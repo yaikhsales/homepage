@@ -5,8 +5,7 @@ import "server-only";
 
 export type CodeEntry = { code: string; label: string };
 
-const DEFAULT_CODES =
-  "YAI2026:Master code,INV-LAW-001:Lawrence (CEO),INV-VAN-001:Vancouver investor";
+const DEFAULT_CODES = "YAI2026:Master code";
 
 let cache: CodeEntry[] | null = null;
 
