@@ -62,29 +62,27 @@ export function LoginCard() {
         transition={{ delay: 0.1, duration: 0.5 }}
         className="flex items-center justify-center mb-6"
       >
-        {/* Logo — falls back to a styled monogram if /images/yai-logo.png is missing */}
+        {/* Logo — falls back to a script-font Yai if /images/yai-logo.png is missing */}
         <img
           src="/images/yai-logo.png"
-          alt="YAI"
-          className="h-16 w-auto drop-shadow-2xl"
+          alt="Yai"
+          className="h-20 w-auto drop-shadow-2xl"
           onError={(e) => {
             (e.currentTarget as HTMLImageElement).style.display = "none";
             const fb = document.getElementById("logo-fallback");
-            if (fb) fb.style.display = "flex";
+            if (fb) fb.style.display = "block";
           }}
         />
-        <div
-          id="logo-fallback"
-          style={{ display: "none" }}
-          className="items-center gap-3"
-        >
-          <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center shadow-lg">
-            <span className="text-yai-blue font-extrabold text-xl tracking-tight">Y</span>
-          </div>
-          <div className="text-white">
-            <div className="font-extrabold text-2xl tracking-tight leading-none">YAI</div>
-            <div className="text-xs text-white/60 mt-1">by Texlink Technologies</div>
-          </div>
+        <div id="logo-fallback" style={{ display: "none" }} className="text-center">
+          <span
+            className="font-script text-white text-7xl sm:text-8xl leading-none select-none"
+            style={{
+              textShadow:
+                "0 1px 0 rgba(255,255,255,0.4), 0 2px 8px rgba(0,0,0,0.45), 0 6px 16px rgba(0,0,0,0.35)",
+            }}
+          >
+            Yai
+          </span>
         </div>
       </motion.div>
 
@@ -102,7 +100,7 @@ export function LoginCard() {
         transition={{ delay: 0.3, duration: 0.5 }}
         className="text-white/80 text-center text-sm sm:text-base mb-8"
       >
-        AI-Native Manufacturing Platform for the Apparel Industry
+        AI-Native Manufacturing Intelligence Platform
       </motion.p>
 
       <motion.form

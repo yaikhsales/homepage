@@ -33,7 +33,8 @@ const config: Config = {
         "yai-border": "#E5EAF1",
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "Inter", "system-ui", "sans-serif"],
+        sans:   ["var(--font-inter)", "Inter", "system-ui", "sans-serif"],
+        script: ["var(--font-allura)", "Allura", "cursive"],
       },
       boxShadow: {
         "card-hover":  "0 10px 30px -10px rgba(10,31,71,0.15)",

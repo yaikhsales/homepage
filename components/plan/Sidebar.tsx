@@ -108,18 +108,26 @@ export function Sidebar({
           <div className="flex items-center gap-3 mb-4">
             <img
               src="/images/yai-logo.png"
-              alt="YAI"
+              alt="Yai"
               className="h-10 w-auto"
-              onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).style.display = "none";
+                const fb = document.getElementById("sidebar-logo-fallback");
+                if (fb) fb.style.display = "inline-block";
+              }}
             />
+            <span
+              id="sidebar-logo-fallback"
+              style={{ display: "none" }}
+              className="font-script text-white text-4xl leading-none"
+            >
+              Yai
+            </span>
             <div>
-              <div className="font-extrabold text-lg leading-tight">YAI</div>
               <div className="text-xs text-white/60">Texlink Technologies</div>
+              <div className="text-[10px] uppercase tracking-wider text-white/45 font-semibold mt-0.5">Business Plan</div>
             </div>
           </div>
-          <p className="text-[11px] uppercase tracking-wider text-white/50 font-semibold">
-            Business Plan
-          </p>
           <p className="text-xs text-white/70 mt-1">
             Viewer: <span className="font-medium">{viewer}</span>
           </p>

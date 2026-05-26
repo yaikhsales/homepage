@@ -11,14 +11,6 @@ export function PlanHero() {
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       className="mb-20"
     >
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2, duration: 0.5 }}
-        className="text-xs uppercase tracking-[0.2em] text-yai-orange font-bold mb-4"
-      >
-        Confidential — Business Plan
-      </motion.p>
       <motion.h1
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
