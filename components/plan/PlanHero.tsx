@@ -21,14 +21,6 @@ export function PlanHero() {
         <br />
         Built for Apparel.
       </motion.h1>
-      <motion.p
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5, duration: 0.6 }}
-        className="text-lg sm:text-xl text-gray-600 leading-relaxed max-w-3xl text-balance"
-      >
-        YAI is an AI-native MES/ERP platform purpose-built for garment factories — already live in two production facilities, replacing three legacy systems, built for a fraction of comparable spend.
-      </motion.p>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
