@@ -17,9 +17,9 @@ export function PlanHero() {
         transition={{ delay: 0.3, duration: 0.7 }}
         className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-yai-navy leading-[1.04] mb-5 text-balance"
       >
-        AI-Native Manufacturing,
+        AI-Native Manufacturing
         <br />
-        Built for Apparel.
+        Intelligence Platform.
       </motion.h1>
       <motion.div
         initial={{ opacity: 0 }}
