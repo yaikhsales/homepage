@@ -106,9 +106,11 @@ export function Sidebar({
       >
         <div className="p-6 border-b border-white/10">
           <div className="flex items-center gap-3 mb-4">
-            <span className="font-script text-white text-5xl leading-none drop-shadow-md">
-              Yai
-            </span>
+            <img
+              src="/images/yai-logo.jpg"
+              alt="Yai"
+              className="h-12 w-12 rounded-md object-cover shadow-md"
+            />
             <div>
               <div className="text-xs text-white/65 leading-tight">Texlink Technologies</div>
               <div className="text-[10px] uppercase tracking-wider text-white/45 font-semibold mt-0.5">Business Plan</div>

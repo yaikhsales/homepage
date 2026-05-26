@@ -62,15 +62,11 @@ export function LoginCard() {
         transition={{ delay: 0.1, duration: 0.5 }}
         className="flex items-center justify-center mb-6"
       >
-        <span
-          className="font-script text-white text-7xl sm:text-8xl leading-none select-none"
-          style={{
-            textShadow:
-              "0 1px 0 rgba(255,255,255,0.4), 0 2px 8px rgba(0,0,0,0.45), 0 6px 16px rgba(0,0,0,0.35)",
-          }}
-        >
-          Yai
-        </span>
+        <img
+          src="/images/yai-logo.jpg"
+          alt="Yai"
+          className="h-32 sm:h-36 w-auto rounded-lg shadow-2xl"
+        />
       </motion.div>
 
       <motion.h1
