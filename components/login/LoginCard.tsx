@@ -62,28 +62,15 @@ export function LoginCard() {
         transition={{ delay: 0.1, duration: 0.5 }}
         className="flex items-center justify-center mb-6"
       >
-        {/* Logo — falls back to a script-font Yai if /images/yai-logo.png is missing */}
-        <img
-          src="/images/yai-logo.png"
-          alt="Yai"
-          className="h-20 w-auto drop-shadow-2xl"
-          onError={(e) => {
-            (e.currentTarget as HTMLImageElement).style.display = "none";
-            const fb = document.getElementById("logo-fallback");
-            if (fb) fb.style.display = "block";
+        <span
+          className="font-script text-white text-7xl sm:text-8xl leading-none select-none"
+          style={{
+            textShadow:
+              "0 1px 0 rgba(255,255,255,0.4), 0 2px 8px rgba(0,0,0,0.45), 0 6px 16px rgba(0,0,0,0.35)",
           }}
-        />
-        <div id="logo-fallback" style={{ display: "none" }} className="text-center">
-          <span
-            className="font-script text-white text-7xl sm:text-8xl leading-none select-none"
-            style={{
-              textShadow:
-                "0 1px 0 rgba(255,255,255,0.4), 0 2px 8px rgba(0,0,0,0.45), 0 6px 16px rgba(0,0,0,0.35)",
-            }}
-          >
-            Yai
-          </span>
-        </div>
+        >
+          Yai
+        </span>
       </motion.div>
 
       <motion.h1

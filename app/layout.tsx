@@ -17,9 +17,12 @@ const allura = Allura({
 });
 
 export const metadata: Metadata = {
-  title: "YAI — Business Plan Portal",
-  description: "Confidential. YAI / Texlink Technologies business plan and strategy portal.",
+  title: "Yai — Business Plan",
+  description: "Confidential. Yai / Texlink Technologies business plan and strategy portal.",
   robots: { index: false, follow: false },
+  icons: {
+    icon: "/icon.svg",
+  },
 };
 
 export default function RootLayout({
