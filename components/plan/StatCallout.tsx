@@ -43,7 +43,7 @@ export function StatCallout({
     <div ref={ref} className="card group">
       <motion.div
         className={`font-extrabold text-4xl sm:text-5xl leading-none tracking-tight ${
-          orange ? "text-yai-orange" : "text-yai-navy"
+          orange ? "text-yai-blue" : "text-yai-navy"
         }`}
       >
         <motion.span>{display}</motion.span>

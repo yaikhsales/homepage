@@ -37,11 +37,11 @@ export function StageLadder() {
           whileHover={{ y: -4 }}
           className={`p-7 rounded-2xl bg-white relative h-full ${
             s.highlight
-              ? "border-2 border-yai-orange shadow-orange-glow"
+              ? "border-2 border-yai-blue shadow-blue-glow"
               : "border-2 border-yai-border"
           }`}
         >
-          <div className="text-[11px] font-bold text-yai-orange uppercase tracking-[0.12em] mb-2">
+          <div className="text-[11px] font-bold text-yai-blue uppercase tracking-[0.12em] mb-2">
             {s.num}
           </div>
           <h3 className="text-2xl font-extrabold text-yai-navy mb-3">{s.name}</h3>
@@ -49,7 +49,7 @@ export function StageLadder() {
           <ul className="text-xs text-gray-500 space-y-1.5">
             {s.bullets.map((b) => (
               <li key={b} className="flex gap-2">
-                <span className="text-yai-orange">▸</span>
+                <span className="text-yai-blue">▸</span>
                 <span>{b}</span>
               </li>
             ))}

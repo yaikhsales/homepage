@@ -126,7 +126,7 @@ export function DashboardDemo() {
       {/* Header bar */}
       <div className="px-5 py-3 border-b border-yai-border bg-yai-bg flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded bg-yai-orange flex items-center justify-center text-white font-bold text-xs">
+          <div className="w-7 h-7 rounded bg-yai-blue flex items-center justify-center text-white font-bold text-xs">
             Y
           </div>
           <div className="text-yai-navy font-semibold text-sm">Admin Dashboard — Factory A</div>
@@ -164,7 +164,7 @@ export function DashboardDemo() {
             <div className="text-[10.5px] uppercase tracking-wider font-bold text-gray-500 mb-1">
               Audit readiness
             </div>
-            <div className="text-3xl font-extrabold text-yai-orange tabular-nums">
+            <div className="text-3xl font-extrabold text-yai-blue tabular-nums">
               <AnimatedNumber value={92} suffix="%" trigger={inView} />
             </div>
             <div className="text-[11px] text-gray-500 font-semibold mt-1">WRAP, BSCI, ILO</div>
@@ -231,7 +231,7 @@ export function DashboardDemo() {
         >
           <div className="text-[10.5px] uppercase tracking-wider font-bold text-gray-500 mb-3 flex items-center justify-between">
             <span>Agent activity</span>
-            <span className="text-yai-orange">Live</span>
+            <span className="text-yai-blue">Live</span>
           </div>
           <div className="space-y-2">
             {ACTIVITY.slice(0, activityIndex).map((a, i) => (

@@ -72,7 +72,7 @@ export function ChatDemo() {
       <div className="rounded-[14px] bg-[#0A1F38] overflow-hidden">
         {/* Chat header */}
         <div className="flex items-center gap-3 px-5 py-3 border-b border-white/10 bg-black/20">
-          <div className="w-8 h-8 rounded-full bg-yai-orange flex items-center justify-center text-white font-bold text-sm">
+          <div className="w-8 h-8 rounded-full bg-yai-blue flex items-center justify-center text-white font-bold text-sm">
             Y
           </div>
           <div className="flex-1">
@@ -99,7 +99,7 @@ export function ChatDemo() {
                 <div
                   className={`max-w-[85%] rounded-2xl px-4 py-2.5 ${
                     msg.from === "user"
-                      ? "bg-yai-orange text-white rounded-br-sm"
+                      ? "bg-yai-blue text-white rounded-br-sm"
                       : "bg-white/8 text-white border border-white/10 rounded-bl-sm"
                   }`}
                   style={msg.from === "agent" ? { backgroundColor: "rgba(255,255,255,0.06)" } : undefined}
@@ -150,7 +150,7 @@ export function ChatDemo() {
           <div className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white/40 text-sm">
             Ask anything about the factory…
           </div>
-          <div className="w-9 h-9 rounded-lg bg-yai-orange flex items-center justify-center">
+          <div className="w-9 h-9 rounded-lg bg-yai-blue flex items-center justify-center">
             <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4 text-white">
               <path
                 d="M5 12l14-8-4 16-3-7-7-1z"

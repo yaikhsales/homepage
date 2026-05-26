@@ -67,7 +67,7 @@ export function Sidebar({
       {/* Mobile header */}
       <div className="lg:hidden sticky top-0 z-30 bg-yai-navy text-white px-4 py-3 flex items-center justify-between shadow no-print">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-yai-orange flex items-center justify-center font-extrabold">
+          <div className="w-8 h-8 rounded-lg bg-yai-blue flex items-center justify-center font-extrabold">
             Y
           </div>
           <span className="font-bold">YAI Plan</span>
@@ -106,9 +106,12 @@ export function Sidebar({
       >
         <div className="p-6 border-b border-white/10">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-lg bg-yai-orange flex items-center justify-center shadow-orange-glow font-extrabold text-lg">
-              Y
-            </div>
+            <img
+              src="/images/yai-logo.png"
+              alt="YAI"
+              className="h-10 w-auto"
+              onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+            />
             <div>
               <div className="font-extrabold text-lg leading-tight">YAI</div>
               <div className="text-xs text-white/60">Texlink Technologies</div>
@@ -132,7 +135,7 @@ export function Sidebar({
                 onClick={onJump(it.id)}
                 className={`relative block py-2 pl-4 pr-2 rounded transition-all duration-200 ${
                   isActive
-                    ? "text-white font-semibold bg-yai-orange/10"
+                    ? "text-white font-semibold bg-yai-blue/10"
                     : "text-white/60 hover:text-white"
                 }`}
               >
@@ -143,7 +146,7 @@ export function Sidebar({
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
-                <span className="text-yai-orange font-bold mr-2">
+                <span className="text-yai-blue font-bold mr-2">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 {it.label}

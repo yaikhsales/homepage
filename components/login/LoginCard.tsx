@@ -54,7 +54,7 @@ export function LoginCard() {
           ? { x: { duration: 0.4, ease: "easeInOut" } }
           : { duration: 0.6, ease: "easeOut" }
       }
-      className="w-full max-w-md bg-white/[0.06] backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-8 sm:p-10"
+      className="w-full max-w-md bg-white/[0.08] backdrop-blur-xl border border-white/15 rounded-2xl shadow-2xl p-8 sm:p-10"
     >
       <motion.div
         initial={{ opacity: 0, y: -10 }}
@@ -62,9 +62,24 @@ export function LoginCard() {
         transition={{ delay: 0.1, duration: 0.5 }}
         className="flex items-center justify-center mb-6"
       >
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl bg-yai-orange flex items-center justify-center shadow-orange-glow">
-            <span className="text-white font-extrabold text-xl tracking-tight">Y</span>
+        {/* Logo — falls back to a styled monogram if /images/yai-logo.png is missing */}
+        <img
+          src="/images/yai-logo.png"
+          alt="YAI"
+          className="h-16 w-auto drop-shadow-2xl"
+          onError={(e) => {
+            (e.currentTarget as HTMLImageElement).style.display = "none";
+            const fb = document.getElementById("logo-fallback");
+            if (fb) fb.style.display = "flex";
+          }}
+        />
+        <div
+          id="logo-fallback"
+          style={{ display: "none" }}
+          className="items-center gap-3"
+        >
+          <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center shadow-lg">
+            <span className="text-yai-blue font-extrabold text-xl tracking-tight">Y</span>
           </div>
           <div className="text-white">
             <div className="font-extrabold text-2xl tracking-tight leading-none">YAI</div>
@@ -85,7 +100,7 @@ export function LoginCard() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3, duration: 0.5 }}
-        className="text-white/70 text-center text-sm sm:text-base mb-8"
+        className="text-white/80 text-center text-sm sm:text-base mb-8"
       >
         AI-Native Manufacturing Platform for the Apparel Industry
       </motion.p>
@@ -98,7 +113,7 @@ export function LoginCard() {
         autoComplete="off"
         noValidate
       >
-        <label htmlFor="access-code" className="block text-white/80 text-sm font-medium mb-2">
+        <label htmlFor="access-code" className="block text-white/85 text-sm font-medium mb-2">
           Access Code
         </label>
         <input
@@ -113,14 +128,14 @@ export function LoginCard() {
           value={code}
           onChange={(e) => setCode(e.target.value)}
           disabled={loading}
-          className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-yai-orange focus:border-transparent transition text-base disabled:opacity-60"
+          className="w-full px-4 py-3 rounded-lg bg-white/12 border border-white/25 text-white placeholder-white/45 focus:outline-none focus:ring-2 focus:ring-white/60 focus:border-transparent transition text-base disabled:opacity-60"
         />
 
         {error && (
           <motion.p
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-3 text-sm text-red-300"
+            className="mt-3 text-sm text-red-200"
           >
             {error}. Please contact{" "}
             <a href="mailto:gamini@yaikh.com" className="underline">
@@ -135,7 +150,7 @@ export function LoginCard() {
           disabled={loading || code.trim().length === 0}
           whileHover={{ scale: 1.01 }}
           whileTap={{ scale: 0.99 }}
-          className="mt-6 w-full bg-yai-orange hover:bg-yai-orange-dark text-white font-semibold py-3 rounded-lg transition shadow-orange-glow disabled:opacity-50 disabled:cursor-not-allowed"
+          className="mt-6 w-full bg-white hover:bg-white/95 text-yai-blue font-bold py-3 rounded-lg transition shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? "Verifying…" : "Enter Portal"}
         </motion.button>
@@ -145,7 +160,7 @@ export function LoginCard() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.6, duration: 0.5 }}
-        className="text-white/50 text-xs text-center mt-8 leading-relaxed"
+        className="text-white/55 text-xs text-center mt-8 leading-relaxed"
       >
         Confidential. By accessing this page you agree not to share its contents without permission.
       </motion.p>

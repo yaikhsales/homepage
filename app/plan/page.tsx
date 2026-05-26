@@ -72,7 +72,7 @@ export default function PlanPage() {
             <p><strong className="text-yai-navy">This plan.</strong> Outlines commercialisation of the <em>Admin-tier</em> modules to mid-large factories across Cambodia and the region. Production modules (YQMS, YTM/CE, YPI, 4DP) remain group internal IP — referenced for completeness but not the subject of this commercial roll-out.</p>
           </div>
 
-          <div className="mt-8 p-5 bg-amber-50 border-l-4 border-yai-orange rounded">
+          <div className="mt-8 p-5 bg-amber-50 border-l-4 border-yai-blue rounded">
             <p className="text-sm text-gray-800"><strong className="text-yai-navy">Scope note for readers:</strong> This document covers commercialisation of <em>Admin-tier modules</em>. The Production-tier modules described in the appendix remain internal IP of the YW Group and are not part of this commercial offering.</p>
           </div>
         </Section>
@@ -108,7 +108,7 @@ export default function PlanPage() {
               ["Readiness",  "Buyer audits at risk"],
             ].map(([k, v]) => (
               <div key={k} className="p-4 bg-white rounded-lg border border-yai-border">
-                <div className="text-2xl font-extrabold text-yai-orange">{k}</div>
+                <div className="text-2xl font-extrabold text-yai-blue">{k}</div>
                 <div className="text-xs text-gray-500 mt-1">{v}</div>
               </div>
             ))}
@@ -133,7 +133,7 @@ export default function PlanPage() {
               ["FLEXIBLE",        "Cloud or on-prem",  "Hybrid deployment — factory keeps sensitive data on site if required."],
             ].map(([k, h, b]) => (
               <Card key={k}>
-                <div className="text-yai-orange font-bold text-xs tracking-wider mb-2">{k}</div>
+                <div className="text-yai-blue font-bold text-xs tracking-wider mb-2">{k}</div>
                 <h3 className="font-bold text-yai-navy mb-2">{h}</h3>
                 <p className="text-sm text-gray-600">{b}</p>
               </Card>
@@ -153,7 +153,7 @@ export default function PlanPage() {
           <StageLadder />
 
           <div className="mt-10 mb-6">
-            <p className="text-xs uppercase tracking-wider font-bold text-yai-orange mb-2">Stage 2 — Agentic, in action</p>
+            <p className="text-xs uppercase tracking-wider font-bold text-yai-blue mb-2">Stage 2 — Agentic, in action</p>
             <h3 className="text-2xl font-bold text-yai-navy mb-4">What a conversation with YAI actually looks like</h3>
             <p className="text-sm text-gray-600 mb-5 max-w-2xl">
               A real Stage-2 interaction: a supervisor asks for the payroll summary, the agent pulls the data, then prepares the WRAP audit pack on request. No clicking through 12 screens.
@@ -163,7 +163,7 @@ export default function PlanPage() {
 
           <div className="mt-10 p-5 bg-yai-navy text-white rounded-lg">
             <p className="text-sm leading-relaxed">
-              <strong className="text-yai-orange">Why this matters commercially:</strong> Each stage is a real revenue step. Most customers land at Stage 1, prove ROI in 90 days, and self-select into Stages 2 and 3. The ladder is the upsell engine — built into the product, not bolted on as sales theatre.
+              <strong className="text-yai-blue">Why this matters commercially:</strong> Each stage is a real revenue step. Most customers land at Stage 1, prove ROI in 90 days, and self-select into Stages 2 and 3. The ladder is the upsell engine — built into the product, not bolted on as sales theatre.
             </p>
           </div>
         </Section>
@@ -193,7 +193,7 @@ export default function PlanPage() {
                   ["05", "Internal Logistics","Inventory, warehouse operations, packing/shipping tracking, internal movement.",         "live"],
                 ].map(([n, name, desc, status]) => (
                   <tr key={n} className="hover:bg-yai-bg">
-                    <td className="px-4 py-3 font-bold text-yai-orange">{n}</td>
+                    <td className="px-4 py-3 font-bold text-yai-blue">{n}</td>
                     <td className="px-4 py-3 font-semibold text-yai-navy whitespace-nowrap">{name}</td>
                     <td className="px-4 py-3 text-gray-700">{desc}</td>
                     <td className="px-4 py-3"><Badge variant={status as "live" | "pilot"}>{status}</Badge></td>
@@ -206,7 +206,7 @@ export default function PlanPage() {
 
           <details className="mt-6 bg-white border border-yai-border rounded-lg p-4 group">
             <summary className="cursor-pointer font-semibold text-yai-navy list-none flex items-center gap-2">
-              <span className="text-yai-orange group-open:rotate-45 inline-block transition-transform">+</span>
+              <span className="text-yai-blue group-open:rotate-45 inline-block transition-transform">+</span>
               Production-tier modules (internal IP — reference only)
             </summary>
             <div className="mt-3 text-sm text-gray-600 space-y-2 pl-6">
@@ -254,7 +254,7 @@ export default function PlanPage() {
                   <td className="px-4 py-3">~13,300</td>
                   <td className="px-4 py-3">~2,350</td>
                   <td className="px-4 py-3">—</td>
-                  <td className="px-4 py-3 text-yai-orange">$TBD</td>
+                  <td className="px-4 py-3 text-yai-blue">$TBD</td>
                 </tr>
               </tbody>
             </table>
@@ -271,7 +271,7 @@ export default function PlanPage() {
           </Thesis>
           <div className="space-y-5">
             {[
-              { tier: "A", color: "bg-yai-orange", title: "Tier A — Priority targets", body: "500–3,000 workers, local/regional ownership, audit-pressured, digitalisation-ready. ~200–400 factories in Cambodia.", note: "Examples (anonymised): TBD" },
+              { tier: "A", color: "bg-yai-blue", title: "Tier A — Priority targets", body: "500–3,000 workers, local/regional ownership, audit-pressured, digitalisation-ready. ~200–400 factories in Cambodia.", note: "Examples (anonymised): TBD" },
               { tier: "B", color: "bg-yai-teal",   title: "Tier B — Secondary",        body: "300–500 workers, smaller buyers, less audit pressure but cost-sensitive. Suitable for Stage 1 (Digital) entry.",                note: "Approach: Self-serve onboarding, lower-touch sales motion." },
               { tier: "C", color: "bg-yai-navy",   title: "Tier C — Strategic groups", body: "Multi-factory groups (3,000+ workers per site, 3+ sites). Stage 3 Big Rollout candidates — six-figure ACV potential each.", note: "Approach: Founder-led, owner-to-owner conversations. Pilot one site, expand to group." },
             ].map((t) => (
@@ -287,7 +287,7 @@ export default function PlanPage() {
               </Card>
             ))}
           </div>
-          <div className="mt-6 p-5 bg-white rounded-lg border-l-4 border-yai-orange">
+          <div className="mt-6 p-5 bg-white rounded-lg border-l-4 border-yai-blue">
             <p className="text-sm text-gray-700"><strong className="text-yai-navy">Ideal customer profile:</strong> Owner-operator or empowered managing director, has felt the cost of a failed audit at least once, already paying for at least one legacy tool, willing to run a 90-day pilot with executive sponsorship.</p>
           </div>
         </Section>
@@ -333,7 +333,7 @@ export default function PlanPage() {
                   <td className="px-4 py-3 whitespace-nowrap">$$ (per module)</td>
                 </tr>
                 <tr className="bg-amber-50/60">
-                  <td className="px-4 py-3 font-bold text-yai-orange">YAI</td>
+                  <td className="px-4 py-3 font-bold text-yai-blue">YAI</td>
                   <td className="px-4 py-3 font-semibold">AI-native, apparel-specific, trilingual, regional pricing, factory-proven</td>
                   <td className="px-4 py-3">Young brand, regional sales presence still being built</td>
                   <td className="px-4 py-3 whitespace-nowrap font-bold">$$ (segment-fit)</td>
@@ -359,7 +359,7 @@ export default function PlanPage() {
               { num: "CHANNEL 3", title: "Bottom-up adoption", bullets: ["Free worker mobile app — payslip, attendance, time-off", "Workers ask managers for it, creating organic pressure", "When factory signs up, worker base is already trained", "Differentiated from any top-down ERP roll-out"] },
             ].map((c) => (
               <Card key={c.num}>
-                <div className="text-yai-orange text-xs font-bold tracking-wider mb-2">{c.num}</div>
+                <div className="text-yai-blue text-xs font-bold tracking-wider mb-2">{c.num}</div>
                 <h3 className="font-bold text-yai-navy text-lg mb-2">{c.title}</h3>
                 <ul className="text-sm text-gray-600 space-y-2">
                   {c.bullets.map((b) => <li key={b}>• {b}</li>)}
@@ -369,7 +369,7 @@ export default function PlanPage() {
           </div>
           <div className="mt-8 p-5 bg-yai-navy text-white rounded-lg">
             <p className="text-sm leading-relaxed">
-              <strong className="text-yai-orange">Why three channels:</strong> Direct sales gives us revenue. Government partnerships give us air cover and free distribution. Bottom-up gives us product-market fit signal and pre-trained users on every floor. Each channel makes the other two cheaper.
+              <strong className="text-yai-blue">Why three channels:</strong> Direct sales gives us revenue. Government partnerships give us air cover and free distribution. Bottom-up gives us product-market fit signal and pre-trained users on every floor. Each channel makes the other two cheaper.
             </p>
           </div>
         </Section>
@@ -401,11 +401,11 @@ export default function PlanPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-yai-border">
-                <tr><td className="px-4 py-3 font-bold text-yai-navy">Starter</td><td className="px-4 py-3">Up to 100</td><td className="px-4 py-3">All Admin modules, Stage 1 (Digital), email support</td><td className="px-4 py-3 text-yai-orange font-bold">$TBD</td></tr>
-                <tr><td className="px-4 py-3 font-bold text-yai-navy">Growth</td><td className="px-4 py-3">Up to 500</td><td className="px-4 py-3">Starter + priority support + custom reports</td><td className="px-4 py-3 text-yai-orange font-bold">$TBD</td></tr>
-                <tr><td className="px-4 py-3 font-bold text-yai-navy">Enterprise</td><td className="px-4 py-3">1,000+</td><td className="px-4 py-3">Growth + SSO, audit log, dedicated CSM</td><td className="px-4 py-3 text-yai-orange font-bold">$TBD</td></tr>
-                <tr className="bg-amber-50/60"><td className="px-4 py-3 font-bold text-yai-navy">Agentic upgrade</td><td className="px-4 py-3">Add-on</td><td className="px-4 py-3">Stage 2 — full AI agent workflows on top of any tier</td><td className="px-4 py-3 text-yai-orange font-bold">+$TBD</td></tr>
-                <tr className="bg-sky-50/60"><td className="px-4 py-3 font-bold text-yai-navy">Big Rollout</td><td className="px-4 py-3">Custom</td><td className="px-4 py-3">Stage 3 — dedicated infra, AIoT, multi-site, head-office</td><td className="px-4 py-3 text-yai-orange font-bold">From $TBD</td></tr>
+                <tr><td className="px-4 py-3 font-bold text-yai-navy">Starter</td><td className="px-4 py-3">Up to 100</td><td className="px-4 py-3">All Admin modules, Stage 1 (Digital), email support</td><td className="px-4 py-3 text-yai-blue font-bold">$TBD</td></tr>
+                <tr><td className="px-4 py-3 font-bold text-yai-navy">Growth</td><td className="px-4 py-3">Up to 500</td><td className="px-4 py-3">Starter + priority support + custom reports</td><td className="px-4 py-3 text-yai-blue font-bold">$TBD</td></tr>
+                <tr><td className="px-4 py-3 font-bold text-yai-navy">Enterprise</td><td className="px-4 py-3">1,000+</td><td className="px-4 py-3">Growth + SSO, audit log, dedicated CSM</td><td className="px-4 py-3 text-yai-blue font-bold">$TBD</td></tr>
+                <tr className="bg-amber-50/60"><td className="px-4 py-3 font-bold text-yai-navy">Agentic upgrade</td><td className="px-4 py-3">Add-on</td><td className="px-4 py-3">Stage 2 — full AI agent workflows on top of any tier</td><td className="px-4 py-3 text-yai-blue font-bold">+$TBD</td></tr>
+                <tr className="bg-sky-50/60"><td className="px-4 py-3 font-bold text-yai-navy">Big Rollout</td><td className="px-4 py-3">Custom</td><td className="px-4 py-3">Stage 3 — dedicated infra, AIoT, multi-site, head-office</td><td className="px-4 py-3 text-yai-blue font-bold">From $TBD</td></tr>
               </tbody>
             </table>
           </div>
@@ -432,7 +432,7 @@ export default function PlanPage() {
             {[
               { tag: "MoE",    bg: "bg-yai-navy",  title: "Ministry of Environment",         body: "Digital audit module — provided free for ministry use. In exchange: official recognition, factory referrals, co-branding on compliance dashboards. Factories pay for their side; ministry gets visibility.", status: "Initial conversations underway." },
               { tag: "ILO",    bg: "bg-yai-teal",  title: "ILO Better Work Cambodia",        body: "Integration potential — YAI compliance evidence feeds Better Work assessments. Reduces duplicate audit prep for factories enrolled in both.",                                                  status: "Exploratory." },
-              { tag: "GMAC",   bg: "bg-yai-orange",title: "GMAC (Garment Manufacturers Assoc. of Cambodia)", body: "Member channel — preferential pricing for GMAC members, joint seminars, association endorsement.",                                                                                       status: "To be initiated Q1." },
+              { tag: "GMAC",   bg: "bg-yai-blue",title: "GMAC (Garment Manufacturers Assoc. of Cambodia)", body: "Member channel — preferential pricing for GMAC members, joint seminars, association endorsement.",                                                                                       status: "To be initiated Q1." },
               { tag: "TAFTAC", bg: "bg-gray-700",  title: "TAFTAC outreach",                 body: "Textile, Apparel, Footwear & Travel Goods Association of Cambodia — broader manufacturing reach beyond GMAC.",                                                                                  status: "Planned." },
             ].map((p) => (
               <Card key={p.tag}>
@@ -447,7 +447,7 @@ export default function PlanPage() {
               </Card>
             ))}
           </div>
-          <div className="mt-6 p-5 bg-white rounded-lg border-l-4 border-yai-orange">
+          <div className="mt-6 p-5 bg-white rounded-lg border-l-4 border-yai-blue">
             <p className="text-sm text-gray-700"><strong className="text-yai-navy">Value exchange model:</strong> We give the institution capability they would otherwise have to build. They give us recognition, referrals, and distribution. No money changes hands at the institutional level — factories pay for their side.</p>
           </div>
         </Section>
@@ -465,7 +465,7 @@ export default function PlanPage() {
           </div>
 
           <div className="mb-6">
-            <p className="text-xs uppercase tracking-wider font-bold text-yai-orange mb-2">Live dashboard — pilot factory</p>
+            <p className="text-xs uppercase tracking-wider font-bold text-yai-blue mb-2">Live dashboard — pilot factory</p>
             <h3 className="text-2xl font-bold text-yai-navy mb-4">What the operating system looks like in production</h3>
             <p className="text-sm text-gray-600 mb-5 max-w-2xl">
               A snapshot from one of the two pilot factories. Workers active today, payroll posted, audit readiness, exception flags, live agent activity feed. This isn&apos;t a mockup — the same numbers our pilot owners see every morning.
@@ -519,7 +519,7 @@ export default function PlanPage() {
           <div className="space-y-5">
             <Card>
               <div className="flex items-start gap-4">
-                <div className="shrink-0 w-16 h-16 rounded-full bg-yai-orange text-white flex items-center justify-center font-extrabold text-xl">GK</div>
+                <div className="shrink-0 w-16 h-16 rounded-full bg-yai-blue text-white flex items-center justify-center font-extrabold text-xl">GK</div>
                 <div>
                   <h3 className="font-bold text-yai-navy text-lg mb-1">Gamini K — Director</h3>
                   <p className="text-sm text-gray-600">Founder, Texlink Technologies Co., Ltd. (Cambodia). Builder-operator across software, manufacturing operations, and finance. Lives on the factory floor when shipping new modules.</p>
@@ -565,7 +565,7 @@ export default function PlanPage() {
                   <td className="px-4 py-3">Net</td>
                   <td className="px-4 py-3 text-gray-600">Investment phase</td>
                   <td className="px-4 py-3 text-gray-600">Break-even</td>
-                  <td className="px-4 py-3 text-yai-orange">Positive</td>
+                  <td className="px-4 py-3 text-yai-blue">Positive</td>
                 </tr>
               </tbody>
             </table>
@@ -583,7 +583,7 @@ export default function PlanPage() {
           <div className="bg-yai-navy text-white p-8 sm:p-10 rounded-2xl my-8">
             <div className="grid sm:grid-cols-3 gap-6 text-center">
               <div>
-                <div className="text-4xl sm:text-5xl font-extrabold text-yai-orange tabular-nums">$360K</div>
+                <div className="text-4xl sm:text-5xl font-extrabold text-yai-blue tabular-nums">$360K</div>
                 <div className="text-sm text-white/70 mt-2 uppercase tracking-wider">Cambodia (actual)</div>
               </div>
               <div>
@@ -616,7 +616,7 @@ export default function PlanPage() {
               { q: "Q4", title: "Scale",        items: ["30+ customers", "First Big Rollout (Stage 3) pilot scoped", "Production module commercialisation case ready for investor review", "Year-2 plan locked"] },
             ].map((m) => (
               <Card key={m.q}>
-                <div className="text-yai-orange font-bold text-sm mb-2">{m.q}</div>
+                <div className="text-yai-blue font-bold text-sm mb-2">{m.q}</div>
                 <h3 className="font-bold text-yai-navy text-lg mb-2">{m.title}</h3>
                 <ul className="text-sm text-gray-600 space-y-1.5">
                   {m.items.map((it) => <li key={it}>• {it}</li>)}
@@ -703,7 +703,7 @@ export default function PlanPage() {
           <h3 className="font-bold text-yai-navy text-xl mb-3">A3. Pilot factory references</h3>
           <details className="bg-white border border-yai-border rounded-lg p-4 mb-2 group">
             <summary className="cursor-pointer font-semibold text-yai-navy list-none">
-              <span className="text-yai-orange group-open:rotate-45 inline-block transition-transform mr-2">+</span>
+              <span className="text-yai-blue group-open:rotate-45 inline-block transition-transform mr-2">+</span>
               Pilot factory A (anonymised)
             </summary>
             <div className="mt-3 text-sm text-gray-600 pl-6">
@@ -713,7 +713,7 @@ export default function PlanPage() {
           </details>
           <details className="bg-white border border-yai-border rounded-lg p-4 mb-6 group">
             <summary className="cursor-pointer font-semibold text-yai-navy list-none">
-              <span className="text-yai-orange group-open:rotate-45 inline-block transition-transform mr-2">+</span>
+              <span className="text-yai-blue group-open:rotate-45 inline-block transition-transform mr-2">+</span>
               Pilot factory B (anonymised)
             </summary>
             <div className="mt-3 text-sm text-gray-600 pl-6">
@@ -731,10 +731,10 @@ export default function PlanPage() {
           <h3 className="font-bold text-yai-navy text-xl mb-3">A5. Contact</h3>
           <Card className="bg-yai-navy border-yai-navy text-white">
             <p className="text-sm leading-relaxed">
-              <strong className="text-yai-orange">Gamini K</strong><br />
+              <strong className="text-yai-blue">Gamini K</strong><br />
               Director, Texlink Technologies Co., Ltd.<br />
-              Email: <a href="mailto:gamini@yaikh.com" className="underline text-yai-orange">gamini@yaikh.com</a><br />
-              Web: <a href="https://www.yaikh.com" className="underline text-yai-orange">www.yaikh.com</a><br />
+              Email: <a href="mailto:gamini@yaikh.com" className="underline text-yai-blue">gamini@yaikh.com</a><br />
+              Web: <a href="https://www.yaikh.com" className="underline text-yai-blue">www.yaikh.com</a><br />
               <span className="text-white/60">Cambodia</span>
             </p>
           </Card>

@@ -23,14 +23,14 @@ export function Funnel() {
           transition={{ duration: 0.7, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }}
           className={`flex items-center justify-between px-5 py-3 rounded-lg text-white ${
             s.highlight
-              ? "bg-gradient-to-r from-yai-orange to-yai-orange-dark"
+              ? "bg-gradient-to-r from-yai-blue to-yai-blue-dark"
               : "bg-gradient-to-r from-yai-navy to-yai-navy-light"
           }`}
         >
           <span className="text-sm font-medium">{s.label}</span>
           <span
             className={`font-extrabold text-lg whitespace-nowrap ml-3 ${
-              s.highlight ? "text-white" : "text-yai-orange"
+              s.highlight ? "text-white" : "text-yai-blue"
             }`}
           >
             {s.value}

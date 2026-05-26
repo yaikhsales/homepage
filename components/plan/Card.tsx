@@ -17,7 +17,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
       ref={ref}
       whileHover={hover ? { y: -3, boxShadow: "0 14px 36px -12px rgba(10,37,64,0.18)" } : undefined}
       transition={{ duration: 0.2 }}
-      className={`bg-white border border-yai-border rounded-xl p-6 transition-colors hover:border-yai-orange/30 ${className}`}
+      className={`bg-white border border-yai-border rounded-xl p-6 transition-colors hover:border-yai-blue/30 ${className}`}
       {...rest}
     >
       {children}
