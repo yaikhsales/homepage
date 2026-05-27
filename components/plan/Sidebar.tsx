@@ -70,7 +70,7 @@ export function Sidebar({
           <div className="w-8 h-8 rounded-lg bg-yai-blue flex items-center justify-center font-extrabold">
             Y
           </div>
-          <span className="font-bold">YAI Plan</span>
+          <span className="font-bold">Yai Plan</span>
         </div>
         <button
           onClick={() => setOpen((o) => !o)}

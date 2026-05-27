@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { MadeInCambodia } from "@/components/plan/MadeInCambodia";
 
 export function LoginCard() {
   const router = useRouter();
@@ -82,10 +83,22 @@ export function LoginCard() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3, duration: 0.5 }}
-        className="text-white/80 text-center text-sm sm:text-base mb-8"
+        className="text-white/85 text-center text-sm sm:text-base mb-3"
       >
-        AI-Native Manufacturing Intelligence Platform
+        Ai-Native Manufacturing Intelligence Platform
       </motion.p>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.35, duration: 0.5 }}
+        className="flex items-center justify-center gap-3 mb-8"
+      >
+        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-white/15 border border-white/20 text-white text-[10px] font-extrabold tracking-[0.18em] uppercase">
+          Ai MIP
+        </span>
+        <span className="text-white/30 text-xs">·</span>
+        <MadeInCambodia variant="dark" />
+      </motion.div>
 
       <motion.form
         initial={{ opacity: 0, y: 10 }}

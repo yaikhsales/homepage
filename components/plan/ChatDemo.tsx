@@ -76,7 +76,7 @@ export function ChatDemo() {
             Y
           </div>
           <div className="flex-1">
-            <div className="text-white font-semibold text-sm">YAI Agent — Finance</div>
+            <div className="text-white font-semibold text-sm">Yai Agent — Finance</div>
             <div className="text-emerald-400 text-[11px] flex items-center gap-1.5">
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               Online

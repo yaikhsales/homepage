@@ -54,21 +54,20 @@ export default function PlanPage() {
         {/* 01 — Executive Summary */}
         <Section id="executive-summary" kicker={kicker(1, "Executive Summary")} title="Executive Summary">
           <Thesis>
-            An AI-native operating system for apparel manufacturing, built in Cambodia, already running in live factories — now ready to commercialise.
+            Factory-tested for 5 years inside live production facilities — Ai MIP is opening its gates to the industry for the first time.
           </Thesis>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-            <StatCallout value={360} prefix="$" suffix="K" orange label="Total build investment" />
-            <StatCallout value={36} suffix=" mo" label="Build duration" />
-            <StatCallout value={20} label="Engineers (Cambodia)" />
-            <StatCallout value={10} label="AI agents in production" />
+            <StatCallout value={10} label="Ai agents in production" />
+            <StatCallout value={20} label="Engineers from Cambodia" />
+            <StatCallout value={36} suffix=" mo" label="In development" />
+            <StatCallout value={40} suffix=" yrs" label="Industry experience (technical + management)" />
           </div>
 
           <div className="space-y-4 text-gray-700 leading-relaxed">
-            <p><strong className="text-yai-navy">What it is.</strong> YAI is an AI-native MES/ERP platform built specifically for the apparel industry — covering finance, HR/payroll, compliance, admin and internal logistics, with a production module suite held as internal IP.</p>
-            <p><strong className="text-yai-navy">Origin.</strong> Built end-to-end in Cambodia by Texlink Technologies — a 20-developer team with deep on-the-floor knowledge of garment manufacturing operations.</p>
-            <p><strong className="text-yai-navy">Traction.</strong> 2 factories in live production, 3 legacy systems successfully replaced, 5 prospect meetings booked in the first week of structured outreach. Weekly seminar series underway.</p>
-            <p><strong className="text-yai-navy">Investment to date.</strong> $360K total spend over 36 months — what would cost $5M–$10M on Singapore or US engineering rates.</p>
+            <p><strong className="text-yai-navy">What it is.</strong> Yai is an Ai-native MES/ERP platform built specifically for the apparel industry — covering finance, HR/payroll, compliance, admin and internal logistics, with a production module suite held as internal IP.</p>
+            <p><strong className="text-yai-navy">Origin.</strong> Built end-to-end in Cambodia by Texlink Technologies — a 20-engineer team with deep on-the-floor knowledge of garment manufacturing operations, backed by 40 years of combined industry experience across technical and management.</p>
+            <p><strong className="text-yai-navy">Traction.</strong> 2 factories in live production for 5 years, 3 legacy systems successfully replaced, 5 prospect meetings booked in the first week of structured outreach. Weekly seminar series underway.</p>
             <p><strong className="text-yai-navy">This plan.</strong> Outlines commercialisation of the <em>Admin-tier</em> modules to mid-large factories across Cambodia and the region. Production modules (YQMS, YTM/CE, YPI, 4DP) remain group internal IP — referenced for completeness but not the subject of this commercial roll-out.</p>
           </div>
 
@@ -80,7 +79,7 @@ export default function PlanPage() {
         {/* 02 — Problem */}
         <Section id="problem" kicker={kicker(2, "The Problem")} title="The Problem">
           <Thesis>
-            Regional garment factories run on paper and outdated software, while compliance demands grow every year. No AI-native option exists for them.
+            Regional garment factories run on paper and outdated software, while compliance demands grow every year. No Ai-native option exists for them.
           </Thesis>
           <div className="grid md:grid-cols-2 gap-5">
             <Card>
@@ -93,11 +92,11 @@ export default function PlanPage() {
             </Card>
             <Card>
               <h3 className="font-bold text-yai-navy text-lg mb-2">Fragmented systems</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">Workforce, payroll, inventory, finance and audit data live in different tools — no single source of truth, no AI-ready data layer.</p>
+              <p className="text-gray-600 text-sm leading-relaxed">Workforce, payroll, inventory, finance and audit data live in different tools — no single source of truth, no Ai-ready data layer.</p>
             </Card>
             <Card>
-              <h3 className="font-bold text-yai-navy text-lg mb-2">No AI-native option</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">SAP and Oracle are priced out of reach. Odoo is generic. In-house systems are dated. There is no AI-first product purpose-built for the apparel segment at a regional price point.</p>
+              <h3 className="font-bold text-yai-navy text-lg mb-2">No Ai-native option</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">SAP and Oracle are priced out of reach. Odoo is generic. In-house systems are dated. There is no Ai-first product purpose-built for the apparel segment at a regional price point.</p>
             </Card>
           </div>
           <div className="mt-8 grid sm:grid-cols-4 gap-3 text-center">
@@ -116,19 +115,19 @@ export default function PlanPage() {
         </Section>
 
         {/* 03 — Solution */}
-        <Section id="solution" kicker={kicker(3, "The Solution")} title="The Solution — YAI Platform">
+        <Section id="solution" kicker={kicker(3, "The Solution")} title="The Solution — Yai Platform">
           <Thesis>
-            One AI-native platform replacing multiple legacy systems — built for how apparel factories actually run.
+            One Ai-native platform replacing multiple legacy systems — built for how apparel factories actually run.
           </Thesis>
           <p className="text-gray-700 leading-relaxed mb-6">
-            YAI is an agentic AI platform purpose-built for apparel manufacturing. Instead of generic ERP modules retrofitted to garment workflows, every module starts from how the factory actually operates — workforce, compliance, payroll, audit cycles, buyer demands.
+            Yai is an agentic Ai platform purpose-built for apparel manufacturing. Instead of generic ERP modules retrofitted to garment workflows, every module starts from how the factory actually operates — workforce, compliance, payroll, audit cycles, buyer demands.
           </p>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {[
-              ["AI-NATIVE",       "10 AI agents",      "Full operational coverage — each agent owns a slice of factory workflow."],
+              ["Ai-NATIVE",       "10 Ai agents",      "Full operational coverage — each agent owns a slice of factory workflow."],
               ["TRILINGUAL",      "EN · 中文 · ខ្មែរ", "Workers, supervisors, owners — everyone uses the platform in their own language."],
               ["OMNI-PLATFORM",   "Web + Android + iOS","Floor managers on mobile, finance on desktop, owners on tablet."],
-              ["INTEGRATED",      "One platform, not five","Replaces fragmented tools with a single, AI-aware data layer."],
+              ["INTEGRATED",      "One platform, not five","Replaces fragmented tools with a single, Ai-aware data layer."],
               ["APPAREL-SPECIFIC","Built where it runs", "Designed in Cambodia, hardened in two live factories — not a generic ERP retrofitted."],
               ["FLEXIBLE",        "Cloud or on-prem",  "Hybrid deployment — factory keeps sensitive data on site if required."],
             ].map(([k, h, b]) => (
@@ -147,14 +146,14 @@ export default function PlanPage() {
             Customers start cheap, prove value, then expand. Each stage unlocks more revenue per customer without re-implementation.
           </Thesis>
           <p className="text-gray-700 leading-relaxed mb-8">
-            Factories don&apos;t buy enterprise platforms in one shot. YAI is architected so a customer can start with a low-risk digital-replacement deployment, advance to agentic workflows, and finally scale to a multi-site Big Rollout — each stage building on the same data layer.
+            Factories don&apos;t buy enterprise platforms in one shot. Yai is architected so a customer can start with a low-risk digital-replacement deployment, advance to agentic workflows, and finally scale to a multi-site Big Rollout — each stage building on the same data layer.
           </p>
 
           <StageLadder />
 
           <div className="mt-10 mb-6">
             <p className="text-xs uppercase tracking-wider font-bold text-yai-blue mb-2">Stage 2 — Agentic, in action</p>
-            <h3 className="text-2xl font-bold text-yai-navy mb-4">What a conversation with YAI actually looks like</h3>
+            <h3 className="text-2xl font-bold text-yai-navy mb-4">What a conversation with Yai actually looks like</h3>
             <p className="text-sm text-gray-600 mb-5 max-w-2xl">
               A real Stage-2 interaction: a supervisor asks for the payroll summary, the agent pulls the data, then prepares the WRAP audit pack on request. No clicking through 12 screens.
             </p>
@@ -225,7 +224,7 @@ export default function PlanPage() {
         {/* 06 — Market */}
         <Section id="market" kicker={kicker(6, "Market Opportunity")} title="Market Opportunity">
           <Thesis>
-            Cambodia alone is a meaningful market. Regional expansion multiplies it by 10× — and YAI is the only AI-native option built for these factories.
+            Cambodia alone is a meaningful market. Regional expansion multiplies it by 10× — and Yai is the only Ai-native option built for these factories.
           </Thesis>
           <div className="grid sm:grid-cols-3 gap-5 mb-8">
             <StatCallout value={2650} orange label="Garment factories in Cambodia" />
@@ -295,7 +294,7 @@ export default function PlanPage() {
         {/* 08 — Competition */}
         <Section id="competition" kicker={kicker(8, "Competitive Landscape")} title="Competitive Landscape">
           <Thesis>
-            No competitor combines AI-native, apparel-specific, and regionally-priced. YAI is the only one in that quadrant.
+            No competitor combines Ai-native, apparel-specific, and regionally-priced. Yai is the only one in that quadrant.
           </Thesis>
           <div className="overflow-x-auto rounded-xl border border-yai-border bg-white mb-6">
             <table className="w-full text-sm">
@@ -311,30 +310,30 @@ export default function PlanPage() {
                 <tr>
                   <td className="px-4 py-3 font-semibold text-yai-navy">SAP / Oracle</td>
                   <td className="px-4 py-3">Enterprise-grade, audited, mature</td>
-                  <td className="px-4 py-3">Too expensive, multi-year implementation, not apparel-specific, not AI-native</td>
+                  <td className="px-4 py-3">Too expensive, multi-year implementation, not apparel-specific, not Ai-native</td>
                   <td className="px-4 py-3 whitespace-nowrap">$$$$$ (100k+/yr)</td>
                 </tr>
                 <tr>
                   <td className="px-4 py-3 font-semibold text-yai-navy">Odoo</td>
                   <td className="px-4 py-3">Modular, lower cost, open ecosystem</td>
-                  <td className="px-4 py-3">Generic ERP, not apparel-tuned, retrofit AI at best, integrator-dependent</td>
+                  <td className="px-4 py-3">Generic ERP, not apparel-tuned, retrofit Ai at best, integrator-dependent</td>
                   <td className="px-4 py-3 whitespace-nowrap">$$$ (20–50k/yr)</td>
                 </tr>
                 <tr>
                   <td className="px-4 py-3 font-semibold text-yai-navy">Legacy / in-house</td>
                   <td className="px-4 py-3">Already paid for, factory floor knows it</td>
-                  <td className="px-4 py-3">Stale tech, no AI, vendor risk, can&apos;t keep up with audit demands</td>
+                  <td className="px-4 py-3">Stale tech, no Ai, vendor risk, can&apos;t keep up with audit demands</td>
                   <td className="px-4 py-3 whitespace-nowrap">$ (sunk + maint.)</td>
                 </tr>
                 <tr>
                   <td className="px-4 py-3 font-semibold text-yai-navy">Niche apparel tools</td>
                   <td className="px-4 py-3">Industry-specific in narrow slices</td>
-                  <td className="px-4 py-3">Point solutions, not integrated, no AI agents, no trilingual stack</td>
+                  <td className="px-4 py-3">Point solutions, not integrated, no Ai agents, no trilingual stack</td>
                   <td className="px-4 py-3 whitespace-nowrap">$$ (per module)</td>
                 </tr>
                 <tr className="bg-amber-50/60">
-                  <td className="px-4 py-3 font-bold text-yai-blue">YAI</td>
-                  <td className="px-4 py-3 font-semibold">AI-native, apparel-specific, trilingual, regional pricing, factory-proven</td>
+                  <td className="px-4 py-3 font-bold text-yai-blue">Yai</td>
+                  <td className="px-4 py-3 font-semibold">Ai-native, apparel-specific, trilingual, regional pricing, factory-proven</td>
                   <td className="px-4 py-3">Young brand, regional sales presence still being built</td>
                   <td className="px-4 py-3 whitespace-nowrap font-bold">$$ (segment-fit)</td>
                 </tr>
@@ -343,7 +342,7 @@ export default function PlanPage() {
           </div>
           <h3 className="font-bold text-yai-navy text-xl mb-3">Positioning statement</h3>
           <p className="text-gray-700 leading-relaxed bg-white p-5 rounded-lg border border-yai-border">
-            For Cambodian and regional garment factories that need to modernise without absorbing enterprise-software cost or complexity, <strong>YAI is the AI-native operating system</strong> that — unlike SAP/Oracle (priced out), Odoo (generic), and legacy tools (stale) — was built specifically for how apparel factories actually run, in the languages they actually use.
+            For Cambodian and regional garment factories that need to modernise without absorbing enterprise-software cost or complexity, <strong>Yai is the Ai-native operating system</strong> that — unlike SAP/Oracle (priced out), Odoo (generic), and legacy tools (stale) — was built specifically for how apparel factories actually run, in the languages they actually use.
           </p>
         </Section>
 
@@ -404,7 +403,7 @@ export default function PlanPage() {
                 <tr><td className="px-4 py-3 font-bold text-yai-navy">Starter</td><td className="px-4 py-3">Up to 100</td><td className="px-4 py-3">All Admin modules, Stage 1 (Digital), email support</td><td className="px-4 py-3 text-yai-blue font-bold">$TBD</td></tr>
                 <tr><td className="px-4 py-3 font-bold text-yai-navy">Growth</td><td className="px-4 py-3">Up to 500</td><td className="px-4 py-3">Starter + priority support + custom reports</td><td className="px-4 py-3 text-yai-blue font-bold">$TBD</td></tr>
                 <tr><td className="px-4 py-3 font-bold text-yai-navy">Enterprise</td><td className="px-4 py-3">1,000+</td><td className="px-4 py-3">Growth + SSO, audit log, dedicated CSM</td><td className="px-4 py-3 text-yai-blue font-bold">$TBD</td></tr>
-                <tr className="bg-amber-50/60"><td className="px-4 py-3 font-bold text-yai-navy">Agentic upgrade</td><td className="px-4 py-3">Add-on</td><td className="px-4 py-3">Stage 2 — full AI agent workflows on top of any tier</td><td className="px-4 py-3 text-yai-blue font-bold">+$TBD</td></tr>
+                <tr className="bg-amber-50/60"><td className="px-4 py-3 font-bold text-yai-navy">Agentic upgrade</td><td className="px-4 py-3">Add-on</td><td className="px-4 py-3">Stage 2 — full Ai agent workflows on top of any tier</td><td className="px-4 py-3 text-yai-blue font-bold">+$TBD</td></tr>
                 <tr className="bg-sky-50/60"><td className="px-4 py-3 font-bold text-yai-navy">Big Rollout</td><td className="px-4 py-3">Custom</td><td className="px-4 py-3">Stage 3 — dedicated infra, AIoT, multi-site, head-office</td><td className="px-4 py-3 text-yai-blue font-bold">From $TBD</td></tr>
               </tbody>
             </table>
@@ -412,7 +411,7 @@ export default function PlanPage() {
           <div className="grid sm:grid-cols-3 gap-4 text-sm">
             {[
               ["Setup fee",           "One-time, scoped per deployment — covers configuration, training, data migration."],
-              ["AI token overages",   "Each tier includes a token allowance. Heavy usage flows to a metered overage charge."],
+              ["Ai token overages",   "Each tier includes a token allowance. Heavy usage flows to a metered overage charge."],
               ["Multi-year discounts","2-year and 3-year commitments unlock pricing locks and discount tiers."],
             ].map(([k, v]) => (
               <div key={k} className="p-4 bg-white rounded-lg border border-yai-border">
@@ -431,7 +430,7 @@ export default function PlanPage() {
           <div className="space-y-5">
             {[
               { tag: "MoE",    bg: "bg-yai-navy",  title: "Ministry of Environment",         body: "Digital audit module — provided free for ministry use. In exchange: official recognition, factory referrals, co-branding on compliance dashboards. Factories pay for their side; ministry gets visibility.", status: "Initial conversations underway." },
-              { tag: "ILO",    bg: "bg-yai-teal",  title: "ILO Better Work Cambodia",        body: "Integration potential — YAI compliance evidence feeds Better Work assessments. Reduces duplicate audit prep for factories enrolled in both.",                                                  status: "Exploratory." },
+              { tag: "ILO",    bg: "bg-yai-teal",  title: "ILO Better Work Cambodia",        body: "Integration potential — Yai compliance evidence feeds Better Work assessments. Reduces duplicate audit prep for factories enrolled in both.",                                                  status: "Exploratory." },
               { tag: "GMAC",   bg: "bg-yai-blue",title: "GMAC (Garment Manufacturers Assoc. of Cambodia)", body: "Member channel — preferential pricing for GMAC members, joint seminars, association endorsement.",                                                                                       status: "To be initiated Q1." },
               { tag: "TAFTAC", bg: "bg-gray-700",  title: "TAFTAC outreach",                 body: "Textile, Apparel, Footwear & Travel Goods Association of Cambodia — broader manufacturing reach beyond GMAC.",                                                                                  status: "Planned." },
             ].map((p) => (
@@ -455,7 +454,7 @@ export default function PlanPage() {
         {/* 13 — Traction (with DashboardDemo) */}
         <Section id="traction" kicker={kicker(13, "Traction")} title="Traction & Pilots">
           <Thesis>
-            This is not a slide-deck startup. Real factories, real workers, real audits — already running on YAI.
+            This is not a slide-deck startup. Real factories, real workers, real audits — already running on Yai.
           </Thesis>
           <div className="grid sm:grid-cols-4 gap-5 mb-8">
             <StatCallout value={2} orange label="Factories in live production" />
@@ -476,11 +475,11 @@ export default function PlanPage() {
           <div className="space-y-4 mt-8">
             <Card>
               <h3 className="font-bold text-yai-navy mb-2">Production pilots — 2 factories live</h3>
-              <p className="text-sm text-gray-600">Two factories within the YW Group are running YAI in production, providing continuous fine-tuning signal. Workforce data, compliance evidence, payroll, and admin workflows are all live. Real audits have been run against real evidence captured by YAI.</p>
+              <p className="text-sm text-gray-600">Two factories within the YW Group are running Yai in production, providing continuous fine-tuning signal. Workforce data, compliance evidence, payroll, and admin workflows are all live. Real audits have been run against real evidence captured by Yai.</p>
             </Card>
             <Card>
               <h3 className="font-bold text-yai-navy mb-2">Legacy replacement — 3 systems retired</h3>
-              <p className="text-sm text-gray-600">YAI has successfully replaced 3 separate legacy tools across the pilot factories — proving migration competence, not just greenfield capability.</p>
+              <p className="text-sm text-gray-600">Yai has successfully replaced 3 separate legacy tools across the pilot factories — proving migration competence, not just greenfield capability.</p>
             </Card>
             <Card>
               <h3 className="font-bold text-yai-navy mb-2">Pipeline — 5 prospect meetings in week 1</h3>
@@ -497,10 +496,10 @@ export default function PlanPage() {
           <div className="grid sm:grid-cols-2 gap-5">
             {[
               ["Backend",          "Laravel (PHP) with MongoDB. Battle-tested, well-known by regional developer pool, easy to extend and maintain."],
-              ["AI Agent Layer",   "Model-agnostic — Claude, GPT, open-source models. The agent orchestration is ours; the underlying LLM is swappable as the market evolves."],
+              ["Ai Agent Layer",   "Model-agnostic — Claude, GPT, open-source models. The agent orchestration is ours; the underlying LLM is swappable as the market evolves."],
               ["Mobile",           "Native Android and iOS apps. Worker app, supervisor app, and owner dashboard — all trilingual."],
               ["Deployment",       "Cloud-default with on-premise hybrid for factories that require data residency. Same codebase, different deployment target."],
-              ["Languages",        "Full UI and AI conversation support in English, Chinese (Simplified), and Khmer. Every workflow, report, and chat in all three."],
+              ["Languages",        "Full UI and Ai conversation support in English, Chinese (Simplified), and Khmer. Every workflow, report, and chat in all three."],
               ["Integrations",     "ABA Bank, Wing, payroll providers, biometric devices, RFID, BOM/PLM systems (where customer brings one)."],
             ].map(([k, v]) => (
               <Card key={k}>
@@ -528,7 +527,7 @@ export default function PlanPage() {
             </Card>
             <Card>
               <h3 className="font-bold text-yai-navy mb-2">Engineering team — 20 developers</h3>
-              <p className="text-sm text-gray-600">Cambodia-based, full-stack Laravel + MongoDB, native mobile, AI agent specialists. Organised across Admin modules and Production modules with shared platform team.</p>
+              <p className="text-sm text-gray-600">Cambodia-based, full-stack Laravel + MongoDB, native mobile, Ai agent specialists. Organised across Admin modules and Production modules with shared platform team.</p>
             </Card>
             <Card>
               <h3 className="font-bold text-yai-navy mb-2">Planned hires</h3>
@@ -634,10 +633,10 @@ export default function PlanPage() {
           <div className="space-y-4">
             {[
               ["Market adoption risk",    "Factories may move slower than projected; budgets are tight, IT change-resistant.", "Three parallel channels (direct, government, bottom-up). Low-cost Stage 1 entry. Reference customers already live."],
-              ["AI cost economics",       "LLM API costs eat margin; token usage scales unpredictably.",                        "Model-agnostic architecture — switch providers as economics shift. Caching, prompt optimisation, and tier-based token allowances. Self-hosted model option for high-volume customers."],
+              ["Ai cost economics",       "LLM API costs eat margin; token usage scales unpredictably.",                        "Model-agnostic architecture — switch providers as economics shift. Caching, prompt optimisation, and tier-based token allowances. Self-hosted model option for high-volume customers."],
               ["Competitive response",    "SAP, Oracle, or Odoo launch regionally-priced apparel SKUs.",                        "Cost-of-engineering advantage (15–28×). Trilingual + apparel-specific positioning is structural, not feature-based. Established government partnerships create switching cost."],
               ["Investor scope timing",   "Decisions on commercialising production modules slip, delaying revenue.",            "Admin-tier commercialisation is independently viable. Production-tier is upside, not dependency."],
-              ["Talent retention",        "Senior engineers poached as YAI&apos;s reputation grows.",                            "Equity participation for key engineers. Strong founder relationships. Cambodia-based team — limited local competition for AI-native talent at this depth."],
+              ["Talent retention",        "Senior engineers poached as Yai&apos;s reputation grows.",                            "Equity participation for key engineers. Strong founder relationships. Cambodia-based team — limited local competition for Ai-native talent at this depth."],
             ].map(([title, risk, mit]) => (
               <Card key={title}>
                 <h3 className="font-bold text-yai-navy mb-1">{title}</h3>
@@ -707,7 +706,7 @@ export default function PlanPage() {
               Pilot factory A (anonymised)
             </summary>
             <div className="mt-3 text-sm text-gray-600 pl-6">
-              <p><strong>Size:</strong> TBD workers • <strong>Location:</strong> Cambodia • <strong>YAI modules:</strong> Admin, HR/Payroll, Compliance, Logistics</p>
+              <p><strong>Size:</strong> TBD workers • <strong>Location:</strong> Cambodia • <strong>Yai modules:</strong> Admin, HR/Payroll, Compliance, Logistics</p>
               <p className="mt-2">Live since TBD. Replaced TBD. Reference call available on request via Gamini K.</p>
             </div>
           </details>
@@ -742,7 +741,7 @@ export default function PlanPage() {
 
         {/* Footer */}
         <footer className="mt-20 pt-10 border-t border-yai-border text-center text-sm text-gray-500 no-print">
-          <p>Confidential — YAI / Texlink Technologies Co., Ltd.</p>
+          <p>Confidential — Yai / Texlink Technologies Co., Ltd.</p>
           <p className="mt-1">By accessing this page you agree not to share its contents without permission.</p>
         </footer>
       </main>

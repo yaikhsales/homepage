@@ -6,13 +6,13 @@ const STAGES = [
   {
     num: "Stage 1",
     name: "Digital",
-    blurb: "Click-based interface that replaces paper. Basic AI assists with data entry and reporting. Low-cost entry point — immediate, tangible wins.",
-    bullets: ["Paper-to-digital workflows", "Standard reports + dashboards", "AI helper for data capture"],
+    blurb: "Click-based interface that replaces paper. Basic Ai assists with data entry and reporting. Low-cost entry point — immediate, tangible wins.",
+    bullets: ["Paper-to-digital workflows", "Standard reports + dashboards", "Ai helper for data capture"],
   },
   {
     num: "Stage 2",
     name: "Agentic",
-    blurb: "Chat-driven workflows. AI agents own end-to-end processes — payroll runs, audit prep, compliance reports — with supervisors approving rather than building.",
+    blurb: "Chat-driven workflows. Ai agents own end-to-end processes — payroll runs, audit prep, compliance reports — with supervisors approving rather than building.",
     bullets: ["Conversational interface", "Autonomous workflow execution", "Trilingual chat (EN/ZH/KH)"],
     highlight: true,
   },
