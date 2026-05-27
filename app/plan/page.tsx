@@ -65,22 +65,26 @@ export default function PlanPage() {
           </div>
 
           <div className="space-y-4 text-gray-700 leading-relaxed">
-            <p><strong className="text-yai-navy">What it is.</strong> Garment factories today still run on paper reports, ledger books, Excel sheets, half a dozen scattered chat apps, email threads, manual signatures, and staff running floor-to-floor chasing approvals — or being chased by phone and chat. Yai consolidates all of that into one Ai-native platform, layered in three:</p>
-            <ol className="ml-2 space-y-3 text-gray-700 list-none counter-reset-layer">
+            <p><strong className="text-yai-navy">What it is.</strong> Yai is a four-layer platform that takes a garment factory from paper-and-chaos to executive Ai. The starting point — Layer 1 — is the reality most factories are stuck in. The next three layers are the evolution Yai delivers:</p>
+            <ol className="ml-2 space-y-3 text-gray-700 list-none">
               <li className="flex gap-3">
-                <span className="shrink-0 w-7 h-7 rounded-full bg-yai-blue text-white text-xs font-extrabold flex items-center justify-center mt-0.5">1</span>
-                <span><strong className="text-yai-blue">Digitalization layer.</strong> Converts paper, chat, email and Excel work into one uniform digital workplace. Every approval, record, signature and conversation lives in one system.</span>
+                <span className="shrink-0 w-7 h-7 rounded-full bg-gray-400 text-white text-xs font-extrabold flex items-center justify-center mt-0.5">1</span>
+                <span><strong className="text-gray-700">Traditional factory work</strong> <em className="text-gray-500">(disconnected &amp; manual — what we replace).</em> Paper reports and books, manual signatures, scattered chat apps, calls and pushes by chat, staff running floor-to-floor chasing approvals — &ldquo;where is the approval?&rdquo;, files sent by chat app.</span>
               </li>
               <li className="flex gap-3">
                 <span className="shrink-0 w-7 h-7 rounded-full bg-yai-blue text-white text-xs font-extrabold flex items-center justify-center mt-0.5">2</span>
-                <span><strong className="text-yai-blue">Agentic layer.</strong> Refines those workflows with LLMs, text and voice functions, dashboards, factory-floor DTV, AIoT devices, mobile and tablet apps. Staff and workers get easier, faster, more accurate operations on every device.</span>
+                <span><strong className="text-yai-blue">Digitalization layer</strong> <em className="text-gray-500">(centralised data).</em> Excel dashboards and digital records flow into one database. Barcode &amp; QR scanners, AIoT sensors, mobile apps and tablets — initial workflow streamlining, one source of truth.</span>
               </li>
               <li className="flex gap-3">
-                <span className="shrink-0 w-7 h-7 rounded-full bg-yai-orange text-white text-xs font-extrabold flex items-center justify-center mt-0.5">3</span>
-                <span><strong className="text-yai-navy">Full Ai layer.</strong> Built for senior management — strategic planning, controls, growth modelling. Manage one factory, expand to a second, then a second country, on the same agentic foundation.</span>
+                <span className="shrink-0 w-7 h-7 rounded-full bg-yai-blue text-white text-xs font-extrabold flex items-center justify-center mt-0.5">3</span>
+                <span><strong className="text-yai-blue">Agentic layer</strong> <em className="text-gray-500">(LLM-powered intelligent agents).</em> Voice-to-workflow processing, text instructions interpreted by LLM, geolocation &amp; logistics optimisation, intuitive dashboards and DTV (Digital Twin Visualisation), real-time Ai guidance for staff — agents refining workflows.</span>
+              </li>
+              <li className="flex gap-3">
+                <span className="shrink-0 w-7 h-7 rounded-full bg-yai-orange text-white text-xs font-extrabold flex items-center justify-center mt-0.5">4</span>
+                <span><strong className="text-yai-navy">Full Ai layer</strong> <em className="text-gray-500">(strategic management &amp; growth).</em> Higher-level management decision-making, strategic planning with Ai insights, predictive business growth, multi-factory management, business expansion and global growth.</span>
               </li>
             </ol>
-            <p className="text-sm text-gray-500 italic">Digital first, agentic next, Full Ai for scale. One platform, one factory&apos;s complete evolution.</p>
+            <p className="text-sm text-gray-500 italic">Manual today → digital tomorrow → agentic next → full Ai at scale. One platform carries the factory through every layer.</p>
             <p><strong className="text-yai-navy">Origin.</strong> Built end-to-end in Cambodia by Texlink Technologies — a 20-engineer team with deep on-the-floor knowledge of garment manufacturing operations, backed by 40 years of combined industry experience across technical and management.</p>
             <p><strong className="text-yai-navy">Traction.</strong> 2 factories in live production for 5 years, 3 legacy systems successfully replaced, 5 prospect meetings booked in the first week of structured outreach. Weekly seminar series underway.</p>
             <p><strong className="text-yai-navy">This plan.</strong> Outlines commercialisation of the <em>Admin-tier</em> modules to mid-large factories across Cambodia and the region. Production modules (YQMS, YTM/CE, YPI, 4DP) remain group internal IP — referenced for completeness but not the subject of this commercial roll-out.</p>
@@ -156,28 +160,28 @@ export default function PlanPage() {
         </Section>
 
         {/* 04 — Architecture (with ChatDemo) */}
-        <Section id="architecture" kicker={kicker(4, "Architecture")} title="Three Layers, One Platform">
+        <Section id="architecture" kicker={kicker(4, "Architecture")} title="From Manual to Full Ai — Four Layers">
           <Thesis>
-            Digitalization, Agentic, Full Ai. Three layers stacked into one platform — each one adds capability without ripping out what came before.
+            Ground truth: platform evolution from manual to agentic and Full Ai management. Four layers, one platform — each one adds capability without ripping out the one below.
           </Thesis>
           <p className="text-gray-700 leading-relaxed mb-8">
-            A factory doesn&apos;t transform overnight. Yai&apos;s three layers stack so a factory can adopt at its own pace — digitize first, layer agentic on top when ready, then unlock the Full Ai layer when scaling beyond one site.
+            A factory doesn&apos;t transform overnight. Layer 1 is the manual reality most factories are stuck in today — Yai replaces it. The next three layers stack so a factory can adopt at its own pace: digitize first, layer agentic on top when ready, unlock the Full Ai layer when scaling beyond one site.
           </p>
 
           <StageLadder />
 
           <div className="mt-10 mb-6">
-            <p className="text-xs uppercase tracking-wider font-bold text-yai-blue mb-2">Layer 2 — Agentic, in action</p>
+            <p className="text-xs uppercase tracking-wider font-bold text-yai-blue mb-2">Layer 3 — Agentic, in action</p>
             <h3 className="text-2xl font-bold text-yai-navy mb-4">What a conversation with Yai actually looks like</h3>
             <p className="text-sm text-gray-600 mb-5 max-w-2xl">
-              A real Layer-2 interaction: a supervisor asks for the payroll summary, the agent pulls the data, then prepares the WRAP audit pack on request. No clicking through 12 screens.
+              A real Layer-3 interaction: a supervisor asks for the payroll summary, the agent pulls the data, then prepares the WRAP audit pack on request. No clicking through 12 screens.
             </p>
           </div>
           <ChatDemo />
 
           <div className="mt-10 p-5 bg-yai-navy text-white rounded-lg">
             <p className="text-sm leading-relaxed">
-              <strong className="text-yai-blue">Why this matters commercially:</strong> Each layer is a real revenue step. Most customers land at Layer 1, prove ROI in 90 days, and self-select into Layers 2 and 3. The architecture is the upsell engine — built into the product, not bolted on as sales theatre.
+              <strong className="text-yai-blue">Why this matters commercially:</strong> Each Yai layer (2 → 3 → 4) is a real revenue step. Most customers land at Layer 2, prove ROI in 90 days, and self-select into Layers 3 and 4. The architecture is the upsell engine — built into the product, not bolted on as sales theatre.
             </p>
           </div>
         </Section>
