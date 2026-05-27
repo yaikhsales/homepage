@@ -104,25 +104,54 @@ export function Sidebar({
         transition={{ type: "spring", damping: 30, stiffness: 240 }}
         className="sidebar w-72 bg-yai-navy text-white min-h-screen lg:sticky lg:top-0 lg:max-h-screen lg:overflow-y-auto sidebar-scroll no-print fixed lg:relative inset-y-0 left-0 z-50 lg:translate-x-0"
       >
-        <div className="p-6 border-b border-white/10">
-          <div className="flex items-end gap-3 mb-4">
-            <span
-              className="font-script text-white text-[3.5rem] leading-[0.85] select-none"
-              style={{
-                textShadow:
-                  "0 1px 0 rgba(255,255,255,0.18), 0 2px 6px rgba(0,0,0,0.4)",
-              }}
-            >
-              Yai
-            </span>
-            <div className="pb-1.5">
-              <div className="text-[11px] text-white/70 leading-tight font-medium">Texlink Technologies</div>
-              <div className="text-[10px] uppercase tracking-wider text-white/45 font-semibold mt-0.5">Business Plan</div>
+        <div className="px-5 pt-6 pb-5 border-b border-white/10">
+          <div className="flex items-center gap-4 mb-4">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/yai-logo.jpg"
+              alt="Yai"
+              className="h-16 w-16 rounded-lg object-cover shadow-lg ring-1 ring-white/20 shrink-0"
+            />
+            <div className="flex-1 min-w-0 leading-tight">
+              <div className="text-sm text-white font-semibold truncate">Texlink Technologies</div>
+              <div className="text-[10px] uppercase tracking-[0.15em] text-yai-orange/90 font-bold mt-1">Strategic DTV</div>
             </div>
           </div>
-          <p className="text-xs text-white/70 mt-1">
-            Viewer: <span className="font-medium">{viewer}</span>
+          <p className="text-[11px] text-white/65 mb-4">
+            Viewer: <span className="font-medium text-white/85">{viewer}</span>
           </p>
+
+          {/* Signature block */}
+          <div className="pt-4 border-t border-white/10 text-white/80">
+            <div className="text-[13px] font-semibold text-white leading-tight">Gamini K</div>
+            <div className="text-[10.5px] uppercase tracking-[0.12em] text-white/55 mt-0.5">Director</div>
+            <div className="text-[11px] font-semibold text-white/85 mt-2 leading-tight">
+              TEXLINK TECHNOLOGIES CO., LTD.
+            </div>
+            <div className="text-[10.5px] text-white/55 leading-snug mt-1">
+              Apparel, Footwear, Bags, Softgoods<br />Manufacturing Intelligence Solutions
+            </div>
+
+            <div className="mt-3 pt-3 border-t border-white/10">
+              <div className="text-[10px] uppercase tracking-[0.15em] text-yai-orange/85 font-bold mb-1.5">Product Suite</div>
+              <ul className="space-y-0.5 text-[11.5px] text-white/75">
+                <li><span className="text-yai-blue-light font-semibold">Yai</span> Digitalization</li>
+                <li><span className="text-yai-blue-light font-semibold">Yai</span> AiOT</li>
+                <li><span className="text-yai-blue-light font-semibold">Yai</span> Bots</li>
+                <li><span className="text-yai-blue-light font-semibold">Yai</span> E-com</li>
+                <li><span className="text-yai-blue-light font-semibold">Yai</span> Gov</li>
+              </ul>
+            </div>
+
+            <a
+              href="https://www.yaikh.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block mt-3 text-[11px] text-yai-orange/90 hover:text-yai-orange underline underline-offset-2 transition"
+            >
+              yaikh.com &rarr;
+            </a>
+          </div>
         </div>
 
         <nav className="py-4 px-3 space-y-0.5 text-sm">
@@ -155,6 +184,7 @@ export function Sidebar({
           })}
         </nav>
 
+        {/* Action buttons */}
         <div className="p-4 border-t border-white/10 space-y-2">
           <button
             onClick={onPrint}

@@ -62,42 +62,13 @@ export function LoginCard() {
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1, duration: 0.5 }}
-        className="flex items-center justify-center mb-6"
+        className="flex items-center justify-center mb-10"
       >
         <img
           src="/images/yai-logo.jpg"
           alt="Yai"
           className="h-32 sm:h-36 w-auto rounded-lg shadow-2xl"
         />
-      </motion.div>
-
-      <motion.h1
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2, duration: 0.5 }}
-        className="text-white text-2xl sm:text-3xl font-extrabold text-center tracking-tight mb-2 text-balance"
-      >
-        Business Plan &amp; Strategy Portal
-      </motion.h1>
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3, duration: 0.5 }}
-        className="text-white/85 text-center text-sm sm:text-base mb-3"
-      >
-        Ai-Native Manufacturing Intelligence Platform
-      </motion.p>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.35, duration: 0.5 }}
-        className="flex items-center justify-center gap-3 mb-8"
-      >
-        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-white/15 border border-white/20 text-white text-[10px] font-extrabold tracking-[0.18em] uppercase">
-          Ai MIP
-        </span>
-        <span className="text-white/30 text-xs">·</span>
-        <MadeInCambodia variant="dark" />
       </motion.div>
 
       <motion.form

@@ -60,66 +60,141 @@ export default function PlanPage() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
             <StatCallout value={10} label="Ai agents in production" />
-            <StatCallout value={20} label="Engineers from Cambodia" />
+            <StatCallout value={20} label="Engineers from Cambodia" flagIcon="/images/cambodia-flag.svg" />
             <StatCallout value={36} suffix=" mo" label="In development" />
             <StatCallout value={40} suffix=" yrs" label="Industry experience (technical + management)" />
           </div>
 
           <div className="space-y-4 text-gray-700 leading-relaxed">
-            <p><strong className="text-yai-navy">What it is.</strong> Yai is <strong className="text-yai-blue">Ai MIP</strong> — Agentic Manufacturing Intelligence. A three-layer platform that modernises your production unit from a whole-paper-based operation into executive Ai. The chaos most factories live in today — <HoverImage src="/images/generated/problem.png" alt="The paper-and-chaos reality Yai replaces" caption="Hover to see what we replace: paper, ledger books, scattered chat, manual signatures, running for approvals.">paper reports and ledger books, scattered chat apps, manual signatures, staff running floor-to-floor chasing approvals, calls and pushes by chat</HoverImage> — is what Yai replaces. The three layers Yai delivers, stacked on top:</p>
+            <p><strong className="text-yai-navy">What it is.</strong> Yai is <strong className="text-yai-blue">Ai MIP</strong> — Agentic Manufacturing Intelligence. A three-layer platform that modernises your production unit from a whole-paper-based operation into executive Ai. The chaos most factories live in today — <HoverImage src="/images/generated/problem.png" alt="The paper-and-chaos reality Yai replaces" caption="Today's chaos — what Yai replaces.">paper reports and ledger books, scattered chat apps, manual signatures, staff running floor-to-floor chasing approvals, calls and pushes by chat</HoverImage> — is what Yai replaces. The three layers Yai delivers, stacked on top:</p>
             <ol className="ml-2 space-y-3 text-gray-700 list-none">
               <li className="flex gap-3">
                 <span className="shrink-0 w-7 h-7 rounded-full bg-yai-blue text-white text-xs font-extrabold flex items-center justify-center mt-0.5">1</span>
-                <span><strong className="text-yai-blue">Digitalization layer</strong> <em className="text-gray-500">(centralised data).</em> Excel dashboards and digital records flow into one database. Barcode &amp; QR scanners, AIoT sensors, mobile apps and tablets — initial workflow streamlining, one source of truth.</span>
+                <HoverImage
+                  src="/images/generated/layer-digitalization.png"
+                  alt="Digitalization layer — centralised data flowing in from scanners, sensors, tablets and dashboards"
+                  caption="Layer 1: one database, all factory data — scanners, AIoT sensors, mobile apps, tablets."
+                >
+                  <strong className="text-yai-blue">Digitalization layer</strong> <em className="text-gray-500">(centralised data).</em> Excel dashboards and digital records flow into one database. Barcode &amp; QR scanners, AIoT sensors, mobile apps and tablets — initial workflow streamlining, one source of truth.
+                </HoverImage>
               </li>
               <li className="flex gap-3">
                 <span className="shrink-0 w-7 h-7 rounded-full bg-yai-blue text-white text-xs font-extrabold flex items-center justify-center mt-0.5">2</span>
-                <span><strong className="text-yai-blue">Agentic layer</strong> <em className="text-gray-500">(LLM-powered intelligent agents).</em> Voice-to-workflow processing, text instructions interpreted by LLM, geolocation &amp; logistics optimisation, intuitive dashboards and DTV (Digital Twin Visualisation), real-time Ai guidance for staff — agents refining workflows.</span>
+                <HoverImage
+                  src="/images/generated/layer-agentic.png"
+                  alt="Agentic layer — LLM-powered agents, voice and chat workflows, DTV digital twin, real-time floor guidance"
+                  caption="Layer 2: Ai agents own workflows. Voice, chat, DTV, real-time guidance, geo &amp; logistics."
+                >
+                  <strong className="text-yai-blue">Agentic layer</strong> <em className="text-gray-500">(LLM-powered intelligent agents).</em> Voice-to-workflow processing, text instructions interpreted by LLM, geolocation &amp; logistics optimisation, intuitive dashboards and DTV (Digital Twin Visualisation), real-time Ai guidance for staff — agents refining workflows.
+                </HoverImage>
               </li>
               <li className="flex gap-3">
                 <span className="shrink-0 w-7 h-7 rounded-full bg-yai-orange text-white text-xs font-extrabold flex items-center justify-center mt-0.5">3</span>
-                <span><strong className="text-yai-navy">Full Ai layer</strong> <em className="text-gray-500">(strategic management &amp; growth).</em> Higher-level management decision-making, strategic planning with Ai insights, predictive business growth, multi-factory management, business expansion and global growth.</span>
+                <HoverImage
+                  src="/images/generated/layer-full-ai.png"
+                  alt="Full Ai layer — executive command centre, multi-country expansion, predictive growth"
+                  caption="Layer 3: executive command. Multi-factory, multi-country, predictive growth, strategic Ai."
+                >
+                  <strong className="text-yai-navy">Full Ai layer</strong> <em className="text-gray-500">(strategic management &amp; growth).</em> Higher-level management decision-making, strategic planning with Ai insights, predictive business growth, multi-factory management, business expansion and global growth.
+                </HoverImage>
               </li>
             </ol>
           </div>
         </Section>
 
         {/* 02 — Problem */}
-        <Section id="problem" kicker={kicker(2, "The Problem")} title="The Problem">
-          <Thesis>
-            Regional garment factories run on paper and outdated software, while compliance demands grow every year. No Ai-native option exists for them.
-          </Thesis>
+        <Section id="problem" kicker={kicker(2, "The Problem")} title="The Sandwich">
+          {/* TOP ROW — Brand + Government */}
           <div className="grid md:grid-cols-2 gap-5">
-            <Card>
-              <h3 className="font-bold text-yai-navy text-lg mb-2">Paper-driven operations</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">Most Cambodian and regional factories still run worker data, attendance, payroll calculations and audit prep on paper, spreadsheets, or fragmented legacy tools.</p>
-            </Card>
-            <Card>
-              <h3 className="font-bold text-yai-navy text-lg mb-2">Compliance burden compounding</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">WRAP, BSCI, ILO, HIGG, CTPAT, GMP, GRS — buyer audit demands grow every year. Manual prep is expensive, error-prone, and slow.</p>
-            </Card>
-            <Card>
-              <h3 className="font-bold text-yai-navy text-lg mb-2">Fragmented systems</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">Workforce, payroll, inventory, finance and audit data live in different tools — no single source of truth, no Ai-ready data layer.</p>
-            </Card>
-            <Card>
-              <h3 className="font-bold text-yai-navy text-lg mb-2">No Ai-native option</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">SAP and Oracle are priced out of reach. Odoo is generic. In-house systems are dated. There is no Ai-first product purpose-built for the apparel segment at a regional price point.</p>
-            </Card>
-          </div>
-          <div className="mt-8 grid sm:grid-cols-4 gap-3 text-center">
-            {[
-              ["Cost",       "SAP/Oracle out of reach"],
-              ["Complexity", "Multiple tools, no integration"],
-              ["Time",       "Manual audit prep, weeks per cycle"],
-              ["Readiness",  "Buyer audits at risk"],
-            ].map(([k, v]) => (
-              <div key={k} className="p-4 bg-white rounded-lg border border-yai-border">
-                <div className="text-2xl font-extrabold text-yai-blue">{k}</div>
-                <div className="text-xs text-gray-500 mt-1">{v}</div>
+            <Card className="overflow-hidden p-0">
+              <div className="px-6 pt-6">
+                <div className="text-yai-blue font-bold text-[10.5px] tracking-[0.15em] uppercase mb-2">Corner 1 &middot; Brand</div>
+                <h3 className="font-bold text-yai-navy text-lg mb-3">The brand is upgrading</h3>
               </div>
-            ))}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/images/generated/brand-ceo.png"
+                alt="A global fashion-brand CEO addresses her board: go agentic now, the factories that integrate win the orders — don't be Nokia."
+                className="w-full h-auto block"
+              />
+              <p className="text-xs italic text-gray-500 px-6 py-3 bg-yai-bg border-t border-yai-border">
+                Inside a global apparel brand HQ: the CEO tells the board &mdash; integrate or be left behind. Excel is finished. <strong className="not-italic text-yai-navy">Don&apos;t be Nokia.</strong>
+              </p>
+            </Card>
+
+            <Card className="overflow-hidden p-0">
+              <div className="px-6 pt-6">
+                <div className="text-yai-blue font-bold text-[10.5px] tracking-[0.15em] uppercase mb-2">Corner 2 &middot; Government</div>
+                <h3 className="font-bold text-yai-navy text-lg mb-3">The government is mandating</h3>
+              </div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/images/generated/government-meeting.png"
+                alt="Cambodian Ministry of Environment officials meet with factory staff: worker data, EMR reports, tax filings must be submitted digitally and on time, or face penalties."
+                className="w-full h-auto block"
+              />
+              <p className="text-xs italic text-gray-500 px-6 py-3 bg-yai-bg border-t border-yai-border">
+                Ministry of Environment officials brief factory staff: digital submission of worker data, EMR reports, tax filings &mdash; on time, every time. <strong className="not-italic text-yai-navy">Late means penalties. The paper era is over.</strong>
+              </p>
+            </Card>
           </div>
+
+          {/* CENTER — The Owner (sandwiched) */}
+          <div className="my-5 flex justify-center">
+            <div className="w-full md:w-[calc(50%-0.625rem)]">
+            <Card className="overflow-hidden p-0 border-yai-orange shadow-xl">
+              <div className="px-6 pt-6">
+                <div className="text-yai-orange font-bold text-[10.5px] tracking-[0.15em] uppercase mb-2">The Owner &middot; Sandwiched</div>
+                <h3 className="font-bold text-yai-navy text-lg mb-3">Caught in the middle</h3>
+              </div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/images/generated/boss-meets-yai.png"
+                alt="The factory boss tells the Yai team: 'we have nearly 20 systems, $2M spent, none working together, half don't even update anymore.'"
+                className="w-full h-auto block"
+              />
+              <p className="text-xs italic text-gray-500 px-6 py-3 bg-orange-50/60 border-t border-yai-orange/30">
+                The boss isn&apos;t the blocker. He&apos;s tried everything. <strong className="not-italic text-yai-navy">~20 half-baked systems. $2M sunk. Zero integration.</strong> Now the brand and the government are forcing his hand &mdash; and he needs a partner who won&apos;t become system #21.
+              </p>
+            </Card>
+            </div>
+          </div>
+
+          {/* BOTTOM ROW — Management + Staff & Workers */}
+          <div className="grid md:grid-cols-2 gap-5">
+            <Card className="overflow-hidden p-0">
+              <div className="px-6 pt-6">
+                <div className="text-yai-blue font-bold text-[10.5px] tracking-[0.15em] uppercase mb-2">Corner 3 &middot; Management</div>
+                <h3 className="font-bold text-yai-navy text-lg mb-3">Management hitting the wall</h3>
+              </div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/images/generated/management-wall.png"
+                alt="Split screen: the general manager overwhelmed by paper and Excel saying 'there is no way', and the sales manager on a buyer call saying 'I don't think the buyer will accept our answer'."
+                className="w-full h-auto block"
+              />
+              <p className="text-xs italic text-gray-500 px-6 py-3 bg-yai-bg border-t border-yai-border">
+                Management buried under paper and Excel; Sales on a buyer call already losing the conversation. <strong className="not-italic text-yai-navy">The current system has hit its ceiling.</strong>
+              </p>
+            </Card>
+
+            <Card className="overflow-hidden p-0">
+              <div className="px-6 pt-6">
+                <div className="text-yai-blue font-bold text-[10.5px] tracking-[0.15em] uppercase mb-2">Corner 4 &middot; Staff &amp; Workers</div>
+                <h3 className="font-bold text-yai-navy text-lg mb-3">Workers don&apos;t resist change</h3>
+              </div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/images/generated/workers-asking-why.png"
+                alt="Long-serving Cambodian garment factory workers gathered on the floor asking honest questions: 'Why now?', 'We've been fine for 100 years', 'Why an app?', 'Who is this Ai agent?'"
+                className="w-full h-auto block"
+              />
+              <p className="text-xs italic text-gray-500 px-6 py-3 bg-yai-bg border-t border-yai-border">
+                The workers don&apos;t resist change &mdash; they resist friction. Most documents and software are in Chinese they can&apos;t read. Every issue means a long trip to HR to talk it through. The same paper form, every day. <strong className="not-italic text-yai-navy">They&apos;ve heard another factory already uses phones &mdash; and they want what works for them.</strong>
+              </p>
+            </Card>
+          </div>
+
         </Section>
 
         {/* 03 — Solution */}
@@ -534,7 +609,7 @@ export default function PlanPage() {
               </div>
             </Card>
             <Card>
-              <h3 className="font-bold text-yai-navy mb-2">Engineering team — 20 developers</h3>
+              <h3 className="font-bold text-yai-navy mb-2">Engineering team — 20 engineers</h3>
               <p className="text-sm text-gray-600">Cambodia-based, full-stack Laravel + MongoDB, native mobile, Ai agent specialists. Organised across Admin modules and Production modules with shared platform team.</p>
             </Card>
             <Card>

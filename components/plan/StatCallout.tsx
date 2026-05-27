@@ -11,6 +11,7 @@ export function StatCallout({
   label,
   orange = false,
   duration = 1.4,
+  flagIcon,
 }: {
   value: number;
   prefix?: string;
@@ -19,6 +20,7 @@ export function StatCallout({
   label: string;
   orange?: boolean;
   duration?: number;
+  flagIcon?: string;
 }) {
   const ref = useRef<HTMLDivElement | null>(null);
   const inView = useInView(ref, { once: true, amount: 0.5 });
@@ -48,8 +50,12 @@ export function StatCallout({
       >
         <motion.span>{display}</motion.span>
       </motion.div>
-      <div className="text-[0.78rem] text-gray-500 uppercase tracking-wider mt-2 font-semibold">
-        {label}
+      <div className="text-[0.78rem] text-gray-500 uppercase tracking-wider mt-2 font-semibold flex items-center gap-1.5">
+        {flagIcon && (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img src={flagIcon} alt="" className="h-3.5 w-auto rounded-[2px] shadow-sm ring-1 ring-black/10" />
+        )}
+        <span>{label}</span>
       </div>
     </div>
   );

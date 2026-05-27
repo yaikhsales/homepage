@@ -45,7 +45,7 @@ export function HoverImage({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 6, scale: 0.96 }}
             transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-            style={{ width }}
+            style={{ width, maxWidth: "min(90vw, 460px)" }}
             className="absolute left-1/2 -translate-x-1/2 top-full mt-3 z-50 rounded-xl shadow-2xl border-2 border-yai-blue overflow-hidden bg-white pointer-events-none"
           >
             <span className="block relative">
