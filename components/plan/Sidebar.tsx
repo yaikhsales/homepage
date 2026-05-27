@@ -105,14 +105,18 @@ export function Sidebar({
         className="sidebar w-72 bg-yai-navy text-white min-h-screen lg:sticky lg:top-0 lg:max-h-screen lg:overflow-y-auto sidebar-scroll no-print fixed lg:relative inset-y-0 left-0 z-50 lg:translate-x-0"
       >
         <div className="p-6 border-b border-white/10">
-          <div className="flex items-center gap-3 mb-4">
-            <img
-              src="/images/yai-logo.jpg"
-              alt="Yai"
-              className="h-12 w-12 rounded-md object-cover shadow-md"
-            />
-            <div>
-              <div className="text-xs text-white/65 leading-tight">Texlink Technologies</div>
+          <div className="flex items-end gap-3 mb-4">
+            <span
+              className="font-script text-white text-[3.5rem] leading-[0.85] select-none"
+              style={{
+                textShadow:
+                  "0 1px 0 rgba(255,255,255,0.18), 0 2px 6px rgba(0,0,0,0.4)",
+              }}
+            >
+              Yai
+            </span>
+            <div className="pb-1.5">
+              <div className="text-[11px] text-white/70 leading-tight font-medium">Texlink Technologies</div>
               <div className="text-[10px] uppercase tracking-wider text-white/45 font-semibold mt-0.5">Business Plan</div>
             </div>
           </div>
