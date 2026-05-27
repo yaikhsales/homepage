@@ -156,28 +156,28 @@ export default function PlanPage() {
         </Section>
 
         {/* 04 — Architecture (with ChatDemo) */}
-        <Section id="architecture" kicker={kicker(4, "Product Architecture")} title="The 3-Stage Ladder">
+        <Section id="architecture" kicker={kicker(4, "Architecture")} title="Three Layers, One Platform">
           <Thesis>
-            Customers start cheap, prove value, then expand. Each stage unlocks more revenue per customer without re-implementation.
+            Digitalization, Agentic, Full Ai. Three layers stacked into one platform — each one adds capability without ripping out what came before.
           </Thesis>
           <p className="text-gray-700 leading-relaxed mb-8">
-            Factories don&apos;t buy enterprise platforms in one shot. Yai is architected so a customer can start with a low-risk digital-replacement deployment, advance to agentic workflows, and finally scale to a multi-site Big Rollout — each stage building on the same data layer.
+            A factory doesn&apos;t transform overnight. Yai&apos;s three layers stack so a factory can adopt at its own pace — digitize first, layer agentic on top when ready, then unlock the Full Ai layer when scaling beyond one site.
           </p>
 
           <StageLadder />
 
           <div className="mt-10 mb-6">
-            <p className="text-xs uppercase tracking-wider font-bold text-yai-blue mb-2">Stage 2 — Agentic, in action</p>
+            <p className="text-xs uppercase tracking-wider font-bold text-yai-blue mb-2">Layer 2 — Agentic, in action</p>
             <h3 className="text-2xl font-bold text-yai-navy mb-4">What a conversation with Yai actually looks like</h3>
             <p className="text-sm text-gray-600 mb-5 max-w-2xl">
-              A real Stage-2 interaction: a supervisor asks for the payroll summary, the agent pulls the data, then prepares the WRAP audit pack on request. No clicking through 12 screens.
+              A real Layer-2 interaction: a supervisor asks for the payroll summary, the agent pulls the data, then prepares the WRAP audit pack on request. No clicking through 12 screens.
             </p>
           </div>
           <ChatDemo />
 
           <div className="mt-10 p-5 bg-yai-navy text-white rounded-lg">
             <p className="text-sm leading-relaxed">
-              <strong className="text-yai-blue">Why this matters commercially:</strong> Each stage is a real revenue step. Most customers land at Stage 1, prove ROI in 90 days, and self-select into Stages 2 and 3. The ladder is the upsell engine — built into the product, not bolted on as sales theatre.
+              <strong className="text-yai-blue">Why this matters commercially:</strong> Each layer is a real revenue step. Most customers land at Layer 1, prove ROI in 90 days, and self-select into Layers 2 and 3. The architecture is the upsell engine — built into the product, not bolted on as sales theatre.
             </p>
           </div>
         </Section>
