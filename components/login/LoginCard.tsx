@@ -10,6 +10,7 @@ export function LoginCard() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [shake, setShake] = useState(0);
+  const [reveal, setReveal] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const onSubmit = async (e: React.FormEvent) => {
@@ -97,20 +98,41 @@ export function LoginCard() {
         <label htmlFor="access-code" className="block text-white/85 text-sm font-medium mb-2">
           Access Code
         </label>
-        <input
-          id="access-code"
-          ref={inputRef}
-          name="access-code"
-          type="text"
-          required
-          autoComplete="off"
-          spellCheck={false}
-          placeholder="Enter your code"
-          value={code}
-          onChange={(e) => setCode(e.target.value)}
-          disabled={loading}
-          className="w-full px-4 py-3 rounded-lg bg-white/12 border border-white/25 text-white placeholder-white/45 focus:outline-none focus:ring-2 focus:ring-white/60 focus:border-transparent transition text-base disabled:opacity-60"
-        />
+        <div className="relative">
+          <input
+            id="access-code"
+            ref={inputRef}
+            name="access-code"
+            type={reveal ? "text" : "password"}
+            required
+            autoComplete="off"
+            spellCheck={false}
+            placeholder="Enter your code"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            disabled={loading}
+            className="w-full pl-4 pr-12 py-3 rounded-lg bg-white border border-white/40 text-yai-blue-deep font-medium placeholder-yai-blue-deep/40 focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent transition text-base disabled:opacity-60 tracking-wide"
+          />
+          <button
+            type="button"
+            onClick={() => setReveal((r) => !r)}
+            tabIndex={-1}
+            aria-label={reveal ? "Hide code" : "Show code"}
+            className="absolute inset-y-0 right-0 px-3 flex items-center text-yai-blue-deep/50 hover:text-yai-blue-deep transition"
+          >
+            {reveal ? (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                <line x1="1" y1="1" x2="23" y2="23"/>
+              </svg>
+            ) : (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            )}
+          </button>
+        </div>
 
         {error && (
           <motion.p
