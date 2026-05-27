@@ -73,7 +73,7 @@ const Icon = {
 
 type LayerIcon = { node: React.ReactNode; label: string };
 type Layer = {
-  num: number;
+  num: number | "Today";
   name: string;
   subtitle: string;
   blurb: string;
@@ -82,9 +82,9 @@ type Layer = {
 };
 
 const LAYERS: Layer[] = [
-  // top → bottom (Layer 4 at top, Layer 1 at bottom)
+  // top → bottom (Yai Layer 3 at top, "Today" at bottom)
   {
-    num: 4,
+    num: 3,
     name: "Full Ai",
     subtitle: "Strategic management & growth",
     blurb: "Executive layer — senior management decisions, multi-factory control, expansion to new countries.",
@@ -98,7 +98,7 @@ const LAYERS: Layer[] = [
     ],
   },
   {
-    num: 3,
+    num: 2,
     name: "Agentic",
     subtitle: "LLM-powered intelligent agents",
     blurb: "Ai agents refine workflows. Voice, text, dashboards and digital-twin visualisation on every device.",
@@ -112,7 +112,7 @@ const LAYERS: Layer[] = [
     ],
   },
   {
-    num: 2,
+    num: 1,
     name: "Digitalization",
     subtitle: "Centralised data",
     blurb: "Excel dashboards and digital records flow into one database. The foundation for everything above.",
@@ -126,10 +126,10 @@ const LAYERS: Layer[] = [
     ],
   },
   {
-    num: 1,
+    num: "Today",
     name: "Traditional Factory Work",
-    subtitle: "Disconnected & manual — what we replace",
-    blurb: "Where most factories are stuck today. Yai doesn't deliver this layer; it replaces it.",
+    subtitle: "Disconnected & manual — what Yai replaces",
+    blurb: "The reality most garment factories are stuck in today. Yai doesn't deliver this layer; it replaces it.",
     variant: "before",
     icons: [
       { node: Icon.paper,   label: "Paper reports" },
@@ -226,7 +226,7 @@ export function StageLadder() {
               {/* Left badge / title block */}
               <div className="md:w-72 shrink-0 p-5 md:p-6 md:border-r md:border-current/10">
                 <div className={`inline-block text-[10px] font-extrabold tracking-[0.18em] px-2 py-1 rounded ${badgeClass(l.variant)}`}>
-                  LAYER {l.num}
+                  {l.num === "Today" ? "TODAY" : `LAYER ${l.num}`}
                 </div>
                 <h3 className={`text-2xl font-extrabold mt-3 ${l.variant === "before" ? "text-gray-600" : ""}`}>
                   {l.name}
