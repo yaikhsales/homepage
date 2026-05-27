@@ -65,7 +65,12 @@ export default function PlanPage() {
           </div>
 
           <div className="space-y-4 text-gray-700 leading-relaxed">
-            <p><strong className="text-yai-navy">What it is.</strong> Yai is an Ai-native MES/ERP platform built specifically for the apparel industry — covering finance, HR/payroll, compliance, admin and internal logistics, with a production module suite held as internal IP.</p>
+            <p><strong className="text-yai-navy">What it is.</strong> Garment factories today still run on paper reports, ledger books, Excel sheets, half a dozen scattered chat apps, email threads, manual signatures, and staff running floor-to-floor chasing approvals — or being chased by phone and chat. Yai consolidates all of that into one Ai-native platform, in two layers:</p>
+            <ul className="ml-5 space-y-2 text-gray-700 list-none">
+              <li><span className="inline-block w-2 h-2 bg-yai-blue rounded-full mr-2 align-middle"></span><strong className="text-yai-blue">Digitalization layer.</strong> Converts paper, chat, email and Excel work into one uniform digital workplace. Every approval, record, signature and conversation lives in one system.</li>
+              <li><span className="inline-block w-2 h-2 bg-yai-orange rounded-full mr-2 align-middle"></span><strong className="text-yai-navy">Agentic layer.</strong> Sits on top of the digital foundation. Ai agents own end-to-end workflows — payroll runs, audit prep, compliance reports — while supervisors approve rather than build.</li>
+            </ul>
+            <p className="text-sm text-gray-500 italic">Digital first, agentic next. The same platform carries the factory through both evolutions.</p>
             <p><strong className="text-yai-navy">Origin.</strong> Built end-to-end in Cambodia by Texlink Technologies — a 20-engineer team with deep on-the-floor knowledge of garment manufacturing operations, backed by 40 years of combined industry experience across technical and management.</p>
             <p><strong className="text-yai-navy">Traction.</strong> 2 factories in live production for 5 years, 3 legacy systems successfully replaced, 5 prospect meetings booked in the first week of structured outreach. Weekly seminar series underway.</p>
             <p><strong className="text-yai-navy">This plan.</strong> Outlines commercialisation of the <em>Admin-tier</em> modules to mid-large factories across Cambodia and the region. Production modules (YQMS, YTM/CE, YPI, 4DP) remain group internal IP — referenced for completeness but not the subject of this commercial roll-out.</p>
