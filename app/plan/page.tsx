@@ -59,7 +59,7 @@ export default function PlanPage() {
           </Thesis>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-            <StatCallout value={10} label="Ai agents in production" />
+            <StatCallout value={10} label="Ai agents stand ready" />
             <StatCallout value={20} label="Engineers from Cambodia" flagIcon="/images/cambodia-flag.svg" />
             <StatCallout value={36} suffix=" mo" label="In development" />
             <StatCallout value={40} suffix=" yrs" label="Industry experience (technical + management)" />
@@ -105,93 +105,58 @@ export default function PlanPage() {
         {/* 02 — Problem */}
         <Section id="problem" kicker={kicker(2, "The Problem")} title="The Sandwich">
           {/* TOP ROW — Brand + Government */}
-          <div className="grid md:grid-cols-2 gap-5">
-            <Card className="overflow-hidden p-0">
-              <div className="px-6 pt-6">
-                <div className="text-yai-blue font-bold text-[10.5px] tracking-[0.15em] uppercase mb-2">Corner 1 &middot; Brand</div>
-                <h3 className="font-bold text-yai-navy text-lg mb-3">The brand is upgrading</h3>
+          <div className="grid md:grid-cols-2 gap-3 items-start">
+            <Card noPadding className="overflow-hidden">
+              <div className="px-4 py-2.5">
+                <span className="text-yai-blue font-bold text-[10px] tracking-[0.12em] uppercase">Corner 1 &middot; Brand</span>
+                <h3 className="font-bold text-yai-navy text-[15px] leading-tight">The brand is upgrading</h3>
               </div>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/generated/brand-ceo.png"
-                alt="A global fashion-brand CEO addresses her board: go agentic now, the factories that integrate win the orders — don't be Nokia."
-                className="w-full h-auto block"
-              />
-              <p className="text-xs italic text-gray-500 px-6 py-3 bg-yai-bg border-t border-yai-border">
-                Inside a global apparel brand HQ: the CEO tells the board &mdash; integrate or be left behind. Excel is finished. <strong className="not-italic text-yai-navy">Don&apos;t be Nokia.</strong>
-              </p>
+              <img src="/images/generated/brand-ceo.png" alt="Brand CEO to her board: integrate or be left behind, don't be Nokia." className="w-full h-auto block" />
             </Card>
 
-            <Card className="overflow-hidden p-0">
-              <div className="px-6 pt-6">
-                <div className="text-yai-blue font-bold text-[10.5px] tracking-[0.15em] uppercase mb-2">Corner 2 &middot; Government</div>
-                <h3 className="font-bold text-yai-navy text-lg mb-3">The government is mandating</h3>
+            <Card noPadding className="overflow-hidden">
+              <div className="px-4 py-2.5">
+                <span className="text-yai-blue font-bold text-[10px] tracking-[0.12em] uppercase">Corner 2 &middot; Government</span>
+                <h3 className="font-bold text-yai-navy text-[15px] leading-tight">The government is mandating</h3>
               </div>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/generated/government-meeting.png"
-                alt="Cambodian Ministry of Environment officials meet with factory staff: worker data, EMR reports, tax filings must be submitted digitally and on time, or face penalties."
-                className="w-full h-auto block"
-              />
-              <p className="text-xs italic text-gray-500 px-6 py-3 bg-yai-bg border-t border-yai-border">
-                Ministry of Environment officials brief factory staff: digital submission of worker data, EMR reports, tax filings &mdash; on time, every time. <strong className="not-italic text-yai-navy">Late means penalties. The paper era is over.</strong>
-              </p>
+              <img src="/images/generated/government-meeting.png" alt="Ministry of Environment: worker data, EMR reports, tax filings — digital and on time, or penalties." className="w-full h-auto block" />
             </Card>
           </div>
 
           {/* CENTER — The Owner (sandwiched) */}
-          <div className="my-5 flex justify-center">
-            <div className="w-full md:w-[calc(50%-0.625rem)]">
-            <Card className="overflow-hidden p-0 border-yai-orange shadow-xl">
-              <div className="px-6 pt-6">
-                <div className="text-yai-orange font-bold text-[10.5px] tracking-[0.15em] uppercase mb-2">The Owner &middot; Sandwiched</div>
-                <h3 className="font-bold text-yai-navy text-lg mb-3">Caught in the middle</h3>
-              </div>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/generated/boss-meets-yai.png"
-                alt="The factory boss tells the Yai team: 'we have nearly 20 systems, $2M spent, none working together, half don't even update anymore.'"
-                className="w-full h-auto block"
-              />
-              <p className="text-xs italic text-gray-500 px-6 py-3 bg-orange-50/60 border-t border-yai-orange/30">
-                The boss isn&apos;t the blocker. He&apos;s tried everything. <strong className="not-italic text-yai-navy">~20 half-baked systems. $2M sunk. Zero integration.</strong> Now the brand and the government are forcing his hand &mdash; and he needs a partner who won&apos;t become system #21.
-              </p>
-            </Card>
+          <div className="my-3 flex justify-center">
+            <div className="w-full md:w-[calc(50%-0.375rem)]">
+              <Card noPadding className="overflow-hidden border-yai-orange shadow-xl">
+                <div className="px-4 py-2.5">
+                  <span className="text-yai-orange font-bold text-[10px] tracking-[0.12em] uppercase">The Owner &middot; Sandwiched</span>
+                  <h3 className="font-bold text-yai-navy text-[15px] leading-tight">Caught in the middle &mdash; ~20 systems, $2M sunk, zero integration</h3>
+                </div>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/images/generated/boss-meets-yai.png" alt="The factory boss tells the Yai team: nearly 20 systems, $2M spent, none working together." className="w-full h-auto block" />
+              </Card>
             </div>
           </div>
 
           {/* BOTTOM ROW — Management + Staff & Workers */}
-          <div className="grid md:grid-cols-2 gap-5">
-            <Card className="overflow-hidden p-0">
-              <div className="px-6 pt-6">
-                <div className="text-yai-blue font-bold text-[10.5px] tracking-[0.15em] uppercase mb-2">Corner 3 &middot; Management</div>
-                <h3 className="font-bold text-yai-navy text-lg mb-3">Management hitting the wall</h3>
+          <div className="grid md:grid-cols-2 gap-3 items-start">
+            <Card noPadding className="overflow-hidden">
+              <div className="px-4 py-2.5">
+                <span className="text-yai-blue font-bold text-[10px] tracking-[0.12em] uppercase">Corner 3 &middot; Management</span>
+                <h3 className="font-bold text-yai-navy text-[15px] leading-tight">Management hitting the wall</h3>
               </div>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/generated/management-wall.png"
-                alt="Split screen: the general manager overwhelmed by paper and Excel saying 'there is no way', and the sales manager on a buyer call saying 'I don't think the buyer will accept our answer'."
-                className="w-full h-auto block"
-              />
-              <p className="text-xs italic text-gray-500 px-6 py-3 bg-yai-bg border-t border-yai-border">
-                Management buried under paper and Excel; Sales on a buyer call already losing the conversation. <strong className="not-italic text-yai-navy">The current system has hit its ceiling.</strong>
-              </p>
+              <img src="/images/generated/management-wall.png" alt="GM overwhelmed by paper and Excel ('there is no way'); Sales on a buyer call ('the buyer won't accept our answer')." className="w-full h-auto block" />
             </Card>
 
-            <Card className="overflow-hidden p-0">
-              <div className="px-6 pt-6">
-                <div className="text-yai-blue font-bold text-[10.5px] tracking-[0.15em] uppercase mb-2">Corner 4 &middot; Staff &amp; Workers</div>
-                <h3 className="font-bold text-yai-navy text-lg mb-3">Workers don&apos;t resist change</h3>
+            <Card noPadding className="overflow-hidden">
+              <div className="px-4 py-2.5">
+                <span className="text-yai-blue font-bold text-[10px] tracking-[0.12em] uppercase">Corner 4 &middot; Staff &amp; Workers</span>
+                <h3 className="font-bold text-yai-navy text-[15px] leading-tight">Workers don&apos;t resist change</h3>
               </div>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/generated/workers-asking-why.png"
-                alt="Long-serving Cambodian garment factory workers gathered on the floor asking honest questions: 'Why now?', 'We've been fine for 100 years', 'Why an app?', 'Who is this Ai agent?'"
-                className="w-full h-auto block"
-              />
-              <p className="text-xs italic text-gray-500 px-6 py-3 bg-yai-bg border-t border-yai-border">
-                The workers don&apos;t resist change &mdash; they resist friction. Most documents and software are in Chinese they can&apos;t read. Every issue means a long trip to HR to talk it through. The same paper form, every day. <strong className="not-italic text-yai-navy">They&apos;ve heard another factory already uses phones &mdash; and they want what works for them.</strong>
-              </p>
+              <img src="/images/generated/workers-asking-why.png" alt="Workers: software in Chinese not Khmer, every issue means a trip to HR, the same form daily — they've heard another factory uses phones." className="w-full h-auto block" />
             </Card>
           </div>
 
@@ -200,24 +165,54 @@ export default function PlanPage() {
         {/* 03 — Solution */}
         <Section id="solution" kicker={kicker(3, "The Solution")} title="The Solution — Yai Platform">
           <Thesis>
-            One Ai-native platform replacing multiple legacy systems — built for how apparel factories actually run.
+            One fully integrated platform, left to right — built to upgrade itself as the business progresses.
           </Thesis>
-          <p className="text-gray-700 leading-relaxed mb-6">
-            Yai is an agentic Ai platform purpose-built for apparel manufacturing. Instead of generic ERP modules retrofitted to garment workflows, every module starts from how the factory actually operates — workforce, compliance, payroll, audit cycles, buyer demands.
+          <p className="text-gray-700 leading-relaxed mb-8">
+            Every pressure in the Sandwich has a direct answer. Yai takes the four forces squeezing the owner &mdash; and the owner&apos;s own fear of buying a 21st failed system &mdash; and turns each one into a solved problem on a single integrated platform.
           </p>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="space-y-4">
             {[
-              ["Ai-NATIVE",       "10 Ai agents",      "Full operational coverage — each agent owns a slice of factory workflow."],
-              ["TRILINGUAL",      "EN · 中文 · ខ្មែរ", "Workers, supervisors, owners — everyone uses the platform in their own language."],
-              ["OMNI-PLATFORM",   "Web + Android + iOS","Floor managers on mobile, finance on desktop, owners on tablet."],
-              ["INTEGRATED",      "One platform, not five","Replaces fragmented tools with a single, Ai-aware data layer."],
-              ["APPAREL-SPECIFIC","Built where it runs", "Designed in Cambodia, hardened in two live factories — not a generic ERP retrofitted."],
-              ["FLEXIBLE",        "Cloud or on-prem",  "Hybrid deployment — factory keeps sensitive data on site if required."],
-            ].map(([k, h, b]) => (
-              <Card key={k}>
-                <div className="text-yai-blue font-bold text-xs tracking-wider mb-2">{k}</div>
-                <h3 className="font-bold text-yai-navy mb-2">{h}</h3>
-                <p className="text-sm text-gray-600">{b}</p>
+              {
+                tag: "Answers Corner 1 · Brand",
+                problem: "“Integrate or we route the order elsewhere — don’t be Nokia.”",
+                title: "Buyer-endorsed — don’t reinvent the wheel",
+                body: "Brands have already seen Yai and what it does. Their word to suppliers: “We’ve seen Yai — just do it. No need to reinvent the wheel.” You’re not pitching an unknown system; you’re plugging into the integration path buyers already recognise.",
+              },
+              {
+                tag: "Answers Corner 2 · Government",
+                problem: "“Worker data, EMR reports, tax filings — digital, on time, or penalties.”",
+                title: "Compliance on autopilot",
+                body: "Worker records, EMR/environmental reports, and tax filings stay digital by default and submit on time. Penalties avoided; the factory is always audit-ready, not scrambling 24 hours before.",
+              },
+              {
+                tag: "Answers The Owner · Sandwiched",
+                problem: "“~20 systems. $2M sunk. None of them talk to each other.”",
+                title: "One platform, not twenty",
+                body: "Yai replaces the graveyard of half-baked systems with a single integrated platform — left to right — that upgrades itself as the business grows. It never becomes system #21.",
+                highlight: true,
+              },
+              {
+                tag: "Answers Corner 3 · Management",
+                problem: "“There is no way — the buyer won’t accept our answer.”",
+                title: "Management gets its time back",
+                body: "Live dashboards replace sprawling spreadsheets; approvals flow through the system instead of floor-to-floor. Sales answers buyers with real-time data, instantly — the ceiling is gone.",
+              },
+              {
+                tag: "Answers Corner 4 · Staff & Workers",
+                problem: "“It’s all in Chinese, every issue goes to HR, the same form every day.”",
+                title: "Built for the floor",
+                body: "Khmer voice, phone-first, no HR detour, no daily paper form. The phone-based way of working the floor team has already been asking for — in their own language.",
+              },
+            ].map((s) => (
+              <Card key={s.tag} className={`flex flex-col sm:flex-row gap-4 ${s.highlight ? "border-yai-orange/40 bg-orange-50/30" : ""}`}>
+                <div className="sm:w-1/2">
+                  <div className="text-[10px] uppercase tracking-[0.12em] font-bold text-gray-400 mb-1.5">{s.tag}</div>
+                  <p className="text-sm text-gray-500 italic leading-snug">{s.problem}</p>
+                </div>
+                <div className="sm:w-1/2 sm:border-l sm:border-yai-border sm:pl-4">
+                  <h3 className={`font-bold text-lg mb-1 ${s.highlight ? "text-yai-orange" : "text-yai-blue"}`}>{s.title}</h3>
+                  <p className="text-sm text-gray-600 leading-relaxed">{s.body}</p>
+                </div>
               </Card>
             ))}
           </div>
@@ -690,7 +685,7 @@ export default function PlanPage() {
           <Thesis>
             Quarterly checkpoints, written down, accountable.
           </Thesis>
-          <div className="grid md:grid-cols-2 gap-5">
+          <div className="grid md:grid-cols-2 gap-3">
             {[
               { q: "Q1", title: "Foundation",   items: ["First 3–5 paid contracts closed", "Sales hire onboarded", "Seminar series at full weekly cadence", "Ministry of Environment partnership term sheet"] },
               { q: "Q2", title: "Validation",   items: ["10+ paying customers", "Ministry partnership signed", "First Stage 2 (Agentic) upgrade sold", "Initial regional conversation"] },
@@ -735,7 +730,7 @@ export default function PlanPage() {
           <Thesis>
             What&apos;s needed from the investor over the next 12 months — not a fundraise, a continuation.
           </Thesis>
-          <div className="grid md:grid-cols-2 gap-5">
+          <div className="grid md:grid-cols-2 gap-3">
             {[
               ["1. Continuation of current funding rate",  "No step-up in capital required. Maintain current monthly run rate to keep the engineering team intact through the commercialisation phase."],
               ["2. Sales hire budget approval",            "$TBD / year fully loaded for 1–2 apparel-industry sales hires. Specific candidates and economic case to be tabled separately."],

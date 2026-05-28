@@ -65,7 +65,7 @@ export function Sidebar({
   return (
     <>
       {/* Mobile header */}
-      <div className="lg:hidden sticky top-0 z-30 bg-yai-navy text-white px-4 py-3 flex items-center justify-between shadow no-print">
+      <div className="md:hidden sticky top-0 z-30 bg-yai-navy text-white px-4 py-3 flex items-center justify-between shadow no-print">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-yai-blue flex items-center justify-center font-extrabold">
             Y
@@ -90,7 +90,7 @@ export function Sidebar({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={() => setOpen(false)}
-            className="lg:hidden fixed inset-0 bg-black/50 z-40 no-print"
+            className="md:hidden fixed inset-0 bg-black/50 z-40 no-print"
           />
         )}
       </AnimatePresence>
@@ -99,43 +99,27 @@ export function Sidebar({
       <motion.aside
         initial={false}
         animate={{
-          x: open ? 0 : typeof window !== "undefined" && window.innerWidth < 1024 ? "-100%" : 0,
+          x: open ? 0 : typeof window !== "undefined" && window.innerWidth < 768 ? "-100%" : 0,
         }}
         transition={{ type: "spring", damping: 30, stiffness: 240 }}
-        className="sidebar w-72 bg-yai-navy text-white min-h-screen lg:sticky lg:top-0 lg:max-h-screen lg:overflow-y-auto sidebar-scroll no-print fixed lg:relative inset-y-0 left-0 z-50 lg:translate-x-0"
+        className="sidebar w-72 bg-yai-navy text-white min-h-screen md:sticky md:top-0 md:max-h-screen md:overflow-y-auto sidebar-scroll no-print fixed md:relative inset-y-0 left-0 z-50 md:translate-x-0"
       >
-        <div className="px-5 pt-6 pb-5 border-b border-white/10">
-          <div className="flex items-center gap-4 mb-4">
+        <div className="px-5 pt-5 pb-4 border-b border-white/10">
+          <div className="flex items-center gap-4">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/images/yai-logo.jpg"
               alt="Yai"
-              className="h-16 w-16 rounded-lg object-cover shadow-lg ring-1 ring-white/20 shrink-0"
+              className="h-14 w-14 rounded-lg object-cover shadow-lg ring-1 ring-white/20 shrink-0"
             />
             <div className="flex-1 min-w-0 leading-tight">
               <div className="text-sm text-white font-semibold truncate">Texlink Technologies</div>
               <div className="text-[10px] uppercase tracking-[0.15em] text-yai-orange/90 font-bold mt-1">Strategic DTV</div>
             </div>
           </div>
-          <p className="text-[11px] text-white/65 mb-4">
-            Viewer: <span className="font-medium text-white/85">{viewer}</span>
-          </p>
-
-          {/* Signature block */}
-          <div className="pt-4 border-t border-white/10 text-white/80">
-            <div className="text-[13px] font-semibold text-white leading-tight">Gamini K</div>
-            <div className="text-[10.5px] uppercase tracking-[0.12em] text-white/55 mt-0.5">Director</div>
-            <div className="text-[11px] font-semibold text-white/85 mt-2 leading-tight">
-              TEXLINK TECHNOLOGIES CO., LTD.
-            </div>
-            <div className="text-[10.5px] text-white/55 leading-snug mt-1">
-              Apparel, Footwear, Bags, Softgoods<br />Manufacturing Intelligence Solutions
-            </div>
-
-          </div>
         </div>
 
-        <nav className="py-4 px-3 space-y-0.5 text-sm">
+        <nav className="py-3 px-3 space-y-0.5 text-sm">
           {items.map((it, i) => {
             const isActive = it.id === active;
             return (
@@ -165,8 +149,20 @@ export function Sidebar({
           })}
         </nav>
 
+        {/* Signature block */}
+        <div className="px-5 pt-4 pb-2 border-t border-white/10 text-white/80">
+          <div className="text-[13px] font-semibold text-white leading-tight">Gamini K</div>
+          <div className="text-[10.5px] uppercase tracking-[0.12em] text-white/55 mt-0.5">Director</div>
+          <div className="text-[11px] font-semibold text-white/85 mt-2 leading-tight">
+            TEXLINK TECHNOLOGIES CO., LTD.
+          </div>
+          <div className="text-[10.5px] text-white/55 leading-snug mt-1">
+            Apparel, Footwear, Bags, Softgoods<br />Manufacturing Intelligence Solutions
+          </div>
+        </div>
+
         {/* Action buttons */}
-        <div className="p-4 border-t border-white/10 space-y-2">
+        <div className="px-4 pt-2 pb-4 space-y-2">
           <button
             onClick={onPrint}
             className="w-full text-xs bg-white/10 hover:bg-white/20 text-white py-2 rounded transition"

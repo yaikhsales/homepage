@@ -294,13 +294,24 @@ async function main() {
   }
 
   const project = process.env.GOOGLE_CLOUD_PROJECT;
-  if (!project) {
-    console.error("[ERROR] GOOGLE_CLOUD_PROJECT missing. Set it in .env.local (the project that holds your $300 credit).");
-    console.error("        Then run: gcloud auth application-default login");
+  const apiKey = process.env.GOOGLE_API_KEY;
+  let ai, model;
+  if (project) {
+    // Preferred: Vertex AI (draws on the GCP $300 credit; needs `gcloud auth application-default login`)
+    const location = process.env.GOOGLE_CLOUD_LOCATION || "global";
+    ai = new GoogleGenAI({ vertexai: true, project, location });
+    model = process.env.GEMINI_IMAGE_MODEL || "gemini-3-pro-image-preview";
+    console.log(`[info] Vertex AI  project=${project}  location=${location}  model=${model}`);
+  } else if (apiKey) {
+    // Fallback: AI Studio key (works immediately, no gcloud setup)
+    ai = new GoogleGenAI({ apiKey });
+    model = process.env.GEMINI_IMAGE_MODEL || "nano-banana-pro-preview";
+    console.log(`[info] AI Studio (fallback)  model=${model}`);
+  } else {
+    console.error("[ERROR] No credentials. Set GOOGLE_CLOUD_PROJECT (Vertex, recommended) or GOOGLE_API_KEY (AI Studio) in .env.local.");
+    console.error("        Vertex one-time: gcloud auth application-default login");
     process.exit(1);
   }
-  const location = process.env.GOOGLE_CLOUD_LOCATION || "global";
-  const ai = new GoogleGenAI({ vertexai: true, project, location });
 
   const force = args.includes("--force");
   const slugFilter = args.filter(a => !a.startsWith("--"));
@@ -315,11 +326,6 @@ async function main() {
 
   const outDir = path.join(ROOT, "public", "images", "generated");
   await fs.mkdir(outDir, { recursive: true });
-
-  // Vertex AI image models: gemini-2.5-flash-image (standard Nano Banana),
-  // gemini-3-pro-image-preview (Nano Banana Pro). Override via GEMINI_IMAGE_MODEL.
-  const model = process.env.GEMINI_IMAGE_MODEL || "gemini-2.5-flash-image";
-  console.log(`[info] Vertex AI  project=${project}  location=${location}  model=${model}`);
 
   let okCount = 0;
   let skipCount = 0;
