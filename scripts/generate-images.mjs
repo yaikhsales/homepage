@@ -1,12 +1,20 @@
 #!/usr/bin/env node
 /**
- * Generate section hero images via Google "Nano Banana" (Gemini 2.5 Flash Image).
+ * Generate section hero images via Google "Nano Banana" (Gemini image models) on VERTEX AI.
+ *
+ * Runs against Vertex AI (not AI Studio) so usage draws on the GCP $300 free-trial credit.
  *
  * Usage:
- *   1. Add GOOGLE_API_KEY=<your_key> to .env.local
- *   2. node scripts/generate-images.mjs              # generates everything
+ *   1. One-time auth (uses your own Google login, no API key):
+ *        gcloud auth application-default login
+ *        gcloud auth application-default set-quota-project <PROJECT_ID>
+ *   2. Set GOOGLE_CLOUD_PROJECT (and optionally GOOGLE_CLOUD_LOCATION) in .env.local
+ *   3. node scripts/generate-images.mjs              # generates everything
  *      node scripts/generate-images.mjs hero problem  # generates specific slugs only
  *      node scripts/generate-images.mjs --force       # regenerate even if file exists
+ *
+ * Model: defaults to gemini-2.5-flash-image (standard Nano Banana). For Nano Banana Pro
+ *   quality set GEMINI_IMAGE_MODEL=gemini-3-pro-image-preview (must be enabled in your project).
  *
  * Output: public/images/generated/<slug>.png
  *
@@ -20,6 +28,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { GoogleGenAI } from "@google/genai";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname  = path.dirname(__filename);
@@ -284,11 +293,14 @@ async function main() {
     return;
   }
 
-  const apiKey = process.env.GOOGLE_API_KEY;
-  if (!apiKey) {
-    console.error("[ERROR] GOOGLE_API_KEY missing. Add it to .env.local or export it before running.");
+  const project = process.env.GOOGLE_CLOUD_PROJECT;
+  if (!project) {
+    console.error("[ERROR] GOOGLE_CLOUD_PROJECT missing. Set it in .env.local (the project that holds your $300 credit).");
+    console.error("        Then run: gcloud auth application-default login");
     process.exit(1);
   }
+  const location = process.env.GOOGLE_CLOUD_LOCATION || "global";
+  const ai = new GoogleGenAI({ vertexai: true, project, location });
 
   const force = args.includes("--force");
   const slugFilter = args.filter(a => !a.startsWith("--"));
@@ -304,10 +316,10 @@ async function main() {
   const outDir = path.join(ROOT, "public", "images", "generated");
   await fs.mkdir(outDir, { recursive: true });
 
-  // Available image models from v1beta: nano-banana-pro-preview, gemini-2.5-flash-image,
-  // gemini-3.1-flash-image-preview, gemini-3-pro-image-preview
-  const model = process.env.GEMINI_IMAGE_MODEL || "nano-banana-pro-preview";
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+  // Vertex AI image models: gemini-2.5-flash-image (standard Nano Banana),
+  // gemini-3-pro-image-preview (Nano Banana Pro). Override via GEMINI_IMAGE_MODEL.
+  const model = process.env.GEMINI_IMAGE_MODEL || "gemini-2.5-flash-image";
+  console.log(`[info] Vertex AI  project=${project}  location=${location}  model=${model}`);
 
   let okCount = 0;
   let skipCount = 0;
@@ -326,41 +338,28 @@ async function main() {
 
     process.stdout.write(`[gen ] ${slug} ... `);
     try {
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { responseModalities: ["IMAGE"] },
-        }),
+      const res = await ai.models.generateContent({
+        model,
+        contents: prompt,
+        config: { responseModalities: ["IMAGE"] },
       });
 
-      if (!res.ok) {
-        const errText = await res.text();
-        console.log(`HTTP ${res.status}`);
-        console.error(`        ${errText.slice(0, 400)}`);
-        failCount++;
-        continue;
-      }
-
-      const data = await res.json();
-      const parts = data?.candidates?.[0]?.content?.parts ?? [];
-      const imgPart = parts.find(p => p.inlineData || p.inline_data);
+      const parts = res?.candidates?.[0]?.content?.parts ?? [];
+      const imgPart = parts.find(p => p.inlineData);
       if (!imgPart) {
         console.log("no image in response");
-        console.error(`        response: ${JSON.stringify(data).slice(0, 400)}`);
+        console.error(`        response: ${JSON.stringify(res).slice(0, 400)}`);
         failCount++;
         continue;
       }
 
-      const inlineData = imgPart.inlineData ?? imgPart.inline_data;
-      const buf = Buffer.from(inlineData.data, "base64");
+      const buf = Buffer.from(imgPart.inlineData.data, "base64");
       await fs.writeFile(outPath, buf);
       const kb = (buf.length / 1024).toFixed(0);
       console.log(`OK (${kb} KB)`);
       okCount++;
 
-      // Light pacing to avoid rate-limit hiccups on free tier
+      // Light pacing between requests
       await new Promise(r => setTimeout(r, 1200));
     } catch (e) {
       console.log(`error`);

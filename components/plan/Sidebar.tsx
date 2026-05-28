@@ -132,25 +132,6 @@ export function Sidebar({
               Apparel, Footwear, Bags, Softgoods<br />Manufacturing Intelligence Solutions
             </div>
 
-            <div className="mt-3 pt-3 border-t border-white/10">
-              <div className="text-[10px] uppercase tracking-[0.15em] text-yai-orange/85 font-bold mb-1.5">Product Suite</div>
-              <ul className="space-y-0.5 text-[11.5px] text-white/75">
-                <li><span className="text-yai-blue-light font-semibold">Yai</span> Digitalization</li>
-                <li><span className="text-yai-blue-light font-semibold">Yai</span> AiOT</li>
-                <li><span className="text-yai-blue-light font-semibold">Yai</span> Bots</li>
-                <li><span className="text-yai-blue-light font-semibold">Yai</span> E-com</li>
-                <li><span className="text-yai-blue-light font-semibold">Yai</span> Gov</li>
-              </ul>
-            </div>
-
-            <a
-              href="https://www.yaikh.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block mt-3 text-[11px] text-yai-orange/90 hover:text-yai-orange underline underline-offset-2 transition"
-            >
-              yaikh.com &rarr;
-            </a>
           </div>
         </div>
 
