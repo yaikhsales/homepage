@@ -163,13 +163,10 @@ export default function PlanPage() {
         </Section>
 
         {/* 03 — Solution */}
-        <Section id="solution" kicker={kicker(3, "The Solution")} title="The Solution — Yai Platform">
+        <Section id="solution" kicker={kicker(3, "The Solution")} title="The Solution — An Ai Platform That Saves Jobs">
           <Thesis>
             One fully integrated platform, left to right — built to upgrade itself as the business progresses.
           </Thesis>
-          <p className="text-gray-700 leading-relaxed mb-8">
-            Every pressure in the Sandwich has a direct answer. Yai takes the four forces squeezing the owner &mdash; and the owner&apos;s own fear of buying a 21st failed system &mdash; and turns each one into a solved problem on a single integrated platform.
-          </p>
           <div className="space-y-4">
             {[
               {
@@ -177,12 +174,16 @@ export default function PlanPage() {
                 problem: "“Integrate or we route the order elsewhere — don’t be Nokia.”",
                 title: "Buyer-endorsed — don’t reinvent the wheel",
                 body: "Brands have already seen Yai and what it does. Their word to suppliers: “We’ve seen Yai — just do it. No need to reinvent the wheel.” You’re not pitching an unknown system; you’re plugging into the integration path buyers already recognise.",
+                image: "/images/generated/brand-solution.png?v=2",
+                imageAlt: "The same brand boardroom now running on Yai — a room full of seated executives on tablets, a 360° live-meeting camera, a data-rich Manufacturing Intelligence dashboard; the chairwoman: 'Yai covered everything — saved everyone's job.'",
               },
               {
                 tag: "Answers Corner 2 · Government",
                 problem: "“Worker data, EMR reports, tax filings — digital, on time, or penalties.”",
                 title: "Compliance on autopilot",
                 body: "Worker records, EMR/environmental reports, and tax filings stay digital by default and submit on time. Penalties avoided; the factory is always audit-ready, not scrambling 24 hours before.",
+                image: "/images/generated/government-solution.png",
+                imageAlt: "The Ministry of Environment meeting now on Yai — green compliance dashboard and live AIoT sensor data, officials and factory staff on tablets; the official: 'Such a clear information flow — proud our Cambodian youth built this.'",
               },
               {
                 tag: "Answers The Owner · Sandwiched",
@@ -204,15 +205,23 @@ export default function PlanPage() {
                 body: "Khmer voice, phone-first, no HR detour, no daily paper form. The phone-based way of working the floor team has already been asking for — in their own language.",
               },
             ].map((s) => (
-              <Card key={s.tag} className={`flex flex-col sm:flex-row gap-4 ${s.highlight ? "border-yai-orange/40 bg-orange-50/30" : ""}`}>
-                <div className="sm:w-1/2">
-                  <div className="text-[10px] uppercase tracking-[0.12em] font-bold text-gray-400 mb-1.5">{s.tag}</div>
-                  <p className="text-sm text-gray-500 italic leading-snug">{s.problem}</p>
+              <Card key={s.tag} className={s.highlight ? "border-yai-orange/40 bg-orange-50/30" : ""}>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="sm:w-1/2">
+                    <div className="text-[10px] uppercase tracking-[0.12em] font-bold text-gray-400 mb-1.5">{s.tag}</div>
+                    <p className="text-sm text-gray-500 italic leading-snug">{s.problem}</p>
+                  </div>
+                  <div className="sm:w-1/2 sm:border-l sm:border-yai-border sm:pl-4">
+                    <h3 className={`font-bold text-lg mb-1 ${s.highlight ? "text-yai-orange" : "text-yai-blue"}`}>{s.title}</h3>
+                    <p className="text-sm text-gray-600 leading-relaxed">{s.body}</p>
+                  </div>
                 </div>
-                <div className="sm:w-1/2 sm:border-l sm:border-yai-border sm:pl-4">
-                  <h3 className={`font-bold text-lg mb-1 ${s.highlight ? "text-yai-orange" : "text-yai-blue"}`}>{s.title}</h3>
-                  <p className="text-sm text-gray-600 leading-relaxed">{s.body}</p>
-                </div>
+                {s.image && (
+                  <div className="mt-4 rounded-lg overflow-hidden border border-yai-border">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={s.image} alt={s.imageAlt} className="w-full h-auto block" />
+                  </div>
+                )}
               </Card>
             ))}
           </div>

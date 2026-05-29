@@ -194,6 +194,28 @@ const PROMPTS = [
       " Lighting: formal, slightly cool, official-government feel. Editorial illustration style matching investor-presentation quality, 16:9 widescreen, no real political logos other than generic Cambodian-government insignia. Mood: serious, official, non-negotiable — this is the government drawing a line.",
   },
   {
+    slug: "government-solution",
+    prompt:
+      "A cinematic editorial illustration of the SAME Cambodian Ministry of Environment meeting room as before — now everyone is working on the Yai platform. Royal-blue (#1E4DAA) and white palette, 16:9 widescreen, premium investor-deck quality." +
+      " A senior Ministry of Environment official (man, mid-50s) stands at the head of the table, relaxed and proud, gesturing warmly at the wall display. IMPORTANT: the officials wear LIGHT SAGE-GREEN AND WHITE formal Ministry-of-Environment uniforms (soft green and white, civilian-environmental style — NOT dark military khaki, NOT olive combat green). Clean, light, official." +
+      " The room is FULL: two more officials in the same green-and-white uniforms AND three Cambodian garment-factory staff in business attire are SEATED around the table, engaged. NO paper folders — everyone holds a sleek tablet showing live Yai environmental dashboards." +
+      " The large wall display is clearly branded 'Yai' and is ENVIRONMENT-DATA-DOMINANT: live environmental monitoring — water-discharge quality (pH, turbidity), air-emissions / AQI gauges, carbon-footprint (kg CO2 per garment) trend, energy use (kWh), wastewater treatment status, effluent levels, and an environmental-compliance scorecard (EMR ✓, WRAP ✓, HIGG ✓, GRS ✓) all green. Rich real-time charts and AIoT sensor readouts — this is an environmental intelligence dashboard, not generic office data." +
+      " On the wall behind: a Cambodian flag and national emblem; an Angkor-Wat silhouette through a tall window." +
+      " A large comic-style SPEECH BUBBLE from the senior official, bold readable sans-serif text: 'Such a clear information flow — Ai with AIoT. We are glad our Cambodian youth built this: great support for the country's manufacturing sector.'" +
+      " Lighting: bright, formal yet warm and optimistic. Editorial illustration style, no real logos other than 'Yai', investor-presentation quality. Mood: proud, collaborative, nation-building.",
+  },
+  {
+    slug: "brand-solution",
+    prompt:
+      "A cinematic editorial illustration of the SAME premium USA corporate boardroom in a global fashion-brand headquarters — now running on the Yai platform. Royal-blue (#1E4DAA) and white palette, 16:9 widescreen, premium investor-deck quality." +
+      " CRITICAL: the boardroom is FULL OF PEOPLE — every chair around the oval table is OCCUPIED by an engaged executive (a diverse board of 7-8 seated men and women in business attire). NO empty chairs. The point is that Ai AUGMENTS these humans, it has NOT replaced them — show a busy, populated, collaborative room." +
+      " The confident female board chairwoman (mid-50s, tailored navy suit, blonde-grey hair) stands at the head of the table, relaxed and satisfied, gesturing warmly at the screen. The seated executives look engaged — some looking at the chairwoman, some at their tablets." +
+      " No papers — each seated executive has a sleek tablet showing live Yai dashboards. A small cylindrical 360-degree live-meeting camera sits in the centre of the table." +
+      " The large back wall screen is clearly branded 'Yai — Manufacturing Intelligence Platform' and is GARMENT-SPECIFIC and DATA-RICH: it mixes apparel design content with analytics — fashion garment design sketches / croquis line-drawings of dresses, shirts and jackets; a row of style sample thumbnails (finished garments); a tech-pack line drawing with measurement callouts; a fabric / colour swatch palette; alongside production-efficiency line charts, OEE gauges, order-tracking bars, and sustainability KPI tiles. Clearly an APPAREL manufacturing intelligence dashboard. Only ONE small remote video tile in a corner (a single Cambodian factory supervisor on a sewing-floor background) — just enough to show the factory is connected. Intelligence and garments, not a wall of faces." +
+      " A large comic-style SPEECH BUBBLE from the chairwoman, bold readable sans-serif text: 'Well — Yai covered everything, didn't it? Saved everyone's job.'" +
+      " Floor-to-ceiling windows reveal a city skyline. Mood: calm, collaborative, resolved — a room full of people, empowered by data. Warm cinematic lighting, no real brand logos other than 'Yai' on the screen, investor-presentation quality.",
+  },
+  {
     slug: "brand-ceo",
     prompt:
       "A cinematic editorial illustration of a corporate boardroom inside a global fashion-brand headquarters. A sharp, commanding female CEO in her mid-50s, in a tailored navy-blue suit, stands at the head of a polished oval conference table. 8-10 diverse board executives in business attire are seated around the table, attentive, several leaning forward, two taking notes. Behind the CEO a large wall display glows with the headline 'Ai-NATIVE SUPPLIER INTEGRATION' and supply-chain network graphics. Floor-to-ceiling windows reveal a dusk city skyline behind her." +

@@ -116,7 +116,11 @@ export function DashboardDemo() {
     if (!inView) return;
     setActivityIndex(0);
     const t = setInterval(() => {
-      setActivityIndex((i) => Math.min(i + 1, ACTIVITY.length));
+      setActivityIndex((i) => {
+        const next = i + 1;
+        if (next >= ACTIVITY.length) clearInterval(t); // stop once the feed is full — let the page reach idle
+        return Math.min(next, ACTIVITY.length);
+      });
     }, 600);
     return () => clearInterval(t);
   }, [inView]);
@@ -132,7 +136,7 @@ export function DashboardDemo() {
           <div className="text-yai-navy font-semibold text-sm">Admin Dashboard — Factory A</div>
         </div>
         <div className="flex items-center gap-1.5 text-[11px] text-emerald-700">
-          <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500" />
           Live
         </div>
       </div>

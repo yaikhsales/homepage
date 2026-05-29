@@ -39,7 +39,7 @@ const SCRIPT: Msg[] = [
 
 export function ChatDemo() {
   const ref = useRef<HTMLDivElement | null>(null);
-  const inView = useInView(ref, { once: false, amount: 0.4 });
+  const inView = useInView(ref, { once: true, amount: 0.4 });
   const [visible, setVisible] = useState<Msg[]>([]);
   const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
@@ -78,7 +78,7 @@ export function ChatDemo() {
           <div className="flex-1">
             <div className="text-white font-semibold text-sm">Yai Agent — Finance</div>
             <div className="text-emerald-400 text-[11px] flex items-center gap-1.5">
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400" />
               Online
             </div>
           </div>

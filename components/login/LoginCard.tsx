@@ -56,7 +56,7 @@ export function LoginCard() {
           ? { x: { duration: 0.4, ease: "easeInOut" } }
           : { duration: 0.6, ease: "easeOut" }
       }
-      className="w-full max-w-md bg-white/[0.08] backdrop-blur-xl border border-white/15 rounded-2xl shadow-2xl p-8 sm:p-10"
+      className="w-full max-w-md bg-white/[0.10] backdrop-blur-md border border-white/15 rounded-2xl shadow-2xl p-8 sm:p-10"
     >
       <motion.div
         initial={{ opacity: 0, y: -10 }}
