@@ -194,6 +194,31 @@ const PROMPTS = [
       " Lighting: formal, slightly cool, official-government feel. Editorial illustration style matching investor-presentation quality, 16:9 widescreen, no real political logos other than generic Cambodian-government insignia. Mood: serious, official, non-negotiable — this is the government drawing a line.",
   },
   {
+    slug: "workers-solution",
+    prompt:
+      "A cinematic editorial illustration of a BRIGHT, clean, modern Cambodian garment factory floor — the happy, dignified 'after' that resolves the earlier scene of four confused workers. Royal-blue (#1E4DAA) and white palette, warm natural light, 16:9 widescreen, premium editorial quality. CORE THEME: humans working smart — absolutely NO robots." +
+      " A BUSY, realistically populated floor — MANY Cambodian operators (10-15 people) seated at long rows of sewing machines, working. DEVICE RULE for realism: most operators do NOT hold phones; instead each sewing machine has a small SCREEN / display MOUNTED on it (showing a Khmer production readout — target, bundle, stitch count) that the seated operator glances at while their hands stay on the garment. Only the TEAM LEADERS / supervisors (2-3 of them) walk the floor holding TABLETS." +
+      " Among them, the SAME FOUR workers from the earlier scene (older women in headscarves and aprons, and one older man) each have ONE comic-style speech bubble that resolves their four original complaints (readable bold text):" +
+      " worker 1 (seated, glancing at her machine-mounted screen): 'Now it's all in Khmer — I understand everything!'" +
+      " worker 2 (talking to a supervisor): 'The agent talks to HR for me — no more queue.'" +
+      " worker 3 (at a station with a mounted screen): 'No more forms — it just records itself.'" +
+      " worker 4 (a team leader holding a tablet): 'Now WE use the phone too!'" +
+      " A supervisor in the mid-ground glances at a single wall-mounted DTV (digital-twin) data screen." +
+      " ALSO INCLUDE two smart-factory details: (1) a TRAFFIC-LIGHT DEFECT-MONITORING system — andon stack-lights (green / amber / red) mounted above the sewing lines, mostly GREEN with one amber, signalling live quality status per line; (2) a small DRIVERLESS GUIDED CART (a low autonomous AGV trolley, clearly no driver) moving down the central aisle carrying a few neatly stacked bundles of garments. These are support tools, not humanoid robots." +
+      " IMPORTANT BRANDING RULE: do NOT plaster the word 'Yai' around — at most ONE small, subtle logo on a single screen. No 'Yai' text on walls, aprons, signs, or repeated across the scene. Realistic factory." +
+      " Mood: optimistic, human, dignified — people working smart, never replaced. Royal-blue and white palette, premium editorial illustration style, investor-presentation quality.",
+  },
+  {
+    slug: "management-solution",
+    prompt:
+      "A split-screen editorial illustration, 16:9 widescreen, royal-blue (#1E4DAA) and white palette, with a clean vertical divider down the middle. The calm, in-control 'after' to the earlier management-chaos scene." +
+      // LEFT HALF — manager in control via Yai
+      " LEFT HALF: a Hong Kong Chinese garment-factory manager (man, 50s, light-blue business shirt, glasses — the same person who was overwhelmed before) now relaxed and in control at his desk, looking at TWO monitors. The monitors show the Yai UI: an Ai chat-agent conversation with data lines and small charts where the agent is requesting an APPROVAL (e.g. a card reading 'Approve OT — Line 4: +18 workers' with an APPROVE button), and a live video-call panel (the Yai meeting interface) with one remote participant tile and live data widgets visible. A tablet stands upright on a small stand beside him also showing the Yai approval screen. He is calmly tapping to approve. Clearly a video meeting in progress." +
+      // RIGHT HALF — mechanics configuring a sewing machine via tablet (AIoT)
+      " RIGHT HALF: on the factory floor, TWO technicians/mechanics in work shirts servicing an industrial sewing machine. A rugged tablet mounted on a stand (or held by one technician) shows a Yai machine-configuration interface — sewing-machine settings, SPI calibration, sensor/AIoT readouts, a maintenance checklist — which they are interacting with to configure the machine. Cables and the sewing machine clearly visible." +
+      " Both halves show the Yai interface on their screens. Mood: calm, efficient, in-control — the opposite of the earlier 'THERE IS NO WAY' chaos. Royal-blue and white palette, warm cinematic lighting, no real brand logos other than 'Yai' on screens, premium editorial illustration style, investor-presentation quality.",
+  },
+  {
     slug: "government-solution",
     prompt:
       "A cinematic editorial illustration of the SAME Cambodian Ministry of Environment meeting room as before — now everyone is working on the Yai platform. Royal-blue (#1E4DAA) and white palette, 16:9 widescreen, premium investor-deck quality." +
@@ -211,7 +236,7 @@ const PROMPTS = [
       " CRITICAL: the boardroom is FULL OF PEOPLE — every chair around the oval table is OCCUPIED by an engaged executive (a diverse board of 7-8 seated men and women in business attire). NO empty chairs. The point is that Ai AUGMENTS these humans, it has NOT replaced them — show a busy, populated, collaborative room." +
       " The confident female board chairwoman (mid-50s, tailored navy suit, blonde-grey hair) stands at the head of the table, relaxed and satisfied, gesturing warmly at the screen. The seated executives look engaged — some looking at the chairwoman, some at their tablets." +
       " No papers — each seated executive has a sleek tablet showing live Yai dashboards. A small cylindrical 360-degree live-meeting camera sits in the centre of the table." +
-      " The large back wall screen is clearly branded 'Yai — Manufacturing Intelligence Platform' and is GARMENT-SPECIFIC and DATA-RICH: it mixes apparel design content with analytics — fashion garment design sketches / croquis line-drawings of dresses, shirts and jackets; a row of style sample thumbnails (finished garments); a tech-pack line drawing with measurement callouts; a fabric / colour swatch palette; alongside production-efficiency line charts, OEE gauges, order-tracking bars, and sustainability KPI tiles. Clearly an APPAREL manufacturing intelligence dashboard. Only ONE small remote video tile in a corner (a single Cambodian factory supervisor on a sewing-floor background) — just enough to show the factory is connected. Intelligence and garments, not a wall of faces." +
+      " The large back wall screen is clearly branded 'Yai — Manufacturing Intelligence Platform'. The LEFT HALF of the screen is dominated by APPAREL DESIGN content that is large and unmistakable: prominent fashion garment design sketches and croquis — clear line-drawings of a dress, a shirt and a jacket — plus a tech-pack technical flat with measurement callouts, a row of finished-garment style sample thumbnails, and a fabric / colour swatch palette. The RIGHT HALF shows the analytics: production-efficiency line charts, OEE gauges, order-tracking bars, sustainability KPI tiles. It must read INSTANTLY as a GARMENT / apparel platform because of the visible clothing sketches. Only ONE small remote video tile tucked in a corner (a single Cambodian factory supervisor on a sewing-floor background). Garment design + data, not a wall of faces." +
       " A large comic-style SPEECH BUBBLE from the chairwoman, bold readable sans-serif text: 'Well — Yai covered everything, didn't it? Saved everyone's job.'" +
       " Floor-to-ceiling windows reveal a city skyline. Mood: calm, collaborative, resolved — a room full of people, empowered by data. Warm cinematic lighting, no real brand logos other than 'Yai' on the screen, investor-presentation quality.",
   },

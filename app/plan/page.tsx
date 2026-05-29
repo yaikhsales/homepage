@@ -174,7 +174,7 @@ export default function PlanPage() {
                 problem: "“Integrate or we route the order elsewhere — don’t be Nokia.”",
                 title: "Buyer-endorsed — don’t reinvent the wheel",
                 body: "Brands have already seen Yai and what it does. Their word to suppliers: “We’ve seen Yai — just do it. No need to reinvent the wheel.” You’re not pitching an unknown system; you’re plugging into the integration path buyers already recognise.",
-                image: "/images/generated/brand-solution.png?v=2",
+                image: "/images/generated/brand-solution.png?v=3",
                 imageAlt: "The same brand boardroom now running on Yai — a room full of seated executives on tablets, a 360° live-meeting camera, a data-rich Manufacturing Intelligence dashboard; the chairwoman: 'Yai covered everything — saved everyone's job.'",
               },
               {
@@ -182,8 +182,8 @@ export default function PlanPage() {
                 problem: "“Worker data, EMR reports, tax filings — digital, on time, or penalties.”",
                 title: "Compliance on autopilot",
                 body: "Worker records, EMR/environmental reports, and tax filings stay digital by default and submit on time. Penalties avoided; the factory is always audit-ready, not scrambling 24 hours before.",
-                image: "/images/generated/government-solution.png",
-                imageAlt: "The Ministry of Environment meeting now on Yai — green compliance dashboard and live AIoT sensor data, officials and factory staff on tablets; the official: 'Such a clear information flow — proud our Cambodian youth built this.'",
+                image: "/images/generated/government-solution.png?v=2",
+                imageAlt: "The Ministry of Environment meeting now on Yai — green-and-white uniforms, a live environment dashboard, officials and factory staff on tablets; the official: 'Such a clear information flow — proud our Cambodian youth built this.'",
               },
               {
                 tag: "Answers The Owner · Sandwiched",
@@ -197,12 +197,16 @@ export default function PlanPage() {
                 problem: "“There is no way — the buyer won’t accept our answer.”",
                 title: "Management gets its time back",
                 body: "Live dashboards replace sprawling spreadsheets; approvals flow through the system instead of floor-to-floor. Sales answers buyers with real-time data, instantly — the ceiling is gone.",
+                image: "/images/generated/management-solution.png",
+                imageAlt: "Split screen: the manager calmly approving via a Yai chat-agent on a video call (left); technicians configuring a sewing machine through a Yai tablet on the floor (right).",
               },
               {
                 tag: "Answers Corner 4 · Staff & Workers",
                 problem: "“It’s all in Chinese, every issue goes to HR, the same form every day.”",
                 title: "Built for the floor",
                 body: "Khmer voice, phone-first, no HR detour, no daily paper form. The phone-based way of working the floor team has already been asking for — in their own language.",
+                image: "/images/generated/workers-solution.png?v=4",
+                imageAlt: "Busy bright floor: operators at machines with mounted screens, supervisors on tablets, andon traffic-lights for defect status, and a driverless cart carrying garment bundles. The four workers' complaints all resolved: Khmer UI, agent-to-HR, no forms, phones for everyone.",
               },
             ].map((s) => (
               <Card key={s.tag} className={s.highlight ? "border-yai-orange/40 bg-orange-50/30" : ""}>

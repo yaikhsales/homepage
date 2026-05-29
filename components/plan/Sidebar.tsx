@@ -15,7 +15,18 @@ export function Sidebar({
 }) {
   const [active, setActive] = useState(items[0]?.id ?? "");
   const [open, setOpen] = useState(false);
+  // Default true so SSR + first client render agree (sidebar visible, x:0) — avoids hydration mismatch.
+  // Updated after mount via matchMedia; also reacts to resize.
+  const [isDesktop, setIsDesktop] = useState(true);
   const router = useRouter();
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const update = () => setIsDesktop(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
 
   // Scroll-spy
   useEffect(() => {
@@ -99,7 +110,7 @@ export function Sidebar({
       <motion.aside
         initial={false}
         animate={{
-          x: open ? 0 : typeof window !== "undefined" && window.innerWidth < 768 ? "-100%" : 0,
+          x: isDesktop || open ? 0 : "-100%",
         }}
         transition={{ type: "spring", damping: 30, stiffness: 240 }}
         className="sidebar w-72 bg-yai-navy text-white min-h-screen md:sticky md:top-0 md:max-h-screen md:overflow-y-auto sidebar-scroll no-print fixed md:relative inset-y-0 left-0 z-50 md:translate-x-0"
