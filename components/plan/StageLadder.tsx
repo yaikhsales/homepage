@@ -69,6 +69,12 @@ const Icon = {
   spark: (
     <svg viewBox="0 0 24 24" {...stroke}><path d="M12 3v3M12 18v3M5 12H2M22 12h-3M6 6l2 2M16 16l2 2M6 18l2-2M16 8l2-2"/><circle cx="12" cy="12" r="3"/></svg>
   ),
+  cpu: (
+    <svg viewBox="0 0 24 24" {...stroke}><rect x="6" y="6" width="12" height="12" rx="1"/><rect x="9.5" y="9.5" width="5" height="5"/><path d="M9 3v3M12 3v3M15 3v3M9 18v3M12 18v3M15 18v3"/><path d="M3 9h3M3 12h3M3 15h3M18 9h3M18 12h3M18 15h3"/></svg>
+  ),
+  solarRack: (
+    <svg viewBox="0 0 24 24" {...stroke}><circle cx="12" cy="4" r="1.6"/><path d="M12 1.4v0.8M12 6.6v0.8M9.6 4h-0.8M15.2 4h-0.8M10.4 2.4l-0.5-0.5M14.1 2.4l0.5-0.5M10.4 5.6l-0.5 0.5M14.1 5.6l0.5 0.5"/><rect x="5" y="10" width="14" height="11" rx="1"/><path d="M5 13.5h14M5 17h14"/><circle cx="7.5" cy="11.75" r="0.4" fill="currentColor"/><circle cx="7.5" cy="15.25" r="0.4" fill="currentColor"/><circle cx="7.5" cy="19" r="0.4" fill="currentColor"/></svg>
+  ),
 } as const;
 
 type LayerIcon = { node: React.ReactNode; label: string };
@@ -87,14 +93,16 @@ const LAYERS: Layer[] = [
     num: 3,
     name: "Full Ai",
     subtitle: "Strategic management & growth",
-    blurb: "Executive layer — senior management decisions, multi-factory control, expansion to new countries.",
+    blurb: "Executive layer — senior management decisions, multi-factory control, expansion to new countries. At this level companies run their own Ai compute on solar-powered mini data centres — cost down, sustainability up.",
     variant: "executive",
     icons: [
-      { node: Icon.globe,    label: "Multi-country" },
-      { node: Icon.chart,    label: "Predictive growth" },
-      { node: Icon.crown,    label: "Executive decisions" },
-      { node: Icon.spark,    label: "Strategic Ai insights" },
-      { node: Icon.building, label: "Multi-factory" },
+      { node: Icon.globe,     label: "Multi-country" },
+      { node: Icon.chart,     label: "Predictive growth" },
+      { node: Icon.crown,     label: "Executive decisions" },
+      { node: Icon.spark,     label: "Strategic Ai insights" },
+      { node: Icon.building,  label: "Multi-factory" },
+      { node: Icon.cpu,       label: "Own Ai computing" },
+      { node: Icon.solarRack, label: "Solar-powered mini data centre" },
     ],
   },
   {
@@ -152,9 +160,9 @@ function panelClass(v: Layer["variant"]) {
     case "highlight":
       return "bg-gradient-to-r from-yai-blue to-[#2A5DC4] border-2 border-yai-blue text-white shadow-blue-glow";
     case "executive":
-      return "bg-gradient-to-r from-yai-navy to-yai-blue-deep border-2 border-yai-navy text-white";
-    default: // platform
-      return "bg-gradient-to-r from-[#E8F0FF] to-[#D7E5FB] border-2 border-yai-blue/40 text-yai-navy";
+      return "bg-gradient-to-r from-[#0A3327] to-[#1A5742] border-2 border-[#0E3B2E] text-white";
+    default: // platform — Layer 1 Digitalization (orange)
+      return "bg-gradient-to-r from-[#FFF1E0] to-[#FFD9B5] border-2 border-yai-orange/40 text-yai-navy";
   }
 }
 
@@ -162,8 +170,8 @@ function badgeClass(v: Layer["variant"]) {
   switch (v) {
     case "before":     return "bg-gray-300 text-gray-700";
     case "highlight":  return "bg-white text-yai-blue";
-    case "executive":  return "bg-yai-blue text-white";
-    default:           return "bg-yai-blue text-white";
+    case "executive":  return "bg-amber-400 text-[#0A3327]";
+    default:           return "bg-yai-orange text-white";
   }
 }
 
@@ -172,7 +180,7 @@ function iconColor(v: Layer["variant"]) {
     case "before":    return "text-gray-400";
     case "highlight": return "text-white";
     case "executive": return "text-white";
-    default:          return "text-yai-blue";
+    default:          return "text-yai-orange";
   }
 }
 
@@ -262,12 +270,6 @@ export function StageLadder() {
         ))}
       </div>
 
-      {/* Caption */}
-      <div className="md:ml-10 mt-5 text-center md:text-left">
-        <p className="text-xs text-gray-500 italic">
-          From paper to predictive Ai. Each layer builds on the one below — Yai delivers Layers 2 through 4.
-        </p>
-      </div>
     </div>
   );
 }

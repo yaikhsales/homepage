@@ -209,13 +209,25 @@ const PROMPTS = [
       " Mood: optimistic, human, dignified — people working smart, never replaced. Royal-blue and white palette, premium editorial illustration style, investor-presentation quality.",
   },
   {
+    slug: "owner-solution",
+    prompt:
+      "A cinematic editorial illustration of a garment-factory boardroom where the factory owner is on a live video meeting with his buyer — connected through the Yai platform. Royal-blue (#1E4DAA) and white palette, 16:9 widescreen, premium investor-deck quality." +
+      " In the room (foreground): the Hong Kong Chinese factory owner 'Mr Chang' (man, late 50s, business shirt, glasses, confident and relaxed) seated at the head of a conference table with his 3 Hong Kong Chinese management team members. Each team member holds a tablet showing a DIFFERENT clearly-labelled Yai production module: one tablet reads 'YQMS' (a quality-management dashboard), one reads '4DP' (a planning board), one reads 'YTPM' (a maintenance screen) — readable module labels on the tablet screens. A small 360 conference camera on the table." +
+      " On the large WALL SCREEN: a live video-call panel branded 'Yai' showing the SAME blonde-grey female brand chairwoman (navy suit) and one or two of her team — the BUYER, joining remotely. Beside the video tile, a small world-map graphic highlights the home factory plus a SECOND factory location (expansion)." +
+      " TWO comic-style speech bubbles, readable bold text:" +
+      " from the chairwoman on the wall screen: 'What do you think, Mr Chang — is your team ready to expand?'" +
+      " from Mr Chang in the room: 'I waited so long for one system this simple. Yes — we're ready to open the next factory.'" +
+      " Mood: warm, optimistic, deal-closing — buyer and supplier aligned on one platform, growth ahead. Floor-to-ceiling windows, a calm modern boardroom. At most ONE small 'Yai' logo on the screen, no other branding. Premium editorial illustration style, investor-presentation quality.",
+  },
+  {
     slug: "management-solution",
     prompt:
       "A split-screen editorial illustration, 16:9 widescreen, royal-blue (#1E4DAA) and white palette, with a clean vertical divider down the middle. The calm, in-control 'after' to the earlier management-chaos scene." +
       // LEFT HALF — manager in control via Yai
-      " LEFT HALF: a Hong Kong Chinese garment-factory manager (man, 50s, light-blue business shirt, glasses — the same person who was overwhelmed before) now relaxed and in control at his desk, looking at TWO monitors. The monitors show the Yai UI: an Ai chat-agent conversation with data lines and small charts where the agent is requesting an APPROVAL (e.g. a card reading 'Approve OT — Line 4: +18 workers' with an APPROVE button), and a live video-call panel (the Yai meeting interface) with one remote participant tile and live data widgets visible. A tablet stands upright on a small stand beside him also showing the Yai approval screen. He is calmly tapping to approve. Clearly a video meeting in progress." +
+      " LEFT HALF: a Hong Kong Chinese garment-factory manager (man, 50s, light-blue business shirt, glasses — the same person who was overwhelmed before) now relaxed and in control at his desk, looking at TWO monitors. The monitors show a clean Yai SOFTWARE DASHBOARD UI — NOT a CCTV camera grid, NO surveillance camera feeds. The dashboard contains: garment/fashion STYLE CARDS with apparel illustrations (dresses, shirts, jackets) and their specs, order-tracking rows each with a small garment thumbnail and status, a line-progress board, and a small Ai chat-agent approval card ('Approve OT — Line 4: +18 workers' with an APPROVE button). Mostly garment-fashion visuals + light data, presented as a polished product interface (cards, rows, panels) — definitely not security-camera tiles. A small video-call tile with one remote participant. A tablet on a stand shows the same garment dashboard. He is calmly tapping APPROVE." +
+      " A comic-style SPEECH BUBBLE from the manager: 'It's all real-time now.'" +
       // RIGHT HALF — mechanics configuring a sewing machine via tablet (AIoT)
-      " RIGHT HALF: on the factory floor, TWO technicians/mechanics in work shirts servicing an industrial sewing machine. A rugged tablet mounted on a stand (or held by one technician) shows a Yai machine-configuration interface — sewing-machine settings, SPI calibration, sensor/AIoT readouts, a maintenance checklist — which they are interacting with to configure the machine. Cables and the sewing machine clearly visible." +
+      " RIGHT HALF: on the factory floor, TWO technicians/mechanics in work shirts servicing an industrial sewing machine. A rugged tablet held by one technician prominently shows the 'YPI' (Yai Production Intelligence) garment technical-specification sheet written IN KHMER SCRIPT — clearly readable Khmer text for garment construction details, measurements, stitch/SPI settings and the machine configuration. The Khmer technical spec must be the obvious focus of the tablet screen. Cables and the sewing machine clearly visible." +
       " Both halves show the Yai interface on their screens. Mood: calm, efficient, in-control — the opposite of the earlier 'THERE IS NO WAY' chaos. Royal-blue and white palette, warm cinematic lighting, no real brand logos other than 'Yai' on screens, premium editorial illustration style, investor-presentation quality.",
   },
   {
@@ -224,7 +236,7 @@ const PROMPTS = [
       "A cinematic editorial illustration of the SAME Cambodian Ministry of Environment meeting room as before — now everyone is working on the Yai platform. Royal-blue (#1E4DAA) and white palette, 16:9 widescreen, premium investor-deck quality." +
       " A senior Ministry of Environment official (man, mid-50s) stands at the head of the table, relaxed and proud, gesturing warmly at the wall display. IMPORTANT: the officials wear LIGHT SAGE-GREEN AND WHITE formal Ministry-of-Environment uniforms (soft green and white, civilian-environmental style — NOT dark military khaki, NOT olive combat green). Clean, light, official." +
       " The room is FULL: two more officials in the same green-and-white uniforms AND three Cambodian garment-factory staff in business attire are SEATED around the table, engaged. NO paper folders — everyone holds a sleek tablet showing live Yai environmental dashboards." +
-      " The large wall display is clearly branded 'Yai' and is ENVIRONMENT-DATA-DOMINANT: live environmental monitoring — water-discharge quality (pH, turbidity), air-emissions / AQI gauges, carbon-footprint (kg CO2 per garment) trend, energy use (kWh), wastewater treatment status, effluent levels, and an environmental-compliance scorecard (EMR ✓, WRAP ✓, HIGG ✓, GRS ✓) all green. Rich real-time charts and AIoT sensor readouts — this is an environmental intelligence dashboard, not generic office data." +
+      " The large wall display is clearly branded 'Yai' and is ENVIRONMENT-DATA-DOMINANT, organised around THREE prominent labelled tiles: 'EMISSIONS' (air-emissions / AQI gauges + kg CO2 trend), 'WASTE HANDLING' (wastewater treatment status, effluent levels, solid-waste recycling %), and 'ENERGY' (kWh usage, renewable %, efficiency trend) — each with live gauges and charts. Plus a small environmental-compliance scorecard (EMR ✓, HIGG ✓, GRS ✓) all green. This is clearly an EMISSIONS / WASTE / ENERGY environmental dashboard." +
       " On the wall behind: a Cambodian flag and national emblem; an Angkor-Wat silhouette through a tall window." +
       " A large comic-style SPEECH BUBBLE from the senior official, bold readable sans-serif text: 'Such a clear information flow — Ai with AIoT. We are glad our Cambodian youth built this: great support for the country's manufacturing sector.'" +
       " Lighting: bright, formal yet warm and optimistic. Editorial illustration style, no real logos other than 'Yai', investor-presentation quality. Mood: proud, collaborative, nation-building.",
@@ -315,6 +327,59 @@ const PROMPTS = [
       "An editorial group illustration of a 20-person Cambodian software engineering team in a relaxed but focused workspace — diverse, mostly Cambodian, in their late twenties to forties, working on laptops with garment-factory inspired references on the walls (fabric swatches, factory blueprints, a wall display showing Ai workflows). The founder Gamini at the centre table reviewing code on a laptop." +
       STYLE_SUFFIX,
   },
+
+  // -------- Ai-agent avatars (one distinct office person per platform module) --------
+  // Pixar / 3D-render style friendly characters, head-and-shoulders, plain pale background
+  // so they crop cleanly into circular avatars. Every face is different — a real office.
+  ...[
+    { slug: "agent-1",  who: "a friendly man in his 30s with neat dark hair and thick black round eyeglasses, royal-blue business suit, white shirt and a bright ORANGE necktie, warm confident smile" },
+    { slug: "agent-2",  who: "a friendly woman in her early 30s with shoulder-length dark brown hair, royal-blue tailored blazer over a white blouse with a small orange scarf accent, bright welcoming smile" },
+    { slug: "agent-3",  who: "a cheerful young Cambodian / South-East-Asian man, age 25, short black hair, no glasses, light-blue button shirt, big friendly grin" },
+    { slug: "agent-4",  who: "a cheerful young Cambodian / South-East-Asian woman, age 24, dark hair in a neat ponytail, slim modern glasses, royal-blue blazer, bright friendly smile" },
+    { slug: "agent-5",  who: "a young man, age 28, short neat dark hair, navy-blue suit with an orange pocket-square accent, confident friendly smile" },
+    { slug: "agent-6",  who: "a friendly woman in her late 20s with a short dark bob haircut, royal-blue top with a thin orange detail, warm cheerful smile" },
+    { slug: "agent-7",  who: "a young Cambodian woman, age 27, black hair tied in a neat bun, no glasses, royal-blue blouse, calm friendly smile" },
+    { slug: "agent-8",  who: "a Cambodian man in his 30s with short neat hair and a thin moustache, light-blue dress shirt and navy tie, friendly smile" },
+    { slug: "agent-9",  who: "a young Cambodian woman, age 22, long straight black hair, round glasses, royal-blue cardigan, bright cheerful smile" },
+    { slug: "agent-10", who: "a young Cambodian man, age 26, short dark hair, navy-blue polo shirt, warm friendly smile" },
+    { slug: "agent-11", who: "a South-East-Asian woman, age 28, wavy shoulder-length hair, royal-blue blazer with small orange earrings, confident smile" },
+    { slug: "agent-12", who: "a Cambodian man, age 26, modern undercut hairstyle, light-blue shirt, relaxed friendly grin" },
+    { slug: "agent-13", who: "a young South-East-Asian woman, age 24, hair in neat braids, rectangular glasses, royal-blue blouse, kind smile" },
+    { slug: "agent-14", who: "a young man, age 29, side-parted dark hair, square glasses, dark-blue suit and white shirt, friendly expression" },
+    { slug: "agent-15", who: "a young woman, age 23, high ponytail, no glasses, royal-blue top, energetic friendly smile" },
+    { slug: "agent-16", who: "a young man, age 27, light short trimmed beard, no glasses, royal-blue shirt with sleeves rolled up, approachable smile" },
+    { slug: "agent-17", who: "a young woman, age 26, short black hair, slim glasses, navy blazer, warm friendly smile" },
+    { slug: "agent-18", who: "a man, age 29, short spiky hair, royal-blue t-shirt under a casual blazer, upbeat grin" },
+    { slug: "agent-19", who: "a woman, age 31, hair tied back neatly, royal-blue blouse with a thin orange necklace, friendly smile" },
+    { slug: "agent-20", who: "a man, age 33, clean-shaven, modern glasses, blue checked shirt, cheerful smile" },
+    { slug: "agent-21", who: "a young woman, age 24, dark bob with straight bangs, royal-blue blazer, bright smile" },
+    { slug: "agent-22", who: "a young man, age 30, neat dark hair, big friendly grin, navy-blue shirt" },
+    { slug: "agent-23", who: "a woman, age 27, long hair styled half-up, slim glasses, royal-blue top, warm smile" },
+    { slug: "agent-24", who: "a young man, age 28, short curly hair, no glasses, light-blue shirt, relaxed smile" },
+    { slug: "agent-25", who: "a young government officer, age 28, in a smart formal government civil-service uniform — a crisp light sage-green and white ministry uniform shirt with shoulder epaulettes, subtle official insignia and a name badge — neat hair, friendly professional smile (this is the E-Government liaison)" },
+    { slug: "agent-26", who: "a man, age 22, youthful fringe hairstyle, smart-casual royal-blue shirt, bright eager smile" },
+    { slug: "agent-27", who: "a young woman compliance officer, age 28, the 'process police' — in a smart navy-blue officer/security uniform with shoulder epaulettes, a badge and a name tag, glasses, neat hair, friendly but firm professional smile" },
+    { slug: "agent-28", who: "a young man, age 31, neat dark hair, royal-blue suit with no tie, confident calm smile" },
+    { slug: "agent-29", who: "a young woman, age 25, ponytail with soft side bangs, royal-blue cardigan, cheerful smile" },
+    { slug: "agent-30", who: "a man, age 30, fade haircut, modern glasses, royal-blue polo shirt, friendly grin" },
+    { slug: "agent-31", who: "a woman, age 33, shoulder-length layered hair, royal-blue blouse, warm welcoming smile" },
+    { slug: "agent-32", who: "a young man, age 30, thick eyebrows, glasses, dark-blue suit, friendly assured expression" },
+    { slug: "agent-33", who: "a woman, age 29, curly black hair, no glasses, royal-blue top with small orange earrings, bright smile" },
+    { slug: "agent-34", who: "a young man, age 29, neat side part with a light beard, royal-blue shirt, friendly smile" },
+    { slug: "agent-35", who: "a woman, age 26, long straight hair, royal-blue blazer, cheerful confident smile" },
+    { slug: "agent-36", who: "a man, age 28, short crew cut, royal-blue t-shirt under a blazer, easygoing grin" },
+    { slug: "agent-37", who: "a young woman, age 27, hair in a low bun, glasses, navy blouse, calm friendly smile" },
+    { slug: "agent-38", who: "a man, age 24, trendy textured hairstyle, royal-blue shirt, bright friendly smile" },
+    { slug: "agent-boss", who: "a confident young factory-group owner (man, age 33), sitting back COMFORTABLY in a tall executive HIGH-BACK leather office chair (the high back of the chair clearly visible behind him), one hand resting relaxed on the chair arm, the other hand making a small gesture, slight calm satisfied smile, short neat dark hair, modern thin glasses, royal-blue tailored business suit, white shirt and a small ORANGE necktie. The pose says: 'I run the company, I'm in command, I'm at ease.' Visible from waist up, the leather chair framing him from behind on both sides" },
+  ].map(({ slug, who }) => ({
+    slug,
+    prompt:
+      `A single 3D animated-character portrait of ${who}. ` +
+      "Style: high-quality Pixar / 3D-render mascot, smooth rounded stylised forms, big expressive eyes, soft studio lighting, friendly approachable corporate-helper vibe. " +
+      "Composition: front-facing head-and-shoulders, centred, the character fills most of the frame, square 1:1 framing. " +
+      "Background: a plain flat solid very-light cool-grey (#EEF2F8) studio backdrop, completely uncluttered, no props, no text, no logos, no watermark. " +
+      "Palette anchored on royal blue (#1E4DAA) with a small tasteful orange accent. Clean, premium, consistent character-set look so all the faces read as members of the same Ai-agent team — but every single face is clearly a different unique person (different gender mix, ages, hairstyles, with and without glasses).",
+  })),
 ];
 
 const HELP = `Usage:
@@ -391,11 +456,28 @@ async function main() {
 
     process.stdout.write(`[gen ] ${slug} ... `);
     try {
-      const res = await ai.models.generateContent({
-        model,
-        contents: prompt,
-        config: { responseModalities: ["IMAGE"] },
-      });
+      let res, attempt = 0;
+      while (true) {
+        try {
+          res = await ai.models.generateContent({
+            model,
+            contents: prompt,
+            config: { responseModalities: ["IMAGE"] },
+          });
+          break;
+        } catch (err) {
+          const msg = String(err?.message || "");
+          const is429 = msg.includes("429") || msg.includes("RESOURCE_EXHAUSTED");
+          if (is429 && attempt < 5) {
+            attempt++;
+            const wait = 25000 * attempt;
+            process.stdout.write(`[429 retry ${attempt} in ${wait / 1000}s] `);
+            await new Promise(r => setTimeout(r, wait));
+            continue;
+          }
+          throw err;
+        }
+      }
 
       const parts = res?.candidates?.[0]?.content?.parts ?? [];
       const imgPart = parts.find(p => p.inlineData);
@@ -412,8 +494,8 @@ async function main() {
       console.log(`OK (${kb} KB)`);
       okCount++;
 
-      // Light pacing between requests
-      await new Promise(r => setTimeout(r, 1200));
+      // Pacing between requests (image quota is per-minute — go slow to avoid 429)
+      await new Promise(r => setTimeout(r, 6500));
     } catch (e) {
       console.log(`error`);
       console.error(`        ${e.message}`);

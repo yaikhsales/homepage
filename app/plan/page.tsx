@@ -12,26 +12,29 @@ import { Funnel } from "@/components/plan/Funnel";
 import { ChatDemo } from "@/components/plan/ChatDemo";
 import { DashboardDemo } from "@/components/plan/DashboardDemo";
 import { HoverImage } from "@/components/plan/HoverImage";
+import { PlatformOrbs } from "@/components/plan/PlatformOrbs";
+import { PricingStaircase } from "@/components/plan/PricingStaircase";
+import { TargetCustomersChart } from "@/components/plan/TargetCustomersChart";
+import { TechStackLayers } from "@/components/plan/TechStackLayers";
+import { TeamClusters } from "@/components/plan/TeamClusters";
+import { RoadmapTimeline } from "@/components/plan/RoadmapTimeline";
 
 const NAV: NavItem[] = [
   { id: "executive-summary", label: "Executive Summary" },
   { id: "problem",           label: "The Problem" },
   { id: "solution",          label: "The Solution" },
   { id: "architecture",      label: "Product Architecture" },
-  { id: "modules",           label: "Module List" },
-  { id: "market",            label: "Market Opportunity" },
-  { id: "customers",         label: "Target Customers" },
-  { id: "competition",       label: "Competitive Landscape" },
-  { id: "gtm",               label: "Go-to-Market" },
-  { id: "funnel",            label: "Sales Funnel" },
+  { id: "modules",           label: "Agents & Skills" },
   { id: "pricing",           label: "Pricing & Packaging" },
-  { id: "partnerships",      label: "Government Partnerships" },
-  { id: "traction",          label: "Traction & Pilots" },
+  { id: "customers",         label: "Target Customers" },
   { id: "tech",              label: "Technology Stack" },
   { id: "team",              label: "Team" },
-  { id: "financials",        label: "Financial Projections" },
   { id: "capital",           label: "Capital Efficiency" },
-  { id: "milestones",        label: "12-Month Milestones" },
+  { id: "financials",        label: "Financials & Milestones" },
+  { id: "gtm",               label: "Go-to-Market" },
+  { id: "funnel",            label: "Sales Funnel" },
+  { id: "traction",          label: "Traction & Pilots" },
+  { id: "competition",       label: "Competitive Landscape" },
   { id: "risks",             label: "Risks & Mitigations" },
   { id: "resources",         label: "Resource Requirements" },
   { id: "appendix",          label: "Appendix" },
@@ -163,7 +166,7 @@ export default function PlanPage() {
         </Section>
 
         {/* 03 — Solution */}
-        <Section id="solution" kicker={kicker(3, "The Solution")} title="The Solution — An Ai Platform That Saves Jobs">
+        <Section id="solution" kicker={kicker(3, "The Solution")} title="The Solution — An Ai platform that saves jobs">
           <Thesis>
             One fully integrated platform, left to right — built to upgrade itself as the business progresses.
           </Thesis>
@@ -182,7 +185,7 @@ export default function PlanPage() {
                 problem: "“Worker data, EMR reports, tax filings — digital, on time, or penalties.”",
                 title: "Compliance on autopilot",
                 body: "Worker records, EMR/environmental reports, and tax filings stay digital by default and submit on time. Penalties avoided; the factory is always audit-ready, not scrambling 24 hours before.",
-                image: "/images/generated/government-solution.png?v=2",
+                image: "/images/generated/government-solution.png?v=3",
                 imageAlt: "The Ministry of Environment meeting now on Yai — green-and-white uniforms, a live environment dashboard, officials and factory staff on tablets; the official: 'Such a clear information flow — proud our Cambodian youth built this.'",
               },
               {
@@ -191,14 +194,16 @@ export default function PlanPage() {
                 title: "One platform, not twenty",
                 body: "Yai replaces the graveyard of half-baked systems with a single integrated platform — left to right — that upgrades itself as the business grows. It never becomes system #21.",
                 highlight: true,
+                image: "/images/generated/owner-solution.png?v=2",
+                imageAlt: "Mr Chang and his team on a Yai video call with the buyer chairwoman, a world-map expansion graphic on screen. She: 'Ready to expand, Mr Chang?' He: 'I waited so long for one system this simple — yes, ready to open the next factory.'",
               },
               {
                 tag: "Answers Corner 3 · Management",
                 problem: "“There is no way — the buyer won’t accept our answer.”",
                 title: "Management gets its time back",
                 body: "Live dashboards replace sprawling spreadsheets; approvals flow through the system instead of floor-to-floor. Sales answers buyers with real-time data, instantly — the ceiling is gone.",
-                image: "/images/generated/management-solution.png",
-                imageAlt: "Split screen: the manager calmly approving via a Yai chat-agent on a video call (left); technicians configuring a sewing machine through a Yai tablet on the floor (right).",
+                image: "/images/generated/management-solution.png?v=4",
+                imageAlt: "Split screen: manager approving on garment-line screens, 'It's all real-time now' (left); technician configuring a sewing machine via a Yai tablet (right).",
               },
               {
                 tag: "Answers Corner 4 · Staff & Workers",
@@ -209,22 +214,14 @@ export default function PlanPage() {
                 imageAlt: "Busy bright floor: operators at machines with mounted screens, supervisors on tablets, andon traffic-lights for defect status, and a driverless cart carrying garment bundles. The four workers' complaints all resolved: Khmer UI, agent-to-HR, no forms, phones for everyone.",
               },
             ].map((s) => (
-              <Card key={s.tag} className={s.highlight ? "border-yai-orange/40 bg-orange-50/30" : ""}>
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <div className="sm:w-1/2">
-                    <div className="text-[10px] uppercase tracking-[0.12em] font-bold text-gray-400 mb-1.5">{s.tag}</div>
-                    <p className="text-sm text-gray-500 italic leading-snug">{s.problem}</p>
-                  </div>
-                  <div className="sm:w-1/2 sm:border-l sm:border-yai-border sm:pl-4">
-                    <h3 className={`font-bold text-lg mb-1 ${s.highlight ? "text-yai-orange" : "text-yai-blue"}`}>{s.title}</h3>
-                    <p className="text-sm text-gray-600 leading-relaxed">{s.body}</p>
-                  </div>
+              <Card key={s.tag} noPadding className={`overflow-hidden ${s.highlight ? "border-yai-orange" : ""}`}>
+                <div className="px-4 pt-4 pb-3">
+                  <div className="text-[10px] uppercase tracking-[0.12em] font-bold text-gray-400 mb-1">{s.tag}</div>
+                  <h3 className={`font-bold text-lg leading-tight ${s.highlight ? "text-yai-orange" : "text-yai-blue"}`}>{s.title}</h3>
                 </div>
                 {s.image && (
-                  <div className="mt-4 rounded-lg overflow-hidden border border-yai-border">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={s.image} alt={s.imageAlt} className="w-full h-auto block" />
-                  </div>
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img src={s.image} alt={s.imageAlt} className="w-full h-auto block" />
                 )}
               </Card>
             ))}
@@ -234,156 +231,306 @@ export default function PlanPage() {
         {/* 04 — Architecture (with ChatDemo) */}
         <Section id="architecture" kicker={kicker(4, "Architecture")} title="From Paper to Full Ai — Three Yai Layers">
           <Thesis>
-            Ai MIP — Agentic Manufacturing Intelligence. Three Yai layers stacked on top of the paper-and-chaos reality, each adding capability without ripping out the one below.
+            Adopt one layer at a time — each builds on the one below, nothing gets ripped out.
           </Thesis>
-          <p className="text-gray-700 leading-relaxed mb-8">
-            A factory doesn&apos;t transform overnight. The &ldquo;Today&rdquo; panel at the bottom shows the manual reality most factories are stuck in — Yai replaces it. The three Yai layers stack so a factory can adopt at its own pace: digitize first, layer agentic on top when ready, unlock the Full Ai layer when scaling beyond one site.
-          </p>
 
           <StageLadder />
-
-          <div className="mt-10 mb-6">
-            <p className="text-xs uppercase tracking-wider font-bold text-yai-blue mb-2">Layer 2 — Agentic, in action</p>
-            <h3 className="text-2xl font-bold text-yai-navy mb-4">What a conversation with Yai actually looks like</h3>
-            <p className="text-sm text-gray-600 mb-5 max-w-2xl">
-              A real Layer-2 interaction: a supervisor asks for the payroll summary, the agent pulls the data, then prepares the WRAP audit pack on request. No clicking through 12 screens.
-            </p>
-          </div>
-          <ChatDemo />
-
-          <div className="mt-10 p-5 bg-yai-navy text-white rounded-lg">
-            <p className="text-sm leading-relaxed">
-              <strong className="text-yai-blue">Why this matters commercially:</strong> Each Yai layer (1 → 2 → 3) is a real revenue step. Most customers land at Layer 1, prove ROI in 90 days, and self-select into Layers 2 and 3. The architecture is the upsell engine — built into the product, not bolted on as sales theatre.
-            </p>
-          </div>
         </Section>
 
         {/* 05 — Modules */}
-        <Section id="modules" kicker={kicker(5, "Admin Module List")} title="Module List">
+        <Section id="modules" kicker={kicker(5, "Agents & Skills")} title="The Agents & Their Skills">
           <Thesis>
-            Five Admin modules approved for commercialisation. Production modules remain group internal IP.
+            The full platform, laid out exactly like the live dashboard — Administration, Management, Operations. Every module is an Ai agent. Tap one to hear what it does.
           </Thesis>
-          <div className="overflow-x-auto rounded-xl border border-yai-border bg-white">
-            <table className="w-full text-sm">
-              <thead className="bg-yai-navy text-white text-[11px] uppercase tracking-wider">
-                <tr>
-                  <th className="px-4 py-3 text-left">#</th>
-                  <th className="px-4 py-3 text-left">Module</th>
-                  <th className="px-4 py-3 text-left">Description</th>
-                  <th className="px-4 py-3 text-left">Status</th>
-                  <th className="px-4 py-3 text-left">Approved By</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-yai-border">
-                {[
-                  ["01", "Finance Agent",     "Invoicing, GL, financial reporting, tax filing prep, multi-currency.",                    "live"],
-                  ["02", "Admin Agent",       "Asset monitoring, cost control, vendor management, internal approvals.",                  "live"],
-                  ["03", "HR & Payroll",      "Recruitment, contracts, attendance, ABA/Wing payroll integration, statutory reporting.", "live"],
-                  ["04", "Compliance",        "WRAP, BSCI, ILO, HIGG, CTPAT, GMP, GRS — audit prep automation, evidence capture.",      "pilot"],
-                  ["05", "Internal Logistics","Inventory, warehouse operations, packing/shipping tracking, internal movement.",         "live"],
-                ].map(([n, name, desc, status]) => (
-                  <tr key={n} className="hover:bg-yai-bg">
-                    <td className="px-4 py-3 font-bold text-yai-blue">{n}</td>
-                    <td className="px-4 py-3 font-semibold text-yai-navy whitespace-nowrap">{name}</td>
-                    <td className="px-4 py-3 text-gray-700">{desc}</td>
-                    <td className="px-4 py-3"><Badge variant={status as "live" | "pilot"}>{status}</Badge></td>
-                    <td className="px-4 py-3 text-gray-600 whitespace-nowrap">Ivan / Terry</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
 
-          <details className="mt-6 bg-white border border-yai-border rounded-lg p-4 group">
-            <summary className="cursor-pointer font-semibold text-yai-navy list-none flex items-center gap-2">
-              <span className="text-yai-blue group-open:rotate-45 inline-block transition-transform">+</span>
-              Production-tier modules (internal IP — reference only)
-            </summary>
-            <div className="mt-3 text-sm text-gray-600 space-y-2 pl-6">
-              <p>The following Production-tier modules are operating internally within the YW Group and are <strong>not part of this commercial offering</strong>:</p>
-              <ul className="list-disc pl-5 space-y-1">
-                <li><strong>YQMS</strong> — Quality Management System</li>
-                <li><strong>YTM / CE</strong> — Trim Management / Cutting Edge production control</li>
-                <li><strong>YPI</strong> — Production Intelligence</li>
-                <li><strong>4DP</strong> — 4-Dimensional Planning</li>
-              </ul>
-              <p className="text-xs text-gray-500 mt-3">Commercialisation of Production modules is a separate decision and would require its own investment case.</p>
-            </div>
-          </details>
+          <PlatformOrbs />
+
+          <div className="mt-12 mb-6">
+            <p className="text-xs uppercase tracking-wider font-bold text-yai-blue mb-2">Agents in action</p>
+            <h3 className="text-2xl font-bold text-yai-navy mb-4">What a conversation with Yai actually looks like</h3>
+            <p className="text-sm text-gray-600 mb-5 max-w-2xl">
+              A real interaction: a supervisor asks the Finance agent for the payroll summary, it pulls the data, then prepares the WRAP audit pack on request. No clicking through 12 screens.
+            </p>
+          </div>
+          <ChatDemo />
         </Section>
 
-        {/* 06 — Market */}
-        <Section id="market" kicker={kicker(6, "Market Opportunity")} title="Market Opportunity">
+        {/* 06 — Pricing */}
+        <Section id="pricing" kicker={kicker(6, "Pricing & Packaging")} title="Pricing & Packaging">
           <Thesis>
-            Cambodia alone is a meaningful market. Regional expansion multiplies it by 10× — and Yai is the only Ai-native option built for these factories.
+            All great marches start with one step. That step is $120 a year — five key members stepping up to digitalization. Simple tasks lead all the way to Full Ai in one year. Who would have thought this was possible?
           </Thesis>
-          <div className="grid sm:grid-cols-3 gap-5 mb-8">
-            <StatCallout value={2650} orange label="Garment factories in Cambodia" />
-            <StatCallout value={400} label="Tier-A targets (500–3,000 workers)" />
-            <StatCallout value={4} suffix=" countries" label="Regional expansion footprint" />
-          </div>
-          <h3 className="font-bold text-yai-navy text-xl mb-3">TAM build-up</h3>
-          <div className="overflow-x-auto rounded-xl border border-yai-border bg-white">
-            <table className="w-full text-sm">
-              <thead className="bg-yai-navy text-white text-[11px] uppercase tracking-wider">
-                <tr>
-                  <th className="px-4 py-3 text-left">Market</th>
-                  <th className="px-4 py-3 text-left">Factories</th>
-                  <th className="px-4 py-3 text-left">Tier-A Target</th>
-                  <th className="px-4 py-3 text-left">ACV (avg)</th>
-                  <th className="px-4 py-3 text-left">TAM</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-yai-border">
-                <tr><td className="px-4 py-3">Cambodia</td><td className="px-4 py-3">2,650</td><td className="px-4 py-3">200–400</td><td className="px-4 py-3 text-gray-400">$TBD</td><td className="px-4 py-3 text-gray-400">$TBD</td></tr>
-                <tr><td className="px-4 py-3">Vietnam</td><td className="px-4 py-3">~6,000</td><td className="px-4 py-3">~1,000</td><td className="px-4 py-3 text-gray-400">$TBD</td><td className="px-4 py-3 text-gray-400">$TBD</td></tr>
-                <tr><td className="px-4 py-3">Bangladesh</td><td className="px-4 py-3">~4,000</td><td className="px-4 py-3">~800</td><td className="px-4 py-3 text-gray-400">$TBD</td><td className="px-4 py-3 text-gray-400">$TBD</td></tr>
-                <tr><td className="px-4 py-3">Myanmar</td><td className="px-4 py-3">~700</td><td className="px-4 py-3">~150</td><td className="px-4 py-3 text-gray-400">$TBD</td><td className="px-4 py-3 text-gray-400">$TBD</td></tr>
-                <tr className="bg-amber-50/60 font-bold">
-                  <td className="px-4 py-3">Total addressable</td>
-                  <td className="px-4 py-3">~13,300</td>
-                  <td className="px-4 py-3">~2,350</td>
-                  <td className="px-4 py-3">—</td>
-                  <td className="px-4 py-3 text-yai-blue">$TBD</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <p className="mt-4 text-sm text-gray-600 italic">
-            Realistic capture assumption: 5% of Tier-A in core markets within 5 years equals approximately 100+ paying factory customers at sustainable ACV.
-          </p>
+
+          <PricingStaircase />
         </Section>
 
         {/* 07 — Customers */}
         <Section id="customers" kicker={kicker(7, "Target Customers")} title="Target Customers">
           <Thesis>
-            Mid-large local/regional factories, 500–3,000 workers, digitalisation-ready. Three tiers, one focus.
+            Five customer clusters across Cambodia — each climbs a different segment of the Yai ladder, from $120 admin modules to multi-factory Ai.
           </Thesis>
-          <div className="space-y-5">
+          <TargetCustomersChart />
+        </Section>
+
+        {/* 08 — Tech */}
+        <Section id="tech" kicker={kicker(8, "Technology")} title="Technology Stack">
+          <Thesis>
+            Different layer, different stack. Cloud SaaS at Layer 1, model-agnostic LLM agents at Layer 2, own-compute on solar at Layer 3 — each tuned for its job, none locked in.
+          </Thesis>
+          <TechStackLayers />
+        </Section>
+
+        {/* 09 — Team */}
+        <Section id="team" kicker={kicker(9, "Team")} title="Team">
+          <Thesis>
+            20 engineers across 5 specialised clusters — owner-led, factory-embedded. Adding sales and customer success next.
+          </Thesis>
+
+          {/* 5 cluster circles (interactive — tap to see each group's experience mix) */}
+          <h3 className="font-bold text-yai-navy text-xl mb-1">Engineering — 5 clusters · 20 engineers</h3>
+          <p className="text-sm text-gray-600 mb-4">Cambodia-based. Each cluster owns its slice of the platform end-to-end.</p>
+          <TeamClusters />
+        </Section>
+
+        {/* 10 — Capital Efficiency */}
+        <Section id="capital" kicker={kicker(10, "Capital Efficiency")} title="The Capital Efficiency Story">
+          <Thesis>
+            Built for $360K what would cost $5M–$10M anywhere else. And the same small dollar in compounds upward — at every Ai layer, the value multiplies.
+          </Thesis>
+
+          {/* Roadmap timeline — past spend curve + every module climbing the 3 Ai layers */}
+          <h3 className="font-bold text-yai-navy text-xl mb-1">How the $360K bought 16 module families</h3>
+          <p className="text-sm text-gray-600 mb-4 max-w-3xl">
+            One chart, every module. The spend curve at the top is what we&rsquo;ve actually paid in Cambodia engineering rates — peaking at ~20 engineers / ~$12K&nbsp;a&nbsp;month. Each row below is a real module: orange = Digitalization built, blue = Agentic layer on top, dark green = Full Ai. Every step right of <strong>TODAY</strong> is value added on the same fixed engineering base.
+          </p>
+          <RoadmapTimeline mode="spend" />
+
+          {/* Worked example — one module, value across the 3 layers */}
+          <h3 className="font-bold text-yai-navy text-xl mb-2 mt-10">Worked example · the Purchasing System</h3>
+          <p className="text-sm text-gray-600 mb-5 max-w-3xl">
+            One concrete module — built once for ~$4K of salary. Its <strong>capability</strong> (and therefore its value) keeps multiplying as the Ai layers stack on top, without new build cost.
+          </p>
+          <div className="grid lg:grid-cols-3 gap-3">
+            {/* Layer 1 — Digitalization */}
+            <div className="rounded-xl border-2 border-yai-orange/40 p-5" style={{ background: "linear-gradient(to bottom, #FFF1E0, #FFFFFF)" }}>
+              <div className="text-[10px] font-extrabold uppercase tracking-[0.18em] bg-yai-orange text-white px-2 py-0.5 rounded inline-block">Layer 1 · Digitalization · TODAY</div>
+              <h4 className="font-extrabold text-yai-navy text-lg mt-2 leading-tight">Web + Android + iOS purchasing system</h4>
+
+              <div className="mt-4">
+                <div className="text-[10px] uppercase tracking-wider font-bold text-gray-500">One-time cost in</div>
+                <div className="text-3xl font-extrabold text-yai-orange tabular-nums leading-none mt-1">~$4,050</div>
+                <div className="text-[11px] text-gray-500 mt-1">2 devs × 1.5 mo @ $1,200/mo  +  mobile dev @ $450 one-off</div>
+              </div>
+
+              <div className="mt-4">
+                <div className="text-[10px] uppercase tracking-wider font-bold text-gray-500 mb-1">What was built</div>
+                <ul className="text-xs text-gray-700 space-y-0.5">
+                  <li>• Web purchase requests + inventory control</li>
+                  <li>• Click-to-approve workflow for Accounting</li>
+                  <li>• Y Shop function (internal procurement)</li>
+                  <li>• Native Android &amp; iOS apps — published</li>
+                </ul>
+              </div>
+
+              <div className="mt-4">
+                <div className="text-[10px] uppercase tracking-wider font-bold text-gray-500 mb-1">Replaces</div>
+                <p className="text-xs text-gray-600">Paper PR forms, manual signature chase, scattered Excel inventory.</p>
+              </div>
+            </div>
+
+            {/* Layer 2 — Agentic */}
+            <div className="rounded-xl border-2 border-yai-blue/40 p-5 text-white" style={{ background: "linear-gradient(to bottom, #1E4DAA, #2A5DC4)" }}>
+              <div className="text-[10px] font-extrabold uppercase tracking-[0.18em] bg-white text-yai-blue px-2 py-0.5 rounded inline-block">Layer 2 · Agentic · ~6 MONTHS IN</div>
+              <h4 className="font-extrabold text-lg mt-2 leading-tight">Ai agent on top of the same system</h4>
+
+              <div className="mt-4">
+                <div className="text-[10px] uppercase tracking-wider font-bold text-amber-300">Marginal cost added</div>
+                <div className="text-3xl font-extrabold text-amber-300 tabular-nums leading-none mt-1">~$0</div>
+                <div className="text-[11px] text-white/75 mt-1">The agent layer is platform-wide — already built once for every module.</div>
+              </div>
+
+              <div className="mt-4">
+                <div className="text-[10px] uppercase tracking-wider font-bold text-amber-300 mb-1">What it now does</div>
+                <ul className="text-xs text-white/95 space-y-0.5">
+                  <li>• Suggests POs from usage patterns</li>
+                  <li>• Predicts reorders before stock-out</li>
+                  <li>• Auto-validates supplier quotes</li>
+                  <li>• Voice + chat — &ldquo;order 200m cotton, Khmer&rdquo;</li>
+                </ul>
+              </div>
+
+              <div className="mt-4">
+                <div className="text-[10px] uppercase tracking-wider font-bold text-amber-300 mb-1">Value jump</div>
+                <p className="text-xs text-white/85">Same dev cost as before. Output multiplied — purchasing now thinks for itself.</p>
+              </div>
+            </div>
+
+            {/* Layer 3 — Full Ai */}
+            <div className="rounded-xl border-2 border-[#0E3B2E] p-5 text-white" style={{ background: "linear-gradient(to bottom, #0A3327, #1A5742)" }}>
+              <div className="text-[10px] font-extrabold uppercase tracking-[0.18em] bg-amber-400 text-[#0A3327] px-2 py-0.5 rounded inline-block">Layer 3 · Full Ai · YEAR 1+</div>
+              <h4 className="font-extrabold text-lg mt-2 leading-tight">Hands-free Ai purchasing</h4>
+
+              <div className="mt-4">
+                <div className="text-[10px] uppercase tracking-wider font-bold text-amber-300">Marginal cost added</div>
+                <div className="text-3xl font-extrabold text-amber-300 tabular-nums leading-none mt-1">~$0</div>
+                <div className="text-[11px] text-white/75 mt-1">A year of clean data + the agent layer above. No new build, no new spend.</div>
+              </div>
+
+              <div className="mt-4">
+                <div className="text-[10px] uppercase tracking-wider font-bold text-amber-300 mb-1">Now runs itself</div>
+                <ul className="text-xs text-white/95 space-y-0.5">
+                  <li>• Forecasts demand · orders ahead</li>
+                  <li>• Cross-checks 12+ suppliers automatically</li>
+                  <li>• Negotiates within rules</li>
+                  <li>• Owner just signs off the exceptions</li>
+                </ul>
+              </div>
+
+              <div className="mt-4">
+                <div className="text-[10px] uppercase tracking-wider font-bold text-amber-300 mb-1">Value compound</div>
+                <p className="text-xs text-white/85">The $4K built once → autonomous procurement at full Ai. Multiply across every module on the platform.</p>
+              </div>
+            </div>
+          </div>
+
+        </Section>
+
+        {/* 11 — Financials & Milestones */}
+        <Section id="financials" kicker={kicker(11, "Financials & Milestones")} title="Financials & 12-Month Milestones">
+          <Thesis>
+            Profitable path inside 36 months — quarterly milestones laid out on the same timeline.
+          </Thesis>
+
+          {/* Forward-looking roadmap — same chart, revenue curve + Year-1 quarterly milestones overlaid */}
+          <h3 className="font-bold text-yai-navy text-xl mb-1">The roadmap, forward — every module climbs, revenue follows</h3>
+          <p className="text-sm text-gray-600 mb-4 max-w-3xl">
+            Same timeline as Capital Efficiency, now read forward. The green curve at the top is the revenue trajectory across the Year-1 quarterly milestones (yellow tags). Engineering cost base stays flat — new revenue flows straight to gross margin minus customer success and sales hires.
+          </p>
+          <RoadmapTimeline mode="revenue" />
+
+          {/* Financial milestone table — three checkpoints */}
+          <div className="overflow-x-auto rounded-xl border border-yai-border bg-white mt-8 mb-6">
+            <table className="w-full text-sm">
+              <thead className="bg-yai-navy text-white text-[11px] uppercase tracking-wider">
+                <tr>
+                  <th className="px-4 py-3 text-left">Metric</th>
+                  <th className="px-4 py-3 text-left">Month 12</th>
+                  <th className="px-4 py-3 text-left">Month 24</th>
+                  <th className="px-4 py-3 text-left">Month 36</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-yai-border">
+                <tr><td className="px-4 py-3 font-semibold text-yai-navy">Paying customers</td><td className="px-4 py-3">5–15</td><td className="px-4 py-3">25–50</td><td className="px-4 py-3">60–100</td></tr>
+                <tr><td className="px-4 py-3 font-semibold text-yai-navy">Revenue mix</td><td className="px-4 py-3 text-sm text-gray-600 italic" colSpan={3}>Weighted toward Starter and Growth in Y1; mix shifts to Enterprise + Agentic in Y2–Y3.</td></tr>
+                <tr><td className="px-4 py-3 font-semibold text-yai-navy">ARR (est. range)</td><td className="px-4 py-3 text-gray-400">$TBD</td><td className="px-4 py-3 text-gray-400">$TBD</td><td className="px-4 py-3 text-gray-400">$TBD</td></tr>
+                <tr><td className="px-4 py-3 font-semibold text-yai-navy">Cost base</td><td className="px-4 py-3 text-gray-400">$TBD</td><td className="px-4 py-3 text-gray-400">$TBD</td><td className="px-4 py-3 text-gray-400">$TBD</td></tr>
+                <tr className="bg-amber-50/60 font-bold">
+                  <td className="px-4 py-3">Net</td>
+                  <td className="px-4 py-3 text-gray-600">Investment phase</td>
+                  <td className="px-4 py-3 text-gray-600">Break-even</td>
+                  <td className="px-4 py-3 text-yai-blue">Positive</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 className="font-bold text-yai-navy text-xl mt-10 mb-3">12-Month Milestones</h3>
+          <p className="text-sm text-gray-600 mb-4">Quarterly checkpoints, written down, accountable — pinned to the timeline above.</p>
+          <div className="grid md:grid-cols-2 gap-3">
             {[
-              { tier: "A", color: "bg-yai-blue", title: "Tier A — Priority targets", body: "500–3,000 workers, local/regional ownership, audit-pressured, digitalisation-ready. ~200–400 factories in Cambodia.", note: "Examples (anonymised): TBD" },
-              { tier: "B", color: "bg-yai-teal",   title: "Tier B — Secondary",        body: "300–500 workers, smaller buyers, less audit pressure but cost-sensitive. Suitable for Stage 1 (Digital) entry.",                note: "Approach: Self-serve onboarding, lower-touch sales motion." },
-              { tier: "C", color: "bg-yai-navy",   title: "Tier C — Strategic groups", body: "Multi-factory groups (3,000+ workers per site, 3+ sites). Stage 3 Big Rollout candidates — six-figure ACV potential each.", note: "Approach: Founder-led, owner-to-owner conversations. Pilot one site, expand to group." },
-            ].map((t) => (
-              <Card key={t.tier}>
-                <div className="flex items-start gap-4">
-                  <div className={`shrink-0 w-12 h-12 rounded-full ${t.color} text-white flex items-center justify-center font-extrabold`}>{t.tier}</div>
-                  <div>
-                    <h3 className="font-bold text-yai-navy text-lg mb-1">{t.title}</h3>
-                    <p className="text-sm text-gray-600 mb-2">{t.body}</p>
-                    <p className="text-xs text-gray-500"><strong>{t.note}</strong></p>
-                  </div>
-                </div>
+              { q: "Q1", title: "Foundation",   items: ["First 3–5 paid contracts closed", "Sales hire onboarded", "Seminar series at full weekly cadence", "Ministry of Environment partnership term sheet"] },
+              { q: "Q2", title: "Validation",   items: ["10+ paying customers", "Ministry partnership signed", "First Stage 2 (Agentic) upgrade sold", "Initial regional conversation"] },
+              { q: "Q3", title: "Expansion",    items: ["20+ customers", "Regional pilot in conversation", "Customer success function operating", "$TBD revenue milestone"] },
+              { q: "Q4", title: "Scale",        items: ["30+ customers", "First Big Rollout (Stage 3) pilot scoped", "Production module commercialisation case ready for investor review", "Year-2 plan locked"] },
+            ].map((m) => (
+              <Card key={m.q}>
+                <div className="text-yai-blue font-bold text-sm mb-2">{m.q}</div>
+                <h3 className="font-bold text-yai-navy text-lg mb-2">{m.title}</h3>
+                <ul className="text-sm text-gray-600 space-y-1.5">
+                  {m.items.map((it) => <li key={it}>• {it}</li>)}
+                </ul>
               </Card>
             ))}
           </div>
-          <div className="mt-6 p-5 bg-white rounded-lg border-l-4 border-yai-blue">
-            <p className="text-sm text-gray-700"><strong className="text-yai-navy">Ideal customer profile:</strong> Owner-operator or empowered managing director, has felt the cost of a failed audit at least once, already paying for at least one legacy tool, willing to run a 90-day pilot with executive sponsorship.</p>
+        </Section>
+
+        {/* 12 — GTM */}
+        <Section id="gtm" kicker={kicker(12, "Go-to-Market")} title="Go-to-Market Strategy">
+          <Thesis>
+            Three parallel channels — direct sales, government/institutional, and bottom-up worker adoption — reinforcing each other.
+          </Thesis>
+          <div className="grid lg:grid-cols-3 gap-5">
+            {[
+              { num: "CHANNEL 1", title: "Direct sales", bullets: ["Weekly seminar series — owner-targeted, 30–50 attendees", "4-stage funnel: meet → demo → pilot → contract", "Founder-led for Tier A/C; sales hire takes over once pattern lands", "Reference selling — first 2 live factories speak to peers"] },
+              { num: "CHANNEL 2", title: "Government & institutional", bullets: ["Ministry of Environment — digital audit module", "ILO Better Work Cambodia — integration potential", "GMAC partnership — member factory channel", "TAFTAC outreach — Cambodia's primary garment association"] },
+              { num: "CHANNEL 3", title: "Bottom-up adoption", bullets: ["Free worker mobile app — payslip, attendance, time-off", "Workers ask managers for it, creating organic pressure", "When factory signs up, worker base is already trained", "Differentiated from any top-down ERP roll-out"] },
+            ].map((c) => (
+              <Card key={c.num}>
+                <div className="text-yai-blue text-xs font-bold tracking-wider mb-2">{c.num}</div>
+                <h3 className="font-bold text-yai-navy text-lg mb-2">{c.title}</h3>
+                <ul className="text-sm text-gray-600 space-y-2">
+                  {c.bullets.map((b) => <li key={b}>• {b}</li>)}
+                </ul>
+              </Card>
+            ))}
+          </div>
+          <div className="mt-8 p-5 bg-yai-navy text-white rounded-lg">
+            <p className="text-sm leading-relaxed">
+              <strong className="text-yai-blue">Why three channels:</strong> Direct sales gives us revenue. Government partnerships give us air cover and free distribution. Bottom-up gives us product-market fit signal and pre-trained users on every floor. Each channel makes the other two cheaper.
+            </p>
           </div>
         </Section>
 
-        {/* 08 — Competition */}
-        <Section id="competition" kicker={kicker(8, "Competitive Landscape")} title="Competitive Landscape">
+        {/* 13 — Funnel */}
+        <Section id="funnel" kicker={kicker(13, "Sales Funnel")} title="Sales Funnel">
+          <Thesis>
+            From 2,650 factories to 5–20 paying customers in year one — concrete numbers at each stage.
+          </Thesis>
+          <Funnel />
+          <p className="mt-6 text-sm text-gray-600 italic">
+            Conservative case: 5 paying customers, year 1. Aggressive case: 20. Both ranges are sustainable given current pipeline velocity (5 meetings booked in first week of structured outreach).
+          </p>
+        </Section>
+
+        {/* 14 — Traction (with DashboardDemo) */}
+        <Section id="traction" kicker={kicker(14, "Traction")} title="Traction & Pilots">
+          <Thesis>
+            This is not a slide-deck startup. Real factories, real workers, real audits — already running on Yai.
+          </Thesis>
+          <div className="grid sm:grid-cols-4 gap-5 mb-8">
+            <StatCallout value={2} orange label="Factories in live production" />
+            <StatCallout value={3} orange label="Legacy systems replaced" />
+            <StatCallout value={5} orange label="Prospect meetings (week 1)" />
+            <StatCallout value={1} suffix="/wk" orange label="Seminar cadence" />
+          </div>
+
+          <div className="mb-6">
+            <p className="text-xs uppercase tracking-wider font-bold text-yai-blue mb-2">Live dashboard — pilot factory</p>
+            <h3 className="text-2xl font-bold text-yai-navy mb-4">What the operating system looks like in production</h3>
+            <p className="text-sm text-gray-600 mb-5 max-w-2xl">
+              A snapshot from one of the two pilot factories. Workers active today, payroll posted, audit readiness, exception flags, live agent activity feed. This isn&apos;t a mockup — the same numbers our pilot owners see every morning.
+            </p>
+          </div>
+          <DashboardDemo />
+
+          <div className="space-y-4 mt-8">
+            <Card>
+              <h3 className="font-bold text-yai-navy mb-2">Production pilots — 2 factories live</h3>
+              <p className="text-sm text-gray-600">Two factories within the YW Group are running Yai in production, providing continuous fine-tuning signal. Workforce data, compliance evidence, payroll, and admin workflows are all live. Real audits have been run against real evidence captured by Yai.</p>
+            </Card>
+            <Card>
+              <h3 className="font-bold text-yai-navy mb-2">Legacy replacement — 3 systems retired</h3>
+              <p className="text-sm text-gray-600">Yai has successfully replaced 3 separate legacy tools across the pilot factories — proving migration competence, not just greenfield capability.</p>
+            </Card>
+            <Card>
+              <h3 className="font-bold text-yai-navy mb-2">Pipeline — 5 prospect meetings in week 1</h3>
+              <p className="text-sm text-gray-600">First week of structured outreach yielded 5 prospect meetings with mid-large Cambodian factories. Weekly seminar series is the standing top-of-funnel mechanism.</p>
+            </Card>
+          </div>
+        </Section>
+
+        {/* 15 — Competition */}
+        <Section id="competition" kicker={kicker(15, "Competitive Landscape")} title="Competitive Landscape">
           <Thesis>
             No competitor combines Ai-native, apparel-specific, and regionally-priced. Yai is the only one in that quadrant.
           </Thesis>
@@ -437,287 +584,8 @@ export default function PlanPage() {
           </p>
         </Section>
 
-        {/* 09 — GTM */}
-        <Section id="gtm" kicker={kicker(9, "Go-to-Market")} title="Go-to-Market Strategy">
-          <Thesis>
-            Three parallel channels — direct sales, government/institutional, and bottom-up worker adoption — reinforcing each other.
-          </Thesis>
-          <div className="grid lg:grid-cols-3 gap-5">
-            {[
-              { num: "CHANNEL 1", title: "Direct sales", bullets: ["Weekly seminar series — owner-targeted, 30–50 attendees", "4-stage funnel: meet → demo → pilot → contract", "Founder-led for Tier A/C; sales hire takes over once pattern lands", "Reference selling — first 2 live factories speak to peers"] },
-              { num: "CHANNEL 2", title: "Government & institutional", bullets: ["Ministry of Environment — digital audit module", "ILO Better Work Cambodia — integration potential", "GMAC partnership — member factory channel", "TAFTAC outreach — Cambodia's primary garment association"] },
-              { num: "CHANNEL 3", title: "Bottom-up adoption", bullets: ["Free worker mobile app — payslip, attendance, time-off", "Workers ask managers for it, creating organic pressure", "When factory signs up, worker base is already trained", "Differentiated from any top-down ERP roll-out"] },
-            ].map((c) => (
-              <Card key={c.num}>
-                <div className="text-yai-blue text-xs font-bold tracking-wider mb-2">{c.num}</div>
-                <h3 className="font-bold text-yai-navy text-lg mb-2">{c.title}</h3>
-                <ul className="text-sm text-gray-600 space-y-2">
-                  {c.bullets.map((b) => <li key={b}>• {b}</li>)}
-                </ul>
-              </Card>
-            ))}
-          </div>
-          <div className="mt-8 p-5 bg-yai-navy text-white rounded-lg">
-            <p className="text-sm leading-relaxed">
-              <strong className="text-yai-blue">Why three channels:</strong> Direct sales gives us revenue. Government partnerships give us air cover and free distribution. Bottom-up gives us product-market fit signal and pre-trained users on every floor. Each channel makes the other two cheaper.
-            </p>
-          </div>
-        </Section>
-
-        {/* 10 — Funnel */}
-        <Section id="funnel" kicker={kicker(10, "Sales Funnel")} title="Sales Funnel">
-          <Thesis>
-            From 2,650 factories to 5–20 paying customers in year one — concrete numbers at each stage.
-          </Thesis>
-          <Funnel />
-          <p className="mt-6 text-sm text-gray-600 italic">
-            Conservative case: 5 paying customers, year 1. Aggressive case: 20. Both ranges are sustainable given current pipeline velocity (5 meetings booked in first week of structured outreach).
-          </p>
-        </Section>
-
-        {/* 11 — Pricing */}
-        <Section id="pricing" kicker={kicker(11, "Pricing & Packaging")} title="Pricing & Packaging">
-          <Thesis>
-            Per-user tiers, optional Agentic upgrade, custom Big Rollout. Designed for the ladder, not the brochure.
-          </Thesis>
-          <div className="overflow-x-auto rounded-xl border border-yai-border bg-white mb-6">
-            <table className="w-full text-sm">
-              <thead className="bg-yai-navy text-white text-[11px] uppercase tracking-wider">
-                <tr>
-                  <th className="px-4 py-3 text-left">Tier</th>
-                  <th className="px-4 py-3 text-left">Users</th>
-                  <th className="px-4 py-3 text-left">What&apos;s included</th>
-                  <th className="px-4 py-3 text-left">Price / Year</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-yai-border">
-                <tr><td className="px-4 py-3 font-bold text-yai-navy">Starter</td><td className="px-4 py-3">Up to 100</td><td className="px-4 py-3">All Admin modules, Stage 1 (Digital), email support</td><td className="px-4 py-3 text-yai-blue font-bold">$TBD</td></tr>
-                <tr><td className="px-4 py-3 font-bold text-yai-navy">Growth</td><td className="px-4 py-3">Up to 500</td><td className="px-4 py-3">Starter + priority support + custom reports</td><td className="px-4 py-3 text-yai-blue font-bold">$TBD</td></tr>
-                <tr><td className="px-4 py-3 font-bold text-yai-navy">Enterprise</td><td className="px-4 py-3">1,000+</td><td className="px-4 py-3">Growth + SSO, audit log, dedicated CSM</td><td className="px-4 py-3 text-yai-blue font-bold">$TBD</td></tr>
-                <tr className="bg-amber-50/60"><td className="px-4 py-3 font-bold text-yai-navy">Agentic upgrade</td><td className="px-4 py-3">Add-on</td><td className="px-4 py-3">Stage 2 — full Ai agent workflows on top of any tier</td><td className="px-4 py-3 text-yai-blue font-bold">+$TBD</td></tr>
-                <tr className="bg-sky-50/60"><td className="px-4 py-3 font-bold text-yai-navy">Big Rollout</td><td className="px-4 py-3">Custom</td><td className="px-4 py-3">Stage 3 — dedicated infra, AIoT, multi-site, head-office</td><td className="px-4 py-3 text-yai-blue font-bold">From $TBD</td></tr>
-              </tbody>
-            </table>
-          </div>
-          <div className="grid sm:grid-cols-3 gap-4 text-sm">
-            {[
-              ["Setup fee",           "One-time, scoped per deployment — covers configuration, training, data migration."],
-              ["Ai token overages",   "Each tier includes a token allowance. Heavy usage flows to a metered overage charge."],
-              ["Multi-year discounts","2-year and 3-year commitments unlock pricing locks and discount tiers."],
-            ].map(([k, v]) => (
-              <div key={k} className="p-4 bg-white rounded-lg border border-yai-border">
-                <h4 className="font-bold text-yai-navy mb-1">{k}</h4>
-                <p className="text-gray-600">{v}</p>
-              </div>
-            ))}
-          </div>
-        </Section>
-
-        {/* 12 — Partnerships */}
-        <Section id="partnerships" kicker={kicker(12, "Partnerships")} title="Government & Institutional Partnerships">
-          <Thesis>
-            We give the ministry a tool it doesn&apos;t have to build. They give us distribution and validation.
-          </Thesis>
-          <div className="space-y-5">
-            {[
-              { tag: "MoE",    bg: "bg-yai-navy",  title: "Ministry of Environment",         body: "Digital audit module — provided free for ministry use. In exchange: official recognition, factory referrals, co-branding on compliance dashboards. Factories pay for their side; ministry gets visibility.", status: "Initial conversations underway." },
-              { tag: "ILO",    bg: "bg-yai-teal",  title: "ILO Better Work Cambodia",        body: "Integration potential — Yai compliance evidence feeds Better Work assessments. Reduces duplicate audit prep for factories enrolled in both.",                                                  status: "Exploratory." },
-              { tag: "GMAC",   bg: "bg-yai-blue",title: "GMAC (Garment Manufacturers Assoc. of Cambodia)", body: "Member channel — preferential pricing for GMAC members, joint seminars, association endorsement.",                                                                                       status: "To be initiated Q1." },
-              { tag: "TAFTAC", bg: "bg-gray-700",  title: "TAFTAC outreach",                 body: "Textile, Apparel, Footwear & Travel Goods Association of Cambodia — broader manufacturing reach beyond GMAC.",                                                                                  status: "Planned." },
-            ].map((p) => (
-              <Card key={p.tag}>
-                <div className="flex items-start gap-4">
-                  <div className={`shrink-0 w-14 h-14 rounded-lg ${p.bg} text-white flex items-center justify-center font-bold text-xs text-center`}>{p.tag}</div>
-                  <div>
-                    <h3 className="font-bold text-yai-navy text-lg mb-1">{p.title}</h3>
-                    <p className="text-sm text-gray-600 mb-2">{p.body}</p>
-                    <p className="text-xs text-gray-500"><strong>Status:</strong> {p.status}</p>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-          <div className="mt-6 p-5 bg-white rounded-lg border-l-4 border-yai-blue">
-            <p className="text-sm text-gray-700"><strong className="text-yai-navy">Value exchange model:</strong> We give the institution capability they would otherwise have to build. They give us recognition, referrals, and distribution. No money changes hands at the institutional level — factories pay for their side.</p>
-          </div>
-        </Section>
-
-        {/* 13 — Traction (with DashboardDemo) */}
-        <Section id="traction" kicker={kicker(13, "Traction")} title="Traction & Pilots">
-          <Thesis>
-            This is not a slide-deck startup. Real factories, real workers, real audits — already running on Yai.
-          </Thesis>
-          <div className="grid sm:grid-cols-4 gap-5 mb-8">
-            <StatCallout value={2} orange label="Factories in live production" />
-            <StatCallout value={3} orange label="Legacy systems replaced" />
-            <StatCallout value={5} orange label="Prospect meetings (week 1)" />
-            <StatCallout value={1} suffix="/wk" orange label="Seminar cadence" />
-          </div>
-
-          <div className="mb-6">
-            <p className="text-xs uppercase tracking-wider font-bold text-yai-blue mb-2">Live dashboard — pilot factory</p>
-            <h3 className="text-2xl font-bold text-yai-navy mb-4">What the operating system looks like in production</h3>
-            <p className="text-sm text-gray-600 mb-5 max-w-2xl">
-              A snapshot from one of the two pilot factories. Workers active today, payroll posted, audit readiness, exception flags, live agent activity feed. This isn&apos;t a mockup — the same numbers our pilot owners see every morning.
-            </p>
-          </div>
-          <DashboardDemo />
-
-          <div className="space-y-4 mt-8">
-            <Card>
-              <h3 className="font-bold text-yai-navy mb-2">Production pilots — 2 factories live</h3>
-              <p className="text-sm text-gray-600">Two factories within the YW Group are running Yai in production, providing continuous fine-tuning signal. Workforce data, compliance evidence, payroll, and admin workflows are all live. Real audits have been run against real evidence captured by Yai.</p>
-            </Card>
-            <Card>
-              <h3 className="font-bold text-yai-navy mb-2">Legacy replacement — 3 systems retired</h3>
-              <p className="text-sm text-gray-600">Yai has successfully replaced 3 separate legacy tools across the pilot factories — proving migration competence, not just greenfield capability.</p>
-            </Card>
-            <Card>
-              <h3 className="font-bold text-yai-navy mb-2">Pipeline — 5 prospect meetings in week 1</h3>
-              <p className="text-sm text-gray-600">First week of structured outreach yielded 5 prospect meetings with mid-large Cambodian factories. Weekly seminar series is the standing top-of-funnel mechanism.</p>
-            </Card>
-          </div>
-        </Section>
-
-        {/* 14 — Tech */}
-        <Section id="tech" kicker={kicker(14, "Technology")} title="Technology Stack">
-          <Thesis>
-            Modern, modular, model-agnostic. No vendor lock-in we don&apos;t control.
-          </Thesis>
-          <div className="grid sm:grid-cols-2 gap-5">
-            {[
-              ["Backend",          "Laravel (PHP) with MongoDB. Battle-tested, well-known by regional developer pool, easy to extend and maintain."],
-              ["Ai Agent Layer",   "Model-agnostic — Claude, GPT, open-source models. The agent orchestration is ours; the underlying LLM is swappable as the market evolves."],
-              ["Mobile",           "Native Android and iOS apps. Worker app, supervisor app, and owner dashboard — all trilingual."],
-              ["Deployment",       "Cloud-default with on-premise hybrid for factories that require data residency. Same codebase, different deployment target."],
-              ["Languages",        "Full UI and Ai conversation support in English, Chinese (Simplified), and Khmer. Every workflow, report, and chat in all three."],
-              ["Integrations",     "ABA Bank, Wing, payroll providers, biometric devices, RFID, BOM/PLM systems (where customer brings one)."],
-            ].map(([k, v]) => (
-              <Card key={k}>
-                <h3 className="font-bold text-yai-navy mb-2">{k}</h3>
-                <p className="text-sm text-gray-600">{v}</p>
-              </Card>
-            ))}
-          </div>
-        </Section>
-
-        {/* 15 — Team */}
-        <Section id="team" kicker={kicker(15, "Team")} title="Team">
-          <Thesis>
-            20 engineers in Cambodia, owner-led, factory-embedded. Adding sales and customer success next.
-          </Thesis>
-          <div className="space-y-5">
-            <Card>
-              <div className="flex items-start gap-4">
-                <div className="shrink-0 w-16 h-16 rounded-full bg-yai-blue text-white flex items-center justify-center font-extrabold text-xl">GK</div>
-                <div>
-                  <h3 className="font-bold text-yai-navy text-lg mb-1">Gamini K — Director</h3>
-                  <p className="text-sm text-gray-600">Founder, Texlink Technologies Co., Ltd. (Cambodia). Builder-operator across software, manufacturing operations, and finance. Lives on the factory floor when shipping new modules.</p>
-                </div>
-              </div>
-            </Card>
-            <Card>
-              <h3 className="font-bold text-yai-navy mb-2">Engineering team — 20 engineers</h3>
-              <p className="text-sm text-gray-600">Cambodia-based, full-stack Laravel + MongoDB, native mobile, Ai agent specialists. Organised across Admin modules and Production modules with shared platform team.</p>
-            </Card>
-            <Card>
-              <h3 className="font-bold text-yai-navy mb-2">Planned hires</h3>
-              <ul className="text-sm text-gray-600 space-y-1.5">
-                <li>• <strong>1–2 sales hires</strong> with apparel industry background — first hire prioritised for Q1.</li>
-                <li>• <strong>Customer success</strong> lead — to own pilot-to-production transitions.</li>
-                <li>• <strong>Compliance specialist</strong> — to deepen audit module credibility with brand HQs.</li>
-              </ul>
-            </Card>
-          </div>
-        </Section>
-
-        {/* 16 — Financials */}
-        <Section id="financials" kicker={kicker(16, "Financial Projections")} title="Financial Projections">
-          <Thesis>
-            Profitable path inside 36 months — even on conservative customer count assumptions.
-          </Thesis>
-          <div className="overflow-x-auto rounded-xl border border-yai-border bg-white mb-6">
-            <table className="w-full text-sm">
-              <thead className="bg-yai-navy text-white text-[11px] uppercase tracking-wider">
-                <tr>
-                  <th className="px-4 py-3 text-left">Metric</th>
-                  <th className="px-4 py-3 text-left">Month 12</th>
-                  <th className="px-4 py-3 text-left">Month 24</th>
-                  <th className="px-4 py-3 text-left">Month 36</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-yai-border">
-                <tr><td className="px-4 py-3 font-semibold text-yai-navy">Paying customers</td><td className="px-4 py-3">5–15</td><td className="px-4 py-3">25–50</td><td className="px-4 py-3">60–100</td></tr>
-                <tr><td className="px-4 py-3 font-semibold text-yai-navy">Revenue mix</td><td className="px-4 py-3 text-sm text-gray-600 italic" colSpan={3}>Weighted toward Starter and Growth in Y1; mix shifts to Enterprise + Agentic in Y2–Y3.</td></tr>
-                <tr><td className="px-4 py-3 font-semibold text-yai-navy">ARR (est. range)</td><td className="px-4 py-3 text-gray-400">$TBD</td><td className="px-4 py-3 text-gray-400">$TBD</td><td className="px-4 py-3 text-gray-400">$TBD</td></tr>
-                <tr><td className="px-4 py-3 font-semibold text-yai-navy">Cost base</td><td className="px-4 py-3 text-gray-400">$TBD</td><td className="px-4 py-3 text-gray-400">$TBD</td><td className="px-4 py-3 text-gray-400">$TBD</td></tr>
-                <tr className="bg-amber-50/60 font-bold">
-                  <td className="px-4 py-3">Net</td>
-                  <td className="px-4 py-3 text-gray-600">Investment phase</td>
-                  <td className="px-4 py-3 text-gray-600">Break-even</td>
-                  <td className="px-4 py-3 text-yai-blue">Positive</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <p className="text-sm text-gray-600 italic">
-            <strong>Why the numbers can hold up:</strong> Engineering cost base is already in place and does not balloon with revenue. New revenue flows to gross margin minus customer success and sales hires.
-          </p>
-        </Section>
-
-        {/* 17 — Capital Efficiency */}
-        <Section id="capital" kicker={kicker(17, "Capital Efficiency")} title="The Capital Efficiency Story">
-          <Thesis>
-            Built for $360K what would cost $5M–$10M anywhere else. That advantage doesn&apos;t expire.
-          </Thesis>
-          <div className="bg-yai-navy text-white p-8 sm:p-10 rounded-2xl my-8">
-            <div className="grid sm:grid-cols-3 gap-6 text-center">
-              <div>
-                <div className="text-4xl sm:text-5xl font-extrabold text-yai-blue tabular-nums">$360K</div>
-                <div className="text-sm text-white/70 mt-2 uppercase tracking-wider">Cambodia (actual)</div>
-              </div>
-              <div>
-                <div className="text-4xl sm:text-5xl font-extrabold text-white/80 tabular-nums">$5M</div>
-                <div className="text-sm text-white/70 mt-2 uppercase tracking-wider">Singapore (~15×)</div>
-              </div>
-              <div>
-                <div className="text-4xl sm:text-5xl font-extrabold text-white/80 tabular-nums">$10M</div>
-                <div className="text-sm text-white/70 mt-2 uppercase tracking-wider">US (~28×)</div>
-              </div>
-            </div>
-          </div>
-          <div className="space-y-4 text-gray-700 leading-relaxed">
-            <p><strong className="text-yai-navy">Why this matters now.</strong> The $360K is sunk cost — the platform exists, two factories are running on it, three legacy systems are gone. We are not asking for someone to fund $5M of build. We are commercialising what&apos;s already built.</p>
-            <p><strong className="text-yai-navy">Why this matters going forward.</strong> The cost-of-engineering advantage doesn&apos;t go away. Every new module, every new feature, every new market we expand into ships at Cambodia rates. The 15–28× cost gap compounds across the entire roadmap — not just past spend.</p>
-            <p><strong className="text-yai-navy">What this enables.</strong> Aggressive pricing without margin pain. Fast feature iteration relative to global competitors. Ability to under-cut SAP/Oracle/Odoo on price while out-iterating them on roadmap.</p>
-          </div>
-        </Section>
-
-        {/* 18 — Milestones */}
-        <Section id="milestones" kicker={kicker(18, "Milestones")} title="12-Month Milestones">
-          <Thesis>
-            Quarterly checkpoints, written down, accountable.
-          </Thesis>
-          <div className="grid md:grid-cols-2 gap-3">
-            {[
-              { q: "Q1", title: "Foundation",   items: ["First 3–5 paid contracts closed", "Sales hire onboarded", "Seminar series at full weekly cadence", "Ministry of Environment partnership term sheet"] },
-              { q: "Q2", title: "Validation",   items: ["10+ paying customers", "Ministry partnership signed", "First Stage 2 (Agentic) upgrade sold", "Initial regional conversation"] },
-              { q: "Q3", title: "Expansion",    items: ["20+ customers", "Regional pilot in conversation", "Customer success function operating", "$TBD revenue milestone"] },
-              { q: "Q4", title: "Scale",        items: ["30+ customers", "First Big Rollout (Stage 3) pilot scoped", "Production module commercialisation case ready for investor review", "Year-2 plan locked"] },
-            ].map((m) => (
-              <Card key={m.q}>
-                <div className="text-yai-blue font-bold text-sm mb-2">{m.q}</div>
-                <h3 className="font-bold text-yai-navy text-lg mb-2">{m.title}</h3>
-                <ul className="text-sm text-gray-600 space-y-1.5">
-                  {m.items.map((it) => <li key={it}>• {it}</li>)}
-                </ul>
-              </Card>
-            ))}
-          </div>
-        </Section>
-
-        {/* 19 — Risks */}
-        <Section id="risks" kicker={kicker(19, "Risks")} title="Risks & Mitigations">
+        {/* 18 — Risks */}
+        <Section id="risks" kicker={kicker(16, "Risks")} title="Risks & Mitigations">
           <Thesis>
             Honest about where this could go wrong — and what&apos;s in place against each.
           </Thesis>
@@ -738,8 +606,8 @@ export default function PlanPage() {
           </div>
         </Section>
 
-        {/* 20 — Resources */}
-        <Section id="resources" kicker={kicker(20, "Resources")} title="Resource Requirements">
+        {/* 19 — Resources */}
+        <Section id="resources" kicker={kicker(17, "Resources")} title="Resource Requirements">
           <Thesis>
             What&apos;s needed from the investor over the next 12 months — not a fundraise, a continuation.
           </Thesis>
@@ -760,8 +628,8 @@ export default function PlanPage() {
           </div>
         </Section>
 
-        {/* 21 — Appendix */}
-        <Section id="appendix" kicker={kicker(21, "Appendix")} title="Appendix">
+        {/* 20 — Appendix */}
+        <Section id="appendix" kicker={kicker(18, "Appendix")} title="Appendix">
           <Thesis>
             Supporting material — demos, diagrams, references, and contact.
           </Thesis>
