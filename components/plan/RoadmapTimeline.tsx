@@ -1,5 +1,7 @@
 "use client";
 
+import type { ReactNode } from "react";
+
 /* Shared module-roadmap timeline — drives both Capital Efficiency and Financials & Milestones.
  * 12 quarter columns (Q3'24 → Q2'27). Top section is a detailed financial chart
  * (quarterly spend bars + cumulative line + headcount row). Bottom is the module
@@ -12,44 +14,45 @@ const QUARTERS = [
 const N = QUARTERS.length;        // 12 columns
 const TODAY = 8;                  // Q2'26 — current quarter (1-based)
 
+type Group = "admin" | "ops";
 type Mod = {
   name: string;
   digStart: number;
   agStart: number;
   fullStart: number;
+  group: Group;
 };
 
-/* Modules ordered by build chronology — earliest-shipped Digitalization at top
- * (small team Q3'24), newest modules at bottom (peak-team Q2'26). Two modules
- * are already at AGENTIC stage today (★): Car Booking, YPM/CE. */
+/* Modules split into ADMINISTRATION (blue) and OPERATIONS (green) groups,
+ * each ordered by build chronology. Two modules are already at AGENTIC stage
+ * today (★): Car Booking, YPM/CE. */
 const MODULES: Mod[] = [
-  // Tier 1 — Q3'24 · 3 engineers · foundation
-  { name: "Admin Core · PR · Shop · Approvals · APP",     digStart: 1, agStart: 8,  fullStart: 11 },
-  { name: "HR · Pay · Org · LMS · AI CCTV",               digStart: 1, agStart: 8,  fullStart: 11 },
-  { name: "Digital Audit · 8S · AIoT · Waste",            digStart: 1, agStart: 8,  fullStart: 11 },
+  // ════════ ADMINISTRATION ════════
+  { name: "Admin Core · PR · Shop · Approvals · APP",     digStart: 1, agStart: 8,  fullStart: 11, group: "admin" },
+  { name: "HR · Pay · Org · LMS · AI CCTV",               digStart: 1, agStart: 8,  fullStart: 11, group: "admin" },
+  { name: "Digital Audit · 8S · AIoT · Waste",            digStart: 1, agStart: 8,  fullStart: 11, group: "admin" },
+  { name: "Gate Pass · CTPAT",                            digStart: 2, agStart: 8,  fullStart: 11, group: "admin" },
+  { name: "Car Booking  ★ AGENTIC",                       digStart: 2, agStart: 6,  fullStart: 11, group: "admin" },
+  { name: "Accounting (Full + GDT)",                      digStart: 3, agStart: 9,  fullStart: 11, group: "admin" },
+  { name: "Speak Up · Worker Voice",                      digStart: 6, agStart: 8,  fullStart: 11, group: "admin" },
+  { name: "Corporate Financials + IEWS",                  digStart: 7, agStart: 9,  fullStart: 12, group: "admin" },
+  { name: "Cambodia E-Gov + E-Invoice",                   digStart: 8, agStart: 10, fullStart: 12, group: "admin" },
 
-  // Tier 2 — Q4'24 – Q1'25 · 5–7 engineers
-  { name: "Gate Pass · CTPAT",                            digStart: 2, agStart: 8,  fullStart: 11 },
-  { name: "Car Booking  ★ AGENTIC",                       digStart: 2, agStart: 6,  fullStart: 11 },
-  { name: "Accounting (Full + GDT)",                      digStart: 3, agStart: 9,  fullStart: 11 },
-
-  // Tier 3 — Q2'25 – Q3'25 · 10–13 engineers
-  { name: "YTM · Machine Maintenance + TPM Shop",         digStart: 4, agStart: 8,  fullStart: 11 },
-  { name: "YQMS · Quality Mgmt (6 stages + Fini Check)",  digStart: 4, agStart: 8,  fullStart: 11 },
-
-  // Tier 4 — Q4'25 – Q1'26 · 16–18 engineers
-  { name: "YPI · Technical Specs (3-language)",           digStart: 5, agStart: 9,  fullStart: 12 },
-  { name: "YPM / CE · Motion · SMV  ★ AGENTIC",           digStart: 5, agStart: 7,  fullStart: 12 },
-  { name: "Product Dev · Sample Room",                    digStart: 5, agStart: 9,  fullStart: 12 },
-  { name: "Speak Up · Worker Voice",                      digStart: 6, agStart: 8,  fullStart: 11 },
-
-  // Tier 5 — Q2'26 · 20 engineers · the orchestration layer
-  { name: "4DP · Planning Brain (4 directions × 4 levels)", digStart: 6, agStart: 9,  fullStart: 12 },
-  { name: "MRP + Logistics (Inbound + Outbound)",         digStart: 7, agStart: 9,  fullStart: 12 },
-  { name: "YWIP · 13-Dept Production Flow",               digStart: 7, agStart: 9,  fullStart: 12 },
-  { name: "Corporate Financials + IEWS",                  digStart: 7, agStart: 9,  fullStart: 12 },
-  { name: "Cambodia E-Gov + E-Invoice",                   digStart: 8, agStart: 10, fullStart: 12 },
+  // ════════ OPERATIONS ════════
+  { name: "YTM · Machine Maintenance + TPM Shop",         digStart: 4, agStart: 8,  fullStart: 11, group: "ops" },
+  { name: "YQMS · Quality Mgmt (6 stages + Fini Check)",  digStart: 4, agStart: 8,  fullStart: 11, group: "ops" },
+  { name: "YPI · Technical Specs (3-language)",           digStart: 5, agStart: 9,  fullStart: 12, group: "ops" },
+  { name: "YPM / CE · Motion · SMV  ★ AGENTIC",           digStart: 5, agStart: 7,  fullStart: 12, group: "ops" },
+  { name: "Product Dev · Sample Room",                    digStart: 5, agStart: 9,  fullStart: 12, group: "ops" },
+  { name: "4DP · Planning Brain (4 directions × 4 levels)", digStart: 6, agStart: 9,  fullStart: 12, group: "ops" },
+  { name: "MRP + Logistics (Inbound + Outbound)",         digStart: 7, agStart: 9,  fullStart: 12, group: "ops" },
+  { name: "YWIP · 13-Dept Production Flow",               digStart: 7, agStart: 9,  fullStart: 12, group: "ops" },
 ];
+
+const GROUP_COLOR: Record<Group, { label: string; tag: string; bg: string }> = {
+  admin: { label: "#1E4DAA", tag: "#1E4DAA", bg: "#1E4DAA" },
+  ops:   { label: "#0A3327", tag: "#0A3327", bg: "#0A3327" },
+};
 
 // Headcount per quarter
 const HEADCOUNT = [3, 5, 7, 10, 13, 16, 18, 20, 20, 20, 20, 20];
@@ -316,37 +319,80 @@ export function RoadmapTimeline({ mode }: { mode: "spend" | "revenue" }) {
         </span>
       </div>
 
-      {/* Module-progression rows */}
-      <div className="space-y-1 mt-6 pt-4 border-t border-yai-border">
-        <div className="text-[10px] uppercase tracking-wider font-extrabold text-yai-navy mb-2">
+      {/* Module-progression rows — split into ADMINISTRATION + OPERATIONS groups */}
+      <div className="mt-6 pt-4 border-t border-yai-border">
+        <div className="text-[10px] uppercase tracking-wider font-extrabold text-yai-navy mb-3">
           Module progression across the same timeline
         </div>
-        {MODULES.map((m) => (
-          <div key={m.name} className="flex items-center gap-2">
-            <div className="w-[200px] shrink-0 text-[10px] font-semibold text-yai-navy leading-tight pr-2">
-              {m.name}
-            </div>
-            <div className="flex-1 relative h-5 rounded bg-gray-50 overflow-hidden">
-              <div className="absolute top-0 bottom-0" style={{
-                left:  `${((m.digStart - 1) / N) * 100}%`,
-                width: `${((m.agStart - m.digStart) / N) * 100}%`,
-                background: COL.dig,
-              }} title="Digitalization" />
-              <div className="absolute top-0 bottom-0" style={{
-                left:  `${((m.agStart - 1) / N) * 100}%`,
-                width: `${((m.fullStart - m.agStart) / N) * 100}%`,
-                background: COL.ag,
-              }} title="Agentic" />
-              <div className="absolute top-0 bottom-0" style={{
-                left:  `${((m.fullStart - 1) / N) * 100}%`,
-                width: `${((N - m.fullStart + 1) / N) * 100}%`,
-                background: COL.full,
-              }} title="Full Ai" />
-              <div className="absolute top-0 bottom-0 border-l-2 border-dashed pointer-events-none"
-                   style={{ left: `${((TODAY - 1) / N) * 100}%`, borderColor: COL.today, opacity: 0.6 }} />
-            </div>
-          </div>
-        ))}
+        {(() => {
+          const rows: ReactNode[] = [];
+          let lastGroup: Group | null = null;
+          MODULES.forEach((m, idx) => {
+            if (m.group !== lastGroup) {
+              const gc = GROUP_COLOR[m.group];
+              const label = m.group === "admin" ? "Administration" : "Operations";
+              rows.push(
+                <div key={`hdr-${m.group}`} className={`flex items-center gap-2 ${idx > 0 ? "mt-4" : ""} mb-2`}>
+                  <div className="w-[200px] shrink-0">
+                    <span
+                      className="inline-block text-[10px] font-extrabold uppercase tracking-[0.15em] px-2.5 py-1 rounded text-white"
+                      style={{ background: gc.bg }}
+                    >
+                      {label}
+                    </span>
+                  </div>
+                  <div className="flex-1 h-px" style={{ background: gc.bg, opacity: 0.25 }} />
+                </div>
+              );
+              lastGroup = m.group;
+            }
+            const gc = GROUP_COLOR[m.group];
+            rows.push(
+              <div key={m.name} className="flex items-center gap-2 py-0.5">
+                <div
+                  className="w-[200px] shrink-0 text-[10px] font-semibold leading-tight pr-2"
+                  style={{ color: gc.label }}
+                >
+                  {m.name}
+                </div>
+                <div className="flex-1 relative h-5 rounded bg-gray-50 overflow-hidden">
+                  <div
+                    className="absolute top-0 bottom-0"
+                    style={{
+                      left: `${((m.digStart - 1) / N) * 100}%`,
+                      width: `${((m.agStart - m.digStart) / N) * 100}%`,
+                      background: COL.dig,
+                    }}
+                    title="Digitalization"
+                  />
+                  <div
+                    className="absolute top-0 bottom-0"
+                    style={{
+                      left: `${((m.agStart - 1) / N) * 100}%`,
+                      width: `${((m.fullStart - m.agStart) / N) * 100}%`,
+                      background: COL.ag,
+                    }}
+                    title="Agentic"
+                  />
+                  <div
+                    className="absolute top-0 bottom-0"
+                    style={{
+                      left: `${((m.fullStart - 1) / N) * 100}%`,
+                      width: `${((N - m.fullStart + 1) / N) * 100}%`,
+                      background: COL.full,
+                    }}
+                    title="Full Ai"
+                  />
+                  <div
+                    className="absolute top-0 bottom-0 border-l-2 border-dashed pointer-events-none"
+                    style={{ left: `${((TODAY - 1) / N) * 100}%`, borderColor: COL.today, opacity: 0.6 }}
+                  />
+                </div>
+              </div>
+            );
+          });
+          return rows;
+        })()}
       </div>
 
       <div className="flex flex-wrap items-center gap-3 mt-4 text-[10px] text-gray-500">
