@@ -30,8 +30,7 @@ const NAV: NavItem[] = [
   { id: "tech",              label: "Technology Stack" },
   { id: "team",              label: "Team" },
   { id: "capital",           label: "Capital Efficiency" },
-  { id: "financials",        label: "Financials & Milestones" },
-  { id: "gtm",               label: "Go-to-Market" },
+  { id: "gtm",               label: "Go-to-Market Milestones" },
   { id: "funnel",            label: "Sales Funnel" },
   { id: "traction",          label: "Traction & Pilots" },
   { id: "competition",       label: "Competitive Landscape" },
@@ -299,109 +298,21 @@ export default function PlanPage() {
           </Thesis>
 
           {/* Roadmap timeline — past spend curve + every module climbing the 3 Ai layers */}
-          <h3 className="font-bold text-yai-navy text-xl mb-1">How the $360K bought 16 module families</h3>
+          <h3 className="font-bold text-yai-navy text-xl mb-1">How ~$165K built 17 module families</h3>
           <p className="text-sm text-gray-600 mb-4 max-w-3xl">
-            One chart, every module. The spend curve at the top is what we&rsquo;ve actually paid in Cambodia engineering rates — peaking at ~20 engineers / ~$12K&nbsp;a&nbsp;month. Each row below is a real module: orange = Digitalization built, blue = Agentic layer on top, dark green = Full Ai. Every step right of <strong>TODAY</strong> is value added on the same fixed engineering base.
+            One chart, every module. The spend curve at the top is what we&rsquo;ve actually paid in Cambodia engineering salaries — team grew from 2 engineers in June 2024 to 20 by early 2026, peaking at ~$12K a month. Each row below is a real module: orange = Digitalization built, blue = Agentic layer on top, dark green = Full Ai. Every step right of <strong>TODAY</strong> is value added on the same fixed engineering base.
           </p>
           <RoadmapTimeline mode="spend" />
 
-          {/* Worked example — one module, value across the 3 layers */}
-          <h3 className="font-bold text-yai-navy text-xl mb-2 mt-10">Worked example · the Purchasing System</h3>
-          <p className="text-sm text-gray-600 mb-5 max-w-3xl">
-            One concrete module — built once for ~$4K of salary. Its <strong>capability</strong> (and therefore its value) keeps multiplying as the Ai layers stack on top, without new build cost.
-          </p>
-          <div className="grid lg:grid-cols-3 gap-3">
-            {/* Layer 1 — Digitalization */}
-            <div className="rounded-xl border-2 border-yai-orange/40 p-5" style={{ background: "linear-gradient(to bottom, #FFF1E0, #FFFFFF)" }}>
-              <div className="text-[10px] font-extrabold uppercase tracking-[0.18em] bg-yai-orange text-white px-2 py-0.5 rounded inline-block">Layer 1 · Digitalization · TODAY</div>
-              <h4 className="font-extrabold text-yai-navy text-lg mt-2 leading-tight">Web + Android + iOS purchasing system</h4>
-
-              <div className="mt-4">
-                <div className="text-[10px] uppercase tracking-wider font-bold text-gray-500">One-time cost in</div>
-                <div className="text-3xl font-extrabold text-yai-orange tabular-nums leading-none mt-1">~$4,050</div>
-                <div className="text-[11px] text-gray-500 mt-1">2 devs × 1.5 mo @ $1,200/mo  +  mobile dev @ $450 one-off</div>
-              </div>
-
-              <div className="mt-4">
-                <div className="text-[10px] uppercase tracking-wider font-bold text-gray-500 mb-1">What was built</div>
-                <ul className="text-xs text-gray-700 space-y-0.5">
-                  <li>• Web purchase requests + inventory control</li>
-                  <li>• Click-to-approve workflow for Accounting</li>
-                  <li>• Y Shop function (internal procurement)</li>
-                  <li>• Native Android &amp; iOS apps — published</li>
-                </ul>
-              </div>
-
-              <div className="mt-4">
-                <div className="text-[10px] uppercase tracking-wider font-bold text-gray-500 mb-1">Replaces</div>
-                <p className="text-xs text-gray-600">Paper PR forms, manual signature chase, scattered Excel inventory.</p>
-              </div>
-            </div>
-
-            {/* Layer 2 — Agentic */}
-            <div className="rounded-xl border-2 border-yai-blue/40 p-5 text-white" style={{ background: "linear-gradient(to bottom, #1E4DAA, #2A5DC4)" }}>
-              <div className="text-[10px] font-extrabold uppercase tracking-[0.18em] bg-white text-yai-blue px-2 py-0.5 rounded inline-block">Layer 2 · Agentic · ~6 MONTHS IN</div>
-              <h4 className="font-extrabold text-lg mt-2 leading-tight">Ai agent on top of the same system</h4>
-
-              <div className="mt-4">
-                <div className="text-[10px] uppercase tracking-wider font-bold text-amber-300">Marginal cost added</div>
-                <div className="text-3xl font-extrabold text-amber-300 tabular-nums leading-none mt-1">~$0</div>
-                <div className="text-[11px] text-white/75 mt-1">The agent layer is platform-wide — already built once for every module.</div>
-              </div>
-
-              <div className="mt-4">
-                <div className="text-[10px] uppercase tracking-wider font-bold text-amber-300 mb-1">What it now does</div>
-                <ul className="text-xs text-white/95 space-y-0.5">
-                  <li>• Suggests POs from usage patterns</li>
-                  <li>• Predicts reorders before stock-out</li>
-                  <li>• Auto-validates supplier quotes</li>
-                  <li>• Voice + chat — &ldquo;order 200m cotton, Khmer&rdquo;</li>
-                </ul>
-              </div>
-
-              <div className="mt-4">
-                <div className="text-[10px] uppercase tracking-wider font-bold text-amber-300 mb-1">Value jump</div>
-                <p className="text-xs text-white/85">Same dev cost as before. Output multiplied — purchasing now thinks for itself.</p>
-              </div>
-            </div>
-
-            {/* Layer 3 — Full Ai */}
-            <div className="rounded-xl border-2 border-[#0E3B2E] p-5 text-white" style={{ background: "linear-gradient(to bottom, #0A3327, #1A5742)" }}>
-              <div className="text-[10px] font-extrabold uppercase tracking-[0.18em] bg-amber-400 text-[#0A3327] px-2 py-0.5 rounded inline-block">Layer 3 · Full Ai · YEAR 1+</div>
-              <h4 className="font-extrabold text-lg mt-2 leading-tight">Hands-free Ai purchasing</h4>
-
-              <div className="mt-4">
-                <div className="text-[10px] uppercase tracking-wider font-bold text-amber-300">Marginal cost added</div>
-                <div className="text-3xl font-extrabold text-amber-300 tabular-nums leading-none mt-1">~$0</div>
-                <div className="text-[11px] text-white/75 mt-1">A year of clean data + the agent layer above. No new build, no new spend.</div>
-              </div>
-
-              <div className="mt-4">
-                <div className="text-[10px] uppercase tracking-wider font-bold text-amber-300 mb-1">Now runs itself</div>
-                <ul className="text-xs text-white/95 space-y-0.5">
-                  <li>• Forecasts demand · orders ahead</li>
-                  <li>• Cross-checks 12+ suppliers automatically</li>
-                  <li>• Negotiates within rules</li>
-                  <li>• Owner just signs off the exceptions</li>
-                </ul>
-              </div>
-
-              <div className="mt-4">
-                <div className="text-[10px] uppercase tracking-wider font-bold text-amber-300 mb-1">Value compound</div>
-                <p className="text-xs text-white/85">The $4K built once → autonomous procurement at full Ai. Multiply across every module on the platform.</p>
-              </div>
-            </div>
-          </div>
-
         </Section>
 
-        {/* 11 — Financials & Milestones */}
-        <Section id="financials" kicker={kicker(11, "Financials & Milestones")} title="Financials & 12-Month Milestones">
+        {/* 11 — Go-to-Market Milestones (merged: was 11 Financials + 12 GTM) */}
+        <Section id="gtm" kicker={kicker(11, "Go-to-Market Milestones")} title="Go-to-Market Milestones">
           <Thesis>
-            Profitable path inside 36 months — quarterly milestones laid out on the same timeline.
+            Profitable path inside 36 months — three parallel channels (direct sales · government · bottom-up workers) feeding the quarterly milestones laid out on the same timeline.
           </Thesis>
 
-          {/* Forward-looking roadmap — same chart, revenue curve + Year-1 quarterly milestones overlaid */}
+          {/* Forward-looking roadmap — revenue curve + Year-1 quarterly milestones overlaid */}
           <h3 className="font-bold text-yai-navy text-xl mb-1">The roadmap, forward — every module climbs, revenue follows</h3>
           <p className="text-sm text-gray-600 mb-4 max-w-3xl">
             Same timeline as Capital Efficiency, now read forward. The green curve at the top is the revenue trajectory across the Year-1 quarterly milestones (yellow tags). Engineering cost base stays flat — new revenue flows straight to gross margin minus customer success and sales hires.
@@ -434,8 +345,32 @@ export default function PlanPage() {
             </table>
           </div>
 
+          {/* Three parallel channels */}
+          <h3 className="font-bold text-yai-navy text-xl mt-10 mb-3">Three parallel channels</h3>
+          <div className="grid lg:grid-cols-3 gap-5">
+            {[
+              { num: "CHANNEL 1", title: "Direct sales", bullets: ["Weekly seminar series — owner-targeted, 30–50 attendees", "4-stage funnel: meet → demo → pilot → contract", "Founder-led for Tier A/C; sales hire takes over once pattern lands", "Reference selling — first 2 live factories speak to peers"] },
+              { num: "CHANNEL 2", title: "Government & institutional", bullets: ["Ministry of Environment — digital audit module", "ILO Better Work Cambodia — integration potential", "GMAC partnership — member factory channel", "TAFTAC outreach — Cambodia's primary garment association"] },
+              { num: "CHANNEL 3", title: "Bottom-up adoption", bullets: ["Free worker mobile app — payslip, attendance, time-off", "Workers ask managers for it, creating organic pressure", "When factory signs up, worker base is already trained", "Differentiated from any top-down ERP roll-out"] },
+            ].map((c) => (
+              <Card key={c.num}>
+                <div className="text-yai-blue text-xs font-bold tracking-wider mb-2">{c.num}</div>
+                <h3 className="font-bold text-yai-navy text-lg mb-2">{c.title}</h3>
+                <ul className="text-sm text-gray-600 space-y-2">
+                  {c.bullets.map((b) => <li key={b}>• {b}</li>)}
+                </ul>
+              </Card>
+            ))}
+          </div>
+          <div className="mt-6 p-5 bg-yai-navy text-white rounded-lg">
+            <p className="text-sm leading-relaxed">
+              <strong className="text-yai-blue">Why three channels:</strong> Direct sales gives us revenue. Government partnerships give us air cover and free distribution. Bottom-up gives us product-market fit signal and pre-trained users on every floor. Each channel makes the other two cheaper.
+            </p>
+          </div>
+
+          {/* 12-Month Milestones */}
           <h3 className="font-bold text-yai-navy text-xl mt-10 mb-3">12-Month Milestones</h3>
-          <p className="text-sm text-gray-600 mb-4">Quarterly checkpoints, written down, accountable — pinned to the timeline above.</p>
+          <p className="text-sm text-gray-600 mb-4">Quarterly checkpoints, written down, accountable — pinned to the timeline above and fed by the three channels.</p>
           <div className="grid md:grid-cols-2 gap-3">
             {[
               { q: "Q1", title: "Foundation",   items: ["First 3–5 paid contracts closed", "Sales hire onboarded", "Seminar series at full weekly cadence", "Ministry of Environment partnership term sheet"] },
@@ -454,35 +389,8 @@ export default function PlanPage() {
           </div>
         </Section>
 
-        {/* 12 — GTM */}
-        <Section id="gtm" kicker={kicker(12, "Go-to-Market")} title="Go-to-Market Strategy">
-          <Thesis>
-            Three parallel channels — direct sales, government/institutional, and bottom-up worker adoption — reinforcing each other.
-          </Thesis>
-          <div className="grid lg:grid-cols-3 gap-5">
-            {[
-              { num: "CHANNEL 1", title: "Direct sales", bullets: ["Weekly seminar series — owner-targeted, 30–50 attendees", "4-stage funnel: meet → demo → pilot → contract", "Founder-led for Tier A/C; sales hire takes over once pattern lands", "Reference selling — first 2 live factories speak to peers"] },
-              { num: "CHANNEL 2", title: "Government & institutional", bullets: ["Ministry of Environment — digital audit module", "ILO Better Work Cambodia — integration potential", "GMAC partnership — member factory channel", "TAFTAC outreach — Cambodia's primary garment association"] },
-              { num: "CHANNEL 3", title: "Bottom-up adoption", bullets: ["Free worker mobile app — payslip, attendance, time-off", "Workers ask managers for it, creating organic pressure", "When factory signs up, worker base is already trained", "Differentiated from any top-down ERP roll-out"] },
-            ].map((c) => (
-              <Card key={c.num}>
-                <div className="text-yai-blue text-xs font-bold tracking-wider mb-2">{c.num}</div>
-                <h3 className="font-bold text-yai-navy text-lg mb-2">{c.title}</h3>
-                <ul className="text-sm text-gray-600 space-y-2">
-                  {c.bullets.map((b) => <li key={b}>• {b}</li>)}
-                </ul>
-              </Card>
-            ))}
-          </div>
-          <div className="mt-8 p-5 bg-yai-navy text-white rounded-lg">
-            <p className="text-sm leading-relaxed">
-              <strong className="text-yai-blue">Why three channels:</strong> Direct sales gives us revenue. Government partnerships give us air cover and free distribution. Bottom-up gives us product-market fit signal and pre-trained users on every floor. Each channel makes the other two cheaper.
-            </p>
-          </div>
-        </Section>
-
         {/* 13 — Funnel */}
-        <Section id="funnel" kicker={kicker(13, "Sales Funnel")} title="Sales Funnel">
+        <Section id="funnel" kicker={kicker(12, "Sales Funnel")} title="Sales Funnel">
           <Thesis>
             From 2,650 factories to 5–20 paying customers in year one — concrete numbers at each stage.
           </Thesis>
@@ -493,7 +401,7 @@ export default function PlanPage() {
         </Section>
 
         {/* 14 — Traction (with DashboardDemo) */}
-        <Section id="traction" kicker={kicker(14, "Traction")} title="Traction & Pilots">
+        <Section id="traction" kicker={kicker(13, "Traction")} title="Traction & Pilots">
           <Thesis>
             This is not a slide-deck startup. Real factories, real workers, real audits — already running on Yai.
           </Thesis>
@@ -530,7 +438,7 @@ export default function PlanPage() {
         </Section>
 
         {/* 15 — Competition */}
-        <Section id="competition" kicker={kicker(15, "Competitive Landscape")} title="Competitive Landscape">
+        <Section id="competition" kicker={kicker(14, "Competitive Landscape")} title="Competitive Landscape">
           <Thesis>
             No competitor combines Ai-native, apparel-specific, and regionally-priced. Yai is the only one in that quadrant.
           </Thesis>
@@ -585,7 +493,7 @@ export default function PlanPage() {
         </Section>
 
         {/* 18 — Risks */}
-        <Section id="risks" kicker={kicker(16, "Risks")} title="Risks & Mitigations">
+        <Section id="risks" kicker={kicker(15, "Risks")} title="Risks & Mitigations">
           <Thesis>
             Honest about where this could go wrong — and what&apos;s in place against each.
           </Thesis>
@@ -607,7 +515,7 @@ export default function PlanPage() {
         </Section>
 
         {/* 19 — Resources */}
-        <Section id="resources" kicker={kicker(17, "Resources")} title="Resource Requirements">
+        <Section id="resources" kicker={kicker(16, "Resources")} title="Resource Requirements">
           <Thesis>
             What&apos;s needed from the investor over the next 12 months — not a fundraise, a continuation.
           </Thesis>
@@ -629,7 +537,7 @@ export default function PlanPage() {
         </Section>
 
         {/* 20 — Appendix */}
-        <Section id="appendix" kicker={kicker(18, "Appendix")} title="Appendix">
+        <Section id="appendix" kicker={kicker(17, "Appendix")} title="Appendix">
           <Thesis>
             Supporting material — demos, diagrams, references, and contact.
           </Thesis>

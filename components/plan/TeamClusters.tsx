@@ -36,7 +36,7 @@ const CLUSTERS: Cluster[] = [
     bg: "linear-gradient(135deg, #F37021, #D85F18)",
     badge: "bg-white text-yai-orange",
     splits: [
-      { pct: 60, color: "#F37021", label: "Software dev",         description: "Core platform engineering — frameworks, APIs, data models, the structural backbone every other module builds on." },
+      { pct: 70, color: "#F37021", label: "Software dev",         description: "Core platform engineering — frameworks, APIs, data models, the structural backbone every other module builds on." },
       { pct: 30, color: "#1E4DAA", label: "AMD + NVIDIA Ai cert", description: "Certified on AMD and NVIDIA Ai stacks — the hardware-aware side of the Ai workload." },
     ],
   },
@@ -132,6 +132,9 @@ export function TeamClusters() {
                       >
                         <div className={s.pct >= 40 ? "text-3xl font-extrabold leading-none" : "text-xl font-extrabold leading-none"}>{s.pct}%</div>
                         <div className={s.pct >= 40 ? "text-[10px] font-bold mt-1.5 leading-tight" : "text-[9px] font-bold mt-1 leading-tight"}>{s.label}</div>
+                        <div className={s.pct >= 40 ? "text-[9px] italic opacity-75 mt-0.5" : "text-[8px] italic opacity-75"}>
+                          {s.label.toLowerCase().includes("dev") ? "skill and experience" : s.label.toLowerCase().includes("cert") ? "skill" : "experience"}
+                        </div>
                       </div>
                     ));
                   })()
