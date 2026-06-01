@@ -19,22 +19,36 @@ type Mod = {
   fullStart: number;
 };
 
+/* Modules ordered by build chronology — earliest-shipped Digitalization at top
+ * (small team Q3'24), newest modules at bottom (peak-team Q2'26). Two modules
+ * are already at AGENTIC stage today (★): Car Booking, YPM/CE. */
 const MODULES: Mod[] = [
-  { name: "PR · Shop · Approval · Support · APP",        digStart: 1, agStart: 8,  fullStart: 11 },
-  { name: "HR · Pay · Org chart",                         digStart: 1, agStart: 8,  fullStart: 11 },
-  { name: "Car booking  (Agentic shipped)",               digStart: 1, agStart: 6,  fullStart: 11 },
-  { name: "Gate pass",                                    digStart: 1, agStart: 8,  fullStart: 11 },
-  { name: "Digital Audit · Waste · AIoT",                 digStart: 1, agStart: 8,  fullStart: 11 },
-  { name: "YTM · Machine maintenance",                    digStart: 2, agStart: 8,  fullStart: 11 },
-  { name: "QMS · Cutting / Sewing / Packing QC",          digStart: 2, agStart: 8,  fullStart: 11 },
-  { name: "Accounting (full · GDT filing)",               digStart: 4, agStart: 9,  fullStart: 11 },
-  { name: "Fabric · Accessories warehouse",               digStart: 6, agStart: 9,  fullStart: 12 },
-  { name: "Product Dev · Sample room",                    digStart: 6, agStart: 9,  fullStart: 12 },
-  { name: "YPI · Tech specs (3 lang)",                    digStart: 6, agStart: 9,  fullStart: 12 },
-  { name: "YPM/CE · Motion · SMV  (Agentic shipped)",     digStart: 6, agStart: 7,  fullStart: 12 },
-  { name: "4DP · Planning brain",                         digStart: 6, agStart: 9,  fullStart: 12 },
-  { name: "MRP · Sourcing · Procurement · Logistics",     digStart: 6, agStart: 9,  fullStart: 12 },
-  { name: "Corporate Financials + IEWS",                  digStart: 6, agStart: 9,  fullStart: 12 },
+  // Tier 1 — Q3'24 · 3 engineers · foundation
+  { name: "Admin Core · PR · Shop · Approvals · APP",     digStart: 1, agStart: 8,  fullStart: 11 },
+  { name: "HR · Pay · Org · LMS · AI CCTV",               digStart: 1, agStart: 8,  fullStart: 11 },
+  { name: "Digital Audit · 8S · AIoT · Waste",            digStart: 1, agStart: 8,  fullStart: 11 },
+
+  // Tier 2 — Q4'24 – Q1'25 · 5–7 engineers
+  { name: "Gate Pass · CTPAT",                            digStart: 2, agStart: 8,  fullStart: 11 },
+  { name: "Car Booking  ★ AGENTIC",                       digStart: 2, agStart: 6,  fullStart: 11 },
+  { name: "Accounting (Full + GDT)",                      digStart: 3, agStart: 9,  fullStart: 11 },
+
+  // Tier 3 — Q2'25 – Q3'25 · 10–13 engineers
+  { name: "YTM · Machine Maintenance + TPM Shop",         digStart: 4, agStart: 8,  fullStart: 11 },
+  { name: "YQMS · Quality Mgmt (6 stages + Fini Check)",  digStart: 4, agStart: 8,  fullStart: 11 },
+
+  // Tier 4 — Q4'25 – Q1'26 · 16–18 engineers
+  { name: "YPI · Technical Specs (3-language)",           digStart: 5, agStart: 9,  fullStart: 12 },
+  { name: "YPM / CE · Motion · SMV  ★ AGENTIC",           digStart: 5, agStart: 7,  fullStart: 12 },
+  { name: "Product Dev · Sample Room",                    digStart: 5, agStart: 9,  fullStart: 12 },
+  { name: "Speak Up · Worker Voice",                      digStart: 6, agStart: 8,  fullStart: 11 },
+
+  // Tier 5 — Q2'26 · 20 engineers · the orchestration layer
+  { name: "4DP · Planning Brain (4 directions × 4 levels)", digStart: 6, agStart: 9,  fullStart: 12 },
+  { name: "MRP + Logistics (Inbound + Outbound)",         digStart: 7, agStart: 9,  fullStart: 12 },
+  { name: "YWIP · 13-Dept Production Flow",               digStart: 7, agStart: 9,  fullStart: 12 },
+  { name: "Corporate Financials + IEWS",                  digStart: 7, agStart: 9,  fullStart: 12 },
+  { name: "Cambodia E-Gov + E-Invoice",                   digStart: 8, agStart: 10, fullStart: 12 },
 ];
 
 // Headcount per quarter
