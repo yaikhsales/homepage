@@ -40,6 +40,7 @@ const NAV: NavItem[] = [
   { id: "capital",           label: "Capital Efficiency" },
   { id: "gtm",               label: "Go-to-Market Milestones" },
   { id: "traction",          label: "Traction & Pilots" },
+  { id: "oc-budget",         label: "OC & Live Budget Update" },
   { id: "competition",       label: "Competitive Landscape" },
   { id: "risks",             label: "Risks & Mitigations" },
   { id: "resources",         label: "Resource Requirements" },
@@ -668,7 +669,74 @@ export default function PlanPage() {
         </Section>
 
         {/* 15 — Competition */}
-        <Section id="competition" kicker={kicker(13, "Competitive Landscape")} title="Competitive Landscape">
+        {/* 13 — OC & Live Budget Update */}
+        <Section id="oc-budget" kicker={kicker(13, "OC & Budget")} title="OC & Live Budget Update">
+          <Thesis>
+            Quarterly Operating Committee update + half-year budget refresh + capex / purchase
+            applications — delivered on the cadence the parent expects.
+          </Thesis>
+
+          <div className="grid sm:grid-cols-3 gap-4 mt-6">
+            <div className="rounded-xl border border-yai-border bg-white p-4 shadow-sm">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-yai-blue text-white text-xs font-extrabold">Q</span>
+                <h4 className="font-extrabold text-yai-navy text-sm leading-tight">Quarterly OC update</h4>
+              </div>
+              <p className="text-xs text-gray-600 leading-snug">
+                Every 3 months. Short deck or written brief — KPIs vs targets, wins / losses, cash
+                &amp; burn, risks, decisions the OC needs to make.
+              </p>
+              <div className="text-[10px] uppercase tracking-wider font-extrabold text-yai-blue mt-3">
+                Cadence
+              </div>
+              <div className="text-xs font-semibold text-yai-navy">Q1 · Q2 · Q3 · Q4</div>
+            </div>
+
+            <div className="rounded-xl border border-yai-border bg-white p-4 shadow-sm">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-yai-orange text-white text-xs font-extrabold">H</span>
+                <h4 className="font-extrabold text-yai-navy text-sm leading-tight">Half-year budget refresh</h4>
+              </div>
+              <p className="text-xs text-gray-600 leading-snug">
+                Every 6 months. Refreshed FY P&amp;L forecast — revenue, costs, headcount, capex —
+                with variance vs the original year-start plan.
+              </p>
+              <div className="text-[10px] uppercase tracking-wider font-extrabold text-yai-orange mt-3">
+                Cadence
+              </div>
+              <div className="text-xs font-semibold text-yai-navy">March · September</div>
+            </div>
+
+            <div className="rounded-xl border border-yai-border bg-white p-4 shadow-sm">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-yai-green text-white text-xs font-extrabold">$</span>
+                <h4 className="font-extrabold text-yai-navy text-sm leading-tight">Purchase applications</h4>
+              </div>
+              <p className="text-xs text-gray-600 leading-snug">
+                Submitted alongside the half-year budget. Larger purchases needing OC sign-off
+                before commitment — equipment, software, contractors, hires above threshold.
+              </p>
+              <div className="text-[10px] uppercase tracking-wider font-extrabold text-yai-green mt-3">
+                Format
+              </div>
+              <div className="text-xs font-semibold text-yai-navy">Arnold&rsquo;s template</div>
+            </div>
+          </div>
+
+          {/* Latest snapshot placeholder */}
+          <div className="rounded-xl border-2 border-dashed border-yai-border bg-gray-50 p-6 text-center mt-6">
+            <div className="text-[11px] uppercase tracking-wider font-extrabold text-gray-400 mb-1">
+              Latest OC update
+            </div>
+            <div className="text-sm text-gray-500 leading-snug max-w-2xl mx-auto">
+              The most recent quarterly OC deck will live here when ready — KPIs, financial position,
+              risks, and the asks for the next quarter. Send me the data and I&rsquo;ll lay it out
+              the same way the GTM segments are presented.
+            </div>
+          </div>
+        </Section>
+
+        <Section id="competition" kicker={kicker(14, "Competitive Landscape")} title="Competitive Landscape">
           <Thesis>
             No competitor combines Ai-native, apparel-specific, and regionally-priced. Yai is the only one in that quadrant.
           </Thesis>
@@ -723,7 +791,7 @@ export default function PlanPage() {
         </Section>
 
         {/* 18 — Risks */}
-        <Section id="risks" kicker={kicker(14, "Risks")} title="Risks & Mitigations">
+        <Section id="risks" kicker={kicker(15, "Risks")} title="Risks & Mitigations">
           <Thesis>
             Honest about where this could go wrong — and what&apos;s in place against each.
           </Thesis>
@@ -745,7 +813,7 @@ export default function PlanPage() {
         </Section>
 
         {/* 19 — Resources */}
-        <Section id="resources" kicker={kicker(15, "Resources")} title="Resource Requirements">
+        <Section id="resources" kicker={kicker(16, "Resources")} title="Resource Requirements">
           <Thesis>
             What&apos;s needed from the investor over the next 12 months — not a fundraise, a continuation.
           </Thesis>
@@ -767,7 +835,7 @@ export default function PlanPage() {
         </Section>
 
         {/* 20 — Appendix */}
-        <Section id="appendix" kicker={kicker(16, "Appendix")} title="Appendix">
+        <Section id="appendix" kicker={kicker(17, "Appendix")} title="Appendix">
           <Thesis>
             Supporting material — demos, diagrams, references, and contact.
           </Thesis>
