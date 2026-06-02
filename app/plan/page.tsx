@@ -18,6 +18,8 @@ import { TargetCustomersChart } from "@/components/plan/TargetCustomersChart";
 import { TechStackLayers } from "@/components/plan/TechStackLayers";
 import { TeamClusters } from "@/components/plan/TeamClusters";
 import { RoadmapTimeline } from "@/components/plan/RoadmapTimeline";
+import { MilestoneRoadmap } from "@/components/plan/MilestoneRoadmap";
+import { BigTechSegment } from "@/components/plan/BigTechSegment";
 
 const NAV: NavItem[] = [
   { id: "executive-summary", label: "Executive Summary" },
@@ -308,85 +310,180 @@ export default function PlanPage() {
 
         {/* 11 — Go-to-Market Milestones (merged: was 11 Financials + 12 GTM) */}
         <Section id="gtm" kicker={kicker(11, "Go-to-Market Milestones")} title="Go-to-Market Milestones">
-          <Thesis>
-            Profitable path inside 36 months — three parallel channels (direct sales · government · bottom-up workers) feeding the quarterly milestones laid out on the same timeline.
-          </Thesis>
-
-          {/* Forward-looking roadmap — revenue curve + Year-1 quarterly milestones overlaid */}
-          <h3 className="font-bold text-yai-navy text-xl mb-1">The roadmap, forward — every module climbs, revenue follows</h3>
-          <p className="text-sm text-gray-600 mb-4 max-w-3xl">
-            Same timeline as Capital Efficiency, now read forward. The green curve at the top is the revenue trajectory across the Year-1 quarterly milestones (yellow tags). Engineering cost base stays flat — new revenue flows straight to gross margin minus customer success and sales hires.
+          {/* Go-to-Market — per-segment approach with milestones */}
+          <h3 className="font-bold text-yai-navy text-xl mt-10 mb-3">Go-to-Market — approach &amp; milestones per segment</h3>
+          <p className="text-sm text-gray-600 mb-5">
+            Each market segment has its own approach and its own progress. ✓ = done · ◐ = in progress · ○ = planned.
           </p>
-          <RoadmapTimeline mode="revenue" />
 
-          {/* Financial milestone table — three checkpoints */}
-          <div className="overflow-x-auto rounded-xl border border-yai-border bg-white mt-8 mb-6">
-            <table className="w-full text-sm">
-              <thead className="bg-yai-navy text-white text-[11px] uppercase tracking-wider">
-                <tr>
-                  <th className="px-4 py-3 text-left">Metric</th>
-                  <th className="px-4 py-3 text-left">Month 12</th>
-                  <th className="px-4 py-3 text-left">Month 24</th>
-                  <th className="px-4 py-3 text-left">Month 36</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-yai-border">
-                <tr><td className="px-4 py-3 font-semibold text-yai-navy">Paying customers</td><td className="px-4 py-3">5–15</td><td className="px-4 py-3">25–50</td><td className="px-4 py-3">60–100</td></tr>
-                <tr><td className="px-4 py-3 font-semibold text-yai-navy">Revenue mix</td><td className="px-4 py-3 text-sm text-gray-600 italic" colSpan={3}>Weighted toward Starter and Growth in Y1; mix shifts to Enterprise + Agentic in Y2–Y3.</td></tr>
-                <tr><td className="px-4 py-3 font-semibold text-yai-navy">ARR (est. range)</td><td className="px-4 py-3 text-gray-400">$TBD</td><td className="px-4 py-3 text-gray-400">$TBD</td><td className="px-4 py-3 text-gray-400">$TBD</td></tr>
-                <tr><td className="px-4 py-3 font-semibold text-yai-navy">Cost base</td><td className="px-4 py-3 text-gray-400">$TBD</td><td className="px-4 py-3 text-gray-400">$TBD</td><td className="px-4 py-3 text-gray-400">$TBD</td></tr>
-                <tr className="bg-amber-50/60 font-bold">
-                  <td className="px-4 py-3">Net</td>
-                  <td className="px-4 py-3 text-gray-600">Investment phase</td>
-                  <td className="px-4 py-3 text-gray-600">Break-even</td>
-                  <td className="px-4 py-3 text-yai-blue">Positive</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <div className="space-y-5">
+            {/* Big-tech segment is interactive — hover a partner card to switch its pathway below */}
+            <BigTechSegment />
 
-          {/* Three parallel channels */}
-          <h3 className="font-bold text-yai-navy text-xl mt-10 mb-3">Three parallel channels</h3>
-          <div className="grid lg:grid-cols-3 gap-5">
             {[
-              { num: "CHANNEL 1", title: "Direct sales", bullets: ["Weekly seminar series — owner-targeted, 30–50 attendees", "4-stage funnel: meet → demo → pilot → contract", "Founder-led for Tier A/C; sales hire takes over once pattern lands", "Reference selling — first 2 live factories speak to peers"] },
-              { num: "CHANNEL 2", title: "Government & institutional", bullets: ["Ministry of Environment — digital audit module", "ILO Better Work Cambodia — integration potential", "GMAC partnership — member factory channel", "TAFTAC outreach — Cambodia's primary garment association"] },
-              { num: "CHANNEL 3", title: "Bottom-up adoption", bullets: ["Free worker mobile app — payslip, attendance, time-off", "Workers ask managers for it, creating organic pressure", "When factory signs up, worker base is already trained", "Differentiated from any top-down ERP roll-out"] },
-            ].map((c) => (
-              <Card key={c.num}>
-                <div className="text-yai-blue text-xs font-bold tracking-wider mb-2">{c.num}</div>
-                <h3 className="font-bold text-yai-navy text-lg mb-2">{c.title}</h3>
-                <ul className="text-sm text-gray-600 space-y-2">
-                  {c.bullets.map((b) => <li key={b}>• {b}</li>)}
+              // 2. FACTORIES — Mid-size Cambodia
+              {
+                tag: "MID-SIZE",
+                name: "Mid-size Cambodia factories",
+                reachable: "~800",
+                color: "#0A3327",
+                bg: "#E8F0EC",
+                desc: "$120 → $15,000 / yr · Garment, bag, footwear. ~300 may stop at Digitalization, ~500 climb the full ladder to Ai.",
+                milestones: [
+                  { d: "Q2 2026", t: "3 factories live",                s: "done",     n: "Pilot factories proving the platform on the floor.", sub: ["Yorkmars Cambodia", "Caswell Cambodia", "Yorksky China"] },
+                  { d: "Q2 2026", t: "Weekly seminar series launch",   s: "progress", n: "Owner-targeted, 30–50 attendees / week.", sub: ["", "", ""] },
+                  { d: "Q2 2026", t: "5 paid contracts closed",         s: "planned",  n: "Cloud Growth tier." },
+                  { d: "Q3 2026", t: "Sales hire onboarded",            s: "planned",  n: "Founder-led handover after the pattern lands." },
+                  { d: "Q4 2026", t: "15 paying customers",             s: "planned",  n: "Mix of Growth + first Enterprise tier." },
+                  { d: "Q1 2027", t: "Reference selling program",       s: "planned",  n: "First 2 live factories speak to peers." },
+                  { d: "Q2 2027", t: "30+ customers · Stage-3 pilot",   s: "planned",  n: "Full Ai pilot scoped on best factory." },
+                ],
+              },
+              // 3. GOVERNMENT
+              {
+                tag: "GOV + INST.",
+                name: "Government &amp; Institutional",
+                reachable: "~800",
+                color: "#1E4DAA",
+                bg: "#E8EEF8",
+                desc: "Partnership-based · projected biggest cluster. Ministries + industry bodies together.",
+                milestones: [
+                  { d: "Q4 2025", t: "Minister of Environment meeting", s: "done", n: "Digital Audit collaboration agreed in principle." },
+                  { d: "Q1 2026", t: "ASEAN Tech Summit pitch prep",   s: "progress", n: "Minister tasked his advisor to propose Yai for the summit." },
+                  { d: "Q2 2026", t: "Ministry of Labour outreach",     s: "planned",  n: "Worker-side compliance + LMS angle." },
+                  { d: "Q2 2026", t: "Ministry of Industry outreach",   s: "planned",  n: "Industrial-zone digitalization pitch." },
+                  { d: "Q3 2026", t: "Ministry of Telecom / Digital Gov", s: "planned", n: "E-Gov SSO infrastructure angle." },
+                  { d: "Q3 2026", t: "ILO Better Work integration",     s: "planned",  n: "Worker-voice + compliance data feed." },
+                  { d: "Q3 2026", t: "GMAC partnership formalized",     s: "planned",  n: "Member-factory channel." },
+                  { d: "Q4 2026", t: "TAFTAC outreach",                 s: "planned",  n: "Primary garment association." },
+                  { d: "Q4 2026", t: "Ministry of Economy / Commerce",  s: "planned",  n: "Investment + export angle." },
+                ],
+              },
+              // 4. OTHERS — Small factories
+              {
+                tag: "SMALL FACTORIES",
+                name: "Small factories",
+                reachable: "~200",
+                color: "#2D9D9A",
+                bg: "#E0F2F1",
+                desc: "$750 – $1,200 / yr · Cloud Growth / Enterprise comfort zone. Rarely escalate to dedicated server or Ai.",
+                milestones: [
+                  { d: "Q3 2026", t: "Cloud Starter packaging",          s: "planned", n: "$120/yr SKU, Khmer-only signup flow." },
+                  { d: "Q3 2026", t: "Self-serve onboarding",            s: "planned", n: "Owner can sign up without a sales call." },
+                  { d: "Q4 2026", t: "First 30 Starter customers",       s: "planned", n: "Mostly admin modules only." },
+                  { d: "Q1 2027", t: "Upgrade path to Growth",           s: "planned", n: "10–20% expected to step up." },
+                ],
+              },
+              // 5. OTHERS — E-commerce
+              {
+                tag: "E-COM",
+                name: "E-commerce cluster — Worker P2P + Marketplaces",
+                reachable: "~600 + 100K worker GMV",
+                color: "#F37021",
+                bg: "#FFF1E0",
+                desc: "Mixed pricing across three sub-clusters of online commerce.",
+                milestones: [
+                  { d: "Q3 2026", t: "Worker P2P marketplace alpha",        s: "planned",  n: "Targeting 100,000 garment workers." },
+                  { d: "Q3 2026", t: "ABA + Wing payment rails integrated", s: "progress", n: "Cambodia's two dominant wallets." },
+                  { d: "Q4 2026", t: "Service-provider marketplace launch", s: "planned",  n: "~1,000 service providers to factories." },
+                  { d: "Q1 2027", t: "First 5,000 active worker sellers",   s: "planned",  n: "Daily-active inside Yai app." },
+                  { d: "Q1 2027", t: "Factory supply marketplace beta",     s: "planned",  n: "Yai-curated 100 SKUs at wholesale." },
+                  { d: "Q2 2027", t: "First $100K wholesale GMV month",     s: "planned",  n: "Factory Supply line at revenue." },
+                ],
+              },
+              // 6. OTHERS — Non-garment
+              {
+                tag: "NON-GARMENT",
+                name: "Non-garment companies",
+                reachable: "~1,000",
+                color: "#6D4FB6",
+                bg: "#EDE9F5",
+                desc: "$120 – $750 / yr · Various industries (hospitality, food, logistics, services) using the admin modules only. Cloud Starter to Cloud Growth.",
+                milestones: [
+                  { d: "Q4 2026", t: "Admin modules unbundled SKU",      s: "planned", n: "PR / HR / Accounting only — no operations." },
+                  { d: "Q1 2027", t: "Hospitality vertical pilot",       s: "planned", n: "Hotel / restaurant chain." },
+                  { d: "Q1 2027", t: "Food production vertical pilot",   s: "planned", n: "Adjacent to garment AIoT story." },
+                  { d: "Q2 2027", t: "Cross-vertical case study",        s: "planned", n: "Proof of platform versatility." },
+                ],
+              },
+            ].map((seg) => (
+              <div key={seg.tag} className="rounded-xl border border-yai-border bg-white">
+                {/* Segment header */}
+                <div className="flex items-start gap-3 p-4 border-b border-yai-border rounded-t-xl" style={{ background: seg.bg }}>
+                  <div className="flex-1">
+                    <div className="flex items-baseline gap-3 mb-1">
+                      <span
+                        className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded text-white"
+                        style={{ background: seg.color }}
+                      >
+                        {seg.tag}
+                      </span>
+                      <h4 className="font-extrabold text-yai-navy text-base leading-tight" dangerouslySetInnerHTML={{ __html: seg.name }} />
+                    </div>
+                    <p className="text-xs text-gray-700 leading-snug max-w-3xl">{seg.desc}</p>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <div className="text-[10px] uppercase tracking-wider text-gray-500">Reachable</div>
+                    <div className="text-lg font-extrabold tabular-nums" style={{ color: seg.color }}>{seg.reachable}</div>
+                  </div>
+                </div>
+                {/* Graphical roadmap at the top */}
+                <div className="p-4 pb-2">
+                  <MilestoneRoadmap milestones={seg.milestones as never} color={seg.color} />
+                </div>
+
+                {/* Milestone detail list — no hover image, no overlap, just clean text */}
+                <ul className="px-4 pb-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-3 border-t border-yai-border pt-4">
+                  {seg.milestones.map((m: { d: string; t: string; s: string; n?: string; sub?: string[] }, i: number) => {
+                    const statusIcon = m.s === "done" ? "✓" : m.s === "progress" ? "◐" : "○";
+                    const statusColor = m.s === "done" ? "#10B981" : m.s === "progress" ? "#F37021" : "#94A3B8";
+                    return (
+                      <li key={i} className="flex items-start gap-2 text-xs">
+                        <span
+                          className="inline-flex items-center justify-center w-7 h-7 rounded-full text-white font-extrabold text-[12px] shrink-0"
+                          style={{ background: seg.color }}
+                        >
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-1.5 mb-0.5">
+                            <span
+                              className="inline-flex items-center justify-center w-4 h-4 rounded-full text-white font-bold text-[9px] shrink-0"
+                              style={{ background: statusColor }}
+                              title={m.s}
+                            >
+                              {statusIcon}
+                            </span>
+                            <span className="text-[10px] uppercase tracking-wider font-semibold text-gray-400">{m.d}</span>
+                          </div>
+                          <div className="font-bold text-yai-navy leading-tight">{m.t}</div>
+                          {m.n && <div className="text-gray-600 leading-snug mt-0.5">{m.n}</div>}
+                          {m.sub && m.sub.length > 0 && (
+                            <ol className="mt-1.5 flex flex-col gap-1">
+                              {m.sub.map((s: string, j: number) => (
+                                <li key={j} className="flex items-start gap-1.5 text-[11px]">
+                                  <span
+                                    className="inline-flex items-center justify-center w-4 h-4 rounded-full text-white font-bold text-[9px] shrink-0 mt-0.5"
+                                    style={{ background: seg.color }}
+                                  >
+                                    {j + 1}
+                                  </span>
+                                  <span className={s ? "text-yai-navy font-semibold" : "text-gray-300 italic"}>
+                                    {s || "— to be filled —"}
+                                  </span>
+                                </li>
+                              ))}
+                            </ol>
+                          )}
+                        </div>
+                      </li>
+                    );
+                  })}
                 </ul>
-              </Card>
+              </div>
             ))}
           </div>
-          <div className="mt-6 p-5 bg-yai-navy text-white rounded-lg">
-            <p className="text-sm leading-relaxed">
-              <strong className="text-yai-blue">Why three channels:</strong> Direct sales gives us revenue. Government partnerships give us air cover and free distribution. Bottom-up gives us product-market fit signal and pre-trained users on every floor. Each channel makes the other two cheaper.
-            </p>
-          </div>
 
-          {/* 12-Month Milestones */}
-          <h3 className="font-bold text-yai-navy text-xl mt-10 mb-3">12-Month Milestones</h3>
-          <p className="text-sm text-gray-600 mb-4">Quarterly checkpoints, written down, accountable — pinned to the timeline above and fed by the three channels.</p>
-          <div className="grid md:grid-cols-2 gap-3">
-            {[
-              { q: "Q1", title: "Foundation",   items: ["First 3–5 paid contracts closed", "Sales hire onboarded", "Seminar series at full weekly cadence", "Ministry of Environment partnership term sheet"] },
-              { q: "Q2", title: "Validation",   items: ["10+ paying customers", "Ministry partnership signed", "First Stage 2 (Agentic) upgrade sold", "Initial regional conversation"] },
-              { q: "Q3", title: "Expansion",    items: ["20+ customers", "Regional pilot in conversation", "Customer success function operating", "$TBD revenue milestone"] },
-              { q: "Q4", title: "Scale",        items: ["30+ customers", "First Big Rollout (Stage 3) pilot scoped", "Production module commercialisation case ready for investor review", "Year-2 plan locked"] },
-            ].map((m) => (
-              <Card key={m.q}>
-                <div className="text-yai-blue font-bold text-sm mb-2">{m.q}</div>
-                <h3 className="font-bold text-yai-navy text-lg mb-2">{m.title}</h3>
-                <ul className="text-sm text-gray-600 space-y-1.5">
-                  {m.items.map((it) => <li key={it}>• {it}</li>)}
-                </ul>
-              </Card>
-            ))}
-          </div>
         </Section>
 
         {/* 13 — Funnel */}

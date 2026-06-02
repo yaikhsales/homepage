@@ -328,6 +328,57 @@ const PROMPTS = [
       STYLE_SUFFIX,
   },
 
+  // -------- Go-to-Market segment hover images (Section 11) --------
+  {
+    slug: "milestone-big-tech",
+    prompt:
+      "A cinematic editorial illustration of a strategic partnership meeting room. The Cambodian founder of Yai (man in his early 40s, calm and confident, royal-blue suit) is at a sleek modern conference table presenting to a panel of senior tech and multilateral-organisation executives — visibly diverse (an American Anthropic-style Ai exec, a Japanese JICA representative, a Western Google-style cloud-platform exec, an Asian Y Combinator partner). On the wall behind: a large screen labelled 'Yai · Strategic partners' with logo placeholders for ANTHROPIC, GOOGLE CLOUD, JICA, ABA BANK, WING. The room is bright, glass-walled, with a global trade map in the background. Mood: high-trust, deal-closing, world-class." +
+      STYLE_SUFFIX,
+  },
+  {
+    slug: "milestone-anthropic-cpn-path",
+    prompt:
+      "A clean editorial infographic illustration depicting the Anthropic Claude Partner Network certification journey as a stepped pathway timeline rendered as a horizontal road. The road has 5 numbered milestone markers (01 through 05) along it, each clearly visible with a circular badge containing the number." +
+      " 5 stages labelled in clean sans-serif text above each marker:" +
+      " * 01 — APPLIED (a stylised application document icon with a paper-plane sending it)" +
+      " * 02 — REVIEW CLEARED (a clean green checkmark badge — this stage clearly marked as DONE)" +
+      " * 03 — TEAM CERTIFICATION (10 stylised Cambodian engineers at laptops, an Academy-style learning dashboard on screen, books and a graduation cap)" +
+      " * 04 — CCAF UNLOCK (a Certified Architect Foundations certificate / shield badge with stars)" +
+      " * 05 — PARTNER PORTAL (an official partner status portal interface, a handshake icon, a tier-progression chart)" +
+      " The road is dark navy with dashed gold centre-line, milestones 1 and 2 have a green tick, milestone 3 has a glowing 'in progress' amber halo, milestones 4 and 5 are grey 'planned'. Royal-blue (#1E4DAA) and white palette with an orange Anthropic-inspired accent on the title bar that reads 'CLAUDE PARTNER NETWORK · CERTIFICATION PATHWAY'. No real company logos. Editorial infographic illustration style, 16:9 widescreen, premium investor-deck quality." +
+      STYLE_SUFFIX,
+  },
+  {
+    slug: "milestone-mid-size",
+    prompt:
+      "A cinematic editorial illustration of a Cambodian mid-size garment-factory owner (man, late 50s, polo shirt) in his factory office signing a contract on a tablet — a Yai sales representative (younger Cambodian woman in royal-blue blazer) smiles confidently next to him. Through the glass wall of the office, the factory floor is visible: rows of sewing machines with operators working, fabric rolls, a few tablets on stations. A small wall screen shows the Yai onboarding dashboard with 'Cloud Growth · $750/yr' clearly highlighted. Mood: trust, confident transaction, a long-needed solution found." +
+      STYLE_SUFFIX,
+  },
+  {
+    slug: "milestone-gov-inst",
+    prompt:
+      "A cinematic editorial illustration of a formal Cambodian government meeting room. The Minister of Environment (man, mid-50s, in a light sage-green and white formal ministry uniform) is shaking hands warmly with the Yai founder across a polished conference table. Three more officials in the same green-and-white uniforms sit attentively, each holding a tablet. The wall behind shows a large screen branded 'Yai · Cambodia Government Compliance Platform' with environmental dashboards (emissions, waste, energy) and ministry logos (Environment, Labour, Industry, Telecom). A Cambodian flag and national emblem are visible, with an Angkor Wat silhouette through a tall window. Mood: nation-building, proud, formal." +
+      STYLE_SUFFIX,
+  },
+  {
+    slug: "milestone-small-factories",
+    prompt:
+      "A cinematic editorial illustration of a small Cambodian textile workshop. A Cambodian shop-owner (woman, 40s, smart-casual, friendly) is sitting on a wooden stool tapping through the Yai mobile-app signup flow on her phone — the screen clearly shows a simple Khmer-language form with 'Cloud Starter · $120 / yr' highlighted. Behind her: a small workshop with 4–6 sewing machines, a couple of operators working, bolts of fabric on shelves, a chalkboard with hand-written orders being replaced by the phone. Mood: accessible, friendly, self-serve — small business empowered." +
+      STYLE_SUFFIX,
+  },
+  {
+    slug: "milestone-e-com",
+    prompt:
+      "A cinematic editorial illustration of Cambodian garment workers using the Yai mobile app during a meal break. Three women workers (in their 20s-30s, factory aprons) sit on a bench in a factory canteen, smiling at their phones. One is buying something on the worker marketplace (the screen clearly shows ABA and WING payment buttons in bright colours), one is selling a small homemade item (a photo of folded clothes and a price tag), one is checking her payroll arrival from ABA. A small floating overlay shows the Yai super-app icons (PR, leave, marketplace, payslip). Mood: empowered, daily, dignified — workers are users not just operators." +
+      STYLE_SUFFIX,
+  },
+  {
+    slug: "milestone-non-garment",
+    prompt:
+      "A cinematic editorial illustration of a Cambodian hospitality manager (man, 30s, smart-casual, hotel uniform) at a reception desk using a laptop running the Yai admin platform — the screen clearly shows the same Yai dashboard (HR, Purchase Requests, Accounting tiles) but the context is a clean modern boutique hotel in Phnom Penh, not a factory. In the background a small restaurant kitchen and a couple of staff in hotel uniforms. The point: the same Yai admin modules work for non-garment SMEs (hospitality, food, services). Mood: versatile, cross-vertical, calm." +
+      STYLE_SUFFIX,
+  },
+
   // -------- Ai-agent avatars (one distinct office person per platform module) --------
   // Pixar / 3D-render style friendly characters, head-and-shoulders, plain pale background
   // so they crop cleanly into circular avatars. Every face is different — a real office.
