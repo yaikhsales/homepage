@@ -80,6 +80,13 @@ const known: Array<[string, string, Status]> = [
   ["CE · Motion · Ai · Product Dev · Sample Room",       "YM", "impl"],
   ["YQMS · Quality Mgmt (6 stages + Fini Check)",        "YM", "full"],
   ["YTM · Machine Maintenance + TPM Shop",               "YM", "full"],
+  // CA + YY also fully use YTM
+  ["YTM · Machine Maintenance + TPM Shop",               "CA", "full"],
+  ["YTM · Machine Maintenance + TPM Shop",               "YY", "full"],
+  // Digital Audit — YW + BZ partly use (not factories), IDFL testing
+  ["Digital Audit · 8S · AIoT · Waste",                  "YW",   "impl"],
+  ["Digital Audit · 8S · AIoT · Waste",                  "BZ",   "impl"],
+  ["Digital Audit · 8S · AIoT · Waste",                  "IDFL", "impl"],
 ];
 known.forEach(([m, f, s]) => {
   if (MATRIX[m]) MATRIX[m][f] = s;
