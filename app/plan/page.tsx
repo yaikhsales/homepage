@@ -21,6 +21,7 @@ import { RoadmapTimeline } from "@/components/plan/RoadmapTimeline";
 import { MilestoneRoadmap } from "@/components/plan/MilestoneRoadmap";
 import { BigTechSegment } from "@/components/plan/BigTechSegment";
 import { MidSizeSegment } from "@/components/plan/MidSizeSegment";
+import { InteractiveSegment } from "@/components/plan/InteractiveSegment";
 
 const NAV: NavItem[] = [
   { id: "executive-summary", label: "Executive Summary" },
@@ -324,150 +325,289 @@ export default function PlanPage() {
             {/* Mid-size segment is interactive — cohorts of 3 factories, hover any factory for its pathway */}
             <MidSizeSegment />
 
-            {[
-              // 3. GOVERNMENT
-              {
-                tag: "GOV + INST.",
-                name: "Government &amp; Institutional",
-                reachable: "~800",
-                color: "#1E4DAA",
-                bg: "#E8EEF8",
-                desc: "Partnership-based · projected biggest cluster. Ministries + industry bodies together.",
-                milestones: [
-                  { d: "Q4 2025", t: "Minister of Environment meeting", s: "done", n: "Digital Audit collaboration agreed in principle." },
-                  { d: "Q1 2026", t: "ASEAN Tech Summit pitch prep",   s: "progress", n: "Minister tasked his advisor to propose Yai for the summit." },
-                  { d: "Q2 2026", t: "Ministry of Labour outreach",     s: "planned",  n: "Worker-side compliance + LMS angle." },
-                  { d: "Q2 2026", t: "Ministry of Industry outreach",   s: "planned",  n: "Industrial-zone digitalization pitch." },
-                  { d: "Q3 2026", t: "Ministry of Telecom / Digital Gov", s: "planned", n: "E-Gov SSO infrastructure angle." },
-                  { d: "Q3 2026", t: "ILO Better Work integration",     s: "planned",  n: "Worker-voice + compliance data feed." },
-                  { d: "Q3 2026", t: "GMAC partnership formalized",     s: "planned",  n: "Member-factory channel." },
-                  { d: "Q4 2026", t: "TAFTAC outreach",                 s: "planned",  n: "Primary garment association." },
-                  { d: "Q4 2026", t: "Ministry of Economy / Commerce",  s: "planned",  n: "Investment + export angle." },
-                ],
-              },
-              // 4. OTHERS — Small factories
-              {
-                tag: "SMALL FACTORIES",
-                name: "Small factories",
-                reachable: "~200",
-                color: "#2D9D9A",
-                bg: "#E0F2F1",
-                desc: "$750 – $1,200 / yr · Cloud Growth / Enterprise comfort zone. Rarely escalate to dedicated server or Ai.",
-                milestones: [
-                  { d: "Q3 2026", t: "Cloud Starter packaging",          s: "planned", n: "$120/yr SKU, Khmer-only signup flow." },
-                  { d: "Q3 2026", t: "Self-serve onboarding",            s: "planned", n: "Owner can sign up without a sales call." },
-                  { d: "Q4 2026", t: "First 30 Starter customers",       s: "planned", n: "Mostly admin modules only." },
-                  { d: "Q1 2027", t: "Upgrade path to Growth",           s: "planned", n: "10–20% expected to step up." },
-                ],
-              },
-              // 5. OTHERS — E-commerce
-              {
-                tag: "E-COM",
-                name: "E-commerce cluster — Worker P2P + Marketplaces",
-                reachable: "~600 + 100K worker GMV",
-                color: "#F37021",
-                bg: "#FFF1E0",
-                desc: "Mixed pricing across three sub-clusters of online commerce.",
-                milestones: [
-                  { d: "Q3 2026", t: "Worker P2P marketplace alpha",        s: "planned",  n: "Targeting 100,000 garment workers." },
-                  { d: "Q3 2026", t: "ABA + Wing payment rails integrated", s: "progress", n: "Cambodia's two dominant wallets." },
-                  { d: "Q4 2026", t: "Service-provider marketplace launch", s: "planned",  n: "~1,000 service providers to factories." },
-                  { d: "Q1 2027", t: "First 5,000 active worker sellers",   s: "planned",  n: "Daily-active inside Yai app." },
-                  { d: "Q1 2027", t: "Factory supply marketplace beta",     s: "planned",  n: "Yai-curated 100 SKUs at wholesale." },
-                  { d: "Q2 2027", t: "First $100K wholesale GMV month",     s: "planned",  n: "Factory Supply line at revenue." },
-                ],
-              },
-              // 6. OTHERS — Non-garment
-              {
-                tag: "NON-GARMENT",
-                name: "Non-garment companies",
-                reachable: "~1,000",
-                color: "#6D4FB6",
-                bg: "#EDE9F5",
-                desc: "$120 – $750 / yr · Various industries (hospitality, food, logistics, services) using the admin modules only. Cloud Starter to Cloud Growth.",
-                milestones: [
-                  { d: "Q4 2026", t: "Admin modules unbundled SKU",      s: "planned", n: "PR / HR / Accounting only — no operations." },
-                  { d: "Q1 2027", t: "Hospitality vertical pilot",       s: "planned", n: "Hotel / restaurant chain." },
-                  { d: "Q1 2027", t: "Food production vertical pilot",   s: "planned", n: "Adjacent to garment AIoT story." },
-                  { d: "Q2 2027", t: "Cross-vertical case study",        s: "planned", n: "Proof of platform versatility." },
-                ],
-              },
-            ].map((seg) => (
-              <div key={seg.tag} className="rounded-xl border border-yai-border bg-white">
-                {/* Segment header */}
-                <div className="flex items-start gap-3 p-4 border-b border-yai-border rounded-t-xl" style={{ background: seg.bg }}>
-                  <div className="flex-1">
-                    <div className="flex items-baseline gap-3 mb-1">
-                      <span
-                        className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded text-white"
-                        style={{ background: seg.color }}
-                      >
-                        {seg.tag}
-                      </span>
-                      <h4 className="font-extrabold text-yai-navy text-base leading-tight" dangerouslySetInnerHTML={{ __html: seg.name }} />
-                    </div>
-                    <p className="text-xs text-gray-700 leading-snug max-w-3xl">{seg.desc}</p>
-                  </div>
-                  <div className="text-right shrink-0">
-                    <div className="text-[10px] uppercase tracking-wider text-gray-500">Reachable</div>
-                    <div className="text-lg font-extrabold tabular-nums" style={{ color: seg.color }}>{seg.reachable}</div>
-                  </div>
-                </div>
-                {/* Graphical roadmap at the top */}
-                <div className="p-4 pb-2">
-                  <MilestoneRoadmap milestones={seg.milestones as never} color={seg.color} />
-                </div>
+            {/* 3. GOVERNMENT + INSTITUTIONAL — interactive */}
+            <InteractiveSegment
+              tag="GOV + INST."
+              name="Government &amp; Institutional"
+              reachable="~800"
+              color="#1E4DAA"
+              bg="#E8EEF8"
+              desc="Partnership-based · projected biggest cluster. Ministries + industry bodies together."
+              topics={[
+                {
+                  num: "01", d: "Q4 2025", t: "Minister of Environment", s: "done",
+                  n: "Digital Audit collaboration agreed in principle.",
+                  pathway: [
+                    { d: "Q3 2025", t: "01 · Introduction via mutual contact",   s: "done",     n: "Initial briefing on Digital Audit concept." },
+                    { d: "Q4 2025", t: "02 · Direct meeting with Minister",      s: "done",     n: "Pitch delivered, principle of collaboration agreed." },
+                    { d: "Q1 2026", t: "03 · Joint scope-of-work document",      s: "progress", n: "Ministry team + Yai aligning audit fields." },
+                    { d: "Q2 2026", t: "04 · Pilot Digital Audit programme",     s: "planned",  n: "First 10 factories audited under the scheme." },
+                    { d: "Q3 2026", t: "05 · Joint public launch",               s: "planned",  n: "Press event + co-branded landing page." },
+                    { d: "Q4 2026", t: "06 · National rollout to 100 factories", s: "planned",  n: "Scale-up across Cambodia." },
+                  ],
+                },
+                {
+                  num: "02", d: "Q1 2026", t: "ASEAN Tech Summit pitch", s: "progress",
+                  n: "Minister tasked his advisor to propose Yai for the summit.",
+                  pathway: [
+                    { d: "Q4 2025", t: "01 · Advisor brief on Yai platform",   s: "done",     n: "One-pager + demo video shared." },
+                    { d: "Q1 2026", t: "02 · Deck + booth design draft",       s: "progress", n: "Working with advisor's team." },
+                    { d: "Q1 2026", t: "03 · Demo scenario locked",            s: "planned",  n: "Live floor demo from Yorkmars pilot data." },
+                    { d: "Q2 2026", t: "04 · Speaking slot confirmed",         s: "planned",  n: "Founder on-stage 15-min slot." },
+                    { d: "Q2 2026", t: "05 · Summit appearance + booth",       s: "planned",  n: "Lead capture from international delegates." },
+                    { d: "Q3 2026", t: "06 · Post-summit press + follow-ups",  s: "planned",  n: "Convert summit leads → pilots." },
+                  ],
+                },
+                {
+                  num: "03", d: "Q2 2026", t: "Ministry of Labour", s: "planned",
+                  n: "Worker-side compliance + LMS angle.",
+                  pathway: [
+                    { d: "Q1 2026", t: "01 · Research labour-data needs",        s: "planned", n: "Map LMS gaps and reporting pain." },
+                    { d: "Q2 2026", t: "02 · Initial meeting via GMAC intro",    s: "planned", n: "Position Yai worker-app as compliance feed." },
+                    { d: "Q3 2026", t: "03 · 5-factory pilot proposal",          s: "planned", n: "Worker-side payslip + LMS API." },
+                    { d: "Q4 2026", t: "04 · Pilot deployed",                    s: "planned", n: "Compliance dashboard for Ministry." },
+                  ],
+                },
+                {
+                  num: "04", d: "Q2 2026", t: "Ministry of Industry", s: "planned",
+                  n: "Industrial-zone digitalization pitch.",
+                  pathway: [
+                    { d: "Q1 2026", t: "01 · SEZ-digitalization brief drafted",  s: "planned", n: "Targeted at Bavet + PPSEZ." },
+                    { d: "Q2 2026", t: "02 · Initial meeting + demo",            s: "planned", n: "MoI senior officials." },
+                    { d: "Q3 2026", t: "03 · SEZ-pilot MoU",                     s: "planned", n: "Subsidised platform for SEZ tenants." },
+                    { d: "Q4 2026", t: "04 · First SEZ rollout",                 s: "planned", n: "10 factories live inside one SEZ." },
+                  ],
+                },
+                {
+                  num: "05", d: "Q3 2026", t: "Ministry of Telecom / Digital Gov", s: "planned",
+                  n: "E-Gov SSO infrastructure angle.",
+                  pathway: [
+                    { d: "Q2 2026", t: "01 · E-Gov SSO integration brief",       s: "planned", n: "Yai logs in via national digital identity." },
+                    { d: "Q3 2026", t: "02 · Technical alignment meeting",       s: "planned", n: "OAuth / OIDC spec walkthrough." },
+                    { d: "Q4 2026", t: "03 · Sandbox SSO connection",            s: "planned", n: "Yai becomes a recognised relying party." },
+                    { d: "Q1 2027", t: "04 · Production SSO live",               s: "planned", n: "Citizens log in to Yai with national ID." },
+                  ],
+                },
+                {
+                  num: "06", d: "Q3 2026", t: "ILO Better Work", s: "planned",
+                  n: "Worker-voice + compliance data feed.",
+                  pathway: [
+                    { d: "Q2 2026", t: "01 · Better Work team intro",            s: "planned", n: "Via existing GMAC + IFC contacts." },
+                    { d: "Q3 2026", t: "02 · Data-spec alignment",               s: "planned", n: "Worker-voice signals + compliance KPIs." },
+                    { d: "Q4 2026", t: "03 · Pilot in 3 Better Work factories",  s: "planned", n: "Anonymous voice channel inside worker app." },
+                    { d: "Q2 2027", t: "04 · Programme-wide rollout",            s: "planned", n: "All Better Work Cambodia factories." },
+                  ],
+                },
+                {
+                  num: "07", d: "Q3 2026", t: "GMAC partnership", s: "planned",
+                  n: "Member-factory channel — primary garment association.",
+                  pathway: [
+                    { d: "Q2 2026", t: "01 · Board-meeting pitch slot",          s: "planned", n: "Member-benefit framing." },
+                    { d: "Q3 2026", t: "02 · MoU draft circulated",              s: "planned", n: "Member-pricing terms negotiated." },
+                    { d: "Q3 2026", t: "03 · MoU signed",                        s: "planned", n: "Yai endorsed as preferred digital platform." },
+                    { d: "Q4 2026", t: "04 · Member newsletter feature",         s: "planned", n: "Drive inbound from member factories." },
+                    { d: "Q1 2027", t: "05 · 20 GMAC members signed up",         s: "planned", n: "Channel-driven pipeline locked." },
+                  ],
+                },
+                {
+                  num: "08", d: "Q4 2026", t: "TAFTAC outreach", s: "planned",
+                  n: "Footwear + travel-goods association — sister to GMAC.",
+                  pathway: [
+                    { d: "Q3 2026", t: "01 · Initial introduction",              s: "planned", n: "Via shared GMAC contacts." },
+                    { d: "Q4 2026", t: "02 · Joint member-training event",       s: "planned", n: "Yai demo to footwear members." },
+                    { d: "Q1 2027", t: "03 · Co-branded landing page",           s: "planned", n: "Member-discount funnel." },
+                    { d: "Q2 2027", t: "04 · First 10 TAFTAC members live",      s: "planned", n: "Footwear-vertical case studies." },
+                  ],
+                },
+                {
+                  num: "09", d: "Q4 2026", t: "Ministry of Economy / Commerce", s: "planned",
+                  n: "Investment + export angle.",
+                  pathway: [
+                    { d: "Q3 2026", t: "01 · Investment-promotion deck",         s: "planned", n: "Yai as digital infrastructure for FDI factories." },
+                    { d: "Q4 2026", t: "02 · First meeting",                     s: "planned", n: "MoC export-readiness team." },
+                    { d: "Q1 2027", t: "03 · Export-readiness pilot",            s: "planned", n: "Yai integrated into MoC's export-cert flow." },
+                    { d: "Q2 2027", t: "04 · Trade-mission inclusion",           s: "planned", n: "Yai on Cambodia tech-trade delegations." },
+                  ],
+                },
+              ]}
+            />
 
-                {/* Milestone detail list — no hover image, no overlap, just clean text */}
-                <ul className="px-4 pb-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-3 border-t border-yai-border pt-4">
-                  {seg.milestones.map((m: { d: string; t: string; s: string; n?: string; sub?: string[] }, i: number) => {
-                    const statusIcon = m.s === "done" ? "✓" : m.s === "progress" ? "◐" : "○";
-                    const statusColor = m.s === "done" ? "#10B981" : m.s === "progress" ? "#F37021" : "#94A3B8";
-                    return (
-                      <li key={i} className="flex items-start gap-2 text-xs">
-                        <span
-                          className="inline-flex items-center justify-center w-7 h-7 rounded-full text-white font-extrabold text-[12px] shrink-0"
-                          style={{ background: seg.color }}
-                        >
-                          {String(i + 1).padStart(2, "0")}
-                        </span>
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center gap-1.5 mb-0.5">
-                            <span
-                              className="inline-flex items-center justify-center w-4 h-4 rounded-full text-white font-bold text-[9px] shrink-0"
-                              style={{ background: statusColor }}
-                              title={m.s}
-                            >
-                              {statusIcon}
-                            </span>
-                            <span className="text-[10px] uppercase tracking-wider font-semibold text-gray-400">{m.d}</span>
-                          </div>
-                          <div className="font-bold text-yai-navy leading-tight">{m.t}</div>
-                          {m.n && <div className="text-gray-600 leading-snug mt-0.5">{m.n}</div>}
-                          {m.sub && m.sub.length > 0 && (
-                            <ol className="mt-1.5 flex flex-col gap-1">
-                              {m.sub.map((s: string, j: number) => (
-                                <li key={j} className="flex items-start gap-1.5 text-[11px]">
-                                  <span
-                                    className="inline-flex items-center justify-center w-4 h-4 rounded-full text-white font-bold text-[9px] shrink-0 mt-0.5"
-                                    style={{ background: seg.color }}
-                                  >
-                                    {j + 1}
-                                  </span>
-                                  <span className={s ? "text-yai-navy font-semibold" : "text-gray-300 italic"}>
-                                    {s || "— to be filled —"}
-                                  </span>
-                                </li>
-                              ))}
-                            </ol>
-                          )}
-                        </div>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            ))}
+            {/* 4. SMALL FACTORIES — interactive */}
+            <InteractiveSegment
+              tag="SMALL FACTORIES"
+              name="Small factories"
+              reachable="~200"
+              color="#2D9D9A"
+              bg="#E0F2F1"
+              desc="$120 – $1,200 / yr · Cloud Starter / Growth comfort zone. Rarely escalate to dedicated server or full Ai."
+              topics={[
+                {
+                  num: "01", d: "Q3 2026", t: "Cloud Starter packaging", s: "planned",
+                  n: "$120/yr SKU, Khmer-only signup flow.",
+                  pathway: [
+                    { d: "Q2 2026", t: "01 · SKU + pricing finalised",        s: "planned", n: "$120/yr, admin-only bundle." },
+                    { d: "Q2 2026", t: "02 · Khmer signup flow built",        s: "planned", n: "No English fallback — Khmer-first." },
+                    { d: "Q3 2026", t: "03 · Khmer onboarding videos",        s: "planned", n: "10-min video per module." },
+                    { d: "Q3 2026", t: "04 · Public launch",                  s: "planned", n: "Promo via seminar series + Telegram." },
+                  ],
+                },
+                {
+                  num: "02", d: "Q3 2026", t: "Self-serve onboarding", s: "planned",
+                  n: "Owner can sign up without a sales call.",
+                  pathway: [
+                    { d: "Q2 2026", t: "01 · Signup-flow UX design",          s: "planned", n: "Owner-led, no-sales-call path." },
+                    { d: "Q3 2026", t: "02 · In-app guided tour",             s: "planned", n: "First-login walkthrough." },
+                    { d: "Q3 2026", t: "03 · Auto-provision first modules",   s: "planned", n: "PR + HR + Accounting auto-enabled." },
+                    { d: "Q4 2026", t: "04 · First 100 self-serve owners",    s: "planned", n: "Onboarding without human touch." },
+                  ],
+                },
+                {
+                  num: "03", d: "Q4 2026", t: "First 30 Starter customers", s: "planned",
+                  n: "Mostly admin modules only.",
+                  pathway: [
+                    { d: "Q3 2026", t: "01 · Seminar-attendee conversion",    s: "planned", n: "5-10 from weekly seminar." },
+                    { d: "Q4 2026", t: "02 · Mid-size owner referrals",       s: "planned", n: "Word-of-mouth from anchor accounts." },
+                    { d: "Q4 2026", t: "03 · First 30 paying customers",      s: "planned", n: "Cloud Starter revenue line live." },
+                    { d: "Q1 2027", t: "04 · Cohort retention analysis",      s: "planned", n: "90-day retention measured." },
+                  ],
+                },
+                {
+                  num: "04", d: "Q1 2027", t: "Upgrade path to Growth", s: "planned",
+                  n: "10–20% expected to step up.",
+                  pathway: [
+                    { d: "Q4 2026", t: "01 · In-app upgrade prompts",         s: "planned", n: "Surface ops modules to Starter users." },
+                    { d: "Q1 2027", t: "02 · Free trial of Growth modules",   s: "planned", n: "14-day Growth tier sampler." },
+                    { d: "Q1 2027", t: "03 · First 5 Starter→Growth upgrades", s: "planned", n: "Validate the upgrade funnel." },
+                    { d: "Q2 2027", t: "04 · 10-20% conversion sustained",    s: "planned", n: "Funnel matures." },
+                  ],
+                },
+              ]}
+            />
+
+            {/* 5. E-COMMERCE — interactive */}
+            <InteractiveSegment
+              tag="E-COM"
+              name="E-commerce cluster — Worker P2P + Marketplaces"
+              reachable="~600 + 100K worker GMV"
+              color="#F37021"
+              bg="#FFF1E0"
+              desc="Mixed pricing across three sub-clusters of online commerce — Worker P2P, Service Providers, Factory Supply."
+              topics={[
+                {
+                  num: "01", d: "Q3 2026", t: "Worker P2P marketplace alpha", s: "planned",
+                  n: "Targeting 100,000 garment workers.",
+                  pathway: [
+                    { d: "Q2 2026", t: "01 · Worker-app marketplace UX",       s: "planned", n: "Listing + buy + chat flows." },
+                    { d: "Q3 2026", t: "02 · Internal alpha testing",          s: "planned", n: "100 staff + Yorkmars workers." },
+                    { d: "Q3 2026", t: "03 · First 1,000 worker sellers",      s: "planned", n: "Seed the supply side." },
+                    { d: "Q4 2026", t: "04 · Public alpha launch",             s: "planned", n: "Open to all worker-app users." },
+                  ],
+                },
+                {
+                  num: "02", d: "Q1 2026", t: "ABA + Wing payment rails", s: "progress",
+                  n: "Cambodia's two dominant wallets.",
+                  pathway: [
+                    { d: "Q4 2025", t: "01 · ABA payroll API integration",     s: "done",     n: "Direct disbursement live." },
+                    { d: "Q4 2025", t: "02 · Wing wallet integration",         s: "done",     n: "Worker mobile-money receive live." },
+                    { d: "Q2 2026", t: "03 · Worker-app payslip surface",      s: "progress", n: "Workers see payment land in-app." },
+                    { d: "Q3 2026", t: "04 · P2P transfers between workers",   s: "planned",  n: "Worker-to-worker money movement." },
+                    { d: "Q4 2026", t: "05 · Marketplace settlement layer",    s: "planned",  n: "Buy / sell settles via ABA / Wing." },
+                  ],
+                },
+                {
+                  num: "03", d: "Q4 2026", t: "Service-provider marketplace", s: "planned",
+                  n: "~1,000 service providers to factories.",
+                  pathway: [
+                    { d: "Q3 2026", t: "01 · Provider directory built",        s: "planned", n: "Categorised: maintenance, legal, logistics, training." },
+                    { d: "Q4 2026", t: "02 · First 100 providers onboarded",   s: "planned", n: "Seeded from existing factory vendors." },
+                    { d: "Q4 2026", t: "03 · Booking + payment flow",          s: "planned", n: "Factory books, escrow-style payment." },
+                    { d: "Q1 2027", t: "04 · Public launch",                   s: "planned", n: "Open to all factory users." },
+                  ],
+                },
+                {
+                  num: "04", d: "Q1 2027", t: "5,000 active worker sellers", s: "planned",
+                  n: "Daily-active inside Yai app.",
+                  pathway: [
+                    { d: "Q4 2026", t: "01 · Worker-incentive programme",      s: "planned", n: "Bonus credits for first listing." },
+                    { d: "Q1 2027", t: "02 · Listing tooling — photo + price", s: "planned", n: "Phone-camera listing in 60 sec." },
+                    { d: "Q1 2027", t: "03 · First 1,000 active sellers",      s: "planned", n: "Activity defined: 1+ sale / month." },
+                    { d: "Q2 2027", t: "04 · 5,000 active sellers",            s: "planned", n: "Marketplace flywheel turning." },
+                  ],
+                },
+                {
+                  num: "05", d: "Q1 2027", t: "Factory supply marketplace", s: "planned",
+                  n: "Yai-curated 100 SKUs at wholesale.",
+                  pathway: [
+                    { d: "Q4 2026", t: "01 · SKU curation — 100 items",        s: "planned", n: "Thread, needles, packaging, PPE." },
+                    { d: "Q1 2027", t: "02 · Wholesale pricing locked",        s: "planned", n: "Yai negotiates supplier terms." },
+                    { d: "Q1 2027", t: "03 · First 10 factories ordering",     s: "planned", n: "Anchor demand." },
+                    { d: "Q2 2027", t: "04 · Public beta",                     s: "planned", n: "Open to all factory accounts." },
+                  ],
+                },
+                {
+                  num: "06", d: "Q2 2027", t: "$100K wholesale GMV month", s: "planned",
+                  n: "Factory Supply line at revenue.",
+                  pathway: [
+                    { d: "Q1 2027", t: "01 · $10K month",                      s: "planned", n: "First proof of demand." },
+                    { d: "Q1 2027", t: "02 · $50K month",                      s: "planned", n: "Repeat ordering established." },
+                    { d: "Q2 2027", t: "03 · $100K month",                     s: "planned", n: "Factory Supply at revenue." },
+                    { d: "Q3 2027", t: "04 · $250K month",                     s: "planned", n: "Material revenue line." },
+                  ],
+                },
+              ]}
+            />
+
+            {/* 6. NON-GARMENT — interactive */}
+            <InteractiveSegment
+              tag="NON-GARMENT"
+              name="Non-garment companies"
+              reachable="~1,000"
+              color="#6D4FB6"
+              bg="#EDE9F5"
+              desc="$120 – $750 / yr · Various industries (hospitality, food, logistics, services) using the admin modules only. Cloud Starter to Cloud Growth."
+              topics={[
+                {
+                  num: "01", d: "Q4 2026", t: "Admin modules unbundled SKU", s: "planned",
+                  n: "PR / HR / Accounting only — no operations.",
+                  pathway: [
+                    { d: "Q3 2026", t: "01 · SKU spec finalised",             s: "planned", n: "Admin-only bundle without ops modules." },
+                    { d: "Q4 2026", t: "02 · Pricing tier set",               s: "planned", n: "$120 / $300 / $750 per year tiers." },
+                    { d: "Q4 2026", t: "03 · Marketing site updated",         s: "planned", n: "Non-garment landing page + use cases." },
+                    { d: "Q1 2027", t: "04 · Public launch",                  s: "planned", n: "Open signup for any industry." },
+                  ],
+                },
+                {
+                  num: "02", d: "Q1 2027", t: "Hospitality vertical pilot", s: "planned",
+                  n: "Hotel / restaurant chain.",
+                  pathway: [
+                    { d: "Q4 2026", t: "01 · First hotel partner identified", s: "planned", n: "Boutique chain — 3 properties." },
+                    { d: "Q1 2027", t: "02 · Hospitality-specific config",    s: "planned", n: "Shift-based payroll + tip handling." },
+                    { d: "Q1 2027", t: "03 · 3-property pilot live",          s: "planned", n: "PR + HR + Accounting across all sites." },
+                    { d: "Q2 2027", t: "04 · Case study published",           s: "planned", n: "Hospitality reference customer." },
+                  ],
+                },
+                {
+                  num: "03", d: "Q1 2027", t: "Food production vertical", s: "planned",
+                  n: "Adjacent to garment AIoT story.",
+                  pathway: [
+                    { d: "Q4 2026", t: "01 · Adjacent food-factory contact",  s: "planned", n: "Snack / bottled-water producer." },
+                    { d: "Q1 2027", t: "02 · AIoT shared-pattern brief",      s: "planned", n: "Reuse machine-control patterns from garment." },
+                    { d: "Q1 2027", t: "03 · Pilot deployment",               s: "planned", n: "Production-line telemetry + admin stack." },
+                    { d: "Q2 2027", t: "04 · Cross-industry case study",      s: "planned", n: "Platform-versatility proof." },
+                  ],
+                },
+                {
+                  num: "04", d: "Q2 2027", t: "Cross-vertical case study", s: "planned",
+                  n: "Proof of platform versatility.",
+                  pathway: [
+                    { d: "Q1 2027", t: "01 · Data collection across pilots",  s: "planned", n: "Hospitality + food + logistics." },
+                    { d: "Q1 2027", t: "02 · Story structure",                s: "planned", n: "One platform · many industries." },
+                    { d: "Q2 2027", t: "03 · Case study published",           s: "planned", n: "Investor + partner-grade content." },
+                    { d: "Q2 2027", t: "04 · PR campaign",                    s: "planned", n: "Trade press + LinkedIn distribution." },
+                  ],
+                },
+              ]}
+            />
           </div>
 
         </Section>
