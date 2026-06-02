@@ -21,6 +21,7 @@ import { MilestoneRoadmap } from "@/components/plan/MilestoneRoadmap";
 import { BigTechSegment } from "@/components/plan/BigTechSegment";
 import { FactoryModuleMatrix } from "@/components/plan/FactoryModuleMatrix";
 import { GtmEnablerBar } from "@/components/plan/GtmEnablerBar";
+import { EventCalendar } from "@/components/plan/EventCalendar";
 import { MidSizeSegment } from "@/components/plan/MidSizeSegment";
 import { InteractiveSegment } from "@/components/plan/InteractiveSegment";
 
@@ -328,7 +329,9 @@ export default function PlanPage() {
               bg="#E8EEF8"
               badge="Trade shows · summits"
               badgeLabel="Channel"
-            />
+            >
+              <EventCalendar />
+            </GtmEnablerBar>
             <GtmEnablerBar
               num="02"
               tag="HIRES"
