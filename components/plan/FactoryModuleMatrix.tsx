@@ -75,10 +75,11 @@ const known: Array<[string, string, Status]> = [
   ["Gate Pass · CTPAT",                                  "YM", "full"],
   ["Car Booking",                                        "YM", "full"],
   ["Platform · Laravel + Mongo + Mobile + AIoT",         "YM", "full"],
+  ["YPI · Technical Specs (3-language)",                 "YM", "impl"],
   ["YPM · Production Mgmt",                              "YM", "impl"],
   ["CE · Motion · Ai · Product Dev · Sample Room",       "YM", "impl"],
-  ["YQMS · Quality Mgmt (6 stages + Fini Check)",        "YM", "impl"],
-  ["YTM · Machine Maintenance + TPM Shop",               "YM", "impl"],
+  ["YQMS · Quality Mgmt (6 stages + Fini Check)",        "YM", "full"],
+  ["YTM · Machine Maintenance + TPM Shop",               "YM", "full"],
 ];
 known.forEach(([m, f, s]) => {
   if (MATRIX[m]) MATRIX[m][f] = s;
