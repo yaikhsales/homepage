@@ -24,6 +24,7 @@ import { GtmEnablerBar } from "@/components/plan/GtmEnablerBar";
 import { EventCalendar } from "@/components/plan/EventCalendar";
 import { SalesTeamProfile } from "@/components/plan/SalesTeamProfile";
 import { SalesProcessFlow } from "@/components/plan/SalesProcessFlow";
+import { BudgetDashboard } from "@/components/plan/BudgetDashboard";
 import { MidSizeSegment } from "@/components/plan/MidSizeSegment";
 import { InteractiveSegment } from "@/components/plan/InteractiveSegment";
 
@@ -723,16 +724,15 @@ export default function PlanPage() {
             </div>
           </div>
 
-          {/* Latest snapshot placeholder */}
-          <div className="rounded-xl border-2 border-dashed border-yai-border bg-gray-50 p-6 text-center mt-6">
-            <div className="text-[11px] uppercase tracking-wider font-extrabold text-gray-400 mb-1">
-              Latest OC update
-            </div>
-            <div className="text-sm text-gray-500 leading-snug max-w-2xl mx-auto">
-              The most recent quarterly OC deck will live here when ready — KPIs, financial position,
-              risks, and the asks for the next quarter. Send me the data and I&rsquo;ll lay it out
-              the same way the GTM segments are presented.
-            </div>
+          {/* Live budget dashboard — sourced from TEXLINK Budget 2026 */}
+          <div className="mt-8">
+            <h3 className="font-extrabold text-yai-navy text-xl mb-2">2026 Live Budget</h3>
+            <p className="text-sm text-gray-600 mb-4 max-w-3xl">
+              Sourced directly from <em>TEXLINK Budget 2026 (1).xls</em>. KPIs, monthly P&amp;L,
+              income lines, expense breakdown, capex requests and team — all on one screen so the
+              OC sees the live position, not a stale PDF.
+            </p>
+            <BudgetDashboard />
           </div>
         </Section>
 
