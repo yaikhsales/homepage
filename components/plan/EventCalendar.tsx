@@ -11,14 +11,30 @@ import { useState } from "react";
  */
 
 type EventType = "ai" | "tech" | "business" | "summit" | "expo" | "networking";
+type Country = "kh" | "cn" | "hk" | "mo" | "sg" | "ph" | "jp" | "id" | "th" | "vn" | "my";
 
 type Event = {
   date: string;        // ISO "YYYY-MM-DD"
   endDate?: string;    // optional multi-day end
   name: string;
   type: EventType;
+  country: Country;
   loc: string;
   note?: string;       // short relevance note
+};
+
+const COUNTRY_FLAG: Record<Country, string> = {
+  kh: "🇰🇭",
+  cn: "🇨🇳",
+  hk: "🇭🇰",
+  mo: "🇲🇴",
+  sg: "🇸🇬",
+  ph: "🇵🇭",
+  jp: "🇯🇵",
+  id: "🇮🇩",
+  th: "🇹🇭",
+  vn: "🇻🇳",
+  my: "🇲🇾",
 };
 
 const TYPE_VIS: Record<EventType, { label: string; color: string; bg: string }> = {
@@ -34,62 +50,62 @@ const TYPE_VIS: Record<EventType, { label: string; color: string; bg: string }> 
 // Through end of 2026 packed; 2027 placeholders. User refines real dates with organiser.
 const EVENTS: Event[] = [
   // ─── JUNE 2026 ───
-  { date: "2026-06-12", name: "Cambodia ICT Federation Roundtable", type: "tech", loc: "Phnom Penh", note: "Monthly industry-body forum." },
-  { date: "2026-06-18", name: "GMAC Member Meeting", type: "business", loc: "Phnom Penh", note: "Garment association — channel to mid-size factories." },
-  { date: "2026-06-25", endDate: "2026-06-27", name: "Cambodia Tech Week", type: "tech", loc: "Phnom Penh · Diamond Island", note: "Largest local tech showcase." },
-  { date: "2026-06-28", endDate: "2026-06-30", name: "BEYOND Expo", type: "expo", loc: "Macau / Guangdong-region", note: "Major Asia-Pacific tech expo, China-adjacent." },
+  { date: "2026-06-12", name: "Cambodia ICT Federation Roundtable", type: "tech", country: "kh", loc: "Phnom Penh", note: "Monthly industry-body forum." },
+  { date: "2026-06-18", name: "GMAC Member Meeting", type: "business", country: "kh", loc: "Phnom Penh", note: "Garment association — channel to mid-size factories." },
+  { date: "2026-06-25", endDate: "2026-06-27", name: "Cambodia Tech Week", type: "tech", country: "kh", loc: "Phnom Penh · Diamond Island", note: "Largest local tech showcase." },
+  { date: "2026-06-28", endDate: "2026-06-30", name: "BEYOND Expo", type: "expo", country: "mo", loc: "Macau / Guangdong-region", note: "Major Asia-Pacific tech expo, China-adjacent." },
 
   // ─── JULY 2026 ───
-  { date: "2026-07-04", endDate: "2026-07-07", name: "WAIC · World Ai Conference", type: "ai", loc: "Shanghai, China", note: "Flagship Ai event in China — must-visit." },
-  { date: "2026-07-09", name: "AMCHAM Cambodia Mixer", type: "networking", loc: "Phnom Penh", note: "Monthly chamber networking." },
-  { date: "2026-07-16", endDate: "2026-07-17", name: "Cambodia Ai & Cloud Summit", type: "ai", loc: "Phnom Penh · Sofitel", note: "Direct positioning — attend / speak." },
-  { date: "2026-07-23", name: "EuroCham Digital Sector Committee", type: "networking", loc: "Phnom Penh", note: "EU-Cambodia digital working group." },
-  { date: "2026-07-28", endDate: "2026-07-30", name: "Smart China Expo", type: "expo", loc: "Chongqing / Guangdong corridor", note: "Smart-mfg + AIoT, factory-relevant." },
+  { date: "2026-07-04", endDate: "2026-07-07", name: "WAIC · World Ai Conference", type: "ai", country: "cn", loc: "Shanghai, China", note: "Flagship Ai event in China — must-visit." },
+  { date: "2026-07-09", name: "AMCHAM Cambodia Mixer", type: "networking", country: "kh", loc: "Phnom Penh", note: "Monthly chamber networking." },
+  { date: "2026-07-16", endDate: "2026-07-17", name: "Cambodia Ai & Cloud Summit", type: "ai", country: "kh", loc: "Phnom Penh · Sofitel", note: "Direct positioning — attend / speak." },
+  { date: "2026-07-23", name: "EuroCham Digital Sector Committee", type: "networking", country: "kh", loc: "Phnom Penh", note: "EU-Cambodia digital working group." },
+  { date: "2026-07-28", endDate: "2026-07-30", name: "Smart China Expo", type: "expo", country: "cn", loc: "Chongqing / Guangdong corridor", note: "Smart-mfg + AIoT, factory-relevant." },
 
   // ─── AUGUST 2026 ───
-  { date: "2026-08-06", name: "ASEAN SME Digital Innovation Forum", type: "summit", loc: "Siem Reap, Cambodia", note: "ASEAN-wide SME audience." },
-  { date: "2026-08-14", endDate: "2026-08-16", name: "Cambodia Garment Mfg Expo", type: "expo", loc: "Phnom Penh · Koh Pich", note: "Direct factory-owner audience." },
-  { date: "2026-08-19", endDate: "2026-08-23", name: "World Robot Conference", type: "ai", loc: "Beijing, China", note: "Major robotics + AIoT showcase." },
-  { date: "2026-08-27", name: "TAFTAC Member Roundtable", type: "business", loc: "Phnom Penh", note: "Footwear / travel-goods association." },
+  { date: "2026-08-06", name: "ASEAN SME Digital Innovation Forum", type: "summit", country: "kh", loc: "Siem Reap, Cambodia", note: "ASEAN-wide SME audience." },
+  { date: "2026-08-14", endDate: "2026-08-16", name: "Cambodia Garment Mfg Expo", type: "expo", country: "kh", loc: "Phnom Penh · Koh Pich", note: "Direct factory-owner audience." },
+  { date: "2026-08-19", endDate: "2026-08-23", name: "World Robot Conference", type: "ai", country: "cn", loc: "Beijing, China", note: "Major robotics + AIoT showcase." },
+  { date: "2026-08-27", name: "TAFTAC Member Roundtable", type: "business", country: "kh", loc: "Phnom Penh", note: "Footwear / travel-goods association." },
 
   // ─── SEPTEMBER 2026 ───
-  { date: "2026-09-04", endDate: "2026-09-06", name: "ASEAN Tech Summit (Cambodia)", type: "summit", loc: "Phnom Penh · Peace Palace", note: "Minister-tasked appearance — primary stage." },
-  { date: "2026-09-10", endDate: "2026-09-12", name: "Inclusion Conference (Ant Group)", type: "ai", loc: "Shanghai, China", note: "Fintech + Ai for inclusion — payment-rail angle." },
-  { date: "2026-09-17", name: "GMAC + ILO Better Work Forum", type: "business", loc: "Phnom Penh", note: "Compliance + worker-voice positioning." },
-  { date: "2026-09-23", endDate: "2026-09-25", name: "Singapore FinTech / SWITCH (ASEAN preview)", type: "summit", loc: "Singapore", note: "ASEAN-wide investor + tech audience." },
+  { date: "2026-09-04", endDate: "2026-09-06", name: "ASEAN Tech Summit (Cambodia)", type: "summit", country: "kh", loc: "Phnom Penh · Peace Palace", note: "Minister-tasked appearance — primary stage." },
+  { date: "2026-09-10", endDate: "2026-09-12", name: "Inclusion Conference (Ant Group)", type: "ai", country: "cn", loc: "Shanghai, China", note: "Fintech + Ai for inclusion — payment-rail angle." },
+  { date: "2026-09-17", name: "GMAC + ILO Better Work Forum", type: "business", country: "kh", loc: "Phnom Penh", note: "Compliance + worker-voice positioning." },
+  { date: "2026-09-23", endDate: "2026-09-25", name: "Singapore FinTech / SWITCH (ASEAN preview)", type: "summit", country: "sg", loc: "Singapore", note: "ASEAN-wide investor + tech audience." },
 
   // ─── OCTOBER 2026 ───
-  { date: "2026-10-08", endDate: "2026-10-10", name: "Cambodia ICT Awards", type: "tech", loc: "Phnom Penh", note: "National recognition — Yai submission target." },
-  { date: "2026-10-15", endDate: "2026-10-19", name: "Canton Fair (Phase 1)", type: "expo", loc: "Guangzhou, China", note: "World's largest trade fair — manufacturing buyer reach." },
-  { date: "2026-10-22", name: "Phnom Penh AIoT Meetup", type: "ai", loc: "Phnom Penh · Factory PP", note: "Developer-community visibility." },
-  { date: "2026-10-27", endDate: "2026-10-29", name: "Hong Kong FinTech Week", type: "summit", loc: "Hong Kong", note: "Greater Bay Area Ai + fintech, China-adjacent." },
+  { date: "2026-10-08", endDate: "2026-10-10", name: "Cambodia ICT Awards", type: "tech", country: "kh", loc: "Phnom Penh", note: "National recognition — Yai submission target." },
+  { date: "2026-10-15", endDate: "2026-10-19", name: "Canton Fair (Phase 1)", type: "expo", country: "cn", loc: "Guangzhou, China", note: "World's largest trade fair — manufacturing buyer reach." },
+  { date: "2026-10-22", name: "Phnom Penh AIoT Meetup", type: "ai", country: "kh", loc: "Phnom Penh · Factory PP", note: "Developer-community visibility." },
+  { date: "2026-10-27", endDate: "2026-10-29", name: "Hong Kong FinTech Week", type: "summit", country: "hk", loc: "Hong Kong", note: "Greater Bay Area Ai + fintech, China-adjacent." },
 
   // ─── NOVEMBER 2026 ───
-  { date: "2026-11-05", endDate: "2026-11-07", name: "Mekong Investment Forum", type: "business", loc: "Phnom Penh", note: "FDI + investment-track presence." },
-  { date: "2026-11-10", endDate: "2026-11-12", name: "AICon · Ai Industry Conference", type: "ai", loc: "Beijing, China", note: "Top-tier enterprise-Ai conference." },
-  { date: "2026-11-15", endDate: "2026-11-17", name: "China Hi-Tech Fair", type: "expo", loc: "Shenzhen, Guangdong", note: "China's largest tech expo — Ai + hardware." },
-  { date: "2026-11-19", name: "Cambodia Smart City Summit", type: "summit", loc: "Phnom Penh · NCDD", note: "Ministry of Telecom / Digital Gov angle." },
-  { date: "2026-11-25", endDate: "2026-11-27", name: "ASEAN Business & Investment Summit", type: "summit", loc: "Manila, Philippines", note: "ASEAN-wide CEO + investor audience." },
+  { date: "2026-11-05", endDate: "2026-11-07", name: "Mekong Investment Forum", type: "business", country: "kh", loc: "Phnom Penh", note: "FDI + investment-track presence." },
+  { date: "2026-11-10", endDate: "2026-11-12", name: "AICon · Ai Industry Conference", type: "ai", country: "cn", loc: "Beijing, China", note: "Top-tier enterprise-Ai conference." },
+  { date: "2026-11-15", endDate: "2026-11-17", name: "China Hi-Tech Fair", type: "expo", country: "cn", loc: "Shenzhen, Guangdong", note: "China's largest tech expo — Ai + hardware." },
+  { date: "2026-11-19", name: "Cambodia Smart City Summit", type: "summit", country: "kh", loc: "Phnom Penh · NCDD", note: "Ministry of Telecom / Digital Gov angle." },
+  { date: "2026-11-25", endDate: "2026-11-27", name: "ASEAN Business & Investment Summit", type: "summit", country: "ph", loc: "Manila, Philippines", note: "ASEAN-wide CEO + investor audience." },
 
   // ─── DECEMBER 2026 ───
-  { date: "2026-12-03", endDate: "2026-12-05", name: "Cambodia–Japan Business Forum", type: "business", loc: "Phnom Penh + Tokyo (hybrid)", note: "JICA partnership channel." },
-  { date: "2026-12-08", endDate: "2026-12-10", name: "Slush Singapore (ASEAN edition)", type: "summit", loc: "Singapore", note: "Founder + investor focused." },
-  { date: "2026-12-11", name: "Year-End Tech Founders Mixer", type: "networking", loc: "Phnom Penh · Rosewood", note: "Local startup ecosystem closing event." },
-  { date: "2026-12-15", endDate: "2026-12-17", name: "ZGC Forum (Zhongguancun)", type: "ai", loc: "Beijing, China", note: "China's Silicon Valley — Ai + deep-tech." },
+  { date: "2026-12-03", endDate: "2026-12-05", name: "Cambodia–Japan Business Forum", type: "business", country: "kh", loc: "Phnom Penh + Tokyo (hybrid)", note: "JICA partnership channel." },
+  { date: "2026-12-08", endDate: "2026-12-10", name: "Slush Singapore (ASEAN edition)", type: "summit", country: "sg", loc: "Singapore", note: "Founder + investor focused." },
+  { date: "2026-12-11", name: "Year-End Tech Founders Mixer", type: "networking", country: "kh", loc: "Phnom Penh · Rosewood", note: "Local startup ecosystem closing event." },
+  { date: "2026-12-15", endDate: "2026-12-17", name: "ZGC Forum (Zhongguancun)", type: "ai", country: "cn", loc: "Beijing, China", note: "China's Silicon Valley — Ai + deep-tech." },
 
   // ─── 2027 PLACEHOLDERS (less dense — refine later) ───
-  { date: "2027-01-15", name: "AMCHAM New-Year Business Summit", type: "summit", loc: "Phnom Penh", note: "Annual outlook + bilateral." },
-  { date: "2027-01-28", endDate: "2027-01-30", name: "Cambodia Mfg & Industrial Expo", type: "expo", loc: "Phnom Penh · Koh Pich", note: "Cross-vertical." },
-  { date: "2027-02-11", name: "Phnom Penh Ai Builders Day", type: "ai", loc: "Phnom Penh · Factory PP", note: "Local engineer recruitment + visibility." },
-  { date: "2027-02-25", endDate: "2027-02-26", name: "ASEAN Digital Ministers Meeting", type: "summit", loc: "Phnom Penh", note: "Government-channel max leverage." },
-  { date: "2027-03-12", endDate: "2027-03-14", name: "Cambodia Garment & Footwear Expo", type: "expo", loc: "Phnom Penh", note: "Footwear-led sister event." },
-  { date: "2027-03-26", name: "EuroCham Cambodia Tech Forum", type: "tech", loc: "Phnom Penh", note: "EU-investor reach." },
-  { date: "2027-04-09", name: "Cambodia Startup Demo Day", type: "tech", loc: "Phnom Penh · Impact Hub", note: "Yai showcase." },
-  { date: "2027-04-22", endDate: "2027-04-24", name: "Mekong Tech Summit", type: "summit", loc: "Phnom Penh", note: "Multi-country audience." },
-  { date: "2027-05-13", name: "GMAC AGM 2027", type: "business", loc: "Phnom Penh", note: "Member-factory AGM — Yai partnership slot." },
-  { date: "2027-05-28", endDate: "2027-05-30", name: "Cambodia Tech Week 2027", type: "tech", loc: "Phnom Penh", note: "Annual flagship — booth target." },
-  { date: "2027-06-10", name: "Cambodia Ai Conference 2027", type: "ai", loc: "Phnom Penh", note: "Primary local Ai stage." },
-  { date: "2027-06-24", endDate: "2027-06-26", name: "ASEAN Industrial Innovation Expo", type: "expo", loc: "Phnom Penh · Diamond Island", note: "Cross-border industrial reach." },
+  { date: "2027-01-15", name: "AMCHAM New-Year Business Summit", type: "summit", country: "kh", loc: "Phnom Penh", note: "Annual outlook + bilateral." },
+  { date: "2027-01-28", endDate: "2027-01-30", name: "Cambodia Mfg & Industrial Expo", type: "expo", country: "kh", loc: "Phnom Penh · Koh Pich", note: "Cross-vertical." },
+  { date: "2027-02-11", name: "Phnom Penh Ai Builders Day", type: "ai", country: "kh", loc: "Phnom Penh · Factory PP", note: "Local engineer recruitment + visibility." },
+  { date: "2027-02-25", endDate: "2027-02-26", name: "ASEAN Digital Ministers Meeting", type: "summit", country: "kh", loc: "Phnom Penh", note: "Government-channel max leverage." },
+  { date: "2027-03-12", endDate: "2027-03-14", name: "Cambodia Garment & Footwear Expo", type: "expo", country: "kh", loc: "Phnom Penh", note: "Footwear-led sister event." },
+  { date: "2027-03-26", name: "EuroCham Cambodia Tech Forum", type: "tech", country: "kh", loc: "Phnom Penh", note: "EU-investor reach." },
+  { date: "2027-04-09", name: "Cambodia Startup Demo Day", type: "tech", country: "kh", loc: "Phnom Penh · Impact Hub", note: "Yai showcase." },
+  { date: "2027-04-22", endDate: "2027-04-24", name: "Mekong Tech Summit", type: "summit", country: "kh", loc: "Phnom Penh", note: "Multi-country audience." },
+  { date: "2027-05-13", name: "GMAC AGM 2027", type: "business", country: "kh", loc: "Phnom Penh", note: "Member-factory AGM — Yai partnership slot." },
+  { date: "2027-05-28", endDate: "2027-05-30", name: "Cambodia Tech Week 2027", type: "tech", country: "kh", loc: "Phnom Penh", note: "Annual flagship — booth target." },
+  { date: "2027-06-10", name: "Cambodia Ai Conference 2027", type: "ai", country: "kh", loc: "Phnom Penh", note: "Primary local Ai stage." },
+  { date: "2027-06-24", endDate: "2027-06-26", name: "ASEAN Industrial Innovation Expo", type: "expo", country: "kh", loc: "Phnom Penh · Diamond Island", note: "Cross-border industrial reach." },
 ];
 
 const MONTH_NAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
@@ -226,7 +242,10 @@ export function EventCalendar() {
                             {formatRange(e.date, e.endDate)}
                           </span>
                         </div>
-                        <div className="text-[12px] font-bold text-yai-navy leading-tight break-words">{e.name}</div>
+                        <div className="text-[12px] font-bold text-yai-navy leading-tight break-words">
+                          <span className="mr-1 text-[14px] leading-none align-middle" aria-label={e.country}>{COUNTRY_FLAG[e.country]}</span>
+                          {e.name}
+                        </div>
                         <div className="text-[10px] text-gray-500 italic mt-0.5">{e.loc}</div>
                         {e.note && <div className="text-[10px] text-gray-600 leading-snug mt-1">{e.note}</div>}
                       </li>
