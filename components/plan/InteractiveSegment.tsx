@@ -36,14 +36,21 @@ const STATUS_COLOR: Record<Status, string> = { done: "#10B981", progress: "#F370
 
 export function InteractiveSegment({ tag, name, reachable, desc, color, bg, topics }: Props) {
   const [activeIdx, setActiveIdx] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
   const active = topics[activeIdx];
 
   return (
-    <div className="rounded-xl border border-yai-border bg-white">
-      {/* Segment header */}
-      <div className="flex items-start gap-3 p-4 border-b border-yai-border rounded-t-xl" style={{ background: bg }}>
+    <div className={`rounded-xl border border-yai-border bg-white ${isOpen ? "" : "shadow-sm"}`}>
+      {/* Segment header — clickable to expand/collapse */}
+      <button
+        type="button"
+        onClick={() => setIsOpen((o) => !o)}
+        aria-expanded={isOpen}
+        className={`w-full flex items-start gap-3 p-4 text-left rounded-t-xl transition-colors ${isOpen ? "border-b border-yai-border" : "rounded-b-xl"}`}
+        style={{ background: bg }}
+      >
         <div className="flex-1">
-          <div className="flex items-baseline gap-3 mb-1">
+          <div className="flex items-baseline gap-3 mb-1 flex-wrap">
             <span
               className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded text-white"
               style={{ background: color }}
@@ -56,15 +63,25 @@ export function InteractiveSegment({ tag, name, reachable, desc, color, bg, topi
             />
           </div>
           <p className="text-xs text-gray-700 leading-snug max-w-3xl">
-            {desc} <strong>Hover any topic</strong> below to see its dedicated pathway.
+            {desc} {isOpen && <><strong>Hover any topic</strong> below to see its dedicated pathway.</>}
           </p>
         </div>
-        <div className="text-right shrink-0">
-          <div className="text-[10px] uppercase tracking-wider text-gray-500">Reachable</div>
-          <div className="text-lg font-extrabold tabular-nums" style={{ color }}>{reachable}</div>
+        <div className="flex flex-col items-end gap-2 shrink-0">
+          <div>
+            <div className="text-[10px] uppercase tracking-wider text-gray-500">Reachable</div>
+            <div className="text-lg font-extrabold tabular-nums text-right" style={{ color }}>{reachable}</div>
+          </div>
+          <span
+            className="inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full text-white shadow-sm"
+            style={{ background: color }}
+          >
+            {isOpen ? "Hide detail" : "Detail"}
+            <span className="text-[10px] leading-none">{isOpen ? "▲" : "▼"}</span>
+          </span>
         </div>
-      </div>
+      </button>
 
+      {!isOpen ? null : <>
       {/* Topic cards — hover / focus / click to switch pathway below */}
       <ul className="px-4 pt-4 pb-2 grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {topics.map((p, i) => {
@@ -133,6 +150,7 @@ export function InteractiveSegment({ tag, name, reachable, desc, color, bg, topi
 
         <MilestoneRoadmap milestones={active.pathway} color={color} />
       </div>
+      </>}
     </div>
   );
 }

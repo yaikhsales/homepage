@@ -133,14 +133,21 @@ const COHORTS = Array.from(new Set(FACTORIES.map((f) => f.cohort))).sort((a, b) 
 
 export function MidSizeSegment() {
   const [activeIdx, setActiveIdx] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
   const active = FACTORIES[activeIdx];
 
   return (
-    <div className="rounded-xl border border-yai-border bg-white">
-      {/* Segment header */}
-      <div className="flex items-start gap-3 p-4 border-b border-yai-border rounded-t-xl" style={{ background: SEG_BG }}>
+    <div className={`rounded-xl border border-yai-border bg-white ${isOpen ? "" : "shadow-sm"}`}>
+      {/* Segment header — clickable to expand/collapse */}
+      <button
+        type="button"
+        onClick={() => setIsOpen((o) => !o)}
+        aria-expanded={isOpen}
+        className={`w-full flex items-start gap-3 p-4 text-left rounded-t-xl transition-colors ${isOpen ? "border-b border-yai-border" : "rounded-b-xl"}`}
+        style={{ background: SEG_BG }}
+      >
         <div className="flex-1">
-          <div className="flex items-baseline gap-3 mb-1">
+          <div className="flex items-baseline gap-3 mb-1 flex-wrap">
             <span
               className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded text-white"
               style={{ background: SEG_COLOR }}
@@ -154,15 +161,26 @@ export function MidSizeSegment() {
           <p className="text-xs text-gray-700 leading-snug max-w-3xl">
             $120 → $15,000 / yr · Garment, bag, footwear. ~300 may stop at Digitalization, ~500 climb
             the full ladder to Ai. We onboard in <strong>cohorts of 3</strong> — each factory has its
-            own pathway. <strong>Hover any factory</strong> below to see its specific story.
+            own pathway.
+            {isOpen && <> <strong>Hover any factory</strong> below to see its specific story.</>}
           </p>
         </div>
-        <div className="text-right shrink-0">
-          <div className="text-[10px] uppercase tracking-wider text-gray-500">Reachable</div>
-          <div className="text-lg font-extrabold tabular-nums" style={{ color: SEG_COLOR }}>~800</div>
+        <div className="flex flex-col items-end gap-2 shrink-0">
+          <div>
+            <div className="text-[10px] uppercase tracking-wider text-gray-500">Reachable</div>
+            <div className="text-lg font-extrabold tabular-nums text-right" style={{ color: SEG_COLOR }}>~800</div>
+          </div>
+          <span
+            className="inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full text-white shadow-sm"
+            style={{ background: SEG_COLOR }}
+          >
+            {isOpen ? "Hide detail" : "Detail"}
+            <span className="text-[10px] leading-none">{isOpen ? "▲" : "▼"}</span>
+          </span>
         </div>
-      </div>
+      </button>
 
+      {!isOpen ? null : <>
       {/* Factory cards — grouped by cohort row */}
       <div className="px-4 pt-4 pb-2 space-y-3">
         {COHORTS.map((cohortNum) => {
@@ -247,6 +265,7 @@ export function MidSizeSegment() {
 
         <MilestoneRoadmap milestones={active.pathway} color={SEG_COLOR} />
       </div>
+      </>}
     </div>
   );
 }

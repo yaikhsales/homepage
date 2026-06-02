@@ -449,6 +449,189 @@ export function RoadmapTimeline({ mode }: { mode: "spend" | "revenue" }) {
         ))}
       </svg>
 
+      {/* Module-progression rows — split into ADMINISTRATION + PLATFORM + OPERATIONS groups */}
+      <div className="pt-2 border-t border-yai-border">
+        {(() => {
+          // NEW value generated only at quarter q (per-quarter delta, not cumulative).
+          // = digValue for each module that STARTS at q
+          //   + (agValue - digValue) for each module that TRANSITIONS to Agentic at q
+          //   + (fullValue - agValue) for each module that TRANSITIONS to Full Ai at q
+          const valueAddedAt = (q: number) => {
+            let total = 0;
+            MODULES.forEach((m) => {
+              if (q === m.fullStart) total += parseK(m.fullValue) - parseK(m.agValue);
+              else if (q === m.agStart) total += parseK(m.agValue) - parseK(m.digValue);
+              else if (q === m.digStart) total += parseK(m.digValue);
+            });
+            return total * mult;
+          };
+          const scrubValue = valueAddedAt(scrubQ);
+          const isToday = scrubQ === TODAY;
+          return (
+            <>
+              <div className="flex items-end justify-between gap-2 mb-1">
+                <div>
+                  <div className="text-[11px] uppercase tracking-wider font-extrabold text-yai-navy">
+                    Module progression across the same timeline
+                  </div>
+                  <div className="text-[10px] text-gray-500">
+                    Each $ = annual SaaS value <strong>added that quarter alone</strong> (modules starting / transitioning that quarter). Click any quarter dot to scrub the indicator.
+                  </div>
+                </div>
+              </div>
+
+              {/* Scrubber row — clickable dots per quarter + the floating indicator */}
+              <div className="relative h-16 mt-2" style={{ marginLeft: `${LEFT_PCT}%`, marginRight: `${RIGHT_PCT}%` }}>
+                {QUARTERS.map((q, i) => {
+                  const qNum = i + 1;
+                  const v = valueAddedAt(qNum);
+                  const selected = qNum === scrubQ;
+                  return (
+                    <button
+                      key={`scrub-${qNum}`}
+                      onClick={() => setScrubQ(qNum)}
+                      type="button"
+                      className="absolute -translate-x-1/2 group cursor-pointer flex flex-col items-center"
+                      style={{ left: `${((qNum - 1) / N) * 100}%`, top: 40 }}
+                      title={`${q} · +${formatK(v)} added this quarter`}
+                    >
+                      <span
+                        className={`block rounded-full transition-all ${
+                          selected ? "w-3 h-3" : "w-1.5 h-1.5 group-hover:w-2.5 group-hover:h-2.5"
+                        }`}
+                        style={{ background: selected ? "#0A1F47" : "#94A3B8" }}
+                      />
+                      <span
+                        className={`mt-0.5 text-[9px] tabular-nums ${selected ? "font-extrabold text-yai-navy" : "text-gray-400 group-hover:text-gray-700"}`}
+                      >
+                        +{formatK(v)}
+                      </span>
+                    </button>
+                  );
+                })}
+
+                {/* Big floating indicator at the selected quarter */}
+                <div
+                  className="absolute -translate-x-1/2 flex flex-col items-center pointer-events-none"
+                  style={{ left: `${((scrubQ - 1) / N) * 100}%`, top: 0 }}
+                >
+                  <span
+                    className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded text-white"
+                    style={{ background: isToday ? "#F37021" : "#0A1F47" }}
+                  >
+                    {isToday ? `TODAY · ${QUARTERS[scrubQ - 1]}` : QUARTERS[scrubQ - 1]}
+                  </span>
+                  <span
+                    className="text-xl font-extrabold tabular-nums leading-none mt-1"
+                    style={{ color: isToday ? "#F37021" : "#0A1F47" }}
+                  >
+                    +{formatK(scrubValue)}
+                  </span>
+                  <span className="text-[9px] text-gray-500 mt-0.5">added this quarter</span>
+                </div>
+              </div>
+            </>
+          );
+        })()}
+        {(() => {
+          const rows: ReactNode[] = [];
+          let lastGroup: Group | null = null;
+          MODULES.forEach((m, idx) => {
+            if (m.group !== lastGroup) {
+              const gc = GROUP_COLOR[m.group];
+              const label =
+                m.group === "admin"    ? "Administration" :
+                m.group === "platform" ? "Platform Foundation" :
+                                         "Operations";
+              rows.push(
+                <div key={`hdr-${m.group}`} className={`flex items-center gap-3 ${idx > 0 ? "mt-4" : ""} mb-2`}>
+                  <span
+                    className="inline-block text-[10px] font-extrabold uppercase tracking-[0.15em] px-2.5 py-1 rounded text-white shrink-0"
+                    style={{ background: gc.bg }}
+                  >
+                    {label}
+                  </span>
+                  {idx === 0 && (
+                    <div className="flex items-center gap-3 text-[10px] text-gray-600 shrink-0">
+                      <span className="flex items-center gap-1">
+                        <span className="inline-block w-3 h-3 rounded-sm" style={{ background: COL.dig }} />Digitalization
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <span className="inline-block w-3 h-3 rounded-sm" style={{ background: COL.ag }} />Agentic
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <span className="inline-block w-3 h-3 rounded-sm" style={{ background: COL.full }} />Full Ai
+                      </span>
+                    </div>
+                  )}
+                  <div className="flex-1 h-px" style={{ background: gc.bg, opacity: 0.25 }} />
+                </div>
+              );
+              lastGroup = m.group;
+            }
+            const gc = GROUP_COLOR[m.group];
+            rows.push(
+              <div key={m.name} className="mb-2.5">
+                <div
+                  className="text-[12px] font-semibold leading-tight mb-1"
+                  style={{ color: gc.label, paddingLeft: `${LEFT_PCT}%` }}
+                >
+                  {m.name}
+                </div>
+                <div
+                  className="relative h-7 rounded bg-gray-50 overflow-hidden"
+                  style={{ marginLeft: `${LEFT_PCT}%`, marginRight: `${RIGHT_PCT}%` }}
+                >
+                  <div
+                    className="absolute top-0 bottom-0 flex items-center justify-center text-white text-[12px] font-extrabold tracking-wide overflow-hidden whitespace-nowrap px-1"
+                    style={{
+                      left: `${((m.digStart - 1) / N) * 100}%`,
+                      width: `${((m.agStart - m.digStart) / N) * 100}%`,
+                      background: COL.dig,
+                    }}
+                    title={`Digitalization · ${m.digValue ?? ""} ${mkt.label} / yr / factory`}
+                  >
+                    {scaleK(m.digValue)}
+                  </div>
+                  <div
+                    className="absolute top-0 bottom-0 flex items-center justify-center text-white text-[12px] font-extrabold tracking-wide overflow-hidden whitespace-nowrap px-1"
+                    style={{
+                      left: `${((m.agStart - 1) / N) * 100}%`,
+                      width: `${((m.fullStart - m.agStart) / N) * 100}%`,
+                      background: COL.ag,
+                    }}
+                    title={`Agentic · ${m.agValue ?? ""} ${mkt.label} / yr / factory`}
+                  >
+                    {scaleK(m.agValue)}
+                  </div>
+                  <div
+                    className="absolute top-0 bottom-0 flex items-center justify-center text-white text-[12px] font-extrabold tracking-wide overflow-hidden whitespace-nowrap px-1"
+                    style={{
+                      left: `${((m.fullStart - 1) / N) * 100}%`,
+                      width: `${((N - m.fullStart + 1) / N) * 100}%`,
+                      background: COL.full,
+                    }}
+                    title={`Full Ai · ${m.fullValue ?? ""} ${mkt.label} / yr / factory`}
+                  >
+                    {scaleK(m.fullValue)}
+                  </div>
+                  <div
+                    className="absolute top-0 bottom-0 pointer-events-none"
+                    style={{
+                      left: `calc(${((scrubQ - 1) / N) * 100}% - 1.5px)`,
+                      width: "3px",
+                      background: "#0A1F47",
+                      boxShadow: "0 0 0 1px rgba(255,255,255,0.9)",
+                    }}
+                  />
+                </div>
+              </div>
+            );
+          });
+          return rows;
+        })()}
+      </div>
+
     </div>
   );
 }

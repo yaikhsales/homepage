@@ -8,7 +8,6 @@ import { StatCallout } from "@/components/plan/StatCallout";
 import { Card, Badge } from "@/components/plan/Card";
 import { PlanHero } from "@/components/plan/PlanHero";
 import { StageLadder } from "@/components/plan/StageLadder";
-import { Funnel } from "@/components/plan/Funnel";
 import { ChatDemo } from "@/components/plan/ChatDemo";
 import { DashboardDemo } from "@/components/plan/DashboardDemo";
 import { HoverImage } from "@/components/plan/HoverImage";
@@ -20,6 +19,7 @@ import { TeamClusters } from "@/components/plan/TeamClusters";
 import { RoadmapTimeline } from "@/components/plan/RoadmapTimeline";
 import { MilestoneRoadmap } from "@/components/plan/MilestoneRoadmap";
 import { BigTechSegment } from "@/components/plan/BigTechSegment";
+import { FactoryModuleMatrix } from "@/components/plan/FactoryModuleMatrix";
 import { MidSizeSegment } from "@/components/plan/MidSizeSegment";
 import { InteractiveSegment } from "@/components/plan/InteractiveSegment";
 
@@ -35,7 +35,6 @@ const NAV: NavItem[] = [
   { id: "team",              label: "Team" },
   { id: "capital",           label: "Capital Efficiency" },
   { id: "gtm",               label: "Go-to-Market Milestones" },
-  { id: "funnel",            label: "Sales Funnel" },
   { id: "traction",          label: "Traction & Pilots" },
   { id: "competition",       label: "Competitive Landscape" },
   { id: "risks",             label: "Risks & Mitigations" },
@@ -608,23 +607,14 @@ export default function PlanPage() {
                 },
               ]}
             />
+
           </div>
 
         </Section>
 
-        {/* 13 — Funnel */}
-        <Section id="funnel" kicker={kicker(12, "Sales Funnel")} title="Sales Funnel">
-          <Thesis>
-            From 2,650 factories to 5–20 paying customers in year one — concrete numbers at each stage.
-          </Thesis>
-          <Funnel />
-          <p className="mt-6 text-sm text-gray-600 italic">
-            Conservative case: 5 paying customers, year 1. Aggressive case: 20. Both ranges are sustainable given current pipeline velocity (5 meetings booked in first week of structured outreach).
-          </p>
-        </Section>
 
         {/* 14 — Traction (with DashboardDemo) */}
-        <Section id="traction" kicker={kicker(13, "Traction")} title="Traction & Pilots">
+        <Section id="traction" kicker={kicker(12, "Traction")} title="Traction & Pilots">
           <Thesis>
             This is not a slide-deck startup. Real factories, real workers, real audits — already running on Yai.
           </Thesis>
@@ -633,6 +623,11 @@ export default function PlanPage() {
             <StatCallout value={3} orange label="Legacy systems replaced" />
             <StatCallout value={5} orange label="Prospect meetings (week 1)" />
             <StatCallout value={1} suffix="/wk" orange label="Seminar cadence" />
+          </div>
+
+          {/* Factory × module adoption matrix — top of traction */}
+          <div className="mb-8">
+            <FactoryModuleMatrix />
           </div>
 
           <div className="mb-6">
@@ -661,7 +656,7 @@ export default function PlanPage() {
         </Section>
 
         {/* 15 — Competition */}
-        <Section id="competition" kicker={kicker(14, "Competitive Landscape")} title="Competitive Landscape">
+        <Section id="competition" kicker={kicker(13, "Competitive Landscape")} title="Competitive Landscape">
           <Thesis>
             No competitor combines Ai-native, apparel-specific, and regionally-priced. Yai is the only one in that quadrant.
           </Thesis>
@@ -716,7 +711,7 @@ export default function PlanPage() {
         </Section>
 
         {/* 18 — Risks */}
-        <Section id="risks" kicker={kicker(15, "Risks")} title="Risks & Mitigations">
+        <Section id="risks" kicker={kicker(14, "Risks")} title="Risks & Mitigations">
           <Thesis>
             Honest about where this could go wrong — and what&apos;s in place against each.
           </Thesis>
@@ -738,7 +733,7 @@ export default function PlanPage() {
         </Section>
 
         {/* 19 — Resources */}
-        <Section id="resources" kicker={kicker(16, "Resources")} title="Resource Requirements">
+        <Section id="resources" kicker={kicker(15, "Resources")} title="Resource Requirements">
           <Thesis>
             What&apos;s needed from the investor over the next 12 months — not a fundraise, a continuation.
           </Thesis>
@@ -760,7 +755,7 @@ export default function PlanPage() {
         </Section>
 
         {/* 20 — Appendix */}
-        <Section id="appendix" kicker={kicker(17, "Appendix")} title="Appendix">
+        <Section id="appendix" kicker={kicker(16, "Appendix")} title="Appendix">
           <Thesis>
             Supporting material — demos, diagrams, references, and contact.
           </Thesis>
