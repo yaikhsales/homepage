@@ -68,9 +68,9 @@ ROWS.forEach((r) => {
 // Seed a few we know — Yorkmars (YM) is the deepest pilot. CA isn't using these yet.
 const known: Array<[string, string, Status]> = [
   // YM — deepest pilot, most admin modules + early ops
-  ["Accounting (Full + GDT)",                            "YM", "full"],
+  ["Accounting (Full + GDT)",                            "YM", "impl"],
   ["Admin Core · PR · Shop · Approvals · APP",           "YM", "full"],
-  ["HR · Pay · Org · LMS · AI CCTV",                     "YM", "full"],
+  ["HR · Pay · Org · LMS · AI CCTV",                     "YM", "impl"],
   ["Digital Audit · 8S · AIoT · Waste",                  "YM", "full"],
   ["Gate Pass · CTPAT",                                  "YM", "hold"],
   ["Car Booking",                                        "YM", "hold"],
