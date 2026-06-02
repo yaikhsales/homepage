@@ -36,8 +36,10 @@ const ROWS: Row[] = [
   { name: "YTM · Machine Maintenance + TPM Shop",          group: "ops" },
   { name: "YQMS · Quality Mgmt (6 stages + Fini Check)",   group: "ops" },
   { name: "YPI · Technical Specs (3-language)",            group: "ops" },
-  { name: "YPM / CE · Motion · SMV",                       group: "ops" },
-  { name: "Product Dev · Sample Room",                     group: "ops" },
+  { name: "YPM · Production Mgmt",                         group: "ops" },
+  { name: "CE · Motion · Ai",                              group: "ops" },
+  { name: "Product Dev",                                   group: "ops" },
+  { name: "Sample Room",                                   group: "ops" },
   { name: "4DP · Planning Brain (4 dir × 4 levels)",       group: "ops" },
   { name: "YWIP · 13-Dept Production Flow",                group: "ops" },
   { name: "MRP + Logistics (Inbound + Outbound)",          group: "ops" },
@@ -75,7 +77,8 @@ const known: Array<[string, string, Status]> = [
   ["Gate Pass · CTPAT",                            "YM", "full"],
   ["Car Booking",                                  "YM", "full"],
   ["Platform · Laravel + Mongo + Mobile + AIoT",   "YM", "full"],
-  ["YPM / CE · Motion · SMV",                      "YM", "impl"],
+  ["YPM · Production Mgmt",                        "YM", "impl"],
+  ["CE · Motion · Ai",                             "YM", "impl"],
   ["YQMS · Quality Mgmt (6 stages + Fini Check)",  "YM", "impl"],
   ["YTM · Machine Maintenance + TPM Shop",         "YM", "impl"],
   // CA is the sister-factory — admin baseline live, ops being added
@@ -83,7 +86,8 @@ const known: Array<[string, string, Status]> = [
   ["HR · Pay · Org · LMS · AI CCTV",               "CA", "full"],
   ["Accounting (Full + GDT)",                      "CA", "impl"],
   ["Platform · Laravel + Mongo + Mobile + AIoT",   "CA", "full"],
-  ["YPM / CE · Motion · SMV",                      "CA", "impl"],
+  ["YPM · Production Mgmt",                        "CA", "impl"],
+  ["CE · Motion · Ai",                             "CA", "impl"],
 ];
 known.forEach(([m, f, s]) => {
   if (MATRIX[m]) MATRIX[m][f] = s;
@@ -102,9 +106,9 @@ const GROUP_BG: Record<Row["group"], string> = {
   ops:      "#E8F0EC",
 };
 const GROUP_LABEL: Record<Row["group"], string> = {
-  admin:    "ADMIN",
+  admin:    "ADMINISTRATION",
   platform: "PLATFORM",
-  ops:      "OPS",
+  ops:      "OPERATIONS",
 };
 const GROUP_COLOR: Record<Row["group"], string> = {
   admin:    "#1E4DAA",
