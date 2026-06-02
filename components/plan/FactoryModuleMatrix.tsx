@@ -37,9 +37,7 @@ const ROWS: Row[] = [
   { name: "YQMS · Quality Mgmt (6 stages + Fini Check)",   group: "ops" },
   { name: "YPI · Technical Specs (3-language)",            group: "ops" },
   { name: "YPM · Production Mgmt",                         group: "ops" },
-  { name: "CE · Motion · Ai",                              group: "ops" },
-  { name: "Product Dev",                                   group: "ops" },
-  { name: "Sample Room",                                   group: "ops" },
+  { name: "CE · Motion · Ai · Product Dev · Sample Room",  group: "ops" },
   { name: "4DP · Planning Brain (4 dir × 4 levels)",       group: "ops" },
   { name: "YWIP · 13-Dept Production Flow",                group: "ops" },
   { name: "MRP + Logistics (Inbound + Outbound)",          group: "ops" },
@@ -67,27 +65,20 @@ ROWS.forEach((r) => {
   });
 });
 
-// Seed a few we know from the rest of the plan — Yorkmars + Caswell are anchor pilots.
+// Seed a few we know — Yorkmars (YM) is the deepest pilot. CA isn't using these yet.
 const known: Array<[string, string, Status]> = [
-  // YM is the deepest pilot — most admin modules + early ops
-  ["Accounting (Full + GDT)",                      "YM", "full"],
-  ["Admin Core · PR · Shop · Approvals · APP",     "YM", "full"],
-  ["HR · Pay · Org · LMS · AI CCTV",               "YM", "full"],
-  ["Digital Audit · 8S · AIoT · Waste",            "YM", "full"],
-  ["Gate Pass · CTPAT",                            "YM", "full"],
-  ["Car Booking",                                  "YM", "full"],
-  ["Platform · Laravel + Mongo + Mobile + AIoT",   "YM", "full"],
-  ["YPM · Production Mgmt",                        "YM", "impl"],
-  ["CE · Motion · Ai",                             "YM", "impl"],
-  ["YQMS · Quality Mgmt (6 stages + Fini Check)",  "YM", "impl"],
-  ["YTM · Machine Maintenance + TPM Shop",         "YM", "impl"],
-  // CA is the sister-factory — admin baseline live, ops being added
-  ["Admin Core · PR · Shop · Approvals · APP",     "CA", "full"],
-  ["HR · Pay · Org · LMS · AI CCTV",               "CA", "full"],
-  ["Accounting (Full + GDT)",                      "CA", "impl"],
-  ["Platform · Laravel + Mongo + Mobile + AIoT",   "CA", "full"],
-  ["YPM · Production Mgmt",                        "CA", "impl"],
-  ["CE · Motion · Ai",                             "CA", "impl"],
+  // YM — deepest pilot, most admin modules + early ops
+  ["Accounting (Full + GDT)",                            "YM", "full"],
+  ["Admin Core · PR · Shop · Approvals · APP",           "YM", "full"],
+  ["HR · Pay · Org · LMS · AI CCTV",                     "YM", "full"],
+  ["Digital Audit · 8S · AIoT · Waste",                  "YM", "full"],
+  ["Gate Pass · CTPAT",                                  "YM", "full"],
+  ["Car Booking",                                        "YM", "full"],
+  ["Platform · Laravel + Mongo + Mobile + AIoT",         "YM", "full"],
+  ["YPM · Production Mgmt",                              "YM", "impl"],
+  ["CE · Motion · Ai · Product Dev · Sample Room",       "YM", "impl"],
+  ["YQMS · Quality Mgmt (6 stages + Fini Check)",        "YM", "impl"],
+  ["YTM · Machine Maintenance + TPM Shop",               "YM", "impl"],
 ];
 known.forEach(([m, f, s]) => {
   if (MATRIX[m]) MATRIX[m][f] = s;
