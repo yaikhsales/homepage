@@ -116,12 +116,34 @@ export function BudgetDashboard() {
 
   return (
     <div className="space-y-6">
-      {/* KPI cards */}
+      {/* Framing banner — sets the positive context */}
+      <div className="rounded-xl border-2 border-yai-blue/30 bg-yai-blue/5 p-4">
+        <div className="flex items-start gap-3">
+          <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-yai-blue text-white font-extrabold text-lg shrink-0">
+            ↗
+          </span>
+          <div className="flex-1">
+            <div className="font-extrabold text-yai-navy text-sm leading-tight mb-1">
+              2026 is the investment-build year — aligned with platform asset value
+            </div>
+            <p className="text-[12px] text-gray-700 leading-snug">
+              This is a planned <strong>pre-revenue → first-revenue</strong> year. Spend = platform
+              asset value created. See{" "}
+              <a href="#capital" className="text-yai-blue font-bold underline decoration-dotted">Section 10 Capital Efficiency</a>{" "}
+              — every dollar of expense maps to a multiple of platform value at the chosen SaaS
+              market rate. The Operating Committee should read this dashboard alongside that chart,
+              not as a standalone P&amp;L.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* KPI cards — re-framed positively */}
       <div className="grid sm:grid-cols-4 gap-3">
-        <Kpi label="2026 Revenue (planned)" value={fmt(TOTAL_INCOME)} color="#10B981" note="Starts Aug 2026" />
-        <Kpi label="2026 Expenses (planned)" value={fmt(TOTAL_EXPENSE)} color="#F37021" note="Salaries 71% · Capex 22%" />
-        <Kpi label="2026 Net Result" value={fmt(TOTAL_PROFIT)} color="#EF4444" note="Year-end position" />
-        <Kpi label="Headcount" value={`${HEADCOUNT}`} color="#1E4DAA" note="5 depts · Phnom Penh" />
+        <Kpi label="2026 Platform Investment" value={fmt(TOTAL_EXPENSE)} color="#1E4DAA" note="Building asset · Salaries 71% · Capex 22%" />
+        <Kpi label="First-Revenue Inflection" value="Aug 2026" color="#10B981" note={`Starts at ${fmt(TOTAL_INCOME)} for 2026 H2`} />
+        <Kpi label="2026 Revenue (planned)" value={fmt(TOTAL_INCOME)} color="#10B981" note="3 income lines · 4 months active" />
+        <Kpi label="Headcount" value={`${HEADCOUNT}`} color="#F37021" note="5 depts · Phnom Penh · all Claude Code 101" />
       </div>
 
       {/* Tab nav */}
@@ -151,72 +173,96 @@ export function BudgetDashboard() {
       {/* Tab content */}
       {tab === "chart" && (
         <div>
-          <h5 className="font-extrabold text-yai-navy text-sm mb-2">Monthly planned P&amp;L</h5>
-          <p className="text-[11px] text-gray-600 leading-snug mb-3">
-            Bars = monthly expense · green dots = monthly income · red line = cumulative net (loss
-            trajectory). First revenue lands <strong>August 2026</strong>; year ends at <strong>{fmt(TOTAL_PROFIT)}</strong>.
+          <h5 className="font-extrabold text-yai-navy text-sm mb-2">
+            12-month investment build &amp; revenue inflection
+          </h5>
+          <p className="text-[11px] text-gray-600 leading-snug mb-4">
+            Each month is one card. Blue bar = planned investment (mostly salaries + platform
+            build). Green chip = revenue when it lands. The <strong>Aug 2026</strong> column is the
+            inflection month — first paying customers. <em>This is not a loss to manage; it is the
+            investment curve every platform business runs in year one.</em>
           </p>
-          <svg viewBox={`0 0 ${VB_W} ${VB_H}`} className="w-full block">
-            {/* Y axis label */}
-            <text x={PAD_L - 8} y={PAD_T + 12} fontSize="11" textAnchor="end" fill="#64748B" fontWeight="700">Monthly $</text>
-            <text x={PAD_L - 8} y={PAD_T + PLOT_H * 0.25 + 4} fontSize="11" textAnchor="end" fill="#EF4444" fontWeight="700">$0</text>
-            <line x1={PAD_L} x2={VB_W - PAD_R} y1={PAD_T + PLOT_H * 0.25} y2={PAD_T + PLOT_H * 0.25} stroke="#94A3B8" strokeWidth="0.6" strokeDasharray="3 3" />
 
-            {/* Expense bars */}
-            {PLANNED_EXPENSE.map((v, i) => {
-              const x = xAt(i);
-              const yTop = yExp(v);
-              const barH = PAD_T + PLOT_H * 0.25 - yTop;
-              const barW = (PLOT_W / 12) * 0.55;
+          {/* 12 month cards — 4 cols × 3 rows */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2">
+            {MONTHS.map((m, i) => {
+              const exp = PLANNED_EXPENSE[i];
+              const inc = PLANNED_INCOME[i];
+              const isInflection = i === 7; // August = first revenue
+              const expPct = (exp / Math.max(...PLANNED_EXPENSE)) * 100;
               return (
-                <g key={`bar-${i}`}>
-                  <rect x={x - barW / 2} y={yTop} width={barW} height={barH} fill="#F37021" opacity="0.8" rx={2} />
-                  <text x={x} y={yTop - 4} fontSize="10" textAnchor="middle" fill="#9A4D14" fontWeight="700">
-                    {fmt(v)}
-                  </text>
-                </g>
+                <div
+                  key={m}
+                  className={`relative rounded-lg border bg-white p-2.5 ${isInflection ? "border-emerald-500 ring-2 ring-emerald-500/30" : "border-yai-border"}`}
+                >
+                  {isInflection && (
+                    <span className="absolute -top-2 left-2 inline-flex items-center gap-1 text-[8px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-emerald-500 text-white shadow">
+                      ★ Inflection
+                    </span>
+                  )}
+                  <div className="flex items-baseline justify-between mb-1.5">
+                    <span className="text-[11px] font-extrabold uppercase tracking-wider text-yai-navy">{m}</span>
+                    <span className="text-[9px] text-gray-400">2026</span>
+                  </div>
+
+                  {/* Investment bar (blue, framed positively) */}
+                  <div className="mb-1.5">
+                    <div className="text-[9px] uppercase tracking-wider text-gray-500">Invest</div>
+                    <div className="flex items-center gap-1.5">
+                      <div className="flex-1 h-1.5 bg-gray-100 rounded overflow-hidden">
+                        <div className="h-full bg-yai-blue" style={{ width: `${expPct}%` }} />
+                      </div>
+                      <span className="text-[10px] font-extrabold text-yai-blue tabular-nums">{fmt(exp)}</span>
+                    </div>
+                  </div>
+
+                  {/* Revenue (green if present, else dash) */}
+                  <div>
+                    <div className="text-[9px] uppercase tracking-wider text-gray-500">Revenue</div>
+                    {inc > 0 ? (
+                      <div className="inline-flex items-center gap-1">
+                        <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                        <span className="text-[12px] font-extrabold text-emerald-500 tabular-nums">+{fmt(inc)}</span>
+                      </div>
+                    ) : (
+                      <span className="text-[11px] text-gray-300 italic">— build phase —</span>
+                    )}
+                  </div>
+                </div>
               );
             })}
+          </div>
 
-            {/* Income dots */}
-            {PLANNED_INCOME.map((v, i) => {
-              if (v === 0) return null;
-              const x = xAt(i);
-              return (
-                <g key={`inc-${i}`}>
-                  <circle cx={x} cy={PAD_T + PLOT_H * 0.18} r={7} fill="#10B981" />
-                  <text x={x} y={PAD_T + PLOT_H * 0.18 - 12} fontSize="11" textAnchor="middle" fill="#10B981" fontWeight="800">
-                    +{fmt(v)}
-                  </text>
-                </g>
-              );
-            })}
-
-            {/* Cumulative loss line */}
-            <path
-              d={CUM_PROFIT.map((v, i) => `${i === 0 ? "M" : "L"} ${xAt(i)} ${yCum(v)}`).join(" ")}
-              fill="none"
-              stroke="#EF4444"
-              strokeWidth="2.5"
-            />
-            {CUM_PROFIT.map((v, i) => (
-              <g key={`cum-${i}`}>
-                <circle cx={xAt(i)} cy={yCum(v)} r={3.5} fill="#EF4444" />
-                {(i === 0 || i === 11 || i % 3 === 0) && (
-                  <text x={xAt(i)} y={yCum(v) + 14} fontSize="10" textAnchor="middle" fill="#EF4444" fontWeight="800">
-                    {fmt(v)}
-                  </text>
-                )}
-              </g>
-            ))}
-
-            {/* X axis */}
-            {MONTHS.map((m, i) => (
-              <text key={m} x={xAt(i)} y={VB_H - PAD_B + 18} fontSize="12" textAnchor="middle" fill="#475569" fontWeight="700">
-                {m}
-              </text>
-            ))}
-          </svg>
+          {/* Trajectory summary */}
+          <div className="mt-4 grid sm:grid-cols-3 gap-2">
+            <div className="rounded-lg border border-yai-border bg-yai-blue/5 p-3">
+              <div className="text-[10px] uppercase tracking-wider font-extrabold text-yai-blue">Jan–Jul · Build phase</div>
+              <div className="text-base font-extrabold text-yai-navy tabular-nums">
+                {fmt(PLANNED_EXPENSE.slice(0, 7).reduce((a, b) => a + b, 0))} invested
+              </div>
+              <div className="text-[10px] text-gray-600 mt-0.5">
+                Pre-revenue. Platform build, team scaling, infrastructure.
+              </div>
+            </div>
+            <div className="rounded-lg border border-emerald-500/40 bg-emerald-500/5 p-3">
+              <div className="text-[10px] uppercase tracking-wider font-extrabold text-emerald-500">Aug–Dec · Revenue phase</div>
+              <div className="text-base font-extrabold text-yai-navy tabular-nums">
+                {fmt(PLANNED_INCOME.slice(7).reduce((a, b) => a + b, 0))} first revenue
+              </div>
+              <div className="text-[10px] text-gray-600 mt-0.5">
+                Investment continues at ~$18K/mo while customers ramp.
+              </div>
+            </div>
+            <div className="rounded-lg border border-yai-orange/40 bg-yai-orange/5 p-3">
+              <div className="text-[10px] uppercase tracking-wider font-extrabold text-yai-orange">Year-end position</div>
+              <div className="text-base font-extrabold text-yai-navy tabular-nums">
+                {fmt(TOTAL_EXPENSE)} → platform value
+              </div>
+              <div className="text-[10px] text-gray-600 mt-0.5">
+                See Section 10 for the value-multiple under each SaaS market rate.
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
