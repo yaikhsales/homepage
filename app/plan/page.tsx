@@ -613,46 +613,9 @@ export default function PlanPage() {
         </Section>
 
 
-        {/* 14 — Traction (with DashboardDemo) */}
+        {/* 12 — Traction */}
         <Section id="traction" kicker={kicker(12, "Traction")} title="Traction & Pilots">
-          <Thesis>
-            This is not a slide-deck startup. Real factories, real workers, real audits — already running on Yai.
-          </Thesis>
-          <div className="grid sm:grid-cols-4 gap-5 mb-8">
-            <StatCallout value={2} orange label="Factories in live production" />
-            <StatCallout value={3} orange label="Legacy systems replaced" />
-            <StatCallout value={5} orange label="Prospect meetings (week 1)" />
-            <StatCallout value={1} suffix="/wk" orange label="Seminar cadence" />
-          </div>
-
-          {/* Factory × module adoption matrix — top of traction */}
-          <div className="mb-8">
-            <FactoryModuleMatrix />
-          </div>
-
-          <div className="mb-6">
-            <p className="text-xs uppercase tracking-wider font-bold text-yai-blue mb-2">Live dashboard — pilot factory</p>
-            <h3 className="text-2xl font-bold text-yai-navy mb-4">What the operating system looks like in production</h3>
-            <p className="text-sm text-gray-600 mb-5 max-w-2xl">
-              A snapshot from one of the two pilot factories. Workers active today, payroll posted, audit readiness, exception flags, live agent activity feed. This isn&apos;t a mockup — the same numbers our pilot owners see every morning.
-            </p>
-          </div>
-          <DashboardDemo />
-
-          <div className="space-y-4 mt-8">
-            <Card>
-              <h3 className="font-bold text-yai-navy mb-2">Production pilots — 2 factories live</h3>
-              <p className="text-sm text-gray-600">Two factories within the YW Group are running Yai in production, providing continuous fine-tuning signal. Workforce data, compliance evidence, payroll, and admin workflows are all live. Real audits have been run against real evidence captured by Yai.</p>
-            </Card>
-            <Card>
-              <h3 className="font-bold text-yai-navy mb-2">Legacy replacement — 3 systems retired</h3>
-              <p className="text-sm text-gray-600">Yai has successfully replaced 3 separate legacy tools across the pilot factories — proving migration competence, not just greenfield capability.</p>
-            </Card>
-            <Card>
-              <h3 className="font-bold text-yai-navy mb-2">Pipeline — 5 prospect meetings in week 1</h3>
-              <p className="text-sm text-gray-600">First week of structured outreach yielded 5 prospect meetings with mid-large Cambodian factories. Weekly seminar series is the standing top-of-funnel mechanism.</p>
-            </Card>
-          </div>
+          <FactoryModuleMatrix />
         </Section>
 
         {/* 15 — Competition */}
