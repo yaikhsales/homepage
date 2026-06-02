@@ -120,11 +120,12 @@ export function FactoryModuleMatrix() {
     <div className="rounded-xl border border-yai-border bg-white overflow-hidden">
       <div className="p-4 border-b border-yai-border bg-gray-50">
         <h4 className="font-extrabold text-yai-navy text-base leading-tight">
-          Factory × module adoption matrix
+          Module adoption — factories &amp; partners
         </h4>
         <p className="text-xs text-gray-600 leading-snug mt-1">
-          Per-factory module status across the full Yai stack (Accounting → MRP). Hover a code in the
-          top row for the full factory name.
+          Per-entity module status across the full Yai stack (Accounting → MRP). Includes both production
+          factories and non-factory partners (labs, group entities). Hover a code in the top row for the
+          full name.
         </p>
 
         {/* Legend */}
