@@ -29,18 +29,48 @@ type Tier = {
 
 const TIERS: Tier[] = [
   {
-    key: "global",
-    label: "Tier 1 · Global Enterprise ERP",
-    short: "Global ERP",
-    color: "#B91C1C",
-    bg: "#FEE2E2",
-    intro: "The biggest names. Heavy, expensive, slow — designed for billion-dollar groups.",
+    key: "ai-new",
+    label: "Ai-First Newcomers (Emerging Threat)",
+    short: "Ai-first newcomers",
+    color: "#7C3AED",
+    bg: "#EDE9FE",
+    intro: "Younger Ai-augmented SaaS — most aren't apparel-specific. Watch them, don't fear them. The category that matters most to us.",
     advantage:
-      "Ai-native from day one · apparel-specific · trilingual (Khmer / Chinese / English) · 1/5 the price · mobile-first · factory-proven.",
+      "Yai is built specifically for apparel manufacturing — not retrofitting generic Ai onto manufacturing afterwards.",
     competitors: [
-      { name: "SAP for Apparel",        strengths: "Brand, deep features, global support",  weakness: "Expensive, slow to deploy, not Ai-native, no Khmer support", price: "$80K – $200K+" },
-      { name: "Oracle NetSuite",        strengths: "Strong financials, cloud-native",       weakness: "Generic, not apparel-specific, no production depth",         price: "$50K – $150K"  },
-      { name: "Microsoft Dynamics 365", strengths: "Office integration, ecosystem",         weakness: "Generic, requires heavy customisation for apparel",          price: "$40K – $120K"  },
+      { name: "Inspectorio",            strengths: "Quality + compliance SaaS, Ai-augmented", weakness: "Strong in compliance, weak in production", region: "Threat: Medium" },
+      { name: "Sourcemap",              strengths: "Supply-chain transparency, Ai features",  weakness: "Different segment",                          region: "Threat: Low" },
+      { name: "Foundation Ai startups", strengths: "Generic Ai-for-manufacturing plays",      weakness: "Mostly early, not apparel-specific",         region: "Threat: Medium" },
+    ],
+  },
+  {
+    key: "diy",
+    label: "Internal / DIY (Hidden Competitor)",
+    short: "DIY internal",
+    color: "#4B5563",
+    bg: "#F3F4F6",
+    intro: "Large garment groups build internal IT systems. The biggest real-world competitor in Cambodia — not other vendors.",
+    advantage:
+      "They spend $500K–$2M building internal systems that take 3–5 years and never reach Ai parity. Yai = finished, Ai-native platform for $25K–$80K / yr. The math wins.",
+    competitors: [
+      { name: "Internal IT teams at large groups", strengths: "Total control, sunk-cost commitment", weakness: "$500K–$2M to build · 3–5 yr timeline · never reach Ai parity", region: "Cambodia + region" },
+    ],
+  },
+  {
+    key: "regional",
+    label: "Tier 1 · Regional Players",
+    short: "Regional",
+    color: "#15803D",
+    bg: "#DCFCE7",
+    intro: "Local players in SE-Asia and China. None own the Cambodia regulatory + language moat.",
+    advantage:
+      "The only Ai-native, apparel-specific, trilingual platform in Cambodia. Owns the local language + local regulatory integration moat (E-Gov, E-Invoice / CamInv, GDT, ABA, Wing).",
+    competitors: [
+      { name: "MISA / FAST",              strengths: "Vietnam ERP brand",      weakness: "Vietnam-centric, no Ai, no Khmer",         region: "Vietnam" },
+      { name: "KiotViet",                 strengths: "SE-Asia retail SaaS",    weakness: "Retail focus, not manufacturing",          region: "SE-Asia" },
+      { name: "Sage (SG / HK partners)",  strengths: "SE-Asia accounting",     weakness: "Generic, accounting-focused, no MES",      region: "SE-Asia" },
+      { name: "Local Cambodian ERPs",     strengths: "Local presence",         weakness: "Small scale, no Ai, no production depth",  region: "Cambodia" },
+      { name: "Chinese factory ERPs (Inspur, Yonyou)", strengths: "China-scale", weakness: "Chinese-only UI, not export-friendly",   region: "China" },
     ],
   },
   {
@@ -77,48 +107,18 @@ const TIERS: Tier[] = [
     ],
   },
   {
-    key: "regional",
-    label: "Tier 4 · Regional Players",
-    short: "Regional",
-    color: "#15803D",
-    bg: "#DCFCE7",
-    intro: "Local players in SE-Asia and China. None own the Cambodia regulatory + language moat.",
+    key: "global",
+    label: "Tier 4 · Global Enterprise ERP",
+    short: "Global ERP",
+    color: "#B91C1C",
+    bg: "#FEE2E2",
+    intro: "The biggest names. Heavy, expensive, slow — designed for billion-dollar groups. Least relevant to us today.",
     advantage:
-      "The only Ai-native, apparel-specific, trilingual platform in Cambodia. Owns the local language + local regulatory integration moat (E-Gov, E-Invoice / CamInv, GDT, ABA, Wing).",
+      "Ai-native from day one · apparel-specific · trilingual (Khmer / Chinese / English) · 1/5 the price · mobile-first · factory-proven.",
     competitors: [
-      { name: "MISA / FAST",              strengths: "Vietnam ERP brand",      weakness: "Vietnam-centric, no Ai, no Khmer",         region: "Vietnam" },
-      { name: "KiotViet",                 strengths: "SE-Asia retail SaaS",    weakness: "Retail focus, not manufacturing",          region: "SE-Asia" },
-      { name: "Sage (SG / HK partners)",  strengths: "SE-Asia accounting",     weakness: "Generic, accounting-focused, no MES",      region: "SE-Asia" },
-      { name: "Local Cambodian ERPs",     strengths: "Local presence",         weakness: "Small scale, no Ai, no production depth",  region: "Cambodia" },
-      { name: "Chinese factory ERPs (Inspur, Yonyou)", strengths: "China-scale", weakness: "Chinese-only UI, not export-friendly",   region: "China" },
-    ],
-  },
-  {
-    key: "ai-new",
-    label: "Ai-First Newcomers (Emerging Threat)",
-    short: "Ai-first newcomers",
-    color: "#7C3AED",
-    bg: "#EDE9FE",
-    intro: "Younger Ai-augmented SaaS — most aren't apparel-specific. Watch them, don't fear them.",
-    advantage:
-      "Yai is built specifically for apparel manufacturing — not retrofitting generic Ai onto manufacturing afterwards.",
-    competitors: [
-      { name: "Inspectorio",         strengths: "Quality + compliance SaaS, Ai-augmented", weakness: "Strong in compliance, weak in production",  region: "Threat: Medium" },
-      { name: "Sourcemap",           strengths: "Supply-chain transparency, Ai features",   weakness: "Different segment",                          region: "Threat: Low" },
-      { name: "Foundation Ai startups", strengths: "Generic Ai-for-manufacturing plays",   weakness: "Mostly early, not apparel-specific",         region: "Threat: Medium" },
-    ],
-  },
-  {
-    key: "diy",
-    label: "Internal / DIY (Hidden Competitor)",
-    short: "DIY internal",
-    color: "#4B5563",
-    bg: "#F3F4F6",
-    intro: "Large garment groups build internal IT systems. The biggest real-world competitor in Cambodia — not other vendors.",
-    advantage:
-      "They spend $500K–$2M building internal systems that take 3–5 years and never reach Ai parity. Yai = finished, Ai-native platform for $25K–$80K / yr. The math wins.",
-    competitors: [
-      { name: "Internal IT teams at large groups", strengths: "Total control, sunk-cost commitment", weakness: "$500K–$2M to build · 3–5 yr timeline · never reach Ai parity", region: "Cambodia + region" },
+      { name: "SAP for Apparel",        strengths: "Brand, deep features, global support",  weakness: "Expensive, slow to deploy, not Ai-native, no Khmer support", price: "$80K – $200K+" },
+      { name: "Oracle NetSuite",        strengths: "Strong financials, cloud-native",       weakness: "Generic, not apparel-specific, no production depth",         price: "$50K – $150K"  },
+      { name: "Microsoft Dynamics 365", strengths: "Office integration, ecosystem",         weakness: "Generic, requires heavy customisation for apparel",          price: "$40K – $120K"  },
     ],
   },
 ];
