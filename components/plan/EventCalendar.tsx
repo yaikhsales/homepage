@@ -56,7 +56,6 @@ const EVENTS: Event[] = [
   { date: "2026-06-17", endDate: "2026-06-19", name: "Vietnam International Tech Expo", type: "tech", country: "vn", loc: "Hanoi · NCC", note: "Vietnam's flagship ICT expo.", url: "https://www.vietnamtechexpo.com" },
   { date: "2026-06-18", name: "GMAC Member Meeting", type: "business", country: "kh", loc: "Phnom Penh", note: "Garment association — channel to mid-size factories.", url: "https://www.gmac-cambodia.org" },
   { date: "2026-06-25", endDate: "2026-06-26", name: "CamTech Summit", type: "tech", country: "kh", loc: "Phnom Penh · Koh Pich", note: "CAFT-organised flagship — fintech, digital banking, regional tech.", url: "https://camtechsummit.com" },
-  { date: "2026-06-28", endDate: "2026-06-30", name: "BEYOND Expo", type: "expo", country: "mo", loc: "Macau / Guangdong-region", note: "Major Asia-Pacific tech expo, China-adjacent.", url: "https://www.beyondexpo.com" },
 
   // ─── JULY 2026 ───
   { date: "2026-07-04", endDate: "2026-07-07", name: "WAIC · World Ai Conference", type: "ai", country: "cn", loc: "Shanghai, China", note: "Flagship Ai event in China — must-visit.", url: "https://www.worldaic.com.cn" },
@@ -118,7 +117,8 @@ const EVENTS: Event[] = [
   { date: "2027-03-26", name: "EuroCham Cambodia Tech Forum", type: "tech", country: "kh", loc: "Phnom Penh", note: "EU-investor reach." },
   { date: "2027-04-09", name: "Cambodia Startup Demo Day", type: "tech", country: "kh", loc: "Phnom Penh · Impact Hub", note: "Yai showcase." },
   { date: "2027-04-22", endDate: "2027-04-24", name: "Mekong Tech Summit", type: "summit", country: "kh", loc: "Phnom Penh", note: "Multi-country audience." },
-  { date: "2027-05-13", name: "GMAC AGM 2027", type: "business", country: "kh", loc: "Phnom Penh", note: "Member-factory AGM — Yai partnership slot." },
+    { date: "2027-05-13", name: "GMAC AGM 2027", type: "business", country: "kh", loc: "Phnom Penh", note: "Member-factory AGM — Yai partnership slot." },
+  { date: "2027-05-26", endDate: "2027-05-29", name: "BEYOND Expo 2027", type: "expo", country: "mo", loc: "Macao · The Venetian Macao Cotai Expo", note: "Asia-Pacific tech expo — 'Empowering Asia' theme. Annual.", url: "https://www.beyondexpo.com" },
   { date: "2027-06-24", endDate: "2027-06-25", name: "CamTech Summit 2027", type: "tech", country: "kh", loc: "Phnom Penh · Koh Pich", note: "Annual CAFT flagship — fintech + regional tech.", url: "https://camtechsummit.com" },
   { date: "2027-06-10", name: "Cambodia Ai Conference 2027", type: "ai", country: "kh", loc: "Phnom Penh", note: "Primary local Ai stage." },
   { date: "2027-06-24", endDate: "2027-06-26", name: "ASEAN Industrial Innovation Expo", type: "expo", country: "kh", loc: "Phnom Penh · Diamond Island", note: "Cross-border industrial reach." },
