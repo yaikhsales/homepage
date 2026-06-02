@@ -12,6 +12,15 @@ export function PlanHero() {
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       className="mb-20"
     >
+      {/* Made in Cambodia — promoted to the very top, larger flag */}
+      <motion.div
+        initial={{ opacity: 0, y: -8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15, duration: 0.6 }}
+        className="mb-5"
+      >
+        <MadeInCambodia variant="light" size="lg" />
+      </motion.div>
       <motion.h1
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
@@ -31,8 +40,6 @@ export function PlanHero() {
         <span className="inline-flex items-center px-3 py-1 rounded-full bg-yai-navy text-white text-[11px] font-extrabold tracking-[0.18em] uppercase">
           Ai MIP
         </span>
-        <span className="text-gray-400 text-sm">·</span>
-        <MadeInCambodia variant="light" />
       </motion.div>
       <motion.div
         initial={{ opacity: 0 }}
