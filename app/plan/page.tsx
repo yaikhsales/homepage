@@ -22,6 +22,8 @@ import { BigTechSegment } from "@/components/plan/BigTechSegment";
 import { FactoryModuleMatrix } from "@/components/plan/FactoryModuleMatrix";
 import { GtmEnablerBar } from "@/components/plan/GtmEnablerBar";
 import { EventCalendar } from "@/components/plan/EventCalendar";
+import { SalesTeamProfile } from "@/components/plan/SalesTeamProfile";
+import { SalesProcessFlow } from "@/components/plan/SalesProcessFlow";
 import { MidSizeSegment } from "@/components/plan/MidSizeSegment";
 import { InteractiveSegment } from "@/components/plan/InteractiveSegment";
 
@@ -334,24 +336,28 @@ export default function PlanPage() {
             </GtmEnablerBar>
             <GtmEnablerBar
               num="02"
-              tag="HIRES"
+              tag="TEAM"
               title="Marketing &amp; sales personnel"
-              desc="Proven capability online and offline. Founder is the wrong frontline sales person — the role needs someone who lives this craft, with a track record. Founder stays the closer / strategic counterpart, not the first contact."
+              desc="5 sales people · 60% factory-industry experience · 30% presentation + training · 10% software / Ai-native. Not Microsoft / Google-cloud sales work — this is mindset-shift work: convincing factory mid + top mgmt to step up through Digitalization → Agentic → Full Ai. All Claude Code certified."
               color="#1E4DAA"
               bg="#E8EEF8"
-              badge="Dedicated hire"
-              badgeLabel="Role"
-            />
+              badge="5 hired · all certified"
+              badgeLabel="Team"
+            >
+              <SalesTeamProfile />
+            </GtmEnablerBar>
             <GtmEnablerBar
               num="03"
               tag="PROCESS"
               title="Clear sales &amp; promotion steps"
-              desc="A documented funnel — outreach → seminar → owner demo → pilot agreement → paid contract — with named owners, SLAs and CRM-tracked stages. Repeatable, not founder-memory-dependent."
+              desc="Primary funnel: printed invitation → weekly 15-20 min online demo → on-site in-person presentation → package commitment ($120 / $750 / $1,000+). Parallel channels: government top-down, app user growth (2.5K → 100K), word of mouth, non-garment expansion."
               color="#1E4DAA"
               bg="#E8EEF8"
-              badge="Funnel · CRM"
-              badgeLabel="Tooling"
-            />
+              badge="4-step + 5 channels"
+              badgeLabel="Funnel"
+            >
+              <SalesProcessFlow />
+            </GtmEnablerBar>
           </div>
 
           {/* Go-to-Market — per-segment approach with milestones */}
