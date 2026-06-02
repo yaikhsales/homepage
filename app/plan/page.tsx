@@ -311,6 +311,49 @@ export default function PlanPage() {
 
         {/* 11 — Go-to-Market Milestones (merged: was 11 Financials + 12 GTM) */}
         <Section id="gtm" kicker={kicker(11, "Go-to-Market Milestones")} title="Go-to-Market Milestones">
+          {/* GTM foundation — 3 things needed before / alongside the per-segment milestones */}
+          <h3 className="font-bold text-yai-navy text-xl mb-3">GTM foundation — what makes the milestones possible</h3>
+          <p className="text-sm text-gray-600 mb-5 max-w-3xl">
+            Three enablers sit underneath every segment milestone below. Without these, even a good
+            segment plan stalls.
+          </p>
+          <div className="grid sm:grid-cols-3 gap-4 mb-10">
+            <div className="rounded-xl border border-yai-border bg-white p-4 shadow-sm">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-yai-blue text-white text-xs font-extrabold">01</span>
+                <h4 className="font-extrabold text-yai-navy text-sm leading-tight">Exhibitions &amp; events (offline)</h4>
+              </div>
+              <p className="text-xs text-gray-600 leading-snug">
+                Cambodia is still a relationship-first market. Owner-trust gets built face-to-face —
+                trade shows, GMAC / TAFTAC events, ministry summits. Yai needs a physical presence
+                where decision-makers gather, not just an online funnel.
+              </p>
+            </div>
+            <div className="rounded-xl border border-yai-border bg-white p-4 shadow-sm">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-yai-blue text-white text-xs font-extrabold">02</span>
+                <h4 className="font-extrabold text-yai-navy text-sm leading-tight">Marketing &amp; sales personnel</h4>
+              </div>
+              <p className="text-xs text-gray-600 leading-snug">
+                Proven capability to promote the platform <strong>online and offline</strong>.
+                The founder is the wrong frontline sales person — the role needs someone who lives
+                this craft, with a track record. Founder remains the closer / strategic counterpart,
+                not the first contact.
+              </p>
+            </div>
+            <div className="rounded-xl border border-yai-border bg-white p-4 shadow-sm">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-yai-blue text-white text-xs font-extrabold">03</span>
+                <h4 className="font-extrabold text-yai-navy text-sm leading-tight">Clear sales &amp; promotion steps</h4>
+              </div>
+              <p className="text-xs text-gray-600 leading-snug">
+                A documented funnel — outreach → seminar → owner demo → pilot agreement → paid
+                contract — with named owners, SLAs and CRM-tracked stages. Repeatable, not
+                founder-memory-dependent.
+              </p>
+            </div>
+          </div>
+
           {/* Go-to-Market — per-segment approach with milestones */}
           <h3 className="font-bold text-yai-navy text-xl mt-10 mb-3">Go-to-Market — approach &amp; milestones per segment</h3>
           <p className="text-sm text-gray-600 mb-5">
