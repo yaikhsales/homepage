@@ -25,6 +25,7 @@ import { EventCalendar } from "@/components/plan/EventCalendar";
 import { SalesTeamProfile } from "@/components/plan/SalesTeamProfile";
 import { SalesProcessFlow } from "@/components/plan/SalesProcessFlow";
 import { BudgetDashboard } from "@/components/plan/BudgetDashboard";
+import { CompetitiveLandscape } from "@/components/plan/CompetitiveLandscape";
 import { MidSizeSegment } from "@/components/plan/MidSizeSegment";
 import { InteractiveSegment } from "@/components/plan/InteractiveSegment";
 
@@ -738,56 +739,11 @@ export default function PlanPage() {
 
         <Section id="competition" kicker={kicker(14, "Competitive Landscape")} title="Competitive Landscape">
           <Thesis>
-            No competitor combines Ai-native, apparel-specific, and regionally-priced. Yai is the only one in that quadrant.
+            6 tiers of competitors mapped, with prices and weaknesses — but in 90% of Cambodian
+            sales conversations the real opponent is paper, spreadsheets, and 10-year-old legacy.
+            Win the status quo first; outmaneuver SAP regionally.
           </Thesis>
-          <div className="overflow-x-auto rounded-xl border border-yai-border bg-white mb-6">
-            <table className="w-full text-sm">
-              <thead className="bg-yai-navy text-white text-[11px] uppercase tracking-wider">
-                <tr>
-                  <th className="px-4 py-3 text-left">Player</th>
-                  <th className="px-4 py-3 text-left">Strengths</th>
-                  <th className="px-4 py-3 text-left">Weaknesses for this segment</th>
-                  <th className="px-4 py-3 text-left">Price band</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-yai-border">
-                <tr>
-                  <td className="px-4 py-3 font-semibold text-yai-navy">SAP / Oracle</td>
-                  <td className="px-4 py-3">Enterprise-grade, audited, mature</td>
-                  <td className="px-4 py-3">Too expensive, multi-year implementation, not apparel-specific, not Ai-native</td>
-                  <td className="px-4 py-3 whitespace-nowrap">$$$$$ (100k+/yr)</td>
-                </tr>
-                <tr>
-                  <td className="px-4 py-3 font-semibold text-yai-navy">Odoo</td>
-                  <td className="px-4 py-3">Modular, lower cost, open ecosystem</td>
-                  <td className="px-4 py-3">Generic ERP, not apparel-tuned, retrofit Ai at best, integrator-dependent</td>
-                  <td className="px-4 py-3 whitespace-nowrap">$$$ (20–50k/yr)</td>
-                </tr>
-                <tr>
-                  <td className="px-4 py-3 font-semibold text-yai-navy">Legacy / in-house</td>
-                  <td className="px-4 py-3">Already paid for, factory floor knows it</td>
-                  <td className="px-4 py-3">Stale tech, no Ai, vendor risk, can&apos;t keep up with audit demands</td>
-                  <td className="px-4 py-3 whitespace-nowrap">$ (sunk + maint.)</td>
-                </tr>
-                <tr>
-                  <td className="px-4 py-3 font-semibold text-yai-navy">Niche apparel tools</td>
-                  <td className="px-4 py-3">Industry-specific in narrow slices</td>
-                  <td className="px-4 py-3">Point solutions, not integrated, no Ai agents, no trilingual stack</td>
-                  <td className="px-4 py-3 whitespace-nowrap">$$ (per module)</td>
-                </tr>
-                <tr className="bg-amber-50/60">
-                  <td className="px-4 py-3 font-bold text-yai-blue">Yai</td>
-                  <td className="px-4 py-3 font-semibold">Ai-native, apparel-specific, trilingual, regional pricing, factory-proven</td>
-                  <td className="px-4 py-3">Young brand, regional sales presence still being built</td>
-                  <td className="px-4 py-3 whitespace-nowrap font-bold">$$ (segment-fit)</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <h3 className="font-bold text-yai-navy text-xl mb-3">Positioning statement</h3>
-          <p className="text-gray-700 leading-relaxed bg-white p-5 rounded-lg border border-yai-border">
-            For Cambodian and regional garment factories that need to modernise without absorbing enterprise-software cost or complexity, <strong>Yai is the Ai-native operating system</strong> that — unlike SAP/Oracle (priced out), Odoo (generic), and legacy tools (stale) — was built specifically for how apparel factories actually run, in the languages they actually use.
-          </p>
+          <CompetitiveLandscape />
         </Section>
 
         {/* 18 — Risks */}
