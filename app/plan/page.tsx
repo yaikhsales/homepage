@@ -20,6 +20,7 @@ import { TeamClusters } from "@/components/plan/TeamClusters";
 import { RoadmapTimeline } from "@/components/plan/RoadmapTimeline";
 import { MilestoneRoadmap } from "@/components/plan/MilestoneRoadmap";
 import { BigTechSegment } from "@/components/plan/BigTechSegment";
+import { MidSizeSegment } from "@/components/plan/MidSizeSegment";
 
 const NAV: NavItem[] = [
   { id: "executive-summary", label: "Executive Summary" },
@@ -320,25 +321,10 @@ export default function PlanPage() {
             {/* Big-tech segment is interactive — hover a partner card to switch its pathway below */}
             <BigTechSegment />
 
+            {/* Mid-size segment is interactive — cohorts of 3 factories, hover any factory for its pathway */}
+            <MidSizeSegment />
+
             {[
-              // 2. FACTORIES — Mid-size Cambodia
-              {
-                tag: "MID-SIZE",
-                name: "Mid-size Cambodia factories",
-                reachable: "~800",
-                color: "#0A3327",
-                bg: "#E8F0EC",
-                desc: "$120 → $15,000 / yr · Garment, bag, footwear. ~300 may stop at Digitalization, ~500 climb the full ladder to Ai.",
-                milestones: [
-                  { d: "Q2 2026", t: "3 factories live",                s: "done",     n: "Pilot factories proving the platform on the floor.", sub: ["Yorkmars Cambodia", "Caswell Cambodia", "Yorksky China"] },
-                  { d: "Q2 2026", t: "Weekly seminar series launch",   s: "progress", n: "Owner-targeted, 30–50 attendees / week.", sub: ["", "", ""] },
-                  { d: "Q2 2026", t: "5 paid contracts closed",         s: "planned",  n: "Cloud Growth tier." },
-                  { d: "Q3 2026", t: "Sales hire onboarded",            s: "planned",  n: "Founder-led handover after the pattern lands." },
-                  { d: "Q4 2026", t: "15 paying customers",             s: "planned",  n: "Mix of Growth + first Enterprise tier." },
-                  { d: "Q1 2027", t: "Reference selling program",       s: "planned",  n: "First 2 live factories speak to peers." },
-                  { d: "Q2 2027", t: "30+ customers · Stage-3 pilot",   s: "planned",  n: "Full Ai pilot scoped on best factory." },
-                ],
-              },
               // 3. GOVERNMENT
               {
                 tag: "GOV + INST.",
