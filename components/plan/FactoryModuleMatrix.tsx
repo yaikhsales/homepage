@@ -11,7 +11,7 @@ import { Fragment } from "react";
  * Status values are placeholders — user will fill in real adoption per factory.
  */
 
-type Status = "full" | "impl" | "planned" | "na";
+type Status = "full" | "impl" | "hold" | "planned" | "na";
 
 type Row = {
   name: string;
@@ -72,8 +72,8 @@ const known: Array<[string, string, Status]> = [
   ["Admin Core · PR · Shop · Approvals · APP",           "YM", "full"],
   ["HR · Pay · Org · LMS · AI CCTV",                     "YM", "full"],
   ["Digital Audit · 8S · AIoT · Waste",                  "YM", "full"],
-  ["Gate Pass · CTPAT",                                  "YM", "full"],
-  ["Car Booking",                                        "YM", "full"],
+  ["Gate Pass · CTPAT",                                  "YM", "hold"],
+  ["Car Booking",                                        "YM", "hold"],
   ["Platform · Laravel + Mongo + Mobile + AIoT",         "YM", "full"],
   ["YPI · Technical Specs (3-language)",                 "YM", "impl"],
   ["YPM · Production Mgmt",                              "YM", "impl"],
@@ -95,6 +95,7 @@ known.forEach(([m, f, s]) => {
 const STATUS_VIS: Record<Status, { ch: string; bg: string; fg: string; label: string }> = {
   full:    { ch: "●", bg: "#10B981", fg: "#FFFFFF", label: "Full" },
   impl:    { ch: "◐", bg: "#F37021", fg: "#FFFFFF", label: "Implementing" },
+  hold:    { ch: "⏸", bg: "#FBBF24", fg: "#FFFFFF", label: "On hold (temp)" },
   planned: { ch: "○", bg: "#F1F5F9", fg: "#94A3B8", label: "Planned" },
   na:      { ch: "—", bg: "#FFFFFF", fg: "#CBD5E1", label: "N/A" },
 };
