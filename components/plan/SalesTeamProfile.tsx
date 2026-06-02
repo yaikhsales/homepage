@@ -36,23 +36,6 @@ const CAPABILITY = [
 export function SalesTeamProfile() {
   return (
     <div className="space-y-5">
-      {/* What this role is NOT */}
-      <div className="rounded-lg border-2 border-yai-orange/40 bg-orange-50/40 p-4">
-        <div className="text-[10px] uppercase tracking-wider font-extrabold text-yai-orange mb-1">
-          What this role is NOT
-        </div>
-        <p className="text-sm text-yai-navy leading-snug">
-          This is <strong>not</strong> a Microsoft- or Google-Cloud sales role. The job is{" "}
-          <strong>mindset shift</strong> — convincing factory middle &amp; top management to abandon
-          the old way of working and step up through{" "}
-          <span className="font-extrabold" style={{ color: "#F37021" }}>Digitalization</span> →{" "}
-          <span className="font-extrabold" style={{ color: "#1E4DAA" }}>Agentic</span> → some
-          functions{" "}
-          <span className="font-extrabold" style={{ color: "#0A3327" }}>Full Ai</span>.
-          Tech buzzwords don&rsquo;t close the deal. Knowing what the factory actually does — does.
-        </p>
-      </div>
-
       {/* Capability blend — 60 / 30 / 10 */}
       <div>
         <h5 className="font-extrabold text-yai-navy text-sm mb-2">Capability blend per hire</h5>
@@ -81,7 +64,7 @@ export function SalesTeamProfile() {
         <div className="flex items-baseline justify-between mb-2">
           <h5 className="font-extrabold text-yai-navy text-sm">The 5-person sales team</h5>
           <span className="text-[10px] uppercase tracking-wider text-gray-500">
-            All Claude Code certified
+            All Claude Code 101 certified
           </span>
         </div>
         <ul className="grid sm:grid-cols-2 lg:grid-cols-5 gap-2">

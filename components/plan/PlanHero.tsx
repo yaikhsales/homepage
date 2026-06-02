@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Badge } from "./Card";
 import { MadeInCambodia } from "./MadeInCambodia";
 
 export function PlanHero() {
@@ -40,16 +39,6 @@ export function PlanHero() {
         <span className="inline-flex items-center px-3 py-1 rounded-full bg-yai-navy text-white text-[11px] font-extrabold tracking-[0.18em] uppercase">
           Ai MIP
         </span>
-      </motion.div>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.7, duration: 0.5 }}
-        className="flex flex-wrap gap-2 mt-6"
-      >
-        <Badge variant="live">2 factories live · 5 years</Badge>
-        <Badge variant="build">3 legacy systems replaced</Badge>
-        <Badge variant="pilot">5 prospect meetings booked</Badge>
       </motion.div>
     </motion.header>
   );

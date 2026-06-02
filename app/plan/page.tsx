@@ -338,10 +338,10 @@ export default function PlanPage() {
               num="02"
               tag="TEAM"
               title="Marketing &amp; sales personnel"
-              desc="5 sales people · 60% factory-industry experience · 30% presentation + training · 10% software / Ai-native. Not Microsoft / Google-cloud sales work — this is mindset-shift work: convincing factory mid + top mgmt to step up through Digitalization → Agentic → Full Ai. All Claude Code certified."
+              desc="5 sales people · 60% factory-industry experience · 30% presentation + training · 10% software / Ai-native. Mindset-shift work: convincing factory mid + top mgmt to step up through Digitalization → Agentic → Full Ai. All Claude Code 101 certified."
               color="#1E4DAA"
               bg="#E8EEF8"
-              badge="5 hired · all certified"
+              badge="5 hired · CC 101"
               badgeLabel="Team"
             >
               <SalesTeamProfile />
