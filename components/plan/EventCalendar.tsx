@@ -52,7 +52,7 @@ const TYPE_VIS: Record<EventType, { label: string; color: string; bg: string }> 
 const EVENTS: Event[] = [
   // ─── JUNE 2026 ───
   { date: "2026-06-03", endDate: "2026-06-05", name: "Asia Tech x Singapore (ATxSG)", type: "tech", country: "sg", loc: "Singapore · Capella Sentosa", note: "Premier ASEAN tech summit — IMDA-anchored.", url: "https://asiatechxsg.com" },
-  { date: "2026-06-12", name: "Cambodia ICT Federation Roundtable", type: "tech", country: "kh", loc: "Phnom Penh", note: "Monthly industry-body forum.", url: "https://ictfederation.org.kh" },
+  { date: "2026-06-12", name: "Cambodia ICT & Digital Forum (CamIDF)", type: "tech", country: "kh", loc: "Phnom Penh", note: "Multi-stakeholder platform — digital gov, biz, citizenship.", url: "https://www.camidf.com" },
   { date: "2026-06-17", endDate: "2026-06-19", name: "Vietnam International Tech Expo", type: "tech", country: "vn", loc: "Hanoi · NCC", note: "Vietnam's flagship ICT expo.", url: "https://www.vietnamtechexpo.com" },
   { date: "2026-06-18", name: "GMAC Member Meeting", type: "business", country: "kh", loc: "Phnom Penh", note: "Garment association — channel to mid-size factories.", url: "https://www.gmac-cambodia.org" },
   { date: "2026-06-25", endDate: "2026-06-26", name: "CamTech Summit", type: "tech", country: "kh", loc: "Phnom Penh · Koh Pich", note: "CAFT-organised flagship — fintech, digital banking, regional tech.", url: "https://camtechsummit.com" },
@@ -64,7 +64,7 @@ const EVENTS: Event[] = [
   { date: "2026-07-09", name: "AMCHAM Cambodia Mixer", type: "networking", country: "kh", loc: "Phnom Penh", note: "Monthly chamber networking.", url: "https://www.amchamcambodia.net" },
   { date: "2026-07-14", endDate: "2026-07-15", name: "MyAI Conference (Malaysia AI)", type: "ai", country: "my", loc: "Kuala Lumpur · KLCC", note: "Malaysia's national-level Ai gathering.", url: "https://www.malaysia-ai.org" },
   { date: "2026-07-16", endDate: "2026-07-17", name: "Cambodia Ai & Cloud Summit", type: "ai", country: "kh", loc: "Phnom Penh · Sofitel", note: "Direct positioning — attend / speak." },
-  { date: "2026-07-23", name: "EuroCham Digital Sector Committee", type: "networking", country: "kh", loc: "Phnom Penh", note: "EU-Cambodia digital working group.", url: "https://www.eurocham-cambodia.org" },
+  { date: "2026-07-23", name: "EuroCham Digital & Tech Committee Afterwork", type: "networking", country: "kh", loc: "Phnom Penh", note: "Recurring EuroCham Cambodia event — regulatory + tech development.", url: "https://www.eurocham-cambodia.org" },
   { date: "2026-07-28", endDate: "2026-07-30", name: "Smart China Expo", type: "expo", country: "cn", loc: "Chongqing / Guangdong corridor", note: "Smart-mfg + AIoT, factory-relevant.", url: "http://www.smartchinaexpo.com" },
 
   // ─── AUGUST 2026 ───
@@ -88,6 +88,7 @@ const EVENTS: Event[] = [
   { date: "2026-10-13", endDate: "2026-10-15", name: "Tech in Asia Conference Singapore", type: "tech", country: "sg", loc: "Singapore", note: "Regional founder + investor conference.", url: "https://www.techinasia.com/conference" },
   { date: "2026-10-15", endDate: "2026-10-19", name: "Canton Fair (Phase 1)", type: "expo", country: "cn", loc: "Guangzhou, China", note: "World's largest trade fair — manufacturing buyer reach.", url: "https://www.cantonfair.org.cn" },
   { date: "2026-10-20", endDate: "2026-10-22", name: "Vietnam Manufacturing Expo", type: "expo", country: "vn", loc: "Hanoi · ICE Hanoi", note: "Industrial / factory-owner reach in Vietnam.", url: "https://www.vietnammanufacturingexpo.com" },
+  { date: "2026-10-17", endDate: "2026-10-18", name: "Cambodia ICT Camp", type: "tech", country: "kh", loc: "Phnom Penh", note: "Bi-annual collaborative camp — cybersecurity, Ai, open data.", url: "https://www.facebook.com/CambodiaICTCamp" },
   { date: "2026-10-22", name: "Phnom Penh AIoT Meetup", type: "ai", country: "kh", loc: "Phnom Penh · Factory PP", note: "Developer-community visibility.", url: "https://factory.fm" },
   { date: "2026-10-27", endDate: "2026-10-29", name: "Hong Kong FinTech Week", type: "summit", country: "hk", loc: "Hong Kong", note: "Greater Bay Area Ai + fintech, China-adjacent.", url: "https://www.fintechweek.hk" },
 
