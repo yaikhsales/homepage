@@ -20,6 +20,7 @@ import { RoadmapTimeline } from "@/components/plan/RoadmapTimeline";
 import { MilestoneRoadmap } from "@/components/plan/MilestoneRoadmap";
 import { BigTechSegment } from "@/components/plan/BigTechSegment";
 import { FactoryModuleMatrix } from "@/components/plan/FactoryModuleMatrix";
+import { GtmEnablerBar } from "@/components/plan/GtmEnablerBar";
 import { MidSizeSegment } from "@/components/plan/MidSizeSegment";
 import { InteractiveSegment } from "@/components/plan/InteractiveSegment";
 
@@ -317,41 +318,37 @@ export default function PlanPage() {
             Three enablers sit underneath every segment milestone below. Without these, even a good
             segment plan stalls.
           </p>
-          <div className="grid sm:grid-cols-3 gap-4 mb-10">
-            <div className="rounded-xl border border-yai-border bg-white p-4 shadow-sm">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-yai-blue text-white text-xs font-extrabold">01</span>
-                <h4 className="font-extrabold text-yai-navy text-sm leading-tight">Exhibitions &amp; events (offline)</h4>
-              </div>
-              <p className="text-xs text-gray-600 leading-snug">
-                Cambodia is still a relationship-first market. Owner-trust gets built face-to-face —
-                trade shows, GMAC / TAFTAC events, ministry summits. Yai needs a physical presence
-                where decision-makers gather, not just an online funnel.
-              </p>
-            </div>
-            <div className="rounded-xl border border-yai-border bg-white p-4 shadow-sm">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-yai-blue text-white text-xs font-extrabold">02</span>
-                <h4 className="font-extrabold text-yai-navy text-sm leading-tight">Marketing &amp; sales personnel</h4>
-              </div>
-              <p className="text-xs text-gray-600 leading-snug">
-                Proven capability to promote the platform <strong>online and offline</strong>.
-                The founder is the wrong frontline sales person — the role needs someone who lives
-                this craft, with a track record. Founder remains the closer / strategic counterpart,
-                not the first contact.
-              </p>
-            </div>
-            <div className="rounded-xl border border-yai-border bg-white p-4 shadow-sm">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-yai-blue text-white text-xs font-extrabold">03</span>
-                <h4 className="font-extrabold text-yai-navy text-sm leading-tight">Clear sales &amp; promotion steps</h4>
-              </div>
-              <p className="text-xs text-gray-600 leading-snug">
-                A documented funnel — outreach → seminar → owner demo → pilot agreement → paid
-                contract — with named owners, SLAs and CRM-tracked stages. Repeatable, not
-                founder-memory-dependent.
-              </p>
-            </div>
+          <div className="space-y-3 mb-10">
+            <GtmEnablerBar
+              num="01"
+              tag="OFFLINE"
+              title="Exhibitions &amp; events (offline)"
+              desc="Cambodia is still a relationship-first market. Owner-trust gets built face-to-face — trade shows, GMAC / TAFTAC events, ministry summits. Yai needs a physical presence where decision-makers gather, not just an online funnel."
+              color="#1E4DAA"
+              bg="#E8EEF8"
+              badge="Trade shows · summits"
+              badgeLabel="Channel"
+            />
+            <GtmEnablerBar
+              num="02"
+              tag="HIRES"
+              title="Marketing &amp; sales personnel"
+              desc="Proven capability online and offline. Founder is the wrong frontline sales person — the role needs someone who lives this craft, with a track record. Founder stays the closer / strategic counterpart, not the first contact."
+              color="#1E4DAA"
+              bg="#E8EEF8"
+              badge="Dedicated hire"
+              badgeLabel="Role"
+            />
+            <GtmEnablerBar
+              num="03"
+              tag="PROCESS"
+              title="Clear sales &amp; promotion steps"
+              desc="A documented funnel — outreach → seminar → owner demo → pilot agreement → paid contract — with named owners, SLAs and CRM-tracked stages. Repeatable, not founder-memory-dependent."
+              color="#1E4DAA"
+              bg="#E8EEF8"
+              badge="Funnel · CRM"
+              badgeLabel="Tooling"
+            />
           </div>
 
           {/* Go-to-Market — per-segment approach with milestones */}
