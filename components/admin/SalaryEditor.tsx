@@ -174,21 +174,47 @@ export function SalaryEditor({ initial }: { initial: Store }) {
             </tr>
           </thead>
           <tbody>
-            {store.members.map((mem, i) => (
-              <tr key={i} className="border-t border-yai-border hover:bg-blue-50/30">
+            {store.members.map((mem, i) => {
+              const isInactive = mem.status === "resigned" || mem.status === "realigned";
+              return (
+              <tr key={i} className={`border-t border-yai-border hover:bg-blue-50/30 ${isInactive ? "bg-red-50/30" : ""}`}>
                 <td className="sticky left-0 bg-white px-2 py-1">
-                  <input
-                    type="text"
-                    value={mem.name}
-                    onChange={(e) => updateMember(i, "name", e.target.value)}
-                    className="w-full font-extrabold text-yai-navy bg-transparent border-0 focus:outline-none focus:bg-blue-50 px-1 py-1 rounded"
-                  />
+                  <div className="flex items-center gap-1.5">
+                    <input
+                      type="text"
+                      value={mem.name}
+                      onChange={(e) => updateMember(i, "name", e.target.value)}
+                      className={`flex-1 min-w-0 font-extrabold bg-transparent border-0 focus:outline-none focus:bg-blue-50 px-1 py-1 rounded ${
+                        isInactive ? "text-red-700 line-through" : "text-yai-navy"
+                      }`}
+                    />
+                    {mem.status === "resigned" && (
+                      <span
+                        className="inline-flex items-center text-[9px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded text-white shrink-0"
+                        style={{ background: STATUS_COLOR.resigned }}
+                        title="Resigned"
+                      >
+                        RESIGN
+                      </span>
+                    )}
+                    {mem.status === "realigned" && (
+                      <span
+                        className="inline-flex items-center text-[9px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded text-white shrink-0"
+                        style={{ background: STATUS_COLOR.realigned }}
+                        title="Re-aligned"
+                      >
+                        RE-ALIGN
+                      </span>
+                    )}
+                  </div>
                 </td>
                 <td className="px-2 py-1">
                   <select
                     value={mem.status}
                     onChange={(e) => updateMember(i, "status", e.target.value)}
-                    className="w-full text-[10px] font-semibold border border-yai-border rounded px-1 py-1 bg-white"
+                    className={`w-full text-[10px] font-extrabold border rounded px-1 py-1 bg-white uppercase tracking-wider ${
+                      isInactive ? "border-red-300" : "border-yai-border"
+                    }`}
                     style={{ color: STATUS_COLOR[mem.status] }}
                   >
                     <option value="active">{STATUS_LABEL.active}</option>
@@ -236,7 +262,8 @@ export function SalaryEditor({ initial }: { initial: Store }) {
                   </button>
                 </td>
               </tr>
-            ))}
+              );
+            })}
           </tbody>
           <tfoot className="bg-gray-50">
             <tr className="border-t-2 border-yai-blue">
