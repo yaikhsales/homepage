@@ -43,15 +43,16 @@ const PARTNERS: Partner[] = [
   },
   {
     num: "02",
-    d: "Q3 2026",
+    d: "Q2 2026",
     t: "Google Cloud for Startups",
-    n: "Vertex AI credits + cloud hosting.",
-    s: "planned",
+    n: "Google partner-team outreach booked. Vertex AI credits + cloud hosting in play.",
+    s: "progress",
     pathway: [
-      { d: "Q2 2026", t: "01 · Apply to Google for Startups Cloud Program",     s: "progress", n: "Application form + AI-startup track." },
-      { d: "Q3 2026", t: "02 · $200K Vertex AI + hosting credits granted",      s: "planned",  n: "2-year credit window." },
-      { d: "Q4 2026", t: "03 · Move LLM inference + Nano Banana onto Vertex",  s: "planned",  n: "Migrate from Anthropic-direct to Vertex routing." },
-      { d: "Q1 2027", t: "04 · Co-marketing case study with Google Cloud",     s: "planned",  n: "Cambodia / SE-Asia garment-tech reference." },
+      { d: "Q2 2026", t: "01 · Apply to Google for Startups Cloud Program",       s: "done",     n: "Application submitted on Ai-startup track." },
+      { d: "Jun 2026", t: "02 · Google rep outreach — Cindy YEN NHI",             s: "progress", n: "BOOKED Mon Jun 8 2026 · 3:15–3:45 PM MYT · Google Meet (yah-rzgm-ydm). Cindy from xwf.google.com initiated. Warm signal — Google partner team engaging directly." },
+      { d: "Q3 2026", t: "03 · $200K Vertex AI + hosting credits granted",        s: "planned",  n: "2-year credit window." },
+      { d: "Q4 2026", t: "04 · Move LLM inference + Nano Banana onto Vertex",     s: "planned",  n: "Migrate from Anthropic-direct to Vertex routing." },
+      { d: "Q1 2027", t: "05 · Co-marketing case study with Google Cloud",        s: "planned",  n: "Cambodia / SE-Asia garment-tech reference." },
     ],
   },
   {
