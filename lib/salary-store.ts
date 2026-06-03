@@ -8,14 +8,15 @@ import path from "node:path";
 const FILE = path.join(process.cwd(), "data", "salary-history.json");
 
 export type MemberStatus = "active" | "resigned" | "realigned";
-export type MemberGroupId = "admin" | "architecture" | "neural-net" | "mobile-apps";
+export type MemberGroupId = "admin" | "architecture" | "neural-net" | "mobile-apps" | "ops-systems";
 export type GroupRole = "lead" | "member";
 
 export const MEMBER_GROUPS: Record<MemberGroupId, { name: string; sub: string; color: string }> = {
-  "admin":        { name: "Texlink Admin",        sub: "HR · Sales · Training",       color: "#1E4DAA" },
-  "architecture": { name: "Architecture",         sub: "HR systems · Pay systems",    color: "#F37021" },
-  "neural-net":   { name: "Neural Net + Finance", sub: "Financial · Administration",  color: "#0A3327" },
-  "mobile-apps":  { name: "Mobile Apps",          sub: "Android · iOS · Worker apps", color: "#14B8A6" },
+  "admin":        { name: "Texlink Admin",        sub: "HR · Sales · Training",            color: "#1E4DAA" },
+  "architecture": { name: "Architecture",         sub: "HR systems · Pay systems",         color: "#F37021" },
+  "neural-net":   { name: "Neural Net + Finance", sub: "Financial · Administration",       color: "#0A3327" },
+  "mobile-apps":  { name: "Mobile Apps",          sub: "Android · iOS · Worker apps",      color: "#14B8A6" },
+  "ops-systems":  { name: "Operations Systems",   sub: "Production · QA · MRP · YPI · YTM", color: "#1E3A8A" },
 };
 
 export type Member = {
@@ -100,35 +101,36 @@ export const SEED_SALARY_STORE: SalaryStore = {
     } },
     { name: "Yoem Chetra (Chetra)",       status: "active", startMonth: "2024-09", group: "mobile-apps", groupRole: "member", monthly: { "2024-09":  97.50, "2024-10":  90.00, "2024-11": 108.75, "2024-12": 128.00, "2026-01": 440.09, "2026-02": 550.42, "2026-03": 539.21, "2026-04":  638.62, "2026-05":  685.00 } },
 
+    // ═══ GROUP 5 · Operations Systems (DEEP BLUE) ═════════════════════════
+    // Production · QA · MRP · YPI · YTM — 80% software dev / 20% NVIDIA Ai cert
+    { name: "DILAN LAKSHITHA LAKMAL (Dilan)", status: "active", startMonth: "2024-05", group: "ops-systems", groupRole: "lead", monthly: {
+      "2024-05": 1000.00, "2024-06": 1000.00, "2024-07": 1000.00, "2024-08": 1000.00, "2024-09": 1000.00, "2024-10": 1000.00, "2024-11": 1000.00, "2024-12": 1000.00,
+      "2025-01": 1500.00, "2025-02": 1500.00, "2025-03": 1500.00, "2025-04": 1500.00, "2025-05": 1500.00, "2025-06": 1500.00, "2025-07": 1500.00, "2025-08": 1500.00, "2025-09": 1500.00, "2025-10": 1500.00, "2025-11": 1500.00, "2025-12": 1500.00,
+      "2026-01": 1429.46, "2026-02": 1520.00, "2026-03": 1540.00, "2026-04": 2164.70, "2026-05": 2150.00,
+    } },
+    { name: "Palayangodage Sampath Yasomi (Yasomi)", status: "active", startMonth: "2024-09", group: "ops-systems", groupRole: "member", monthly: { "2024-09": 511.50, "2024-10": 700.00, "2024-11": 700.00, "2024-12": 700.00, "2026-01": 716.00, "2026-02": 720.00, "2026-03": 740.00, "2026-04":  873.83, "2026-05":  949.00 } },
+    // Koem Chichhorng = "Alen" (alias). 2025 flat at $525; May 2026 = new $600 + $105 bonus.
+    { name: "Koem Chichhorng (Alen)",     status: "active", startMonth: "2024-10", group: "ops-systems", groupRole: "member", monthly: {
+      "2024-10": 78.00, "2024-11": 278.80, "2024-12": 422.00,
+      "2025-01": 525.00, "2025-02": 525.00, "2025-03": 525.00, "2025-04": 525.00, "2025-05": 525.00, "2025-06": 525.00, "2025-07": 525.00, "2025-08": 525.00, "2025-09": 525.00, "2025-10": 525.00, "2025-11": 525.00, "2025-12": 525.00,
+      "2026-01": 552.10, "2026-02": 525.90, "2026-03": 525.60, "2026-04": 570.70, "2026-05": 705.00,
+    } },
+    { name: "Young Songheang (Heang)",    status: "active", startMonth: "2025-01", group: "ops-systems", groupRole: "member", monthly: { "2026-01": 437.00, "2026-02": 404.48, "2026-03": 414.21, "2026-04":  473.81, "2026-05":  420.00 } },
+    { name: "Proeurng Sokhim (Sokhim)",   status: "active", startMonth: "2024-08", group: "ops-systems", groupRole: "member", monthly: { "2024-08":  28.50, "2024-09": 122.25, "2024-10": 102.00, "2024-11": 133.50, "2024-12": 223.50, "2026-01": 428.60, "2026-02": 414.20, "2026-03": 431.02, "2026-04":  484.09, "2026-05":  420.00 } },
+
     // ═══ Unassigned (will be grouped later) ══════════════════════════════
     // May 2026 cells below = NEW base + score-based bonus. Bonus breakdown:
     //   Daly $180, Dilan $300, Rich $170, Virot $170, Samnang $150, Seangleng $100,
     //   Yasomi $149, Alen $105, Chhay $110, Chetra $110, Khun $80, Menghorng $100,
     //   Sam $92, Phanny $90, Sophy/Sokhim/Thida/Noch/Michael/Heang $0.
     //   Total May 2026 bonus pool = $1,906.
-    { name: "DILAN LAKSHITHA LAKMAL (Dilan)", status: "active", startMonth: "2024-05", monthly: {
-      "2024-05": 1000.00, "2024-06": 1000.00, "2024-07": 1000.00, "2024-08": 1000.00, "2024-09": 1000.00, "2024-10": 1000.00, "2024-11": 1000.00, "2024-12": 1000.00,
-      "2025-01": 1500.00, "2025-02": 1500.00, "2025-03": 1500.00, "2025-04": 1500.00, "2025-05": 1500.00, "2025-06": 1500.00, "2025-07": 1500.00, "2025-08": 1500.00, "2025-09": 1500.00, "2025-10": 1500.00, "2025-11": 1500.00, "2025-12": 1500.00,
-      "2026-01": 1429.46, "2026-02": 1520.00, "2026-03": 1540.00, "2026-04": 2164.70, "2026-05": 2150.00,
-    } },
     { name: "Visal",                      status: "active", startMonth: "2024-08", monthly: { "2024-08": 216.81, "2024-09": 460.15, "2024-10": 469.00, "2024-11": 471.92, "2024-12": 460.00 } },
-    { name: "Palayangodage Sampath Yasomi (Yasomi)", status: "active", startMonth: "2024-09", monthly: { "2024-09": 511.50, "2024-10": 700.00, "2024-11": 700.00, "2024-12": 700.00, "2026-01": 716.00, "2026-02": 720.00, "2026-03": 740.00, "2026-04":  873.83, "2026-05":  949.00 } },
     { name: "Sreyleak",                   status: "active", startMonth: "2024-07", monthly: { "2024-07": 119.25, "2024-08": 184.50, "2024-09": 223.50, "2024-10": 207.75, "2024-11": 309.00, "2024-12": 369.00 } },
     { name: "Set Sophy (Sophy)",          status: "active", startMonth: "2024-07", monthly: { "2024-07":  65.25, "2024-08": 132.00, "2024-09": 115.50, "2024-10": 117.75, "2024-11":  57.00, "2024-12": 159.00, "2026-01": 526.62, "2026-02": 510.35, "2026-03": 481.19, "2026-04":  481.50, "2026-05":  500.00 } },
-    { name: "Proeurng Sokhim (Sokhim)",   status: "active", startMonth: "2024-08", monthly: { "2024-08":  28.50, "2024-09": 122.25, "2024-10": 102.00, "2024-11": 133.50, "2024-12": 223.50, "2026-01": 428.60, "2026-02": 414.20, "2026-03": 431.02, "2026-04":  484.09, "2026-05":  420.00 } },
     { name: "Keomhieng",                  status: "realigned", startMonth: "2024-09", endMonth: "2024-11", monthly: { "2024-09": 107.25, "2024-10": 61.50, "2024-11": 59.25 } },
     { name: "Phoumen",                    status: "resigned",  startMonth: "2024-08", endMonth: "2024-08", monthly: { "2024-08": 192.00 } },
-    // Koem Chichhorng = "Alen" (alias). 2025 flat at $525; May 2026 = new $600 + $105 bonus.
-    { name: "Koem Chichhorng (Alen)",     status: "active", startMonth: "2024-10", monthly: {
-      "2024-10": 78.00, "2024-11": 278.80, "2024-12": 422.00,
-      "2025-01": 525.00, "2025-02": 525.00, "2025-03": 525.00, "2025-04": 525.00, "2025-05": 525.00, "2025-06": 525.00, "2025-07": 525.00, "2025-08": 525.00, "2025-09": 525.00, "2025-10": 525.00, "2025-11": 525.00, "2025-12": 525.00,
-      "2026-01": 552.10, "2026-02": 525.90, "2026-03": 525.60, "2026-04": 570.70, "2026-05": 705.00,
-    } },
     { name: "Vannara",                    status: "active", startMonth: "2024-11", monthly: { "2024-11":  78.00, "2024-12": 331.00 } },
     { name: "Phallin",                    status: "active", startMonth: "2024-12", monthly: { "2024-12": 123.00 } },
-
-    // ─── Remaining 2025 / 2026 joiner (ungrouped) ─────────────────────────
-    { name: "Young Songheang (Heang)",    status: "active", startMonth: "2025-01", monthly: { "2026-01": 437.00, "2026-02": 404.48, "2026-03": 414.21, "2026-04":  473.81, "2026-05":  420.00 } },
   ],
 };
 
