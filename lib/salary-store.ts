@@ -43,7 +43,8 @@ export const SEED_SALARY_STORE: SalaryStore = {
     //   Yasomi $149, Alen $105, Chhay $110, Chetra $110, Khun $80, Menghorng $100,
     //   Sam $92, Phanny $90, Sophy/Sokhim/Thida/Noch/Michael/Heang $0.
     //   Total May 2026 bonus pool = $1,906.
-    { name: "Rich",                       status: "active", startMonth: "2024-05", monthly: { "2024-05": 398.23, "2024-06": 451.31, "2024-07": 433.62, "2024-08": 504.38, "2024-09": 536.69, "2024-10": 547.46, "2024-11": 515.00, "2024-12": 525.92, "2026-05": 1120.00 } },
+    // Peang Sereysothirich = "Rich" (alias). Was a duplicate row before — merged into one.
+    { name: "Peang Sereysothirich",       status: "active", startMonth: "2024-05", monthly: { "2024-05": 398.23, "2024-06": 451.31, "2024-07": 433.62, "2024-08": 504.38, "2024-09": 536.69, "2024-10": 547.46, "2024-11": 515.00, "2024-12": 525.92, "2026-01": 766.96, "2026-02": 777.30, "2026-03": 844.35, "2026-04": 1081.00, "2026-05": 1120.00 } },
     { name: "Van Virot",                  status: "active", startMonth: "2024-05", monthly: { "2024-05": 327.46, "2024-06": 433.62, "2024-07": 415.92, "2024-08": 515.15, "2024-09": 558.23, "2024-10": 547.46, "2024-11": 548.00, "2024-12": 547.46, "2026-01": 866.96, "2026-02": 860.02, "2026-03": 861.02, "2026-04": 1040.58, "2026-05": 1120.00 } },
     { name: "DILAN LAKSHITHA LAKMAL",     status: "active", startMonth: "2024-05", monthly: {
       "2024-05": 1000.00, "2024-06": 1000.00, "2024-07": 1000.00, "2024-08": 1000.00, "2024-09": 1000.00, "2024-10": 1000.00, "2024-11": 1000.00, "2024-12": 1000.00,
@@ -69,7 +70,6 @@ export const SEED_SALARY_STORE: SalaryStore = {
 
     // ─── New 2025 / 2026 joiners (appear in Jan 2026 sheet) ──────────────
     { name: "Pich Daly",                  status: "active", startMonth: "2025-01", monthly: { "2026-01": 929.00, "2026-02": 923.00, "2026-03": 923.02, "2026-04": 1140.25, "2026-05": 1155.00 } },
-    { name: "Peang Sereysothirich",       status: "active", startMonth: "2025-01", monthly: { "2026-01": 766.96, "2026-02": 777.30, "2026-03": 844.35, "2026-04": 1081.00 } },
     { name: "Sin Khon",                   status: "active", startMonth: "2025-01", monthly: { "2026-01": 401.13, "2026-02": 410.35, "2026-03": 378.94, "2026-04":  495.84, "2026-05":  530.00 } },
     { name: "Ton Noeun",                  status: "active", startMonth: "2025-01", monthly: { "2026-01": 467.83, "2026-02": 461.50, "2026-03": 471.02, "2026-04":  471.02 } },
     { name: "Koem Phanny",                status: "active", startMonth: "2025-01", monthly: { "2026-01": 469.84, "2026-02": 401.16, "2026-03": 454.60, "2026-04":  562.39, "2026-05":  540.00 } },
