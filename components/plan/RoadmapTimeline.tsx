@@ -65,14 +65,19 @@ const GROUP_COLOR: Record<Group, { label: string; tag: string; bg: string }> = {
   ops:      { label: "#0A3327", tag: "#0A3327", bg: "#0A3327" },
 };
 
-// Headcount per quarter (representative end-of-quarter HC, derived from monthly
-// chart: 2→3→3→4→4→5→5→7→7→10→10→12→15→15→17→17→18→18→19→19→20→20→20…)
-const HEADCOUNT = [4, 5, 10, 15, 17, 19, 20, 20, 20, 20, 20, 20];
+// Headcount per quarter — end of quarter, real where we have data.
+// Real: Q3'24 = 15 paid in Sep · Q4'24 = 17 paid in Dec · Q1'26 = 20 (Jan-Apr sheet) ·
+// Q2'26 = 22 (after 3 May-2026 joiners: Alen, Sam, Michael).
+// 2025 is interpolated since per-person 2025 salaries are still TBC.
+const HEADCOUNT = [15, 17, 17, 18, 19, 20, 20, 22, 23, 24, 25, 25];
 
-// Quarterly spend $K — Cambodia engineering salary basis ($500–$600/eng/mo,
-// growing as senior Ai-cert engineers joined). Summed monthly per the source
-// chart: Jul 24 $1.5K / Aug $1.5K / … / Mar 26 onward $12K/mo.
-const QUARTERLY_SPEND_K = [5, 9, 13, 18, 24, 26, 33, 36, 36, 36, 36, 36];
+// Quarterly salary spend $K — real where we have data.
+// Real Q3'24 = $10.5K (Jul+Aug+Sep 2024 sum from the original 2024 costing sheet).
+// Real Q4'24 = $16.6K (Oct+Nov+Dec 2024).
+// Real Q1'26 = $36.2K (Jan $12,095 + Feb $11,913 + Mar $12,152 — TEXLINK 2026 sheet).
+// Real Q2'26 = ~$43K so far (Apr $14,757 + May ~$14K incl. bonus + Jun TBC).
+// 2025 quarters interpolated linearly between Q4'24 actual and Q1'26 actual.
+const QUARTERLY_SPEND_K = [11, 17, 18, 22, 26, 32, 36, 43, 42, 42, 42, 42];
 
 // Revenue trajectory — illustrative quarterly
 const QUARTERLY_REV_K = [0, 0, 0, 0, 0, 0, 8, 12, 25, 35, 50, 50];

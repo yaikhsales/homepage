@@ -304,13 +304,13 @@ export default function PlanPage() {
         {/* 10 — Capital Efficiency */}
         <Section id="capital" kicker={kicker(10, "Capital Efficiency")} title="The Capital Efficiency Story">
           <Thesis>
-            Built for $360K what would cost $5M–$10M anywhere else. And the same small dollar in compounds upward — at every Ai layer, the value multiplies.
+            Built for ~$205K to date and ~$370K through 2027 — what would cost $5M–$10M anywhere else. And the same small dollar in compounds upward — at every Ai layer, the value multiplies.
           </Thesis>
 
           {/* Roadmap timeline — past spend curve + every module climbing the 3 Ai layers */}
-          <h3 className="font-bold text-yai-navy text-xl mb-1">How ~$165K built 17 module families</h3>
+          <h3 className="font-bold text-yai-navy text-xl mb-1">How ~$205K built 17 module families</h3>
           <p className="text-sm text-gray-600 mb-4 max-w-3xl">
-            One chart, every module. The spend curve at the top is what we&rsquo;ve actually paid in Cambodia engineering salaries — team grew from 2 engineers in June 2024 to 20 by early 2026, peaking at ~$12K a month. Each row below is a real module: orange = Digitalization built, blue = Agentic layer on top, dark green = Full Ai. Every step right of <strong>TODAY</strong> is value added on the same fixed engineering base.
+            One chart, every module. The spend curve at the top is what we&rsquo;ve <strong>actually paid</strong> in Cambodia engineering salaries — team grew from 3 engineers in May 2024 (Rich, Virot, Dilan) to <strong>22 by May 2026</strong>, with monthly burn now ~$14K and bonuses on top. Each row below is a real module: orange = Digitalization built, blue = Agentic layer on top, dark green = Full Ai. Every step right of <strong>TODAY</strong> is value added on the same engineering base.
           </p>
           <RoadmapTimeline mode="spend" />
 
