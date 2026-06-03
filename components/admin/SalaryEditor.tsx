@@ -3,18 +3,28 @@
 import { useMemo, useState } from "react";
 
 type Status = "active" | "resigned" | "realigned";
+type GroupId = "admin" | "architecture" | "neural-net";
+type GroupRole = "lead" | "member";
 type Member = {
   name: string;
   status: Status;
   startMonth: string;
   endMonth?: string | null;
   monthly: Record<string, number>;
+  group?: GroupId;
+  groupRole?: GroupRole;
 };
 type Store = {
   updatedAt: string | null;
   updatedBy: string | null;
   months: string[];
   members: Member[];
+};
+
+const GROUP_META: Record<GroupId, { name: string; sub: string; color: string }> = {
+  "admin":        { name: "Texlink Admin",        sub: "HR · Sales · Training",      color: "#1E4DAA" },
+  "architecture": { name: "Architecture",         sub: "HR systems · Pay systems",   color: "#F37021" },
+  "neural-net":   { name: "Neural Net + Finance", sub: "Financial · Administration", color: "#0A3327" },
 };
 
 const STATUS_LABEL: Record<Status, string> = {
@@ -176,9 +186,18 @@ export function SalaryEditor({ initial }: { initial: Store }) {
           <tbody>
             {store.members.map((mem, i) => {
               const isInactive = mem.status === "resigned" || mem.status === "realigned";
+              const groupMeta = mem.group ? GROUP_META[mem.group] : null;
+              const isGroupStart = !!mem.group && (i === 0 || store.members[i - 1]?.group !== mem.group);
               return (
-              <tr key={i} className={`border-t border-yai-border hover:bg-blue-50/30 ${isInactive ? "bg-red-50/30" : ""}`}>
-                <td className="sticky left-0 bg-white px-2 py-1">
+              <tr
+                key={i}
+                className={`border-t hover:bg-blue-50/30 ${isInactive ? "bg-red-50/30" : ""} ${isGroupStart ? "border-t-2" : "border-yai-border"}`}
+                style={groupMeta && isGroupStart ? { borderTopColor: groupMeta.color } : undefined}
+              >
+                <td
+                  className="sticky left-0 bg-white px-2 py-1"
+                  style={groupMeta ? { boxShadow: `inset 3px 0 0 0 ${groupMeta.color}` } : undefined}
+                >
                   <div className="flex items-center gap-1.5">
                     <input
                       type="text"
@@ -188,6 +207,24 @@ export function SalaryEditor({ initial }: { initial: Store }) {
                         isInactive ? "text-red-700 line-through" : "text-yai-navy"
                       }`}
                     />
+                    {mem.groupRole === "lead" && groupMeta && (
+                      <span
+                        className="inline-flex items-center text-[9px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded text-white shrink-0"
+                        style={{ background: groupMeta.color }}
+                        title={`${groupMeta.name} — Lead`}
+                      >
+                        ★ LEAD
+                      </span>
+                    )}
+                    {mem.groupRole === "member" && groupMeta && (
+                      <span
+                        className="inline-flex items-center text-[9px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded shrink-0 border"
+                        style={{ borderColor: groupMeta.color, color: groupMeta.color, background: `${groupMeta.color}10` }}
+                        title={`${groupMeta.name} — Member`}
+                      >
+                        {groupMeta.name.split(" ")[0]}
+                      </span>
+                    )}
                     {mem.status === "resigned" && (
                       <span
                         className="inline-flex items-center text-[9px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded text-white shrink-0"
