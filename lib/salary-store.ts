@@ -37,6 +37,12 @@ export const SEED_SALARY_STORE: SalaryStore = {
     // Bonus pool — compensation, not an expense. Fill in for any month a bonus was paid.
     { name: "Bonus pool (year-end / milestones)", status: "active", startMonth: "2024-05", monthly: {} },
 
+    // ─── Texlink Admin · HR · Sales · Training group (60% garment floor xp + 20% SW/Ai + 20% dual-role) ──
+    { name: "Pich Daly (Daly)",           status: "active", startMonth: "2025-01", monthly: { "2026-01": 929.00, "2026-02": 923.00, "2026-03": 923.02, "2026-04": 1140.25, "2026-05": 1155.00 } },
+    { name: "Koem Phanny (Phanny)",       status: "active", startMonth: "2025-01", monthly: { "2026-01": 469.84, "2026-02": 401.16, "2026-03": 454.60, "2026-04":  562.39, "2026-05":  540.00 } },
+    { name: "Sin Khun (Khun)",            status: "active", startMonth: "2025-01", monthly: { "2026-01": 401.13, "2026-02": 410.35, "2026-03": 378.94, "2026-04":  495.84, "2026-05":  530.00 } },
+    { name: "Dot Sreynach (Noch)",        status: "active", startMonth: "2025-01", monthly: { "2026-01": 445.80, "2026-02": 430.35, "2026-03": 431.02, "2026-04":  496.22, "2026-05":  420.00 } },
+
     // ─── Original 2024 cohort (renamed to full names) ─────────────────────
     // May 2026 cells below = NEW base + score-based bonus. Bonus breakdown:
     //   Daly $180, Dilan $300, Rich $170, Virot $170, Samnang $150, Seangleng $100,
@@ -97,13 +103,9 @@ export const SEED_SALARY_STORE: SalaryStore = {
     { name: "Vannara",                    status: "active", startMonth: "2024-11", monthly: { "2024-11":  78.00, "2024-12": 331.00 } },
     { name: "Phallin",                    status: "active", startMonth: "2024-12", monthly: { "2024-12": 123.00 } },
 
-    // ─── New 2025 / 2026 joiners (appear in Jan 2026 sheet) ──────────────
-    { name: "Pich Daly (Daly)",           status: "active", startMonth: "2025-01", monthly: { "2026-01": 929.00, "2026-02": 923.00, "2026-03": 923.02, "2026-04": 1140.25, "2026-05": 1155.00 } },
-    { name: "Sin Khun (Khun)",            status: "active", startMonth: "2025-01", monthly: { "2026-01": 401.13, "2026-02": 410.35, "2026-03": 378.94, "2026-04":  495.84, "2026-05":  530.00 } },
+    // ─── New 2025 / 2026 joiners (Admin/Sales group moved to top) ──────────
     // Ton Naoun = "Sam" (alias). May 2026 = new $500 + $92 bonus.
     { name: "Ton Naoun (Sam)",            status: "active", startMonth: "2025-01", monthly: { "2026-01": 467.83, "2026-02": 461.50, "2026-03": 471.02, "2026-04":  471.02, "2026-05": 592.00 } },
-    { name: "Koem Phanny (Phanny)",       status: "active", startMonth: "2025-01", monthly: { "2026-01": 469.84, "2026-02": 401.16, "2026-03": 454.60, "2026-04":  562.39, "2026-05":  540.00 } },
-    { name: "Dot Sreynach (Noch)",        status: "active", startMonth: "2025-01", monthly: { "2026-01": 445.80, "2026-02": 430.35, "2026-03": 431.02, "2026-04":  496.22, "2026-05":  420.00 } },
     // Van Phanith = "Michael" (alias). May 2026 = old $400 (no raise, no bonus).
     { name: "Van Phanith (Michael)",      status: "active", startMonth: "2025-01", monthly: { "2026-01": 410.19, "2026-02": 394.31, "2026-03": 394.98, "2026-04":  439.55, "2026-05": 400.00 } },
     { name: "Young Songheang (Heang)",    status: "active", startMonth: "2025-01", monthly: { "2026-01": 437.00, "2026-02": 404.48, "2026-03": 414.21, "2026-04":  473.81, "2026-05":  420.00 } },
