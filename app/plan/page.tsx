@@ -24,7 +24,6 @@ import { GtmEnablerBar } from "@/components/plan/GtmEnablerBar";
 import { EventCalendar } from "@/components/plan/EventCalendar";
 import { SalesTeamProfile } from "@/components/plan/SalesTeamProfile";
 import { SalesProcessFlow } from "@/components/plan/SalesProcessFlow";
-import { BudgetDashboard } from "@/components/plan/BudgetDashboard";
 import { CompetitiveLandscape } from "@/components/plan/CompetitiveLandscape";
 import { MidSizeSegment } from "@/components/plan/MidSizeSegment";
 import { InteractiveSegment } from "@/components/plan/InteractiveSegment";
@@ -725,15 +724,18 @@ export default function PlanPage() {
             </div>
           </div>
 
-          {/* Live budget dashboard — sourced from TEXLINK Budget 2026 */}
-          <div className="mt-8">
-            <h3 className="font-extrabold text-yai-navy text-xl mb-2">2026 Live Budget</h3>
-            <p className="text-sm text-gray-600 mb-4 max-w-3xl">
-              Sourced directly from <em>TEXLINK Budget 2026 (1).xls</em>. KPIs, monthly P&amp;L,
-              income lines, expense breakdown, capex requests and team — all on one screen so the
-              OC sees the live position, not a stale PDF.
+          {/* Live budget — will reappear once the 4 P&L stream feeders are populated */}
+          <div className="mt-8 rounded-xl border-2 border-dashed border-yai-border bg-white/50 p-6">
+            <div className="text-[10px] uppercase tracking-wider font-extrabold text-gray-400 mb-1">
+              Live Budget · new format incoming
+            </div>
+            <h3 className="font-extrabold text-yai-navy text-xl mb-2">Real P&amp;L roll-up · 2024 → today</h3>
+            <p className="text-sm text-gray-600 leading-snug max-w-3xl">
+              The aggregate view rebuilds itself directly from the 4 admin feeders — Sales / Income,
+              Salaries, Capex / Equipment, Sales Running Costs — once they&rsquo;re populated. No
+              more pre-baked Excel snapshot here; the OC sees actuals as Texlink posts them month
+              by month. Salary stream is the first feeder seeded (May 2024 onward).
             </p>
-            <BudgetDashboard />
           </div>
         </Section>
 
