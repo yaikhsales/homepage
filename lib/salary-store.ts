@@ -34,6 +34,8 @@ export const SEED_SALARY_STORE: SalaryStore = {
   // with any extras a user pre-saved beyond today. This array is just a seed anchor.
   months: ["2024-05"],
   members: [
+    // Bonus pool — compensation, not an expense. Fill in for any month a bonus was paid.
+    { name: "Bonus pool (year-end / milestones)", status: "active", startMonth: "2024-05", monthly: {} },
     { name: "Rich",       status: "active",    startMonth: "2024-05", monthly: { "2024-05": 398.23, "2024-06": 451.31, "2024-07": 433.62, "2024-08": 504.38, "2024-09": 536.69, "2024-10": 547.46, "2024-11": 515.00, "2024-12": 525.92 } },
     { name: "Virot",      status: "active",    startMonth: "2024-05", monthly: { "2024-05": 327.46, "2024-06": 433.62, "2024-07": 415.92, "2024-08": 515.15, "2024-09": 558.23, "2024-10": 547.46, "2024-11": 548.00, "2024-12": 547.46 } },
     { name: "Dilan",      status: "active",    startMonth: "2024-05", monthly: {

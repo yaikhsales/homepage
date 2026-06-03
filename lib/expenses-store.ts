@@ -65,15 +65,7 @@ export const SEED_EXPENSES_STORE: ExpensesStore = {
   updatedBy: null,
   months: ["2024-05"],
   categories: [
-    {
-      id: "bonus",
-      name: "Bonus",
-      detail: "Event-driven team bonuses (annual, project milestones, year-end).",
-      color: "#10B981",
-      items: [
-        { id: "bonus-pool", name: "Bonus pool",  frequency: "one-off", monthly: {} },
-      ],
-    },
+    // Bonus moved to the Salary feeder (compensation, not expense).
     {
       id: "computers",
       name: "Computers",
