@@ -2,13 +2,22 @@ import Link from "next/link";
 import { readStore } from "@/lib/budget-store";
 import { readSalaryStore } from "@/lib/salary-store";
 import { readSalesStore } from "@/lib/sales-store";
+import { readExpensesStore } from "@/lib/expenses-store";
 
 export default async function AdminDashboard() {
   const store = await readStore();
   const salaryStore = await readSalaryStore();
   const salesStore = await readSalesStore();
+  const expensesStore = await readExpensesStore();
   const salesGrand = salesStore.streams.reduce<number>(
     (s, st) => s + Object.values(st.monthly).reduce<number>((ss, c) => ss + (c.revenue ?? 0), 0),
+    0,
+  );
+  const expensesGrand = expensesStore.categories.reduce<number>(
+    (s, cat) => s + cat.items.reduce<number>(
+      (ss, it) => ss + Object.values(it.monthly).reduce<number>((sss, m) => sss + (m.amount ?? 0), 0),
+      0,
+    ),
     0,
   );
   const hasActuals =
@@ -91,11 +100,30 @@ export default async function AdminDashboard() {
             </div>
           )}
         </Link>
-        <FeederPlaceholder
-          icon="⚙"
-          title="Capex / Equipment"
-          desc="Equipment + furniture + dev-gear purchases. Computers, AIoT sensors, networking, office accessories."
-        />
+        <Link
+          href="/admin/capex"
+          className="group block rounded-xl border-2 border-yai-border bg-white p-5 hover:border-yai-blue hover:shadow-lg transition-all"
+        >
+          <div className="flex items-start justify-between mb-2">
+            <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-yai-blue text-white font-extrabold text-lg">
+              ⚙
+            </span>
+            {expensesGrand > 0 ? (
+              <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                ● ${expensesGrand.toLocaleString(undefined, { maximumFractionDigits: 0 })} logged
+              </span>
+            ) : (
+              <span className="text-[10px] font-extrabold uppercase tracking-wider text-gray-400 bg-gray-50 px-2 py-0.5 rounded-full border border-gray-200">
+                {expensesStore.categories.length} categories · empty
+              </span>
+            )}
+          </div>
+          <h2 className="text-lg font-extrabold text-yai-navy">Capex / Equipment + Expenses</h2>
+          <p className="text-xs text-gray-600 leading-snug mt-1">
+            All non-salary spend. 8 collapsible categories — Bonus, Computers, Furniture, Dev
+            equipment, Admin Shop, Ai Fees, Villa Rent, Petty Cash + Promotion.
+          </p>
+        </Link>
         <FeederPlaceholder
           icon="💸"
           title="Sales Running Costs"
