@@ -53,8 +53,6 @@ const TYPE_VIS: Record<EventType, { label: string; color: string; bg: string }> 
 // Through end of 2026 packed; 2027 placeholders. User refines real dates with organiser.
 const EVENTS: Event[] = [
   // ─── JUNE 2026 ───
-  { date: "2026-06-03", name: "Anthropic · CPN Services Program (live, 8am PT)", type: "ai", country: "us", loc: "Online · Anthropic Partner Series", note: "REGISTERED. End-to-end of Claude Partner Network just for services partners — 2026 program structure (tiers, Frontier incentive, sandbox credits, co-sell motions), tooling + MDF + deal-reg, the operational rhythm. Direct pathway content for Yai's CPN journey.", url: "https://www.anthropic.com" },
-  { date: "2026-06-04", name: "Anthropic · CPN Services Program (global replay, 11am SGT)", type: "ai", country: "sg", loc: "Online · Anthropic Partner Series · SE-Asia replay", note: "Same content as June 3 PT session, replay in SGT (Cambodia-friendly time). 'What you'll learn: Earn / Operate / The ask.'", url: "https://www.anthropic.com" },
   { date: "2026-06-03", name: "EuroCham · Risk Mgmt into Competitive Advantage (virtual training)", type: "business", country: "kh", loc: "Online · Phnom Penh", note: "EuroCham Cambodia training course.", url: "https://eurocham-cambodia.org" },
   { date: "2026-06-03", endDate: "2026-06-05", name: "Asia Tech x Singapore (ATxSG)", type: "tech", country: "sg", loc: "Singapore · Capella Sentosa", note: "Premier ASEAN tech summit — IMDA-anchored.", url: "https://asiatechxsg.com" },
   { date: "2026-06-04", endDate: "2026-06-05", name: "EuroCham · Modern Manager's Toolkit: Data Literacy & AI Mastery", type: "ai", country: "kh", loc: "Phnom Penh", note: "EuroCham training — direct Ai positioning audience.", url: "https://eurocham-cambodia.org" },
