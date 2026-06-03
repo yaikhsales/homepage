@@ -8,13 +8,14 @@ import path from "node:path";
 const FILE = path.join(process.cwd(), "data", "salary-history.json");
 
 export type MemberStatus = "active" | "resigned" | "realigned";
-export type MemberGroupId = "admin" | "architecture" | "neural-net";
+export type MemberGroupId = "admin" | "architecture" | "neural-net" | "mobile-apps";
 export type GroupRole = "lead" | "member";
 
 export const MEMBER_GROUPS: Record<MemberGroupId, { name: string; sub: string; color: string }> = {
-  "admin":        { name: "Texlink Admin",        sub: "HR · Sales · Training",     color: "#1E4DAA" },
-  "architecture": { name: "Architecture",         sub: "HR systems · Pay systems",  color: "#F37021" },
-  "neural-net":   { name: "Neural Net + Finance", sub: "Financial · Administration", color: "#0A3327" },
+  "admin":        { name: "Texlink Admin",        sub: "HR · Sales · Training",       color: "#1E4DAA" },
+  "architecture": { name: "Architecture",         sub: "HR systems · Pay systems",    color: "#F37021" },
+  "neural-net":   { name: "Neural Net + Finance", sub: "Financial · Administration",  color: "#0A3327" },
+  "mobile-apps":  { name: "Mobile Apps",          sub: "Android · iOS · Worker apps", color: "#14B8A6" },
 };
 
 export type Member = {
@@ -83,6 +84,22 @@ export const SEED_SALARY_STORE: SalaryStore = {
     } },
     { name: "Dot Sreynach (Noch)",        status: "active", startMonth: "2025-01", group: "neural-net", groupRole: "member", monthly: { "2026-01": 445.80, "2026-02": 430.35, "2026-03": 431.02, "2026-04":  496.22, "2026-05":  420.00 } },
 
+    // ═══ GROUP 4 · Mobile Apps (TEAL) ═════════════════════════════════════
+    // Android · iOS · Worker apps — 60% mobile app dev / 20% AIoT+Robotics net / 20% Qualcomm Ai cert
+    // Keo Samnang: 2025 Jan-Mar @ $454, Apr+ @ $750 (65.20% raise).
+    { name: "Keo Samnang (Samnang)",      status: "active", startMonth: "2024-07", group: "mobile-apps", groupRole: "lead", monthly: {
+      "2024-07": 22.19, "2024-08": 460.15, "2024-09": 460.15, "2024-10": 469.00, "2024-11": 481.00, "2024-12": 469.00,
+      "2025-01": 454.00, "2025-02": 454.00, "2025-03": 454.00, "2025-04": 750.00, "2025-05": 750.00, "2025-06": 750.00, "2025-07": 750.00, "2025-08": 750.00, "2025-09": 750.00, "2025-10": 750.00, "2025-11": 750.00, "2025-12": 750.00,
+      "2026-01": 781.42, "2026-02": 731.50, "2026-03": 761.02, "2026-04": 960.46, "2026-05": 1000.00,
+    } },
+    // Chhang Mengchhay: 2025 all months @ $550 (no raise April 2025).
+    { name: "Chhang Mengchhay (Chhay)",   status: "active", startMonth: "2024-08", group: "mobile-apps", groupRole: "member", monthly: {
+      "2024-08": 143.25, "2024-09": 189.00, "2024-10": 157.50, "2024-11": 214.00, "2024-12": 345.00,
+      "2025-01": 550.00, "2025-02": 550.00, "2025-03": 550.00, "2025-04": 550.00, "2025-05": 550.00, "2025-06": 550.00, "2025-07": 550.00, "2025-08": 550.00, "2025-09": 550.00, "2025-10": 550.00, "2025-11": 550.00, "2025-12": 550.00,
+      "2026-01": 556.10, "2026-02": 505.50, "2026-03": 517.40, "2026-04": 692.60, "2026-05": 685.00,
+    } },
+    { name: "Yoem Chetra (Chetra)",       status: "active", startMonth: "2024-09", group: "mobile-apps", groupRole: "member", monthly: { "2024-09":  97.50, "2024-10":  90.00, "2024-11": 108.75, "2024-12": 128.00, "2026-01": 440.09, "2026-02": 550.42, "2026-03": 539.21, "2026-04":  638.62, "2026-05":  685.00 } },
+
     // ═══ Unassigned (will be grouped later) ══════════════════════════════
     // May 2026 cells below = NEW base + score-based bonus. Bonus breakdown:
     //   Daly $180, Dilan $300, Rich $170, Virot $170, Samnang $150, Seangleng $100,
@@ -94,26 +111,13 @@ export const SEED_SALARY_STORE: SalaryStore = {
       "2025-01": 1500.00, "2025-02": 1500.00, "2025-03": 1500.00, "2025-04": 1500.00, "2025-05": 1500.00, "2025-06": 1500.00, "2025-07": 1500.00, "2025-08": 1500.00, "2025-09": 1500.00, "2025-10": 1500.00, "2025-11": 1500.00, "2025-12": 1500.00,
       "2026-01": 1429.46, "2026-02": 1520.00, "2026-03": 1540.00, "2026-04": 2164.70, "2026-05": 2150.00,
     } },
-    // Keo Samnang: 2025 Jan-Mar @ $454, Apr+ @ $750 (65.20% raise).
-    { name: "Keo Samnang (Samnang)",      status: "active", startMonth: "2024-07", monthly: {
-      "2024-07": 22.19, "2024-08": 460.15, "2024-09": 460.15, "2024-10": 469.00, "2024-11": 481.00, "2024-12": 469.00,
-      "2025-01": 454.00, "2025-02": 454.00, "2025-03": 454.00, "2025-04": 750.00, "2025-05": 750.00, "2025-06": 750.00, "2025-07": 750.00, "2025-08": 750.00, "2025-09": 750.00, "2025-10": 750.00, "2025-11": 750.00, "2025-12": 750.00,
-      "2026-01": 781.42, "2026-02": 731.50, "2026-03": 761.02, "2026-04": 960.46, "2026-05": 1000.00,
-    } },
     { name: "Visal",                      status: "active", startMonth: "2024-08", monthly: { "2024-08": 216.81, "2024-09": 460.15, "2024-10": 469.00, "2024-11": 471.92, "2024-12": 460.00 } },
     { name: "Palayangodage Sampath Yasomi (Yasomi)", status: "active", startMonth: "2024-09", monthly: { "2024-09": 511.50, "2024-10": 700.00, "2024-11": 700.00, "2024-12": 700.00, "2026-01": 716.00, "2026-02": 720.00, "2026-03": 740.00, "2026-04":  873.83, "2026-05":  949.00 } },
     { name: "Sreyleak",                   status: "active", startMonth: "2024-07", monthly: { "2024-07": 119.25, "2024-08": 184.50, "2024-09": 223.50, "2024-10": 207.75, "2024-11": 309.00, "2024-12": 369.00 } },
     { name: "Set Sophy (Sophy)",          status: "active", startMonth: "2024-07", monthly: { "2024-07":  65.25, "2024-08": 132.00, "2024-09": 115.50, "2024-10": 117.75, "2024-11":  57.00, "2024-12": 159.00, "2026-01": 526.62, "2026-02": 510.35, "2026-03": 481.19, "2026-04":  481.50, "2026-05":  500.00 } },
-    // Chhang Mengchhay: 2025 all months @ $550 (no raise April 2025).
-    { name: "Chhang Mengchhay (Chhay)",   status: "active", startMonth: "2024-08", monthly: {
-      "2024-08": 143.25, "2024-09": 189.00, "2024-10": 157.50, "2024-11": 214.00, "2024-12": 345.00,
-      "2025-01": 550.00, "2025-02": 550.00, "2025-03": 550.00, "2025-04": 550.00, "2025-05": 550.00, "2025-06": 550.00, "2025-07": 550.00, "2025-08": 550.00, "2025-09": 550.00, "2025-10": 550.00, "2025-11": 550.00, "2025-12": 550.00,
-      "2026-01": 556.10, "2026-02": 505.50, "2026-03": 517.40, "2026-04": 692.60, "2026-05": 685.00,
-    } },
     { name: "Proeurng Sokhim (Sokhim)",   status: "active", startMonth: "2024-08", monthly: { "2024-08":  28.50, "2024-09": 122.25, "2024-10": 102.00, "2024-11": 133.50, "2024-12": 223.50, "2026-01": 428.60, "2026-02": 414.20, "2026-03": 431.02, "2026-04":  484.09, "2026-05":  420.00 } },
     { name: "Keomhieng",                  status: "realigned", startMonth: "2024-09", endMonth: "2024-11", monthly: { "2024-09": 107.25, "2024-10": 61.50, "2024-11": 59.25 } },
     { name: "Phoumen",                    status: "resigned",  startMonth: "2024-08", endMonth: "2024-08", monthly: { "2024-08": 192.00 } },
-    { name: "Yoem Chetra (Chetra)",       status: "active", startMonth: "2024-09", monthly: { "2024-09":  97.50, "2024-10":  90.00, "2024-11": 108.75, "2024-12": 128.00, "2026-01": 440.09, "2026-02": 550.42, "2026-03": 539.21, "2026-04":  638.62, "2026-05":  685.00 } },
     // Koem Chichhorng = "Alen" (alias). 2025 flat at $525; May 2026 = new $600 + $105 bonus.
     { name: "Koem Chichhorng (Alen)",     status: "active", startMonth: "2024-10", monthly: {
       "2024-10": 78.00, "2024-11": 278.80, "2024-12": 422.00,
