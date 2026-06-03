@@ -114,7 +114,13 @@ export const SEED_SALARY_STORE: SalaryStore = {
       "2025-01": 1500.00, "2025-02": 1500.00, "2025-03": 1500.00, "2025-04": 1500.00, "2025-05": 1500.00, "2025-06": 1500.00, "2025-07": 1500.00, "2025-08": 1500.00, "2025-09": 1500.00, "2025-10": 1500.00, "2025-11": 1500.00, "2025-12": 1500.00,
       "2026-01": 1429.46, "2026-02": 1520.00, "2026-03": 1540.00, "2026-04": 2164.70, "2026-05": 2150.00,
     } },
-    { name: "Palayangodage Sampath Yasomi (Yasomi)", status: "active", startMonth: "2024-09", group: "ops-systems", groupRole: "member", monthly: { "2024-09": 511.50, "2024-10": 700.00, "2024-11": 700.00, "2024-12": 700.00, "2026-01": 716.00, "2026-02": 720.00, "2026-03": 740.00, "2026-04":  873.83, "2026-05":  949.00 } },
+    // 2025 Jan-Dec filled at $700 — average of the 3 prior steady months (Oct-Dec 2024 all $700);
+    // no Yorkmars TYM sheet entry for Yasomi, so 2025 was filled by formula not source data.
+    { name: "Palayangodage Sampath Yasomi (Yasomi)", status: "active", startMonth: "2024-09", group: "ops-systems", groupRole: "member", monthly: {
+      "2024-09": 511.50, "2024-10": 700.00, "2024-11": 700.00, "2024-12": 700.00,
+      "2025-01": 700.00, "2025-02": 700.00, "2025-03": 700.00, "2025-04": 700.00, "2025-05": 700.00, "2025-06": 700.00, "2025-07": 700.00, "2025-08": 700.00, "2025-09": 700.00, "2025-10": 700.00, "2025-11": 700.00, "2025-12": 700.00,
+      "2026-01": 716.00, "2026-02": 720.00, "2026-03": 740.00, "2026-04":  873.83, "2026-05":  949.00,
+    } },
     // Koem Chichhorng = "Alen" (alias). 2025 flat at $525; May 2026 = new $600 + $105 bonus.
     // NOTE: Alen's TYM055 ID reassigned to Young Sengheang from Apr 2025;
     //       Alen's Apr 2025 = $16 clean-out before transition off Yorkmars roster.
