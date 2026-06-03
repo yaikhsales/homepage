@@ -25,6 +25,7 @@ import { EventCalendar } from "@/components/plan/EventCalendar";
 import { SalesTeamProfile } from "@/components/plan/SalesTeamProfile";
 import { SalesProcessFlow } from "@/components/plan/SalesProcessFlow";
 import { CompetitiveLandscape } from "@/components/plan/CompetitiveLandscape";
+import { LiveBudgetSummary } from "@/components/plan/LiveBudgetSummary";
 import { MidSizeSegment } from "@/components/plan/MidSizeSegment";
 import { InteractiveSegment } from "@/components/plan/InteractiveSegment";
 
@@ -724,18 +725,15 @@ export default function PlanPage() {
             </div>
           </div>
 
-          {/* Live budget — will reappear once the 4 P&L stream feeders are populated */}
-          <div className="mt-8 rounded-xl border-2 border-dashed border-yai-border bg-white/50 p-6">
-            <div className="text-[10px] uppercase tracking-wider font-extrabold text-gray-400 mb-1">
-              Live Budget · new format incoming
+          {/* Live P&L roll-up — auto-aggregates the admin Sales + Salary + Expenses stores */}
+          <div className="mt-8">
+            <div className="flex items-baseline justify-between gap-3 mb-3 flex-wrap">
+              <h3 className="font-extrabold text-yai-navy text-xl">Live P&amp;L roll-up · 2024 → today</h3>
+              <span className="text-[10px] uppercase tracking-wider text-gray-500">
+                Sourced from admin · Sales · Salaries · Expenses
+              </span>
             </div>
-            <h3 className="font-extrabold text-yai-navy text-xl mb-2">Real P&amp;L roll-up · 2024 → today</h3>
-            <p className="text-sm text-gray-600 leading-snug max-w-3xl">
-              The aggregate view rebuilds itself directly from the 4 admin feeders — Sales / Income,
-              Salaries, Capex / Equipment, Sales Running Costs — once they&rsquo;re populated. No
-              more pre-baked Excel snapshot here; the OC sees actuals as Texlink posts them month
-              by month. Salary stream is the first feeder seeded (May 2024 onward).
-            </p>
+            <LiveBudgetSummary />
           </div>
         </Section>
 
