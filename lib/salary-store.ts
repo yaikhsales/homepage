@@ -101,7 +101,8 @@ export const SEED_SALARY_STORE: SalaryStore = {
     // ─── New 2025 / 2026 joiners (appear in Jan 2026 sheet) ──────────────
     { name: "Pich Daly",                  status: "active", startMonth: "2025-01", monthly: { "2026-01": 929.00, "2026-02": 923.00, "2026-03": 923.02, "2026-04": 1140.25, "2026-05": 1155.00 } },
     { name: "Sin Khon",                   status: "active", startMonth: "2025-01", monthly: { "2026-01": 401.13, "2026-02": 410.35, "2026-03": 378.94, "2026-04":  495.84, "2026-05":  530.00 } },
-    { name: "Ton Noeun",                  status: "active", startMonth: "2025-01", monthly: { "2026-01": 467.83, "2026-02": 461.50, "2026-03": 471.02, "2026-04":  471.02 } },
+    // Ton Noeun = "Sam" (alias). May 2026 = new $500 + $92 bonus.
+    { name: "Ton Noeun",                  status: "active", startMonth: "2025-01", monthly: { "2026-01": 467.83, "2026-02": 461.50, "2026-03": 471.02, "2026-04":  471.02, "2026-05": 592.00 } },
     { name: "Koem Phanny",                status: "active", startMonth: "2025-01", monthly: { "2026-01": 469.84, "2026-02": 401.16, "2026-03": 454.60, "2026-04":  562.39, "2026-05":  540.00 } },
     { name: "Dot Sreynoch",               status: "active", startMonth: "2025-01", monthly: { "2026-01": 445.80, "2026-02": 430.35, "2026-03": 431.02, "2026-04":  496.22, "2026-05":  420.00 } },
     { name: "Van Phanith",                status: "active", startMonth: "2025-01", monthly: { "2026-01": 410.19, "2026-02": 394.31, "2026-03": 394.98, "2026-04":  439.55 } },
@@ -109,7 +110,7 @@ export const SEED_SALARY_STORE: SalaryStore = {
 
     // ─── May 2026 onboards (raise sheet has them but not Jan-Apr) ─────────
     // Note: Alen = Koem Chichhorng (alias) — merged above, no separate row.
-    { name: "Sam",                        status: "active", startMonth: "2026-05", monthly: { "2026-05": 592.00 } },
+    // Note: Sam = Ton Noeun (alias) — merged above, no separate row.
     { name: "Michael",                    status: "active", startMonth: "2026-05", monthly: { "2026-05": 400.00 } },
   ],
 };
