@@ -26,40 +26,16 @@ export default async function AdminDashboard() {
         </p>
       </div>
 
-      <div className="grid sm:grid-cols-2 gap-4">
-        {/* Live Budget */}
-        <Link
-          href="/admin/budget"
-          className="group block rounded-xl border-2 border-yai-border bg-white p-5 hover:border-yai-blue hover:shadow-lg transition-all"
-        >
-          <div className="flex items-start justify-between mb-2">
-            <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-yai-blue text-white font-extrabold text-lg">
-              $
-            </span>
-            {hasActuals ? (
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                ● Live
-              </span>
-            ) : (
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-gray-400 bg-gray-50 px-2 py-0.5 rounded-full border border-gray-200">
-                no actuals yet
-              </span>
-            )}
-          </div>
-          <h2 className="text-lg font-extrabold text-yai-navy">Live Budget · Planned vs Actual</h2>
-          <p className="text-xs text-gray-600 leading-snug mt-1">
-            12-month editable Plan vs Actual for expense + income + optional notes. Save publishes
-            instantly to Section 13 of the live plan.
-          </p>
-          {store.updatedAt && (
-            <div className="mt-3 text-[10px] text-gray-500">
-              Last updated <strong className="text-yai-navy">{new Date(store.updatedAt).toLocaleString()}</strong>
-              {" "}by <strong>{store.updatedBy ?? "—"}</strong>
-            </div>
-          )}
-        </Link>
-
-        {/* Salary History */}
+      {/* P&L streams — 4 individual feeders */}
+      <div className="mb-2 text-[10px] uppercase tracking-[0.18em] text-gray-500 font-bold">
+        P&amp;L streams
+      </div>
+      <div className="grid sm:grid-cols-2 gap-4 mb-8">
+        <FeederPlaceholder
+          icon="💰"
+          title="Sales / Income"
+          desc="Per-month income tracking — Yai Basic Server, Yai Ai Agent Service, Yai Ai Cloud Client, Yai Market Place."
+        />
         <Link
           href="/admin/salaries"
           className="group block rounded-xl border-2 border-yai-border bg-white p-5 hover:border-yai-blue hover:shadow-lg transition-all"
@@ -78,10 +54,10 @@ export default async function AdminDashboard() {
               </span>
             )}
           </div>
-          <h2 className="text-lg font-extrabold text-yai-navy">Salary History · 2024 → today</h2>
+          <h2 className="text-lg font-extrabold text-yai-navy">Salaries · 2024 → today</h2>
           <p className="text-xs text-gray-600 leading-snug mt-1">
             Excel-grid of every team member × every month they were paid. Seeded with May–Dec 2024
-            real data. Extend 2025 + 2026 month by month.
+            real data. Months auto-extend to today.
           </p>
           {salaryGrand > 0 && (
             <div className="mt-3 text-[10px] text-gray-500">
@@ -89,8 +65,60 @@ export default async function AdminDashboard() {
             </div>
           )}
         </Link>
+        <FeederPlaceholder
+          icon="⚙"
+          title="Capex / Equipment"
+          desc="Equipment + furniture + dev-gear purchases. Computers, AIoT sensors, networking, office accessories."
+        />
+        <FeederPlaceholder
+          icon="💸"
+          title="Sales Running Costs"
+          desc="Marketing, travel, exhibition booths, training, swag, partner-event sponsorships."
+        />
+      </div>
 
-        {/* Future feeders */}
+      {/* Aggregate / reporting */}
+      <div className="mb-2 text-[10px] uppercase tracking-[0.18em] text-gray-500 font-bold">
+        Aggregate &amp; reporting
+      </div>
+      <div className="grid sm:grid-cols-2 gap-4 mb-8">
+        <Link
+          href="/admin/budget"
+          className="group block rounded-xl border-2 border-yai-border bg-white p-5 hover:border-yai-blue hover:shadow-lg transition-all"
+        >
+          <div className="flex items-start justify-between mb-2">
+            <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-yai-blue text-white font-extrabold text-lg">
+              ∑
+            </span>
+            {hasActuals ? (
+              <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                ● Live
+              </span>
+            ) : (
+              <span className="text-[10px] font-extrabold uppercase tracking-wider text-gray-400 bg-gray-50 px-2 py-0.5 rounded-full border border-gray-200">
+                no actuals yet
+              </span>
+            )}
+          </div>
+          <h2 className="text-lg font-extrabold text-yai-navy">Live Budget roll-up · 2026</h2>
+          <p className="text-xs text-gray-600 leading-snug mt-1">
+            Aggregate Plan vs Actual at the monthly company level — until the 4 P&amp;L stream
+            editors auto-sync, you can override here for the OC view.
+          </p>
+          {store.updatedAt && (
+            <div className="mt-3 text-[10px] text-gray-500">
+              Last updated <strong className="text-yai-navy">{new Date(store.updatedAt).toLocaleString()}</strong>
+              {" "}by <strong>{store.updatedBy ?? "—"}</strong>
+            </div>
+          )}
+        </Link>
+      </div>
+
+      {/* Plan content feeders */}
+      <div className="mb-2 text-[10px] uppercase tracking-[0.18em] text-gray-500 font-bold">
+        Plan content
+      </div>
+      <div className="grid sm:grid-cols-2 gap-4">
         <FeederPlaceholder
           icon="▦"
           title="Factory Module Adoption"
