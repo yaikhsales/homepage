@@ -29,3 +29,6 @@ yarn-error.log*
 .claude
 *.log
 tsconfig.tsbuildinfo
+
+# Runtime data (admin-edited budget actuals)
+data/

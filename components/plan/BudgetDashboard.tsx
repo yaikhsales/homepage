@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 /**
  * 2026 Live Budget Dashboard — sourced from TEXLINK Budget 2026 (1).xls
@@ -20,9 +20,8 @@ const PLANNED_EXPENSE = [18675, 16100, 21450, 17300, 28850, 27400, 19750, 17650,
 const PLANNED_INCOME  = [    0,     0,     0,     0,     0,     0,     0, 10000,     0, 10000,     0, 10000];
 const PLANNED_PROFIT  = PLANNED_INCOME.map((rev, i) => rev - PLANNED_EXPENSE[i]);
 
-// Today's actuals — left blank for now (user fills in monthly)
-const ACTUAL_EXPENSE: (number | null)[] = [null, null, null, null, null, null, null, null, null, null, null, null];
-const ACTUAL_INCOME:  (number | null)[] = [null, null, null, null, null, null, null, null, null, null, null, null];
+// Default empty actuals — replaced by API fetch on mount (admin-edited values)
+const EMPTY_ACTUALS: (number | null)[] = [null, null, null, null, null, null, null, null, null, null, null, null];
 
 const TOTAL_INCOME  = PLANNED_INCOME.reduce((a, b) => a + b, 0);
 const TOTAL_EXPENSE = PLANNED_EXPENSE.reduce((a, b) => a + b, 0);
@@ -113,6 +112,30 @@ function fmt(n: number): string {
 
 export function BudgetDashboard() {
   const [tab, setTab] = useState<"chart" | "income" | "expense" | "capex" | "team">("chart");
+  const [actualExpense, setActualExpense] = useState<(number | null)[]>(EMPTY_ACTUALS);
+  const [actualIncome,  setActualIncome]  = useState<(number | null)[]>(EMPTY_ACTUALS);
+  const [actualNotes,   setActualNotes]   = useState<(string | null)[]>(EMPTY_ACTUALS.map(() => null));
+  const [actualsMeta, setActualsMeta] = useState<{ updatedAt: string | null; updatedBy: string | null }>({ updatedAt: null, updatedBy: null });
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const r = await fetch("/api/admin/budget");
+        const j = await r.json();
+        if (cancelled || !j?.actuals) return;
+        setActualExpense(j.actuals.expense || EMPTY_ACTUALS);
+        setActualIncome(j.actuals.income || EMPTY_ACTUALS);
+        setActualNotes(j.actuals.notes || EMPTY_ACTUALS.map(() => null));
+        setActualsMeta({ updatedAt: j.updatedAt, updatedBy: j.updatedBy });
+      } catch { /* no-op */ }
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
+  const totalActualIncome  = actualIncome.reduce<number>((s, v) => s + (v ?? 0), 0);
+  const totalActualExpense = actualExpense.reduce<number>((s, v) => s + (v ?? 0), 0);
+  const hasAnyActuals = actualExpense.some((v) => v !== null) || actualIncome.some((v) => v !== null);
 
   return (
     <div className="space-y-6">
@@ -145,6 +168,20 @@ export function BudgetDashboard() {
         <Kpi label="2026 Revenue (planned)" value={fmt(TOTAL_INCOME)} color="#10B981" note="3 income lines · 4 months active" />
         <Kpi label="Headcount" value={`${HEADCOUNT}`} color="#F37021" note="5 depts · Phnom Penh · all Claude Code 101" />
       </div>
+
+      {/* Live actuals status — only shown if admin has posted any */}
+      {hasAnyActuals && (
+        <div className="rounded-lg border border-emerald-300 bg-emerald-50 p-3 flex items-start gap-3">
+          <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-emerald-500 text-white font-extrabold text-sm shrink-0">●</span>
+          <div className="flex-1 text-[11px] text-emerald-900 leading-snug">
+            <strong>Live actuals posted</strong> — {fmt(totalActualExpense)} expense / {fmt(totalActualIncome)} income recorded.
+            {actualsMeta.updatedAt && (
+              <> Last update {new Date(actualsMeta.updatedAt).toLocaleString()} by {actualsMeta.updatedBy}.</>
+            )}{" "}
+            Below cards show <strong>Plan / Actual</strong> side-by-side where data is in.
+          </div>
+        </div>
+      )}
 
       {/* Tab nav */}
       <div className="flex flex-wrap gap-1 border-b border-yai-border">
@@ -188,6 +225,10 @@ export function BudgetDashboard() {
             {MONTHS.map((m, i) => {
               const exp = PLANNED_EXPENSE[i];
               const inc = PLANNED_INCOME[i];
+              const actExp = actualExpense[i];
+              const actInc = actualIncome[i];
+              const note   = actualNotes[i];
+              const hasActual = actExp !== null || actInc !== null;
               const isInflection = i === 7; // August = first revenue
               const expPct = (exp / Math.max(...PLANNED_EXPENSE)) * 100;
               return (
@@ -202,7 +243,11 @@ export function BudgetDashboard() {
                   )}
                   <div className="flex items-baseline justify-between mb-1.5">
                     <span className="text-[11px] font-extrabold uppercase tracking-wider text-yai-navy">{m}</span>
-                    <span className="text-[9px] text-gray-400">2026</span>
+                    {hasActual ? (
+                      <span className="text-[9px] uppercase tracking-wider text-emerald-600 font-bold">● actual</span>
+                    ) : (
+                      <span className="text-[9px] text-gray-400">2026</span>
+                    )}
                   </div>
 
                   {/* Investment bar (blue, framed positively) */}
@@ -214,6 +259,11 @@ export function BudgetDashboard() {
                       </div>
                       <span className="text-[10px] font-extrabold text-yai-blue tabular-nums">{fmt(exp)}</span>
                     </div>
+                    {actExp !== null && (
+                      <div className="text-[10px] text-emerald-600 font-extrabold tabular-nums mt-0.5">
+                        Actual {fmt(actExp)}
+                      </div>
+                    )}
                   </div>
 
                   {/* Revenue (green if present, else dash) */}
@@ -227,7 +277,18 @@ export function BudgetDashboard() {
                     ) : (
                       <span className="text-[11px] text-gray-300 italic">— build phase —</span>
                     )}
+                    {actInc !== null && actInc > 0 && (
+                      <div className="text-[10px] text-emerald-700 font-extrabold tabular-nums">
+                        Actual +{fmt(actInc)}
+                      </div>
+                    )}
                   </div>
+
+                  {note && (
+                    <div className="mt-1.5 pt-1.5 border-t border-yai-border text-[9px] text-gray-600 italic leading-snug">
+                      {note}
+                    </div>
+                  )}
                 </div>
               );
             })}

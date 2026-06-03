@@ -26,15 +26,10 @@ export function PlanHero() {
           <img
             src="/images/generated/asean-logo-with-flags.png"
             alt="ASEAN — Cambodia and 9 fellow member states"
-            className="w-16 h-16 object-contain opacity-90"
+            className="w-16 h-16 object-contain"
           />
-          <span className="flex flex-col leading-tight">
-            <span className="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-bold">
-              Built for
-            </span>
-            <span className="text-base sm:text-lg font-extrabold tracking-[0.22em] uppercase text-yai-navy/80">
-              ASEAN
-            </span>
+          <span className="text-base sm:text-lg font-extrabold tracking-[0.22em] uppercase text-yai-navy/80">
+            ASEAN
           </span>
         </span>
       </motion.div>

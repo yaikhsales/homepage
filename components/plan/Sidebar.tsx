@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { AdminPanel } from "./AdminPanel";
 
 export type NavItem = { id: string; label: string };
 
@@ -160,8 +161,9 @@ export function Sidebar({
           })}
         </nav>
 
-        {/* Signature block */}
-        <div className="px-5 pt-4 pb-2 border-t border-white/10 text-white/80">
+        {/* Signature block + admin settings wheel */}
+        <div className="relative px-5 pt-4 pb-2 border-t border-white/10 text-white/80">
+          <AdminPanel />
           <div className="text-[13px] font-semibold text-white leading-tight">Gamini K</div>
           <div className="text-[10.5px] uppercase tracking-[0.12em] text-white/55 mt-0.5">Director</div>
           <div className="text-[11px] font-semibold text-white/85 mt-2 leading-tight">
