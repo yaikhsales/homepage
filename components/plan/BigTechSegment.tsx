@@ -31,14 +31,54 @@ const PARTNERS: Partner[] = [
     n: "Application cleared initial review. In team-certification phase.",
     s: "progress",
     pathway: [
-      { d: "Q1 2026", t: "01 · CPN application submitted",        s: "done",     n: "Application sent to Claude Partner Network." },
-      { d: "Q2 2026", t: "02 · Initial review cleared",           s: "done",     n: "Anthropic confirmed: approved to move forward." },
-      { d: "Jun 2026", t: "03 · CPN Services Program webinar",    s: "progress", n: "Registered for Jun 3 (8am PT live) + Jun 4 (11am SGT replay). End-to-end of CPN for services partners — 2026 program structure, tiers, Frontier incentive, sandbox credits, co-sell motions, MDF + deal-reg, operational rhythm. 'Earn / Operate / The ask.'" },
-      { d: "Q3 2026", t: "04 · Team certification — 10 members",  s: "progress", n: "Enrol 10 team in Anthropic Academy. CPN learning path." },
-      { d: "Q3 2026", t: "05 · CPN learning path complete",       s: "planned",  n: "Confirm completions. Triggers CCAF unlock." },
-      { d: "Q4 2026", t: "06 · CCAF certification achieved",      s: "planned",  n: "Claude Certified Architect Foundations — org cert." },
-      { d: "Q4 2026", t: "07 · Partner Portal access",            s: "planned",  n: "Accept Network terms. Tier assigned." },
-      { d: "Q1 2027", t: "08 · Featured-customer / case study",   s: "planned",  n: "Only after portal launch + tier confirmed." },
+      {
+        monthLabel: "03-26", d: "Mar 2026", t: "CPN application", s: "done",
+        activities: [
+          { title: "CPN application submitted to Anthropic", status: "done" },
+        ],
+      },
+      {
+        monthLabel: "04-26", d: "Apr 2026", t: "Initial review cleared", s: "done",
+        activities: [
+          { title: "Anthropic confirmed: approved to move forward", status: "done" },
+        ],
+      },
+      {
+        monthLabel: "06-26", d: "Jun 2026", t: "Webinar + enrolment kickoff", s: "progress",
+        activities: [
+          { week: 1, title: "CPN Services Program webinar (Jun 3 PT / Jun 4 SGT)", status: "progress" },
+          { week: 2, title: "Enrol 10 team in Anthropic Academy", status: "planned" },
+          { week: 3, title: "Begin CPN learning path modules",     status: "planned" },
+          { week: 4, title: "Submit deal-reg test entries",        status: "planned" },
+        ],
+      },
+      {
+        monthLabel: "07-26", d: "Jul 2026", t: "Team certification", s: "planned",
+        activities: [
+          { week: 1, title: "Continue Academy modules", status: "planned" },
+          { week: 2, title: "10-member completion target", status: "planned" },
+          { week: 4, title: "Submit CCAF readiness check", status: "planned" },
+        ],
+      },
+      {
+        monthLabel: "11-26", d: "Nov 2026", t: "CCAF certification achieved", s: "planned",
+        activities: [
+          { title: "Claude Certified Architect Foundations — org cert", status: "planned" },
+        ],
+      },
+      {
+        monthLabel: "12-26", d: "Dec 2026", t: "Partner Portal + Tier assigned", s: "planned",
+        activities: [
+          { week: 2, title: "Accept Network terms",        status: "planned" },
+          { week: 3, title: "Tier assigned (Silver / Gold)", status: "planned" },
+        ],
+      },
+      {
+        monthLabel: "03-27", d: "Mar 2027", t: "Featured-customer / case study", s: "planned",
+        activities: [
+          { title: "Public Yai × Anthropic case study", status: "planned" },
+        ],
+      },
     ],
   },
   {
@@ -48,11 +88,39 @@ const PARTNERS: Partner[] = [
     n: "Google partner-team outreach booked. Vertex AI credits + cloud hosting in play.",
     s: "progress",
     pathway: [
-      { d: "Q2 2026", t: "01 · Apply to Google for Startups Cloud Program",       s: "done",     n: "Application submitted on Ai-startup track." },
-      { d: "Jun 2026", t: "02 · Google rep outreach — Cindy YEN NHI",             s: "progress", n: "BOOKED Mon Jun 8 2026 · 3:15–3:45 PM MYT · Google Meet (yah-rzgm-ydm). Cindy from xwf.google.com initiated. Warm signal — Google partner team engaging directly." },
-      { d: "Q3 2026", t: "03 · $200K Vertex AI + hosting credits granted",        s: "planned",  n: "2-year credit window." },
-      { d: "Q4 2026", t: "04 · Move LLM inference + Nano Banana onto Vertex",     s: "planned",  n: "Migrate from Anthropic-direct to Vertex routing." },
-      { d: "Q1 2027", t: "05 · Co-marketing case study with Google Cloud",        s: "planned",  n: "Cambodia / SE-Asia garment-tech reference." },
+      {
+        monthLabel: "05-26", d: "May 2026", t: "Application submitted", s: "done",
+        activities: [
+          { title: "Apply to Google for Startups Cloud Program (Ai-startup track)", status: "done" },
+        ],
+      },
+      {
+        monthLabel: "06-26", d: "Jun 2026", t: "Google rep outreach", s: "progress",
+        activities: [
+          { week: 2, title: "Meeting BOOKED — Cindy YEN NHI · Jun 8 · 3:15 PM MYT · Google Meet", status: "progress" },
+          { week: 2, title: "Pitch Yai use-case + Vertex usage plan",                              status: "planned" },
+          { week: 3, title: "Follow-up + receive credit programme details",                        status: "planned" },
+        ],
+      },
+      {
+        monthLabel: "08-26", d: "Aug 2026", t: "Credits granted", s: "planned",
+        activities: [
+          { title: "$200K Vertex AI + hosting credits · 2-year window", status: "planned" },
+        ],
+      },
+      {
+        monthLabel: "11-26", d: "Nov 2026", t: "Migrate to Vertex", s: "planned",
+        activities: [
+          { week: 1, title: "Move LLM inference onto Vertex", status: "planned" },
+          { week: 3, title: "Move Nano Banana onto Vertex",   status: "planned" },
+        ],
+      },
+      {
+        monthLabel: "02-27", d: "Feb 2027", t: "Co-marketing", s: "planned",
+        activities: [
+          { title: "Case study with Google Cloud — Cambodia / SE-Asia garment-tech", status: "planned" },
+        ],
+      },
     ],
   },
   {

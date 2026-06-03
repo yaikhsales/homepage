@@ -5,12 +5,21 @@
  * connected via dashed lines. Inspired by the classic "creative timeline" template
  * (yellow→red→orange→teal→blue→pink→purple progression). */
 
+export type Activity = {
+  week?: 1 | 2 | 3 | 4 | 5;                 // 1–5 = week of the month; omit if not week-specific
+  title: string;
+  note?: string;
+  status?: "done" | "progress" | "planned";
+};
+
 export type Milestone = {
-  d: string;                                // date label, e.g. "Q2 2026"
-  t: string;                                // milestone title
+  d: string;                                // date label, e.g. "Q2 2026" or "Jun 2026"
+  t: string;                                // milestone title (or month title when monthLabel is set)
   s: "done" | "progress" | "planned";
   n?: string;                               // short description (not shown in card; reserved)
-  sub?: string[];                           // optional numbered sub-items (e.g. factory names) — "" renders as TBD slot
+  sub?: string[];                           // optional numbered sub-items (e.g. factory names)
+  monthLabel?: string;                      // e.g. "06-26" — overrides the sequential pin number with a month code
+  activities?: Activity[];                  // optional multi-activity breakdown (weekly bullets in the card)
 };
 
 interface Props {
@@ -61,11 +70,14 @@ export function MilestoneRoadmap({ milestones, color, bgColor }: Props) {
     return yStart + ((yEnd - yStart) * i) / (N - 1);
   };
 
-  const PIN_R = 28;
-  const cardW = Math.max(140, Math.min(220, step - 12));
-  // Card grows if any milestone has sub-items
+  const PIN_R = 30;
+  const cardW = Math.max(150, Math.min(230, step - 12));
+  // Card grows if any milestone has sub-items OR multi-week activities
   const hasSubs = milestones.some((m) => m.sub && m.sub.length > 0);
-  const cardH = hasSubs ? 180 : 120;
+  const hasActs = milestones.some((m) => m.activities && m.activities.length > 0);
+  const cardH = hasActs ? 200 : hasSubs ? 180 : 120;
+  // Anyone using monthLabel? → pin font drops slightly to fit "06-26" cleanly
+  const hasMonthLabels = milestones.some((m) => !!m.monthLabel);
 
   return (
     <div className="w-full rounded-lg overflow-hidden" style={{ background: bgColor || "transparent" }}>
@@ -124,7 +136,37 @@ export function MilestoneRoadmap({ milestones, color, bgColor }: Props) {
                   <div className="text-[13px] uppercase tracking-wider font-extrabold" style={{ color: ringColor }}>
                     {m.d}
                   </div>
-                  <div className="text-[15px] font-extrabold text-yai-navy leading-snug break-words">{m.t}</div>
+                  <div className="text-[14px] font-extrabold text-yai-navy leading-snug break-words">{m.t}</div>
+                  {/* Activities — weekly breakdown of multiple things happening this month */}
+                  {m.activities && m.activities.length > 0 && (
+                    <ul className="mt-1 flex flex-col gap-0.5 text-[11px] leading-snug">
+                      {m.activities.map((a, j) => {
+                        const aStatus = a.status ?? m.s;
+                        const stMark = aStatus === "done" ? "✓" : aStatus === "progress" ? "◐" : "○";
+                        const stColor = aStatus === "done" ? "#10B981" : aStatus === "progress" ? "#F37021" : "#94A3B8";
+                        return (
+                          <li key={j} className="flex items-start gap-1.5">
+                            {a.week ? (
+                              <span
+                                className="inline-flex items-center justify-center text-[8px] font-extrabold uppercase tracking-wider px-1 py-0.5 rounded text-white shrink-0 mt-0.5"
+                                style={{ background: ringColor }}
+                              >
+                                W{a.week}
+                              </span>
+                            ) : (
+                              <span
+                                className="inline-flex items-center justify-center w-4 h-4 rounded-full font-bold text-[10px] shrink-0 mt-0.5"
+                                style={{ color: stColor }}
+                              >
+                                {stMark}
+                              </span>
+                            )}
+                            <span className="break-words text-yai-navy font-semibold">{a.title}</span>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
                   {m.sub && m.sub.length > 0 && (
                     <ol className="mt-1 flex flex-col gap-0.5 text-[12px] leading-snug">
                       {m.sub.map((s, j) => (
@@ -148,17 +190,17 @@ export function MilestoneRoadmap({ milestones, color, bgColor }: Props) {
               {/* Pin circle — vibrant ring colour */}
               <circle cx={x} cy={y} r={PIN_R + 4} fill="#FFFFFF" />
               <circle cx={x} cy={y} r={PIN_R} fill={ringColor} />
-              {/* Pin number */}
+              {/* Pin label — either monthLabel ("06-26") or sequential number ("01") */}
               <text
                 x={x}
                 y={y + 2}
-                fontSize="22"
+                fontSize={m.monthLabel ? "16" : "22"}
                 textAnchor="middle"
                 dominantBaseline="middle"
                 fill="#FFFFFF"
                 fontWeight="900"
               >
-                {String(i + 1).padStart(2, "0")}
+                {m.monthLabel ?? String(i + 1).padStart(2, "0")}
               </text>
 
               {/* Status badge on circle edge */}
