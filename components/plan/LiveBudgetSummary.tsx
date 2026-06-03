@@ -71,9 +71,28 @@ export async function LiveBudgetSummary() {
 
   return (
     <div className="space-y-3">
-      {/* 01 · Revenue */}
+      {/* 01 · NET (summary on top) */}
       <GtmEnablerBar
         num="01"
+        tag="NET"
+        title="Net position · investment build"
+        desc="Revenue − (Salaries + Expenses). Negative is expected during the platform-build phase — see Section 10 for the asset-value offset."
+        color={netPosition >= 0 ? "#10B981" : "#0A1F47"}
+        bg="#F8FAFC"
+        badge={fmt(netPosition)}
+        badgeLabel="Today"
+      >
+        <div className="grid sm:grid-cols-3 gap-3 mb-3">
+          <MiniStat label="In" value={fmt(totalRevenue)} sub="Revenue booked" color="#10B981" />
+          <MiniStat label="Out" value={fmt(totalSalary + totalExpenses)} sub={`Salaries ${fmt(totalSalary)} + Expenses ${fmt(totalExpenses)}`} color="#F37021" />
+          <MiniStat label="Net" value={fmt(netPosition)} sub={netPosition >= 0 ? "Surplus" : "Investment build"} color={netPosition >= 0 ? "#10B981" : "#0A1F47"} />
+        </div>
+        <NetSparkline months={allMonths} revenueByMonth={revenueByMonth} salaryByMonth={salaryByMonth} expensesByMonth={expensesByMonth} />
+      </GtmEnablerBar>
+
+      {/* 02 · Revenue */}
+      <GtmEnablerBar
+        num="02"
         tag="REVENUE"
         title="Sales / Income"
         desc="9 streams — 6 planned packages (Cloud Starter→Big Ai Brain) + 3 variable-revenue e-com streams."
@@ -86,9 +105,9 @@ export async function LiveBudgetSummary() {
         <MonthlySparkline label="Revenue · monthly" months={allMonths} values={revenueByMonth} color="#10B981" />
       </GtmEnablerBar>
 
-      {/* 02 · Salaries */}
+      {/* 03 · Salaries */}
       <GtmEnablerBar
-        num="02"
+        num="03"
         tag="SALARIES"
         title="Compensation paid"
         desc={`${salaries.members.length} members tracked from May 2024 onward. Includes bonuses.`}
@@ -105,9 +124,9 @@ export async function LiveBudgetSummary() {
         <MonthlySparkline label="Salaries · monthly" months={allMonths} values={salaryByMonth} color="#1E4DAA" />
       </GtmEnablerBar>
 
-      {/* 03 · Other expenses */}
+      {/* 04 · Other expenses */}
       <GtmEnablerBar
-        num="03"
+        num="04"
         tag="EXPENSES"
         title="Other expenses · capex + running"
         desc={`${expensesByCategory.length} categories — Computers, Furniture, Dev gear, Admin Shop, Ai Fees, Villa Rent, Petty Cash + Promotion.`}
@@ -134,25 +153,6 @@ export async function LiveBudgetSummary() {
           ))}
         </div>
         <MonthlySparkline label="Expenses · monthly" months={allMonths} values={expensesByMonth} color="#F37021" />
-      </GtmEnablerBar>
-
-      {/* 04 · Net position */}
-      <GtmEnablerBar
-        num="04"
-        tag="NET"
-        title="Net position · investment build"
-        desc="Revenue − (Salaries + Expenses). Negative is expected during the platform-build phase — see Section 10 for the asset-value offset."
-        color={netPosition >= 0 ? "#10B981" : "#0A1F47"}
-        bg="#F8FAFC"
-        badge={fmt(netPosition)}
-        badgeLabel="Today"
-      >
-        <div className="grid sm:grid-cols-3 gap-3 mb-3">
-          <MiniStat label="In" value={fmt(totalRevenue)} sub="Revenue booked" color="#10B981" />
-          <MiniStat label="Out" value={fmt(totalSalary + totalExpenses)} sub={`Salaries ${fmt(totalSalary)} + Expenses ${fmt(totalExpenses)}`} color="#F37021" />
-          <MiniStat label="Net" value={fmt(netPosition)} sub={netPosition >= 0 ? "Surplus" : "Investment build"} color={netPosition >= 0 ? "#10B981" : "#0A1F47"} />
-        </div>
-        <NetSparkline months={allMonths} revenueByMonth={revenueByMonth} salaryByMonth={salaryByMonth} expensesByMonth={expensesByMonth} />
       </GtmEnablerBar>
 
       {/* Footer */}
