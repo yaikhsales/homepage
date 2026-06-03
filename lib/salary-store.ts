@@ -118,19 +118,19 @@ export const SEED_SALARY_STORE: SalaryStore = {
     { name: "Young Songheang (Heang)",    status: "active", startMonth: "2025-01", group: "ops-systems", groupRole: "member", monthly: { "2026-01": 437.00, "2026-02": 404.48, "2026-03": 414.21, "2026-04":  473.81, "2026-05":  420.00 } },
     { name: "Proeurng Sokhim (Sokhim)",   status: "active", startMonth: "2024-08", group: "ops-systems", groupRole: "member", monthly: { "2024-08":  28.50, "2024-09": 122.25, "2024-10": 102.00, "2024-11": 133.50, "2024-12": 223.50, "2026-01": 428.60, "2026-02": 414.20, "2026-03": 431.02, "2026-04":  484.09, "2026-05":  420.00 } },
 
-    // ═══ Unassigned (will be grouped later) ══════════════════════════════
-    // May 2026 cells below = NEW base + score-based bonus. Bonus breakdown:
+    // ═══ Historic / Resigned (no current team assignment) ════════════════
+    // Bonus pool breakdown for active staff (May 2026 score-based):
     //   Daly $180, Dilan $300, Rich $170, Virot $170, Samnang $150, Seangleng $100,
     //   Yasomi $149, Alen $105, Chhay $110, Chetra $110, Khun $80, Menghorng $100,
     //   Sam $92, Phanny $90, Sophy/Sokhim/Thida/Noch/Michael/Heang $0.
     //   Total May 2026 bonus pool = $1,906.
-    { name: "Visal",                      status: "active", startMonth: "2024-08", monthly: { "2024-08": 216.81, "2024-09": 460.15, "2024-10": 469.00, "2024-11": 471.92, "2024-12": 460.00 } },
-    { name: "Sreyleak",                   status: "active", startMonth: "2024-07", monthly: { "2024-07": 119.25, "2024-08": 184.50, "2024-09": 223.50, "2024-10": 207.75, "2024-11": 309.00, "2024-12": 369.00 } },
-    { name: "Set Sophy (Sophy)",          status: "active", startMonth: "2024-07", monthly: { "2024-07":  65.25, "2024-08": 132.00, "2024-09": 115.50, "2024-10": 117.75, "2024-11":  57.00, "2024-12": 159.00, "2026-01": 526.62, "2026-02": 510.35, "2026-03": 481.19, "2026-04":  481.50, "2026-05":  500.00 } },
+    { name: "Visal",                      status: "resigned", startMonth: "2024-08", endMonth: "2024-12", monthly: { "2024-08": 216.81, "2024-09": 460.15, "2024-10": 469.00, "2024-11": 471.92, "2024-12": 460.00 } },
+    { name: "Sreyleak",                   status: "resigned", startMonth: "2024-07", endMonth: "2024-12", monthly: { "2024-07": 119.25, "2024-08": 184.50, "2024-09": 223.50, "2024-10": 207.75, "2024-11": 309.00, "2024-12": 369.00 } },
+    { name: "Set Sophy (Sophy)",          status: "resigned", startMonth: "2024-07", endMonth: "2026-05", monthly: { "2024-07":  65.25, "2024-08": 132.00, "2024-09": 115.50, "2024-10": 117.75, "2024-11":  57.00, "2024-12": 159.00, "2026-01": 526.62, "2026-02": 510.35, "2026-03": 481.19, "2026-04":  481.50, "2026-05":  500.00 } },
     { name: "Keomhieng",                  status: "realigned", startMonth: "2024-09", endMonth: "2024-11", monthly: { "2024-09": 107.25, "2024-10": 61.50, "2024-11": 59.25 } },
     { name: "Phoumen",                    status: "resigned",  startMonth: "2024-08", endMonth: "2024-08", monthly: { "2024-08": 192.00 } },
-    { name: "Vannara",                    status: "active", startMonth: "2024-11", monthly: { "2024-11":  78.00, "2024-12": 331.00 } },
-    { name: "Phallin",                    status: "active", startMonth: "2024-12", monthly: { "2024-12": 123.00 } },
+    { name: "Vannara",                    status: "resigned", startMonth: "2024-11", endMonth: "2024-12", monthly: { "2024-11":  78.00, "2024-12": 331.00 } },
+    { name: "Phallin",                    status: "resigned", startMonth: "2024-12", endMonth: "2024-12", monthly: { "2024-12": 123.00 } },
   ],
 };
 
