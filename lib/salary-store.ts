@@ -88,11 +88,11 @@ export const SEED_SALARY_STORE: SalaryStore = {
     { name: "Keomhieng",                  status: "realigned", startMonth: "2024-09", endMonth: "2024-11", monthly: { "2024-09": 107.25, "2024-10": 61.50, "2024-11": 59.25 } },
     { name: "Phoumen",                    status: "resigned",  startMonth: "2024-08", endMonth: "2024-08", monthly: { "2024-08": 192.00 } },
     { name: "Yoem Chetra",                status: "active", startMonth: "2024-09", monthly: { "2024-09":  97.50, "2024-10":  90.00, "2024-11": 108.75, "2024-12": 128.00, "2026-01": 440.09, "2026-02": 550.42, "2026-03": 539.21, "2026-04":  638.62, "2026-05":  685.00 } },
-    // Koem Chichhorng: 2025 all months @ $525 (no raise April 2025).
+    // Koem Chichhorng = "Alen" (alias). 2025 flat at $525; May 2026 = new $600 + $105 bonus.
     { name: "Koem Chichhorng",            status: "active", startMonth: "2024-10", monthly: {
       "2024-10": 78.00, "2024-11": 278.80, "2024-12": 422.00,
       "2025-01": 525.00, "2025-02": 525.00, "2025-03": 525.00, "2025-04": 525.00, "2025-05": 525.00, "2025-06": 525.00, "2025-07": 525.00, "2025-08": 525.00, "2025-09": 525.00, "2025-10": 525.00, "2025-11": 525.00, "2025-12": 525.00,
-      "2026-01": 552.10, "2026-02": 525.90, "2026-03": 525.60, "2026-04": 570.70,
+      "2026-01": 552.10, "2026-02": 525.90, "2026-03": 525.60, "2026-04": 570.70, "2026-05": 705.00,
     } },
     { name: "Vannara",                    status: "active", startMonth: "2024-11", monthly: { "2024-11":  78.00, "2024-12": 331.00 } },
     { name: "Phallin",                    status: "active", startMonth: "2024-12", monthly: { "2024-12": 123.00 } },
@@ -107,7 +107,7 @@ export const SEED_SALARY_STORE: SalaryStore = {
     { name: "Young Sengheang",            status: "active", startMonth: "2025-01", monthly: { "2026-01": 437.00, "2026-02": 404.48, "2026-03": 414.21, "2026-04":  473.81, "2026-05":  420.00 } },
 
     // ─── May 2026 onboards (raise sheet has them but not Jan-Apr) ─────────
-    { name: "Alen",                       status: "active", startMonth: "2026-05", monthly: { "2026-05": 705.00 } },
+    // Note: Alen = Koem Chichhorng (alias) — merged above, no separate row.
     { name: "Sam",                        status: "active", startMonth: "2026-05", monthly: { "2026-05": 592.00 } },
     { name: "Michael",                    status: "active", startMonth: "2026-05", monthly: { "2026-05": 400.00 } },
   ],
