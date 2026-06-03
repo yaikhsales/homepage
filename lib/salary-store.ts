@@ -43,8 +43,9 @@ export const SEED_SALARY_STORE: SalaryStore = {
     //   Yasomi $149, Alen $105, Chhay $110, Chetra $110, Khun $80, Menghorng $100,
     //   Sam $92, Phanny $90, Sophy/Sokhim/Thida/Noch/Michael/Heang $0.
     //   Total May 2026 bonus pool = $1,906.
-    // Peang Sereysothirich = "Rich" (alias). 2025 Jan-Mar @ $554, Apr+ @ $850 (53.43% raise).
-    { name: "Peang Sereysothirich",       status: "active", startMonth: "2024-05", monthly: {
+    // Rich (real name). Peang Sereysothirich = formal/Cambodian name used on legal payment sheets.
+    // 2025 Jan-Mar @ $554, Apr+ @ $850 (53.43% raise).
+    { name: "Rich",                       status: "active", startMonth: "2024-05", monthly: {
       "2024-05": 398.23, "2024-06": 451.31, "2024-07": 433.62, "2024-08": 504.38, "2024-09": 536.69, "2024-10": 547.46, "2024-11": 515.00, "2024-12": 525.92,
       "2025-01": 554.00, "2025-02": 554.00, "2025-03": 554.00, "2025-04": 850.00, "2025-05": 850.00, "2025-06": 850.00, "2025-07": 850.00, "2025-08": 850.00, "2025-09": 850.00, "2025-10": 850.00, "2025-11": 850.00, "2025-12": 850.00,
       "2026-01": 766.96, "2026-02": 777.30, "2026-03": 844.35, "2026-04": 1081.00, "2026-05": 1120.00,
