@@ -8,14 +8,15 @@ export async function POST(req: Request) {
   let user = "", pass = "";
   try {
     const body = await req.json();
-    user = typeof body?.user === "string" ? body.user : "";
-    pass = typeof body?.pass === "string" ? body.pass : "";
+    user = typeof body?.user === "string" ? body.user.trim() : "";
+    pass = typeof body?.pass === "string" ? body.pass.trim() : "";
   } catch {
     return NextResponse.json({ ok: false, error: "Invalid request" }, { status: 400 });
   }
 
   const label = checkAdminCreds(user, pass);
   if (!label) {
+    console.log(`[YAI ADMIN] Login REJECTED · user="${user}" len=${user.length} passLen=${pass.length}`);
     await new Promise((r) => setTimeout(r, 400));
     return NextResponse.json({ ok: false, error: "Invalid credentials" }, { status: 401 });
   }
