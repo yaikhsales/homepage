@@ -58,7 +58,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div className="pt-3 pb-1 px-3 text-[9px] uppercase tracking-[0.18em] text-white/40 font-bold">
             P&amp;L streams
           </div>
-          <AdminNavLink href="/admin/sales"    label="Sales / Income"     icon="💰" disabled />
+          <AdminNavLink href="/admin/sales"    label="Sales / Income"     icon="💰" />
           <AdminNavLink href="/admin/salaries" label="Salaries"           icon="👥" />
           <AdminNavLink href="/admin/capex"    label="Capex / Equipment"  icon="⚙" disabled />
           <AdminNavLink href="/admin/costs"    label="Sales Running Costs" icon="💸" disabled />

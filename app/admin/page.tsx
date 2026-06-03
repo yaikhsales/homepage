@@ -1,10 +1,16 @@
 import Link from "next/link";
 import { readStore } from "@/lib/budget-store";
 import { readSalaryStore } from "@/lib/salary-store";
+import { readSalesStore } from "@/lib/sales-store";
 
 export default async function AdminDashboard() {
   const store = await readStore();
   const salaryStore = await readSalaryStore();
+  const salesStore = await readSalesStore();
+  const salesGrand = salesStore.streams.reduce<number>(
+    (s, st) => s + Object.values(st.monthly).reduce<number>((ss, c) => ss + (c.revenue ?? 0), 0),
+    0,
+  );
   const hasActuals =
     store.actuals.expense.some((v) => v !== null) ||
     store.actuals.income.some((v) => v !== null);
@@ -31,11 +37,31 @@ export default async function AdminDashboard() {
         P&amp;L streams
       </div>
       <div className="grid sm:grid-cols-2 gap-4 mb-8">
-        <FeederPlaceholder
-          icon="💰"
-          title="Sales / Income"
-          desc="Per-month income tracking — Yai Basic Server, Yai Ai Agent Service, Yai Ai Cloud Client, Yai Market Place."
-        />
+        <Link
+          href="/admin/sales"
+          className="group block rounded-xl border-2 border-yai-border bg-white p-5 hover:border-yai-blue hover:shadow-lg transition-all"
+        >
+          <div className="flex items-start justify-between mb-2">
+            <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-emerald-500 text-white font-extrabold text-lg">
+              💰
+            </span>
+            {salesGrand > 0 ? (
+              <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                ● ${salesGrand.toLocaleString(undefined, { maximumFractionDigits: 0 })} booked
+              </span>
+            ) : (
+              <span className="text-[10px] font-extrabold uppercase tracking-wider text-gray-400 bg-gray-50 px-2 py-0.5 rounded-full border border-gray-200">
+                {salesStore.streams.length} streams · 0 revenue
+              </span>
+            )}
+          </div>
+          <h2 className="text-lg font-extrabold text-yai-navy">Sales / Income</h2>
+          <p className="text-xs text-gray-600 leading-snug mt-1">
+            6 planned packages (Cloud Starter / Growth / Enterprise / Ai Server / Agentic / Big Ai
+            Brain) + 3 uncertain e-commerce streams. Each row collapsible — fill in monthly
+            customers + revenue.
+          </p>
+        </Link>
         <Link
           href="/admin/salaries"
           className="group block rounded-xl border-2 border-yai-border bg-white p-5 hover:border-yai-blue hover:shadow-lg transition-all"
