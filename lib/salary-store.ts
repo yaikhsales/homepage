@@ -54,7 +54,7 @@ export const SEED_SALARY_STORE: SalaryStore = {
     // ═══ GROUP 1 · Texlink Admin (BLUE) ══════════════════════════════════
     // HR · Sales · Admin · Training — 60% garment floor xp + 20% SW/Ai + 20% dual-role
     { name: "Pich Daly (Daly)",           status: "active", startMonth: "2025-01", group: "admin", groupRole: "lead",   monthly: { "2026-01": 929.00, "2026-02": 923.00, "2026-03": 923.02, "2026-04": 1140.25, "2026-05": 1155.00 } },
-    { name: "Koem Phanny (Phanny)",       empId: "TYM005", status: "active", startMonth: "2025-01", group: "admin", groupRole: "member", monthly: { "2025-02": 184.00, "2025-04": 150.00, "2025-05": 176.00, "2025-06": 198.00, "2026-01": 469.84, "2026-02": 401.16, "2026-03": 454.60, "2026-04":  562.39, "2026-05":  540.00 } },
+    { name: "Koem Phanny (Phanny)",       empId: "TYM005", status: "active", startMonth: "2025-01", group: "admin", groupRole: "member", monthly: { "2025-02": 184.00, "2025-04": 150.00, "2025-05": 176.00, "2025-06": 198.00, "2025-07": 200.00, "2025-08": 300.00, "2025-09": 271.00, "2025-10": 319.00, "2025-11": 256.00, "2025-12": 316.00, "2026-01": 469.84, "2026-02": 401.16, "2026-03": 454.60, "2026-04":  562.39, "2026-05":  540.00 } },
     { name: "Sin Khun (Khun)",            status: "active", startMonth: "2025-01", group: "admin", groupRole: "member", monthly: { "2026-01": 401.13, "2026-02": 410.35, "2026-03": 378.94, "2026-04":  495.84, "2026-05":  530.00 } },
 
     // ═══ GROUP 2 · Architecture (ORANGE) ═════════════════════════════════
@@ -65,9 +65,9 @@ export const SEED_SALARY_STORE: SalaryStore = {
       "2025-01": 529.62, "2025-02": 551.77, "2025-03": 464.54, "2025-04": 802.85, "2025-05": 713.31, "2025-06": 837.92, "2025-07": 782.38, "2025-08": 849.46, "2025-09": 832.69, "2025-10": 804.85, "2025-11": 689.08, "2025-12": 788.31,
       "2026-01": 766.96, "2026-02": 777.30, "2026-03": 844.35, "2026-04": 1081.00, "2026-05": 1120.00,
     } },
-    { name: "Voun Thida (Thida)",         empId: "TYM011", status: "active", startMonth: "2024-09", group: "architecture", groupRole: "member", monthly: { "2024-09": 115.50, "2024-10": 108.00, "2024-11": 132.00, "2024-12": 194.25, "2025-01": 263.25, "2025-02": 254.25, "2025-04": 159.75, "2025-05": 288.00, "2025-06": 27.00, "2026-01": 445.80, "2026-02": 431.00, "2026-03": 431.02, "2026-04":  496.02, "2026-05":  420.00 } },
+    { name: "Voun Thida (Thida)",         empId: "TYM011", status: "active", startMonth: "2024-09", group: "architecture", groupRole: "member", monthly: { "2024-09": 115.50, "2024-10": 108.00, "2024-11": 132.00, "2024-12": 194.25, "2025-01": 263.25, "2025-02": 254.25, "2025-04": 159.75, "2025-05": 288.00, "2025-06": 27.00, "2025-07": 153.75, "2025-08": 162.00, "2025-09": 137.25, "2025-10": 210.00, "2025-11": 154.00, "2025-12": 405.00, "2026-01": 445.80, "2026-02": 431.00, "2026-03": 431.02, "2026-04":  496.02, "2026-05":  420.00 } },
     // Van Phanith = "Michael" (alias). May 2026 = old $400 (no raise, no bonus).
-    { name: "Van Phanith (Michael)",      status: "active", startMonth: "2025-01", group: "architecture", groupRole: "member", monthly: { "2026-01": 410.19, "2026-02": 394.31, "2026-03": 394.98, "2026-04":  439.55, "2026-05": 400.00 } },
+    { name: "Van Phanith (Michael)",      empId: "TYM057 (Oct+)", status: "active", startMonth: "2025-01", group: "architecture", groupRole: "member", monthly: { "2025-10": 136.85, "2025-11": 281.35, "2025-12": 364.65, "2026-01": 410.19, "2026-02": 394.31, "2026-03": 394.98, "2026-04":  439.55, "2026-05": 400.00 } },
     // Ton Naoun = "Sam" (alias). May 2026 = new $500 + $92 bonus.
     { name: "Ton Naoun (Sam)",            status: "active", startMonth: "2025-01", group: "architecture", groupRole: "member", monthly: { "2026-01": 467.83, "2026-02": 461.50, "2026-03": 471.02, "2026-04":  471.02, "2026-05": 592.00 } },
 
@@ -79,7 +79,7 @@ export const SEED_SALARY_STORE: SalaryStore = {
       "2025-01": 507.46, "2025-02": 540.69, "2025-03": 507.92, "2025-04": 753.23, "2025-05": 847.46, "2025-06": 788.31, "2025-07": 888.00, "2025-08": 849.46, "2025-09": 866.23, "2025-10": 871.00, "2025-11": 871.00, "2025-12": 771.77,
       "2026-01": 866.96, "2026-02": 860.02, "2026-03": 861.02, "2026-04": 1040.58, "2026-05": 1120.00,
     } },
-    { name: "Sobon Menghorng (Menghorng)", empId: "TYM003", status: "active", startMonth: "2024-07", group: "neural-net", groupRole: "member", monthly: { "2024-07":  65.25, "2024-08": 132.00, "2024-09": 115.50, "2024-10":  78.00, "2024-11":  52.50, "2024-12":  44.25, "2025-01": 33.00, "2025-02": 143.25, "2025-04": 180.00, "2025-05": 210.00, "2025-06": 111.75, "2026-01": 517.02, "2026-02": 451.35, "2026-03": 511.02, "2026-04":  580.21, "2026-05":  625.00 } },
+    { name: "Sobon Menghorng (Menghorng)", empId: "TYM003", status: "active", startMonth: "2024-07", group: "neural-net", groupRole: "member", monthly: { "2024-07":  65.25, "2024-08": 132.00, "2024-09": 115.50, "2024-10":  78.00, "2024-11":  52.50, "2024-12":  44.25, "2025-01": 33.00, "2025-02": 143.25, "2025-04": 180.00, "2025-05": 210.00, "2025-06": 111.75, "2025-07":  12.00, "2026-01": 517.02, "2026-02": 451.35, "2026-03": 511.02, "2026-04":  580.21, "2026-05":  625.00 } },
     // NOTE: Seangleng's 2025-01/02 are 2nd-half-only ($179, $241) per TYM sheet;
     //       Apr 2025 sheet shows only an $11 clean-out — kept $500 placeholder for now.
     { name: "Chhim Seangleng (Seangleng)", empId: "TYM006", status: "active", startMonth: "2024-08", group: "neural-net", groupRole: "member", monthly: {
@@ -87,7 +87,7 @@ export const SEED_SALARY_STORE: SalaryStore = {
       "2025-01": 179.00, "2025-02": 241.00, "2025-03": 500.00, "2025-04": 11.00, "2025-05": 500.00, "2025-06": 500.00, "2025-07": 500.00, "2025-08": 500.00, "2025-09": 500.00, "2025-10": 500.00, "2025-11": 500.00, "2025-12": 500.00,
       "2026-01": 507.05, "2026-02": 490.78, "2026-03": 501.08, "2026-04": 613.90, "2026-05": 700.00,
     } },
-    { name: "Dot Sreynach (Noch)",        empId: "TYM006/Apr+", status: "active", startMonth: "2025-01", group: "neural-net", groupRole: "member", monthly: { "2025-04": 137.00, "2025-05": 357.00, "2025-06": 16.00, "2026-01": 445.80, "2026-02": 430.35, "2026-03": 431.02, "2026-04":  496.22, "2026-05":  420.00 } },
+    { name: "Dot Sreynach (Noch)",        empId: "TYM006 (Apr+)", status: "active", startMonth: "2025-01", group: "neural-net", groupRole: "member", monthly: { "2025-04": 137.00, "2025-05": 357.00, "2025-06": 16.00, "2025-07": 166.00, "2025-08": 198.00, "2025-09": 166.00, "2025-10": 297.00, "2025-11": 342.00, "2025-12": 422.00, "2026-01": 445.80, "2026-02": 430.35, "2026-03": 431.02, "2026-04":  496.22, "2026-05":  420.00 } },
 
     // ═══ GROUP 4 · Mobile Apps (TEAL) ═════════════════════════════════════
     // Android · iOS · Worker apps — 60% mobile app dev / 20% AIoT+Robotics net / 20% Qualcomm Ai cert
@@ -105,7 +105,7 @@ export const SEED_SALARY_STORE: SalaryStore = {
       "2025-01": 225.00, "2025-02": 257.00, "2025-03": 550.00, "2025-04": 11.00, "2025-05": 550.00, "2025-06": 550.00, "2025-07": 550.00, "2025-08": 550.00, "2025-09": 550.00, "2025-10": 550.00, "2025-11": 550.00, "2025-12": 550.00,
       "2026-01": 556.10, "2026-02": 505.50, "2026-03": 517.40, "2026-04": 692.60, "2026-05": 685.00,
     } },
-    { name: "Yoem Chetra (Chetra)",       empId: "TYM053", status: "active", startMonth: "2024-09", group: "mobile-apps", groupRole: "member", monthly: { "2024-09":  97.50, "2024-10":  90.00, "2024-11": 108.75, "2024-12": 128.00, "2025-01": 187.00, "2025-02": 180.00, "2025-04": 42.00, "2025-05": 63.00, "2025-06": 138.00, "2026-01": 440.09, "2026-02": 550.42, "2026-03": 539.21, "2026-04":  638.62, "2026-05":  685.00 } },
+    { name: "Yoem Chetra (Chetra)",       empId: "TYM053", status: "active", startMonth: "2024-09", group: "mobile-apps", groupRole: "member", monthly: { "2024-09":  97.50, "2024-10":  90.00, "2024-11": 108.75, "2024-12": 128.00, "2025-01": 187.00, "2025-02": 180.00, "2025-04": 42.00, "2025-05": 63.00, "2025-06": 138.00, "2025-07": 369.00, "2025-08": 282.00, "2025-09": 229.00, "2025-10": 119.00, "2026-01": 440.09, "2026-02": 550.42, "2026-03": 539.21, "2026-04":  638.62, "2026-05":  685.00 } },
 
     // ═══ GROUP 5 · Operations Systems (DEEP BLUE) ═════════════════════════
     // Production · QA · MRP · YPI · YTM — 80% software dev / 20% NVIDIA Ai cert
@@ -123,8 +123,8 @@ export const SEED_SALARY_STORE: SalaryStore = {
       "2025-01": 387.00, "2025-02": 408.00, "2025-03": 525.00, "2025-04": 16.00, "2025-05": 525.00, "2025-06": 525.00, "2025-07": 525.00, "2025-08": 525.00, "2025-09": 525.00, "2025-10": 525.00, "2025-11": 525.00, "2025-12": 525.00,
       "2026-01": 552.10, "2026-02": 525.90, "2026-03": 525.60, "2026-04": 570.70, "2026-05": 705.00,
     } },
-    { name: "Young Songheang (Heang)",    empId: "TYM055 (Apr+)", status: "active", startMonth: "2025-01", group: "ops-systems", groupRole: "member", monthly: { "2025-04": 145.00, "2025-05": 350.00, "2025-06": 16.00, "2026-01": 437.00, "2026-02": 404.48, "2026-03": 414.21, "2026-04":  473.81, "2026-05":  420.00 } },
-    { name: "Proeurng Sokhim (Sokhim)",   empId: "TYM010", status: "active", startMonth: "2024-08", group: "ops-systems", groupRole: "member", monthly: { "2024-08":  28.50, "2024-09": 122.25, "2024-10": 102.00, "2024-11": 133.50, "2024-12": 223.50, "2025-01": 233.25, "2025-02": 234.75, "2025-04": 162.75, "2025-05": 289.50, "2025-06": 19.50, "2026-01": 428.60, "2026-02": 414.20, "2026-03": 431.02, "2026-04":  484.09, "2026-05":  420.00 } },
+    { name: "Young Songheang (Heang)",    empId: "TYM055 (Apr+)", status: "active", startMonth: "2025-01", group: "ops-systems", groupRole: "member", monthly: { "2025-04": 145.00, "2025-05": 350.00, "2025-06": 16.00, "2025-07": 253.00, "2025-08": 384.00, "2025-09": 288.00, "2025-10": 373.00, "2025-11": 273.00, "2025-12": 393.00, "2026-01": 437.00, "2026-02": 404.48, "2026-03": 414.21, "2026-04":  473.81, "2026-05":  420.00 } },
+    { name: "Proeurng Sokhim (Sokhim)",   empId: "TYM010", status: "active", startMonth: "2024-08", group: "ops-systems", groupRole: "member", monthly: { "2024-08":  28.50, "2024-09": 122.25, "2024-10": 102.00, "2024-11": 133.50, "2024-12": 223.50, "2025-01": 233.25, "2025-02": 234.75, "2025-04": 162.75, "2025-05": 289.50, "2025-06": 19.50, "2025-07": 123.75, "2025-08": 150.00, "2025-09": 114.75, "2025-10": 152.25, "2025-11": 171.75, "2025-12": 400.00, "2026-01": 428.60, "2026-02": 414.20, "2026-03": 431.02, "2026-04":  484.09, "2026-05":  420.00 } },
 
     // ═══ Historic / Resigned (no current team assignment) ════════════════
     // Bonus pool breakdown for active staff (May 2026 score-based):
@@ -134,10 +134,10 @@ export const SEED_SALARY_STORE: SalaryStore = {
     //   Total May 2026 bonus pool = $1,906.
     // Visal: extended endMonth to 2025-05 — appears on May 2025 TYM sheet as TYM057 with $32 clean-out.
     { name: "Chivan Visal (Visal)",       empId: "YM7874 / TYM057 (May)", status: "resigned", startMonth: "2024-08", endMonth: "2025-05", monthly: { "2024-08": 216.81, "2024-09": 460.15, "2024-10": 469.00, "2024-11": 471.92, "2024-12": 460.00, "2025-01": 475.85, "2025-02": 457.54, "2025-05": 32.00 } },
-    // Sreyleak: extended to 2025-06 — Apr $298, May $340, Jun $31.
-    { name: "Sem Sreyleak (Sreyleak)",    empId: "TYM001", status: "resigned", startMonth: "2024-07", endMonth: "2025-06", monthly: { "2024-07": 119.25, "2024-08": 184.50, "2024-09": 223.50, "2024-10": 207.75, "2024-11": 309.00, "2024-12": 369.00, "2025-01": 333.00, "2025-02": 307.00, "2025-04": 298.00, "2025-05": 340.00, "2025-06": 31.00 } },
-    // Sophy: filled Apr/May/Jun 2025 gap before 2026 resumption.
-    { name: "Set Sophy (Sophy)",          empId: "TYM008", status: "resigned", startMonth: "2024-07", endMonth: "2026-05", monthly: { "2024-07":  65.25, "2024-08": 132.00, "2024-09": 115.50, "2024-10": 117.75, "2024-11":  57.00, "2024-12": 159.00, "2025-01":  80.25, "2025-02": 201.00, "2025-04": 191.25, "2025-05": 232.50, "2025-06": 127.50, "2026-01": 526.62, "2026-02": 510.35, "2026-03": 481.19, "2026-04":  481.50, "2026-05":  500.00 } },
+    // Sreyleak: final clean-out Jul 2025 $9.
+    { name: "Sem Sreyleak (Sreyleak)",    empId: "TYM001", status: "resigned", startMonth: "2024-07", endMonth: "2025-07", monthly: { "2024-07": 119.25, "2024-08": 184.50, "2024-09": 223.50, "2024-10": 207.75, "2024-11": 309.00, "2024-12": 369.00, "2025-01": 333.00, "2025-02": 307.00, "2025-04": 298.00, "2025-05": 340.00, "2025-06": 31.00, "2025-07": 9.00 } },
+    // Sophy: filled Apr/May/Jun/Jul 2025 + 2026 resumption.
+    { name: "Set Sophy (Sophy)",          empId: "TYM008", status: "resigned", startMonth: "2024-07", endMonth: "2026-05", monthly: { "2024-07":  65.25, "2024-08": 132.00, "2024-09": 115.50, "2024-10": 117.75, "2024-11":  57.00, "2024-12": 159.00, "2025-01":  80.25, "2025-02": 201.00, "2025-04": 191.25, "2025-05": 232.50, "2025-06": 127.50, "2025-07": 12.00, "2026-01": 526.62, "2026-02": 510.35, "2026-03": 481.19, "2026-04":  481.50, "2026-05":  500.00 } },
     { name: "Keomhieng",                  status: "realigned", startMonth: "2024-09", endMonth: "2024-11", monthly: { "2024-09": 107.25, "2024-10": 61.50, "2024-11": 59.25 } },
     { name: "Phoumen",                    status: "resigned",  startMonth: "2024-08", endMonth: "2024-08", monthly: { "2024-08": 192.00 } },
     { name: "Vannara",                    status: "resigned", startMonth: "2024-11", endMonth: "2024-12", monthly: { "2024-11":  78.00, "2024-12": 331.00 } },
@@ -145,8 +145,8 @@ export const SEED_SALARY_STORE: SalaryStore = {
 
     // ─── Additional ex-employees from Yorkmars TYM payroll sheets ────────
     // Note: amounts are part-time / 2nd-half-of-month payments per sheet.
-    // Pich Sovanra: extended to 2025-06 — keeps appearing in Apr/May/Jun.
-    { name: "Pich Sovanra",               empId: "TYM007", status: "resigned", startMonth: "2025-01", endMonth: "2025-06", monthly: { "2025-01": 288.75, "2025-02": 255.75, "2025-04": 240.75, "2025-05": 293.25, "2025-06":  29.25 } },
+    // Pich Sovanra: extended to 2025-08 — appears through Aug then off the roster.
+    { name: "Pich Sovanra",               empId: "TYM007", status: "resigned", startMonth: "2025-01", endMonth: "2025-08", monthly: { "2025-01": 288.75, "2025-02": 255.75, "2025-04": 240.75, "2025-05": 293.25, "2025-06":  29.25, "2025-07": 161.25, "2025-08": 222.75 } },
     { name: "Suy Sovichea",               empId: "TYM015", status: "resigned", startMonth: "2025-02", endMonth: "2025-02", monthly: { "2025-02": 203.15 } },
     { name: "Son Seyha",                  empId: "TYM058", status: "resigned", startMonth: "2025-01", endMonth: "2025-02", monthly: { "2025-01": 264.35, "2025-02": 312.80 } },
     { name: "Roth Tongleng",              empId: "TYM060", status: "resigned", startMonth: "2025-01", endMonth: "2025-02", monthly: { "2025-01": 350.20, "2025-02": 398.65 } },
@@ -155,7 +155,7 @@ export const SEED_SALARY_STORE: SalaryStore = {
     // ─── New ex-employees discovered in Apr-Jun 2025 TYM sheets ──────────
     // TYM002 reassigned from Chhang Mengchhay → Phat Chanda starting Apr 2025.
     { name: "Phat Chanda",                empId: "TYM002 (Apr+)", status: "resigned", startMonth: "2025-04", endMonth: "2025-06", monthly: { "2025-04":  67.50, "2025-05": 185.25, "2025-06":   5.25 } },
-    { name: "Nay Chanvicheka",            empId: "TYM054", status: "resigned", startMonth: "2025-04", endMonth: "2025-06", monthly: { "2025-04": 266.90, "2025-05": 314.50, "2025-06": 327.25 } },
+    { name: "Nay Chanvicheka",            empId: "TYM054", status: "resigned", startMonth: "2025-04", endMonth: "2025-12", monthly: { "2025-04": 266.90, "2025-05": 314.50, "2025-06": 327.25, "2025-07": 367.20, "2025-08": 323.85, "2025-09": 259.25, "2025-10": 323.00, "2025-11": 277.10, "2025-12": 379.00 } },
   ],
 };
 
