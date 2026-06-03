@@ -157,8 +157,12 @@ export function SalesEditor({ initial }: { initial: Store }) {
                     {cat.label}
                   </span>
                   {isUncertain && (
-                    <span className="text-[9px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded text-white shrink-0 bg-amber-500">
-                      Uncertain
+                    <span
+                      className="text-[9px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded text-white shrink-0"
+                      style={{ background: "#F37021" }}
+                      title="User target is planned · revenue per user is variable (take-rate / wholesale margin)"
+                    >
+                      Variable rev
                     </span>
                   )}
                   <div className="min-w-0 flex-1">
