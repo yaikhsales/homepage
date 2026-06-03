@@ -211,7 +211,7 @@ export function AdminPanel() {
                     placeholder="Username"
                     value={loginUser}
                     onChange={(e) => setLoginUser(e.target.value)}
-                    className="w-full border border-yai-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-yai-blue"
+                    className="w-full border border-yai-border rounded-lg px-3 py-2 text-sm text-yai-navy placeholder:text-gray-400 bg-white focus:outline-none focus:border-yai-blue"
                     required
                   />
                   <input
@@ -220,7 +220,7 @@ export function AdminPanel() {
                     placeholder="Passcode"
                     value={loginPass}
                     onChange={(e) => setLoginPass(e.target.value)}
-                    className="w-full border border-yai-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-yai-blue"
+                    className="w-full border border-yai-border rounded-lg px-3 py-2 text-sm text-yai-navy placeholder:text-gray-400 bg-white focus:outline-none focus:border-yai-blue"
                     required
                   />
                   {loginErr && (
@@ -273,7 +273,7 @@ export function AdminPanel() {
                                 value={store.actuals.expense[i] ?? ""}
                                 onChange={(e) => updateCell("expense", i, e.target.value)}
                                 placeholder="—"
-                                className="w-full text-right border border-yai-border rounded px-2 py-1 text-[11px] tabular-nums focus:outline-none focus:border-yai-blue"
+                                className="w-full text-right border border-yai-border rounded px-2 py-1 text-[11px] tabular-nums text-yai-navy placeholder:text-gray-300 bg-white focus:outline-none focus:border-yai-blue"
                               />
                             </td>
                             <td className="px-1 py-1">
@@ -282,7 +282,7 @@ export function AdminPanel() {
                                 value={store.actuals.income[i] ?? ""}
                                 onChange={(e) => updateCell("income", i, e.target.value)}
                                 placeholder="—"
-                                className="w-full text-right border border-yai-border rounded px-2 py-1 text-[11px] tabular-nums focus:outline-none focus:border-yai-blue"
+                                className="w-full text-right border border-yai-border rounded px-2 py-1 text-[11px] tabular-nums text-yai-navy placeholder:text-gray-300 bg-white focus:outline-none focus:border-yai-blue"
                               />
                             </td>
                             <td className="px-1 py-1">
@@ -291,7 +291,7 @@ export function AdminPanel() {
                                 value={store.actuals.notes[i] ?? ""}
                                 onChange={(e) => updateCell("notes", i, e.target.value)}
                                 placeholder="Optional note — visible to viewers"
-                                className="w-full border border-yai-border rounded px-2 py-1 text-[11px] focus:outline-none focus:border-yai-blue"
+                                className="w-full border border-yai-border rounded px-2 py-1 text-[11px] text-yai-navy placeholder:text-gray-300 bg-white focus:outline-none focus:border-yai-blue"
                               />
                             </td>
                           </tr>
