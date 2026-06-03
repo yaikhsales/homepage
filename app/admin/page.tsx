@@ -1,11 +1,17 @@
 import Link from "next/link";
 import { readStore } from "@/lib/budget-store";
+import { readSalaryStore } from "@/lib/salary-store";
 
 export default async function AdminDashboard() {
   const store = await readStore();
+  const salaryStore = await readSalaryStore();
   const hasActuals =
     store.actuals.expense.some((v) => v !== null) ||
     store.actuals.income.some((v) => v !== null);
+  const salaryGrand = salaryStore.members.reduce<number>(
+    (s, m) => s + Object.values(m.monthly).reduce<number>((ss, v) => ss + v, 0),
+    0,
+  );
 
   return (
     <div className="p-8 max-w-5xl">
@@ -49,6 +55,37 @@ export default async function AdminDashboard() {
             <div className="mt-3 text-[10px] text-gray-500">
               Last updated <strong className="text-yai-navy">{new Date(store.updatedAt).toLocaleString()}</strong>
               {" "}by <strong>{store.updatedBy ?? "—"}</strong>
+            </div>
+          )}
+        </Link>
+
+        {/* Salary History */}
+        <Link
+          href="/admin/salaries"
+          className="group block rounded-xl border-2 border-yai-border bg-white p-5 hover:border-yai-blue hover:shadow-lg transition-all"
+        >
+          <div className="flex items-start justify-between mb-2">
+            <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-yai-navy text-white font-extrabold text-lg">
+              👥
+            </span>
+            {salaryGrand > 0 ? (
+              <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                ● {salaryStore.members.length} ppl · {salaryStore.months.length} mo
+              </span>
+            ) : (
+              <span className="text-[10px] font-extrabold uppercase tracking-wider text-gray-400 bg-gray-50 px-2 py-0.5 rounded-full border border-gray-200">
+                empty
+              </span>
+            )}
+          </div>
+          <h2 className="text-lg font-extrabold text-yai-navy">Salary History · 2024 → today</h2>
+          <p className="text-xs text-gray-600 leading-snug mt-1">
+            Excel-grid of every team member × every month they were paid. Seeded with May–Dec 2024
+            real data. Extend 2025 + 2026 month by month.
+          </p>
+          {salaryGrand > 0 && (
+            <div className="mt-3 text-[10px] text-gray-500">
+              Grand total so far <strong className="text-yai-navy">${salaryGrand.toLocaleString(undefined, { maximumFractionDigits: 0 })}</strong>
             </div>
           )}
         </Link>

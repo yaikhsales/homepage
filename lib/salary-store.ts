@@ -1,0 +1,74 @@
+// Server-only: monthly per-person salary history.
+// Excel-style: members × months grid.
+
+import "server-only";
+import fs from "node:fs/promises";
+import path from "node:path";
+
+const FILE = path.join(process.cwd(), "data", "salary-history.json");
+
+export type MemberStatus = "active" | "resigned" | "realigned";
+
+export type Member = {
+  name: string;
+  status: MemberStatus;
+  startMonth: string;          // "2024-05"
+  endMonth?: string | null;    // null = still employed
+  // monthly cost keyed by "YYYY-MM"; missing keys = no payment that month
+  monthly: Record<string, number>;
+};
+
+export type SalaryStore = {
+  updatedAt: string | null;
+  updatedBy: string | null;
+  // ordered list of months present in the dataset, e.g. "2024-05" → "2026-12"
+  months: string[];
+  members: Member[];
+};
+
+/** Default seed — May 2024 → December 2024, taken directly from the YAI Costing 2024 sheet. */
+export const SEED_SALARY_STORE: SalaryStore = {
+  updatedAt: null,
+  updatedBy: null,
+  months: ["2024-05","2024-06","2024-07","2024-08","2024-09","2024-10","2024-11","2024-12"],
+  members: [
+    { name: "Rich",       status: "active",    startMonth: "2024-05", monthly: { "2024-05": 398.23, "2024-06": 451.31, "2024-07": 433.62, "2024-08": 504.38, "2024-09": 536.69, "2024-10": 547.46, "2024-11": 515.00, "2024-12": 525.92 } },
+    { name: "Virot",      status: "active",    startMonth: "2024-05", monthly: { "2024-05": 327.46, "2024-06": 433.62, "2024-07": 415.92, "2024-08": 515.15, "2024-09": 558.23, "2024-10": 547.46, "2024-11": 548.00, "2024-12": 547.46 } },
+    { name: "Samang",     status: "active",    startMonth: "2024-07", monthly: {                                       "2024-07":  22.19, "2024-08": 460.15, "2024-09": 460.15, "2024-10": 469.00, "2024-11": 481.00, "2024-12": 469.00 } },
+    { name: "Visal",      status: "active",    startMonth: "2024-08", monthly: {                                                          "2024-08": 216.81, "2024-09": 460.15, "2024-10": 469.00, "2024-11": 471.92, "2024-12": 460.00 } },
+    { name: "Yasomi",     status: "active",    startMonth: "2024-09", monthly: {                                                                             "2024-09": 511.50, "2024-10": 700.00, "2024-11": 700.00, "2024-12": 700.00 } },
+    { name: "Sreyleak",   status: "active",    startMonth: "2024-07", monthly: {                                       "2024-07": 119.25, "2024-08": 184.50, "2024-09": 223.50, "2024-10": 207.75, "2024-11": 309.00, "2024-12": 369.00 } },
+    { name: "Menghorng",  status: "active",    startMonth: "2024-07", monthly: {                                       "2024-07":  65.25, "2024-08": 132.00, "2024-09": 115.50, "2024-10":  78.00, "2024-11":  52.50, "2024-12":  44.25 } },
+    { name: "Sophy",      status: "active",    startMonth: "2024-07", monthly: {                                       "2024-07":  65.25, "2024-08": 132.00, "2024-09": 115.50, "2024-10": 117.75, "2024-11":  57.00, "2024-12": 159.00 } },
+    { name: "Mengchay",   status: "active",    startMonth: "2024-08", monthly: {                                                          "2024-08": 143.25, "2024-09": 189.00, "2024-10": 157.50, "2024-11": 214.00, "2024-12": 345.00 } },
+    { name: "Seangleng",  status: "active",    startMonth: "2024-08", monthly: {                                                          "2024-08": 103.50, "2024-09": 189.75, "2024-10": 168.75, "2024-11": 238.00, "2024-12": 294.00 } },
+    { name: "Sokhim",     status: "active",    startMonth: "2024-08", monthly: {                                                          "2024-08":  28.50, "2024-09": 122.25, "2024-10": 102.00, "2024-11": 133.50, "2024-12": 223.50 } },
+    { name: "Thida",      status: "active",    startMonth: "2024-09", monthly: {                                                                             "2024-09": 115.50, "2024-10": 108.00, "2024-11": 132.00, "2024-12": 194.25 } },
+    { name: "Keomhieng",  status: "realigned", startMonth: "2024-09", endMonth: "2024-11", monthly: {                                                        "2024-09": 107.25, "2024-10":  61.50, "2024-11":  59.25 } },
+    { name: "Phoumen",    status: "resigned",  startMonth: "2024-08", endMonth: "2024-08", monthly: {                                     "2024-08": 192.00 } },
+    { name: "Chetra",     status: "active",    startMonth: "2024-09", monthly: {                                                                             "2024-09":  97.50, "2024-10":  90.00, "2024-11": 108.75, "2024-12": 128.00 } },
+    { name: "Chichhorng", status: "active",    startMonth: "2024-10", monthly: {                                                                                                "2024-10":  78.00, "2024-11": 278.80, "2024-12": 422.00 } },
+    { name: "Vannara",    status: "active",    startMonth: "2024-11", monthly: {                                                                                                                   "2024-11":  78.00, "2024-12": 331.00 } },
+    { name: "Phallin",    status: "active",    startMonth: "2024-12", monthly: {                                                                                                                                      "2024-12": 123.00 } },
+  ],
+};
+
+export async function readSalaryStore(): Promise<SalaryStore> {
+  try {
+    const text = await fs.readFile(FILE, "utf-8");
+    const parsed = JSON.parse(text) as SalaryStore;
+    return {
+      updatedAt: parsed.updatedAt ?? null,
+      updatedBy: parsed.updatedBy ?? null,
+      months: parsed.months ?? SEED_SALARY_STORE.months,
+      members: parsed.members ?? SEED_SALARY_STORE.members,
+    };
+  } catch {
+    return SEED_SALARY_STORE;
+  }
+}
+
+export async function writeSalaryStore(store: SalaryStore): Promise<void> {
+  await fs.mkdir(path.dirname(FILE), { recursive: true });
+  await fs.writeFile(FILE, JSON.stringify(store, null, 2), "utf-8");
+}

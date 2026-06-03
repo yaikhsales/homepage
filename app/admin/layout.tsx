@@ -54,8 +54,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </Link>
         </div>
         <nav className="px-3 py-3 space-y-0.5 text-sm flex-1">
-          <AdminNavLink href="/admin"        label="Dashboard"   icon="◆" />
-          <AdminNavLink href="/admin/budget" label="Live Budget" icon="$" />
+          <AdminNavLink href="/admin"          label="Dashboard"          icon="◆" />
+          <div className="pt-3 pb-1 px-3 text-[9px] uppercase tracking-[0.18em] text-white/40 font-bold">
+            Financial
+          </div>
+          <AdminNavLink href="/admin/salaries" label="Salary History"     icon="👥" />
+          <AdminNavLink href="/admin/budget"   label="Live Budget 2026"   icon="$" />
+          <AdminNavLink href="/admin/capex"    label="Capex / Equipment"  icon="⚙" disabled />
+          <AdminNavLink href="/admin/costs"    label="Sales + Running Costs" icon="💸" disabled />
+          <div className="pt-3 pb-1 px-3 text-[9px] uppercase tracking-[0.18em] text-white/40 font-bold">
+            Plan content
+          </div>
           <AdminNavLink href="/admin/factories" label="Factory Adoption"  icon="▦" disabled />
           <AdminNavLink href="/admin/events"    label="Events Calendar"   icon="▣" disabled />
           <AdminNavLink href="/admin/partners"  label="Partner Pathways"  icon="▤" disabled />
