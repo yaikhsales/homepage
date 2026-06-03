@@ -379,6 +379,17 @@ const PROMPTS = [
       STYLE_SUFFIX,
   },
 
+  // -------- Regional badges --------
+  {
+    slug: "asean-logo-with-flags",
+    prompt:
+      "A high-quality, premium emblem composition centred on the ASEAN official logo (10 yellow / gold rice-paddy stalks bound together by a red ring on a deep blue circular background, with a white inner ring labelled 'ASEAN'). Around the central ASEAN emblem, arranged in a clean evenly-spaced circular halo, are the 10 ASEAN member-state national flags rendered as small rounded-corner rectangular badges with a soft drop shadow:" +
+      " Brunei Darussalam, Cambodia, Indonesia, Laos, Malaysia, Myanmar, Philippines, Singapore, Thailand, Vietnam." +
+      " Each flag must be in its accurate official colours and proportions. The Cambodian flag in particular must show the detailed white Angkor Wat temple silhouette (three central towers with a stepped pyramid base) on its red middle band — accurate, detailed, recognisable." +
+      " The overall composition is set on a clean transparent / very-light-grey background (PNG with transparency), high-resolution, sharp vector-quality edges, suitable for use as a regional-membership emblem in an investor deck." +
+      " Style: official, polished, geopolitical-association quality — like the kind of badge UN agencies or ministry sites use. No people, no text other than 'ASEAN' on the central emblem, no clutter. Square 1:1 aspect ratio.",
+  },
+
   // -------- Ai-agent avatars (one distinct office person per platform module) --------
   // Pixar / 3D-render style friendly characters, head-and-shoulders, plain pale background
   // so they crop cleanly into circular avatars. Every face is different — a real office.
