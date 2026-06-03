@@ -53,23 +53,16 @@ const TYPE_VIS: Record<EventType, { label: string; color: string; bg: string }> 
 // Through end of 2026 packed; 2027 placeholders. User refines real dates with organiser.
 const EVENTS: Event[] = [
   // ─── JUNE 2026 ───
-  { date: "2026-06-03", name: "EuroCham · Risk Mgmt into Competitive Advantage (virtual training)", type: "business", country: "kh", loc: "Online · Phnom Penh", note: "EuroCham Cambodia training course.", url: "https://eurocham-cambodia.org" },
   { date: "2026-06-03", endDate: "2026-06-05", name: "Asia Tech x Singapore (ATxSG)", type: "tech", country: "sg", loc: "Singapore · Capella Sentosa", note: "Premier ASEAN tech summit — IMDA-anchored.", url: "https://asiatechxsg.com" },
-  { date: "2026-06-04", endDate: "2026-06-05", name: "EuroCham · Modern Manager's Toolkit: Data Literacy & AI Mastery", type: "ai", country: "kh", loc: "Phnom Penh", note: "EuroCham training — direct Ai positioning audience.", url: "https://eurocham-cambodia.org" },
   { date: "2026-06-08", endDate: "2026-06-14", name: "Singapore AI Week", type: "ai", country: "sg", loc: "Singapore (week-long, multi-venue)", note: "Annual week-long series of Ai events anchored by SuperAI — Asia's largest Ai conference.", url: "https://superai.com/sg-ai-week" },
   { date: "2026-06-09", name: "EuroCham · Industrial Parks & SEZ Forum 2026", type: "business", country: "kh", loc: "Phnom Penh", note: "SEZ-tenant angle — direct factory + Ministry of Industry positioning.", url: "https://eurocham-cambodia.org" },
   { date: "2026-06-09", endDate: "2026-06-11", name: "EuroCham · European Tech Business Delegation to Cambodia", type: "business", country: "kh", loc: "Phnom Penh", note: "EU-tech executives visiting Cambodia — Yai pitch + partnership window.", url: "https://eurocham-cambodia.org" },
-  { date: "2026-06-11", name: "EuroCham · Digital & Technology Committee Afterwork", type: "networking", country: "kh", loc: "Phnom Penh", note: "Recurring EuroCham digital working group.", url: "https://eurocham-cambodia.org" },
-  { date: "2026-06-12", name: "Cambodia ICT & Digital Forum (CamIDF)", type: "tech", country: "kh", loc: "Phnom Penh", note: "Multi-stakeholder platform — digital gov, biz, citizenship. URL TBD." },
   { date: "2026-06-16", name: "Cambodia Textile Summit 2026 ⭐", type: "summit", country: "kh", loc: "Phnom Penh · Raffles Hotel Le Royal · 08:00 AM", note: "TOP PRIORITY · co-organised by TAFTAC + ILO + Better Factories Cambodia + GIZ (EuroCham logistics). 200+ leaders. Direct GFT (garment / footwear / travel goods) audience. Topics: CPTPP, compliance (OSH/GBVH/Heat Stress), circularity, textile waste — all aligned with Yai modules. #CamboTextile2026", url: "https://eurocham-cambodia.org" },
   { date: "2026-06-17", endDate: "2026-06-19", name: "Vietnam International Tech Expo", type: "tech", country: "vn", loc: "Hanoi · NCC", note: "Vietnam ICT expo — verify name and URL." },
-  { date: "2026-06-18", name: "GMAC Member Meeting", type: "business", country: "kh", loc: "Phnom Penh", note: "Garment association — channel to mid-size factories.", url: "https://www.gmac-cambodia.org" },
   { date: "2026-06-25", endDate: "2026-06-26", name: "CamTech Summit", type: "tech", country: "kh", loc: "Phnom Penh · Koh Pich", note: "CAFT-organised flagship — fintech, digital banking, regional tech.", url: "https://camtechsummit.com" },
 
   // ─── JULY 2026 ───
   { date: "2026-07-04", endDate: "2026-07-07", name: "WAIC · World Ai Conference", type: "ai", country: "cn", loc: "Shanghai, China", note: "Flagship Ai event in China — must-visit.", url: "https://www.worldaic.com.cn" },
-  { date: "2026-07-09", name: "AMCHAM Cambodia Mixer", type: "networking", country: "kh", loc: "Phnom Penh", note: "Monthly chamber networking.", url: "https://www.amchamcambodia.net" },
-  { date: "2026-07-14", endDate: "2026-07-15", name: "MyAI Conference (Malaysia AI)", type: "ai", country: "my", loc: "Kuala Lumpur · KLCC", note: "Malaysia national Ai gathering — verify exact name + URL." },
   { date: "2026-07-16", endDate: "2026-07-17", name: "Cambodia Ai & Cloud Summit", type: "ai", country: "kh", loc: "Phnom Penh · Sofitel", note: "Direct positioning — attend / speak." },
   { date: "2026-07-28", endDate: "2026-07-30", name: "Smart China Expo", type: "expo", country: "cn", loc: "Chongqing", note: "Smart-mfg + AIoT, factory-relevant. Verify dates." },
 
@@ -79,7 +72,6 @@ const EVENTS: Event[] = [
   { date: "2026-08-14", endDate: "2026-08-16", name: "Cambodia Garment Mfg Expo", type: "expo", country: "kh", loc: "Phnom Penh · Koh Pich", note: "Direct factory-owner audience — verify exact name + URL." },
   { date: "2026-08-19", endDate: "2026-08-23", name: "World Robot Conference", type: "ai", country: "cn", loc: "Beijing, China", note: "Major robotics + AIoT showcase." },
   { date: "2026-08-26", endDate: "2026-08-28", name: "Malaysia Tech Month / KL Converge", type: "tech", country: "my", loc: "Kuala Lumpur · KLCC", note: "MDEC programmes — verify exact event + dates.", url: "https://mdec.my" },
-  { date: "2026-08-27", name: "TAFTAC Member Roundtable", type: "business", country: "kh", loc: "Phnom Penh", note: "Footwear / travel-goods association.", url: "https://www.taftac.org.kh" },
 
   // ─── SEPTEMBER 2026 ───
   { date: "2026-09-02", endDate: "2026-09-04", name: "Saigon Tech Summit", type: "tech", country: "vn", loc: "Ho Chi Minh City", note: "Vietnam's largest tech-investor stage." },
@@ -94,8 +86,6 @@ const EVENTS: Event[] = [
   { date: "2026-10-13", endDate: "2026-10-15", name: "Tech in Asia Conference Singapore", type: "tech", country: "sg", loc: "Singapore", note: "Regional founder + investor conference.", url: "https://www.techinasia.com" },
   { date: "2026-10-15", endDate: "2026-10-19", name: "Canton Fair (Phase 1)", type: "expo", country: "cn", loc: "Guangzhou, China", note: "World's largest trade fair — manufacturing buyer reach.", url: "https://www.cantonfair.org.cn" },
   { date: "2026-10-20", endDate: "2026-10-22", name: "Vietnam Manufacturing Expo", type: "expo", country: "vn", loc: "Hanoi · ICE Hanoi", note: "Industrial / factory-owner reach in Vietnam — verify URL." },
-  { date: "2026-10-17", endDate: "2026-10-18", name: "Cambodia ICT Camp", type: "tech", country: "kh", loc: "Phnom Penh", note: "Bi-annual collaborative camp — cybersecurity, Ai, open data. URL TBD." },
-  { date: "2026-10-22", name: "Phnom Penh AIoT Meetup", type: "ai", country: "kh", loc: "Phnom Penh · Factory PP", note: "Developer-community visibility.", url: "https://factoryphnompenh.com" },
   { date: "2026-10-27", endDate: "2026-10-29", name: "Hong Kong FinTech Week", type: "summit", country: "hk", loc: "Hong Kong", note: "Greater Bay Area Ai + fintech, China-adjacent.", url: "https://www.fintechweek.hk" },
 
   // ─── NOVEMBER 2026 ───
@@ -105,29 +95,21 @@ const EVENTS: Event[] = [
   { date: "2026-11-15", endDate: "2026-11-17", name: "China Hi-Tech Fair", type: "expo", country: "cn", loc: "Shenzhen, Guangdong", note: "China's largest tech expo — Ai + hardware.", url: "http://www.chtf.com" },
   { date: "2026-11-13", name: "National STI Day (MISTI)", type: "tech", country: "kh", loc: "Phnom Penh · Koh Pich Convention Centre", note: "MISTI ministry-hosted · ~200 booths · startups + SMEs + Industry 4.0.", url: "https://misti.gov.kh" },
   { date: "2026-11-19", name: "Cambodia Smart City Summit", type: "summit", country: "kh", loc: "Phnom Penh · NCDD", note: "Ministry of Telecom / Digital Gov angle." },
-  { date: "2026-11-21", name: "Cambodia Tech Forum", type: "tech", country: "kh", loc: "Phnom Penh", note: "Annual networking + exhibition for digital pros, founders, devs. Verify exact URL.", url: "https://startupcambodia.gov.kh" },
   { date: "2026-11-25", endDate: "2026-11-27", name: "ASEAN Business & Investment Summit", type: "summit", country: "ph", loc: "Manila, Philippines", note: "ASEAN-wide CEO + investor audience.", url: "https://asean-bac.org" },
 
   // ─── DECEMBER 2026 ───
-  { date: "2026-12-02", endDate: "2026-12-04", name: "Vietnam Web Summit / Tech Founders Forum", type: "tech", country: "vn", loc: "Ho Chi Minh City", note: "Founder-community Vietnam edition." },
   { date: "2026-12-03", endDate: "2026-12-05", name: "Cambodia–Japan Business Forum", type: "business", country: "kh", loc: "Phnom Penh + Tokyo (hybrid)", note: "JICA partnership channel.", url: "https://www.jica.go.jp/cambodia" },
   { date: "2026-12-08", endDate: "2026-12-10", name: "Slush Singapore (ASEAN edition)", type: "summit", country: "sg", loc: "Singapore", note: "Founder + investor focused.", url: "https://www.slush.org" },
-  { date: "2026-12-11", name: "Year-End Tech Founders Mixer", type: "networking", country: "kh", loc: "Phnom Penh · Rosewood", note: "Local startup ecosystem closing event." },
   { date: "2026-12-15", endDate: "2026-12-17", name: "ZGC Forum (Zhongguancun)", type: "ai", country: "cn", loc: "Beijing, China", note: "China's Silicon Valley — Ai + deep-tech. Verify URL." },
 
-  // ─── 2027 PLACEHOLDERS (less dense — refine later) ───
-  { date: "2027-01-15", name: "AMCHAM New-Year Business Summit", type: "summit", country: "kh", loc: "Phnom Penh", note: "Annual outlook + bilateral." },
-  { date: "2027-01-28", endDate: "2027-01-30", name: "Cambodia Mfg & Industrial Expo", type: "expo", country: "kh", loc: "Phnom Penh · Koh Pich", note: "Cross-vertical." },
-  { date: "2027-02-11", name: "Phnom Penh Ai Builders Day", type: "ai", country: "kh", loc: "Phnom Penh · Factory PP", note: "Local engineer recruitment + visibility." },
+  // ─── 2027 MAJOR EVENTS ONLY ───
+  { date: "2027-01-28", endDate: "2027-01-30", name: "Cambodia Mfg & Industrial Expo", type: "expo", country: "kh", loc: "Phnom Penh · Koh Pich", note: "Cross-vertical industrial expo." },
   { date: "2027-02-25", endDate: "2027-02-26", name: "ASEAN Digital Ministers Meeting", type: "summit", country: "kh", loc: "Phnom Penh", note: "Government-channel max leverage." },
   { date: "2027-03-12", endDate: "2027-03-14", name: "Cambodia Garment & Footwear Expo", type: "expo", country: "kh", loc: "Phnom Penh", note: "Footwear-led sister event." },
-  { date: "2027-03-26", name: "EuroCham Cambodia Tech Forum", type: "tech", country: "kh", loc: "Phnom Penh", note: "EU-investor reach." },
-  { date: "2027-04-09", name: "Cambodia Startup Demo Day", type: "tech", country: "kh", loc: "Phnom Penh · Impact Hub", note: "Yai showcase." },
-  { date: "2027-04-22", endDate: "2027-04-24", name: "Mekong Tech Summit", type: "summit", country: "kh", loc: "Phnom Penh", note: "Multi-country audience." },
-    { date: "2027-05-13", name: "GMAC AGM 2027", type: "business", country: "kh", loc: "Phnom Penh", note: "Member-factory AGM — Yai partnership slot." },
+  { date: "2027-04-22", endDate: "2027-04-24", name: "Mekong Tech Summit", type: "summit", country: "kh", loc: "Phnom Penh", note: "Multi-country regional tech summit." },
+  { date: "2027-05-13", name: "GMAC AGM 2027", type: "business", country: "kh", loc: "Phnom Penh", note: "Member-factory AGM — Yai partnership slot." },
   { date: "2027-05-26", endDate: "2027-05-29", name: "BEYOND Expo 2027", type: "expo", country: "mo", loc: "Macao · The Venetian Macao Cotai Expo", note: "Asia-Pacific tech expo — 'Empowering Asia' theme. Annual.", url: "https://www.beyondexpo.com" },
   { date: "2027-06-24", endDate: "2027-06-25", name: "CamTech Summit 2027", type: "tech", country: "kh", loc: "Phnom Penh · Koh Pich", note: "Annual CAFT flagship — fintech + regional tech.", url: "https://camtechsummit.com" },
-  { date: "2027-06-10", name: "Cambodia Ai Conference 2027", type: "ai", country: "kh", loc: "Phnom Penh", note: "Primary local Ai stage." },
   { date: "2027-06-24", endDate: "2027-06-26", name: "ASEAN Industrial Innovation Expo", type: "expo", country: "kh", loc: "Phnom Penh · Diamond Island", note: "Cross-border industrial reach." },
 ];
 
