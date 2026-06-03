@@ -1,9 +1,10 @@
-// Server component — reads admin stores directly from disk and renders
-// the public roll-up shown to viewers in Section 13.
+// Server component — reads the 3 admin stores and renders the public Section 13
+// summary as 4 collapsible GTM-style bars (Revenue · Salaries · Expenses · Net).
 
 import { readSalesStore } from "@/lib/sales-store";
 import { readSalaryStore } from "@/lib/salary-store";
 import { readExpensesStore } from "@/lib/expenses-store";
+import { GtmEnablerBar } from "./GtmEnablerBar";
 
 function fmt(n: number): string {
   if (Math.abs(n) >= 1_000_000) return `$${(n / 1_000_000).toFixed(2)}M`;
@@ -24,12 +25,7 @@ export async function LiveBudgetSummary() {
     readExpensesStore(),
   ]);
 
-  // Build a master month list across all 3 stores
-  const allMonths = Array.from(new Set([
-    ...sales.months, ...salaries.months, ...expenses.months,
-  ])).sort();
-
-  // Sum revenue by month + stream
+  // Aggregate
   const revenueByMonth: Record<string, number> = {};
   const revenueByStream = sales.streams.map((st) => {
     let total = 0;
@@ -41,7 +37,6 @@ export async function LiveBudgetSummary() {
   });
   const totalRevenue = revenueByStream.reduce<number>((s, st) => s + st.total, 0);
 
-  // Sum salaries by month
   const salaryByMonth: Record<string, number> = {};
   let totalSalary = 0;
   for (const mem of salaries.members) {
@@ -52,7 +47,6 @@ export async function LiveBudgetSummary() {
     }
   }
 
-  // Sum non-salary expenses by month + by category
   const expensesByMonth: Record<string, number> = {};
   const expensesByCategory = expenses.categories.map((cat) => {
     let total = 0;
@@ -66,180 +60,121 @@ export async function LiveBudgetSummary() {
     return { ...cat, total };
   });
   const totalExpenses = expensesByCategory.reduce<number>((s, c) => s + c.total, 0);
+  const netPosition = totalRevenue - totalSalary - totalExpenses;
 
-  const totalCost = totalSalary + totalExpenses;
-  const netPosition = totalRevenue - totalCost;
-  const hasAnyData = totalRevenue > 0 || totalCost > 0;
+  const allMonths = Array.from(new Set([
+    ...sales.months, ...salaries.months, ...expenses.months,
+  ])).sort();
 
-  // Determine the data window — first month with any data → today
-  const windowMonths = allMonths.filter((m) =>
-    revenueByMonth[m] || salaryByMonth[m] || expensesByMonth[m]
-  );
-
-  const lastUpdated = [
-    sales.updatedAt,
-    salaries.updatedAt,
-    expenses.updatedAt,
-  ].filter(Boolean).sort().reverse()[0];
-
-  if (!hasAnyData) {
-    return (
-      <div className="rounded-xl border-2 border-dashed border-yai-border bg-white/50 p-6 text-center">
-        <div className="text-[11px] uppercase tracking-wider font-extrabold text-gray-400 mb-1">
-          Live P&amp;L · awaiting admin entries
-        </div>
-        <div className="text-sm text-gray-500 max-w-xl mx-auto">
-          Once the admin posts Sales / Salaries / Capex actuals, this view rebuilds itself
-          automatically with KPI cards, per-stream summaries, and a monthly trend.
-        </div>
-      </div>
-    );
-  }
+  const lastUpdated = [sales.updatedAt, salaries.updatedAt, expenses.updatedAt]
+    .filter(Boolean).sort().reverse()[0];
 
   return (
-    <div className="space-y-6">
-      {/* KPI row */}
-      <div className="grid sm:grid-cols-4 gap-3">
-        <Kpi label="Revenue booked"      value={fmt(totalRevenue)}    color="#10B981" note={`${revenueByStream.filter((s) => s.total > 0).length} of ${revenueByStream.length} streams active`} />
-        <Kpi label="Salaries paid"       value={fmt(totalSalary)}     color="#1E4DAA" note={`${salaries.members.length} members · ${windowMonths.length} months`} />
-        <Kpi label="Other expenses"      value={fmt(totalExpenses)}   color="#F37021" note={`${expensesByCategory.filter((c) => c.total > 0).length} of ${expensesByCategory.length} categories active`} />
-        <Kpi label="Net position"        value={fmt(netPosition)}     color={netPosition >= 0 ? "#10B981" : "#1E4DAA"} note="Revenue − (Salaries + Expenses)" />
-      </div>
+    <div className="space-y-3">
+      {/* 01 · Revenue */}
+      <GtmEnablerBar
+        num="01"
+        tag="REVENUE"
+        title="Sales / Income"
+        desc="9 streams — 6 planned packages (Cloud Starter→Big Ai Brain) + 3 variable-revenue e-com streams."
+        color="#10B981"
+        bg="#ECFDF5"
+        badge={fmt(totalRevenue)}
+        badgeLabel="Booked"
+      >
+        <StreamGrid streams={revenueByStream} totalLabel="Streams active" />
+        <MonthlySparkline label="Revenue · monthly" months={allMonths} values={revenueByMonth} color="#10B981" />
+      </GtmEnablerBar>
 
-      {/* Stream summary — Sales */}
-      <div>
-        <h4 className="text-[11px] uppercase tracking-wider font-extrabold text-yai-navy mb-2">
-          Income streams · planned vs booked
-        </h4>
-        <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
-          {revenueByStream.map((st) => {
-            const isUncertain = st.certainty === "uncertain";
-            const cat = CAT_VIS[st.category] ?? CAT_VIS.cloud;
-            return (
-              <li
-                key={st.id}
-                className={`rounded-lg border bg-white p-2.5 ${isUncertain ? "border-orange-200 bg-orange-50/30" : "border-yai-border"}`}
-                style={{ borderLeftWidth: 3, borderLeftColor: cat.bg }}
-              >
-                <div className="flex items-baseline justify-between gap-2 mb-1 flex-wrap">
-                  <div className="flex items-baseline gap-1.5 flex-wrap">
-                    <span
-                      className="text-[8px] font-extrabold uppercase tracking-wider px-1 py-0.5 rounded text-white"
-                      style={{ background: cat.bg }}
-                    >
-                      {cat.label}
-                    </span>
-                    <span className="text-[12px] font-extrabold text-yai-navy leading-tight">{st.name}</span>
-                  </div>
-                  <span className="text-[11px] font-extrabold tabular-nums" style={{ color: st.total > 0 ? "#10B981" : "#94A3B8" }}>
-                    {st.total > 0 ? fmt(st.total) : "—"}
-                  </span>
-                </div>
-                <div className="text-[10px] text-gray-600 leading-snug">
-                  <span className="font-semibold text-gray-700">{st.unitLabel}</span>
-                  <span className="text-gray-400"> · {st.tierLabel}</span>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
+      {/* 02 · Salaries */}
+      <GtmEnablerBar
+        num="02"
+        tag="SALARIES"
+        title="Compensation paid"
+        desc={`${salaries.members.length} members tracked from May 2024 onward. Includes bonuses.`}
+        color="#1E4DAA"
+        bg="#EFF6FF"
+        badge={fmt(totalSalary)}
+        badgeLabel="Paid"
+      >
+        <div className="grid sm:grid-cols-3 gap-3">
+          <MiniStat label="Members on roll" value={`${salaries.members.filter((m) => m.status === "active").length}`} sub={`${salaries.members.length} total · ${salaries.members.filter((m) => m.status !== "active").length} resigned / re-aligned`} color="#1E4DAA" />
+          <MiniStat label="Months tracked" value={`${salaries.months.length}`} sub={`May 2024 → today`} color="#1E4DAA" />
+          <MiniStat label="Avg / month" value={fmt(salaries.months.length ? totalSalary / salaries.months.length : 0)} sub="Burn pace" color="#1E4DAA" />
+        </div>
+        <MonthlySparkline label="Salaries · monthly" months={allMonths} values={salaryByMonth} color="#1E4DAA" />
+      </GtmEnablerBar>
 
-      {/* Expense category summary */}
-      <div>
-        <h4 className="text-[11px] uppercase tracking-wider font-extrabold text-yai-navy mb-2">
-          Expense categories · spent so far
-        </h4>
-        <ul className="grid sm:grid-cols-2 lg:grid-cols-4 gap-2">
-          <li
-            className="rounded-lg border border-yai-border bg-white p-2.5"
-            style={{ borderLeftWidth: 3, borderLeftColor: "#1E4DAA" }}
-          >
-            <div className="flex items-baseline justify-between gap-2 mb-1">
-              <span className="text-[12px] font-extrabold text-yai-navy">Salaries</span>
-              <span className="text-[11px] font-extrabold text-yai-blue tabular-nums">{fmt(totalSalary)}</span>
-            </div>
-            <div className="text-[10px] text-gray-600">{salaries.members.length} members · auto-sums from per-person grid</div>
-          </li>
+      {/* 03 · Other expenses */}
+      <GtmEnablerBar
+        num="03"
+        tag="EXPENSES"
+        title="Other expenses · capex + running"
+        desc={`${expensesByCategory.length} categories — Computers, Furniture, Dev gear, Admin Shop, Ai Fees, Villa Rent, Petty Cash + Promotion.`}
+        color="#F37021"
+        bg="#FFF7ED"
+        badge={fmt(totalExpenses)}
+        badgeLabel="Spent"
+      >
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-2">
           {expensesByCategory.map((cat) => (
-            <li
+            <div
               key={cat.id}
               className="rounded-lg border border-yai-border bg-white p-2.5"
               style={{ borderLeftWidth: 3, borderLeftColor: cat.color }}
             >
-              <div className="flex items-baseline justify-between gap-2 mb-1">
-                <span className="text-[12px] font-extrabold text-yai-navy">{cat.name}</span>
-                <span className="text-[11px] font-extrabold tabular-nums" style={{ color: cat.total > 0 ? cat.color : "#94A3B8" }}>
+              <div className="flex items-baseline justify-between gap-2">
+                <span className="text-[12px] font-extrabold text-yai-navy leading-tight">{cat.name}</span>
+                <span className="text-[11px] font-extrabold tabular-nums shrink-0" style={{ color: cat.total > 0 ? cat.color : "#94A3B8" }}>
                   {cat.total > 0 ? fmt(cat.total) : "—"}
                 </span>
               </div>
-              <div className="text-[10px] text-gray-600">{cat.items.length} line item{cat.items.length === 1 ? "" : "s"}</div>
-            </li>
+              <div className="text-[10px] text-gray-500 mt-0.5">{cat.items.length} line item{cat.items.length === 1 ? "" : "s"}</div>
+            </div>
           ))}
-        </ul>
-      </div>
-
-      {/* Monthly trend table — compact */}
-      {windowMonths.length > 0 && (
-        <div>
-          <h4 className="text-[11px] uppercase tracking-wider font-extrabold text-yai-navy mb-2">
-            Monthly trend · {fmtMonth(windowMonths[0])} → {fmtMonth(windowMonths[windowMonths.length - 1])}
-          </h4>
-          <div className="overflow-x-auto rounded-lg border border-yai-border bg-white">
-            <table className="text-[11px] border-collapse w-full">
-              <thead className="bg-yai-navy text-white">
-                <tr>
-                  <th className="text-left px-2 py-1.5 font-bold uppercase tracking-wider sticky left-0 bg-yai-navy">Month</th>
-                  <th className="text-right px-2 py-1.5 font-bold uppercase tracking-wider">Revenue</th>
-                  <th className="text-right px-2 py-1.5 font-bold uppercase tracking-wider">Salaries</th>
-                  <th className="text-right px-2 py-1.5 font-bold uppercase tracking-wider">Other exp.</th>
-                  <th className="text-right px-2 py-1.5 font-bold uppercase tracking-wider bg-yai-blue">Net</th>
-                </tr>
-              </thead>
-              <tbody>
-                {windowMonths.map((m) => {
-                  const rev = revenueByMonth[m] ?? 0;
-                  const sal = salaryByMonth[m] ?? 0;
-                  const exp = expensesByMonth[m] ?? 0;
-                  const net = rev - sal - exp;
-                  return (
-                    <tr key={m} className="border-t border-yai-border">
-                      <td className="px-2 py-1 font-bold text-yai-navy sticky left-0 bg-white">{fmtMonth(m)}</td>
-                      <td className="px-2 py-1 text-right tabular-nums" style={{ color: rev > 0 ? "#10B981" : "#94A3B8" }}>
-                        {rev > 0 ? fmt(rev) : "—"}
-                      </td>
-                      <td className="px-2 py-1 text-right tabular-nums" style={{ color: sal > 0 ? "#1E4DAA" : "#94A3B8" }}>
-                        {sal > 0 ? fmt(sal) : "—"}
-                      </td>
-                      <td className="px-2 py-1 text-right tabular-nums" style={{ color: exp > 0 ? "#F37021" : "#94A3B8" }}>
-                        {exp > 0 ? fmt(exp) : "—"}
-                      </td>
-                      <td className="px-2 py-1 text-right font-extrabold tabular-nums bg-blue-50/30" style={{ color: net >= 0 ? "#10B981" : "#1E4DAA" }}>
-                        {fmt(net)}
-                      </td>
-                    </tr>
-                  );
-                })}
-                <tr className="border-t-2 border-yai-blue bg-gray-50">
-                  <td className="px-2 py-2 font-extrabold uppercase tracking-wider text-[10px] text-yai-navy sticky left-0 bg-gray-50">Total</td>
-                  <td className="px-2 py-2 text-right font-extrabold text-emerald-600 tabular-nums">{fmt(totalRevenue)}</td>
-                  <td className="px-2 py-2 text-right font-extrabold text-yai-blue tabular-nums">{fmt(totalSalary)}</td>
-                  <td className="px-2 py-2 text-right font-extrabold text-yai-orange tabular-nums">{fmt(totalExpenses)}</td>
-                  <td className="px-2 py-2 text-right font-extrabold tabular-nums bg-blue-50" style={{ color: netPosition >= 0 ? "#10B981" : "#1E4DAA" }}>
-                    {fmt(netPosition)}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
         </div>
-      )}
+        <MonthlySparkline label="Expenses · monthly" months={allMonths} values={expensesByMonth} color="#F37021" />
+      </GtmEnablerBar>
+
+      {/* 04 · Net position */}
+      <GtmEnablerBar
+        num="04"
+        tag="NET"
+        title="Net position · investment build"
+        desc="Revenue − (Salaries + Expenses). Negative is expected during the platform-build phase — see Section 10 for the asset-value offset."
+        color={netPosition >= 0 ? "#10B981" : "#0A1F47"}
+        bg="#F8FAFC"
+        badge={fmt(netPosition)}
+        badgeLabel="Today"
+      >
+        <div className="grid sm:grid-cols-3 gap-3 mb-3">
+          <MiniStat label="In" value={fmt(totalRevenue)} sub="Revenue booked" color="#10B981" />
+          <MiniStat label="Out" value={fmt(totalSalary + totalExpenses)} sub={`Salaries ${fmt(totalSalary)} + Expenses ${fmt(totalExpenses)}`} color="#F37021" />
+          <MiniStat label="Net" value={fmt(netPosition)} sub={netPosition >= 0 ? "Surplus" : "Investment build"} color={netPosition >= 0 ? "#10B981" : "#0A1F47"} />
+        </div>
+        <NetSparkline months={allMonths} revenueByMonth={revenueByMonth} salaryByMonth={salaryByMonth} expensesByMonth={expensesByMonth} />
+      </GtmEnablerBar>
 
       {/* Footer */}
-      <div className="text-[10px] text-gray-500 leading-snug">
-        Sourced live from the admin back-end (Sales / Salaries / Capex feeders).
+      <div className="text-[10px] text-gray-500 leading-snug pt-1">
+        Sourced live from admin · Sales · Salaries · Expenses.
         {lastUpdated && <> Last update <strong className="text-yai-navy">{new Date(lastUpdated).toLocaleString()}</strong>.</>}
       </div>
+    </div>
+  );
+}
+
+/* ─── Helper presentation components (all server-side) ──────────────────── */
+
+function MiniStat({ label, value, sub, color }: { label: string; value: string; sub: string; color: string }) {
+  return (
+    <div
+      className="rounded-lg border border-yai-border bg-white p-3"
+      style={{ borderTopWidth: 3, borderTopColor: color }}
+    >
+      <div className="text-[10px] uppercase tracking-wider font-bold text-gray-500">{label}</div>
+      <div className="text-xl font-extrabold tabular-nums" style={{ color }}>{value}</div>
+      <div className="text-[10px] text-gray-600 italic mt-0.5">{sub}</div>
     </div>
   );
 }
@@ -251,15 +186,155 @@ const CAT_VIS: Record<string, { label: string; bg: string }> = {
   ecom:     { label: "E-com",    bg: "#F37021" },
 };
 
-function Kpi({ label, value, color, note }: { label: string; value: string; color: string; note: string }) {
+type SimpleStream = {
+  id: string;
+  name: string;
+  category: string;
+  certainty: string;
+  unitLabel: string;
+  tierLabel: string;
+  total: number;
+};
+
+function StreamGrid({ streams, totalLabel }: { streams: SimpleStream[]; totalLabel: string }) {
+  const active = streams.filter((s) => s.total > 0).length;
   return (
-    <div
-      className="rounded-xl border border-yai-border bg-white p-3 shadow-sm"
-      style={{ borderTopWidth: 3, borderTopColor: color }}
-    >
-      <div className="text-[10px] uppercase tracking-wider font-bold text-gray-500">{label}</div>
-      <div className="text-2xl font-extrabold tabular-nums" style={{ color }}>{value}</div>
-      <div className="text-[10px] text-gray-600 italic mt-0.5">{note}</div>
+    <div>
+      <div className="text-[10px] uppercase tracking-wider font-extrabold text-gray-500 mb-2">
+        {active} of {streams.length} {totalLabel.toLowerCase()}
+      </div>
+      <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
+        {streams.map((st) => {
+          const cat = CAT_VIS[st.category] ?? CAT_VIS.cloud;
+          const isUncertain = st.certainty === "uncertain";
+          return (
+            <li
+              key={st.id}
+              className={`rounded-lg border bg-white p-2.5 ${isUncertain ? "border-orange-200" : "border-yai-border"}`}
+              style={{ borderLeftWidth: 3, borderLeftColor: cat.bg }}
+            >
+              <div className="flex items-baseline justify-between gap-2 mb-0.5 flex-wrap">
+                <div className="flex items-baseline gap-1.5 flex-wrap">
+                  <span
+                    className="text-[8px] font-extrabold uppercase tracking-wider px-1 py-0.5 rounded text-white"
+                    style={{ background: cat.bg }}
+                  >
+                    {cat.label}
+                  </span>
+                  <span className="text-[12px] font-extrabold text-yai-navy">{st.name}</span>
+                </div>
+                <span className="text-[11px] font-extrabold tabular-nums" style={{ color: st.total > 0 ? "#10B981" : "#94A3B8" }}>
+                  {st.total > 0 ? fmt(st.total) : "—"}
+                </span>
+              </div>
+              <div className="text-[10px] text-gray-500">{st.unitLabel} · <span className="text-gray-400">{st.tierLabel}</span></div>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}
+
+/** Compact monthly bar sparkline + min/max labels. Server-rendered SVG. */
+function MonthlySparkline({ label, months, values, color }: {
+  label: string;
+  months: string[];
+  values: Record<string, number>;
+  color: string;
+}) {
+  const data = months.map((m) => values[m] ?? 0);
+  const max = Math.max(0.0001, ...data);
+  const W = 720, H = 60, BAR_W = months.length ? (W - 2) / months.length : 0;
+  const hasAny = data.some((v) => v > 0);
+
+  return (
+    <div className="mt-3 rounded-lg bg-gray-50 border border-yai-border p-3">
+      <div className="flex items-baseline justify-between gap-2 mb-2">
+        <span className="text-[10px] uppercase tracking-wider font-extrabold text-gray-500">{label}</span>
+        {months.length > 0 && (
+          <span className="text-[10px] text-gray-500">
+            {fmtMonth(months[0])} → {fmtMonth(months[months.length - 1])}
+          </span>
+        )}
+      </div>
+      {!hasAny ? (
+        <div className="text-[11px] text-gray-400 italic text-center py-3">No data yet — admin posts will appear here.</div>
+      ) : (
+        <svg viewBox={`0 0 ${W} ${H}`} className="w-full" preserveAspectRatio="none">
+          {data.map((v, i) => {
+            const barH = (v / max) * (H - 14);
+            const x = 1 + i * BAR_W;
+            const y = H - 1 - barH;
+            return (
+              <rect
+                key={i}
+                x={x + 0.5}
+                y={y}
+                width={Math.max(1, BAR_W - 1)}
+                height={Math.max(0.5, barH)}
+                fill={color}
+                opacity={v > 0 ? 0.85 : 0.15}
+                rx={1}
+              />
+            );
+          })}
+        </svg>
+      )}
+    </div>
+  );
+}
+
+/** Net position sparkline — shows Revenue (green up) and Cost (red down) per month. */
+function NetSparkline({ months, revenueByMonth, salaryByMonth, expensesByMonth }: {
+  months: string[];
+  revenueByMonth: Record<string, number>;
+  salaryByMonth: Record<string, number>;
+  expensesByMonth: Record<string, number>;
+}) {
+  const rev = months.map((m) => revenueByMonth[m] ?? 0);
+  const cost = months.map((m) => (salaryByMonth[m] ?? 0) + (expensesByMonth[m] ?? 0));
+  const maxRev = Math.max(0.0001, ...rev);
+  const maxCost = Math.max(0.0001, ...cost);
+  const peak = Math.max(maxRev, maxCost);
+  const W = 720, H = 80, BAR_W = months.length ? (W - 2) / months.length : 0;
+  const midY = H / 2;
+  const hasAny = rev.some((v) => v > 0) || cost.some((v) => v > 0);
+
+  return (
+    <div className="rounded-lg bg-gray-50 border border-yai-border p-3">
+      <div className="flex items-baseline justify-between gap-2 mb-2 flex-wrap">
+        <span className="text-[10px] uppercase tracking-wider font-extrabold text-gray-500">Monthly · revenue vs cost</span>
+        <div className="flex items-center gap-3 text-[10px]">
+          <span className="flex items-center gap-1">
+            <span className="inline-block w-2.5 h-2.5 rounded-sm bg-emerald-500" /> <span className="text-gray-700">Revenue</span>
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="inline-block w-2.5 h-2.5 rounded-sm bg-yai-orange" /> <span className="text-gray-700">Cost</span>
+          </span>
+        </div>
+      </div>
+      {!hasAny ? (
+        <div className="text-[11px] text-gray-400 italic text-center py-3">No data yet — admin posts will appear here.</div>
+      ) : (
+        <svg viewBox={`0 0 ${W} ${H}`} className="w-full" preserveAspectRatio="none">
+          <line x1={0} x2={W} y1={midY} y2={midY} stroke="#CBD5E1" strokeWidth="0.5" strokeDasharray="2 2" />
+          {months.map((_, i) => {
+            const r = rev[i];
+            const c = cost[i];
+            const x = 1 + i * BAR_W;
+            const bw = Math.max(1, BAR_W - 1);
+            const rH = (r / peak) * (midY - 2);
+            const cH = (c / peak) * (midY - 2);
+            return (
+              <g key={i}>
+                {r > 0 && <rect x={x + 0.5} y={midY - rH} width={bw} height={rH} fill="#10B981" opacity={0.85} rx={1} />}
+                {c > 0 && <rect x={x + 0.5} y={midY}      width={bw} height={cH} fill="#F37021" opacity={0.75} rx={1} />}
+              </g>
+            );
+          })}
+        </svg>
+      )}
     </div>
   );
 }
