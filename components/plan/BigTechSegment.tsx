@@ -17,6 +17,7 @@ type Partner = {
   t: string;            // partner title
   n: string;            // short summary visible on the card
   s: Status;            // overall status (highest stage reached)
+  url?: string;         // optional partner / programme URL — renders the title as a link
   pathway: Milestone[]; // the dedicated multi-stage pathway shown when hovered
 };
 
@@ -30,6 +31,7 @@ const PARTNERS: Partner[] = [
     t: "Anthropic · Claude Partner Network",
     n: "Application cleared initial review. In team-certification phase.",
     s: "progress",
+    url: "https://www.anthropic.com/partners",
     pathway: [
       {
         monthLabel: "03-26", d: "Mar 2026", t: "CPN application", s: "done",
@@ -87,6 +89,7 @@ const PARTNERS: Partner[] = [
     t: "Google Cloud for Startups",
     n: "Google partner-team outreach booked. Vertex AI credits + cloud hosting in play.",
     s: "progress",
+    url: "https://cloud.google.com/startup",
     pathway: [
       {
         monthLabel: "05-26", d: "May 2026", t: "Application submitted", s: "done",
@@ -129,6 +132,7 @@ const PARTNERS: Partner[] = [
     t: "JICA · Cambodia-Japan SME programme",
     n: "Bilateral funding + Japanese factory references.",
     s: "planned",
+    url: "https://www.jica.go.jp/cambodia",
     pathway: [
       { d: "Q3 2026", t: "01 · Meeting with JICA Cambodia office",             s: "planned", n: "Position Yai inside the SME digital-transformation track." },
       { d: "Q4 2026", t: "02 · Apply to JICA innovation funding scheme",      s: "planned", n: "Joint Cambodia-Japan SME bilateral programme." },
@@ -142,6 +146,7 @@ const PARTNERS: Partner[] = [
     t: "Y Combinator / Antler / SE-Asia accelerator",
     n: "Brand validation + investor + intro network.",
     s: "planned",
+    url: "https://www.ycombinator.com/apply",
     pathway: [
       { d: "Q3 2026", t: "01 · Apply to YC W27 (or Antler / Iterative)", s: "planned", n: "Investor + global intro network." },
       { d: "Q4 2026", t: "02 · Interview + decision",                    s: "planned", n: "If accepted, batch starts Jan 2027." },
@@ -155,6 +160,7 @@ const PARTNERS: Partner[] = [
     t: "ADB / IFC garment-sector digital track",
     n: "Multilateral grant or financing for digital transformation.",
     s: "planned",
+    url: "https://www.ifc.org/en/what-we-do/products-and-services/how-to-apply-for-financing",
     pathway: [
       { d: "Q4 2026", t: "01 · Outreach to ADB Cambodia + IFC SEA office", s: "planned", n: "Garment-sector digital transformation case." },
       { d: "Q1 2027", t: "02 · Position inside Better Factories Cambodia",  s: "planned", n: "Joint ILO + IFC programme already running." },
@@ -168,6 +174,7 @@ const PARTNERS: Partner[] = [
     t: "ABA + Wing · Cambodia payment rails",
     n: "Payroll auto-disbursement live. B2B + worker P2P next.",
     s: "progress",
+    url: "https://www.ababank.com",
     pathway: [
       { d: "Q4 2025", t: "01 · ABA payroll API integration",         s: "done",     n: "Cambodia's largest bank — direct disbursement." },
       { d: "Q4 2025", t: "02 · Wing wallet integration",             s: "done",     n: "Dominant mobile-money network for workers." },
@@ -273,7 +280,21 @@ export function BigTechSegment() {
                     </span>
                     <span className="text-[10px] uppercase tracking-wider font-semibold text-gray-400">{p.d}</span>
                   </div>
-                  <div className="font-bold text-yai-navy leading-tight">{p.t}</div>
+                  <div className="font-bold text-yai-navy leading-tight">
+                    {p.t}
+                    {p.url && (
+                      <a
+                        href={p.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="ml-1 text-[11px] font-bold text-yai-blue hover:underline"
+                        title={`Open ${p.t}`}
+                      >
+                        ↗
+                      </a>
+                    )}
+                  </div>
                   <div className="text-gray-600 leading-snug mt-0.5">{p.n}</div>
                 </div>
               </button>
@@ -290,7 +311,19 @@ export function BigTechSegment() {
               Pathway for
             </div>
             <div className="text-base font-extrabold" style={{ color: SEG_COLOR }}>
-              {active.t}
+              {active.url ? (
+                <a
+                  href={active.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:underline inline-flex items-baseline gap-1"
+                >
+                  {active.t}
+                  <span className="text-[11px] opacity-70">↗</span>
+                </a>
+              ) : (
+                active.t
+              )}
             </div>
           </div>
           <div className="text-[10px] text-gray-500 italic">
