@@ -13,6 +13,7 @@ type Member = {
   monthly: Record<string, number>;
   group?: GroupId;
   groupRole?: GroupRole;
+  empId?: string;
 };
 type Store = {
   updatedAt: string | null;
@@ -201,6 +202,14 @@ export function SalaryEditor({ initial }: { initial: Store }) {
                   style={groupMeta ? { boxShadow: `inset 3px 0 0 0 ${groupMeta.color}` } : undefined}
                 >
                   <div className="flex items-center gap-1.5">
+                    {mem.empId && (
+                      <span
+                        className="inline-flex items-center text-[9px] font-mono font-bold text-gray-500 bg-gray-100 px-1 py-0.5 rounded shrink-0"
+                        title="Employee ID"
+                      >
+                        {mem.empId}
+                      </span>
+                    )}
                     <input
                       type="text"
                       value={mem.name}

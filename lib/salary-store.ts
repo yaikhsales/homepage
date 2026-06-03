@@ -28,6 +28,8 @@ export type Member = {
   monthly: Record<string, number>;
   group?: MemberGroupId;
   groupRole?: GroupRole;
+  /** Factory / payroll employee ID, e.g. "YM7654" */
+  empId?: string;
 };
 
 export type SalaryStore = {
@@ -58,9 +60,9 @@ export const SEED_SALARY_STORE: SalaryStore = {
     // ═══ GROUP 2 · Architecture (ORANGE) ═════════════════════════════════
     // HR systems · Pay systems — 70% SW dev / 30% AMD+NVIDIA Ai cert
     // 2025 Jan-Mar @ $554, Apr+ @ $850 (53.43% raise).
-    { name: "Peang Sereysothirich (Rich)", status: "active", startMonth: "2024-05", group: "architecture", groupRole: "lead", monthly: {
+    { name: "Peang Sereysothirich (Rich)", empId: "YM7654", status: "active", startMonth: "2024-05", group: "architecture", groupRole: "lead", monthly: {
       "2024-05": 398.23, "2024-06": 451.31, "2024-07": 433.62, "2024-08": 504.38, "2024-09": 536.69, "2024-10": 547.46, "2024-11": 515.00, "2024-12": 525.92,
-      "2025-01": 554.00, "2025-02": 554.00, "2025-03": 554.00, "2025-04": 850.00, "2025-05": 850.00, "2025-06": 850.00, "2025-07": 850.00, "2025-08": 850.00, "2025-09": 850.00, "2025-10": 850.00, "2025-11": 850.00, "2025-12": 850.00,
+      "2025-01": 529.62, "2025-02": 551.77, "2025-03": 464.54, "2025-04": 802.85, "2025-05": 713.31, "2025-06": 837.92, "2025-07": 782.38, "2025-08": 849.46, "2025-09": 832.69, "2025-10": 804.85, "2025-11": 689.08, "2025-12": 788.31,
       "2026-01": 766.96, "2026-02": 777.30, "2026-03": 844.35, "2026-04": 1081.00, "2026-05": 1120.00,
     } },
     { name: "Voun Thida (Thida)",         status: "active", startMonth: "2024-09", group: "architecture", groupRole: "member", monthly: { "2024-09": 115.50, "2024-10": 108.00, "2024-11": 132.00, "2024-12": 194.25, "2026-01": 445.80, "2026-02": 431.00, "2026-03": 431.02, "2026-04":  496.02, "2026-05":  420.00 } },
@@ -72,9 +74,9 @@ export const SEED_SALARY_STORE: SalaryStore = {
     // ═══ GROUP 3 · Neural Net + Finance (GREEN) ══════════════════════════
     // Financial · Administration — 70% SW dev / 30% NVIDIA Ai cert
     // 2025 Jan-Mar @ $554, Apr+ @ $850 (53.43% raise).
-    { name: "Van Virot (Virot)",          status: "active", startMonth: "2024-05", group: "neural-net", groupRole: "lead", monthly: {
+    { name: "Van Virot (Virot)",          empId: "YM7655", status: "active", startMonth: "2024-05", group: "neural-net", groupRole: "lead", monthly: {
       "2024-05": 327.46, "2024-06": 433.62, "2024-07": 415.92, "2024-08": 515.15, "2024-09": 558.23, "2024-10": 547.46, "2024-11": 548.00, "2024-12": 547.46,
-      "2025-01": 554.00, "2025-02": 554.00, "2025-03": 554.00, "2025-04": 850.00, "2025-05": 850.00, "2025-06": 850.00, "2025-07": 850.00, "2025-08": 850.00, "2025-09": 850.00, "2025-10": 850.00, "2025-11": 850.00, "2025-12": 850.00,
+      "2025-01": 507.46, "2025-02": 540.69, "2025-03": 507.92, "2025-04": 753.23, "2025-05": 847.46, "2025-06": 788.31, "2025-07": 888.00, "2025-08": 849.46, "2025-09": 866.23, "2025-10": 871.00, "2025-11": 871.00, "2025-12": 771.77,
       "2026-01": 866.96, "2026-02": 860.02, "2026-03": 861.02, "2026-04": 1040.58, "2026-05": 1120.00,
     } },
     { name: "Sobon Menghorng (Menghorng)", status: "active", startMonth: "2024-07", group: "neural-net", groupRole: "member", monthly: { "2024-07":  65.25, "2024-08": 132.00, "2024-09": 115.50, "2024-10":  78.00, "2024-11":  52.50, "2024-12":  44.25, "2026-01": 517.02, "2026-02": 451.35, "2026-03": 511.02, "2026-04":  580.21, "2026-05":  625.00 } },
@@ -88,9 +90,9 @@ export const SEED_SALARY_STORE: SalaryStore = {
     // ═══ GROUP 4 · Mobile Apps (TEAL) ═════════════════════════════════════
     // Android · iOS · Worker apps — 60% mobile app dev / 20% AIoT+Robotics net / 20% Qualcomm Ai cert
     // Keo Samnang: 2025 Jan-Mar @ $454, Apr+ @ $750 (65.20% raise).
-    { name: "Keo Samnang (Samnang)",      status: "active", startMonth: "2024-07", group: "mobile-apps", groupRole: "lead", monthly: {
+    { name: "Keo Samnang (Samnang)",      empId: "YM7824", status: "active", startMonth: "2024-07", group: "mobile-apps", groupRole: "lead", monthly: {
       "2024-07": 22.19, "2024-08": 460.15, "2024-09": 460.15, "2024-10": 469.00, "2024-11": 481.00, "2024-12": 469.00,
-      "2025-01": 454.00, "2025-02": 454.00, "2025-03": 454.00, "2025-04": 750.00, "2025-05": 750.00, "2025-06": 750.00, "2025-07": 750.00, "2025-08": 750.00, "2025-09": 750.00, "2025-10": 750.00, "2025-11": 750.00, "2025-12": 750.00,
+      "2025-01": 485.00, "2025-02": 457.54, "2025-03": 437.31, "2025-04": 769.00, "2025-05": 751.31, "2025-06": 739.77, "2025-07": 766.15, "2025-08": 706.77, "2025-09": 751.31, "2025-10": 769.00, "2025-11": 725.15, "2025-12": 771.00,
       "2026-01": 781.42, "2026-02": 731.50, "2026-03": 761.02, "2026-04": 960.46, "2026-05": 1000.00,
     } },
     // Chhang Mengchhay: 2025 all months @ $550 (no raise April 2025).
@@ -124,7 +126,7 @@ export const SEED_SALARY_STORE: SalaryStore = {
     //   Yasomi $149, Alen $105, Chhay $110, Chetra $110, Khun $80, Menghorng $100,
     //   Sam $92, Phanny $90, Sophy/Sokhim/Thida/Noch/Michael/Heang $0.
     //   Total May 2026 bonus pool = $1,906.
-    { name: "Visal",                      status: "resigned", startMonth: "2024-08", endMonth: "2024-12", monthly: { "2024-08": 216.81, "2024-09": 460.15, "2024-10": 469.00, "2024-11": 471.92, "2024-12": 460.00 } },
+    { name: "Chivan Visal (Visal)",       empId: "YM7874", status: "resigned", startMonth: "2024-08", endMonth: "2025-02", monthly: { "2024-08": 216.81, "2024-09": 460.15, "2024-10": 469.00, "2024-11": 471.92, "2024-12": 460.00, "2025-01": 475.85, "2025-02": 457.54 } },
     { name: "Sreyleak",                   status: "resigned", startMonth: "2024-07", endMonth: "2024-12", monthly: { "2024-07": 119.25, "2024-08": 184.50, "2024-09": 223.50, "2024-10": 207.75, "2024-11": 309.00, "2024-12": 369.00 } },
     { name: "Set Sophy (Sophy)",          status: "resigned", startMonth: "2024-07", endMonth: "2026-05", monthly: { "2024-07":  65.25, "2024-08": 132.00, "2024-09": 115.50, "2024-10": 117.75, "2024-11":  57.00, "2024-12": 159.00, "2026-01": 526.62, "2026-02": 510.35, "2026-03": 481.19, "2026-04":  481.50, "2026-05":  500.00 } },
     { name: "Keomhieng",                  status: "realigned", startMonth: "2024-09", endMonth: "2024-11", monthly: { "2024-09": 107.25, "2024-10": 61.50, "2024-11": 59.25 } },
