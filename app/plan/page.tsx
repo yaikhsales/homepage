@@ -30,6 +30,7 @@ import { CompetitiveLandscape } from "@/components/plan/CompetitiveLandscape";
 import { LiveBudgetSummary } from "@/components/plan/LiveBudgetSummary";
 import { MidSizeSegment } from "@/components/plan/MidSizeSegment";
 import { InteractiveSegment } from "@/components/plan/InteractiveSegment";
+import { FloatingGlass } from "@/components/plan/FloatingGlass";
 
 const NAV: NavItem[] = [
   { id: "executive-summary", label: "Executive Summary",     labelKey: "nav.executive" },
@@ -138,6 +139,8 @@ export default async function PlanPage() {
   return (
     <div className="flex bg-yai-bg min-h-screen">
       <Sidebar items={NAV} viewer={viewer} />
+
+      <FloatingGlass />
 
       <main className="flex-1 max-w-4xl mx-auto px-5 sm:px-8 lg:px-12 py-10 lg:py-14">
         <PlanHero />
