@@ -108,8 +108,18 @@ function buildQuarters(monthList: string[]): QuarterBucket[] {
 export function SalaryEditor({ initial }: { initial: Store }) {
   const [store, setStore] = useState<Store>(initial);
   const [view, setView] = useState<ViewMode>("quarterly");
+  const [expandedQs, setExpandedQs] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState("");
+
+  const toggleQuarter = (qKey: string) => {
+    setExpandedQs((prev) => {
+      const next = new Set(prev);
+      if (next.has(qKey)) next.delete(qKey);
+      else next.add(qKey);
+      return next;
+    });
+  };
 
   // Totals row + grand total exclude resigned/realigned members ("dead wood").
   // Their individual numbers still show in the per-row Total column for audit purposes.
@@ -290,15 +300,35 @@ export function SalaryEditor({ initial }: { initial: Store }) {
             <thead className="bg-yai-navy text-white">
               <tr>
                 <th className="sticky left-0 z-10 bg-yai-navy text-left px-2 py-2 font-bold uppercase tracking-wider w-48">Name</th>
-                {quarters.filter((q) => !q.isPrediction).map((q) => (
-                  <th
-                    key={q.key}
-                    className="text-right px-2 py-2 font-bold uppercase tracking-wider w-24 whitespace-nowrap"
-                    title={`${q.months.length} month${q.months.length === 1 ? "" : "s"}: ${q.months.join(", ")}`}
-                  >
-                    {q.shortLabel}
-                  </th>
-                ))}
+                {quarters.filter((q) => !q.isPrediction).flatMap((q) => {
+                  const expanded = expandedQs.has(q.key);
+                  const cells = [
+                    <th
+                      key={q.key}
+                      onClick={() => toggleQuarter(q.key)}
+                      className={`text-right px-2 py-2 font-bold uppercase tracking-wider w-24 whitespace-nowrap cursor-pointer select-none transition ${expanded ? "bg-yai-blue" : "hover:bg-yai-navy/80"}`}
+                      title={expanded ? "Click to collapse" : `Click to drill into ${q.months.length} month${q.months.length === 1 ? "" : "s"}`}
+                    >
+                      <span className="inline-flex items-center gap-1">
+                        {q.shortLabel}
+                        <span className="text-[8px] opacity-70">{expanded ? "◀" : "▶"}</span>
+                      </span>
+                    </th>,
+                  ];
+                  if (expanded) {
+                    q.months.forEach((ym) => {
+                      cells.push(
+                        <th
+                          key={`${q.key}-${ym}`}
+                          className="text-right px-1 py-2 font-normal text-[9px] tracking-wider w-16 whitespace-nowrap bg-yai-blue/40"
+                        >
+                          {fmtMonth(ym)}
+                        </th>
+                      );
+                    });
+                  }
+                  return cells;
+                })}
                 <th className="text-right px-2 py-2 font-bold uppercase tracking-wider w-28 bg-yai-blue">Actual total</th>
                 {quarters.filter((q) => q.isPrediction).map((q) => (
                   <th
@@ -348,17 +378,32 @@ export function SalaryEditor({ initial }: { initial: Store }) {
                         )}
                       </div>
                     </td>
-                    {quarters.map((q, qi) => {
-                      if (q.isPrediction) return null;
+                    {quarters.flatMap((q, qi) => {
+                      if (q.isPrediction) return [];
+                      const expanded = expandedQs.has(q.key);
                       const v = memberQuarters[i][qi];
-                      return (
+                      const cells = [
                         <td
                           key={q.key}
-                          className={`px-2 py-1 text-right text-[11px] tabular-nums font-semibold ${v > 0 ? "text-yai-navy" : "text-gray-300"}`}
+                          className={`px-2 py-1 text-right text-[11px] tabular-nums font-semibold ${expanded ? "bg-blue-50/60" : ""} ${v > 0 ? "text-yai-navy" : "text-gray-300"}`}
                         >
                           {v > 0 ? `$${v.toLocaleString(undefined, { maximumFractionDigits: 0 })}` : "—"}
-                        </td>
-                      );
+                        </td>,
+                      ];
+                      if (expanded) {
+                        q.months.forEach((ym) => {
+                          const mv = mem.monthly[ym];
+                          cells.push(
+                            <td
+                              key={`${q.key}-${ym}`}
+                              className={`px-1 py-1 text-right text-[10px] tabular-nums bg-blue-50/30 ${mv && mv > 0 ? "text-yai-navy" : "text-gray-300"}`}
+                            >
+                              {mv && mv > 0 ? `$${mv.toLocaleString(undefined, { maximumFractionDigits: 0 })}` : "—"}
+                            </td>
+                          );
+                        });
+                      }
+                      return cells;
                     })}
                     <td
                       className={`px-2 py-1 text-right font-extrabold tabular-nums ${
@@ -390,13 +435,27 @@ export function SalaryEditor({ initial }: { initial: Store }) {
                 <td className="sticky left-0 bg-gray-50 px-2 py-2 font-extrabold text-yai-navy uppercase tracking-wider text-[10px]">
                   Quarterly total
                 </td>
-                {quarters.map((q, qi) => {
-                  if (q.isPrediction) return null;
-                  return (
-                    <td key={q.key} className="px-2 py-2 text-right font-extrabold tabular-nums text-yai-navy">
+                {quarters.flatMap((q, qi) => {
+                  if (q.isPrediction) return [];
+                  const expanded = expandedQs.has(q.key);
+                  const cells = [
+                    <td key={q.key} className={`px-2 py-2 text-right font-extrabold tabular-nums text-yai-navy ${expanded ? "bg-blue-100/60" : ""}`}>
                       {quarterTotals[qi] > 0 ? `$${quarterTotals[qi].toLocaleString(undefined, { maximumFractionDigits: 0 })}` : "—"}
-                    </td>
-                  );
+                    </td>,
+                  ];
+                  if (expanded) {
+                    q.months.forEach((ym) => {
+                      const sum = store.members
+                        .filter((m) => m.status === "active")
+                        .reduce<number>((s, m) => s + (m.monthly[ym] ?? 0), 0);
+                      cells.push(
+                        <td key={`${q.key}-${ym}`} className="px-1 py-2 text-right font-bold text-[10px] tabular-nums text-yai-navy bg-blue-50/60">
+                          {sum > 0 ? `$${sum.toLocaleString(undefined, { maximumFractionDigits: 0 })}` : "—"}
+                        </td>
+                      );
+                    });
+                  }
+                  return cells;
                 })}
                 <td className="px-2 py-2 text-right font-extrabold text-yai-orange tabular-nums bg-orange-50">
                   ${actualGrandTotal.toLocaleString(undefined, { maximumFractionDigits: 0 })}
@@ -413,7 +472,10 @@ export function SalaryEditor({ initial }: { initial: Store }) {
             </tfoot>
           </table>
           <div className="px-3 py-2 text-[10px] text-gray-500 bg-gray-50 border-t border-yai-border">
+            <strong className="text-yai-navy">Click any quarter header</strong> to drill into its 3 months (click again to collapse).
+            &nbsp;·&nbsp;
             <strong className="text-amber-700">Amber columns</strong> = 2-quarter forecast based on the average of each row&apos;s last 2 actual quarters with non-zero data.
+            &nbsp;·&nbsp;
             Switch to <strong>Monthly</strong> view to edit cells — quarterly view is read-only.
           </div>
         </div>
