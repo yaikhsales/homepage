@@ -290,17 +290,26 @@ export function SalaryEditor({ initial }: { initial: Store }) {
             <thead className="bg-yai-navy text-white">
               <tr>
                 <th className="sticky left-0 z-10 bg-yai-navy text-left px-2 py-2 font-bold uppercase tracking-wider w-48">Name</th>
-                {quarters.map((q) => (
+                {quarters.filter((q) => !q.isPrediction).map((q) => (
                   <th
                     key={q.key}
-                    className={`text-right px-2 py-2 font-bold uppercase tracking-wider w-24 whitespace-nowrap ${q.isPrediction ? "bg-amber-600 text-white" : ""}`}
-                    title={q.isPrediction ? "Forecast — avg of last 2 actual quarters" : `${q.months.length} month${q.months.length === 1 ? "" : "s"}: ${q.months.join(", ")}`}
+                    className="text-right px-2 py-2 font-bold uppercase tracking-wider w-24 whitespace-nowrap"
+                    title={`${q.months.length} month${q.months.length === 1 ? "" : "s"}: ${q.months.join(", ")}`}
                   >
                     {q.shortLabel}
-                    {q.isPrediction && <span className="block text-[8px] font-normal opacity-80">forecast</span>}
                   </th>
                 ))}
                 <th className="text-right px-2 py-2 font-bold uppercase tracking-wider w-28 bg-yai-blue">Actual total</th>
+                {quarters.filter((q) => q.isPrediction).map((q) => (
+                  <th
+                    key={q.key}
+                    className="text-right px-2 py-2 font-bold uppercase tracking-wider w-24 whitespace-nowrap bg-amber-600 text-white"
+                    title="Forecast — avg of last 2 actual quarters"
+                  >
+                    {q.shortLabel}
+                    <span className="block text-[8px] font-normal opacity-80">forecast</span>
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody>
@@ -340,18 +349,12 @@ export function SalaryEditor({ initial }: { initial: Store }) {
                       </div>
                     </td>
                     {quarters.map((q, qi) => {
+                      if (q.isPrediction) return null;
                       const v = memberQuarters[i][qi];
                       return (
                         <td
                           key={q.key}
-                          className={`px-2 py-1 text-right text-[11px] tabular-nums font-semibold ${
-                            q.isPrediction
-                              ? "text-amber-700 bg-amber-50/60 italic"
-                              : v > 0
-                                ? "text-yai-navy"
-                                : "text-gray-300"
-                          }`}
-                          title={q.isPrediction ? `Forecast: $${v.toFixed(0)}` : undefined}
+                          className={`px-2 py-1 text-right text-[11px] tabular-nums font-semibold ${v > 0 ? "text-yai-navy" : "text-gray-300"}`}
                         >
                           {v > 0 ? `$${v.toLocaleString(undefined, { maximumFractionDigits: 0 })}` : "—"}
                         </td>
@@ -365,6 +368,19 @@ export function SalaryEditor({ initial }: { initial: Store }) {
                     >
                       {actualSum > 0 ? `$${actualSum.toLocaleString(undefined, { maximumFractionDigits: 0 })}` : "—"}
                     </td>
+                    {quarters.map((q, qi) => {
+                      if (!q.isPrediction) return null;
+                      const v = memberQuarters[i][qi];
+                      return (
+                        <td
+                          key={q.key}
+                          className="px-2 py-1 text-right text-[11px] tabular-nums font-semibold text-amber-700 bg-amber-50/60 italic"
+                          title={`Forecast: $${v.toFixed(0)}`}
+                        >
+                          {v > 0 ? `$${v.toLocaleString(undefined, { maximumFractionDigits: 0 })}` : "—"}
+                        </td>
+                      );
+                    })}
                   </tr>
                 );
               })}
@@ -374,17 +390,25 @@ export function SalaryEditor({ initial }: { initial: Store }) {
                 <td className="sticky left-0 bg-gray-50 px-2 py-2 font-extrabold text-yai-navy uppercase tracking-wider text-[10px]">
                   Quarterly total
                 </td>
-                {quarters.map((q, qi) => (
-                  <td
-                    key={q.key}
-                    className={`px-2 py-2 text-right font-extrabold tabular-nums ${q.isPrediction ? "text-amber-700 bg-amber-50/60" : "text-yai-navy"}`}
-                  >
-                    {quarterTotals[qi] > 0 ? `$${quarterTotals[qi].toLocaleString(undefined, { maximumFractionDigits: 0 })}` : "—"}
-                  </td>
-                ))}
+                {quarters.map((q, qi) => {
+                  if (q.isPrediction) return null;
+                  return (
+                    <td key={q.key} className="px-2 py-2 text-right font-extrabold tabular-nums text-yai-navy">
+                      {quarterTotals[qi] > 0 ? `$${quarterTotals[qi].toLocaleString(undefined, { maximumFractionDigits: 0 })}` : "—"}
+                    </td>
+                  );
+                })}
                 <td className="px-2 py-2 text-right font-extrabold text-yai-orange tabular-nums bg-orange-50">
                   ${actualGrandTotal.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                 </td>
+                {quarters.map((q, qi) => {
+                  if (!q.isPrediction) return null;
+                  return (
+                    <td key={q.key} className="px-2 py-2 text-right font-extrabold tabular-nums text-amber-700 bg-amber-50/60">
+                      {quarterTotals[qi] > 0 ? `$${quarterTotals[qi].toLocaleString(undefined, { maximumFractionDigits: 0 })}` : "—"}
+                    </td>
+                  );
+                })}
               </tr>
             </tfoot>
           </table>
