@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 type Split = { pct: number; color: string; label: string; description?: string };
+type Member = { alias: string; name: string; lead?: boolean };
 type Cluster = {
   num: number;
   name: string;
@@ -11,7 +12,7 @@ type Cluster = {
   bg: string;
   badge: string;
   splits?: Split[];
-  avatars?: number[]; // agent-N image indices — shown as mini face row inside the circle
+  members?: Member[];  // real team — portraits served from /images/team/portraits/{alias}.png
 };
 
 const CLUSTERS: Cluster[] = [
@@ -26,8 +27,11 @@ const CLUSTERS: Cluster[] = [
       { pct: 20, color: "#F37021", label: "SW + Ai cert",    description: "Modern-stack engineers, formally certified on Claude — the Ai layer is built by people who know how Ai actually works." },
       { pct: 20, color: "#2D9D9A", label: "Dual role",       description: "Engineers who also run pieces of the factory operation — close-to-the-floor product feedback every day." },
     ],
-    // 5 key members — 3 male (1, 3, 8) + 2 female (6 short-bob, 9 long hair)
-    avatars: [1, 3, 8, 6, 9],
+    members: [
+      { alias: "daly",   name: "Pich Daly",     lead: true },
+      { alias: "phanny", name: "Koem Phanny" },
+      { alias: "khun",   name: "Sin Khun" },
+    ],
   },
   {
     num: 2,
@@ -39,6 +43,12 @@ const CLUSTERS: Cluster[] = [
       { pct: 70, color: "#F37021", label: "Software dev",         description: "Core platform engineering — frameworks, APIs, data models, the structural backbone every other module builds on." },
       { pct: 30, color: "#1E4DAA", label: "AMD + NVIDIA Ai cert", description: "Certified on AMD and NVIDIA Ai stacks — the hardware-aware side of the Ai workload." },
     ],
+    members: [
+      { alias: "rich",    name: "Peang Sereysothirich", lead: true },
+      { alias: "thida",   name: "Voun Thida" },
+      { alias: "michael", name: "Van Phanith" },
+      { alias: "sam",     name: "Ton Noeun" },
+    ],
   },
   {
     num: 3,
@@ -49,6 +59,12 @@ const CLUSTERS: Cluster[] = [
     splits: [
       { pct: 70, color: "#0A3327", label: "Software dev",   description: "Building the Ai neural-network layer and the financial modules — model-aware engineering at the core of the platform." },
       { pct: 30, color: "#1E4DAA", label: "NVIDIA Ai cert", description: "Certified on the NVIDIA Ai stack — tuned for the training and inference workloads behind Yai's neural-network layer." },
+    ],
+    members: [
+      { alias: "virot",     name: "Van Virot", lead: true },
+      { alias: "menghorng", name: "Sobon Menghorng" },
+      { alias: "seangleng", name: "Chhim Seangleng" },
+      { alias: "noch",      name: "Dot Sreynoch" },
     ],
   },
   {
@@ -62,6 +78,11 @@ const CLUSTERS: Cluster[] = [
       { pct: 20, color: "#6D4FB6", label: "AIoT + Robotics net.",  description: "Connecting sensors, machines and AGV / robotic carts to the platform — the AIoT and on-floor robotics networking layer." },
       { pct: 20, color: "#D4A017", label: "Qualcomm Ai cert",     description: "Certified on the Qualcomm Ai stack — on-device Ai inference for mobile and edge workloads, tuned for Snapdragon hardware." },
     ],
+    members: [
+      { alias: "samnang", name: "Samnang Keo", lead: true },
+      { alias: "chhay",   name: "Chhang Mengchhay" },
+      { alias: "chetra",  name: "Yoem Chetra" },
+    ],
   },
   {
     num: 5,
@@ -72,6 +93,13 @@ const CLUSTERS: Cluster[] = [
     splits: [
       { pct: 80, color: "#0A1F47", label: "Software dev",   description: "Production, QA, MRP, YPI and YTM modules — the operations engine that runs the factory floor in real time." },
       { pct: 20, color: "#1E4DAA", label: "NVIDIA Ai cert", description: "Certified on the NVIDIA Ai stack — Ai-driven production planning, defect detection and inference at the edge." },
+    ],
+    members: [
+      { alias: "dilan",  name: "Dilan Lakmal", lead: true },
+      { alias: "yasomi", name: "Samipath Yasomi" },
+      { alias: "alen",   name: "Koem Chichhong" },
+      { alias: "heang",  name: "Young Sengheang" },
+      { alias: "sokhim", name: "Proeurng Sokhim" },
     ],
   },
 ];
@@ -103,15 +131,17 @@ export function TeamClusters() {
                   Group {c.num}
                 </span>
                 <div className="font-extrabold text-[12px] leading-tight mt-1.5 px-1">{c.name}</div>
-                {c.avatars && c.avatars.length > 0 && (
+                {c.members && c.members.length > 0 && (
                   <div className="flex items-center -space-x-1.5 mt-1.5">
-                    {c.avatars.map((n) => (
+                    {c.members.slice(0, 5).map((m) => (
+                      // eslint-disable-next-line @next/next/no-img-element
                       <img
-                        key={n}
-                        src={`/images/generated/agent-${n}.png?v=3`}
-                        alt=""
+                        key={m.alias}
+                        src={`/images/team/portraits/${m.alias}.png`}
+                        alt={m.name}
+                        title={m.name + (m.lead ? " · LEAD" : "")}
                         draggable={false}
-                        className="w-[18px] h-[18px] rounded-full ring-[1.5px] ring-white object-cover shadow-sm select-none"
+                        className={`w-[20px] h-[20px] rounded-full object-cover shadow-sm select-none ${m.lead ? "ring-2 ring-amber-300" : "ring-[1.5px] ring-white"}`}
                       />
                     ))}
                   </div>
@@ -167,24 +197,69 @@ export function TeamClusters() {
             Group {cluster.num} · {cluster.name} — experience mix detail
           </h4>
           {cluster.splits ? (
-            <div className="grid sm:grid-cols-3 gap-3">
-              {cluster.splits.map((s, i) => (
+            <>
+              <div className="grid sm:grid-cols-3 gap-3">
+                {cluster.splits.map((s, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.25, delay: 0.05 + i * 0.08, ease: "easeOut" }}
+                    className="rounded-lg overflow-hidden border border-yai-border bg-white shadow-sm"
+                  >
+                    <div className="text-white font-extrabold text-2xl px-4 py-2.5" style={{ background: s.color }}>
+                      {s.pct}% <span className="text-xs font-bold opacity-90 ml-1">· {s.label}</span>
+                    </div>
+                    {s.description && (
+                      <p className="text-xs text-gray-600 leading-snug p-3">{s.description}</p>
+                    )}
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Member roster — real portraits */}
+              {cluster.members && cluster.members.length > 0 && (
                 <motion.div
-                  key={i}
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.25, delay: 0.05 + i * 0.08, ease: "easeOut" }}
-                  className="rounded-lg overflow-hidden border border-yai-border bg-white shadow-sm"
+                  transition={{ duration: 0.3, delay: 0.25, ease: "easeOut" }}
+                  className="mt-6"
                 >
-                  <div className="text-white font-extrabold text-2xl px-4 py-2.5" style={{ background: s.color }}>
-                    {s.pct}% <span className="text-xs font-bold opacity-90 ml-1">· {s.label}</span>
+                  <h4 className="font-bold text-yai-navy text-xs uppercase tracking-wider mb-3">
+                    Group {cluster.num} roster · {cluster.members.length} engineers
+                  </h4>
+                  <div className="flex flex-wrap gap-4">
+                    {cluster.members.map((m) => (
+                      <div key={m.alias} className="flex flex-col items-center w-[80px]">
+                        <div
+                          className={`relative w-[64px] h-[64px] rounded-full overflow-hidden shadow-md ${m.lead ? "ring-[3px] ring-amber-400 ring-offset-2" : "ring-2 ring-white"}`}
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={`/images/team/portraits/${m.alias}.png`}
+                            alt={m.name}
+                            className="w-full h-full object-cover"
+                          />
+                          {m.lead && (
+                            <span className="absolute -top-1 -right-1 bg-amber-400 text-[8px] font-extrabold text-yai-navy px-1 py-0.5 rounded shadow">
+                              ★
+                            </span>
+                          )}
+                        </div>
+                        <div className="text-[10px] font-bold text-yai-navy text-center mt-1.5 leading-tight">
+                          {m.name}
+                        </div>
+                        {m.lead && (
+                          <div className="text-[8px] uppercase tracking-wider font-extrabold text-amber-600 mt-0.5">
+                            Lead
+                          </div>
+                        )}
+                      </div>
+                    ))}
                   </div>
-                  {s.description && (
-                    <p className="text-xs text-gray-600 leading-snug p-3">{s.description}</p>
-                  )}
                 </motion.div>
-              ))}
-            </div>
+              )}
+            </>
           ) : (
             <p className="text-sm text-gray-500 italic py-4 text-center border-2 border-dashed border-yai-border rounded-lg">
               Tell me the experience mix for this cluster and I&apos;ll wire it in.

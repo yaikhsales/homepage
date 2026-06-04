@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { AdminPanel } from "./AdminPanel";
-import { LanguageToggle } from "./LanguageToggle";
 
 export type NavItem = { id: string; label: string };
 
@@ -177,11 +176,6 @@ export function Sidebar({
 
         {/* Action buttons */}
         <div className="px-4 pt-2 pb-4 space-y-2">
-          {/* Language toggle — UK / China flags */}
-          <div className="flex items-center justify-between gap-2 mb-1">
-            <span className="text-[10px] uppercase tracking-[0.12em] text-white/55 font-bold">Language</span>
-            <LanguageToggle />
-          </div>
           <button
             onClick={onPrint}
             className="w-full text-xs bg-white/10 hover:bg-white/20 text-white py-2 rounded transition"
