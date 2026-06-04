@@ -57,8 +57,57 @@ function nextMonth(ym: string): string {
   return `${yy}-${mm}`;
 }
 
+type ViewMode = "monthly" | "quarterly";
+
+type QuarterBucket = {
+  key: string;          // "Q3 2024"
+  shortLabel: string;   // "Q3·24"
+  months: string[];     // ["2024-07", "2024-08", "2024-09"]
+  isPrediction: boolean;
+};
+
+/** Group store.months into quarter buckets, then append 2 predicted quarters past the latest. */
+function buildQuarters(monthList: string[]): QuarterBucket[] {
+  const byKey: Record<string, { months: string[]; year: number; quarter: number }> = {};
+  for (const ym of monthList) {
+    const [y, m] = ym.split("-").map(Number);
+    const q = Math.ceil(m / 3);
+    const key = `Q${q} ${y}`;
+    if (!byKey[key]) byKey[key] = { months: [], year: y, quarter: q };
+    byKey[key].months.push(ym);
+  }
+  const sorted = Object.entries(byKey)
+    .sort(([, a], [, b]) => a.year - b.year || a.quarter - b.quarter)
+    .map(([key, b]) => ({
+      key,
+      shortLabel: `Q${b.quarter}·${String(b.year).slice(-2)}`,
+      months: b.months,
+      isPrediction: false,
+      year: b.year,
+      quarter: b.quarter,
+    }));
+  if (!sorted.length) return [];
+  // Append 2 prediction quarters after the latest
+  const last = sorted[sorted.length - 1];
+  const out: QuarterBucket[] = sorted.map(({ year, quarter, ...rest }) => rest);
+  let y = last.year;
+  let q = last.quarter;
+  for (let i = 0; i < 2; i++) {
+    q++;
+    if (q > 4) { q = 1; y++; }
+    out.push({
+      key: `Q${q} ${y}`,
+      shortLabel: `Q${q}·${String(y).slice(-2)}`,
+      months: [],
+      isPrediction: true,
+    });
+  }
+  return out;
+}
+
 export function SalaryEditor({ initial }: { initial: Store }) {
   const [store, setStore] = useState<Store>(initial);
+  const [view, setView] = useState<ViewMode>("quarterly");
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState("");
 
@@ -79,6 +128,44 @@ export function SalaryEditor({ initial }: { initial: Store }) {
   }, [store]);
 
   const grandTotal = monthTotals.reduce<number>((s, v) => s + v, 0);
+
+  // Quarterly buckets + predicted forecast for the next 2 quarters
+  const quarters = useMemo(() => buildQuarters(store.months), [store.months]);
+
+  /** Per-member quarterly sums. For prediction quarters, project using the avg of the last 2 actual quarters with non-zero data. */
+  const memberQuarters = useMemo(() => {
+    return store.members.map((mem) => {
+      const actuals: number[] = [];
+      const sums = quarters.map((q) => {
+        if (q.isPrediction) return null; // fill after we know actuals
+        const s = q.months.reduce<number>((acc, m) => acc + (mem.monthly[m] ?? 0), 0);
+        if (s > 0) actuals.push(s);
+        return s;
+      });
+      // Predicted = avg of last 2 non-zero actual quarters
+      const recent = actuals.slice(-2);
+      const projection = recent.length ? recent.reduce((a, b) => a + b, 0) / recent.length : 0;
+      return sums.map((s) => (s === null ? projection : s));
+    });
+  }, [quarters, store.members]);
+
+  /** Active-only per-quarter total + grand. Prediction quarters use same active-only filter. */
+  const quarterTotals = useMemo(() => {
+    return quarters.map((_, qi) =>
+      store.members.reduce<number>(
+        (s, mem, mi) => (mem.status === "active" ? s + memberQuarters[mi][qi] : s),
+        0
+      )
+    );
+  }, [quarters, store.members, memberQuarters]);
+
+  /** Sum of actual quarters only (not predictions) — the "Total up to now" figure. */
+  const actualGrandTotal = useMemo(() => {
+    return quarters.reduce<number>(
+      (s, q, qi) => (q.isPrediction ? s : s + quarterTotals[qi]),
+      0
+    );
+  }, [quarters, quarterTotals]);
 
   const setCell = (memberIdx: number, ym: string, value: string) => {
     const next: Store = { ...store, members: [...store.members] };
@@ -152,17 +239,40 @@ export function SalaryEditor({ initial }: { initial: Store }) {
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-4 text-xs">
           <Stat label="Members" value={`${store.members.length}`} />
-          <Stat label="Months tracked" value={`${store.months.length}`} />
-          <Stat label="Grand total" value={`$${grandTotal.toLocaleString(undefined, { maximumFractionDigits: 2 })}`} color="#10B981" />
+          <Stat label={view === "quarterly" ? "Quarters" : "Months tracked"} value={`${view === "quarterly" ? quarters.length - 2 : store.months.length}${view === "quarterly" ? " + 2 forecast" : ""}`} />
+          <Stat
+            label={view === "quarterly" ? "Total up to now" : "Grand total"}
+            value={`$${(view === "quarterly" ? actualGrandTotal : grandTotal).toLocaleString(undefined, { maximumFractionDigits: 0 })}`}
+            color="#10B981"
+          />
         </div>
         <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={addMonth}
-            className="text-xs bg-white border border-yai-border hover:bg-blue-50 px-3 py-1.5 rounded-lg font-bold text-yai-navy"
-          >
-            + Next month
-          </button>
+          {/* View toggle */}
+          <div className="inline-flex items-stretch rounded-lg border border-yai-border overflow-hidden">
+            <button
+              type="button"
+              onClick={() => setView("monthly")}
+              className={`text-xs font-bold px-3 py-1.5 transition ${view === "monthly" ? "bg-yai-navy text-white" : "bg-white text-yai-navy hover:bg-blue-50"}`}
+            >
+              Monthly
+            </button>
+            <button
+              type="button"
+              onClick={() => setView("quarterly")}
+              className={`text-xs font-bold px-3 py-1.5 transition border-l border-yai-border ${view === "quarterly" ? "bg-yai-navy text-white" : "bg-white text-yai-navy hover:bg-blue-50"}`}
+            >
+              Quarterly + Forecast
+            </button>
+          </div>
+          {view === "monthly" && (
+            <button
+              type="button"
+              onClick={addMonth}
+              className="text-xs bg-white border border-yai-border hover:bg-blue-50 px-3 py-1.5 rounded-lg font-bold text-yai-navy"
+            >
+              + Next month
+            </button>
+          )}
           <button
             type="button"
             onClick={addMember}
@@ -173,7 +283,120 @@ export function SalaryEditor({ initial }: { initial: Store }) {
         </div>
       </div>
 
-      {/* Excel grid */}
+      {/* Quarterly compact view */}
+      {view === "quarterly" && (
+        <div className="overflow-x-auto rounded-xl border border-yai-border bg-white shadow-sm">
+          <table className="text-[11px] border-collapse w-full">
+            <thead className="bg-yai-navy text-white">
+              <tr>
+                <th className="sticky left-0 z-10 bg-yai-navy text-left px-2 py-2 font-bold uppercase tracking-wider w-48">Name</th>
+                {quarters.map((q) => (
+                  <th
+                    key={q.key}
+                    className={`text-right px-2 py-2 font-bold uppercase tracking-wider w-24 whitespace-nowrap ${q.isPrediction ? "bg-amber-600 text-white" : ""}`}
+                    title={q.isPrediction ? "Forecast — avg of last 2 actual quarters" : `${q.months.length} month${q.months.length === 1 ? "" : "s"}: ${q.months.join(", ")}`}
+                  >
+                    {q.shortLabel}
+                    {q.isPrediction && <span className="block text-[8px] font-normal opacity-80">forecast</span>}
+                  </th>
+                ))}
+                <th className="text-right px-2 py-2 font-bold uppercase tracking-wider w-28 bg-yai-blue">Actual total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {store.members.map((mem, i) => {
+                const isInactive = mem.status === "resigned" || mem.status === "realigned";
+                const groupMeta = mem.group ? GROUP_META[mem.group] : null;
+                const isGroupStart = !!mem.group && (i === 0 || store.members[i - 1]?.group !== mem.group);
+                const actualSum = quarters.reduce<number>((s, q, qi) => (q.isPrediction ? s : s + memberQuarters[i][qi]), 0);
+                return (
+                  <tr
+                    key={i}
+                    className={`border-t hover:bg-blue-50/30 ${isInactive ? "bg-red-50/30" : ""} ${isGroupStart ? "border-t-2" : "border-yai-border"}`}
+                    style={groupMeta && isGroupStart ? { borderTopColor: groupMeta.color } : undefined}
+                  >
+                    <td
+                      className="sticky left-0 bg-white px-2 py-1"
+                      style={groupMeta ? { boxShadow: `inset 3px 0 0 0 ${groupMeta.color}` } : undefined}
+                    >
+                      <div className="flex items-center gap-1.5">
+                        <span className={`flex-1 min-w-0 font-extrabold px-1 py-1 ${isInactive ? "text-red-700 line-through" : "text-yai-navy"}`}>
+                          {mem.name}
+                        </span>
+                        {mem.groupRole === "lead" && groupMeta && (
+                          <span className="inline-flex items-center text-[9px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded text-white shrink-0" style={{ background: groupMeta.color }}>★ LEAD</span>
+                        )}
+                        {mem.groupRole === "member" && groupMeta && (
+                          <span className="inline-flex items-center text-[9px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded shrink-0 border" style={{ borderColor: groupMeta.color, color: groupMeta.color, background: `${groupMeta.color}10` }}>
+                            {groupMeta.name.split(" ")[0]}
+                          </span>
+                        )}
+                        {mem.status === "resigned" && (
+                          <span className="inline-flex items-center text-[9px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded text-white shrink-0" style={{ background: STATUS_COLOR.resigned }}>RESIGN</span>
+                        )}
+                        {mem.status === "realigned" && (
+                          <span className="inline-flex items-center text-[9px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded text-white shrink-0" style={{ background: STATUS_COLOR.realigned }}>RE-ALIGN</span>
+                        )}
+                      </div>
+                    </td>
+                    {quarters.map((q, qi) => {
+                      const v = memberQuarters[i][qi];
+                      return (
+                        <td
+                          key={q.key}
+                          className={`px-2 py-1 text-right text-[11px] tabular-nums font-semibold ${
+                            q.isPrediction
+                              ? "text-amber-700 bg-amber-50/60 italic"
+                              : v > 0
+                                ? "text-yai-navy"
+                                : "text-gray-300"
+                          }`}
+                          title={q.isPrediction ? `Forecast: $${v.toFixed(0)}` : undefined}
+                        >
+                          {v > 0 ? `$${v.toLocaleString(undefined, { maximumFractionDigits: 0 })}` : "—"}
+                        </td>
+                      );
+                    })}
+                    <td
+                      className={`px-2 py-1 text-right font-extrabold tabular-nums ${
+                        isInactive ? "text-gray-400 bg-gray-50/40" : "text-yai-blue bg-blue-50/50"
+                      }`}
+                      title={isInactive ? "Historic — excluded from grand totals" : "Sum of actual quarters only"}
+                    >
+                      {actualSum > 0 ? `$${actualSum.toLocaleString(undefined, { maximumFractionDigits: 0 })}` : "—"}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+            <tfoot className="bg-gray-50">
+              <tr className="border-t-2 border-yai-blue">
+                <td className="sticky left-0 bg-gray-50 px-2 py-2 font-extrabold text-yai-navy uppercase tracking-wider text-[10px]">
+                  Quarterly total
+                </td>
+                {quarters.map((q, qi) => (
+                  <td
+                    key={q.key}
+                    className={`px-2 py-2 text-right font-extrabold tabular-nums ${q.isPrediction ? "text-amber-700 bg-amber-50/60" : "text-yai-navy"}`}
+                  >
+                    {quarterTotals[qi] > 0 ? `$${quarterTotals[qi].toLocaleString(undefined, { maximumFractionDigits: 0 })}` : "—"}
+                  </td>
+                ))}
+                <td className="px-2 py-2 text-right font-extrabold text-yai-orange tabular-nums bg-orange-50">
+                  ${actualGrandTotal.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+          <div className="px-3 py-2 text-[10px] text-gray-500 bg-gray-50 border-t border-yai-border">
+            <strong className="text-amber-700">Amber columns</strong> = 2-quarter forecast based on the average of each row&apos;s last 2 actual quarters with non-zero data.
+            Switch to <strong>Monthly</strong> view to edit cells — quarterly view is read-only.
+          </div>
+        </div>
+      )}
+
+      {/* Excel grid (monthly view) */}
+      {view === "monthly" && (
       <div className="overflow-x-auto rounded-xl border border-yai-border bg-white shadow-sm">
         <table className="text-[11px] border-collapse">
           <thead className="bg-yai-navy text-white">
@@ -332,6 +555,7 @@ export function SalaryEditor({ initial }: { initial: Store }) {
           </tfoot>
         </table>
       </div>
+      )}
 
       {/* Actions */}
       <div className="flex items-center justify-between gap-3">
