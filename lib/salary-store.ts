@@ -140,36 +140,14 @@ export const SEED_SALARY_STORE: SalaryStore = {
     // 2025-06 outlier ($19.50) replaced with row avg $201.76.
     { name: "Proeurng Sokhim (Sokhim)",   status: "active", startMonth: "2024-08", group: "ops-systems", groupRole: "member", monthly: { "2024-08":  28.50, "2024-09": 122.25, "2024-10": 102.00, "2024-11": 133.50, "2024-12": 223.50, "2025-01": 233.25, "2025-02": 234.75, "2025-03": 186.57, "2025-04": 162.75, "2025-05": 289.50, "2025-06": 201.76, "2025-07": 123.75, "2025-08": 150.00, "2025-09": 114.75, "2025-10": 152.25, "2025-11": 171.75, "2025-12": 400.00, "2026-01": 428.60, "2026-02": 414.20, "2026-03": 431.02, "2026-04":  484.09, "2026-05":  420.00 } },
 
-    // ═══ Historic / Resigned (no current team assignment) ════════════════
+    // ═══ Active · no group yet ═══════════════════════════════════════════
     // Bonus pool breakdown for active staff (May 2026 score-based):
     //   Daly $180, Dilan $300, Rich $170, Virot $170, Samnang $150, Seangleng $100,
     //   Yasomi $149, Alen $105, Chhay $110, Chetra $110, Khun $80, Menghorng $100,
     //   Sam $92, Phanny $90, Sophy/Sokhim/Thida/Noch/Michael/Heang $0.
     //   Total May 2026 bonus pool = $1,906.
-    // Sophy: longest tenure of the historic rows — filled Apr/May/Jun/Jul 2025 + 2026 resumption.
-    { name: "Set Sophy (Sophy)",          status: "resigned", startMonth: "2024-07", endMonth: "2026-05", monthly: { "2024-07":  65.25, "2024-08": 132.00, "2024-09": 115.50, "2024-10": 117.75, "2024-11":  57.00, "2024-12": 159.00, "2025-01":  80.25, "2025-02": 201.00, "2025-03": 140.75, "2025-04": 191.25, "2025-05": 232.50, "2025-06": 127.50, "2025-07": 12.00, "2025-08": 140.75, "2025-09": 140.75, "2025-10": 140.75, "2025-11": 140.75, "2025-12": 140.75, "2026-01": 526.62, "2026-02": 510.35, "2026-03": 481.19, "2026-04":  481.50, "2026-05":  500.00 } },
-    // Visal: extended endMonth to 2025-05 — appears on May 2025 TYM sheet as TYM057 with $32 clean-out.
-    { name: "Chivan Visal (Visal)",       status: "resigned", startMonth: "2024-08", endMonth: "2025-05", monthly: { "2024-08": 216.81, "2024-09": 460.15, "2024-10": 469.00, "2024-11": 471.92, "2024-12": 460.00, "2025-01": 475.85, "2025-02": 457.54, "2025-05": 32.00 } },
-    // Sreyleak: final clean-out Jul 2025 $9.
-    { name: "Sem Sreyleak (Sreyleak)",    status: "resigned", startMonth: "2024-07", endMonth: "2025-07", monthly: { "2024-07": 119.25, "2024-08": 184.50, "2024-09": 223.50, "2024-10": 207.75, "2024-11": 309.00, "2024-12": 369.00, "2025-01": 333.00, "2025-02": 307.00, "2025-04": 298.00, "2025-05": 340.00, "2025-06": 31.00, "2025-07": 9.00 } },
-    { name: "Keomhieng",                  status: "realigned", startMonth: "2024-09", endMonth: "2024-11", monthly: { "2024-09": 107.25, "2024-10": 61.50, "2024-11": 59.25 } },
-    { name: "Phoumen",                    status: "resigned",  startMonth: "2024-08", endMonth: "2024-08", monthly: { "2024-08": 192.00 } },
-    { name: "Vannara",                    status: "resigned", startMonth: "2024-11", endMonth: "2024-12", monthly: { "2024-11":  78.00, "2024-12": 331.00 } },
-    { name: "Chean Phallyn (Phallin)",    status: "resigned", startMonth: "2024-12", endMonth: "2025-02", monthly: { "2024-12": 123.00, "2025-01": 409.00, "2025-02": 376.00 } },
-
-    // ─── Additional ex-employees from Yorkmars TYM payroll sheets ────────
-    // Note: amounts are part-time / 2nd-half-of-month payments per sheet.
-    // Pich Sovanra: extended to 2025-08 — appears through Aug then off the roster.
-    { name: "Pich Sovanra",               status: "resigned", startMonth: "2025-01", endMonth: "2025-08", monthly: { "2025-01": 288.75, "2025-02": 255.75, "2025-04": 240.75, "2025-05": 293.25, "2025-06":  29.25, "2025-07": 161.25, "2025-08": 222.75 } },
-    { name: "Suy Sovichea",               status: "resigned", startMonth: "2025-02", endMonth: "2025-02", monthly: { "2025-02": 203.15 } },
-    { name: "Son Seyha",                  status: "resigned", startMonth: "2025-01", endMonth: "2025-02", monthly: { "2025-01": 264.35, "2025-02": 312.80 } },
-    { name: "Roth Tongleng",              status: "resigned", startMonth: "2025-01", endMonth: "2025-02", monthly: { "2025-01": 350.20, "2025-02": 398.65 } },
-    { name: "Sin Sithai",                                  status: "resigned", startMonth: "2025-01", endMonth: "2025-01", monthly: { "2025-01":  88.40 } },
-
-    // ─── New ex-employees discovered in Apr-Jun 2025 TYM sheets ──────────
-    // TYM002 reassigned from Chhang Mengchhay → Phat Chanda starting Apr 2025.
-    { name: "Phat Chanda",                status: "resigned", startMonth: "2025-04", endMonth: "2025-06", monthly: { "2025-04":  67.50, "2025-05": 185.25, "2025-06":   5.25 } },
-    { name: "Nay Chanvicheka",            status: "resigned", startMonth: "2025-04", endMonth: "2025-12", monthly: { "2025-04": 266.90, "2025-05": 314.50, "2025-06": 327.25, "2025-07": 367.20, "2025-08": 323.85, "2025-09": 259.25, "2025-10": 323.00, "2025-11": 277.10, "2025-12": 379.00 } },
+    // Sophy: kept as active (counts in totals); other historic rows removed per user request.
+    { name: "Set Sophy (Sophy)",          status: "active", startMonth: "2024-07", monthly: { "2024-07":  65.25, "2024-08": 132.00, "2024-09": 115.50, "2024-10": 117.75, "2024-11":  57.00, "2024-12": 159.00, "2025-01":  80.25, "2025-02": 201.00, "2025-03": 140.75, "2025-04": 191.25, "2025-05": 232.50, "2025-06": 127.50, "2025-07": 12.00, "2025-08": 140.75, "2025-09": 140.75, "2025-10": 140.75, "2025-11": 140.75, "2025-12": 140.75, "2026-01": 526.62, "2026-02": 510.35, "2026-03": 481.19, "2026-04":  481.50, "2026-05":  500.00 } },
   ],
 };
 
