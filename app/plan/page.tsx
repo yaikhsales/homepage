@@ -253,7 +253,7 @@ export default async function PlanPage() {
         </Section>
 
         {/* 03 — Solution */}
-        <Section id="solution" kicker={kicker(3, "The Solution")} title="The Solution — An Ai platform that saves jobs">
+        <Section id="solution" kicker={kicker(3, "The Solution")} title="The Solution — An Ai Platform that Saves Jobs">
           <Thesis>
             One fully integrated platform, left to right — built to upgrade itself as the business progresses.
           </Thesis>
@@ -406,7 +406,7 @@ export default async function PlanPage() {
             <GtmEnablerBar
               num="01"
               tag="OFFLINE"
-              title="Exhibitions &amp; events (offline)"
+              title="Exhibitions &amp; Events (Offline)"
               desc="Cambodia is still a relationship-first market. Owner-trust gets built face-to-face — trade shows, GMAC / TAFTAC events, ministry summits. Yai needs a physical presence where decision-makers gather, not just an online funnel."
               color="#1E4DAA"
               bg="#E8EEF8"
@@ -418,7 +418,7 @@ export default async function PlanPage() {
             <GtmEnablerBar
               num="02"
               tag="TEAM"
-              title="Marketing &amp; sales personnel"
+              title="Marketing &amp; Sales Personnel"
               desc="5 sales people · 60% factory-industry experience · 30% presentation + training · 10% software / Ai-native. Mindset-shift work: convincing factory mid + top mgmt to step up through Digitalization → Agentic → Full Ai. All Claude Code 101 certified."
               color="#1E4DAA"
               bg="#E8EEF8"
@@ -430,7 +430,7 @@ export default async function PlanPage() {
             <GtmEnablerBar
               num="03"
               tag="PROCESS"
-              title="Clear sales &amp; promotion steps"
+              title="Clear Sales &amp; Promotion Steps"
               desc="Primary funnel: printed invitation → weekly 15-20 min online demo → on-site in-person presentation → package commitment ($120 / $750 / $1,000+). Parallel channels: government top-down, app user growth (2.5K → 100K), word of mouth, non-garment expansion."
               color="#1E4DAA"
               bg="#E8EEF8"
