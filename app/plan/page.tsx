@@ -1,6 +1,8 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { verifySession } from "@/lib/auth";
+import { readSalaryStore } from "@/lib/salary-store";
+import { readExpensesStore } from "@/lib/expenses-store";
 import { Sidebar, type NavItem } from "@/components/plan/Sidebar";
 import { Section } from "@/components/plan/Section";
 import { Thesis } from "@/components/plan/Thesis";
@@ -52,10 +54,84 @@ const NAV: NavItem[] = [
 const kicker = (n: number, label: string) =>
   `${String(n).padStart(2, "0")} / ${label}`;
 
-export default function PlanPage() {
+/* RoadmapTimeline expects 12 quarter columns: Q3'24 → Q2'27.
+ * Forecast formula for quarters past Q2'26: each row's last-2-actual-quarters average.
+ * Headcount = members with any non-zero monthly cell in that quarter. */
+const CHART_QUARTERS = [
+  { y: 2024, q: 3, months: ["2024-07", "2024-08", "2024-09"] },
+  { y: 2024, q: 4, months: ["2024-10", "2024-11", "2024-12"] },
+  { y: 2025, q: 1, months: ["2025-01", "2025-02", "2025-03"] },
+  { y: 2025, q: 2, months: ["2025-04", "2025-05", "2025-06"] },
+  { y: 2025, q: 3, months: ["2025-07", "2025-08", "2025-09"] },
+  { y: 2025, q: 4, months: ["2025-10", "2025-11", "2025-12"] },
+  { y: 2026, q: 1, months: ["2026-01", "2026-02", "2026-03"] },
+  { y: 2026, q: 2, months: ["2026-04", "2026-05", "2026-06"] },
+  { y: 2026, q: 3, months: ["2026-07", "2026-08", "2026-09"] },
+  { y: 2026, q: 4, months: ["2026-10", "2026-11", "2026-12"] },
+  { y: 2027, q: 1, months: ["2027-01", "2027-02", "2027-03"] },
+  { y: 2027, q: 2, months: ["2027-04", "2027-05", "2027-06"] },
+];
+const TODAY_INDEX = 7; // Q2'26 = 0-based index 7
+
+async function computeRoadmapData() {
+  const [salaries, expenses] = await Promise.all([readSalaryStore(), readExpensesStore()]);
+  // Per-quarter salary sum (active members only, matches /admin/salaries quarterly view)
+  const salaryByQ: number[] = CHART_QUARTERS.map((q) =>
+    salaries.members
+      .filter((m) => m.status === "active")
+      .reduce<number>((s, m) => s + q.months.reduce<number>((ss, ym) => ss + (m.monthly[ym] ?? 0), 0), 0)
+  );
+  // Per-row forecast (avg of last 2 non-zero actuals) — only used for forecast quarters
+  const memberForecasts: number[] = salaries.members
+    .filter((m) => m.status === "active")
+    .map((m) => {
+      const actuals: number[] = [];
+      for (let qi = 0; qi <= TODAY_INDEX; qi++) {
+        const s = CHART_QUARTERS[qi].months.reduce<number>((ss, ym) => ss + (m.monthly[ym] ?? 0), 0);
+        if (s > 0) actuals.push(s);
+      }
+      const last2 = actuals.slice(-2);
+      return last2.length ? last2.reduce((a, b) => a + b, 0) / last2.length : 0;
+    });
+  const forecastQuarter = memberForecasts.reduce((a, b) => a + b, 0);
+  // Fill forecast quarters where no actual data exists
+  for (let qi = TODAY_INDEX + 1; qi < CHART_QUARTERS.length; qi++) {
+    if (salaryByQ[qi] === 0) salaryByQ[qi] = forecastQuarter;
+  }
+  // Per-quarter expense sum (all categories × all items)
+  const expenseByQ: number[] = CHART_QUARTERS.map((q) =>
+    expenses.categories.reduce<number>(
+      (s, c) =>
+        s +
+        c.items.reduce<number>(
+          (ss, it) => ss + q.months.reduce<number>((sss, ym) => sss + (it.monthly[ym]?.amount ?? 0), 0),
+          0
+        ),
+      0
+    )
+  );
+  // Combined spend in $K
+  const quarterlySpendK = salaryByQ.map((s, i) => Math.round((s + expenseByQ[i]) / 1000));
+  // Headcount per quarter = members with any non-zero cell that quarter
+  const headcount: number[] = CHART_QUARTERS.map((q) =>
+    salaries.members.filter(
+      (m) => m.status === "active" && q.months.some((ym) => (m.monthly[ym] ?? 0) > 0)
+    ).length
+  );
+  // Pad forecast headcount with the current quarter's count if zero
+  const lastHC = headcount[TODAY_INDEX] || Math.max(...headcount);
+  for (let qi = TODAY_INDEX + 1; qi < headcount.length; qi++) {
+    if (headcount[qi] === 0) headcount[qi] = lastHC;
+  }
+  return { quarterlySpendK, headcount };
+}
+
+export default async function PlanPage() {
   const session = cookies().get("yai_session")?.value;
   const viewer = verifySession(session);
   if (!viewer) redirect("/");
+
+  const roadmap = await computeRoadmapData();
 
   return (
     <div className="flex bg-yai-bg min-h-screen">
@@ -312,7 +388,7 @@ export default function PlanPage() {
           <p className="text-sm text-gray-600 mb-4 max-w-3xl">
             One chart, every module. The spend curve at the top is what we&rsquo;ve <strong>actually paid</strong> in Cambodia engineering salaries — team grew from 3 engineers in May 2024 (Rich, Virot, Dilan) to <strong>22 by May 2026</strong>, with monthly burn now ~$14K and bonuses on top. Each row below is a real module: orange = Digitalization built, blue = Agentic layer on top, dark green = Full Ai. Every step right of <strong>TODAY</strong> is value added on the same engineering base.
           </p>
-          <RoadmapTimeline mode="spend" />
+          <RoadmapTimeline mode="spend" quarterlySpendK={roadmap.quarterlySpendK} headcount={roadmap.headcount} />
 
         </Section>
 

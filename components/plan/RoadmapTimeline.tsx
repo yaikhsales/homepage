@@ -158,8 +158,19 @@ function formatK(k: number): string {
   return `$${Math.round(k)}K`;
 }
 
-export function RoadmapTimeline({ mode }: { mode: "spend" | "revenue" }) {
+type RoadmapProps = {
+  mode: "spend" | "revenue";
+  /** Override the hardcoded quarterlySpendK with live data from /admin/salaries + /admin/capex. */
+  quarterlySpendK?: number[];
+  /** Override the hardcoded headcount with live data. */
+  headcount?: number[];
+};
+
+export function RoadmapTimeline({ mode, quarterlySpendK, headcount }: RoadmapProps) {
   const isSpend = mode === "spend";
+  // Live data overrides the hardcoded fallbacks. Either both come through together or neither.
+  const liveSpend = quarterlySpendK ?? QUARTERLY_SPEND_K;
+  const liveHeadcount = headcount ?? HEADCOUNT;
   // Interactive scrubber — which quarter is the indicator currently pointing at?
   // Defaults to TODAY (Q2'26 = 8). User can click any quarter to "scrub" it.
   const [scrubQ, setScrubQ] = useState<number>(TODAY);
@@ -172,10 +183,18 @@ export function RoadmapTimeline({ mode }: { mode: "spend" | "revenue" }) {
     const n = Number(s.replace(/[^\d.]/g, ""));
     return formatK(n * mult);
   };
-  const quarterly = isSpend ? QUARTERLY_SPEND_K : QUARTERLY_REV_K;
-  const cumulative = isSpend ? CUM_SPEND : CUM_REV;
-  const cumToday = isSpend ? SPEND_TODAY : REV_TODAY;
-  const cumProjected = isSpend ? SPEND_PROJECTED : REV_PROJECTED;
+  // Build cumulative spend from liveSpend (which may be props-driven).
+  const liveCumSpend: number[] = liveSpend.reduce<number[]>((acc, q, i) => {
+    acc.push((acc[i - 1] || 0) + q);
+    return acc;
+  }, []);
+  const liveSpendToday = liveCumSpend[TODAY - 1];
+  const liveSpendProjected = liveCumSpend[N - 1];
+
+  const quarterly = isSpend ? liveSpend : QUARTERLY_REV_K;
+  const cumulative = isSpend ? liveCumSpend : CUM_REV;
+  const cumToday = isSpend ? liveSpendToday : REV_TODAY;
+  const cumProjected = isSpend ? liveSpendProjected : REV_PROJECTED;
   const curveColor = isSpend ? "#1E4DAA" : "#10B981";
   const barColor = isSpend ? "#94A3B8" : "#6EE7B7";
   const barFutureColor = isSpend ? "#CBD5E1" : "#A7F3D0";
@@ -236,7 +255,11 @@ export function RoadmapTimeline({ mode }: { mode: "spend" | "revenue" }) {
           <>
             <span className="flex items-center gap-1.5 text-[12px] font-bold text-gray-600 uppercase tracking-wide">
               <span className="inline-block w-3.5 h-2.5 rounded-sm" style={{ background: barColor }} />
-              Quarterly expenses
+              Past quarters
+            </span>
+            <span className="flex items-center gap-1.5 text-[12px] font-bold uppercase tracking-wide" style={{ color: "#B45309" }}>
+              <span className="inline-block w-3.5 h-2.5 rounded-sm" style={{ background: "#F59E0B" }} />
+              Next-2 forecast
             </span>
             <span className="flex items-center gap-1.5 text-[12px] font-extrabold uppercase tracking-wide" style={{ color: curveColor }}>
               <span className="inline-block w-4 h-[3px]" style={{ background: curveColor }} />
@@ -333,18 +356,45 @@ export function RoadmapTimeline({ mode }: { mode: "spend" | "revenue" }) {
         <path d={curvePath(cumulative, yMax) + ` L ${xForQuarter(N - 1)},${PLOT_BOTTOM} L ${xForQuarter(0)},${PLOT_BOTTOM} Z`}
               fill={curveColor} opacity="0.06" />
 
-        {/* Quarterly spend bars — scaled to the LEFT (bar / salary) axis using full plot height */}
+        {/* Quarterly spend bars. Colour by phase:
+            past = gray · next-2 quarters = AMBER forecast · later quarters = lightest gray planning */}
         {quarterly.map((spend, i) => {
           const barH = (spend / barAxisMax) * PLOT_H;
           const barW = (PLOT_W / N) * 0.55;
           const barX = xForQuarter(i) - barW / 2;
           const barY = PLOT_BOTTOM - barH;
           const isPast = i + 1 <= TODAY;
+          const isNextForecast = isSpend && i + 1 > TODAY && i + 1 <= TODAY + 2;
+          const fillColor = isPast
+            ? barColor
+            : isNextForecast
+              ? "#F59E0B"        // amber-500 — matches /admin/salaries forecast columns
+              : barFutureColor;
+          const isFcst = isNextForecast;
           return (
             <g key={`bar-${i}`}>
-              <rect x={barX} y={barY} width={barW} height={barH} fill={isPast ? barColor : barFutureColor} opacity="0.75" rx={1.5} />
+              <rect
+                x={barX}
+                y={barY}
+                width={barW}
+                height={barH}
+                fill={fillColor}
+                opacity={isFcst ? 0.9 : 0.75}
+                rx={1.5}
+                stroke={isFcst ? "#B45309" : "none"}
+                strokeWidth={isFcst ? 0.6 : 0}
+                strokeDasharray={isFcst ? "2 2" : undefined}
+              />
               {spend > 0 && (
-                <text x={xForQuarter(i)} y={barY - 5} fontSize="13" textAnchor="middle" fill="#475569" fontWeight="700">
+                <text
+                  x={xForQuarter(i)}
+                  y={barY - 5}
+                  fontSize="13"
+                  textAnchor="middle"
+                  fill={isFcst ? "#B45309" : "#475569"}
+                  fontWeight="700"
+                  fontStyle={isFcst ? "italic" : "normal"}
+                >
                   ${spend}K
                 </text>
               )}
@@ -425,7 +475,7 @@ export function RoadmapTimeline({ mode }: { mode: "spend" | "revenue" }) {
 
         {/* Row label: Headcount */}
         <text x={PLOT_LEFT - 6} y={PLOT_BOTTOM + 52} fontSize="13" textAnchor="end" fill="#6B7280" fontWeight="700">Head Count</text>
-        {HEADCOUNT.map((hc, i) => {
+        {liveHeadcount.map((hc, i) => {
           const x = xForQuarter(i);
           const isPeak = hc === 20;
           return (
