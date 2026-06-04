@@ -26,59 +26,85 @@ type Store = {
   categories: Category[];
 };
 
+type FlatRow = {
+  catIdx: number;
+  itemIdx: number;
+  cat: Category;
+  item: LineItem;
+  isGroupStart: boolean;
+};
+
 function fmtMonth(ym: string): string {
   const [y, m] = ym.split("-");
   const names = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   return `${names[Number(m) - 1]} ${y.slice(-2)}`;
 }
 
+function nextMonth(ym: string): string {
+  const [y, m] = ym.split("-").map(Number);
+  const d = new Date(y, m - 1, 1);
+  d.setMonth(d.getMonth() + 1);
+  const yy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  return `${yy}-${mm}`;
+}
+
 export function ExpensesEditor({ initial }: { initial: Store }) {
   const [store, setStore] = useState<Store>(initial);
-  const [openIds, setOpenIds] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState("");
 
-  const totals = useMemo(() => {
-    const catTotals: number[] = store.categories.map((c) =>
-      c.items.reduce<number>((s, it) =>
-        s + Object.values(it.monthly).reduce<number>((ss, m) => ss + (m.amount ?? 0), 0)
-      , 0)
-    );
-    const grand = catTotals.reduce<number>((s, v) => s + v, 0);
-    return { catTotals, grand };
+  // Flatten categories → line items, tracking group boundaries
+  const rows: FlatRow[] = useMemo(() => {
+    const out: FlatRow[] = [];
+    store.categories.forEach((cat, catIdx) => {
+      cat.items.forEach((item, itemIdx) => {
+        out.push({ catIdx, itemIdx, cat, item, isGroupStart: itemIdx === 0 });
+      });
+    });
+    return out;
   }, [store]);
 
-  const toggle = (id: string) => {
-    setOpenIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id); else next.add(id);
-      return next;
-    });
-  };
+  const itemTotals = useMemo(
+    () => rows.map((r) =>
+      Object.values(r.item.monthly).reduce<number>((s, c) => s + (c.amount ?? 0), 0)
+    ),
+    [rows]
+  );
 
-  const updateCell = (catIdx: number, itemIdx: number, ym: string, field: "amount" | "qty" | "note", value: string) => {
+  const monthTotals = useMemo(() => {
+    return store.months.map((m) =>
+      rows.reduce<number>((s, r) => s + (r.item.monthly[m]?.amount ?? 0), 0)
+    );
+  }, [rows, store.months]);
+
+  const grandTotal = monthTotals.reduce<number>((s, v) => s + v, 0);
+
+  const setCell = (catIdx: number, itemIdx: number, ym: string, value: string) => {
     const next: Store = { ...store, categories: [...store.categories] };
     const cat = { ...next.categories[catIdx], items: [...next.categories[catIdx].items] };
     const item = { ...cat.items[itemIdx], monthly: { ...cat.items[itemIdx].monthly } };
     const existing = item.monthly[ym] ?? { amount: 0 };
-    const updated: MonthCell = { ...existing };
-    if (field === "note") {
-      updated.note = value || undefined;
-    } else if (field === "qty") {
-      const n = value === "" ? 0 : Number(value);
-      updated.qty = Number.isNaN(n) || n === 0 ? undefined : n;
+    const num = value === "" ? null : Number(value);
+    if (num === null || Number.isNaN(num) || num <= 0) {
+      // keep qty/note if present but drop if all empty
+      if (existing.qty || existing.note) {
+        item.monthly[ym] = { ...existing, amount: 0 };
+      } else {
+        delete item.monthly[ym];
+      }
     } else {
-      const n = value === "" ? 0 : Number(value);
-      updated.amount = Number.isNaN(n) ? 0 : n;
-    }
-    if (!updated.amount && !updated.qty && !updated.note) {
-      delete item.monthly[ym];
-    } else {
-      item.monthly[ym] = updated;
+      item.monthly[ym] = { ...existing, amount: num };
     }
     cat.items[itemIdx] = item;
     next.categories[catIdx] = cat;
     setStore(next);
+  };
+
+  const addMonth = () => {
+    const last = store.months[store.months.length - 1] ?? "2024-04";
+    const nm = nextMonth(last);
+    setStore({ ...store, months: [...store.months, nm] });
   };
 
   const save = async () => {
@@ -107,159 +133,123 @@ export function ExpensesEditor({ initial }: { initial: Store }) {
 
   return (
     <div className="space-y-4">
-      {/* Header row */}
+      {/* Status row */}
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-4 text-xs">
           <Stat label="Categories" value={`${store.categories.length}`} />
-          <Stat label="Line items" value={`${store.categories.reduce((s, c) => s + c.items.length, 0)}`} />
-          <Stat label="Months" value={`${store.months.length}`} />
-          <Stat label="Grand total" value={`$${totals.grand.toLocaleString(undefined, { maximumFractionDigits: 0 })}`} color="#EF4444" />
+          <Stat label="Line items" value={`${rows.length}`} />
+          <Stat label="Months tracked" value={`${store.months.length}`} />
+          <Stat label="Grand total" value={`$${grandTotal.toLocaleString(undefined, { maximumFractionDigits: 2 })}`} color="#EF4444" />
         </div>
-        <div className="flex items-center gap-3">
-          {msg && (
-            <span className={`text-xs font-semibold ${msg.startsWith("✓") ? "text-emerald-600" : "text-red-600"}`}>
-              {msg}
-            </span>
-          )}
+        <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={save}
-            disabled={loading}
-            className="bg-yai-orange hover:bg-yai-orange-dark text-white font-extrabold px-6 py-2.5 rounded-lg transition disabled:opacity-50 text-sm"
+            onClick={addMonth}
+            className="text-xs bg-white border border-yai-border hover:bg-blue-50 px-3 py-1.5 rounded-lg font-bold text-yai-navy"
           >
-            {loading ? "Saving…" : "Save"}
+            + Next month
           </button>
         </div>
       </div>
 
-      {/* Category rows */}
-      <div className="space-y-2">
-        {store.categories.map((cat, cIdx) => {
-          const isOpen = openIds.has(cat.id);
-          const catTotal = totals.catTotals[cIdx];
-          return (
-            <div
-              key={cat.id}
-              className="rounded-xl border-2 border-yai-border bg-white overflow-hidden"
-              style={isOpen ? { borderColor: cat.color } : {}}
-            >
-              {/* Header */}
-              <button
-                type="button"
-                onClick={() => toggle(cat.id)}
-                className="w-full flex items-center justify-between gap-3 p-3 text-left hover:bg-gray-50 transition"
-                style={{ background: isOpen ? `${cat.color}10` : "transparent" }}
+      {/* Excel grid */}
+      <div className="overflow-x-auto rounded-xl border border-yai-border bg-white shadow-sm">
+        <table className="text-[11px] border-collapse">
+          <thead className="bg-yai-navy text-white">
+            <tr>
+              <th className="sticky left-0 z-10 bg-yai-navy text-left px-2 py-2 font-bold uppercase tracking-wider w-56">Line item</th>
+              <th className="text-left px-2 py-2 font-bold uppercase tracking-wider w-28">Category</th>
+              <th className="text-center px-2 py-2 font-bold uppercase tracking-wider w-16">Freq</th>
+              {store.months.map((m) => (
+                <th key={m} className="text-right px-2 py-2 font-bold uppercase tracking-wider w-20 whitespace-nowrap">
+                  {fmtMonth(m)}
+                </th>
+              ))}
+              <th className="text-right px-2 py-2 font-bold uppercase tracking-wider w-24 bg-yai-blue">Total $</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r, i) => (
+              <tr
+                key={`${r.cat.id}-${r.item.id}`}
+                className={`hover:bg-blue-50/30 ${r.isGroupStart ? "border-t-2" : "border-t border-yai-border"}`}
+                style={r.isGroupStart ? { borderTopColor: r.cat.color } : undefined}
               >
-                <div className="flex items-center gap-3 flex-1 min-w-0">
-                  <span
-                    className="inline-flex items-center justify-center w-8 h-8 rounded-lg text-white font-extrabold text-xs shrink-0"
-                    style={{ background: cat.color }}
-                  >
-                    {cat.items.length}
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <div className="text-sm font-extrabold text-yai-navy">{cat.name}</div>
-                    <div className="text-[10px] text-gray-500 leading-snug truncate">{cat.detail}</div>
+                <td
+                  className="sticky left-0 bg-white px-2 py-1"
+                  style={{ boxShadow: `inset 3px 0 0 0 ${r.cat.color}` }}
+                >
+                  <div className="flex flex-col">
+                    <span className="font-extrabold text-yai-navy text-[12px] leading-tight">{r.item.name}</span>
+                    {r.item.unitLabel && (
+                      <span className="text-[9px] text-gray-500 leading-tight mt-0.5">{r.item.unitLabel}</span>
+                    )}
                   </div>
-                </div>
-                <div className="flex items-center gap-3 shrink-0">
-                  <span className="text-xs text-gray-500 uppercase tracking-wider font-bold">Total</span>
-                  <span className="text-sm font-extrabold tabular-nums" style={{ color: catTotal > 0 ? cat.color : "#94A3B8" }}>
-                    ${catTotal.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                </td>
+                <td className="px-2 py-1">
+                  <span
+                    className="inline-flex items-center text-[9px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded shrink-0 border"
+                    style={{ borderColor: r.cat.color, color: r.cat.color, background: `${r.cat.color}10` }}
+                    title={r.cat.detail}
+                  >
+                    {r.cat.name.split(" ")[0]}
                   </span>
-                  <span className="text-gray-400 text-sm">{isOpen ? "▲" : "▼"}</span>
-                </div>
-              </button>
-
-              {/* Items table when expanded */}
-              {isOpen && (
-                <div className="border-t border-yai-border bg-gray-50/50 p-3 space-y-3">
-                  {cat.items.map((item, iIdx) => {
-                    const itemTotal = Object.values(item.monthly).reduce<number>((s, c) => s + (c.amount ?? 0), 0);
-                    return (
-                      <div key={item.id} className="bg-white rounded-lg border border-yai-border">
-                        {/* Item header */}
-                        <div className="flex items-baseline justify-between gap-3 p-2.5 border-b border-yai-border bg-gray-50/40">
-                          <div className="flex items-baseline gap-2 flex-wrap">
-                            <span className="text-[12px] font-extrabold text-yai-navy">{item.name}</span>
-                            {item.unitLabel && (
-                              <span className="text-[10px] text-gray-500">· {item.unitLabel}</span>
-                            )}
-                            <span
-                              className="text-[8px] font-extrabold uppercase tracking-wider px-1 py-0.5 rounded text-white"
-                              style={{ background: item.frequency === "recurring" ? "#1E4DAA" : "#0A3327" }}
-                            >
-                              {item.frequency === "recurring" ? "monthly" : "one-off"}
-                            </span>
-                          </div>
-                          <span className="text-[11px] font-extrabold tabular-nums" style={{ color: itemTotal > 0 ? cat.color : "#94A3B8" }}>
-                            ${itemTotal.toLocaleString(undefined, { maximumFractionDigits: 0 })}
-                          </span>
-                        </div>
-
-                        {/* Monthly grid */}
-                        <div className="overflow-x-auto">
-                          <table className="text-[10px] border-collapse w-full">
-                            <thead className="bg-gray-100 text-gray-600">
-                              <tr>
-                                <th className="text-left px-2 py-1 font-bold uppercase tracking-wider w-20">Month</th>
-                                <th className="text-right px-2 py-1 font-bold uppercase tracking-wider w-16">Qty</th>
-                                <th className="text-right px-2 py-1 font-bold uppercase tracking-wider w-24">Amount $</th>
-                                <th className="text-left px-2 py-1 font-bold uppercase tracking-wider">Note</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {store.months.map((m) => {
-                                const cell = item.monthly[m];
-                                return (
-                                  <tr key={m} className="border-t border-yai-border hover:bg-blue-50/30">
-                                    <td className="px-2 py-0.5 font-bold text-yai-navy">{fmtMonth(m)}</td>
-                                    <td className="px-1 py-0.5">
-                                      <input
-                                        type="number"
-                                        value={cell?.qty ?? ""}
-                                        onChange={(e) => updateCell(cIdx, iIdx, m, "qty", e.target.value)}
-                                        placeholder="—"
-                                        className="w-full text-right text-[10px] tabular-nums text-yai-navy placeholder:text-gray-300 border border-yai-border rounded px-1 py-0.5 bg-white focus:outline-none focus:border-yai-blue"
-                                      />
-                                    </td>
-                                    <td className="px-1 py-0.5">
-                                      <input
-                                        type="number"
-                                        step="0.01"
-                                        value={cell?.amount ?? ""}
-                                        onChange={(e) => updateCell(cIdx, iIdx, m, "amount", e.target.value)}
-                                        placeholder="—"
-                                        className="w-full text-right text-[10px] tabular-nums text-yai-navy placeholder:text-gray-300 border border-yai-border rounded px-1 py-0.5 bg-white focus:outline-none focus:border-yai-blue"
-                                      />
-                                    </td>
-                                    <td className="px-1 py-0.5">
-                                      <input
-                                        type="text"
-                                        value={cell?.note ?? ""}
-                                        onChange={(e) => updateCell(cIdx, iIdx, m, "note", e.target.value)}
-                                        placeholder="optional"
-                                        className="w-full text-[10px] text-yai-navy placeholder:text-gray-300 border border-yai-border rounded px-1 py-0.5 bg-white focus:outline-none focus:border-yai-blue"
-                                      />
-                                    </td>
-                                  </tr>
-                                );
-                              })}
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          );
-        })}
+                </td>
+                <td className="px-2 py-1 text-center">
+                  <span
+                    className="inline-flex items-center text-[8px] font-extrabold uppercase tracking-wider px-1 py-0.5 rounded text-white"
+                    style={{ background: r.item.frequency === "recurring" ? "#1E4DAA" : "#0A3327" }}
+                  >
+                    {r.item.frequency === "recurring" ? "mo" : "1×"}
+                  </span>
+                </td>
+                {store.months.map((m) => {
+                  const cell = r.item.monthly[m];
+                  const amt = cell?.amount ?? 0;
+                  return (
+                    <td key={m} className="px-1 py-0.5">
+                      <input
+                        type="number"
+                        step="0.01"
+                        value={amt > 0 ? amt : ""}
+                        onChange={(e) => setCell(r.catIdx, r.itemIdx, m, e.target.value)}
+                        placeholder="—"
+                        title={cell?.note || undefined}
+                        className={`w-full text-right text-[11px] tabular-nums px-1 py-1 rounded border focus:outline-none focus:border-yai-blue ${
+                          amt > 0
+                            ? "text-yai-navy font-semibold border-transparent bg-white hover:bg-blue-50"
+                            : "text-gray-300 border-transparent bg-gray-50/50 hover:bg-blue-50"
+                        }`}
+                      />
+                    </td>
+                  );
+                })}
+                <td className="px-2 py-1 text-right font-extrabold text-yai-blue tabular-nums bg-blue-50/50">
+                  {itemTotals[i] > 0 ? `$${itemTotals[i].toLocaleString(undefined, { maximumFractionDigits: 2 })}` : "—"}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+          <tfoot className="bg-gray-50">
+            <tr className="border-t-2 border-yai-blue">
+              <td className="sticky left-0 bg-gray-50 px-2 py-2 font-extrabold text-yai-navy uppercase tracking-wider text-[10px]" colSpan={3}>
+                Monthly total
+              </td>
+              {monthTotals.map((t, i) => (
+                <td key={i} className="px-2 py-2 text-right font-extrabold text-yai-navy tabular-nums">
+                  {t > 0 ? `$${t.toLocaleString(undefined, { maximumFractionDigits: 0 })}` : "—"}
+                </td>
+              ))}
+              <td className="px-2 py-2 text-right font-extrabold text-yai-orange tabular-nums bg-orange-50">
+                ${grandTotal.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+              </td>
+            </tr>
+          </tfoot>
+        </table>
       </div>
 
-      {/* Footer */}
-      <div className="flex items-center justify-between gap-3 pt-2">
+      {/* Actions */}
+      <div className="flex items-center justify-between gap-3">
         <div className="text-[11px] text-gray-500">
           {store.updatedAt && (
             <>Last saved <strong className="text-yai-navy">{new Date(store.updatedAt).toLocaleString()}</strong> by <strong>{store.updatedBy}</strong></>
@@ -267,7 +257,9 @@ export function ExpensesEditor({ initial }: { initial: Store }) {
         </div>
         <div className="flex items-center gap-3">
           {msg && (
-            <span className={`text-xs font-semibold ${msg.startsWith("✓") ? "text-emerald-600" : "text-red-600"}`}>{msg}</span>
+            <span className={`text-xs font-semibold ${msg.startsWith("✓") ? "text-emerald-600" : "text-red-600"}`}>
+              {msg}
+            </span>
           )}
           <button
             type="button"

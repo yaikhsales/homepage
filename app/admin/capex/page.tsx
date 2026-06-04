@@ -11,9 +11,10 @@ export default async function AdminCapexPage() {
         </div>
         <h1 className="text-3xl font-extrabold mt-1">Capex / Equipment + Expenses</h1>
         <p className="text-sm text-gray-600 mt-1">
-          Non-salary expense streams. Click a category header to see its line items + monthly grid.
-          Categories match the Texlink Budget &lsquo;Expences&rsquo; layout — Bonus, Computers,
-          Furniture, Dev equipment, Admin Shop, Ai Fees, Villa Rent, Petty Cash + Sales Promotion.
+          Excel-style grid. Line items down the rows, months across the columns. Type the actual
+          monthly amount paid for each item; blank = no payment that month. Each line item is colored
+          by its category — Computers, Furniture, Dev equipment, Admin Shop, Ai Fees, Villa Rent,
+          Petty Cash + Sales Promotion.
         </p>
       </div>
       <ExpensesEditor initial={store} />
