@@ -51,12 +51,13 @@ export function MilestoneRoadmap({ milestones, color, bgColor }: Props) {
 
   // Viewbox geometry — ascending diagonal.
   // LEFT_PAD / RIGHT_PAD ≥ cardW/2 + safety, otherwise the first/last cards clip the viewBox.
+  // VB_H sized to fit the tallest cardH + 60px gap above and below the ribbon path.
   const VB_W = 1200;
-  const VB_H = 480;
+  const VB_H = 700;             // was 480 — taller so 260px cards fit fully
   const LEFT_PAD = 130;
   const RIGHT_PAD = 130;
-  const TOP_PAD = 240;          // top of leftmost circle (path ENDS here on the right)
-  const BOTTOM_PAD = 240;       // baseline for leftmost circle
+  const TOP_PAD = 360;          // top of leftmost circle (path ENDS here on the right)
+  const BOTTOM_PAD = 340;       // baseline for leftmost circle
   // Path ascends from bottom-left to top-right
   const xStart = LEFT_PAD;
   const yStart = VB_H - BOTTOM_PAD;
@@ -71,11 +72,14 @@ export function MilestoneRoadmap({ milestones, color, bgColor }: Props) {
   };
 
   const PIN_R = 30;
-  const cardW = Math.max(150, Math.min(230, step - 12));
-  // Card grows if any milestone has sub-items OR multi-week activities
+  // Wider cards now (was 150–230) — they alternate above/below so adjacent cards
+  // don't visually collide even when cardW > step.
+  const cardW = Math.max(180, Math.min(240, step + 30));
+  // Card grows if any milestone has sub-items OR multi-week activities.
+  // Bumped heights so all text + week-tag bullets fit without clipping.
   const hasSubs = milestones.some((m) => m.sub && m.sub.length > 0);
   const hasActs = milestones.some((m) => m.activities && m.activities.length > 0);
-  const cardH = hasActs ? 200 : hasSubs ? 180 : 120;
+  const cardH = hasActs ? 260 : hasSubs ? 200 : 140;
   // Anyone using monthLabel? → pin font drops slightly to fit "06-26" cleanly
   const hasMonthLabels = milestones.some((m) => !!m.monthLabel);
 
@@ -125,12 +129,13 @@ export function MilestoneRoadmap({ milestones, color, bgColor }: Props) {
                 strokeDasharray="4 4"
               />
 
-              {/* Card with dashed coloured border — larger fonts now that we have room */}
+              {/* Card with solid coloured border + drop shadow — readable at a glance */}
               <foreignObject x={cardX} y={cardY} width={cardW} height={cardH}>
                 <div
-                  className="w-full h-full rounded-lg bg-white px-3 py-2.5 flex flex-col gap-1 overflow-hidden"
+                  className="w-full rounded-lg bg-white px-3 py-2.5 flex flex-col gap-1 shadow-md"
                   style={{
-                    border: `2px dashed ${ringColor}`,
+                    border: `2.5px solid ${ringColor}`,
+                    minHeight: cardH,
                   }}
                 >
                   <div className="text-[13px] uppercase tracking-wider font-extrabold" style={{ color: ringColor }}>
