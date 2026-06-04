@@ -9,11 +9,13 @@ import type { ReactNode } from "react";
  * progression bars (Digitalization → Agentic → Full Ai per module). */
 
 const QUARTERS = [
-  "Q3'24", "Q4'24", "Q1'25", "Q2'25", "Q3'25", "Q4'25",
-  "Q1'26", "Q2'26", "Q3'26", "Q4'26", "Q1'27", "Q2'27",
+  "Q2'24", "Q3'24", "Q4'24",
+  "Q1'25", "Q2'25", "Q3'25", "Q4'25",
+  "Q1'26", "Q2'26", "Q3'26", "Q4'26",
+  "Q1'27", "Q2'27",
 ];
-const N = QUARTERS.length;        // 12 columns
-const TODAY = 8;                  // Q2'26 — current quarter (1-based)
+const N = QUARTERS.length;        // 13 columns — Q2'24 (start of real data) → Q2'27
+const TODAY = 9;                  // Q2'26 — current quarter (1-based), Jun 2026
 
 type Group = "admin" | "platform" | "ops";
 type Mod = {
@@ -32,31 +34,31 @@ type Mod = {
  * today (★): Car Booking, YPM/CE. */
 const MODULES: Mod[] = [
   // ════════ ADMINISTRATION ════════
-  { name: "Admin Core · PR · Shop · Approvals · APP",     digStart: 1, agStart: 8,  fullStart: 11, group: "admin", digValue: "$5K",  agValue: "$8K",  fullValue: "$12K" },
-  { name: "HR · Pay · Org · LMS · AI CCTV",               digStart: 1, agStart: 8,  fullStart: 11, group: "admin", digValue: "$9K",  agValue: "$14K", fullValue: "$20K" },
-  { name: "Digital Audit · 8S · AIoT · Waste",            digStart: 1, agStart: 8,  fullStart: 11, group: "admin", digValue: "$10K", agValue: "$16K", fullValue: "$24K" },
-  { name: "Gate Pass · CTPAT",                            digStart: 2, agStart: 8,  fullStart: 11, group: "admin", digValue: "$5K",  agValue: "$8K",  fullValue: "$12K" },
-  { name: "Car Booking  ★ AGENTIC",                       digStart: 2, agStart: 6,  fullStart: 11, group: "admin", digValue: "$1K",  agValue: "$2K",  fullValue: "$3K"  },
-  { name: "Accounting (Full + GDT)",                      digStart: 3, agStart: 9,  fullStart: 11, group: "admin", digValue: "$5K",  agValue: "$8K",  fullValue: "$12K" },
-  { name: "Speak Up · Worker Voice",                      digStart: 6, agStart: 8,  fullStart: 11, group: "admin", digValue: "$3K",  agValue: "$5K",  fullValue: "$8K"  },
-  { name: "Corporate Financials + IEWS",                  digStart: 7, agStart: 9,  fullStart: 12, group: "admin", digValue: "$3K",  agValue: "$5K",  fullValue: "$8K"  },
-  { name: "Cambodia E-Gov + E-Invoice",                   digStart: 8, agStart: 10, fullStart: 12, group: "admin", digValue: "$4K",  agValue: "$6K",  fullValue: "$8K"  },
+  { name: "Admin Core · PR · Shop · Approvals · APP",     digStart: 2, agStart: 9,  fullStart: 12, group: "admin", digValue: "$5K",  agValue: "$8K",  fullValue: "$12K" },
+  { name: "HR · Pay · Org · LMS · AI CCTV",               digStart: 2, agStart: 9,  fullStart: 12, group: "admin", digValue: "$9K",  agValue: "$14K", fullValue: "$20K" },
+  { name: "Digital Audit · 8S · AIoT · Waste",            digStart: 2, agStart: 9,  fullStart: 12, group: "admin", digValue: "$10K", agValue: "$16K", fullValue: "$24K" },
+  { name: "Gate Pass · CTPAT",                            digStart: 3, agStart: 9,  fullStart: 12, group: "admin", digValue: "$5K",  agValue: "$8K",  fullValue: "$12K" },
+  { name: "Car Booking  ★ AGENTIC",                       digStart: 3, agStart: 7,  fullStart: 12, group: "admin", digValue: "$1K",  agValue: "$2K",  fullValue: "$3K"  },
+  { name: "Accounting (Full + GDT)",                      digStart: 4, agStart: 10,  fullStart: 12, group: "admin", digValue: "$5K",  agValue: "$8K",  fullValue: "$12K" },
+  { name: "Speak Up · Worker Voice",                      digStart: 7, agStart: 9,  fullStart: 12, group: "admin", digValue: "$3K",  agValue: "$5K",  fullValue: "$8K"  },
+  { name: "Corporate Financials + IEWS",                  digStart: 8, agStart: 10,  fullStart: 13, group: "admin", digValue: "$3K",  agValue: "$5K",  fullValue: "$8K"  },
+  { name: "Cambodia E-Gov + E-Invoice",                   digStart: 9, agStart: 11, fullStart: 13, group: "admin", digValue: "$4K",  agValue: "$6K",  fullValue: "$8K"  },
 
   // ════════ PLATFORM FOUNDATION ════════
   // Dig: Laravel + MongoDB Ai-native · Android & iOS apps · MQTT + TUYA · SMART Gate · SMART Camera
   // Ag:  + LLM APIs (Claude / GPT / Gemini) · Agentic chat in mobile app
   // Full Ai: own Ai server (solar + battery) · 5G bonding for rural factories · 5G internal WiFi for workers
-  { name: "Platform · Laravel + Mongo + Mobile + AIoT + Ai Server", digStart: 1, agStart: 6, fullStart: 12, group: "platform", digValue: "$8K", agValue: "$20K", fullValue: "$35K" },
+  { name: "Platform · Laravel + Mongo + Mobile + AIoT + Ai Server", digStart: 2, agStart: 7, fullStart: 13, group: "platform", digValue: "$8K", agValue: "$20K", fullValue: "$35K" },
 
   // ════════ OPERATIONS ════════
-  { name: "YTM · Machine Maintenance + TPM Shop",         digStart: 4, agStart: 8,  fullStart: 11, group: "ops",   digValue: "$7K",  agValue: "$11K", fullValue: "$16K" },
-  { name: "YQMS · Quality Mgmt (6 stages + Fini Check)",  digStart: 4, agStart: 8,  fullStart: 11, group: "ops",   digValue: "$12K", agValue: "$20K", fullValue: "$30K" },
-  { name: "YPI · Technical Specs (3-language)",           digStart: 5, agStart: 9,  fullStart: 12, group: "ops",   digValue: "$6K",  agValue: "$10K", fullValue: "$15K" },
-  { name: "YPM / CE · Motion · SMV  ★ AGENTIC",           digStart: 5, agStart: 7,  fullStart: 12, group: "ops",   digValue: "$15K", agValue: "$24K", fullValue: "$36K" },
-  { name: "Product Dev · Sample Room",                    digStart: 5, agStart: 9,  fullStart: 12, group: "ops",   digValue: "$2K",  agValue: "$3K",  fullValue: "$5K"  },
-  { name: "4DP · Planning Brain (4 directions × 4 levels)", digStart: 6, agStart: 9,  fullStart: 12, group: "ops",   digValue: "$12K", agValue: "$20K", fullValue: "$30K" },
-  { name: "MRP + Logistics (Inbound + Outbound)",         digStart: 7, agStart: 9,  fullStart: 12, group: "ops",   digValue: "$4K",  agValue: "$7K",  fullValue: "$10K" },
-  { name: "YWIP · 13-Dept Production Flow",               digStart: 7, agStart: 9,  fullStart: 12, group: "ops",   digValue: "$8K",  agValue: "$13K", fullValue: "$20K" },
+  { name: "YTM · Machine Maintenance + TPM Shop",         digStart: 5, agStart: 9,  fullStart: 12, group: "ops",   digValue: "$7K",  agValue: "$11K", fullValue: "$16K" },
+  { name: "YQMS · Quality Mgmt (6 stages + Fini Check)",  digStart: 5, agStart: 9,  fullStart: 12, group: "ops",   digValue: "$12K", agValue: "$20K", fullValue: "$30K" },
+  { name: "YPI · Technical Specs (3-language)",           digStart: 6, agStart: 10,  fullStart: 13, group: "ops",   digValue: "$6K",  agValue: "$10K", fullValue: "$15K" },
+  { name: "YPM / CE · Motion · SMV  ★ AGENTIC",           digStart: 6, agStart: 8,  fullStart: 13, group: "ops",   digValue: "$15K", agValue: "$24K", fullValue: "$36K" },
+  { name: "Product Dev · Sample Room",                    digStart: 6, agStart: 10,  fullStart: 13, group: "ops",   digValue: "$2K",  agValue: "$3K",  fullValue: "$5K"  },
+  { name: "4DP · Planning Brain (4 directions × 4 levels)", digStart: 7, agStart: 10,  fullStart: 13, group: "ops",   digValue: "$12K", agValue: "$20K", fullValue: "$30K" },
+  { name: "MRP + Logistics (Inbound + Outbound)",         digStart: 8, agStart: 10,  fullStart: 13, group: "ops",   digValue: "$4K",  agValue: "$7K",  fullValue: "$10K" },
+  { name: "YWIP · 13-Dept Production Flow",               digStart: 8, agStart: 10,  fullStart: 13, group: "ops",   digValue: "$8K",  agValue: "$13K", fullValue: "$20K" },
 ];
 
 const GROUP_COLOR: Record<Group, { label: string; tag: string; bg: string }> = {
@@ -66,25 +68,15 @@ const GROUP_COLOR: Record<Group, { label: string; tag: string; bg: string }> = {
 };
 
 // Headcount per quarter — end of quarter, real where we have data.
-// Pulled from /admin/salaries (active members per quarter).
-// Q3'24 = 12 core + 3 historic still on roll = 15
-// Q4'24 = 13 core (+ Alen joins Oct) + 2 historic = 15
-// Q1'26 = adds Daly/Khun/Sam/Phanny = 19 active group
-// Q2'26 = 20 active (Sophy ungrouped + 19 group members)
-const HEADCOUNT = [15, 15, 15, 16, 16, 17, 19, 20, 21, 22, 23, 24];
+// Pulled from /admin/salaries (active members per quarter). 13 quarters Q2'24 → Q2'27.
+const HEADCOUNT = [3, 15, 15, 15, 16, 16, 17, 19, 20, 21, 22, 23, 24];
 
-// Quarterly TOTAL spend $K = salaries (real from /admin/salaries) + ~$3K/q expense buffer
-// (capex/villa/AI fees — expense store not yet populated with actuals).
-// Real salary numbers from quarterly view:
-//   Q3'24=$9K  Q4'24=$14K  Q1'25=$18K  Q2'25=$23K  Q3'25=$23K  Q4'25=$25K
-//   Q1'26=$36K Q2'26=$30K (partial — Jun not closed)
-// Forecast Q3'26 / Q4'26 = $33K each (avg of last 2 actual quarters per /admin/salaries).
-// Forecast Q1'27 / Q2'27 = slight growth as new hires bed in.
-// TODO: wire this directly to the salary + expense stores for auto-refresh.
-const QUARTERLY_SPEND_K = [12, 17, 21, 26, 26, 28, 39, 33, 36, 36, 37, 38];
+// Quarterly TOTAL spend $K = salaries (real from /admin/salaries) + small expense buffer.
+// Fallback only — overridden by props from app/plan/page.tsx in production.
+const QUARTERLY_SPEND_K = [4, 12, 17, 21, 26, 26, 28, 39, 33, 36, 36, 37, 38];
 
-// Revenue trajectory — illustrative quarterly
-const QUARTERLY_REV_K = [0, 0, 0, 0, 0, 0, 8, 12, 25, 35, 50, 50];
+// Revenue trajectory — illustrative quarterly (13 quarters)
+const QUARTERLY_REV_K = [0, 0, 0, 0, 0, 0, 0, 8, 12, 25, 35, 50, 50];
 
 // Cumulative
 const CUM_SPEND: number[] = QUARTERLY_SPEND_K.reduce<number[]>((acc, q, i) => {
@@ -102,10 +94,10 @@ const REV_TODAY = CUM_REV[TODAY - 1];
 const REV_PROJECTED = CUM_REV[N - 1];
 
 const MILESTONES = [
-  { qtr: 8,  label: "Q1 · Foundation",  detail: "3–5 paid contracts" },
-  { qtr: 9,  label: "Q2 · Validation",  detail: "10+ customers · Ministry signed" },
-  { qtr: 10, label: "Q3 · Expansion",   detail: "20+ customers · regional pilot" },
-  { qtr: 11, label: "Q4 · Scale",       detail: "30+ customers · Stage 3 scoped" },
+  { qtr: 9,  label: "Q1 · Foundation",  detail: "3–5 paid contracts" },
+  { qtr: 10,  label: "Q2 · Validation",  detail: "10+ customers · Ministry signed" },
+  { qtr: 11, label: "Q3 · Expansion",   detail: "20+ customers · regional pilot" },
+  { qtr: 12, label: "Q4 · Scale",       detail: "30+ customers · Stage 3 scoped" },
 ];
 
 const COL = {
@@ -259,7 +251,7 @@ export function RoadmapTimeline({ mode, quarterlySpendK, headcount }: RoadmapPro
             </span>
             <span className="flex items-center gap-1.5 text-[12px] font-bold uppercase tracking-wide" style={{ color: "#B45309" }}>
               <span className="inline-block w-3.5 h-2.5 rounded-sm" style={{ background: "#F59E0B" }} />
-              Next-2 forecast
+              Forecast (post-Q2&apos;26)
             </span>
             <span className="flex items-center gap-1.5 text-[12px] font-extrabold uppercase tracking-wide" style={{ color: curveColor }}>
               <span className="inline-block w-4 h-[3px]" style={{ background: curveColor }} />
@@ -357,20 +349,15 @@ export function RoadmapTimeline({ mode, quarterlySpendK, headcount }: RoadmapPro
               fill={curveColor} opacity="0.06" />
 
         {/* Quarterly spend bars. Colour by phase:
-            past = gray · next-2 quarters = AMBER forecast · later quarters = lightest gray planning */}
+            past (incl. current) = gray · all future quarters = AMBER forecast */}
         {quarterly.map((spend, i) => {
           const barH = (spend / barAxisMax) * PLOT_H;
           const barW = (PLOT_W / N) * 0.55;
           const barX = xForQuarter(i) - barW / 2;
           const barY = PLOT_BOTTOM - barH;
           const isPast = i + 1 <= TODAY;
-          const isNextForecast = isSpend && i + 1 > TODAY && i + 1 <= TODAY + 2;
-          const fillColor = isPast
-            ? barColor
-            : isNextForecast
-              ? "#F59E0B"        // amber-500 — matches /admin/salaries forecast columns
-              : barFutureColor;
-          const isFcst = isNextForecast;
+          const isFcst = isSpend && !isPast;       // every quarter past TODAY = amber forecast
+          const fillColor = isPast ? barColor : "#F59E0B";   // amber-500
           return (
             <g key={`bar-${i}`}>
               <rect

@@ -54,10 +54,12 @@ const NAV: NavItem[] = [
 const kicker = (n: number, label: string) =>
   `${String(n).padStart(2, "0")} / ${label}`;
 
-/* RoadmapTimeline expects 12 quarter columns: Q3'24 → Q2'27.
- * Forecast formula for quarters past Q2'26: each row's last-2-actual-quarters average.
+/* RoadmapTimeline expects 13 quarter columns: Q2'24 → Q2'27 (Q2'24 is where real
+ * salary data starts — Rich + Virot + Dilan paid May+Jun 2024).
+ * Forecast formula for quarters past TODAY (Q2'26): each row's last-2-actual-quarters average.
  * Headcount = members with any non-zero monthly cell in that quarter. */
 const CHART_QUARTERS = [
+  { y: 2024, q: 2, months: ["2024-04", "2024-05", "2024-06"] },
   { y: 2024, q: 3, months: ["2024-07", "2024-08", "2024-09"] },
   { y: 2024, q: 4, months: ["2024-10", "2024-11", "2024-12"] },
   { y: 2025, q: 1, months: ["2025-01", "2025-02", "2025-03"] },
@@ -71,7 +73,7 @@ const CHART_QUARTERS = [
   { y: 2027, q: 1, months: ["2027-01", "2027-02", "2027-03"] },
   { y: 2027, q: 2, months: ["2027-04", "2027-05", "2027-06"] },
 ];
-const TODAY_INDEX = 7; // Q2'26 = 0-based index 7
+const TODAY_INDEX = 8; // Q2'26 = 0-based index 8 in the 13-quarter array
 
 async function computeRoadmapData() {
   const [salaries, expenses] = await Promise.all([readSalaryStore(), readExpensesStore()]);
