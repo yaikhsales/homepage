@@ -77,9 +77,39 @@ export function FloatingGlass() {
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
-        className="rounded-2xl backdrop-blur-xl bg-white/55 ring-1 ring-white/60 border border-white/40 shadow-[0_10px_40px_-10px_rgba(10,31,71,0.35)] touch-none cursor-grab active:cursor-grabbing transition-shadow hover:shadow-[0_15px_50px_-10px_rgba(10,31,71,0.45)]"
-        style={{ width: `${PANEL_W}px`, height: `${PANEL_H}px`, maxWidth: "calc(100vw - 40px)" }}
+        className="relative rounded-3xl overflow-hidden touch-none cursor-grab active:cursor-grabbing transition-shadow"
+        style={{
+          width: `${PANEL_W}px`,
+          height: `${PANEL_H}px`,
+          maxWidth: "calc(100vw - 40px)",
+          // True glassmorphism — heavy blur + saturation boost makes colours behind it pop through
+          backdropFilter: "blur(28px) saturate(180%)",
+          WebkitBackdropFilter: "blur(28px) saturate(180%)",
+          // Diagonal gradient with very low alpha — most of the look comes from what's behind
+          background:
+            "linear-gradient(135deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.06) 60%, rgba(255,255,255,0.12) 100%)",
+          // Soft outer shadow + bright inner-top edge for the glossy "lens lip"
+          boxShadow:
+            "0 20px 50px -20px rgba(10,31,71,0.45), 0 2px 6px rgba(10,31,71,0.08), inset 0 1px 0 rgba(255,255,255,0.6), inset 0 0 0 1px rgba(255,255,255,0.18)",
+          border: "1px solid rgba(255,255,255,0.35)",
+        }}
       >
+        {/* Specular highlight band at the top — fakes the glass curving the light */}
+        <div
+          className="absolute inset-x-0 top-0 h-1/3 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.15) 40%, transparent 100%)",
+          }}
+        />
+        {/* Subtle highlight along the left edge */}
+        <div
+          className="absolute inset-y-0 left-0 w-px pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.7) 30%, rgba(255,255,255,0.2) 70%, transparent 100%)",
+          }}
+        />
         {/* empty body — drag from anywhere on the surface */}
       </div>
     </div>
