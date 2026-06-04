@@ -62,9 +62,13 @@ export function SalaryEditor({ initial }: { initial: Store }) {
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState("");
 
+  // Totals row + grand total exclude resigned/realigned members ("dead wood").
+  // Their individual numbers still show in the per-row Total column for audit purposes.
   const monthTotals = useMemo(() => {
     return store.months.map((m) =>
-      store.members.reduce<number>((s, mem) => s + (mem.monthly[m] ?? 0), 0)
+      store.members
+        .filter((mem) => mem.status === "active")
+        .reduce<number>((s, mem) => s + (mem.monthly[m] ?? 0), 0)
     );
   }, [store]);
 
@@ -287,7 +291,12 @@ export function SalaryEditor({ initial }: { initial: Store }) {
                     />
                   </td>
                 ))}
-                <td className="px-2 py-1 text-right font-extrabold text-yai-blue tabular-nums bg-blue-50/50">
+                <td
+                  className={`px-2 py-1 text-right font-extrabold tabular-nums ${
+                    isInactive ? "text-gray-400 bg-gray-50/40" : "text-yai-blue bg-blue-50/50"
+                  }`}
+                  title={isInactive ? "Historic — excluded from monthly + grand totals" : undefined}
+                >
                   {memberTotals[i] > 0 ? `$${memberTotals[i].toLocaleString(undefined, { maximumFractionDigits: 2 })}` : "—"}
                 </td>
                 <td className="px-1 py-1 text-center">

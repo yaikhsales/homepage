@@ -39,7 +39,10 @@ export async function LiveBudgetSummary() {
 
   const salaryByMonth: Record<string, number> = {};
   let totalSalary = 0;
+  // Exclude resigned / re-aligned members ("dead wood") so the run-rate reflects
+  // the current active payroll, not historic outflows for people who've left.
   for (const mem of salaries.members) {
+    if (mem.status !== "active") continue;
     for (const [m, v] of Object.entries(mem.monthly)) {
       const n = typeof v === "number" ? v : 0;
       salaryByMonth[m] = (salaryByMonth[m] ?? 0) + n;
