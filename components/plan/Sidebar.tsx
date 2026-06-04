@@ -4,8 +4,10 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { AdminPanel } from "./AdminPanel";
+import { LanguageToggle, useLang } from "./LanguageToggle";
+import { translate } from "@/lib/i18n";
 
-export type NavItem = { id: string; label: string };
+export type NavItem = { id: string; label: string; labelKey?: string };
 
 export function Sidebar({
   items,
@@ -20,6 +22,8 @@ export function Sidebar({
   // Updated after mount via matchMedia; also reacts to resize.
   const [isDesktop, setIsDesktop] = useState(true);
   const router = useRouter();
+  const lang = useLang();
+  const t = (key: string, fallback?: string) => translate(lang, key, fallback);
 
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
@@ -125,8 +129,8 @@ export function Sidebar({
               className="h-14 w-14 rounded-lg object-cover shadow-lg ring-1 ring-white/20 shrink-0"
             />
             <div className="flex-1 min-w-0 leading-tight">
-              <div className="text-sm text-white font-semibold truncate">Texlink Technologies</div>
-              <div className="text-[10px] uppercase tracking-[0.15em] text-yai-orange/90 font-bold mt-1">Strategic DTV</div>
+              <div className="text-sm text-white font-semibold truncate">{t("sidebar.company")}</div>
+              <div className="text-[10px] uppercase tracking-[0.15em] text-yai-orange/90 font-bold mt-1">{t("sidebar.tagline")}</div>
             </div>
           </div>
         </div>
@@ -155,7 +159,7 @@ export function Sidebar({
                 <span className="text-yai-blue font-bold mr-2">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                {it.label}
+                {it.labelKey ? t(it.labelKey, it.label) : it.label}
               </a>
             );
           })}
@@ -165,28 +169,33 @@ export function Sidebar({
         <div className="relative px-5 pt-4 pb-2 border-t border-white/10 text-white/80">
           <AdminPanel />
           <div className="text-[13px] font-semibold text-white leading-tight">Gamini K</div>
-          <div className="text-[10.5px] uppercase tracking-[0.12em] text-white/55 mt-0.5">Director</div>
+          <div className="text-[10.5px] uppercase tracking-[0.12em] text-white/55 mt-0.5">{t("sidebar.director")}</div>
           <div className="text-[11px] font-semibold text-white/85 mt-2 leading-tight">
-            TEXLINK TECHNOLOGIES CO., LTD.
+            {t("sidebar.company_full")}
           </div>
           <div className="text-[10.5px] text-white/55 leading-snug mt-1">
-            Apparel, Footwear, Bags, Softgoods<br />Manufacturing Intelligence Solutions
+            {t("sidebar.industry")}<br />{t("sidebar.industry_sub")}
           </div>
         </div>
 
         {/* Action buttons */}
         <div className="px-4 pt-2 pb-4 space-y-2">
+          {/* Language toggle — static EN/中文 (no external service) */}
+          <div className="flex items-center justify-between gap-2 mb-1">
+            <span className="text-[10px] uppercase tracking-[0.12em] text-white/55 font-bold">{t("sidebar.language")}</span>
+            <LanguageToggle />
+          </div>
           <button
             onClick={onPrint}
             className="w-full text-xs bg-white/10 hover:bg-white/20 text-white py-2 rounded transition"
           >
-            Download as PDF
+            {t("sidebar.download_pdf")}
           </button>
           <button
             onClick={onLogout}
             className="w-full text-xs text-white/60 hover:text-white py-1 transition"
           >
-            Sign out
+            {t("sidebar.sign_out")}
           </button>
         </div>
       </motion.aside>
