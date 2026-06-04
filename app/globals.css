@@ -50,3 +50,11 @@
   section { break-inside: avoid; }
   h2 { break-after: avoid; }
 }
+
+/* Hide Google Translate's injected top banner — we drive translation via our own UK/CN flag buttons */
+.goog-te-banner-frame.skiptranslate { display: none !important; }
+.goog-te-gadget-simple { display: none !important; }
+.goog-te-gadget-icon { display: none !important; }
+body { top: 0 !important; }
+.goog-tooltip, .goog-tooltip:hover { background: none !important; box-shadow: none !important; }
+.goog-text-highlight { background-color: transparent !important; box-shadow: none !important; }
