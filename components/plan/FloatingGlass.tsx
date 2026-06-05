@@ -6,8 +6,8 @@ import { useEffect, useRef, useState } from "react";
  * User clicks-and-drags anywhere on the surface to reposition it.
  * Position persists in localStorage so it stays where you parked it. */
 
-const PANEL_W = 336;   // +20% (was 280)
-const PANEL_H = 780;   // +20% (was 650)
+const PANEL_W = 220;   // narrower so it doesn't crowd page content (was 336)
+const PANEL_H = 780;   // height unchanged
 
 export function FloatingGlass() {
   const [mounted, setMounted] = useState(false);
