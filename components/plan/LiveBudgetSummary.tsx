@@ -100,7 +100,7 @@ export async function LiveBudgetSummary() {
         num="02"
         tag="REVENUE"
         title="Sales / Income"
-        desc="9 streams — 6 planned packages (Cloud Starter→Big Ai Brain) + 3 variable-revenue e-com streams."
+        desc="11 streams — 8 planned packages (Cloud × 3 · Ai Server · Admin Tools · Ops Tools · Agentic · Big Ai Brain) + 3 variable-reach e-com streams. Tracking starts Jun 2026."
         color="#10B981"
         bg="#ECFDF5"
         badge={fmt(totalRevenue)}
