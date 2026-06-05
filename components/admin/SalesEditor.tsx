@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 
 type Category = "cloud" | "hardware" | "addon" | "ecom";
 type Certainty = "planned" | "uncertain";
-type MonthCell = { customers: number; revenue: number; note?: string };
+type MonthCell = { planned?: number; actual?: number; customers?: number; note?: string };
 type Stream = {
   id: string;
   name: string;
@@ -23,11 +23,11 @@ type Store = {
   streams: Stream[];
 };
 
-const CAT_VIS: Record<Category, { label: string; bg: string; color: string }> = {
-  cloud:    { label: "Cloud",    bg: "#1E4DAA", color: "#FFFFFF" },
-  hardware: { label: "Hardware", bg: "#0A3327", color: "#FFFFFF" },
-  addon:    { label: "Add-on",   bg: "#6D4FB6", color: "#FFFFFF" },
-  ecom:     { label: "E-com",    bg: "#F37021", color: "#FFFFFF" },
+const CAT_VIS: Record<Category, { label: string; color: string }> = {
+  cloud:    { label: "Cloud",    color: "#1E4DAA" },
+  hardware: { label: "Hardware", color: "#0A3327" },
+  addon:    { label: "Add-on",   color: "#6D4FB6" },
+  ecom:     { label: "E-com",    color: "#F37021" },
 };
 
 function fmtMonth(ym: string): string {
@@ -36,49 +36,60 @@ function fmtMonth(ym: string): string {
   return `${names[Number(m) - 1]} ${y.slice(-2)}`;
 }
 
+function nextMonth(ym: string): string {
+  const [y, m] = ym.split("-").map(Number);
+  const d = new Date(y, m - 1, 1);
+  d.setMonth(d.getMonth() + 1);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+}
+
+type ViewMode = "planned" | "actual";
+
 export function SalesEditor({ initial }: { initial: Store }) {
   const [store, setStore] = useState<Store>(initial);
-  const [openIds, setOpenIds] = useState<Set<string>>(new Set());
+  const [view, setView] = useState<ViewMode>("planned");
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState("");
 
-  const totals = useMemo(() => {
-    const monthlyTotal = store.months.map((m) =>
-      store.streams.reduce<number>((s, st) => s + (st.monthly[m]?.revenue ?? 0), 0)
+  // Per-month totals (excluding e-com streams that are uncertain — they're still counted, just visually flagged)
+  const monthTotals = useMemo(() => {
+    return store.months.map((m) =>
+      store.streams.reduce<number>((s, st) => s + (st.monthly[m]?.[view] ?? 0), 0)
     );
-    const streamTotal = store.streams.map((st) =>
-      store.months.reduce<number>((s, m) => s + (st.monthly[m]?.revenue ?? 0), 0)
+  }, [store, view]);
+
+  const streamTotals = useMemo(() => {
+    return store.streams.map((st) =>
+      store.months.reduce<number>((s, m) => s + (st.monthly[m]?.[view] ?? 0), 0)
     );
-    const grand = monthlyTotal.reduce<number>((s, v) => s + v, 0);
-    return { monthlyTotal, streamTotal, grand };
-  }, [store]);
+  }, [store, view]);
 
-  const toggle = (id: string) => {
-    setOpenIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id); else next.add(id);
-      return next;
-    });
-  };
+  const grandTotal = monthTotals.reduce<number>((s, v) => s + v, 0);
 
-  const updateCell = (streamIdx: number, ym: string, field: "customers" | "revenue" | "note", value: string) => {
+  const setCell = (streamIdx: number, ym: string, value: string) => {
     const next: Store = { ...store, streams: [...store.streams] };
     const stream = { ...next.streams[streamIdx], monthly: { ...next.streams[streamIdx].monthly } };
-    const existing = stream.monthly[ym] ?? { customers: 0, revenue: 0 };
+    const existing = stream.monthly[ym] ?? {};
+    const num = value === "" ? undefined : Number(value);
     const updated: MonthCell = { ...existing };
-    if (field === "note") {
-      updated.note = value || undefined;
+    if (num === undefined || Number.isNaN(num) || num <= 0) {
+      delete updated[view];
     } else {
-      const n = value === "" ? 0 : Number(value);
-      updated[field] = Number.isNaN(n) ? 0 : n;
+      updated[view] = num;
     }
-    if (updated.customers === 0 && updated.revenue === 0 && !updated.note) {
+    // Strip the cell entirely if everything is empty
+    if (!updated.planned && !updated.actual && !updated.customers && !updated.note) {
       delete stream.monthly[ym];
     } else {
       stream.monthly[ym] = updated;
     }
     next.streams[streamIdx] = stream;
     setStore(next);
+  };
+
+  const addMonth = () => {
+    const last = store.months[store.months.length - 1] ?? "2026-05";
+    setStore({ ...store, months: [...store.months, nextMonth(last)] });
   };
 
   const save = async () => {
@@ -112,140 +123,148 @@ export function SalesEditor({ initial }: { initial: Store }) {
         <div className="flex items-center gap-4 text-xs">
           <Stat label="Streams" value={`${store.streams.length}`} />
           <Stat label="Months tracked" value={`${store.months.length}`} />
-          <Stat label="Grand total" value={`$${totals.grand.toLocaleString(undefined, { maximumFractionDigits: 0 })}`} color="#10B981" />
+          <Stat
+            label={view === "planned" ? "Planned total" : "Actual total"}
+            value={`$${grandTotal.toLocaleString(undefined, { maximumFractionDigits: 0 })}`}
+            color={view === "planned" ? "#1E4DAA" : "#10B981"}
+          />
         </div>
-        <div className="flex items-center gap-3">
-          {msg && (
-            <span className={`text-xs font-semibold ${msg.startsWith("✓") ? "text-emerald-600" : "text-red-600"}`}>
-              {msg}
-            </span>
-          )}
+        <div className="flex items-center gap-2">
+          {/* Planned / Actual toggle */}
+          <div className="inline-flex items-stretch rounded-lg border border-yai-border overflow-hidden">
+            <button
+              type="button"
+              onClick={() => setView("planned")}
+              className={`text-xs font-bold px-3 py-1.5 transition ${view === "planned" ? "bg-yai-blue text-white" : "bg-white text-yai-navy hover:bg-blue-50"}`}
+            >
+              Planned
+            </button>
+            <button
+              type="button"
+              onClick={() => setView("actual")}
+              className={`text-xs font-bold px-3 py-1.5 transition border-l border-yai-border ${view === "actual" ? "bg-emerald-600 text-white" : "bg-white text-yai-navy hover:bg-emerald-50"}`}
+            >
+              Actual
+            </button>
+          </div>
           <button
             type="button"
-            onClick={save}
-            disabled={loading}
-            className="bg-yai-orange hover:bg-yai-orange-dark text-white font-extrabold px-6 py-2.5 rounded-lg transition disabled:opacity-50 text-sm"
+            onClick={addMonth}
+            className="text-xs bg-white border border-yai-border hover:bg-blue-50 px-3 py-1.5 rounded-lg font-bold text-yai-navy"
           >
-            {loading ? "Saving…" : "Save"}
+            + Next month
           </button>
         </div>
       </div>
 
-      {/* Stream rows — each collapsible */}
-      <div className="space-y-2">
-        {store.streams.map((stream, sIdx) => {
-          const isOpen = openIds.has(stream.id);
-          const cat = CAT_VIS[stream.category];
-          const isUncertain = stream.certainty === "uncertain";
-          const streamRevenue = totals.streamTotal[sIdx];
-          return (
-            <div
-              key={stream.id}
-              className={`rounded-xl border-2 bg-white overflow-hidden ${isUncertain ? "border-amber-300 bg-amber-50/30" : "border-yai-border"}`}
-            >
-              {/* Header — click to toggle */}
-              <button
-                type="button"
-                onClick={() => toggle(stream.id)}
-                className="w-full flex items-center justify-between gap-3 p-3 text-left hover:bg-blue-50/30 transition"
-              >
-                <div className="flex items-center gap-3 flex-1 min-w-0">
-                  <span
-                    className="text-[9px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded text-white shrink-0"
-                    style={{ background: cat.bg }}
-                  >
-                    {cat.label}
-                  </span>
-                  {isUncertain && (
-                    <span
-                      className="text-[9px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded text-white shrink-0"
-                      style={{ background: "#F37021" }}
-                      title="User target is planned · revenue per user is variable (take-rate / wholesale margin)"
-                    >
-                      Variable rev
-                    </span>
-                  )}
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-baseline gap-2 flex-wrap">
-                      <span className="text-sm font-extrabold text-yai-navy">{stream.name}</span>
-                      <span className="text-[11px] text-gray-500 font-semibold">{stream.unitLabel}</span>
-                      <span className="text-[10px] text-gray-400">· {stream.tierLabel}</span>
+      {/* Excel grid */}
+      <div className="overflow-x-auto rounded-xl border border-yai-border bg-white shadow-sm">
+        <table className="text-[11px] border-collapse">
+          <thead className="bg-yai-navy text-white">
+            <tr>
+              <th className="sticky left-0 z-10 bg-yai-navy text-left px-2 py-2 font-bold uppercase tracking-wider w-56">Stream</th>
+              <th className="text-left px-2 py-2 font-bold uppercase tracking-wider w-20">Cat</th>
+              <th className="text-right px-2 py-2 font-bold uppercase tracking-wider w-24 whitespace-nowrap">Unit price</th>
+              {store.months.map((m) => (
+                <th key={m} className="text-right px-2 py-2 font-bold uppercase tracking-wider w-20 whitespace-nowrap">
+                  {fmtMonth(m)}
+                </th>
+              ))}
+              <th className={`text-right px-2 py-2 font-bold uppercase tracking-wider w-24 ${view === "planned" ? "bg-yai-blue" : "bg-emerald-600"}`}>
+                {view === "planned" ? "Planned $" : "Actual $"}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {store.streams.map((stream, i) => {
+              const cat = CAT_VIS[stream.category];
+              const isUncertain = stream.certainty === "uncertain";
+              return (
+                <tr
+                  key={stream.id}
+                  className={`hover:bg-blue-50/30 border-t-2 ${isUncertain ? "bg-amber-50/30" : ""}`}
+                  style={{ borderTopColor: cat.color }}
+                >
+                  <td className="sticky left-0 bg-white px-2 py-1" style={{ boxShadow: `inset 3px 0 0 0 ${cat.color}` }}>
+                    <div className="flex flex-col">
+                      <span className="font-extrabold text-yai-navy text-[12px] leading-tight">{stream.name}</span>
+                      <span className="text-[9px] text-gray-500 leading-tight mt-0.5">{stream.tierLabel}</span>
                     </div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 shrink-0">
-                  <span className="text-xs text-gray-500 uppercase tracking-wider font-bold">Total</span>
-                  <span className="text-sm font-extrabold tabular-nums" style={{ color: streamRevenue > 0 ? "#10B981" : "#94A3B8" }}>
-                    ${streamRevenue.toLocaleString(undefined, { maximumFractionDigits: 0 })}
-                  </span>
-                  <span className="text-gray-400 text-sm">{isOpen ? "▲" : "▼"}</span>
-                </div>
-              </button>
-
-              {/* Body — expanded detail with monthly grid */}
-              {isOpen && (
-                <div className="border-t border-yai-border bg-gray-50/50 p-3 space-y-3">
-                  <p className="text-xs text-gray-700 leading-snug">{stream.detail}</p>
-
-                  <div className="overflow-x-auto rounded-lg border border-yai-border bg-white">
-                    <table className="text-[11px] border-collapse w-full">
-                      <thead className="bg-yai-navy text-white">
-                        <tr>
-                          <th className="text-left px-2 py-1.5 font-bold uppercase tracking-wider w-24">Month</th>
-                          <th className="text-right px-2 py-1.5 font-bold uppercase tracking-wider w-24">Customers</th>
-                          <th className="text-right px-2 py-1.5 font-bold uppercase tracking-wider w-28">Revenue $</th>
-                          <th className="text-left px-2 py-1.5 font-bold uppercase tracking-wider">Note</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {store.months.map((m) => {
-                          const cell = stream.monthly[m];
-                          return (
-                            <tr key={m} className="border-t border-yai-border hover:bg-blue-50/30">
-                              <td className="px-2 py-1 font-extrabold text-yai-navy">{fmtMonth(m)}</td>
-                              <td className="px-1 py-1">
-                                <input
-                                  type="number"
-                                  value={cell?.customers ?? ""}
-                                  onChange={(e) => updateCell(sIdx, m, "customers", e.target.value)}
-                                  placeholder="—"
-                                  className="w-full text-right text-[11px] tabular-nums text-yai-navy placeholder:text-gray-300 border border-yai-border rounded px-2 py-1 bg-white focus:outline-none focus:border-yai-blue"
-                                />
-                              </td>
-                              <td className="px-1 py-1">
-                                <input
-                                  type="number"
-                                  step="0.01"
-                                  value={cell?.revenue ?? ""}
-                                  onChange={(e) => updateCell(sIdx, m, "revenue", e.target.value)}
-                                  placeholder="—"
-                                  className="w-full text-right text-[11px] tabular-nums text-yai-navy placeholder:text-gray-300 border border-yai-border rounded px-2 py-1 bg-white focus:outline-none focus:border-yai-blue"
-                                />
-                              </td>
-                              <td className="px-1 py-1">
-                                <input
-                                  type="text"
-                                  value={cell?.note ?? ""}
-                                  onChange={(e) => updateCell(sIdx, m, "note", e.target.value)}
-                                  placeholder="Optional — public-visible"
-                                  className="w-full text-[11px] text-yai-navy placeholder:text-gray-300 border border-yai-border rounded px-2 py-1 bg-white focus:outline-none focus:border-yai-blue"
-                                />
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              )}
-            </div>
-          );
-        })}
+                  </td>
+                  <td className="px-2 py-1">
+                    <div className="flex flex-col gap-1">
+                      <span
+                        className="inline-flex items-center text-[9px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded text-white shrink-0 w-fit"
+                        style={{ background: cat.color }}
+                      >
+                        {cat.label}
+                      </span>
+                      {isUncertain && (
+                        <span className="inline-flex items-center text-[8px] font-extrabold uppercase tracking-wider px-1 py-0.5 rounded text-white bg-amber-500 w-fit">
+                          Variable
+                        </span>
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-2 py-1 text-right text-[10px] text-gray-600 whitespace-nowrap">
+                    {stream.unitLabel}
+                  </td>
+                  {store.months.map((m) => {
+                    const cell = stream.monthly[m];
+                    const v = cell?.[view] ?? 0;
+                    const otherView = view === "planned" ? "actual" : "planned";
+                    const otherV = cell?.[otherView] ?? 0;
+                    return (
+                      <td key={m} className="px-1 py-0.5">
+                        <input
+                          type="number"
+                          step="0.01"
+                          value={v > 0 ? v : ""}
+                          onChange={(e) => setCell(i, m, e.target.value)}
+                          placeholder="—"
+                          title={otherV > 0 ? `${otherView}: $${otherV.toLocaleString()}` : undefined}
+                          className={`w-full text-right text-[11px] tabular-nums px-1 py-1 rounded border focus:outline-none focus:border-yai-blue ${
+                            v > 0
+                              ? view === "planned"
+                                ? "text-yai-blue font-semibold border-transparent bg-blue-50/40 hover:bg-blue-50"
+                                : "text-emerald-700 font-semibold border-transparent bg-emerald-50/40 hover:bg-emerald-50"
+                              : "text-gray-300 border-transparent bg-gray-50/50 hover:bg-blue-50"
+                          }`}
+                        />
+                      </td>
+                    );
+                  })}
+                  <td className={`px-2 py-1 text-right font-extrabold tabular-nums ${view === "planned" ? "text-yai-blue bg-blue-50/50" : "text-emerald-700 bg-emerald-50/50"}`}>
+                    {streamTotals[i] > 0 ? `$${streamTotals[i].toLocaleString(undefined, { maximumFractionDigits: 0 })}` : "—"}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+          <tfoot className="bg-gray-50">
+            <tr className="border-t-2 border-yai-blue">
+              <td className="sticky left-0 bg-gray-50 px-2 py-2 font-extrabold text-yai-navy uppercase tracking-wider text-[10px]" colSpan={3}>
+                Monthly total ({view})
+              </td>
+              {monthTotals.map((t, i) => (
+                <td key={i} className={`px-2 py-2 text-right font-extrabold tabular-nums ${view === "planned" ? "text-yai-blue" : "text-emerald-700"}`}>
+                  {t > 0 ? `$${t.toLocaleString(undefined, { maximumFractionDigits: 0 })}` : "—"}
+                </td>
+              ))}
+              <td className={`px-2 py-2 text-right font-extrabold tabular-nums ${view === "planned" ? "text-yai-blue bg-blue-50" : "text-emerald-700 bg-emerald-50"}`}>
+                ${grandTotal.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+        <div className="px-3 py-2 text-[10px] text-gray-500 bg-gray-50 border-t border-yai-border">
+          Toggle <strong>Planned</strong> = forecast / target · <strong>Actual</strong> = booked / closed.
+          Each cell stores both — switch view to edit the other side. Hover a cell to see the opposite-view value.
+        </div>
       </div>
 
-      {/* Save footer */}
-      <div className="flex items-center justify-between gap-3 pt-2">
+      {/* Actions */}
+      <div className="flex items-center justify-between gap-3">
         <div className="text-[11px] text-gray-500">
           {store.updatedAt && (
             <>Last saved <strong className="text-yai-navy">{new Date(store.updatedAt).toLocaleString()}</strong> by <strong>{store.updatedBy}</strong></>
@@ -253,9 +272,7 @@ export function SalesEditor({ initial }: { initial: Store }) {
         </div>
         <div className="flex items-center gap-3">
           {msg && (
-            <span className={`text-xs font-semibold ${msg.startsWith("✓") ? "text-emerald-600" : "text-red-600"}`}>
-              {msg}
-            </span>
+            <span className={`text-xs font-semibold ${msg.startsWith("✓") ? "text-emerald-600" : "text-red-600"}`}>{msg}</span>
           )}
           <button
             type="button"

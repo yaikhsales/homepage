@@ -38,17 +38,20 @@ export async function POST(req: Request) {
           tierLabel: String(s?.tierLabel ?? ""),
           detail: String(s?.detail ?? ""),
           monthly: (() => {
-            const out: Record<string, { customers: number; revenue: number; note?: string }> = {};
+            const out: Record<string, { planned?: number; actual?: number; customers?: number; note?: string }> = {};
             if (s?.monthly && typeof s.monthly === "object") {
               for (const [k, v] of Object.entries(s.monthly)) {
                 const obj = v as Record<string, unknown>;
-                const c = Number(obj?.customers ?? 0) || 0;
-                const r = Number(obj?.revenue ?? 0) || 0;
-                if (c > 0 || r > 0 || obj?.note) {
+                const planned = Number(obj?.planned ?? 0) || 0;
+                const actual  = Number(obj?.actual  ?? 0) || 0;
+                const customers = Number(obj?.customers ?? 0) || 0;
+                const note = obj?.note ? String(obj.note) : undefined;
+                if (planned > 0 || actual > 0 || customers > 0 || note) {
                   out[k] = {
-                    customers: c,
-                    revenue: r,
-                    ...(obj?.note ? { note: String(obj.note) } : {}),
+                    ...(planned > 0 ? { planned } : {}),
+                    ...(actual  > 0 ? { actual  } : {}),
+                    ...(customers > 0 ? { customers } : {}),
+                    ...(note ? { note } : {}),
                   };
                 }
               }

@@ -12,9 +12,10 @@ export default async function AdminSalesPage() {
         </div>
         <h1 className="text-3xl font-extrabold mt-1">Sales / Income</h1>
         <p className="text-sm text-gray-600 mt-1">
-          The real income streams — 6 planned packages from the pricing staircase + 3 uncertain
-          e-commerce streams. Each row is collapsible (click the header to see details). Fill in
-          monthly customer counts + revenue as you book deals.
+          Excel-style grid starting <strong>June 2026</strong> — the month the platform opens its
+          gates commercially. Streams down the rows (6 planned packages + 3 variable-rev e-commerce
+          streams), months across the columns. Toggle <strong>Planned</strong> / <strong>Actual</strong>
+          at the top — each cell stores both numbers so you can track forecast vs booked.
         </p>
       </div>
 

@@ -13,9 +13,14 @@ export type StreamCategory = "cloud" | "hardware" | "addon" | "ecom";
 export type StreamCertainty = "planned" | "uncertain";
 
 export type MonthCell = {
-  customers: number;   // active paying customers / users that month
-  revenue: number;     // $ recognised that month
-  note?: string;       // optional, public-visible note
+  /** Forecast / target revenue $ for the month — what we expect to book */
+  planned?: number;
+  /** Booked / closed revenue $ for the month — actuals */
+  actual?: number;
+  /** Active customer / user count that month (optional, supports per-stream KPI tracking) */
+  customers?: number;
+  /** Optional public-visible note */
+  note?: string;
 };
 
 export type IncomeStream = {
@@ -37,18 +42,35 @@ export type SalesStore = {
   streams: IncomeStream[];
 };
 
-const START_YEAR = 2024;
-const START_MONTH = 5; // May 2024 — same anchor as salary store
+// Sales starts JUN 2026 — the month the platform opens its gates commercially.
+// (Salaries start May 2024 — that grid is historical. Sales is forward-looking.)
+const START_YEAR = 2026;
+const START_MONTH = 6;
+// How many months past the current real-world month to surface up-front.
+// 18 = a year-and-a-half runway visible without "+ Next month" clicks.
+const FORWARD_RUNWAY_MONTHS = 18;
 
-function monthsUpToToday(): string[] {
+function defaultMonths(): string[] {
   const now = new Date();
-  const endYear = now.getFullYear();
-  const endMonth = now.getMonth() + 1;
+  // Show at least START → today + 18 forward (capped at 36 months from start).
+  const endY = now.getFullYear();
+  const endM = now.getMonth() + 1; // 1-12
   const out: string[] = [];
   let y = START_YEAR;
   let m = START_MONTH;
-  while (y < endYear || (y === endYear && m <= endMonth)) {
+  let added = 0;
+  const minForward = endM + FORWARD_RUNWAY_MONTHS - 12 * (endY - START_YEAR);
+  // Generate from start until either (a) we've reached today + runway, or (b) cap of 36 months.
+  while (added < 36 && (y < endY || (y === endY && m <= endM) || added < minForward + 12 * (endY - START_YEAR))) {
     out.push(`${y}-${String(m).padStart(2, "0")}`);
+    added++;
+    m++;
+    if (m > 12) { m = 1; y++; }
+  }
+  // Always ensure at least 24 months of forward visibility from START
+  while (added < 24) {
+    out.push(`${y}-${String(m).padStart(2, "0")}`);
+    added++;
     m++;
     if (m > 12) { m = 1; y++; }
   }
@@ -56,7 +78,7 @@ function monthsUpToToday(): string[] {
 }
 
 function buildMonths(stored?: string[]): string[] {
-  const base = monthsUpToToday();
+  const base = defaultMonths();
   if (!stored?.length) return base;
   const merged = new Set([...base, ...stored.filter((m) => /^\d{4}-\d{2}$/.test(m))]);
   return Array.from(merged).sort();
@@ -67,7 +89,7 @@ function buildMonths(stored?: string[]): string[] {
 export const SEED_SALES_STORE: SalesStore = {
   updatedAt: null,
   updatedBy: null,
-  months: ["2024-05"],
+  months: ["2026-06"],
   streams: [
     // ─── CLOUD PACKAGES (Step 1-3 of the pricing staircase) ───
     {
