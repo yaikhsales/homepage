@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 
 export function AdminLoginForm() {
   const router = useRouter();
-  const [user, setUser] = useState("");
   const [pass, setPass] = useState("");
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
@@ -18,13 +17,13 @@ export function AdminLoginForm() {
       const r = await fetch("/api/admin/auth", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user, pass }),
+        body: JSON.stringify({ user: "", pass }),
       });
       const j = await r.json();
       if (j.ok) {
         router.refresh();
       } else {
-        setErr(j.error || "Login failed");
+        setErr(j.error || "Incorrect passcode");
       }
     } catch {
       setErr("Network error");
@@ -36,18 +35,9 @@ export function AdminLoginForm() {
   return (
     <form onSubmit={submit} className="space-y-3">
       <input
-        type="text"
-        autoComplete="username"
-        autoFocus
-        placeholder="Username"
-        value={user}
-        onChange={(e) => setUser(e.target.value)}
-        className="w-full border border-yai-border rounded-lg px-3 py-2.5 text-sm text-yai-navy placeholder:text-gray-400 bg-white focus:outline-none focus:border-yai-blue"
-        required
-      />
-      <input
         type="password"
         autoComplete="current-password"
+        autoFocus
         placeholder="Passcode"
         value={pass}
         onChange={(e) => setPass(e.target.value)}

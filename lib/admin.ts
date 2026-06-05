@@ -1,6 +1,6 @@
 // Server-only: admin login + signed admin cookie.
-// Single-user model: username `texlink`, passcode `012026` (overridable via env).
-// Cookie format identical to viewer auth: base64(label).hmacSha256(label, secret)
+// Passcode-only model: just enter 012026 (overridable via YAI_ADMIN_PASS env).
+// Username field removed from the UI — passcode alone is sufficient.
 
 import "server-only";
 import { createHmac, timingSafeEqual } from "crypto";
@@ -41,12 +41,11 @@ export function verifyAdminCookie(value: string | undefined | null): string | nu
   }
 }
 
-/** Single admin user. Override via env in production. */
-export function checkAdminCreds(user: string, pass: string): string | null {
-  const expectedUser = process.env.YAI_ADMIN_USER || "texlink";
+/** Passcode-only check — username ignored. Override passcode via YAI_ADMIN_PASS env. */
+export function checkAdminCreds(_user: string, pass: string): string | null {
   const expectedPass = process.env.YAI_ADMIN_PASS || "012026";
-  if (user === expectedUser && pass === expectedPass) {
-    return expectedUser;
+  if (pass === expectedPass) {
+    return "admin";
   }
   return null;
 }
