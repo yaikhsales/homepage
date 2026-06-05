@@ -10,7 +10,7 @@ export default async function AdminDashboard() {
   const salesStore = await readSalesStore();
   const expensesStore = await readExpensesStore();
   const salesGrand = salesStore.streams.reduce<number>(
-    (s, st) => s + Object.values(st.monthly).reduce<number>((ss, c) => ss + (c.revenue ?? 0), 0),
+    (s, st) => s + Object.values(st.monthly).reduce<number>((ss, c) => ss + (c.actual ?? c.planned ?? 0), 0),
     0,
   );
   const expensesGrand = expensesStore.categories.reduce<number>(

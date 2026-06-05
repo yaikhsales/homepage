@@ -30,8 +30,10 @@ export async function LiveBudgetSummary() {
   const revenueByStream = sales.streams.map((st) => {
     let total = 0;
     for (const [m, cell] of Object.entries(st.monthly)) {
-      total += cell.revenue ?? 0;
-      revenueByMonth[m] = (revenueByMonth[m] ?? 0) + (cell.revenue ?? 0);
+      // Prefer actual booked $; fall back to planned forecast where no actual is recorded
+      const v = cell.actual ?? cell.planned ?? 0;
+      total += v;
+      revenueByMonth[m] = (revenueByMonth[m] ?? 0) + v;
     }
     return { ...st, total };
   });
