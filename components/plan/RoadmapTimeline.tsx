@@ -40,7 +40,7 @@ const MODULES: Mod[] = [
   { name: "Gate Pass · CTPAT",                            digStart: 3, agStart: 9,  fullStart: 12, group: "admin", digValue: "$5K",  agValue: "$8K",  fullValue: "$12K" },
   { name: "Car Booking  ★ AGENTIC",                       digStart: 3, agStart: 7,  fullStart: 12, group: "admin", digValue: "$1K",  agValue: "$2K",  fullValue: "$3K"  },
   { name: "Accounting (Full + GDT)",                      digStart: 4, agStart: 10,  fullStart: 12, group: "admin", digValue: "$5K",  agValue: "$8K",  fullValue: "$12K" },
-  { name: "Speak Up · Worker Voice",                      digStart: 7, agStart: 9,  fullStart: 12, group: "admin", digValue: "$3K",  agValue: "$5K",  fullValue: "$8K"  },
+  { name: "Speak Up · Worker Voice",                      digStart: 7, agStart: 11, fullStart: 13, group: "admin", digValue: "$3K",  agValue: "$5K",  fullValue: "$8K"  },
   { name: "Corporate Financials + IEWS",                  digStart: 8, agStart: 10,  fullStart: 13, group: "admin", digValue: "$3K",  agValue: "$5K",  fullValue: "$8K"  },
   { name: "Cambodia E-Gov + E-Invoice",                   digStart: 9, agStart: 11, fullStart: 13, group: "admin", digValue: "$4K",  agValue: "$6K",  fullValue: "$8K"  },
 
@@ -52,7 +52,7 @@ const MODULES: Mod[] = [
 
   // ════════ OPERATIONS ════════
   { name: "YTM · Machine Maintenance + TPM Shop",         digStart: 5, agStart: 9,  fullStart: 12, group: "ops",   digValue: "$7K",  agValue: "$11K", fullValue: "$16K" },
-  { name: "YQMS · Quality Mgmt (6 stages + Fini Check)",  digStart: 5, agStart: 9,  fullStart: 12, group: "ops",   digValue: "$12K", agValue: "$20K", fullValue: "$30K" },
+  { name: "YQMS · Quality Mgmt (6 stages + Fini Check)",  digStart: 5, agStart: 11, fullStart: 14, group: "ops",   digValue: "$12K", agValue: "$20K", fullValue: "$30K" },
   { name: "YPI · Technical Specs (3-language)",           digStart: 6, agStart: 10,  fullStart: 13, group: "ops",   digValue: "$6K",  agValue: "$10K", fullValue: "$15K" },
   { name: "YPM / CE · Motion · SMV  ★ AGENTIC",           digStart: 6, agStart: 8,  fullStart: 13, group: "ops",   digValue: "$15K", agValue: "$24K", fullValue: "$36K" },
   { name: "Product Dev · Sample Room",                    digStart: 6, agStart: 10,  fullStart: 13, group: "ops",   digValue: "$2K",  agValue: "$3K",  fullValue: "$5K"  },
