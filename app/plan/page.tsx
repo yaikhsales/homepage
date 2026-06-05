@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { verifySession } from "@/lib/auth";
 import { readSalaryStore } from "@/lib/salary-store";
 import { readExpensesStore } from "@/lib/expenses-store";
+import { readAboutStore } from "@/lib/about-store";
 import { Sidebar, type NavItem } from "@/components/plan/Sidebar";
 import { Section } from "@/components/plan/Section";
 import { Thesis } from "@/components/plan/Thesis";
@@ -49,7 +50,7 @@ const NAV: NavItem[] = [
   { id: "competition",       label: "Competitive Landscape",  labelKey: "nav.competition" },
   { id: "risks",             label: "Risks & Mitigations",    labelKey: "nav.risks" },
   { id: "resources",         label: "Resource Requirements",  labelKey: "nav.resources" },
-  { id: "appendix",          label: "Appendix",               labelKey: "nav.appendix" },
+  { id: "appendix",          label: "About Yai",              labelKey: "nav.appendix" },
 ];
 
 const kicker = (n: number, label: string) =>
@@ -135,6 +136,7 @@ export default async function PlanPage() {
   if (!viewer) redirect("/");
 
   const roadmap = await computeRoadmapData();
+  const about = await readAboutStore();
 
   return (
     <div className="flex bg-yai-bg min-h-screen">
@@ -871,72 +873,43 @@ export default async function PlanPage() {
           </div>
         </Section>
 
-        {/* 20 — Appendix */}
-        <Section id="appendix" kicker={kicker(17, "Appendix")} title="Appendix">
+        {/* 17 — About Yai */}
+        <Section id="appendix" kicker={kicker(17, "About Yai")} title="About Yai">
           <Thesis>
-            Supporting material — demos, diagrams, references, and contact.
+            Credentials, product preview, and contact. Image slots are admin-managed from{" "}
+            <code className="text-xs bg-gray-100 px-1 rounded">/admin/about</code>.
           </Thesis>
 
-          <h3 className="font-bold text-yai-navy text-xl mb-3 mt-6">A1. Demo screenshots</h3>
-          <p className="text-sm text-gray-600 mb-4">Live interactive demos are embedded throughout this plan — see Sections 04 (chat agent) and 13 (admin dashboard). Static screenshots below for offline reference.</p>
-          <div className="grid sm:grid-cols-2 gap-4 mb-8">
-            <Card className="text-center">
-              <div className="h-48 bg-gray-100 rounded flex items-center justify-center text-gray-400 text-sm mb-3">
-                [Web dashboard screenshot]<br /><span className="text-xs">public/images/demo-dashboard.png</span>
-              </div>
-              <p className="text-sm text-gray-600 font-medium">Stage 1 — Admin dashboard</p>
-            </Card>
-            <Card className="text-center">
-              <div className="h-48 bg-gray-100 rounded flex items-center justify-center text-gray-400 text-sm mb-3">
-                [Mobile agentic interface]<br /><span className="text-xs">public/images/demo-mobile.png</span>
-              </div>
-              <p className="text-sm text-gray-600 font-medium">Stage 2 — Mobile agentic chat</p>
-            </Card>
+          {/* A1 · Company credentials — 3 slots */}
+          <h3 className="font-bold text-yai-navy text-xl mb-3 mt-6">A1. Company credentials</h3>
+          <p className="text-sm text-gray-600 mb-4">
+            Public-facing proof of legitimacy — Cambodian business registration, VAT certificate, ICT licence.
+          </p>
+          <div className="grid sm:grid-cols-3 gap-4 mb-8">
+            <CredentialCard slot={about.a1.businessRegistration} fallbackLabel="Business Registration" />
+            <CredentialCard slot={about.a1.vatCertificate}       fallbackLabel="VAT Certificate" />
+            <CredentialCard slot={about.a1.ictLicense}           fallbackLabel="ICT License" />
           </div>
 
-          <h3 className="font-bold text-yai-navy text-xl mb-3">A2. Architecture diagrams</h3>
-          <Card className="text-center mb-8">
-            <div className="h-40 bg-gray-100 rounded flex items-center justify-center text-gray-400 text-sm">
-              [System architecture diagram]<br /><span className="text-xs">public/images/architecture.png</span>
-            </div>
-          </Card>
+          {/* A2 · Product preview — 2 slots */}
+          <h3 className="font-bold text-yai-navy text-xl mb-3">A2. Product preview</h3>
+          <p className="text-sm text-gray-600 mb-4">
+            What Yai looks like in production — the worker-facing front UI + the agentic chat layer.
+          </p>
+          <div className="grid sm:grid-cols-2 gap-4 mb-8">
+            <CredentialCard slot={about.a2.frontUi}  fallbackLabel="Front UI" />
+            <CredentialCard slot={about.a2.agentics} fallbackLabel="Agentics" />
+          </div>
 
-          <h3 className="font-bold text-yai-navy text-xl mb-3">A3. Pilot factory references</h3>
-          <details className="bg-white border border-yai-border rounded-lg p-4 mb-2 group">
-            <summary className="cursor-pointer font-semibold text-yai-navy list-none">
-              <span className="text-yai-blue group-open:rotate-45 inline-block transition-transform mr-2">+</span>
-              Pilot factory A (anonymised)
-            </summary>
-            <div className="mt-3 text-sm text-gray-600 pl-6">
-              <p><strong>Size:</strong> TBD workers • <strong>Location:</strong> Cambodia • <strong>Yai modules:</strong> Admin, HR/Payroll, Compliance, Logistics</p>
-              <p className="mt-2">Live since TBD. Replaced TBD. Reference call available on request via Gamini K.</p>
-            </div>
-          </details>
-          <details className="bg-white border border-yai-border rounded-lg p-4 mb-6 group">
-            <summary className="cursor-pointer font-semibold text-yai-navy list-none">
-              <span className="text-yai-blue group-open:rotate-45 inline-block transition-transform mr-2">+</span>
-              Pilot factory B (anonymised)
-            </summary>
-            <div className="mt-3 text-sm text-gray-600 pl-6">
-              <p><strong>Size:</strong> TBD • <strong>Modules:</strong> Admin, Finance, HR/Payroll. Reference call available on request.</p>
-            </div>
-          </details>
-
-          <h3 className="font-bold text-yai-navy text-xl mb-3 mt-8">A4. Founder bio</h3>
-          <Card className="mb-8">
-            <p className="text-sm text-gray-700 leading-relaxed">
-              <strong className="text-yai-navy">Gamini K</strong> — Director, Texlink Technologies Co., Ltd. (Cambodia). [TODO: 3–5 lines of bio — background, prior ventures, why this product exists]
-            </p>
-          </Card>
-
-          <h3 className="font-bold text-yai-navy text-xl mb-3">A5. Contact</h3>
+          {/* A3 · Contact — was A5 */}
+          <h3 className="font-bold text-yai-navy text-xl mb-3 mt-8">A3. Contact</h3>
           <Card className="bg-yai-navy border-yai-navy text-white">
             <p className="text-sm leading-relaxed">
-              <strong className="text-yai-blue">Gamini K</strong><br />
-              Director, Texlink Technologies Co., Ltd.<br />
-              Email: <a href="mailto:gamini@yaikh.com" className="underline text-yai-blue">gamini@yaikh.com</a><br />
-              Web: <a href="https://www.yaikh.com" className="underline text-yai-blue">www.yaikh.com</a><br />
-              <span className="text-white/60">Cambodia</span>
+              <strong className="text-yai-blue">{about.a3.name}</strong><br />
+              {about.a3.role}, {about.a3.org}<br />
+              {about.a3.email && (<>Email: <a href={`mailto:${about.a3.email}`} className="underline text-yai-blue">{about.a3.email}</a><br /></>)}
+              {about.a3.web && (<>Web: <a href={about.a3.web.startsWith("http") ? about.a3.web : `https://${about.a3.web}`} className="underline text-yai-blue">{about.a3.web}</a><br /></>)}
+              {about.a3.location && <span className="text-white/60">{about.a3.location}</span>}
             </p>
           </Card>
         </Section>
@@ -947,6 +920,31 @@ export default async function PlanPage() {
           <p className="mt-1">By accessing this page you agree not to share its contents without permission.</p>
         </footer>
       </main>
+    </div>
+  );
+}
+
+/** Section 17 image-slot card — renders the admin-uploaded image if a URL exists,
+ *  otherwise shows a soft placeholder so the layout doesn't collapse. */
+function CredentialCard({ slot, fallbackLabel }: { slot: { url: string; caption: string }; fallbackLabel: string }) {
+  return (
+    <div className="rounded-xl border border-yai-border bg-white overflow-hidden shadow-sm">
+      <div className="aspect-[3/2] bg-gray-50 flex items-center justify-center overflow-hidden">
+        {slot.url ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={slot.url} alt={slot.caption || fallbackLabel} className="w-full h-full object-contain" />
+        ) : (
+          <div className="text-center text-gray-400 text-xs italic px-4">
+            <div className="text-[10px] uppercase tracking-wider font-bold mb-1">{fallbackLabel}</div>
+            Upload from /admin/about
+          </div>
+        )}
+      </div>
+      {(slot.caption || !slot.url) && (
+        <div className="px-3 py-2 text-[11px] text-gray-600 font-semibold text-center border-t border-yai-border">
+          {slot.caption || fallbackLabel}
+        </div>
+      )}
     </div>
   );
 }

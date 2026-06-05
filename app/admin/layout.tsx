@@ -73,6 +73,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <AdminNavLink href="/admin/events"    label="Events Calendar"   icon="▣" disabled />
           <AdminNavLink href="/admin/partners"  label="Partner Pathways"  icon="▤" disabled />
           <AdminNavLink href="/admin/oc"        label="OC Update Content" icon="✎" disabled />
+          <AdminNavLink href="/admin/about"     label="About · Section 17" icon="ℹ" />
         </nav>
         <div className="px-5 py-3 border-t border-white/10 text-[10px] text-white/50 space-y-1">
           <div>Signed in as <strong className="text-white/90">{user}</strong></div>
