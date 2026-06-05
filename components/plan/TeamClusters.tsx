@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 type Split = { pct: number; color: string; label: string; description?: string };
-type Member = { alias: string; name: string; lead?: boolean };
+type Member = { alias: string; name: string; lead?: boolean; support?: boolean };
 type Cluster = {
   num: number;
   name: string;
@@ -28,9 +28,12 @@ const CLUSTERS: Cluster[] = [
       { pct: 20, color: "#2D9D9A", label: "Dual role",       description: "Engineers who also run pieces of the factory operation — close-to-the-floor product feedback every day." },
     ],
     members: [
-      { alias: "daly",   name: "Pich Daly",     lead: true },
+      { alias: "daly",   name: "Pich Daly",        lead: true },
       { alias: "phanny", name: "Koem Phanny" },
       { alias: "khun",   name: "Sin Khun" },
+      // Technical support — primary cluster is elsewhere, they assist Admin/HR
+      { alias: "chhay",  name: "Chhang Mengchhay", support: true },
+      { alias: "noch",   name: "Dot Sreynach",     support: true },
     ],
   },
   {
@@ -217,48 +220,49 @@ export function TeamClusters() {
                 ))}
               </div>
 
-              {/* Member roster — real portraits */}
-              {cluster.members && cluster.members.length > 0 && (
-                <motion.div
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: 0.25, ease: "easeOut" }}
-                  className="mt-6"
-                >
-                  <h4 className="font-bold text-yai-navy text-xs uppercase tracking-wider mb-3">
-                    Group {cluster.num} roster · {cluster.members.length} engineers
-                  </h4>
-                  <div className="flex flex-wrap gap-4">
-                    {cluster.members.map((m) => (
-                      <div key={m.alias} className="flex flex-col items-center w-[80px]">
-                        <div
-                          className={`relative w-[64px] h-[64px] rounded-full overflow-hidden shadow-md ${m.lead ? "ring-[3px] ring-amber-400 ring-offset-2" : "ring-2 ring-white"}`}
-                        >
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
-                            src={`/images/team/portraits/${m.alias}.png`}
-                            alt={m.name}
-                            className="w-full h-full object-cover"
-                          />
-                          {m.lead && (
-                            <span className="absolute -top-1 -right-1 bg-amber-400 text-[8px] font-extrabold text-yai-navy px-1 py-0.5 rounded shadow">
-                              ★
-                            </span>
-                          )}
-                        </div>
-                        <div className="text-[10px] font-bold text-yai-navy text-center mt-1.5 leading-tight">
-                          {m.name}
-                        </div>
-                        {m.lead && (
-                          <div className="text-[8px] uppercase tracking-wider font-extrabold text-amber-600 mt-0.5">
-                            Lead
+              {/* Member roster — real portraits.
+                  Core members rendered first; technical-support members appear after a divider. */}
+              {cluster.members && cluster.members.length > 0 && (() => {
+                const core    = cluster.members.filter((m) => !m.support);
+                const support = cluster.members.filter((m) => m.support);
+                return (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: 0.25, ease: "easeOut" }}
+                    className="mt-6"
+                  >
+                    <h4 className="font-bold text-yai-navy text-xs uppercase tracking-wider mb-3">
+                      Group {cluster.num} roster · {core.length} engineer{core.length === 1 ? "" : "s"}
+                      {support.length > 0 && (
+                        <span className="text-gray-400 ml-1">+ {support.length} tech support</span>
+                      )}
+                    </h4>
+                    <div className="flex flex-wrap items-start gap-4">
+                      {/* Core members — uniform 76px outer wrapper so ring widths don't shift baselines */}
+                      {core.map((m) => (
+                        <AvatarTile key={m.alias} m={m} />
+                      ))}
+
+                      {/* Visual divider before tech-support cluster — only if any */}
+                      {support.length > 0 && (
+                        <div className="flex flex-col items-center self-stretch px-2">
+                          <div className="w-px flex-1 bg-yai-border" />
+                          <div className="text-[8px] uppercase tracking-wider font-extrabold text-gray-400 my-1 [writing-mode:vertical-rl] rotate-180">
+                            Tech support
                           </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
+                          <div className="w-px flex-1 bg-yai-border" />
+                        </div>
+                      )}
+
+                      {/* Technical-support members — slightly dimmed, no LEAD badge */}
+                      {support.map((m) => (
+                        <AvatarTile key={`s-${m.alias}`} m={m} dimmed />
+                      ))}
+                    </div>
+                  </motion.div>
+                );
+              })()}
             </>
           ) : (
             <p className="text-sm text-gray-500 italic py-4 text-center border-2 border-dashed border-yai-border rounded-lg">
@@ -272,5 +276,48 @@ export function TeamClusters() {
         Tap any cluster above to see its experience mix.
       </p>
     </>
+  );
+}
+
+/** Uniform-size avatar tile so leads (amber ring + offset) don't shift the baseline.
+ *  Outer wrapper is always 76×76; ring lives inside so width stays constant. */
+function AvatarTile({ m, dimmed = false }: { m: Member; dimmed?: boolean }) {
+  return (
+    <div className={`flex flex-col items-center w-[80px] ${dimmed ? "opacity-80" : ""}`}>
+      <div className="relative w-[76px] h-[76px] flex items-center justify-center">
+        <div
+          className={`w-[64px] h-[64px] rounded-full overflow-hidden shadow-md bg-white ${
+            m.lead
+              ? "ring-[3px] ring-amber-400 ring-offset-2 ring-offset-white"
+              : "ring-2 ring-white"
+          }`}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={`/images/team/portraits/${m.alias}.png`}
+            alt={m.name}
+            className="w-full h-full object-cover"
+          />
+        </div>
+        {m.lead && (
+          <span className="absolute top-0 right-0 bg-amber-400 text-[8px] font-extrabold text-yai-navy px-1 py-0.5 rounded shadow">
+            ★
+          </span>
+        )}
+      </div>
+      <div className={`text-[10px] font-bold text-center mt-1.5 leading-tight ${dimmed ? "text-gray-500" : "text-yai-navy"}`}>
+        {m.name}
+      </div>
+      {m.lead && (
+        <div className="text-[8px] uppercase tracking-wider font-extrabold text-amber-600 mt-0.5">
+          Lead
+        </div>
+      )}
+      {m.support && (
+        <div className="text-[8px] uppercase tracking-wider font-extrabold text-gray-400 mt-0.5">
+          Tech support
+        </div>
+      )}
+    </div>
   );
 }
