@@ -75,90 +75,37 @@ export async function LiveBudgetSummary() {
     .filter(Boolean).sort().reverse()[0];
 
   return (
-    <div className="space-y-3">
-      {/* 01 · INCOME (Sales / revenue) */}
-      <GtmEnablerBar
-        num="01"
-        tag="INCOME"
-        title="Sales / Income"
-        desc="11 streams — 8 planned packages (Cloud × 3 · Ai Server · Admin Tools · Ops Tools · Agentic · Big Ai Brain) + 3 variable-reach e-com streams. Tracking starts Jun 2026."
-        color="#10B981"
-        bg="#ECFDF5"
-        badge={fmt(totalRevenue)}
-        badgeLabel="Booked"
-      >
-        <StreamGrid streams={revenueByStream} totalLabel="Streams active" />
-        <MonthlySparkline label="Revenue · monthly" months={allMonths} values={revenueByMonth} color="#10B981" />
-      </GtmEnablerBar>
+    <div className="space-y-4">
+      {/* Headline numbers — Income · Salaries · Capex · Net (4 stat tiles) */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <MiniStat label="01 · Income"   value={fmt(totalRevenue)}                 sub="Booked (Jun 2026 →)"          color="#10B981" />
+        <MiniStat label="02 · Salaries" value={fmt(totalSalary)}                  sub={`${salaries.members.filter((m) => m.status === "active").length} active · ${salaries.months.length} mo`} color="#1E4DAA" />
+        <MiniStat label="03 · Capex"    value={fmt(totalExpenses)}                sub={`${expensesByCategory.length} cats`} color="#F37021" />
+        <MiniStat
+          label="04 · Net"
+          value={fmt(netPosition)}
+          sub={netPosition >= 0 ? "Surplus" : "Investment build"}
+          color={netPosition >= 0 ? "#10B981" : "#0A1F47"}
+        />
+      </div>
 
-      {/* 02 · EXPENSES (Salaries — the people cost) */}
-      <GtmEnablerBar
-        num="02"
-        tag="EXPENSES"
-        title="Salaries · compensation paid"
-        desc={`${salaries.members.length} members tracked from May 2024 onward. Includes bonuses.`}
-        color="#1E4DAA"
-        bg="#EFF6FF"
-        badge={fmt(totalSalary)}
-        badgeLabel="Paid"
-      >
-        <div className="grid sm:grid-cols-3 gap-3">
-          <MiniStat label="Members on roll" value={`${salaries.members.filter((m) => m.status === "active").length}`} sub={`${salaries.members.length} total · ${salaries.members.filter((m) => m.status !== "active").length} resigned / re-aligned`} color="#1E4DAA" />
-          <MiniStat label="Months tracked" value={`${salaries.months.length}`} sub={`May 2024 → today`} color="#1E4DAA" />
-          <MiniStat label="Avg / month" value={fmt(salaries.months.length ? totalSalary / salaries.months.length : 0)} sub="Burn pace" color="#1E4DAA" />
+      {/* ONE consolidated chart — all 4 flows on the same timeline */}
+      <div className="rounded-xl border border-yai-border bg-white p-4 sm:p-5">
+        <div className="flex items-baseline justify-between gap-3 mb-2 flex-wrap">
+          <h4 className="font-bold text-yai-navy text-sm uppercase tracking-wider">
+            Quarterly · Income vs Salaries + Capex
+          </h4>
+          <span className="text-[10px] text-gray-500 italic">
+            Income − (Salaries + Capex) = Net (line)
+          </span>
         </div>
-        <MonthlySparkline label="Salaries · monthly" months={allMonths} values={salaryByMonth} color="#1E4DAA" />
-      </GtmEnablerBar>
-
-      {/* 03 · CAPEX (Capex + running costs) */}
-      <GtmEnablerBar
-        num="03"
-        tag="CAPEX"
-        title="Capex + running costs"
-        desc={`${expensesByCategory.length} categories — Computers, Furniture, Dev gear, Admin Shop, Ai Fees, Villa Rent, Petty Cash + Promotion.`}
-        color="#F37021"
-        bg="#FFF7ED"
-        badge={fmt(totalExpenses)}
-        badgeLabel="Spent"
-      >
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-2">
-          {expensesByCategory.map((cat) => (
-            <div
-              key={cat.id}
-              className="rounded-lg border border-yai-border bg-white p-2.5"
-              style={{ borderLeftWidth: 3, borderLeftColor: cat.color }}
-            >
-              <div className="flex items-baseline justify-between gap-2">
-                <span className="text-[12px] font-extrabold text-yai-navy leading-tight">{cat.name}</span>
-                <span className="text-[11px] font-extrabold tabular-nums shrink-0" style={{ color: cat.total > 0 ? cat.color : "#94A3B8" }}>
-                  {cat.total > 0 ? fmt(cat.total) : "—"}
-                </span>
-              </div>
-              <div className="text-[10px] text-gray-500 mt-0.5">{cat.items.length} line item{cat.items.length === 1 ? "" : "s"}</div>
-            </div>
-          ))}
-        </div>
-        <MonthlySparkline label="Expenses · monthly" months={allMonths} values={expensesByMonth} color="#F37021" />
-      </GtmEnablerBar>
-
-      {/* 04 · NET (summary at the bottom — Income − Expenses − Capex) */}
-      <GtmEnablerBar
-        num="04"
-        tag="NET"
-        title="Net position · investment build"
-        desc="Income − (Salaries + Capex). Negative is expected during the platform-build phase — see Section 10 for the asset-value offset."
-        color={netPosition >= 0 ? "#10B981" : "#0A1F47"}
-        bg="#F8FAFC"
-        badge={fmt(netPosition)}
-        badgeLabel="Today"
-      >
-        <div className="grid sm:grid-cols-3 gap-3 mb-3">
-          <MiniStat label="In" value={fmt(totalRevenue)} sub="Income booked" color="#10B981" />
-          <MiniStat label="Out" value={fmt(totalSalary + totalExpenses)} sub={`Salaries ${fmt(totalSalary)} + Capex ${fmt(totalExpenses)}`} color="#F37021" />
-          <MiniStat label="Net" value={fmt(netPosition)} sub={netPosition >= 0 ? "Surplus" : "Investment build"} color={netPosition >= 0 ? "#10B981" : "#0A1F47"} />
-        </div>
-        <NetSparkline months={allMonths} revenueByMonth={revenueByMonth} salaryByMonth={salaryByMonth} expensesByMonth={expensesByMonth} />
-      </GtmEnablerBar>
+        <NetSparkline
+          months={allMonths}
+          revenueByMonth={revenueByMonth}
+          salaryByMonth={salaryByMonth}
+          expensesByMonth={expensesByMonth}
+        />
+      </div>
 
       {/* Footer */}
       <div className="text-[10px] text-gray-500 leading-snug pt-1">

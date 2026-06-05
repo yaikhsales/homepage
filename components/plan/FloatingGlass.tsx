@@ -117,27 +117,7 @@ export function FloatingGlass() {
               "linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.3) 30%, rgba(255,255,255,0.1) 70%, transparent 100%)",
           }}
         />
-        {/* Yai brand panel — logo + tagline, centered in the glass */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center pointer-events-none">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/images/yai-logo.jpg"
-            alt="Yai"
-            className="w-20 h-20 rounded-2xl object-cover shadow-xl ring-2 ring-white/70"
-          />
-          <div className="mt-4 text-[10px] uppercase tracking-[0.25em] font-extrabold text-yai-navy/70">
-            Yai
-          </div>
-          <div className="mt-1 text-[16px] font-extrabold text-yai-navy leading-tight">
-            Ai-Native MIP
-          </div>
-          <div className="mt-2 text-[10px] text-yai-navy/65 leading-snug max-w-[180px]">
-            Manufacturing Intelligence Platform — factory-tested for 5 years, opening its gates June 2026.
-          </div>
-          <div className="mt-3 text-[9px] uppercase tracking-[0.18em] font-bold text-yai-orange">
-            Texlink Technologies
-          </div>
-        </div>
+        {/* Empty — reserved for a different purpose */}
       </div>
     </div>
   );
