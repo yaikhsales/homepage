@@ -2,9 +2,18 @@
 
 import { useEffect, useRef, useState } from "react";
 
-/* Draggable floating glass card — empty for now.
- * User clicks-and-drags anywhere on the surface to reposition it.
- * Position persists in localStorage so it stays where you parked it. */
+/* Draggable floating glass card.
+ * Shows the current viewport size + screen size for verifying the
+ * fluid font-scaling in globals.css across different monitors. */
+
+function bucket(w: number): string {
+  if (w >= 3000) return "UHD 4K · 32\"+";
+  if (w >= 2400) return "WQHD · 27\"";
+  if (w >= 1700) return "FHD · 24\"";
+  if (w >= 1300) return "FHD · 23\"";
+  if (w >= 900)  return "Laptop";
+  return "Mobile / Tablet";
+}
 
 const PANEL_W = 220;   // narrower so it doesn't crowd page content (was 336)
 const PANEL_H = 780;   // height unchanged
@@ -12,7 +21,27 @@ const PANEL_H = 780;   // height unchanged
 export function FloatingGlass() {
   const [mounted, setMounted] = useState(false);
   const [pos, setPos] = useState({ x: 30, y: 80 });
+  const [view, setView] = useState({ vw: 0, vh: 0, sw: 0, sh: 0, dpr: 1, rem: 16 });
   const dragRef = useRef({ dragging: false, offsetX: 0, offsetY: 0 });
+
+  // Capture viewport + screen + computed-rem size, update on resize
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const read = () => {
+      const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+      setView({
+        vw: window.innerWidth,
+        vh: window.innerHeight,
+        sw: window.screen?.width || 0,
+        sh: window.screen?.height || 0,
+        dpr: window.devicePixelRatio || 1,
+        rem,
+      });
+    };
+    read();
+    window.addEventListener("resize", read);
+    return () => window.removeEventListener("resize", read);
+  }, []);
 
   // Restore saved position on mount
   useEffect(() => {
@@ -117,7 +146,24 @@ export function FloatingGlass() {
               "linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.3) 30%, rgba(255,255,255,0.1) 70%, transparent 100%)",
           }}
         />
-        {/* empty body — drag from anywhere on the surface */}
+        {/* Viewport / screen readout — confirms fluid type scaling is working */}
+        <div className="absolute inset-x-0 bottom-0 p-3">
+          <div className="rounded-lg bg-white/30 backdrop-blur-sm px-2.5 py-2 text-yai-navy">
+            <div className="text-[9px] uppercase tracking-[0.18em] font-extrabold text-yai-navy/60">
+              Display
+            </div>
+            <div className="text-[12px] font-extrabold mt-0.5">{bucket(view.vw)}</div>
+            <div className="text-[10px] tabular-nums mt-1 text-yai-navy/70">
+              Viewport · {view.vw}×{view.vh}
+            </div>
+            <div className="text-[10px] tabular-nums text-yai-navy/70">
+              Screen · {view.sw}×{view.sh} @{view.dpr}×
+            </div>
+            <div className="text-[10px] tabular-nums text-yai-navy/70 mt-1">
+              Root font · {view.rem.toFixed(1)}px
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

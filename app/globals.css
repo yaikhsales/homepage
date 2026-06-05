@@ -5,6 +5,12 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    /* Fluid root font-size — scales with the user's screen width so text
+     * stays comfortably readable from 1024px laptops up to 32" 4K monitors.
+     * clamp(MIN, FORMULA, MAX): floor 15px (small laptops),
+     * ceiling 21px (UHD/4K big monitors). All rem-based Tailwind sizes
+     * scale with this automatically. */
+    font-size: clamp(15px, calc(0.35vw + 11px), 21px);
   }
   body {
     @apply bg-yai-bg text-gray-900 antialiased;
