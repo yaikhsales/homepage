@@ -139,6 +139,30 @@ export const SEED_SALES_STORE: SalesStore = {
       monthly: {},
     },
 
+    // ─── STEP 4 UNLOCKS — Administrative + Operation tool stacks ───
+    {
+      id: "admin-tools",
+      name: "Administrative Tools",
+      category: "addon",
+      certainty: "planned",
+      unitPrice: 1500,
+      unitLabel: "$1,500 / yr",
+      tierLabel: "Unlocked after Ai Server · admin module stack",
+      detail: "Administrative module set unlocked after the Ai Server hardware purchase — PR, HR, Pay, Org, LMS, Ai CCTV. The admin core for the whole factory.",
+      monthly: {},
+    },
+    {
+      id: "ops-tools",
+      name: "Operation Tools",
+      category: "addon",
+      certainty: "planned",
+      unitPrice: 2000,
+      unitLabel: "$2,000 / yr",
+      tierLabel: "Unlocked after Ai Server · ops module stack",
+      detail: "Operation module set unlocked after the Ai Server hardware purchase — YPM, YQMS, YPI, YTM, MRP. The operations engine that runs the floor in real time.",
+      monthly: {},
+    },
+
     // ─── ADD-ONS (Step 5-6) ───
     {
       id: "agentic",
