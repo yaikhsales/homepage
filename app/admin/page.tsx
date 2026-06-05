@@ -195,6 +195,52 @@ export default async function AdminDashboard() {
         />
       </div>
 
+      {/* Investor / pitch downloads */}
+      <div className="mt-10 mb-2 text-[10px] uppercase tracking-[0.18em] text-gray-500 font-bold">
+        Investor pack
+      </div>
+      <div className="grid sm:grid-cols-2 gap-4 mb-8">
+        <a
+          href="/downloads/yai-plan-deck.pptx"
+          download="yai-plan-deck.pptx"
+          className="group block rounded-xl border-2 border-yai-orange bg-gradient-to-br from-orange-50 to-white p-5 hover:shadow-lg transition-all"
+        >
+          <div className="flex items-start justify-between mb-2">
+            <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-yai-orange text-white font-extrabold text-lg">
+              ⬇
+            </span>
+            <span className="text-[10px] font-extrabold uppercase tracking-wider text-yai-orange bg-white px-2 py-0.5 rounded-full border border-yai-orange/30">
+              PPTX · 1 + 17 slides
+            </span>
+          </div>
+          <h2 className="text-lg font-extrabold text-yai-navy">Yai Investor Deck</h2>
+          <p className="text-xs text-gray-600 leading-snug mt-1">
+            Cover slide (Texlink Technologies · STRATEGIC DTV brand) + one slide per plan section
+            (01 Executive Summary → 17 Appendix). Open in PowerPoint or Keynote, or print to PDF for
+            a sharable investor book.
+          </p>
+          <div className="mt-3 text-[10px] text-yai-orange font-bold">
+            Click to download → save as PDF in your slide app for a printable book.
+          </div>
+        </a>
+        <div className="rounded-xl border-2 border-dashed border-gray-300 bg-white p-5 opacity-60">
+          <div className="flex items-start justify-between mb-2">
+            <span className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-gray-200 text-gray-500 font-extrabold text-lg">
+              📄
+            </span>
+            <span className="text-[10px] font-extrabold uppercase tracking-wider text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
+              regenerate on demand
+            </span>
+          </div>
+          <h2 className="text-lg font-extrabold text-yai-navy/70">Build deck from latest data</h2>
+          <p className="text-xs text-gray-500 leading-snug mt-1">
+            Run <code className="bg-gray-100 px-1 rounded">node scripts/build-deck.mjs</code> to rebuild the deck
+            with the latest copy from <code className="bg-gray-100 px-1 rounded">public/downloads/</code>.
+            Future enhancement: auto-build on each admin save.
+          </p>
+        </div>
+      </div>
+
       <div className="mt-8 text-[11px] text-gray-500 leading-snug max-w-2xl">
         <strong>Architecture note:</strong> writes hit ephemeral file storage on Railway today
         (resets on redeploy). When you&rsquo;re ready to make actuals permanent, attach a Railway
