@@ -99,6 +99,10 @@ const AppLayout = () => {
         window.open(module.url, "_blank", "noopener,noreferrer");
       else if (demoType === "VIEW_SYSTEM_ANALYSIS")
         navigate(`/dashboard/${id}`);
+      else if (demoType === "VIEW_SOP_MAP")
+        navigate(`/dashboard/sop-map`);
+      else if (demoType === "VIEW_FACTORY_WORKFLOW")
+        navigate(`/dashboard/factory-workflow`);
       else if (demoType === "SUBMENU_YHR") {
         // Navigate directly to YHR component
         navigate("/dashboard/yhr");

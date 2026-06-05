@@ -83,6 +83,8 @@ import YTMShop from "./ytm-shop/ytm-shop";
 import YTM from "./ytm/ytm";
 import YShop from "./y-shop/y-shop";
 import TrafficLight from "./traffic-light/traffic-light";
+import SOPMap from "./views/SOPMap";
+import FactoryWorkflow from "./views/FactoryWorkflow";
 import PWIP from "./PWIP/pwip";
 import CallOut from "./Call-out/call-out";
 import Training from "./training/training";
@@ -369,6 +371,14 @@ export default function App() {
           <Route
             path="system-analysis"
             element={<SystemAnalyze onBack={handleBack} />}
+          />
+          <Route
+            path="sop-map"
+            element={<SOPMap onBack={handleBack} />}
+          />
+          <Route
+            path="factory-workflow"
+            element={<FactoryWorkflow onBack={handleBack} />}
           />
           <Route
             path="waste"

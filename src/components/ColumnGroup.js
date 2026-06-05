@@ -10,10 +10,10 @@ const ColumnGroup = ({ group, onModuleClick, botVersion = 'default', onBotModule
   const isWhiteGroup = group.id === 'prepro-col' || group.id === 'prodmat-col';
   
   return (
-    <div className="flex flex-col min-w-[100px] flex-1">
+    <div className="flex flex-col w-[110px] sm:w-[120px] md:w-[130px] shrink-0">
       {/* Sub Label - Always show frame, even if title is empty - Big label size matching QA but rounded */}
-      <div className="mb-6 flex justify-center h-[38px] items-center">
-        <div className={`w-full text-center py-2 rounded-full uppercase tracking-widest text-sm font-bold h-[38px] flex items-center justify-center transition-all duration-300 ${isDropdownOpen ? 'bg-slate-800/60 backdrop-blur-md border border-slate-600 shadow-xl' : 'glass-effect-strong shadow-xl hover:shadow-2xl'} ${group.title ? 'text-white' : 'text-transparent'}`}>
+      <div className="mb-5 flex justify-center h-[38px] items-center">
+        <div className={`w-full text-center py-2 rounded-lg text-sm md:text-base font-semibold flex items-center justify-center transition-all duration-300 bg-white bg-opacity-20 backdrop-blur-sm px-3 shadow-sm ${group.title ? 'text-white' : 'text-transparent'}`}>
             {group.title ? translateModuleTitle(group.title) : ''}
         </div>
       </div>

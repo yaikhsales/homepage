@@ -1,0 +1,1303 @@
+================================================================================
+  YAIKH PLATFORM — COMPREHENSIVE SEO & CONTENT MASTER REPORT
+  Generated: May 2026 | Platform: yaikh.com | Demo: demo1.yaikh.com
+  Developer: TexLink Technologies Co., Ltd.
+================================================================================
+
+TABLE OF CONTENTS
+-----------------
+1. Platform Overview
+2. Company & Brand Identity
+3. What Yaikh Does (Plain Language for Search Engines)
+4. All Modules — Detailed Descriptions
+   4.1 Administration Section
+   4.2 Management Dashboard
+   4.3 Operations Section
+5. AI Agents & Chatbots (Full Description)
+6. Technology Stack
+7. Target Industry & Users
+8. SEO Keyword Strategy
+9. Recommended Meta Tags (Page by Page)
+10. Structured Data / Schema.org Recommendations
+11. Content Strategy for Blog/Pages
+12. Sitemap Page List (All Routes)
+13. Robots.txt Recommendations
+14. Quick-Win SEO Action Items
+
+================================================================================
+1. PLATFORM OVERVIEW
+================================================================================
+
+Yaikh (yaikh.com) is an AI-powered enterprise management platform built by
+TexLink Technologies Co., Ltd., headquartered in Phnom Penh, Cambodia.
+
+It serves as an all-in-one smart factory and business management system,
+combining traditional ERP (Enterprise Resource Planning) features with
+cutting-edge AI agents, IoT (Internet of Things) sensor integration, and
+digital transformation tools.
+
+The demo dashboard is accessible at: https://demo1.yaikh.com
+The live production system runs at: https://ym.yaikh.com
+
+Yaikh is primarily designed for garment factories, manufacturing companies,
+and industrial enterprises in Southeast Asia — especially Cambodia — that
+want to digitize their operations, automate HR, track energy and resources,
+manage quality control, and deploy AI assistants for every department.
+
+================================================================================
+2. COMPANY & BRAND IDENTITY
+================================================================================
+
+Company Name : TexLink Technologies Co., Ltd.
+Brand Name   : Yaikh (also written as "Yai" for AI agents)
+Website      : https://yaikh.com
+Demo         : https://demo1.yaikh.com
+Production   : https://ym.yaikh.com
+Contact Email: [email protected]
+Contact Phone: +855 96 575 4574
+Location     : Phnom Penh, Cambodia
+Languages    : English, Khmer (Cambodian), Chinese (Simplified)
+
+Core Brand Pillars:
+  - AI-First Enterprise Software
+  - IoT-Connected Smart Factory
+  - Digital Transformation for Southeast Asia
+  - Modular, Role-Based Management Platform
+
+================================================================================
+3. WHAT YAIKH DOES (PLAIN LANGUAGE FOR SEARCH ENGINES)
+================================================================================
+
+Yaikh is a comprehensive AI-powered enterprise resource planning (ERP) and
+smart factory management platform that helps manufacturing companies digitize
+and automate every aspect of their business operations.
+
+IN SIMPLE TERMS, YAIKH HELPS BUSINESSES:
+
+  ✓ Manage their entire human resources (HR) pipeline — from recruitment,
+    interviewing, onboarding, attendance tracking, payroll, NSSF compliance,
+    visa/work permits, to canteen management.
+
+  ✓ Track factory production in real-time — monitoring work-in-progress (WIP),
+    production line performance, machine maintenance, and output quality.
+
+  ✓ Control quality at every stage — from fabric receiving, cutting inspection,
+    sewing QC, finishing, packing, to final buyer inspection using the YQMS
+    (Yaikh Quality Management System).
+
+  ✓ Monitor energy, water, air quality, and waste using IoT sensors — helping
+    factories reduce consumption, comply with environmental standards, and
+    achieve sustainability goals.
+
+  ✓ Automate financial workflows — purchase requests, approvals, payments,
+    invoicing, tax reporting, and trial balance reports.
+
+  ✓ Digitize audits — digital compliance certificates, 6S checklists, audit
+    plans, and corrective action plans (CAP).
+
+  ✓ Deploy AI assistants for every department — AI bots for Finance (Finance PA),
+    HR (HR PA), Admin (Admin PA), Quality (QMS PA), Production (Production PA),
+    CSR (CSR PA), Sales (Sale PA), and Social Media (Social PA).
+
+  ✓ Connect to Cambodian government e-services — CCF, MISTI, OWSO, E-Filing,
+    and NSSF portals directly from the dashboard.
+
+================================================================================
+4. ALL MODULES — DETAILED DESCRIPTIONS
+================================================================================
+
+------------------------------------------------------------------------
+4.1 ADMINISTRATION SECTION
+------------------------------------------------------------------------
+
+--- ACCOUNTANT MODULE ---
+  The Accountant module is Yaikh's complete financial management system.
+  It handles the full cycle of purchase requests and financial reporting.
+
+  Sub-modules:
+  • Verify PR (Purchase Request Verification)
+    - Finance teams use this to review and verify incoming purchase requests.
+    - Can check request details, attached invoices, and supporting documents.
+    - Ensures accuracy before approval.
+
+  • Approval PR (Purchase Request Approval)
+    - Senior managers or department heads approve or reject verified PRs.
+    - Full status tracking shows pending, approved, or rejected states.
+    - Audit trail maintained for compliance.
+
+  • Pay PR (Purchase Request Payment)
+    - Processes actual payments for approved purchase requests.
+    - Links payment records to original purchase requests.
+    - Maintains a complete financial audit trail.
+
+  • TB Monthly Yearly (Trial Balance)
+    - Generates Trial Balance financial reports for monthly and yearly periods.
+    - Helps accountants reconcile accounts and prepare financial statements.
+    - Connected to the ym.yaikh.com production accounting system.
+
+  • TOI (Transfer of Information)
+    - Global data transfer and information-sharing tool.
+    - Connects factory data across departments and external systems.
+
+  • Factory Accounting
+    - Handles factory-level accounting operations and cost calculations.
+    - Tracks production costs, overheads, and departmental budgets.
+
+  • TAX Reporting
+    - Generates tax reports and compliance documentation.
+    - Supports Cambodian tax filing requirements.
+
+--- E-INVOICING MODULE ---
+  Digital invoicing system with three components:
+  • Cambodia E-Invoice — Compliant with Cambodian government e-invoice standards.
+  • Supplier Management — Manages supplier profiles, contacts, and payment terms.
+  • IEWS (Integrated E-commerce Workflow System) — Connects invoicing to orders.
+
+--- YHR (YAIKH HUMAN RESOURCES) MODULE ---
+  Yaikh's complete Human Resources Management System (HRMS).
+  Covers the entire employee lifecycle from hire to retire.
+
+  Sub-modules:
+  • Recruitment — Post jobs, track applicants, manage the hiring pipeline.
+  • Interview — Schedule and record interview sessions and outcomes.
+  • Onboarding — Digital onboarding workflows for new employees.
+  • Attendance — Daily attendance checking and checklist management.
+  • My Attendance — Employee self-service attendance view.
+  • Benefit Profile — Manage employee benefits, allowances, and entitlements.
+  • Payroll — Calculate and process monthly payroll.
+  • NSSF (National Social Security Fund) — Cambodia NSSF compliance and reporting.
+  • Visa & Work Permit — Track and manage foreign worker visas and permits.
+  • FWCMS (Foreign Worker Contract Management System) — Manage foreign worker contracts.
+  • Canteen — Factory canteen meal management and cost tracking.
+
+--- ORG CHART MODULE ---
+  Visual organizational chart system:
+  • Master Organization Chart — Company-wide org chart view.
+  • Custom Organization Chart — Customizable charts by department.
+  • Leader/Worker Sections — View team hierarchies and reporting lines.
+
+--- SALARY BILL MODULE ---
+  Comprehensive salary and compensation management:
+  • Monthly Salary — Process monthly salary payments.
+  • Weekly Incentive — Calculate and distribute weekly performance incentives.
+  • Permit Fee — Track and manage permit-related fees.
+  • Resign Payment — Calculate and process final payments for departing employees.
+
+--- TRAINING MODULE ---
+  Department-based training management:
+  • Organizes training programs by department.
+  • Tracks employee participation and completion.
+  • Videos available in English and Chinese.
+
+--- TEMPORARY WORKER REQUEST MODULE ---
+  • Request Worker Form — Submit requests for temporary workers.
+  • Request Worker List — View and manage all temp worker requests.
+  Useful for factories with seasonal production peaks.
+
+--- SPEAK UP MODULE ---
+  Employee feedback and anonymous communication channel.
+  Allows workers to raise concerns, suggestions, or complaints safely.
+
+--- SUPPORT TICKET MODULE ---
+  IT and operational support ticketing system:
+  • Create support tickets for technical issues or operational problems.
+  • Track ticket status from creation to resolution.
+  • Assign tickets to responsible teams or individuals.
+  • View ticket history and resolution notes.
+
+--- PURCHASE REQUEST MODULE (Admin Side) ---
+  The admin-facing purchase management system:
+  • Purchase Request Form — Create detailed purchase requisitions.
+  • Show List Request — View all submitted purchase requests with status.
+  • Master List — Manage approved vendors and item catalogs.
+  • Purchaser Workspace — Dedicated view for procurement officers.
+  • My Confirm Received — Confirm receipt of purchased goods.
+  • Documents Joiner — Merge purchase-related documents.
+
+--- Y SHOP MODULE ---
+  Internal company store for office supplies and stationery:
+  • Employees can browse and request office items.
+  • Items include stationery, equipment, and operational supplies.
+  • Acts as an internal e-commerce system for company resources.
+
+--- MONEY CLAIM MODULE ---
+  Employee expense claims management:
+  • Submit claims for out-of-pocket business expenses.
+  • Attach receipts and supporting documents.
+  • Track approval status and reimbursement.
+
+--- GATE PASS MODULE ---
+  Security and visitor management system:
+  • Gate Pass — Issue and track passes for people/vehicles entering/exiting.
+  • Gate In/Out Records — Log all entry and exit events.
+  • Motorcycle Records — Track motorcycle access.
+  • Car Plate Records — Manage car registration tracking.
+  • Truck Records — Log freight and delivery trucks.
+  • Walk In/Out — Pedestrian access logging.
+  • Visitor Record — Log and manage external visitor visits.
+  • 12K YM Tuk Tuk — Specific transport tracking for site vehicles.
+
+--- MEETING ROOM MODULE ---
+  Conference and meeting room booking system:
+  • Book meeting rooms in advance.
+  • View meeting schedules on a timeline.
+  • Prevent double-bookings and manage room availability.
+
+--- MY CAR BOOKING MODULE ---
+  Company vehicle booking system:
+  • Book company cars for official trips.
+  • Track vehicle usage and availability.
+  • Manage driver assignments.
+
+--- FIRE ALARM MODULE ---
+  Fire alarm system integration and monitoring.
+  Real-time alerts and incident logging.
+
+--- CCTV MODULE ---
+  Security camera and facial recognition system:
+  • Face Scan Logs — Logs of all facial recognition events.
+  • My Face Scan — Employee's personal facial scan history.
+  Integrates AI-powered face recognition for attendance and security.
+
+--- DIGITAL AUDIT MODULE (CSR) ---
+  Digital compliance and audit management:
+  • Audit Plan — Schedule and plan upcoming audits.
+  • Compliance Certificate — Manage and store compliance certificates.
+  • Digital Audit — Conduct audits digitally with real-time checklists.
+  • Checklist 6S — 6S (Sort, Set, Shine, Standardize, Sustain, Safety)
+    workplace organization checklist tool.
+  Helps factories maintain international compliance standards.
+
+--- ENERGY MODULE (CSR) ---
+  Real-time energy monitoring using IoT sensors:
+  • Meters — View electricity meter readings and consumption data.
+  • Solar Dashboard — Monitor solar panel generation and efficiency.
+  • Switch Board Ampere Load Monitoring — Track electrical load on switchboards.
+  • Energy Source — Manage and monitor energy sources (grid, solar, generator).
+  Helps factories track, reduce, and report energy consumption.
+
+--- AIR MODULE (CSR) ---
+  Factory air quality and environmental monitoring:
+  • Temperature Humidity Sensor — Real-time temperature and humidity readings.
+  • Switch (Fan & Pump) — Control ventilation fans and pumps remotely.
+  • Air Quality Detector — Monitor pollutants and air quality levels.
+  Ensures healthy working conditions and regulatory compliance.
+
+--- WATER MODULE (CSR) ---
+  Water consumption tracking system:
+  • In — Track incoming water volume and sources.
+  • Out — Track outgoing/used water and waste water.
+  Helps factories monitor water usage and sustainability.
+
+--- WASTE MODULE (CSR) ---
+  Waste management and environmental compliance:
+  • Waste Analytics — Track waste by type, volume, and disposal method.
+  • Boiler — Monitor boiler performance and waste heat.
+  Supports CSR reporting and environmental compliance.
+
+--- CHEMICAL MODULE (CSR) ---
+  Chemical inventory and safety management.
+  Track chemical storage, usage, and disposal per safety regulations.
+
+--- SHIPPING MODULE ---
+  Shipping request and logistics management:
+  • Submit and track shipping requests.
+  • Manage delivery schedules and shipment documentation.
+  • Coordinate with logistics providers.
+
+--- E-GOVERNMENT MODULE ---
+  Direct links to Cambodian government portals:
+  • CCF (Council for the Development of Cambodia) — Business registration.
+  • MISTI — Ministry of Industry, Science, Technology and Innovation.
+  • OWSO — One Window Service Office for business permits.
+  • E-Filing — Cambodia General Department of Taxation e-filing portal.
+  • NSSF — National Social Security Fund employer portal.
+  Streamlines compliance with Cambodian government requirements.
+
+------------------------------------------------------------------------
+4.2 MANAGEMENT DASHBOARD (CENTRAL)
+------------------------------------------------------------------------
+
+--- SYSTEM ANALYSIS MODULE ---
+  The central intelligence hub of the Yaikh platform:
+  • Provides management-level KPIs and analytics dashboards.
+  • Cross-module data visualization for decision makers.
+  • Real-time overview of factory performance metrics.
+  • Noticeable alerts and action items for management attention.
+
+------------------------------------------------------------------------
+4.3 OPERATIONS SECTION
+------------------------------------------------------------------------
+
+--- YQMS (YAIKH QUALITY MANAGEMENT SYSTEM) ---
+  The most comprehensive module — covers the complete quality control
+  process for garment manufacturing from pre-production to final inspection.
+
+  Pre-Production:
+  • QC File — Digital quality control file setup per style/order.
+  • Pre-Production Meeting (PPM) — Digital meeting minutes and action items.
+
+  Cutting Stage QC:
+  • Cutting Panel Inspection — Inspect cut fabric panels for defects.
+  • First Output Cutting — Initial cutting quality check.
+  • QA Cutting — QA review of cutting department output.
+  • Cutting Inspection — Detailed cutting defect logging.
+
+  Decoration Stage QC:
+  • First Output Printing/Embroidery — First piece inspection for prints.
+  • Printing Inspection — Ongoing print quality checks.
+  • Embroidery Inspection — Embroidery defect tracking.
+  • QA Printing/Embroidery — QA audit for decoration department.
+
+  Sewing Stage QC:
+  • First Output Sewing — Initial sewing quality check.
+  • QC End Line Checking — End-of-line quality gate check.
+  • Inline Audit Rolling — Rolling audits during sewing production.
+  • Internal Rolling QC — Internal QC team random audits.
+  • Garment Check Output — Check completed garment output quantities.
+  • QA 20pcs Audit — 20-piece quality audit (AQL standard).
+
+  Finishing & Packing QC:
+  • Finishing Inspection — Inspect finished garments.
+  • Ironing Inspection — Check ironing quality and press quality.
+  • Humidity Aquaboy Checking — Measure fabric moisture content.
+  • Offline Audit — Off-line quality audit checks.
+  • Packing Inspection — Check packing quality and carton standards.
+  • QA Audit Finishing Packing — QA-level audit of finishing/packing.
+
+  Final Inspection:
+  • Fin Check — Yaikh's digital final inspection tool (AI-powered).
+  • Pre Final Inspection — Internal pre-final check before buyer inspection.
+  • Final Inspection — Official final inspection record.
+  • Buyer Final Inspection — Formal buyer/third-party inspection record.
+
+  Reporting & Compliance:
+  • First Output Finishing and Packing — First piece inspection record.
+  • Dashboard — YQMS KPI dashboard with defect rates and trends.
+  • Report — Exportable quality reports.
+  • Customer Complaint CAP (Corrective Action Plan) — Track and resolve
+    customer quality complaints with corrective actions.
+  • Supplier Evaluation — Rate and evaluate material suppliers.
+
+--- FC (FABRIC & ACCESSORIES CONTROL) MODULE ---
+  Complete material management system from receiving to issuing:
+
+  Receiving:
+  • Fabric Receiving — Log incoming fabric shipments with quantity and specs.
+  • Accessories Receiving — Log incoming accessories (buttons, zippers, labels).
+
+  Testing & Inspection:
+  • Fabric Inspection — Inspect fabric quality (shrinkage, color, defects).
+  • Fabric Test — Lab test results for fabric properties.
+  • Accessories Inspection — Quality check all accessories.
+
+  Warehouse Management:
+  • Warehouse Tracking — Real-time fabric and accessories inventory tracking.
+  • Consumptions — Track material consumption vs. planned quantities.
+  • Calculator — Calculate required material quantities for production orders.
+
+  Issuing:
+  • Fabric Issuing — Issue fabric from warehouse to production lines.
+  • Accessories Issuing — Issue accessories to production teams.
+
+  Logistics:
+  • Delivery Tracking — Track fabric/accessories delivery status.
+  • Return Fabric — Process fabric returns to warehouse or suppliers.
+  • Return Accessories — Process accessories returns.
+  • Brand Protection — Track and protect brand-labelled materials.
+
+--- CALL OUT MODULE ---
+  Quality call-out and defect escalation management:
+  • Flag quality issues for immediate attention.
+  • Track resolution of quality call-outs.
+  • Used by QA teams to escalate critical defects.
+
+--- CE (COST ENGINEERING) MODULE ---
+  Advanced production efficiency and cost analysis:
+  • Standard Time — Set and manage standard times for operations.
+  • Product Development — Track development costs and timelines.
+  • Garment Analysis — Analyze garment construction and costs.
+  • Productivity — Track operator and line productivity.
+  • Machine Allocation — Optimize machine assignments to production lines.
+  • Skill Inventory — Map worker skills to operation requirements.
+  • Team Performance — Monitor team-level performance metrics.
+  • Learning Curve — Track operator skill improvement over time.
+  • Downtimes — Log and analyze machine and production downtimes.
+  • Cost Centers — Manage departmental cost centers and budgets.
+  • CPM (Critical Path Method) — Project planning and scheduling tool.
+  • Style Costing — Calculate complete garment production costs.
+
+--- YWIP (YAIKH WORK IN PROGRESS) MODULE ---
+  Production WIP (Work In Progress) tracking:
+  • Real-time visibility of garments at each production stage.
+  • Track bundles moving through cutting, sewing, finishing.
+
+--- YTM (YAIKH TOTAL MAINTENANCE) MODULE ---
+  Preventive and corrective machine maintenance system:
+  • Machine Location tracking in factory layout.
+  • Setup and Repair — Log machine setups and repair jobs.
+  • Routine Maintenance — Schedule and track routine maintenance tasks.
+  • System Setup — Configure machinery settings and parameters.
+  • Data Management — Manage maintenance records and history.
+  • TV Displays — Factory floor display board management.
+  • Transfers — Track machine relocations within the factory.
+  • Downloads — Export maintenance reports.
+  • Analysis — Maintenance cost and downtime analysis.
+  • Reports — Exportable maintenance reports.
+
+--- YTM SHOP MODULE ---
+  Maintenance workshop and spare parts management:
+  • Manage spare parts inventory.
+  • Issue parts for maintenance jobs.
+  • Track parts usage and procurement needs.
+
+--- CE MODULE (COST ENGINEERING) ---
+  (See CE description above under Operations Section.)
+
+--- 4DP MODULE ---
+  External production data dashboard:
+  Accessed via https://4dp.yaikh.com
+  Advanced production planning and data visualization.
+
+--- YPI MODULE ---
+  External Yaikh Project Intelligence dashboard:
+  Accessed via https://ypm.yaikh.com
+  Project management and tracking for factory orders.
+
+--- MRP (MATERIAL REQUIREMENTS PLANNING) MODULE ---
+  Materials planning and procurement requirements calculation.
+  Calculates what materials are needed, when, and in what quantities.
+
+--- PWIP MODULE ---
+  Production WIP (Work In Progress) Panel — detailed view of
+  work items at each stage of the production process.
+
+--- TRAFFIC LIGHT MODULE ---
+  Production floor visual management system:
+  Red/Yellow/Green status display for production lines and machines.
+  Allows management to quickly identify issues on the factory floor.
+
+--- AUTOPOST MODULE ---
+  Automated social media and content posting tool.
+  Supports auto-publishing to platforms like TikTok, Facebook, Instagram.
+
+================================================================================
+5. AI AGENTS & CHATBOTS — FULL DESCRIPTION
+================================================================================
+
+Yaikh deploys role-specific AI Personal Assistants (PA) powered by
+Google Gemini 2.5 Flash, hosted through a custom AI agent backend at:
+  https://yaikh-ai-agent-77568730259.asia-southeast1.run.app/api/ai-agent
+
+Each PA is trained on specific module contexts and the full Yaikh platform
+knowledge base, providing conversational AI assistance to users.
+
+--- YAI (GENERAL AI AGENT) ---
+  The general-purpose AI assistant for the entire Yaikh platform.
+  Capabilities:
+  • Answer questions about any Yaikh module.
+  • Generate images (using Gemini image generation).
+  • Deep Research mode — comprehensive research on any topic.
+  • File and image upload analysis (multimodal AI).
+  • Voice input (speech-to-text via Web Speech API).
+  • Multi-language support (English, Khmer, Chinese).
+  • Chat history saved in browser local storage.
+  • Token-by-token streaming responses (ChatGPT-style UX).
+
+--- FINANCE PA (Finance Personal Assistant) ---
+  Modules covered: Accountant (Verify PR, Approval PR, Pay PR,
+  TB Monthly Yearly, TOI, Factory Accounting, TAX Reporting), E-Invoicing.
+  Helps with: Financial management, budgeting, purchase request workflows,
+  invoices, payment processing, tax compliance.
+
+--- ADMIN PA (Admin Personal Assistant) ---
+  Modules covered: Purchase Request, Y Shop, Support Ticket, Bill Record,
+  Gate Pass, Meeting Room, My Car Booking, Fire Alarm, CCTV.
+  Helps with: Administrative operations, support tickets, security issues,
+  car fuel tracking, facility management.
+
+--- HR PA (HR Personal Assistant) ---
+  Modules covered: YHR (Recruitment, Interview, Onboarding, Attendance,
+  Benefit Profile, Payroll, NSSF, Visa/Work Permit, FWCMS, Canteen),
+  Salary Bill, Org Chart, Training, Temp Work Request, Speak Up.
+  Helps with: Recruitment, payroll processing, attendance, employee benefits,
+  visa and work permit tracking, HR compliance.
+
+--- CSR PA (Corporate Social Responsibility Personal Assistant) ---
+  Modules covered: Digital Audit, Energy, Air, Water, Waste, Chemical.
+  Helps with: Corporate social responsibility, induction training, 6S audits,
+  compliance certificates, environmental monitoring, audit checklists.
+
+--- QMS PA (Quality Management System Personal Assistant) ---
+  Modules covered: YQMS (all sub-modules), Call Out.
+  Helps with: Quality management, defect inspections, third-party audits,
+  buyer final inspection preparations, corrective action plans.
+
+--- PPC PA (Production Planning & Control Personal Assistant) ---
+  Modules covered: Master Plan, Line Plan, PPM, PPS.
+  Helps with: Order status, production delay alerts, action items,
+  supplier alerts, production schedule management.
+
+--- PRODUCTION PA (Production Personal Assistant) ---
+  Handles production operations, scheduling, inventory tracking,
+  workflow optimization, and quality metrics monitoring.
+
+--- SALE PA (Sales Personal Assistant) ---
+  Assists with: Sales order management, buyer communications, quotations,
+  email management, customer factory visits.
+
+--- SOCIAL PA (Social Media Personal Assistant) ---
+  Manages social media content for:
+  TikTok, Facebook, YouTube, Instagram, LinkedIn.
+  Can auto-generate and schedule posts.
+
+--- GM CHAT ---
+  A dedicated general management chat interface.
+  Provides executive-level insights, reports, and answers.
+  Built as a premium conversational interface for senior management.
+
+--- YAI DATA BOT ---
+  Data-focused AI assistant for querying platform analytics.
+  Provides data-driven insights from across all Yaikh modules.
+
+--- FINANCE PA, ADMIN PA, HR PA, CSR PA (Sub-bots) ---
+  Each department has its own dedicated sub-bot UI with:
+  • Module-specific quick suggestion buttons.
+  • Context-aware responses limited to that department's data.
+  • Khmer text-to-speech (TTS) support.
+
+================================================================================
+6. TECHNOLOGY STACK
+================================================================================
+
+Frontend       : React.js (Create React App)
+Styling        : Tailwind CSS
+Icons          : Lucide React
+Routing        : React Router DOM
+AI/ML          : Google Gemini 2.5 Flash (via REST API)
+AI Backend     : Custom Node.js agent on Google Cloud Run (asia-southeast1)
+Fonts          : Google Fonts — Inter (UI), Khmer OS Battambang (Khmer script)
+Analytics      : Cloudflare Beacon (Web Analytics)
+CDN/Hosting    : Cloudflare (demo1.yaikh.com)
+PWA            : Progressive Web App (manifest.json, Service Worker ready)
+Multilingual   : English, Khmer, Chinese (Traditional/Simplified)
+Speech Input   : Web Speech API (voice-to-text)
+Video          : HTML5 Video (bilingual demo videos)
+
+================================================================================
+7. TARGET INDUSTRY & USERS
+================================================================================
+
+PRIMARY INDUSTRY:
+  Garment and textile manufacturing (Cambodia, Southeast Asia)
+
+PRIMARY USERS:
+  • Factory General Managers and Directors
+  • HR Managers and Officers
+  • Production Managers and Supervisors
+  • Quality Assurance (QA) Managers and Technicians
+  • Finance and Accounting Staff
+  • CSR (Corporate Social Responsibility) Officers
+  • IT Administrators
+  • Production Line Leaders and Operators (via mobile)
+
+SECONDARY INDUSTRIES:
+  • Other manufacturing sectors (electronics, footwear, food processing)
+  • Logistics and distribution companies
+  • Any mid-to-large enterprise seeking AI-powered digitalization in Cambodia
+
+GEOGRAPHY:
+  • Primary: Cambodia (Phnom Penh, Siem Reap, manufacturing zones)
+  • Secondary: Southeast Asia (Vietnam, Thailand, Myanmar, Indonesia)
+  • Tertiary: Global garment buyers and brand owners sourcing from Cambodia
+
+================================================================================
+8. SEO KEYWORD STRATEGY
+================================================================================
+
+TIER 1 — PRIMARY BRAND KEYWORDS:
+  yaikh
+  yaikh.com
+  yaikh platform
+  demo1.yaikh.com
+  ym.yaikh.com
+  TexLink Technologies
+
+TIER 2 — PRODUCT CATEGORY KEYWORDS:
+  AI-powered ERP system Cambodia
+  smart factory management software
+  garment factory management system
+  manufacturing ERP Cambodia
+  enterprise management platform Cambodia
+  factory digitalization software
+  AI business management platform Southeast Asia
+
+TIER 3 — MODULE-SPECIFIC KEYWORDS:
+  digital HR management garment factory
+  quality management system garment manufacturing
+  fabric control system garment factory
+  IoT energy monitoring factory
+  digital audit compliance software
+  purchase request approval system
+  salary payroll system Cambodia
+  NSSF compliance software Cambodia
+  e-invoicing Cambodia GDT
+  factory gate pass system
+  support ticket system manufacturing
+
+TIER 4 — AI/TECH KEYWORDS:
+  AI chatbot factory management
+  AI personal assistant ERP
+  Gemini AI enterprise software
+  AI quality inspection system
+  IoT sensor factory monitoring
+  digital twin factory software
+
+TIER 5 — LONG-TAIL KEYWORDS:
+  "garment factory management software Cambodia"
+  "AI HR system for garment factory"
+  "how to digitize garment factory Cambodia"
+  "Cambodia e-invoice software GDT compliant"
+  "NSSF payroll system Cambodia factory"
+  "quality management system for garment manufacturer"
+  "IoT energy monitoring garment factory"
+  "AI chatbot for HR management"
+  "digital audit 6S checklist software"
+  "fabric warehouse tracking system"
+  "purchase request approval workflow"
+  "Cambodia factory ERP system"
+
+================================================================================
+9. RECOMMENDED META TAGS (Page by Page)
+================================================================================
+
+--- HOME PAGE (demo1.yaikh.com) ---
+<title>Yaikh — AI-Powered Smart Factory & Enterprise Management Platform</title>
+<meta name="description" content="Yaikh by TexLink Technologies is an all-in-one AI-powered ERP and smart factory management platform for garment manufacturers in Cambodia. Manage HR, QC, Energy, Finance, and more — powered by Gemini AI.">
+<meta name="keywords" content="Yaikh, AI ERP, smart factory, garment factory management, Cambodia ERP, enterprise management platform, AI chatbot factory, TexLink Technologies">
+<meta property="og:title" content="Yaikh — AI-Powered Smart Factory Management Platform">
+<meta property="og:description" content="All-in-one enterprise management platform for garment factories with AI assistants, IoT monitoring, quality management, HR, and finance modules.">
+<meta property="og:url" content="https://demo1.yaikh.com">
+<meta property="og:type" content="website">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://yaikh.com">
+
+--- YQMS / QUALITY MANAGEMENT PAGE ---
+<title>YQMS — Digital Quality Management System for Garment Manufacturing | Yaikh</title>
+<meta name="description" content="Yaikh YQMS covers the complete quality control process for garment factories — from pre-production meetings and cutting inspection to final buyer inspection and defect reporting.">
+
+--- HR / YHR PAGE ---
+<title>YHR — Digital Human Resources Management for Garment Factories | Yaikh</title>
+<meta name="description" content="Yaikh YHR manages recruitment, onboarding, attendance, payroll, NSSF, visa/work permits, and canteen for garment factories in Cambodia. Fully digital HR system.">
+
+--- ENERGY MONITORING PAGE ---
+<title>Smart Energy Monitoring — IoT Factory Energy Tracking | Yaikh</title>
+<meta name="description" content="Monitor electricity meters, solar dashboards, switch board load, and energy sources in real-time with Yaikh's IoT-powered energy management system for factories.">
+
+--- AI AGENTS PAGE ---
+<title>AI Personal Assistants — Finance PA, HR PA, QMS PA & More | Yaikh</title>
+<meta name="description" content="Yaikh deploys role-specific AI assistants powered by Google Gemini for every department — Finance, HR, Admin, Quality, Production, CSR, Sales, and Social Media.">
+
+--- FC / FABRIC CONTROL PAGE ---
+<title>FC — Fabric & Accessories Control System for Garment Factories | Yaikh</title>
+<meta name="description" content="Yaikh FC manages fabric receiving, inspection, testing, warehouse tracking, issuing, and delivery for garment factories — reducing waste and improving traceability.">
+
+================================================================================
+10. STRUCTURED DATA / SCHEMA.ORG RECOMMENDATIONS
+================================================================================
+
+Add this JSON-LD structured data to the main <index.html>:
+
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Yaikh",
+  "url": "https://yaikh.com",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web Browser",
+  "description": "AI-powered enterprise management platform for garment factories and manufacturing companies. Includes HR, quality management, energy monitoring, AI chatbots, and finance modules.",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+    "description": "Demo available at demo1.yaikh.com"
+  },
+  "creator": {
+    "@type": "Organization",
+    "name": "TexLink Technologies Co., Ltd.",
+    "url": "https://yaikh.com",
+    "email": "[email protected]",
+    "telephone": "+855 96 575 4574",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Phnom Penh",
+      "addressCountry": "KH"
+    }
+  },
+  "featureList": [
+    "AI-powered HR Management",
+    "Quality Management System (YQMS)",
+    "IoT Energy Monitoring",
+    "Financial Management and E-Invoicing",
+    "Digital Audit and Compliance",
+    "Fabric and Accessories Control",
+    "AI Personal Assistants for every department",
+    "Gate Pass and Security Management",
+    "Production WIP Tracking",
+    "Machine Maintenance Management"
+  ],
+  "screenshot": "https://demo1.yaikh.com/home.png",
+  "inLanguage": ["en", "km", "zh"]
+}
+
+Add Organization schema:
+
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "TexLink Technologies Co., Ltd.",
+  "alternateName": "Yaikh",
+  "url": "https://yaikh.com",
+  "logo": "https://demo1.yaikh.com/logo.jpg",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+855-96-575-4574",
+    "contactType": "customer service",
+    "email": "[email protected]",
+    "availableLanguage": ["English", "Khmer", "Chinese"]
+  },
+  "sameAs": [
+    "https://demo1.yaikh.com",
+    "https://ym.yaikh.com"
+  ]
+}
+
+================================================================================
+11. CONTENT STRATEGY FOR BLOG/PAGES (TO RANK IN SEARCH)
+================================================================================
+
+RECOMMENDED BLOG/LANDING PAGE TOPICS:
+
+  1. "What is Yaikh? The AI-Powered Smart Factory Platform for Cambodia"
+     Target keyword: "Yaikh platform review Cambodia"
+
+  2. "How Yaikh's YQMS Replaces Paper-Based Quality Control in Garment Factories"
+     Target keyword: "digital quality management garment factory"
+
+  3. "AI Chatbots in Manufacturing: How Yaikh's PA Bots Help Every Department"
+     Target keyword: "AI chatbot manufacturing ERP"
+
+  4. "IoT Energy Monitoring for Factories — How Yaikh Tracks Electricity and Solar"
+     Target keyword: "IoT energy monitoring factory Cambodia"
+
+  5. "Cambodia E-Invoice Compliance — How Yaikh's E-Invoicing Module Works"
+     Target keyword: "Cambodia e-invoice GDT software"
+
+  6. "Complete HR Digitalization for Garment Factories — Yaikh YHR Guide"
+     Target keyword: "digital HR system garment factory Cambodia"
+
+  7. "How to Digitize Your Factory in Cambodia: A Complete Guide with Yaikh"
+     Target keyword: "factory digitalization Cambodia guide"
+
+  8. "NSSF Payroll Software for Cambodia — How Yaikh Automates Compliance"
+     Target keyword: "NSSF payroll software Cambodia"
+
+  9. "Fabric Warehouse Management System for Garment Manufacturers — Yaikh FC"
+     Target keyword: "fabric warehouse tracking system garment"
+
+  10. "6S Digital Audit Checklist Tool for Factories — Yaikh Digital Audit"
+      Target keyword: "6S audit checklist digital tool factory"
+
+================================================================================
+12. SITEMAP PAGE LIST (ALL ROUTES IN THE APP)
+================================================================================
+
+All routes available in the Yaikh Dashboard (demo1.yaikh.com):
+
+  / (Home Dashboard)
+  /welcome (Welcome/Intro Page)
+  /dashboard (Main Dashboard)
+  /dashboard/training (Training Grid View)
+  /dashboard/sensors (Sensor Grid View)
+  /dashboard/waste/analytics (Waste Analytics)
+  /dashboard/waste/boiler (Boiler Management)
+  /dashboard/ytm-shop (YTM Shop)
+  /dashboard/ytm (YTM Maintenance)
+  /dashboard/y-shop (Y Shop / Internal Store)
+  /dashboard/traffic-light (Traffic Light Dashboard)
+  /dashboard/pwip (Production WIP Panel)
+  /dashboard/call-out (Quality Call Out)
+  /dashboard/meeting (Meeting Timeline)
+  /dashboard/meeting-room (Meeting Room Booking)
+  /dashboard/car-booking (Car Booking)
+  /dashboard/cctv/face-scan (CCTV Face Scan Logs)
+  /dashboard/cctv/my-face-scan (My Face Scan)
+  /dashboard/ticket (Support Ticket Management)
+  /dashboard/verify-pr (Verify Purchase Request)
+  /dashboard/approval-pr (Approval Purchase Request)
+  /dashboard/pay-pr (Pay Purchase Request)
+  /dashboard/yhr (YHR Human Resources)
+  /dashboard/recruitment (Recruitment)
+  /dashboard/interview (Interview Management)
+  /dashboard/onboarding (Employee Onboarding)
+  /dashboard/benefit-profile (Benefit Profile)
+  /dashboard/payroll (Payroll)
+  /dashboard/visa-work-permit (Visa & Work Permit)
+  /dashboard/canteen (Canteen Management)
+  /dashboard/nssf (NSSF Management)
+  /dashboard/salary-bill (Salary Bill Overview)
+  /dashboard/monthly-salary (Monthly Salary)
+  /dashboard/weekly-incentive (Weekly Incentive)
+  /dashboard/permit-fee (Permit Fee)
+  /dashboard/resign-payment (Resign Payment)
+  /dashboard/ce (Cost Engineering)
+  /dashboard/standard-time (Standard Time)
+  /dashboard/product-development (Product Development)
+  /dashboard/garment-analysis (Garment Analysis)
+  /dashboard/productivity (Productivity)
+  /dashboard/machine-allocation (Machine Allocation)
+  /dashboard/skill-inventory (Skill Inventory)
+  /dashboard/team-performance (Team Performance)
+  /dashboard/learning-curve (Learning Curve)
+  /dashboard/downtimes (Downtimes)
+  /dashboard/cost-centers (Cost Centers)
+  /dashboard/cpm (Critical Path Method)
+  /dashboard/style-costing (Style Costing)
+  /dashboard/checklist-attendance (Checklist Attendance)
+  /dashboard/my-attendance (My Attendance)
+  /dashboard/compliance-certificate (Compliance Certificate)
+  /dashboard/audit-plan (Audit Plan)
+  /dashboard/checklist-6s (6S Checklist)
+  /dashboard/digital-audit-questions (Digital Audit Questions)
+  /dashboard/purchase-requisition-form (Purchase Requisition Form)
+  /dashboard/show-list-request (Show List Request)
+  /dashboard/master-list (Master List)
+  /dashboard/my-confirm-received (My Confirm Received)
+  /dashboard/org-chart-master (Organization Chart)
+  /dashboard/energy/meters (Energy Meters)
+  /dashboard/energy/switch-board (Switch Board Monitoring)
+  /dashboard/energy/energy-source (Energy Source)
+  /dashboard/energy/solar-dashboard (Solar Dashboard)
+  /dashboard/air/temperature (Temperature Humidity Sensor)
+  /dashboard/air/quality (Air Quality)
+  /dashboard/temp-worker-request/form (Temp Worker Request Form)
+  /dashboard/temp-worker-request/list (Temp Worker Request List)
+  /dashboard/bill-record (Bill Record)
+  /dashboard/water (Water Management)
+  /dashboard/water/in (Water In)
+  /dashboard/water/out (Water Out)
+  /dashboard/gatepass (Gate Pass)
+  /dashboard/gatepass/visitor (Visitor Record)
+  /dashboard/system-analysis (System Analysis)
+  /dashboard/waste (Waste Dashboard)
+  /dashboard/training/:department (Department Training)
+  /dashboard/fc/fabric-receiving (Fabric Receiving)
+  /dashboard/fc/accessories-receiving (Accessories Receiving)
+  /dashboard/fc/fabric-inspection (Fabric Inspection)
+  /dashboard/fc/fabric-test (Fabric Test)
+  /dashboard/fc/accessories-inspection (Accessories Inspection)
+  /dashboard/fc/warehouse-tracking (Warehouse Tracking)
+  /dashboard/fc/consumptions (Material Consumptions)
+  /dashboard/fc/calculator (Material Calculator)
+  /dashboard/fc/fabric-issuing (Fabric Issuing)
+  /dashboard/fc/accessories-issuing (Accessories Issuing)
+  /dashboard/fc/delivery-tracking (Delivery Tracking)
+  /dashboard/fc/return-fabric (Return Fabric)
+  /dashboard/fc/return-accessories (Return Accessories)
+  /dashboard/fc/brand-protection (Brand Protection)
+  /dashboard/yqms/qc-file (QC File)
+  /dashboard/yqms/pre-production-meeting (Pre-Production Meeting)
+  /dashboard/yqms/fin-check (Final Check Dashboard)
+  /dashboard/yqms/rolling-qc (Internal Rolling QC)
+  /dashboard/yqms/cutting-inspection (Cutting Inspection)
+  /dashboard/yqms/sewing-output (Garment Check Output)
+  /dashboard/yqms/packing-inspection (Packing Inspection)
+  /dashboard/yqms/final-inspection (Final Inspection)
+  /dashboard/yqms/20pcs-audit (QA 20pcs Audit)
+  /dashboard/yqms/inline-audit (Inline Audit Rolling)
+  /dashboard/yqms/offline-audit (Offline Audit)
+  /dashboard/yqms/endline-check (QC End Line Checking)
+  /dashboard/yqms/first-output-cutting (First Output Cutting)
+  /dashboard/yqms/pre-final (Pre Final Inspection)
+  /dashboard/yqms/buyer-final (Buyer Final Inspection)
+  /dashboard/yqms/supplier-evaluation (Supplier Evaluation)
+  /dashboard/yqms/cap (Customer Complaint CAP)
+  /dashboard/yqms/qa-audit-finishing (QA Audit Finishing Packing)
+  /dashboard/yqms/first-output-finishing (First Output Finishing and Packing)
+  /dashboard/yqms/report (YQMS Report)
+  /dashboard/yqms/ironing-inspection (Ironing Inspection)
+  /dashboard/yqms/aquaboy (Humidity Aquaboy Checking)
+  /dashboard/yqms/aquaboy/list (Aquaboy Report List)
+  /dashboard/yqms/dashboard (YQMS Dashboard)
+  /dashboard/yqms/qc-roving (QC Roving Dashboard)
+  /dashboard/yqms/cutting (Cutting Dashboard)
+  /dashboard/yqms/first-output-print (First Output Printing/Embroidery)
+  /dashboard/yqms/first-output-sewing (First Output Sewing)
+  /dashboard/yqms/qa-cutting (QA Cutting)
+  /dashboard/yqms/qa-print (QA Printing/Embroidery)
+  /dashboard/yqms/cut-panel-inspection (Cut Panel Inspection)
+  /dashboard/yqms/printing-inspection (Printing Inspection)
+  /dashboard/yqms/embroidery-inspection (Embroidery Inspection)
+  /dashboard/yqms/finishing-inspection (Finishing Inspection)
+  /dashboard/shipping/request (Shipping Request)
+  /dashboard/money-claim (Money Claim)
+  /dashboard/autopost (AutoPost Social Media)
+
+================================================================================
+13. ROBOTS.TXT RECOMMENDATIONS
+================================================================================
+
+Current robots.txt is minimal. Recommended update:
+
+  User-agent: *
+  Allow: /
+  Disallow: /static/
+  Disallow: /dashboard/verify-pr
+  Disallow: /dashboard/approval-pr
+  Disallow: /dashboard/pay-pr
+  Disallow: /dashboard/payroll
+  Disallow: /dashboard/salary-bill
+  Disallow: /dashboard/cctv/
+  Disallow: /dashboard/gatepass/visitor
+
+  # Allow all public/marketing pages
+  Allow: /welcome
+  Allow: /
+
+  Sitemap: https://demo1.yaikh.com/sitemap.xml
+  Sitemap: https://yaikh.com/sitemap.xml
+
+NOTE: The main production system (ym.yaikh.com) should have:
+  User-agent: *
+  Disallow: /
+  — to prevent search engines from indexing the private production system.
+
+================================================================================
+14. QUICK-WIN SEO ACTION ITEMS
+================================================================================
+
+IMMEDIATE ACTIONS (Do Today):
+  ✓ Update <title> tag in public/index.html to:
+    "Yaikh — AI-Powered Smart Factory Management Platform | Cambodia"
+  ✓ Update <meta name="description"> to a keyword-rich 155-character description.
+  ✓ Add Open Graph tags (og:title, og:description, og:image, og:url).
+  ✓ Add Twitter Card meta tags.
+  ✓ Add structured data JSON-LD (see Section 10 above).
+  ✓ Upload a proper og:image (1200x630px) — can use home.png.
+  ✓ Add <html lang="en"> — DONE (already present in index.html).
+
+SHORT-TERM ACTIONS (This Week):
+  ✓ Create a proper sitemap.xml listing all public pages.
+  ✓ Update robots.txt with proper directives.
+  ✓ Create an "About Yaikh" landing page with rich content.
+  ✓ Create individual feature pages for top 5 modules (YQMS, YHR, Energy, FC, CE).
+  ✓ Add canonical URLs on all pages.
+  ✓ Register yaikh.com in Google Search Console.
+  ✓ Register in Bing Webmaster Tools.
+  ✓ Submit sitemap to Google Search Console.
+  ✓ Add Google Analytics 4 tracking.
+
+MEDIUM-TERM ACTIONS (This Month):
+  ✓ Write 3-5 blog posts on target keywords (see Section 11).
+  ✓ Create a YouTube channel with demo videos (already have OT Cost,
+    Support Ticket, Purchase, Production videos — upload them!).
+  ✓ List TexLink Technologies on Google My Business (Phnom Penh).
+  ✓ Get backlinks from Cambodia tech directories and industry publications.
+  ✓ Create a LinkedIn company page for TexLink Technologies.
+  ✓ Translate key landing pages into Khmer for local Cambodia SEO.
+  ✓ Add FAQ schema markup to module pages.
+  ✓ Improve Core Web Vitals — ensure LCP < 2.5s, FID < 100ms, CLS < 0.1.
+
+LONG-TERM ACTIONS (This Quarter):
+  ✓ Build a comprehensive help center / documentation site.
+  ✓ Create case studies from actual factory clients.
+  ✓ Start link-building outreach to garment industry publications.
+  ✓ Consider a Khmer-language version of the main website.
+  ✓ Add review/testimonial schema for social proof.
+  ✓ Build an affiliate or partner program page.
+
+================================================================================
+15. ABOUT US PAGE — FULL CONTENT
+================================================================================
+
+The About Us page is accessible from the dashboard header (Info icon ℹ).
+It displays in a 3-column layout with: Company identity (left), Platform
+description & technologies (center), and Team Members (right).
+
+--- OFFICIAL PLATFORM DESCRIPTION (3 Languages) ---
+
+  ENGLISH:
+  "Yaikh is a manufacturing solution platform specially designed for garment,
+  footwear, bags, and softgoods manufacturing. Owned by TexLink Technologies
+  registered in Cambodia, the platform operates on Windows, iOS, and Android
+  platforms."
+
+  KHMER (ខ្មែរ):
+  "Yaikh គឺជាវេទិកាដំណោះស្រាយសម្រាប់ការផលិតដែលត្រូវបានរចនាជាពិសេសសម្រាប់
+  ការផលិតសម្លៀកបំពាក់ ស្បែកជើង កាបូប និងផលិតផល ក្រណាត់ស្រាលទន់ៗ ផ្សេងៗ។
+  ជាកម្មសិទ្ធិរបស់ TexLink Technologies ដែលបានចុះបញ្ជីនៅកម្ពុជា
+  វេទិកានេះដំណើរការលើប្រព័ន្ធ Windows, iOS, និង Android។"
+
+  CHINESE (中文):
+  "Yaikh 是一个专门为服装、鞋类、箱包和软质品制造业设计的生产解决方案平台。
+  该平台归属在柬埔寨注册的 TexLink Technologies 公司所有，
+  并支持 Windows、iOS和Android 操作系统"
+
+KEY FACTS FROM THE ABOUT US PAGE:
+  • Company Legal Name: TexLink Technologies Co., Ltd.
+    (Khmer: តិចលីង តិចណូឡូជី ឯ.ក)
+  • Registered in: Cambodia
+  • Platforms: Windows, iOS (App Store), Android (Google Play)
+  • Industries served: Garment, Footwear, Bags, Softgoods Manufacturing
+
+OPERATING REGIONS (Flags displayed):
+  • Hong Kong
+  • Cambodia (primary/highlighted)
+  • Singapore
+
+--- OFFICIAL CERTIFICATES & REGISTRATIONS ---
+  • MOC Certificate (Ministry of Commerce — Cambodian business registration)
+  • ICT Certificate (Information & Communication Technology certification)
+  • TAFTAC (Textile, Apparel, Footwear & Travel goods Association of Cambodia)
+  • QIP CDC (Qualified Investment Project — Council for the Development of Cambodia)
+
+  These certificates establish Yaikh/TexLink Technologies as a legally
+  registered, certified technology business in Cambodia serving the
+  textile and apparel industry.
+
+--- TECHNOLOGY STACK (from About Us page) ---
+  Backend Technologies:
+  • Laravel (PHP framework)
+  • MongoDB (NoSQL database)
+  • React (Frontend framework)
+  • Node.js (JavaScript runtime)
+  • Express.js (Node.js web framework)
+
+  AI Technologies:
+  • Google Gemini (primary AI model — Gemini 2.5 Flash)
+  • DeepSeek (supplementary AI)
+  • Claude (Anthropic AI)
+  • NVIDIA (GPU infrastructure)
+  • AMD (hardware infrastructure)
+
+  DevOps:
+  • GitHub (source control)
+
+--- FULL DEVELOPMENT TEAM (from About Us page) ---
+
+  1. Arnold — Team Member
+
+  2. Gamini K — Manager YAI
+     Contact: +855 92 973 194 | Email: gamini@yalkh.com
+
+  3. Peang Sereysothirich — Full-Stack Developer & DevOps Engineer
+     Contact: +855 10 460 407 | Email: sothirich.p@yorkmars.com
+     Skills: Laravel, PHP, NodeJS, MongoDB, Java & JavaFX, Discord Bot,
+             Flutter, React Native, Huawei Cloud, AWS, Cyber Security,
+             Splunk BOTS, AI, Telegram Bot, Sketch 3D, DevOps,
+             RESTful API, GraphQL, Machine Learning
+     Projects:
+       - Jan 2025–Present: PM & Full-Stack Developer at Myelin Technologies (UK)
+       - May 2024–Present: Full-Stack Developer & DevOps Engineer at YalKH
+       - May 2024–Present: Full-Stack Developer at G ACC
+       - Nov 2024–Mar 2025: Full-Stack Developer at COC2025
+
+  4. Van Virot — Full-Stack Developer
+     Contact: +855 71 651 6791 | Email: bongloyfo@gmail.com
+     Skills: Laravel, PHP, Java, JavaScript & jQuery, PostgreSQL,
+             MySQL, MongoDB, Firmware Development
+     Projects: Stock management system, Hospital management system,
+               SmartPage Builder, Official website
+
+  5. Samnang Keo — Lead Mobile Developer
+     Contact: +855 96 798 9019 | Email: samnangkeo.lo.23@gmail.com
+     Skills: Flutter & Dart, Firebase, RESTful APIs, Git, GitHub/GitLab,
+             Android & iOS app deployment
+     Projects: Yal App (Yorkmars Cambodia), Anakut Digital
+
+  6. Dilan Lakmal — Lead Data Engineer
+     Contact: +855 75 891 3639 | Email: dilan@yorkmars.com
+     Skills: Full-Stack Web Developer, Data Engineer, Power BI Specialist
+     Projects:
+       - YQMS (Dec 2024–ongoing) — 20+ sub-systems
+       - YQMS Visualization (Phase 2)
+       - YQMS AI (Phase 3)
+       - Power BI Data Analysis (Aug 2022–Nov 2024) — YM, YY, CA factories
+
+  7. Samipath Yasomi — Data Analytics
+     Contact: +855 75 201 2316 | Email: payasomi@gmail.com
+     Skills: HTML, Python, C++/C#, JavaScript, VS Code, React
+
+  8. Pich Daly — Digital Development Supervisor
+     Contact: +855 78 255 700 | Email: dalypich100@gmail.com
+
+  9. Chhang Mengchhay — Mobile Developer
+     Contact: +855 85 807 492 | Email: chhayhighlay1232@gmail.com
+     Skills: Flutter, API-Laravel, DB Management, AWS, Java,
+             Chinese Calligraphy, Chinese Painting
+
+  10. Chhim Seangleng — Web Developer
+      Contact: +855 98 594 600 | Email: chhimseangleng123@gmail.com
+      Skills: HTML, CSS, Bootstrap, JavaScript, Java, SQL Server
+
+  11. Koem Chichhong — Software Engineering
+      Contact: +855 61 361 239 | Email: chichhorng.koem@student.cadt.edu.kh
+      Skills: Flutter, HTML, CSS, JavaScript, MySQL, C/C++,
+              DigitalOcean Deployment
+
+  Additional Team Members:
+  12. Yeom Chetra
+  13. Sobon Menghorng
+  14. Sin Khun
+  15. Proeurng Sokhim
+  16. Voun Thida
+  17. Dot Sreynoch
+  18. Ton Noeun
+  19. Young Sengheang
+  20. Van Phanith
+  21. Koem Phanny
+
+================================================================================
+16. MOBILE APP — YAIKH ON IOS & ANDROID
+================================================================================
+
+Yaikh has official mobile apps available on both major app stores:
+
+  ANDROID (Google Play Store):
+  Link: https://play.google.com/store/apps/details?id=com.yorkmars.ymapp
+  Package ID: com.yorkmars.ymapp
+
+  iOS (Apple App Store — Cambodia):
+  Link: https://apps.apple.com/kh/app/yaikh/id6756765341
+  App ID: 6756765341
+
+  MOBILE FEATURES:
+  • Access all Yaikh modules from smartphone
+  • Role-based access — employees see only their relevant modules
+  • Works on iOS and Android
+  • Same AI chatbot assistants as web version
+  • Real-time notifications (Bell icon with 24+ notification support)
+  • QR Code scanning (integrated QR code reader)
+
+  SEO NOTE: Having apps on both stores significantly boosts brand authority
+  and searchability. These should be linked from the main yaikh.com website
+  with app schema markup and app store links.
+
+  App Store Schema to add to website:
+  "softwareRequirements": "iOS 14+, Android 8+",
+  "downloadUrl": "https://apps.apple.com/kh/app/yaikh/id6756765341",
+  "installUrl": "https://play.google.com/store/apps/details?id=com.yorkmars.ymapp"
+
+================================================================================
+17. DASHBOARD HEADER NAVIGATION — COMPLETE FEATURE LIST
+================================================================================
+
+The main dashboard header (top navigation bar) contains:
+
+  LEFT SECTION:
+  • Logo (Yaikh logo — links to home)
+  • User Profile (photo, name "Sin Khon", ID: YM7584)
+  • QR Code Scanner button
+  • Bell Notification (shows count badge — e.g., 24 notifications)
+
+  RIGHT SECTION (Desktop):
+  • Video 📹 — Opens the Welcome/Video demo page (/welcome)
+  • About Us ℹ️ — Opens the full About Us page
+  • Vendor 📄 — Opens vendor PDF document (/assets/vendor/vendor.pdf)
+  • Price 💲 — Opens pricing image (/assets/vendor/price1.jpg)
+  • Pictures 🖼️ — Opens the Book/Gallery Viewer
+  • Phone Screenshots 📱 — Opens phone screenshot viewer
+  • Mail ✉️ — Email link
+  • Calendar 📅 — Calendar access
+  • Chat 💬 — Messaging
+  • Shopping Cart 🛒
+  • Tickets 🎫
+
+  LANGUAGE SELECTOR:
+  • English (🇬🇧 UK flag)
+  • ខ្មែរ — Khmer (🇰🇭 Cambodia flag)
+  • 中文 — Chinese (🇨🇳 China flag)
+
+  COUNTRY/REGION SELECTOR:
+  • AT (default — showing Austria code, likely customizable)
+
+  MOBILE MENU:
+  • Hamburger menu (≡) on mobile devices
+  • Expands to show all features as vertical list
+
+  APP STORE BADGES (visible on extra-wide screens 2XL+):
+  • Google Play Store badge → links to app
+  • Apple App Store badge → links to iOS app
+
+  AI ASSISTANT BUTTONS (in main content area):
+  • YAI Data Bot — data analytics AI
+  • General AI Agent — full Gemini AI assistant
+  • GM Chat — General Management chat
+  • Specialized PA buttons per module section
+
+================================================================================
+18. YAIKH DEMO VIDEOS (Welcome Page)
+================================================================================
+
+The welcome page (/welcome) shows 4 instructional demo videos in a 2x2 grid.
+Videos are available in English and Chinese (switchable with language button).
+
+  Video 1: OT Cost (Overtime Cost Management)
+    EN file: /assets/videos/ot-cost.mp4
+    ZH file: /assets/videos/chinese/ot-cost-chinese.mp4
+    Thumbnail: /assets/videos/ot-cost-preview.jpg
+    Department: Production
+
+  Video 2: Support Ticket System
+    EN file: /assets/videos/Support-Ticket-System.mp4
+    ZH file: /assets/videos/chinese/support-ticket-chinese.mp4
+    Thumbnail: /assets/videos/support-ticket-preview.jpg
+    Department: Account Department
+
+  Video 3: Yai Purchase (Purchase Request System)
+    EN file: /assets/videos/Yai-Purhcase.mp4
+    ZH file: /assets/videos/chinese/purchase-request-chinese.mp4
+    Thumbnail: /assets/videos/purchase-preview.jpg
+    Department: Planning Department
+
+  Video 4: Production Record
+    EN file: /assets/videos/production-record.mp4
+    ZH file: /assets/videos/chinese/production-chinese.mp4
+    Thumbnail: /assets/videos/production-preview.jpg
+    Department: Warehouse
+
+  SEO NOTE: These videos should be uploaded to YouTube with proper titles,
+  descriptions, and tags. They will drive organic search traffic and can
+  be embedded on landing pages for much better SEO and conversion rates.
+
+  Recommended YouTube video titles:
+  1. "Yaikh OT Cost Management — AI-Powered Overtime Tracking for Factories"
+  2. "Yaikh Support Ticket System — IT Help Desk for Manufacturing Companies"
+  3. "Yaikh Purchase Request — Digital Procurement for Garment Factories"
+  4. "Yaikh Production Record System — Real-Time Factory Production Tracking"
+
+================================================================================
+END OF YAIKH SEO MASTER REPORT (COMPLETE EDITION)
+================================================================================
+
+Report Summary:
+  - Platform: Yaikh (yaikh.com) by TexLink Technologies Co., Ltd.
+  - Demo: https://demo1.yaikh.com
+  - Production: https://ym.yaikh.com
+  - Mobile Apps: Google Play (com.yorkmars.ymapp) + App Store (id6756765341)
+  - Modules Documented: 40+ modules across Administration and Operations
+  - AI Agents Documented: 10 specialized AI Personal Assistants
+  - Routes Documented: 100+ application routes
+  - Team Members Documented: 21 team members
+  - Certificates: MOC, ICT, TAFTAC, QIP CDC
+  - Operating Regions: Cambodia, Hong Kong, Singapore
+  - Demo Videos: 4 (English + Chinese versions)
+  - SEO Keywords: 30+ primary and long-tail keywords identified
+  - Action Items: 25+ prioritized SEO improvements
+  - Industry: Garment, Footwear, Bags, Softgoods manufacturing
+  - Region: Cambodia, Southeast Asia, Hong Kong, Singapore
+
+Source: Deep code analysis of yaikh-dashboard
+Path: c:\Users\SETHI\Desktop\Yaikh-demo\yaikh-dashboard
+
+================================================================================

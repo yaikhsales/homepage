@@ -380,25 +380,16 @@ export const ThemeBackground = () => {
       className="fixed inset-0 overflow-hidden pointer-events-none bg-slate-900"
       style={{ zIndex: -1, width: "100vw", height: "100vh" }}
     >
-      {/* Blurred background layer to fill empty widescreen margins beautifully */}
       <img
-        src="/assets/background/robot-bg-ai.png"
-        className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 scale-105"
+        src="/assets/circuit-bg.jpg"
+        alt="Theme Background"
+        className="absolute inset-0 w-full h-full object-cover"
         style={{ zIndex: -2 }}
         onError={(e) => { e.target.style.display = "none"; }}
       />
-
-      {/* Main crisp visible image without cropping the robot's head */}
-      <img
-        src="/assets/background/robot-bg-ai.png"
-        alt="Robot AI Background"
-        className="absolute inset-0 w-full h-full object-contain"
-        style={{ zIndex: -1, opacity: 0.85 }}
-        onError={(e) => { e.target.style.display = "none"; }}
-      />
       
-      {/* Soft gradient overlay to keep dashboard text perfectly readable */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-900/30 to-slate-900/60" style={{ zIndex: 0 }}></div>
+      {/* Very light overlay to ensure some text readability if needed */}
+      <div className="absolute inset-0 bg-slate-900/10" style={{ zIndex: 0 }}></div>
     </div>,
     document.body,
   );
