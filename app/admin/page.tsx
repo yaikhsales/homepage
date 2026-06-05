@@ -9,8 +9,11 @@ export default async function AdminDashboard() {
   const salaryStore = await readSalaryStore();
   const salesStore = await readSalesStore();
   const expensesStore = await readExpensesStore();
+  // Exclude e-com streams — they store user counts, not dollars.
   const salesGrand = salesStore.streams.reduce<number>(
-    (s, st) => s + Object.values(st.monthly).reduce<number>((ss, c) => ss + (c.actual ?? c.planned ?? 0), 0),
+    (s, st) => st.category === "ecom"
+      ? s
+      : s + Object.values(st.monthly).reduce<number>((ss, c) => ss + (c.actual ?? c.planned ?? 0), 0),
     0,
   );
   const expensesGrand = expensesStore.categories.reduce<number>(

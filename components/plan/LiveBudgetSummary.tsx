@@ -25,15 +25,19 @@ export async function LiveBudgetSummary() {
     readExpensesStore(),
   ]);
 
-  // Aggregate
+  // Aggregate — e-com streams store user counts, not dollars, so SKIP them
+  // from the revenue $ total (their numbers belong in a separate user-count chart).
   const revenueByMonth: Record<string, number> = {};
   const revenueByStream = sales.streams.map((st) => {
     let total = 0;
-    for (const [m, cell] of Object.entries(st.monthly)) {
-      // Prefer actual booked $; fall back to planned forecast where no actual is recorded
-      const v = cell.actual ?? cell.planned ?? 0;
-      total += v;
-      revenueByMonth[m] = (revenueByMonth[m] ?? 0) + v;
+    const isMoney = st.category !== "ecom";
+    if (isMoney) {
+      for (const [m, cell] of Object.entries(st.monthly)) {
+        // Prefer actual booked $; fall back to planned forecast where no actual is recorded
+        const v = cell.actual ?? cell.planned ?? 0;
+        total += v;
+        revenueByMonth[m] = (revenueByMonth[m] ?? 0) + v;
+      }
     }
     return { ...st, total };
   });
