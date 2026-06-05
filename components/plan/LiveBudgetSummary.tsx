@@ -75,37 +75,62 @@ export async function LiveBudgetSummary() {
     .filter(Boolean).sort().reverse()[0];
 
   return (
-    <div className="space-y-4">
-      {/* Headline numbers — Income · Salaries · Capex · Net (4 stat tiles) */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <MiniStat label="01 · Income"   value={fmt(totalRevenue)}                 sub="Booked (Jun 2026 →)"          color="#10B981" />
-        <MiniStat label="02 · Salaries" value={fmt(totalSalary)}                  sub={`${salaries.members.filter((m) => m.status === "active").length} active · ${salaries.months.length} mo`} color="#1E4DAA" />
-        <MiniStat label="03 · Capex"    value={fmt(totalExpenses)}                sub={`${expensesByCategory.length} cats`} color="#F37021" />
-        <MiniStat
-          label="04 · Net"
-          value={fmt(netPosition)}
-          sub={netPosition >= 0 ? "Surplus" : "Investment build"}
-          color={netPosition >= 0 ? "#10B981" : "#0A1F47"}
-        />
-      </div>
+    <div className="space-y-3">
+      {/* 01 · INCOME — one chart, no sub-card palettes */}
+      <GtmEnablerBar
+        num="01"
+        tag="INCOME"
+        title="Sales / Income"
+        desc="11 streams — 8 planned packages (Cloud × 3 · Ai Server · Admin Tools · Ops Tools · Agentic · Big Ai Brain) + 3 variable-reach e-com streams. Tracking starts Jun 2026."
+        color="#10B981"
+        bg="#ECFDF5"
+        badge={fmt(totalRevenue)}
+        badgeLabel="Booked"
+      >
+        <MonthlySparkline label="Income · quarterly" months={allMonths} values={revenueByMonth} color="#10B981" />
+      </GtmEnablerBar>
 
-      {/* ONE consolidated chart — all 4 flows on the same timeline */}
-      <div className="rounded-xl border border-yai-border bg-white p-4 sm:p-5">
-        <div className="flex items-baseline justify-between gap-3 mb-2 flex-wrap">
-          <h4 className="font-bold text-yai-navy text-sm uppercase tracking-wider">
-            Quarterly · Income vs Salaries + Capex
-          </h4>
-          <span className="text-[10px] text-gray-500 italic">
-            Income − (Salaries + Capex) = Net (line)
-          </span>
-        </div>
-        <NetSparkline
-          months={allMonths}
-          revenueByMonth={revenueByMonth}
-          salaryByMonth={salaryByMonth}
-          expensesByMonth={expensesByMonth}
-        />
-      </div>
+      {/* 02 · SALARIES — one chart */}
+      <GtmEnablerBar
+        num="02"
+        tag="EXPENSES"
+        title="Salaries · compensation paid"
+        desc={`${salaries.members.length} members tracked from May 2024 onward. Includes bonuses.`}
+        color="#1E4DAA"
+        bg="#EFF6FF"
+        badge={fmt(totalSalary)}
+        badgeLabel="Paid"
+      >
+        <MonthlySparkline label="Salaries · quarterly" months={allMonths} values={salaryByMonth} color="#1E4DAA" />
+      </GtmEnablerBar>
+
+      {/* 03 · CAPEX — one chart */}
+      <GtmEnablerBar
+        num="03"
+        tag="CAPEX"
+        title="Capex + running costs"
+        desc={`${expensesByCategory.length} categories — Computers, Furniture, Dev gear, Admin Shop, Ai Fees, Villa Rent, Petty Cash + Promotion.`}
+        color="#F37021"
+        bg="#FFF7ED"
+        badge={fmt(totalExpenses)}
+        badgeLabel="Spent"
+      >
+        <MonthlySparkline label="Capex · quarterly" months={allMonths} values={expensesByMonth} color="#F37021" />
+      </GtmEnablerBar>
+
+      {/* 04 · NET — one chart (revenue up · cost down · net line) */}
+      <GtmEnablerBar
+        num="04"
+        tag="NET"
+        title="Net position · investment build"
+        desc="Income − (Salaries + Capex). Negative is expected during the platform-build phase — see Section 10 for the asset-value offset."
+        color={netPosition >= 0 ? "#10B981" : "#0A1F47"}
+        bg="#F8FAFC"
+        badge={fmt(netPosition)}
+        badgeLabel="Today"
+      >
+        <NetSparkline months={allMonths} revenueByMonth={revenueByMonth} salaryByMonth={salaryByMonth} expensesByMonth={expensesByMonth} />
+      </GtmEnablerBar>
 
       {/* Footer */}
       <div className="text-[10px] text-gray-500 leading-snug pt-1">
