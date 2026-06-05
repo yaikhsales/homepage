@@ -2,9 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate, Outlet } from "react-router-dom";
 import {
   Search,
-  Database,
   ChevronRight,
-  Lightbulb,
   Sparkles,
 } from "lucide-react";
 
@@ -32,10 +30,10 @@ const AppLayout = () => {
   const [botModuleContext, setBotModuleContext] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [showDragon, setShowDragon] = useState(false);
-  const [dragonMode, setDragonMode] = useState("initial");
+  const [dragonMode, setDragonMode] = useState("initial"); // eslint-disable-line no-unused-vars
   const yaiDataButtonRef = useRef(null);
   const [hasPlayedInitialAnimation, setHasPlayedInitialAnimation] =
-    useState(false);
+    useState(false); // eslint-disable-line no-unused-vars
 
   const openBotForModule = (module) => {
     setBotModuleContext(module);
