@@ -195,14 +195,14 @@ export default async function AdminDashboard() {
         />
       </div>
 
-      {/* Investor / pitch downloads */}
+      {/* Strategic DTV downloads */}
       <div className="mt-10 mb-2 text-[10px] uppercase tracking-[0.18em] text-gray-500 font-bold">
-        Investor pack
+        Strategic DTV · downloads
       </div>
       <div className="grid sm:grid-cols-2 gap-4 mb-8">
         <a
           href="/downloads/yai-plan-deck.pptx"
-          download="yai-plan-deck.pptx"
+          download="yai-strategic-dtv.pptx"
           className="group block rounded-xl border-2 border-yai-orange bg-gradient-to-br from-orange-50 to-white p-5 hover:shadow-lg transition-all"
         >
           <div className="flex items-start justify-between mb-2">
@@ -213,11 +213,13 @@ export default async function AdminDashboard() {
               PPTX · 1 + 17 slides
             </span>
           </div>
-          <h2 className="text-lg font-extrabold text-yai-navy">Yai Investor Deck</h2>
+          <h2 className="text-lg font-extrabold text-yai-navy">Yai Strategic DTV deck</h2>
           <p className="text-xs text-gray-600 leading-snug mt-1">
-            Cover slide (Texlink Technologies · STRATEGIC DTV brand) + one slide per plan section
-            (01 Executive Summary → 17 Appendix). Open in PowerPoint or Keynote, or print to PDF for
-            a sharable investor book.
+            PowerPoint version of the public Strategic DTV plan. Cover slide
+            (Texlink Technologies · STRATEGIC DTV brand) + one slide per section
+            (01 Executive Summary → 17 About Yai). Same images, same group colours,
+            same 18-module agent grid as the website. Open in PowerPoint / Keynote,
+            print to PDF for a sharable strategic-DTV book.
           </p>
           <div className="mt-3 text-[10px] text-yai-orange font-bold">
             Click to download → save as PDF in your slide app for a printable book.

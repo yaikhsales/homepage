@@ -93,7 +93,7 @@ function addBrandFrame(slide, kicker, title) {
     x: 0.55, y: SH - 0.4, w: SW - 1.1, h: 0,
     line: { color: LINE, width: 0.5 },
   });
-  slide.addText("Yai · Investor Plan · June 2026", {
+  slide.addText("Yai · Strategic DTV · June 2026", {
     x: 0.55, y: SH - 0.35, w: 5, h: 0.25,
     fontSize: 8, fontFace: FONT_BODY, color: SUBTEXT, margin: 0,
   });
@@ -189,7 +189,7 @@ function bulletBlock(slide, x, y, w, h, items, color = TEXT, fontSize = 12) {
     x: 0.7, y: 4.85, w: 6.5, h: 0.4, fontSize: 11, color: "CADCFC", italic: true, margin: 0,
   });
 
-  slide.addText("YAI · INVESTOR PLAN · JUNE 2026", {
+  slide.addText("YAI · STRATEGIC DTV · JUNE 2026", {
     x: 0.7, y: SH - 0.45, w: 5, h: 0.3,
     fontSize: 8, color: WHITE, bold: true, charSpacing: 5, margin: 0,
   });
@@ -328,62 +328,113 @@ function bulletBlock(slide, x, y, w, h, items, color = TEXT, fontSize = 12) {
 }
 
 // ════════════════════════════════════════════════════════════
-// 05 — AGENTS & SKILLS (grid of real agent avatars)
+// 05 — AGENTS & SKILLS (all 18 modules with native task names)
 // ════════════════════════════════════════════════════════════
 {
   const slide = pres.addSlide();
   slide.background = { color: WHITE };
   addBrandFrame(slide, "05 / AGENTS & SKILLS", "The Agents & Their Skills.");
 
-  slide.addText("17 module families across Administration + Operations — each with its own Ai agents.", {
-    x: 0.55, y: 1.45, w: 9, h: 0.3, fontSize: 11, color: TEXT, italic: true, margin: 0,
+  slide.addText("18 modules — each colour-coded by group, each with its own Ai agents + native tasks.", {
+    x: 0.55, y: 1.40, w: 9, h: 0.25, fontSize: 10, color: TEXT, italic: true, margin: 0,
   });
 
-  // Grid of agent avatars (rows of 12, with cluster colour ring colour-coding)
-  const avatarSize = 0.55;
-  const startX = 0.55, startY = 1.9;
-  const cols = 12;
-  const total = 24;
+  // All 18 modules — same list the public RoadmapTimeline renders.
+  // Group A = Administration (blue), P = Platform (slate-navy), O = Operations (green).
+  const modules = [
+    // ── ADMINISTRATION (9) ──
+    { name: "Admin Core",      tasks: "PR · Shop · Approvals · APP",        group: "A" },
+    { name: "HR · Pay · Org",   tasks: "LMS · Ai CCTV · attendance",         group: "A" },
+    { name: "Digital Audit",   tasks: "8S · AIoT · waste tracking",          group: "A" },
+    { name: "Gate Pass",       tasks: "CTPAT · visitor log",                  group: "A" },
+    { name: "Car Booking ★",   tasks: "Agentic · auto-allocate",              group: "A", agentic: true },
+    { name: "Accounting",      tasks: "Full + GDT filing",                    group: "A" },
+    { name: "Speak Up",        tasks: "Worker voice · anon channel",          group: "A" },
+    { name: "Corp Financials", tasks: "+ IEWS · owner view",                  group: "A" },
+    { name: "Cambodia E-Gov",  tasks: "+ E-Invoice · ministry filings",       group: "A" },
+
+    // ── PLATFORM (1) ──
+    { name: "Platform Core",   tasks: "Laravel · Mongo · Mobile · AIoT · Ai Server", group: "P" },
+
+    // ── OPERATIONS (8) ──
+    { name: "YTM",             tasks: "Machine maintenance · TPM shop",       group: "O" },
+    { name: "YQMS",            tasks: "QC 6 stages · Fini check",             group: "O" },
+    { name: "YPI",             tasks: "Tech specs · 3-language",              group: "O" },
+    { name: "YPM / CE ★",      tasks: "Motion · SMV · Agentic",               group: "O", agentic: true },
+    { name: "Product Dev",     tasks: "Sample room · pattern",                group: "O" },
+    { name: "4DP",             tasks: "Planning brain · 4 dirs × 4 levels",   group: "O" },
+    { name: "MRP + Logistics", tasks: "Inbound + outbound",                   group: "O" },
+    { name: "YWIP",            tasks: "13-dept production flow",              group: "O" },
+  ];
+
+  // Group colours
+  const groupColor = { A: BLUE, P: NAVY, O: GREEN };
+
+  // 6-column × 3-row grid
+  const cols = 6;
+  const gridX = 0.55, gridY = 1.85;
   const gridW = SW - 1.1;
-  const cellW = gridW / cols;
-  for (let i = 0; i < total; i++) {
+  const cardGap = 0.08;
+  const cardW = (gridW - cardGap * (cols - 1)) / cols;
+  const cardH = 0.95;
+  const rowGap = 0.08;
+
+  modules.forEach((m, i) => {
     const r = Math.floor(i / cols);
     const c = i % cols;
-    const x = startX + c * cellW + (cellW - avatarSize) / 2;
-    const y = startY + r * (avatarSize + 0.15);
-    const agentImg = img(`agent-${i + 1}.png`);
-    if (agentImg) {
-      slide.addImage({
-        path: agentImg, x, y, w: avatarSize, h: avatarSize,
-        sizing: { type: "cover", w: avatarSize, h: avatarSize },
-        rounding: true,
+    const x = gridX + c * (cardW + cardGap);
+    const y = gridY + r * (cardH + rowGap);
+    const accent = groupColor[m.group];
+
+    // Card background
+    slide.addShape(pres.shapes.RECTANGLE, {
+      x, y, w: cardW, h: cardH, fill: { color: WHITE }, line: { color: LINE, width: 0.5 },
+    });
+    // Left-edge group accent
+    slide.addShape(pres.shapes.RECTANGLE, {
+      x, y, w: 0.06, h: cardH, fill: { color: accent }, line: { color: accent },
+    });
+    // Star badge for ★ AGENTIC modules
+    if (m.agentic) {
+      slide.addShape(pres.shapes.OVAL, {
+        x: x + cardW - 0.30, y: y + 0.06, w: 0.24, h: 0.24,
+        fill: { color: ORANGE }, line: { color: ORANGE },
+      });
+      slide.addText("★", {
+        x: x + cardW - 0.30, y: y + 0.06, w: 0.24, h: 0.24,
+        fontSize: 10, color: WHITE, bold: true, align: "center", valign: "middle", margin: 0,
       });
     }
-  }
+    // Module name (bold, accent colour)
+    slide.addText(m.name, {
+      x: x + 0.13, y: y + 0.10, w: cardW - 0.40, h: 0.28,
+      fontSize: 10, color: accent, bold: true, margin: 0,
+    });
+    // Native tasks (small muted)
+    slide.addText(m.tasks, {
+      x: x + 0.13, y: y + 0.40, w: cardW - 0.20, h: 0.50,
+      fontSize: 7.5, color: TEXT, margin: 0,
+    });
+  });
 
-  // 4 module-group chips at the bottom
-  const chipY = 3.85, chipH = 1.20, chipGap = 0.10;
-  const chipW = (SW - 1.1 - chipGap * 3) / 4;
-  const chips = [
-    { label: "ADMINISTRATION", count: "9 modules", color: BLUE },
-    { label: "PLATFORM",       count: "1 module · core",  color: NAVY },
-    { label: "OPERATIONS",     count: "8 modules", color: GREEN },
-    { label: "AGENTIC ★",      count: "2 live",    color: ORANGE },
+  // Group legend at the bottom
+  const legY = gridY + 3 * cardH + 2 * rowGap + 0.10;
+  const legends = [
+    { color: BLUE,  label: "ADMINISTRATION · 9 modules" },
+    { color: NAVY,  label: "PLATFORM · 1 module" },
+    { color: GREEN, label: "OPERATIONS · 8 modules" },
+    { color: ORANGE, label: "★ AGENTIC LIVE · Car Booking + YPM/CE" },
   ];
-  chips.forEach((ch, i) => {
-    const x = 0.55 + i * (chipW + chipGap);
+  let legX = 0.55;
+  legends.forEach((l) => {
     slide.addShape(pres.shapes.RECTANGLE, {
-      x, y: chipY, w: chipW, h: chipH,
-      fill: { color: WHITE }, line: { color: ch.color, width: 1.5 },
+      x: legX, y: legY, w: 0.18, h: 0.14, fill: { color: l.color }, line: { color: l.color },
     });
-    slide.addText(ch.label, {
-      x: x + 0.12, y: chipY + 0.18, w: chipW - 0.24, h: 0.25,
-      fontSize: 9, color: ch.color, bold: true, charSpacing: 3, margin: 0,
+    slide.addText(l.label, {
+      x: legX + 0.22, y: legY - 0.04, w: 2.5, h: 0.22,
+      fontSize: 8, color: NAVY, bold: true, charSpacing: 2, margin: 0,
     });
-    slide.addText(ch.count, {
-      x: x + 0.12, y: chipY + 0.55, w: chipW - 0.24, h: 0.55,
-      fontSize: 18, color: NAVY, bold: true, margin: 0,
-    });
+    legX += 2.4;
   });
 }
 
