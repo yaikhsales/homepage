@@ -228,11 +228,21 @@ export async function readSalesStore(): Promise<SalesStore> {
   try {
     const text = await fs.readFile(FILE, "utf-8");
     const parsed = JSON.parse(text) as SalesStore;
+    const saved = parsed.streams ?? [];
+
+    // Merge: keep ALL saved streams (with their monthly cells intact),
+    // append any seed streams that aren't in the saved file yet.
+    // This way the user never loses data, and new seed entries flow in
+    // when the code adds them.
+    const savedIds = new Set(saved.map((s) => s.id));
+    const newFromSeed = SEED_SALES_STORE.streams.filter((s) => !savedIds.has(s.id));
+    const mergedStreams = [...saved, ...newFromSeed];
+
     return {
       updatedAt: parsed.updatedAt ?? null,
       updatedBy: parsed.updatedBy ?? null,
       months: buildMonths(parsed.months),
-      streams: parsed.streams ?? SEED_SALES_STORE.streams,
+      streams: mergedStreams,
     };
   } catch {
     return {

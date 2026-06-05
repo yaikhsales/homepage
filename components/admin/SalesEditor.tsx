@@ -51,13 +51,17 @@ export function SalesEditor({ initial }: { initial: Store }) {
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState("");
 
-  // Per-month totals (excluding e-com streams that are uncertain — they're still counted, just visually flagged)
+  // Per-month $ totals — exclude e-com streams (their cells store user/people counts, not money)
   const monthTotals = useMemo(() => {
     return store.months.map((m) =>
-      store.streams.reduce<number>((s, st) => s + (st.monthly[m]?.[view] ?? 0), 0)
+      store.streams.reduce<number>(
+        (s, st) => (st.category === "ecom" ? s : s + (st.monthly[m]?.[view] ?? 0)),
+        0
+      )
     );
   }, [store, view]);
 
+  // Per-stream totals — for $ streams = revenue total; for e-com = sum of monthly user counts
   const streamTotals = useMemo(() => {
     return store.streams.map((st) =>
       store.months.reduce<number>((s, m) => s + (st.monthly[m]?.[view] ?? 0), 0)
@@ -199,10 +203,11 @@ export function SalesEditor({ initial }: { initial: Store }) {
                     const v = cell?.[view] ?? 0;
                     const otherView = view === "planned" ? "actual" : "planned";
                     const otherV = cell?.[otherView] ?? 0;
-                    // Each up-arrow click = +1 client = +unitPrice $. E-com streams have unitPrice=0
-                    // (variable rev) so fall back to 0.01 step so the user can still type free-form $.
-                    const stepSize = stream.unitPrice > 0 ? stream.unitPrice : 0.01;
-                    const clients = stream.unitPrice > 0 && v > 0 ? Math.round(v / stream.unitPrice) : 0;
+                    const isEcom = stream.category === "ecom";
+                    // For SaaS / hardware streams: arrow step = unit price (= 1 client increment).
+                    // For e-com: cells store USER / PEOPLE counts, not $. Arrow step = 1.
+                    const stepSize = isEcom ? 1 : stream.unitPrice > 0 ? stream.unitPrice : 0.01;
+                    const clients = !isEcom && stream.unitPrice > 0 && v > 0 ? Math.round(v / stream.unitPrice) : 0;
                     return (
                       <td key={m} className="px-1 py-0.5 align-top">
                         <div className="flex flex-col">
@@ -215,20 +220,29 @@ export function SalesEditor({ initial }: { initial: Store }) {
                             placeholder="—"
                             title={
                               otherV > 0
-                                ? `${otherView}: $${otherV.toLocaleString()}`
-                                : stream.unitPrice > 0
-                                  ? `↑ adds 1 client = +$${stream.unitPrice}`
-                                  : undefined
+                                ? `${otherView}: ${isEcom ? otherV.toLocaleString() + " users" : "$" + otherV.toLocaleString()}`
+                                : isEcom
+                                  ? "↑ adds 1 user"
+                                  : stream.unitPrice > 0
+                                    ? `↑ adds 1 client = +$${stream.unitPrice}`
+                                    : undefined
                             }
                             className={`w-full text-right text-[11px] tabular-nums px-1 py-1 rounded border focus:outline-none focus:border-yai-blue ${
                               v > 0
-                                ? view === "planned"
-                                  ? "text-yai-blue font-semibold border-transparent bg-blue-50/40 hover:bg-blue-50"
-                                  : "text-emerald-700 font-semibold border-transparent bg-emerald-50/40 hover:bg-emerald-50"
+                                ? isEcom
+                                  ? "text-amber-700 font-semibold border-transparent bg-amber-50/40 hover:bg-amber-50"
+                                  : view === "planned"
+                                    ? "text-yai-blue font-semibold border-transparent bg-blue-50/40 hover:bg-blue-50"
+                                    : "text-emerald-700 font-semibold border-transparent bg-emerald-50/40 hover:bg-emerald-50"
                                 : "text-gray-300 border-transparent bg-gray-50/50 hover:bg-blue-50"
                             }`}
                           />
-                          {clients > 0 && (
+                          {isEcom && v > 0 && (
+                            <span className="text-[8px] text-gray-400 leading-tight pl-1 mt-0.5 text-right tabular-nums">
+                              {v.toLocaleString()} users
+                            </span>
+                          )}
+                          {!isEcom && clients > 0 && (
                             <span className="text-[8px] text-gray-400 leading-tight pl-1 mt-0.5 text-right tabular-nums">
                               {clients} {clients === 1 ? "client" : "clients"}
                             </span>
@@ -237,8 +251,20 @@ export function SalesEditor({ initial }: { initial: Store }) {
                       </td>
                     );
                   })}
-                  <td className={`px-2 py-1 text-right font-extrabold tabular-nums ${view === "planned" ? "text-yai-blue bg-blue-50/50" : "text-emerald-700 bg-emerald-50/50"}`}>
-                    {streamTotals[i] > 0 ? `$${streamTotals[i].toLocaleString(undefined, { maximumFractionDigits: 0 })}` : "—"}
+                  <td
+                    className={`px-2 py-1 text-right font-extrabold tabular-nums ${
+                      isUncertain
+                        ? "text-amber-700 bg-amber-50/50"
+                        : view === "planned"
+                          ? "text-yai-blue bg-blue-50/50"
+                          : "text-emerald-700 bg-emerald-50/50"
+                    }`}
+                  >
+                    {streamTotals[i] > 0
+                      ? stream.category === "ecom"
+                        ? `${streamTotals[i].toLocaleString(undefined, { maximumFractionDigits: 0 })} users`
+                        : `$${streamTotals[i].toLocaleString(undefined, { maximumFractionDigits: 0 })}`
+                      : "—"}
                   </td>
                   <td className="px-2 py-1">
                     <div className="flex flex-col items-center gap-1">
