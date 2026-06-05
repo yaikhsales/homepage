@@ -76,29 +76,10 @@ export async function LiveBudgetSummary() {
 
   return (
     <div className="space-y-3">
-      {/* 01 · NET (summary on top) */}
+      {/* 01 · INCOME (Sales / revenue) */}
       <GtmEnablerBar
         num="01"
-        tag="NET"
-        title="Net position · investment build"
-        desc="Revenue − (Salaries + Expenses). Negative is expected during the platform-build phase — see Section 10 for the asset-value offset."
-        color={netPosition >= 0 ? "#10B981" : "#0A1F47"}
-        bg="#F8FAFC"
-        badge={fmt(netPosition)}
-        badgeLabel="Today"
-      >
-        <div className="grid sm:grid-cols-3 gap-3 mb-3">
-          <MiniStat label="In" value={fmt(totalRevenue)} sub="Revenue booked" color="#10B981" />
-          <MiniStat label="Out" value={fmt(totalSalary + totalExpenses)} sub={`Salaries ${fmt(totalSalary)} + Expenses ${fmt(totalExpenses)}`} color="#F37021" />
-          <MiniStat label="Net" value={fmt(netPosition)} sub={netPosition >= 0 ? "Surplus" : "Investment build"} color={netPosition >= 0 ? "#10B981" : "#0A1F47"} />
-        </div>
-        <NetSparkline months={allMonths} revenueByMonth={revenueByMonth} salaryByMonth={salaryByMonth} expensesByMonth={expensesByMonth} />
-      </GtmEnablerBar>
-
-      {/* 02 · Revenue */}
-      <GtmEnablerBar
-        num="02"
-        tag="REVENUE"
+        tag="INCOME"
         title="Sales / Income"
         desc="11 streams — 8 planned packages (Cloud × 3 · Ai Server · Admin Tools · Ops Tools · Agentic · Big Ai Brain) + 3 variable-reach e-com streams. Tracking starts Jun 2026."
         color="#10B981"
@@ -110,11 +91,11 @@ export async function LiveBudgetSummary() {
         <MonthlySparkline label="Revenue · monthly" months={allMonths} values={revenueByMonth} color="#10B981" />
       </GtmEnablerBar>
 
-      {/* 03 · Salaries */}
+      {/* 02 · EXPENSES (Salaries — the people cost) */}
       <GtmEnablerBar
-        num="03"
-        tag="SALARIES"
-        title="Compensation paid"
+        num="02"
+        tag="EXPENSES"
+        title="Salaries · compensation paid"
         desc={`${salaries.members.length} members tracked from May 2024 onward. Includes bonuses.`}
         color="#1E4DAA"
         bg="#EFF6FF"
@@ -129,11 +110,11 @@ export async function LiveBudgetSummary() {
         <MonthlySparkline label="Salaries · monthly" months={allMonths} values={salaryByMonth} color="#1E4DAA" />
       </GtmEnablerBar>
 
-      {/* 04 · Other expenses */}
+      {/* 03 · CAPEX (Capex + running costs) */}
       <GtmEnablerBar
-        num="04"
-        tag="EXPENSES"
-        title="Other expenses · capex + running"
+        num="03"
+        tag="CAPEX"
+        title="Capex + running costs"
         desc={`${expensesByCategory.length} categories — Computers, Furniture, Dev gear, Admin Shop, Ai Fees, Villa Rent, Petty Cash + Promotion.`}
         color="#F37021"
         bg="#FFF7ED"
@@ -158,6 +139,25 @@ export async function LiveBudgetSummary() {
           ))}
         </div>
         <MonthlySparkline label="Expenses · monthly" months={allMonths} values={expensesByMonth} color="#F37021" />
+      </GtmEnablerBar>
+
+      {/* 04 · NET (summary at the bottom — Income − Expenses − Capex) */}
+      <GtmEnablerBar
+        num="04"
+        tag="NET"
+        title="Net position · investment build"
+        desc="Income − (Salaries + Capex). Negative is expected during the platform-build phase — see Section 10 for the asset-value offset."
+        color={netPosition >= 0 ? "#10B981" : "#0A1F47"}
+        bg="#F8FAFC"
+        badge={fmt(netPosition)}
+        badgeLabel="Today"
+      >
+        <div className="grid sm:grid-cols-3 gap-3 mb-3">
+          <MiniStat label="In" value={fmt(totalRevenue)} sub="Income booked" color="#10B981" />
+          <MiniStat label="Out" value={fmt(totalSalary + totalExpenses)} sub={`Salaries ${fmt(totalSalary)} + Capex ${fmt(totalExpenses)}`} color="#F37021" />
+          <MiniStat label="Net" value={fmt(netPosition)} sub={netPosition >= 0 ? "Surplus" : "Investment build"} color={netPosition >= 0 ? "#10B981" : "#0A1F47"} />
+        </div>
+        <NetSparkline months={allMonths} revenueByMonth={revenueByMonth} salaryByMonth={salaryByMonth} expensesByMonth={expensesByMonth} />
       </GtmEnablerBar>
 
       {/* Footer */}
