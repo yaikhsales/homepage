@@ -83,6 +83,8 @@ const known: Array<[string, string, Status]> = [
   // CA + YY also fully use YTM
   ["YTM · Machine Maintenance + TPM Shop",               "CA", "full"],
   ["YTM · Machine Maintenance + TPM Shop",               "YY", "full"],
+  // CA factory is in the middle of YQMS rollout
+  ["YQMS · Quality Mgmt (6 stages + Fini Check)",        "CA", "impl"],
   // Digital Audit — YW + BZ partly use (not factories), IDFL testing
   ["Digital Audit · 8S · AIoT · Waste",                  "YW",   "impl"],
   ["Digital Audit · 8S · AIoT · Waste",                  "BZ",   "impl"],

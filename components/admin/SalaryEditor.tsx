@@ -23,7 +23,7 @@ type Store = {
 };
 
 const GROUP_META: Record<GroupId, { name: string; sub: string; color: string }> = {
-  "admin":        { name: "Texlink Admin",        sub: "HR · Sales · Training",            color: "#1E4DAA" },
+  "admin":        { name: "Texlink Sales & Admin", sub: "HR · Sales · Training",            color: "#1E4DAA" },
   "architecture": { name: "Architecture",         sub: "HR systems · Pay systems",         color: "#F37021" },
   "neural-net":   { name: "Neural Net + Finance", sub: "Financial · Administration",       color: "#0A3327" },
   "mobile-apps":  { name: "Mobile Apps",          sub: "Android · iOS · Worker apps",      color: "#14B8A6" },

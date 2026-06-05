@@ -18,7 +18,7 @@ type Cluster = {
 const CLUSTERS: Cluster[] = [
   {
     num: 1,
-    name: "Texlink Admin",
+    name: "Texlink Sales & Admin",
     sub: ["Admin", "HR", "Sales", "Training"],
     bg: "linear-gradient(135deg, #1E4DAA, #143C8C)",
     badge: "bg-white text-yai-blue",

@@ -542,7 +542,7 @@ function bulletBlock(slide, x, y, w, h, items, color = TEXT, fontSize = 12) {
   addBrandFrame(slide, "09 / TEAM", "Engineering — 5 Clusters · 20 Engineers.");
 
   const clusters = [
-    { name: "Texlink Admin",          color: BLUE,   members: ["daly", "phanny", "khun"] },
+    { name: "Texlink Sales & Admin",  color: BLUE,   members: ["daly", "phanny", "khun"] },
     { name: "Architecture",           color: ORANGE, members: ["rich", "thida", "michael", "sam"] },
     { name: "Neural Net + Finance",   color: "0A3327", members: ["virot", "menghorng", "seangleng", "noch"] },
     { name: "Mobile Apps",            color: TEAL,   members: ["samnang", "chhay", "chetra"] },
