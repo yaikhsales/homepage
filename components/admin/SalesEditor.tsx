@@ -214,23 +214,41 @@ export function SalesEditor({ initial }: { initial: Store }) {
                     const v = cell?.[view] ?? 0;
                     const otherView = view === "planned" ? "actual" : "planned";
                     const otherV = cell?.[otherView] ?? 0;
+                    // Each up-arrow click = +1 client = +unitPrice $. E-com streams have unitPrice=0
+                    // (variable rev) so fall back to 0.01 step so the user can still type free-form $.
+                    const stepSize = stream.unitPrice > 0 ? stream.unitPrice : 0.01;
+                    const clients = stream.unitPrice > 0 && v > 0 ? Math.round(v / stream.unitPrice) : 0;
                     return (
-                      <td key={m} className="px-1 py-0.5">
-                        <input
-                          type="number"
-                          step="0.01"
-                          value={v > 0 ? v : ""}
-                          onChange={(e) => setCell(i, m, e.target.value)}
-                          placeholder="—"
-                          title={otherV > 0 ? `${otherView}: $${otherV.toLocaleString()}` : undefined}
-                          className={`w-full text-right text-[11px] tabular-nums px-1 py-1 rounded border focus:outline-none focus:border-yai-blue ${
-                            v > 0
-                              ? view === "planned"
-                                ? "text-yai-blue font-semibold border-transparent bg-blue-50/40 hover:bg-blue-50"
-                                : "text-emerald-700 font-semibold border-transparent bg-emerald-50/40 hover:bg-emerald-50"
-                              : "text-gray-300 border-transparent bg-gray-50/50 hover:bg-blue-50"
-                          }`}
-                        />
+                      <td key={m} className="px-1 py-0.5 align-top">
+                        <div className="flex flex-col">
+                          <input
+                            type="number"
+                            step={stepSize}
+                            min={0}
+                            value={v > 0 ? v : ""}
+                            onChange={(e) => setCell(i, m, e.target.value)}
+                            placeholder="—"
+                            title={
+                              otherV > 0
+                                ? `${otherView}: $${otherV.toLocaleString()}`
+                                : stream.unitPrice > 0
+                                  ? `↑ adds 1 client = +$${stream.unitPrice}`
+                                  : undefined
+                            }
+                            className={`w-full text-right text-[11px] tabular-nums px-1 py-1 rounded border focus:outline-none focus:border-yai-blue ${
+                              v > 0
+                                ? view === "planned"
+                                  ? "text-yai-blue font-semibold border-transparent bg-blue-50/40 hover:bg-blue-50"
+                                  : "text-emerald-700 font-semibold border-transparent bg-emerald-50/40 hover:bg-emerald-50"
+                                : "text-gray-300 border-transparent bg-gray-50/50 hover:bg-blue-50"
+                            }`}
+                          />
+                          {clients > 0 && (
+                            <span className="text-[8px] text-gray-400 leading-tight pl-1 mt-0.5 text-right tabular-nums">
+                              {clients} {clients === 1 ? "client" : "clients"}
+                            </span>
+                          )}
+                        </div>
                       </td>
                     );
                   })}
