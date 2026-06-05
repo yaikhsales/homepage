@@ -2,18 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 
-/* Draggable floating glass card.
- * Shows the current viewport size + screen size for verifying the
- * fluid font-scaling in globals.css across different monitors. */
-
-function bucket(w: number): string {
-  if (w >= 3000) return "UHD 4K · 32\"+";
-  if (w >= 2400) return "WQHD · 27\"";
-  if (w >= 1700) return "FHD · 24\"";
-  if (w >= 1300) return "FHD · 23\"";
-  if (w >= 900)  return "Laptop";
-  return "Mobile / Tablet";
-}
+/* Draggable floating glass card — Yai brand panel.
+ * (Screen-size detection lives in globals.css via the clamp() root font;
+ *  that part doesn't need any UI here.) */
 
 const PANEL_W = 220;   // narrower so it doesn't crowd page content (was 336)
 const PANEL_H = 780;   // height unchanged
@@ -21,27 +12,7 @@ const PANEL_H = 780;   // height unchanged
 export function FloatingGlass() {
   const [mounted, setMounted] = useState(false);
   const [pos, setPos] = useState({ x: 30, y: 80 });
-  const [view, setView] = useState({ vw: 0, vh: 0, sw: 0, sh: 0, dpr: 1, rem: 16 });
   const dragRef = useRef({ dragging: false, offsetX: 0, offsetY: 0 });
-
-  // Capture viewport + screen + computed-rem size, update on resize
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const read = () => {
-      const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-      setView({
-        vw: window.innerWidth,
-        vh: window.innerHeight,
-        sw: window.screen?.width || 0,
-        sh: window.screen?.height || 0,
-        dpr: window.devicePixelRatio || 1,
-        rem,
-      });
-    };
-    read();
-    window.addEventListener("resize", read);
-    return () => window.removeEventListener("resize", read);
-  }, []);
 
   // Restore saved position on mount
   useEffect(() => {
@@ -146,22 +117,25 @@ export function FloatingGlass() {
               "linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.3) 30%, rgba(255,255,255,0.1) 70%, transparent 100%)",
           }}
         />
-        {/* Viewport / screen readout — confirms fluid type scaling is working */}
-        <div className="absolute inset-x-0 bottom-0 p-3">
-          <div className="rounded-lg bg-white/30 backdrop-blur-sm px-2.5 py-2 text-yai-navy">
-            <div className="text-[9px] uppercase tracking-[0.18em] font-extrabold text-yai-navy/60">
-              Display
-            </div>
-            <div className="text-[12px] font-extrabold mt-0.5">{bucket(view.vw)}</div>
-            <div className="text-[10px] tabular-nums mt-1 text-yai-navy/70">
-              Viewport · {view.vw}×{view.vh}
-            </div>
-            <div className="text-[10px] tabular-nums text-yai-navy/70">
-              Screen · {view.sw}×{view.sh} @{view.dpr}×
-            </div>
-            <div className="text-[10px] tabular-nums text-yai-navy/70 mt-1">
-              Root font · {view.rem.toFixed(1)}px
-            </div>
+        {/* Yai brand panel — logo + tagline, centered in the glass */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center pointer-events-none">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/yai-logo.jpg"
+            alt="Yai"
+            className="w-20 h-20 rounded-2xl object-cover shadow-xl ring-2 ring-white/70"
+          />
+          <div className="mt-4 text-[10px] uppercase tracking-[0.25em] font-extrabold text-yai-navy/70">
+            Yai
+          </div>
+          <div className="mt-1 text-[16px] font-extrabold text-yai-navy leading-tight">
+            Ai-Native MIP
+          </div>
+          <div className="mt-2 text-[10px] text-yai-navy/65 leading-snug max-w-[180px]">
+            Manufacturing Intelligence Platform — factory-tested for 5 years, opening its gates June 2026.
+          </div>
+          <div className="mt-3 text-[9px] uppercase tracking-[0.18em] font-bold text-yai-orange">
+            Texlink Technologies
           </div>
         </div>
       </div>
