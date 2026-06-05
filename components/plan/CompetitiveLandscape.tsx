@@ -237,14 +237,14 @@ export function CompetitiveLandscape() {
         <h5 className="font-extrabold text-yai-navy text-sm mb-2">
           Where Yai wins — one line per segment
         </h5>
-        <ul className="space-y-1.5">
+        <ul className="space-y-2">
           {WINS.map((w) => (
-            <li key={w.vs} className="flex items-start gap-3 text-[12px] py-1.5 border-b border-yai-border last:border-b-0">
-              <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yai-blue text-white font-extrabold text-[9px] shrink-0 mt-0.5">
+            <li key={w.vs} className="flex items-center gap-4 text-base py-2.5 border-b border-yai-border last:border-b-0">
+              <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-yai-blue text-white font-extrabold text-sm shrink-0">
                 ✓
               </span>
-              <span className="font-extrabold text-yai-navy w-44 shrink-0">vs {w.vs}</span>
-              <span className="text-gray-700 leading-snug">{w.line}</span>
+              <span className="font-extrabold text-yai-navy text-lg w-52 shrink-0">vs {w.vs}</span>
+              <span className="text-gray-700 leading-snug text-base">{w.line}</span>
             </li>
           ))}
         </ul>
