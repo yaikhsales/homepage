@@ -144,6 +144,9 @@ export function TeamClusters() {
                         alt={m.name}
                         title={m.name + (m.lead ? " · LEAD" : "")}
                         draggable={false}
+                        // Push focal point up: portraits are head + shoulders, so center-center
+                        // crops too much shoulder. 50% / 18% puts the face in the middle.
+                        style={{ objectPosition: "50% 18%" }}
                         className={`w-[20px] h-[20px] rounded-full object-cover shadow-sm select-none ${m.lead ? "ring-2 ring-amber-300" : "ring-[1.5px] ring-white"}`}
                       />
                     ))}
@@ -296,6 +299,10 @@ function AvatarTile({ m, dimmed = false }: { m: Member; dimmed?: boolean }) {
           <img
             src={`/images/team/portraits/${m.alias}.png`}
             alt={m.name}
+            // Portraits are head + shoulders. center-center crops too much off the top
+            // (cuts the head) and leaves shoulders dominant. 50% / 18% pulls the face
+            // up into the visual middle of the circle.
+            style={{ objectPosition: "50% 18%" }}
             className="w-full h-full object-cover"
           />
         </div>
