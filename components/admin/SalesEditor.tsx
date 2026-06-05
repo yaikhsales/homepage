@@ -162,8 +162,7 @@ export function SalesEditor({ initial }: { initial: Store }) {
         <table className="text-[11px] border-collapse">
           <thead className="bg-yai-navy text-white">
             <tr>
-              <th className="sticky left-0 z-10 bg-yai-navy text-left px-2 py-2 font-bold uppercase tracking-wider w-56">Stream</th>
-              <th className="text-left px-2 py-2 font-bold uppercase tracking-wider w-20">Cat</th>
+              <th className="sticky left-0 z-10 bg-yai-navy text-left px-2 py-2 font-bold uppercase tracking-wider w-72">Stream</th>
               <th className="text-right px-2 py-2 font-bold uppercase tracking-wider w-24 whitespace-nowrap">Unit price</th>
               {store.months.map((m) => (
                 <th key={m} className="text-right px-2 py-2 font-bold uppercase tracking-wider w-20 whitespace-nowrap">
@@ -173,6 +172,7 @@ export function SalesEditor({ initial }: { initial: Store }) {
               <th className={`text-right px-2 py-2 font-bold uppercase tracking-wider w-24 ${view === "planned" ? "bg-yai-blue" : "bg-emerald-600"}`}>
                 {view === "planned" ? "Planned $" : "Actual $"}
               </th>
+              <th className="text-center px-2 py-2 font-bold uppercase tracking-wider w-20">Cat</th>
             </tr>
           </thead>
           <tbody>
@@ -188,22 +188,7 @@ export function SalesEditor({ initial }: { initial: Store }) {
                   <td className="sticky left-0 bg-white px-2 py-1" style={{ boxShadow: `inset 3px 0 0 0 ${cat.color}` }}>
                     <div className="flex flex-col">
                       <span className="font-extrabold text-yai-navy text-[12px] leading-tight">{stream.name}</span>
-                      <span className="text-[9px] text-gray-500 leading-tight mt-0.5">{stream.tierLabel}</span>
-                    </div>
-                  </td>
-                  <td className="px-2 py-1">
-                    <div className="flex flex-col gap-1">
-                      <span
-                        className="inline-flex items-center text-[9px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded text-white shrink-0 w-fit"
-                        style={{ background: cat.color }}
-                      >
-                        {cat.label}
-                      </span>
-                      {isUncertain && (
-                        <span className="inline-flex items-center text-[8px] font-extrabold uppercase tracking-wider px-1 py-0.5 rounded text-white bg-amber-500 w-fit">
-                          Variable
-                        </span>
-                      )}
+                      <span className="text-[10px] text-gray-500 leading-snug mt-0.5">{stream.tierLabel}</span>
                     </div>
                   </td>
                   <td className="px-2 py-1 text-right text-[10px] text-gray-600 whitespace-nowrap">
@@ -255,13 +240,28 @@ export function SalesEditor({ initial }: { initial: Store }) {
                   <td className={`px-2 py-1 text-right font-extrabold tabular-nums ${view === "planned" ? "text-yai-blue bg-blue-50/50" : "text-emerald-700 bg-emerald-50/50"}`}>
                     {streamTotals[i] > 0 ? `$${streamTotals[i].toLocaleString(undefined, { maximumFractionDigits: 0 })}` : "—"}
                   </td>
+                  <td className="px-2 py-1">
+                    <div className="flex flex-col items-center gap-1">
+                      <span
+                        className="inline-flex items-center text-[9px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded text-white shrink-0"
+                        style={{ background: cat.color }}
+                      >
+                        {cat.label}
+                      </span>
+                      {isUncertain && (
+                        <span className="inline-flex items-center text-[8px] font-extrabold uppercase tracking-wider px-1 py-0.5 rounded text-white bg-amber-500">
+                          Variable
+                        </span>
+                      )}
+                    </div>
+                  </td>
                 </tr>
               );
             })}
           </tbody>
           <tfoot className="bg-gray-50">
             <tr className="border-t-2 border-yai-blue">
-              <td className="sticky left-0 bg-gray-50 px-2 py-2 font-extrabold text-yai-navy uppercase tracking-wider text-[10px]" colSpan={3}>
+              <td className="sticky left-0 bg-gray-50 px-2 py-2 font-extrabold text-yai-navy uppercase tracking-wider text-[10px]" colSpan={2}>
                 Monthly total ({view})
               </td>
               {monthTotals.map((t, i) => (
@@ -272,6 +272,7 @@ export function SalesEditor({ initial }: { initial: Store }) {
               <td className={`px-2 py-2 text-right font-extrabold tabular-nums ${view === "planned" ? "text-yai-blue bg-blue-50" : "text-emerald-700 bg-emerald-50"}`}>
                 ${grandTotal.toLocaleString(undefined, { maximumFractionDigits: 0 })}
               </td>
+              <td className="px-2 py-2" />
             </tr>
           </tfoot>
         </table>
