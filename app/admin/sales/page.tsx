@@ -1,6 +1,9 @@
 import { readSalesStore } from "@/lib/sales-store";
 import { SalesEditor } from "@/components/admin/SalesEditor";
 
+// Always re-read the store on each request so admin saves show immediately.
+export const dynamic = "force-dynamic";
+
 export default async function AdminSalesPage() {
   const store = await readSalesStore();
 

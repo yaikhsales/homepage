@@ -4,6 +4,11 @@ import { verifySession } from "@/lib/auth";
 import { readSalaryStore } from "@/lib/salary-store";
 import { readExpensesStore } from "@/lib/expenses-store";
 import { readAboutStore } from "@/lib/about-store";
+
+// Always render fresh — the plan reads live admin data (Sales / Salaries / Capex /
+// About) from disk on every request. Without this, Next.js caches the render at
+// build time and the public page never reflects admin saves.
+export const dynamic = "force-dynamic";
 import { Sidebar, type NavItem } from "@/components/plan/Sidebar";
 import { Section } from "@/components/plan/Section";
 import { Thesis } from "@/components/plan/Thesis";

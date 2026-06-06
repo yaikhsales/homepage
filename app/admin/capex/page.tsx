@@ -1,6 +1,9 @@
 import { readExpensesStore } from "@/lib/expenses-store";
 import { ExpensesEditor } from "@/components/admin/ExpensesEditor";
 
+// Always re-read the store on each request so admin saves show immediately.
+export const dynamic = "force-dynamic";
+
 export default async function AdminCapexPage() {
   const store = await readExpensesStore();
   return (

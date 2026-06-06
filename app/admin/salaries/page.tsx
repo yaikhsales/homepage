@@ -1,6 +1,9 @@
 import { readSalaryStore } from "@/lib/salary-store";
 import { SalaryEditor } from "@/components/admin/SalaryEditor";
 
+// Always re-read the store on each request so admin saves show immediately.
+export const dynamic = "force-dynamic";
+
 export default async function AdminSalariesPage() {
   const store = await readSalaryStore();
 

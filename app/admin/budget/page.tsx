@@ -1,6 +1,9 @@
 import { readStore } from "@/lib/budget-store";
 import { AdminBudgetEditor } from "@/components/admin/AdminBudgetEditor";
 
+// Always re-read the store on each request so admin saves show immediately.
+export const dynamic = "force-dynamic";
+
 export default async function AdminBudgetPage() {
   const store = await readStore();
 

@@ -4,6 +4,9 @@ import { readSalaryStore } from "@/lib/salary-store";
 import { readSalesStore } from "@/lib/sales-store";
 import { readExpensesStore } from "@/lib/expenses-store";
 
+// Always re-read the store on each request so admin saves show immediately.
+export const dynamic = "force-dynamic";
+
 export default async function AdminDashboard() {
   const store = await readStore();
   const salaryStore = await readSalaryStore();
