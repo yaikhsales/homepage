@@ -65,20 +65,26 @@ export function ExpensesEditor({ initial }: { initial: Store }) {
     return out;
   }, [store]);
 
+  // Split the timeline at the end of the CURRENT calendar year.
+  // Everything up to & including Dec-of-this-year = "committed / up to now".
+  // The TOTAL column sits right after it; the months beyond = "next 6 months" forecast.
+  const cutoff = `${new Date().getFullYear()}-12`; // e.g. "2026-12"
+  const actualMonths = useMemo(() => store.months.filter((m) => m <= cutoff), [store.months, cutoff]);
+  const forecastMonths = useMemo(() => store.months.filter((m) => m > cutoff), [store.months, cutoff]);
+
+  // Per-row total = committed spend only (the actuals window, up to Dec this year).
   const itemTotals = useMemo(
     () => rows.map((r) =>
-      Object.values(r.item.monthly).reduce<number>((s, c) => s + (c.amount ?? 0), 0)
+      actualMonths.reduce<number>((s, m) => s + (r.item.monthly[m]?.amount ?? 0), 0)
     ),
-    [rows]
+    [rows, actualMonths]
   );
 
-  const monthTotals = useMemo(() => {
-    return store.months.map((m) =>
-      rows.reduce<number>((s, r) => s + (r.item.monthly[m]?.amount ?? 0), 0)
-    );
-  }, [rows, store.months]);
+  // Monthly totals for the whole timeline (used in the footer).
+  const monthTotal = (m: string) =>
+    rows.reduce<number>((s, r) => s + (r.item.monthly[m]?.amount ?? 0), 0);
 
-  const grandTotal = monthTotals.reduce<number>((s, v) => s + v, 0);
+  const grandTotal = actualMonths.reduce<number>((s, m) => s + monthTotal(m), 0);
 
   const setCell = (catIdx: number, itemIdx: number, ym: string, value: string) => {
     const next: Store = { ...store, categories: [...store.categories] };
@@ -160,12 +166,19 @@ export function ExpensesEditor({ initial }: { initial: Store }) {
               <th className="sticky left-0 z-10 bg-yai-navy text-left px-2 py-2 font-bold uppercase tracking-wider w-56">Line item</th>
               <th className="text-left px-2 py-2 font-bold uppercase tracking-wider w-28">Category</th>
               <th className="text-center px-2 py-2 font-bold uppercase tracking-wider w-16">Freq</th>
-              {store.months.map((m) => (
+              {actualMonths.map((m) => (
                 <th key={m} className="text-right px-2 py-2 font-bold uppercase tracking-wider w-20 whitespace-nowrap">
                   {fmtMonth(m)}
                 </th>
               ))}
-              <th className="text-right px-2 py-2 font-bold uppercase tracking-wider w-24 bg-yai-blue">Total $</th>
+              <th className="text-right px-2 py-2 font-bold uppercase tracking-wider w-24 bg-yai-blue whitespace-nowrap">
+                Total $<span className="block text-[7px] font-normal opacity-80">up to now</span>
+              </th>
+              {forecastMonths.map((m) => (
+                <th key={m} className="text-right px-2 py-2 font-bold uppercase tracking-wider w-20 whitespace-nowrap bg-amber-600">
+                  {fmtMonth(m)}<span className="block text-[7px] font-normal opacity-80">forecast</span>
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>
@@ -203,7 +216,7 @@ export function ExpensesEditor({ initial }: { initial: Store }) {
                     {r.item.frequency === "recurring" ? "mo" : "1×"}
                   </span>
                 </td>
-                {store.months.map((m) => {
+                {actualMonths.map((m) => {
                   const cell = r.item.monthly[m];
                   const amt = cell?.amount ?? 0;
                   return (
@@ -227,6 +240,27 @@ export function ExpensesEditor({ initial }: { initial: Store }) {
                 <td className="px-2 py-1 text-right font-extrabold text-yai-blue tabular-nums bg-blue-50/50">
                   {itemTotals[i] > 0 ? `$${itemTotals[i].toLocaleString(undefined, { maximumFractionDigits: 2 })}` : "—"}
                 </td>
+                {forecastMonths.map((m) => {
+                  const cell = r.item.monthly[m];
+                  const amt = cell?.amount ?? 0;
+                  return (
+                    <td key={m} className="px-1 py-0.5">
+                      <input
+                        type="number"
+                        step="0.01"
+                        value={amt > 0 ? amt : ""}
+                        onChange={(e) => setCell(r.catIdx, r.itemIdx, m, e.target.value)}
+                        placeholder="—"
+                        title={cell?.note || undefined}
+                        className={`w-full text-right text-[11px] tabular-nums px-1 py-1 rounded border focus:outline-none focus:border-yai-blue ${
+                          amt > 0
+                            ? "text-amber-700 font-semibold border-transparent bg-amber-50/40 hover:bg-amber-50"
+                            : "text-gray-300 border-transparent bg-amber-50/20 hover:bg-amber-50"
+                        }`}
+                      />
+                    </td>
+                  );
+                })}
               </tr>
             ))}
           </tbody>
@@ -235,14 +269,25 @@ export function ExpensesEditor({ initial }: { initial: Store }) {
               <td className="sticky left-0 bg-gray-50 px-2 py-2 font-extrabold text-yai-navy uppercase tracking-wider text-[10px]" colSpan={3}>
                 Monthly total
               </td>
-              {monthTotals.map((t, i) => (
-                <td key={i} className="px-2 py-2 text-right font-extrabold text-yai-navy tabular-nums">
-                  {t > 0 ? `$${t.toLocaleString(undefined, { maximumFractionDigits: 0 })}` : "—"}
-                </td>
-              ))}
+              {actualMonths.map((m) => {
+                const t = monthTotal(m);
+                return (
+                  <td key={m} className="px-2 py-2 text-right font-extrabold text-yai-navy tabular-nums">
+                    {t > 0 ? `$${t.toLocaleString(undefined, { maximumFractionDigits: 0 })}` : "—"}
+                  </td>
+                );
+              })}
               <td className="px-2 py-2 text-right font-extrabold text-yai-orange tabular-nums bg-orange-50">
                 ${grandTotal.toLocaleString(undefined, { maximumFractionDigits: 0 })}
               </td>
+              {forecastMonths.map((m) => {
+                const t = monthTotal(m);
+                return (
+                  <td key={m} className="px-2 py-2 text-right font-extrabold text-amber-700 tabular-nums bg-amber-50/40">
+                    {t > 0 ? `$${t.toLocaleString(undefined, { maximumFractionDigits: 0 })}` : "—"}
+                  </td>
+                );
+              })}
             </tr>
           </tfoot>
         </table>
