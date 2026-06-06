@@ -73,6 +73,16 @@ export const SEED_EXPENSES_STORE: ExpensesStore = {
   months: ["2024-05"],
   categories: [
     // Bonus moved to the Salary feeder (compensation, not expense).
+    // Ai Fees first — the ongoing Ai cost is the headline running expense.
+    {
+      id: "ai-fees",
+      name: "Ai Fees",
+      detail: "Anthropic / Google Cloud / OpenAI API + token-usage fees.",
+      color: "#8B5CF6",
+      items: [
+        { id: "ai-monthly", name: "Monthly Ai usage", frequency: "recurring", monthly: {} },
+      ],
+    },
     {
       id: "computers",
       name: "Computers",
@@ -122,15 +132,6 @@ export const SEED_EXPENSES_STORE: ExpensesStore = {
       ],
     },
     {
-      id: "ai-fees",
-      name: "Ai Fees",
-      detail: "Anthropic / Google Cloud / OpenAI API + token-usage fees.",
-      color: "#8B5CF6",
-      items: [
-        { id: "ai-monthly", name: "Monthly Ai usage", frequency: "recurring", monthly: {} },
-      ],
-    },
-    {
       id: "villa-rent",
       name: "Villa Rent + Utilities",
       detail: "Office rent + internet + electricity in Phnom Penh.",
@@ -154,6 +155,13 @@ export const SEED_EXPENSES_STORE: ExpensesStore = {
   ],
 };
 
+/** Float the Ai Fees category to the top regardless of stored order. */
+function floatAiToTop(cats: ExpenseCategory[]): ExpenseCategory[] {
+  const ai = cats.filter((c) => c.id === "ai-fees");
+  const rest = cats.filter((c) => c.id !== "ai-fees");
+  return [...ai, ...rest];
+}
+
 export async function readExpensesStore(): Promise<ExpensesStore> {
   try {
     const text = await fs.readFile(FILE, "utf-8");
@@ -162,7 +170,7 @@ export async function readExpensesStore(): Promise<ExpensesStore> {
       updatedAt: parsed.updatedAt ?? null,
       updatedBy: parsed.updatedBy ?? null,
       months: buildMonths(parsed.months),
-      categories: parsed.categories ?? SEED_EXPENSES_STORE.categories,
+      categories: floatAiToTop(parsed.categories ?? SEED_EXPENSES_STORE.categories),
     };
   } catch {
     return {
