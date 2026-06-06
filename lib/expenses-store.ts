@@ -36,11 +36,17 @@ export type ExpensesStore = {
 
 const START_YEAR = 2024;
 const START_MONTH = 5;
+// Always keep this many months visible PAST the current real-world month, so
+// there's a planning runway to type future capex into. Because new Date() is
+// evaluated on every read, the window slides forward automatically as months pass.
+const FORWARD_RUNWAY_MONTHS = 6;
 
 function monthsUpToToday(): string[] {
   const now = new Date();
-  const endYear = now.getFullYear();
-  const endMonth = now.getMonth() + 1;
+  // Target end = today + FORWARD_RUNWAY_MONTHS
+  let endYear = now.getFullYear();
+  let endMonth = now.getMonth() + 1 + FORWARD_RUNWAY_MONTHS; // 1-12 + runway
+  while (endMonth > 12) { endMonth -= 12; endYear++; }
   const out: string[] = [];
   let y = START_YEAR;
   let m = START_MONTH;
