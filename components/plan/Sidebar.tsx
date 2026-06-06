@@ -130,7 +130,10 @@ export function Sidebar({
             />
             <div className="flex-1 min-w-0 leading-tight">
               <div className="text-sm text-white font-semibold truncate">{t("sidebar.company")}</div>
-              <div className="text-[10px] uppercase tracking-[0.15em] text-yai-orange/90 font-bold mt-1">{t("sidebar.tagline")}</div>
+              <div className="flex items-center justify-between gap-2 mt-1">
+                <div className="text-[10px] uppercase tracking-[0.15em] text-yai-orange/90 font-bold">{t("sidebar.tagline")}</div>
+                <LanguageToggle />
+              </div>
             </div>
           </div>
         </div>
@@ -180,11 +183,6 @@ export function Sidebar({
 
         {/* Action buttons */}
         <div className="px-4 pt-2 pb-4 space-y-2">
-          {/* Language toggle — static EN/中文 (no external service) */}
-          <div className="flex items-center justify-between gap-2 mb-1">
-            <span className="text-[10px] uppercase tracking-[0.12em] text-white/55 font-bold">{t("sidebar.language")}</span>
-            <LanguageToggle />
-          </div>
           <button
             onClick={onPrint}
             className="w-full text-xs bg-white/10 hover:bg-white/20 text-white py-2 rounded transition"
