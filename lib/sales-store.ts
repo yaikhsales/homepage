@@ -145,10 +145,10 @@ export const SEED_SALES_STORE: SalesStore = {
       name: "Administrative Tools",
       category: "addon",
       certainty: "planned",
-      unitPrice: 1500,
-      unitLabel: "$1,500 / yr",
-      tierLabel: "Unlocked after Ai Server · admin module stack",
-      detail: "Administrative module set unlocked after the Ai Server hardware purchase — PR, HR, Pay, Org, LMS, Ai CCTV. The admin core for the whole factory.",
+      unitPrice: 5000,
+      unitLabel: "$5,000 / yr",
+      tierLabel: "Activated after Ai Server · admin module stack",
+      detail: "Administrative module set activated after the Ai Server hardware purchase — PR, HR, Pay, Org, LMS, Ai CCTV. The admin core for the whole factory.",
       monthly: {},
     },
     {
@@ -156,10 +156,10 @@ export const SEED_SALES_STORE: SalesStore = {
       name: "Operation Tools",
       category: "addon",
       certainty: "planned",
-      unitPrice: 2000,
-      unitLabel: "$2,000 / yr",
-      tierLabel: "Unlocked after Ai Server · ops module stack",
-      detail: "Operation module set unlocked after the Ai Server hardware purchase — YPM, YQMS, YPI, YTM, MRP. The operations engine that runs the floor in real time.",
+      unitPrice: 10000,
+      unitLabel: "$10,000 / yr",
+      tierLabel: "Activated after Ai Server · ops module stack",
+      detail: "Operation module set activated after the Ai Server hardware purchase — YPM, YQMS, YPI, YTM, MRP. The operations engine that runs the floor in real time.",
       monthly: {},
     },
 
@@ -229,14 +229,20 @@ export async function readSalesStore(): Promise<SalesStore> {
     const text = await fs.readFile(FILE, "utf-8");
     const parsed = JSON.parse(text) as SalesStore;
     const saved = parsed.streams ?? [];
+    const savedById = new Map(saved.map((s) => [s.id, s]));
 
-    // Merge: keep ALL saved streams (with their monthly cells intact),
-    // append any seed streams that aren't in the saved file yet.
-    // This way the user never loses data, and new seed entries flow in
-    // when the code adds them.
-    const savedIds = new Set(saved.map((s) => s.id));
-    const newFromSeed = SEED_SALES_STORE.streams.filter((s) => !savedIds.has(s.id));
-    const mergedStreams = [...saved, ...newFromSeed];
+    // Merge by seed order. For each seed stream, take its METADATA
+    // (name, category, certainty, unitPrice, unitLabel, tierLabel, detail)
+    // as the source of truth — so price / label corrections in code always
+    // flow through — but PRESERVE the user's saved `monthly` cells.
+    // Any extra saved stream not in the seed is appended at the end.
+    const merged = SEED_SALES_STORE.streams.map((seed) => {
+      const prev = savedById.get(seed.id);
+      return { ...seed, monthly: prev?.monthly ?? seed.monthly };
+    });
+    const seedIds = new Set(SEED_SALES_STORE.streams.map((s) => s.id));
+    const extra = saved.filter((s) => !seedIds.has(s.id));
+    const mergedStreams = [...merged, ...extra];
 
     return {
       updatedAt: parsed.updatedAt ?? null,
