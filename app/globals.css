@@ -108,20 +108,56 @@
   body {
     background: #fff !important;
     color: #111 !important;
-    /* Tighter base size for print so more content fits per page. */
-    font-size: 9.5pt;
+    font-size: 11pt;
   }
 
-  /* Smaller html root in print → all rem-based Tailwind sizes scale down,
-   * compressing the page count without re-laying-out screen mode. */
-  html { font-size: 10pt !important; }
+  /* Readable rem base — Tailwind sizes scale up from this. */
+  html { font-size: 11.5pt !important; }
 
-  /* Tighten vertical rhythm — section gaps were 24 (rem ⇒ 96px screen). */
-  section { margin-bottom: 0.8cm !important; }
-  h2 { margin-bottom: 0.3cm !important; font-size: 16pt !important; }
-  h3 { font-size: 11pt !important; margin-top: 0.2cm; margin-bottom: 0.15cm; }
-  h4 { font-size: 10pt !important; }
-  p  { margin: 0.12cm 0 !important; }
+  /* Each numbered section starts on a fresh page. With 17 sections + cover
+   * + end page that's ~19 sheets — looks like a proper deck instead of
+   * cramming Section 2 onto the same page as Section 1. */
+  main > section,
+  main section[id] {
+    page-break-before: always !important;
+    break-before: page !important;
+    margin-bottom: 0 !important;
+    padding-top: 0.4cm;
+  }
+  /* But the first section after the hero shouldn't force a break — it
+   * shares page 2 with the hero block. */
+  main > header + section,
+  main > div + section:first-of-type {
+    page-break-before: auto !important;
+    break-before: auto !important;
+  }
+
+  h2 { margin-bottom: 0.4cm !important; font-size: 22pt !important; }
+  h3 { font-size: 13pt !important; margin-top: 0.3cm; margin-bottom: 0.2cm; }
+  h4 { font-size: 11pt !important; }
+  p  { margin: 0.18cm 0 !important; line-height: 1.45 !important; }
+
+  /* No shaded card backgrounds — they look cheap on paper. Borders only. */
+  .bg-yai-bg,
+  .bg-blue-50,
+  .bg-blue-50\/30,
+  .bg-amber-50,
+  .bg-orange-50,
+  .bg-gray-50,
+  .bg-white\/12,
+  .bg-white\/10,
+  [class*="bg-blue-"][class*="\/"],
+  [class*="bg-orange-"][class*="\/"],
+  [class*="bg-amber-"][class*="\/"] {
+    background: #fff !important;
+  }
+  /* Card containers — keep border, drop fill + shadow for clean print. */
+  .rounded-xl, .rounded-2xl, .card {
+    background: #fff !important;
+    box-shadow: none !important;
+  }
+  /* The Thesis blue-on-cream banner reads better as plain colored text. */
+  main p[class*="text-yai-blue"] { background: transparent !important; }
 
   /* Hero block: trim the 5rem top + 5rem mb-20 of the screen layout. */
   main > div.mb-20,
@@ -308,17 +344,11 @@
     page: coverpage;
     page-break-after: always;
     break-after: page;
-    /* Edge-to-edge A4 — explicit size in mm. */
     width: 210mm !important;
     min-width: 210mm !important;
     max-width: 210mm !important;
-    /* IMPORTANT: 297mm exactly often loses 1-2mm to box-sizing/rounding and
-     * leaves a hairline white band at the bottom. Bump to 298mm so we
-     * overlap into the next page boundary — coverpage has overflow:hidden
-     * and page-break-after:always so the overflow is invisible. */
-    height: 298mm !important;
-    min-height: 298mm !important;
-    background: linear-gradient(135deg, #0A1F47 0%, #1E4DAA 60%, #2A5DC4 100%);
+    height: 297mm !important;
+    min-height: 297mm !important;
     color: #fff;
     position: relative;
     margin: 0 !important;
@@ -326,6 +356,25 @@
     overflow: hidden;
     box-sizing: border-box;
     display: block !important;
+    background: transparent !important;
+  }
+  /* Paint the gradient via a pseudo-element that overflows ALL sides by 10mm.
+   * This guarantees full bleed regardless of how Chrome's print engine
+   * computes the final page area — no hairline white band. */
+  .print-cover::before {
+    content: "";
+    position: absolute;
+    top: -10mm !important;
+    left: -10mm !important;
+    right: -10mm !important;
+    bottom: -10mm !important;
+    background: linear-gradient(135deg, #0A1F47 0%, #1E4DAA 60%, #2A5DC4 100%) !important;
+    z-index: 0;
+  }
+  /* Lift cover-inner above the gradient pseudo */
+  .print-cover-inner {
+    position: relative;
+    z-index: 1;
   }
   .print-cover-inner {
     height: 100%;
