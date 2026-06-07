@@ -37,6 +37,7 @@ import { LiveBudgetSummary } from "@/components/plan/LiveBudgetSummary";
 import { MidSizeSegment } from "@/components/plan/MidSizeSegment";
 import { InteractiveSegment } from "@/components/plan/InteractiveSegment";
 import { FloatingGlass } from "@/components/plan/FloatingGlass";
+import { BodyTranslator } from "@/components/plan/BodyTranslator";
 
 const NAV: NavItem[] = [
   { id: "executive-summary", label: "Executive Summary",     labelKey: "nav.executive" },
@@ -150,6 +151,7 @@ export default async function PlanPage() {
       <FloatingGlass />
 
       <main className="flex-1 max-w-4xl mx-auto px-5 sm:px-8 lg:px-12 py-10 lg:py-14">
+        <BodyTranslator />
         <PlanHero />
 
         {/* 01 — Executive Summary */}
