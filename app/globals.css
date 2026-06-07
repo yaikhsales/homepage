@@ -71,10 +71,17 @@
   @top-right  { content: ""; }
 }
 
-/* The cover page suppresses the bottom footer (clean front sheet). */
-@page :first {
+/* Named page for cover/end sheets — explicit margin 0 + no footer so they
+ * bleed edge-to-edge. Applied via `page: coverpage` on those elements. */
+@page coverpage {
+  size: A4;
   margin: 0;
+  @top-left   { content: ""; }
+  @top-center { content: ""; }
+  @top-right  { content: ""; }
+  @bottom-left   { content: ""; }
   @bottom-center { content: ""; }
+  @bottom-right  { content: ""; }
 }
 
 @media print {
@@ -121,24 +128,34 @@
   main > header.mb-20,
   header[class*="mb-20"] { margin-bottom: 0.4cm !important; }
 
-  /* ALL Cambodia / ASEAN / inline-flag images — cap tiny so they never
-   * blow up to dominate a print page (the stat-callout flag was rendering
-   * page-height when the SVG had no intrinsic width set). */
+  /* ALL Cambodia / ASEAN / inline-flag images — hard-locked size so they
+   * never balloon (the StatCallout flag SVG has no intrinsic dimensions
+   * and was inheriting the loose `main img` 7cm cap). Using both width
+   * AND height explicitly beats every other cascading rule. */
+  main img[src*="cambodia-flag"],
+  main img[src*="flag-cambodia"],
+  main img[alt="Flag of Cambodia"],
+  main img[src*="/cambodia"],
   img[src*="cambodia-flag"],
-  img[src*="flag-cambodia"],
-  img[alt="Flag of Cambodia"] {
-    max-height: 5mm !important;
-    max-width: 9mm !important;
-    width: auto !important;
-    height: auto !important;
+  img[src*="flag-cambodia"] {
+    width: 8mm !important;
+    height: 4mm !important;
+    max-width: 8mm !important;
+    max-height: 4mm !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    object-fit: contain !important;
     display: inline-block !important;
+    margin: 0 0.5mm !important;
   }
   /* ASEAN logo a touch larger so it remains recognisable */
+  main img[alt*="ASEAN"],
   img[alt*="ASEAN"] {
-    max-height: 10mm !important;
-    max-width: 15mm !important;
-    width: auto !important;
-    height: auto !important;
+    width: 14mm !important;
+    height: 14mm !important;
+    max-width: 14mm !important;
+    max-height: 14mm !important;
+    display: inline-block !important;
   }
   /* "MADE IN CAMBODIA" lettering scaled down too. */
   header .uppercase { font-size: 9pt !important; letter-spacing: 0.14em !important; }
@@ -167,9 +184,10 @@
     break-inside: avoid;
   }
 
-  /* Hero image / large feature pics scale down so they don't dominate the
-   * page and leave huge empty bottoms. 7cm fits ~2-3 per A4 page. */
-  main img {
+  /* Hero / scene-style large images — cap height so they don't dominate
+   * a page. Excludes flags, ASEAN logo, agent avatars (small w-10 images),
+   * and icon-style sprites to avoid catching tiny inline pictures. */
+  main img:not([src*="flag"]):not([src*="cambodia"]):not([alt*="ASEAN"]):not([src*="agent-"]):not([src*="icon"]):not([src*="portrait"]) {
     max-height: 7cm !important;
     width: auto !important;
     object-fit: contain !important;
@@ -177,10 +195,11 @@
     margin-right: auto;
     display: block;
   }
-  /* Cover/end page images keep their natural size. */
-  .print-cover img, .print-end img { max-height: none !important; }
-  /* Flag images keep their tight caps from above (specificity wins). */
-  img[src*="flag"] { max-height: 5mm !important; }
+  /* Cover/end page images bypass all caps. */
+  .print-cover img, .print-end img {
+    max-height: none !important;
+    max-width: none !important;
+  }
 
   /* Section pacing — keep each section together when it fits; otherwise
    * allow a clean break BEFORE a new section so headings start on a fresh
@@ -273,11 +292,13 @@
 
   /* COVER ----------------------------------------------------------------- */
   .print-cover {
+    page: coverpage;
     page-break-after: always;
     break-after: page;
-    /* Edge-to-edge A4 — explicit size in mm (vw/vh are unreliable in print). */
+    /* Edge-to-edge A4 — explicit size in mm. */
     width: 210mm !important;
     height: 297mm !important;
+    min-height: 297mm !important;
     max-width: 210mm !important;
     background: linear-gradient(135deg, #0A1F47 0%, #1E4DAA 60%, #2A5DC4 100%);
     color: #fff;
@@ -286,6 +307,7 @@
     padding: 0 !important;
     overflow: hidden;
     box-sizing: border-box;
+    /* The coverpage @page has margin:0, so this 297mm block fills the sheet. */
   }
   .print-cover-inner {
     height: 100%;
