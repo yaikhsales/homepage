@@ -53,7 +53,13 @@ export function StatCallout({
       <div className="text-[0.78rem] text-gray-500 uppercase tracking-wider mt-2 font-semibold flex items-center gap-1.5">
         {flagIcon && (
           /* eslint-disable-next-line @next/next/no-img-element */
-          <img src={flagIcon} alt="" className="h-3.5 w-auto rounded-[2px] shadow-sm ring-1 ring-black/10" />
+          <img
+            src={flagIcon}
+            alt=""
+            width={22}
+            height={14}
+            className="stat-flag h-3.5 w-auto rounded-[2px] shadow-sm ring-1 ring-black/10"
+          />
         )}
         <span>{label}</span>
       </div>

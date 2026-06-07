@@ -128,10 +128,23 @@
   main > header.mb-20,
   header[class*="mb-20"] { margin-bottom: 0.4cm !important; }
 
+  /* StatCallout flag — class-targeted so it can't slip past selector
+   * specificity. Plus the component now passes width/height attributes
+   * so even without CSS the browser sizes the SVG at 22×14px. */
+  img.stat-flag {
+    width: 6mm !important;
+    height: 3.5mm !important;
+    max-width: 6mm !important;
+    max-height: 3.5mm !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    object-fit: contain !important;
+    display: inline-block !important;
+    margin: 0 0.4mm !important;
+  }
   /* ALL Cambodia / ASEAN / inline-flag images — hard-locked size so they
-   * never balloon (the StatCallout flag SVG has no intrinsic dimensions
-   * and was inheriting the loose `main img` 7cm cap). Using both width
-   * AND height explicitly beats every other cascading rule. */
+   * never balloon (the SVG has no intrinsic dimensions and inherited the
+   * loose `main img` 7cm cap). */
   main img[src*="cambodia-flag"],
   main img[src*="flag-cambodia"],
   main img[alt="Flag of Cambodia"],
@@ -297,9 +310,14 @@
     break-after: page;
     /* Edge-to-edge A4 — explicit size in mm. */
     width: 210mm !important;
-    height: 297mm !important;
-    min-height: 297mm !important;
+    min-width: 210mm !important;
     max-width: 210mm !important;
+    /* IMPORTANT: 297mm exactly often loses 1-2mm to box-sizing/rounding and
+     * leaves a hairline white band at the bottom. Bump to 298mm so we
+     * overlap into the next page boundary — coverpage has overflow:hidden
+     * and page-break-after:always so the overflow is invisible. */
+    height: 298mm !important;
+    min-height: 298mm !important;
     background: linear-gradient(135deg, #0A1F47 0%, #1E4DAA 60%, #2A5DC4 100%);
     color: #fff;
     position: relative;
@@ -307,7 +325,7 @@
     padding: 0 !important;
     overflow: hidden;
     box-sizing: border-box;
-    /* The coverpage @page has margin:0, so this 297mm block fills the sheet. */
+    display: block !important;
   }
   .print-cover-inner {
     height: 100%;
