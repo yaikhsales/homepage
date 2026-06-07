@@ -78,6 +78,12 @@
 }
 
 @media print {
+  /* Zero out html/body so the cover/end pages can render edge-to-edge. */
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
   /* Hide chrome that's not meant for paper. */
   aside,
   .no-print,
@@ -115,10 +121,23 @@
   main > header.mb-20,
   header[class*="mb-20"] { margin-bottom: 0.4cm !important; }
 
-  /* Cambodian flag in hero — screen is w-20 h-10 (≈80×40px). Print smaller. */
-  header img[alt="Flag of Cambodia"],
-  header img[alt*="ASEAN"] {
-    width: 14mm !important;
+  /* ALL Cambodia / ASEAN / inline-flag images — cap tiny so they never
+   * blow up to dominate a print page (the stat-callout flag was rendering
+   * page-height when the SVG had no intrinsic width set). */
+  img[src*="cambodia-flag"],
+  img[src*="flag-cambodia"],
+  img[alt="Flag of Cambodia"] {
+    max-height: 5mm !important;
+    max-width: 9mm !important;
+    width: auto !important;
+    height: auto !important;
+    display: inline-block !important;
+  }
+  /* ASEAN logo a touch larger so it remains recognisable */
+  img[alt*="ASEAN"] {
+    max-height: 10mm !important;
+    max-width: 15mm !important;
+    width: auto !important;
     height: auto !important;
   }
   /* "MADE IN CAMBODIA" lettering scaled down too. */
@@ -149,10 +168,19 @@
   }
 
   /* Hero image / large feature pics scale down so they don't dominate the
-   * page and leave huge empty bottoms. */
-  main img { max-height: 9cm !important; object-fit: contain !important; }
+   * page and leave huge empty bottoms. 7cm fits ~2-3 per A4 page. */
+  main img {
+    max-height: 7cm !important;
+    width: auto !important;
+    object-fit: contain !important;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+  }
   /* Cover/end page images keep their natural size. */
   .print-cover img, .print-end img { max-height: none !important; }
+  /* Flag images keep their tight caps from above (specificity wins). */
+  img[src*="flag"] { max-height: 5mm !important; }
 
   /* Section pacing — keep each section together when it fits; otherwise
    * allow a clean break BEFORE a new section so headings start on a fresh
@@ -167,19 +195,26 @@
     break-after: avoid;
     page-break-after: avoid;
   }
-  /* Cards / images should not be split across pages. */
-  .card,
-  .rounded-xl,
-  .rounded-2xl,
-  img,
-  svg,
-  figure,
-  table {
+  /* Only protect SMALL atomic units. Large cards (Sandwich, Solution cards
+   * with full-bleed images) must flow naturally — otherwise the browser
+   * pushes a too-tall card to the next page and leaves huge empty bands
+   * at the bottom of the previous page. */
+  img, svg, figure, table {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .card, .rounded-xl, .rounded-2xl {
+    break-inside: auto !important;
+    page-break-inside: auto !important;
+  }
+  /* Tiny stat cards still hold together. */
+  .grid > .card {
     break-inside: avoid;
     page-break-inside: avoid;
   }
 
-  /* Make sure images don't push off the right edge. */
+  /* Images: max width 100%, max height tighter so half-page hero shots
+   * don't leave empty page bottoms. */
   img { max-width: 100% !important; height: auto !important; }
 
   /* Hyperlinks remain readable + clickable in the saved PDF. */
@@ -240,14 +275,17 @@
   .print-cover {
     page-break-after: always;
     break-after: page;
-    /* Fill an entire A4 sheet edge-to-edge (we cleared @page :first margins). */
-    height: 297mm;
-    width: 100%;
+    /* Edge-to-edge A4 — explicit size in mm (vw/vh are unreliable in print). */
+    width: 210mm !important;
+    height: 297mm !important;
+    max-width: 210mm !important;
     background: linear-gradient(135deg, #0A1F47 0%, #1E4DAA 60%, #2A5DC4 100%);
     color: #fff;
     position: relative;
     margin: 0 !important;
     padding: 0 !important;
+    overflow: hidden;
+    box-sizing: border-box;
   }
   .print-cover-inner {
     height: 100%;
