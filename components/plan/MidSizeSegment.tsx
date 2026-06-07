@@ -253,7 +253,8 @@ export function MidSizeSegment() {
       {/* Active factory's pathway — switches as user hovers a card above.
        *  In print: render EVERY factory's pathway so PDF is complete. */}
       {printing ? (
-        FACTORIES.map((f) => (
+        <div className="print-pathway-grid">
+        {FACTORIES.map((f) => (
           <div
             key={f.num}
             className="px-4 pt-3 pb-4 border-t-2 mt-2"
@@ -264,17 +265,18 @@ export function MidSizeSegment() {
                 <div className="text-[10px] uppercase tracking-wider font-extrabold text-gray-500">
                   Pathway for
                 </div>
-                <div className="text-base font-extrabold" style={{ color: SEG_COLOR }}>
-                  {f.t} <span className="text-gray-500 font-normal text-xs">· {f.loc}</span>
+                <div className="text-sm font-extrabold" style={{ color: SEG_COLOR }}>
+                  {f.t} <span className="text-gray-500 font-normal text-[10px]">· {f.loc}</span>
                 </div>
               </div>
               <div className="text-[10px] text-gray-500 italic">
-                {f.pathway.length} stage{f.pathway.length === 1 ? "" : "s"}
+                {f.pathway.length}st
               </div>
             </div>
             <MilestoneRoadmap milestones={f.pathway} color={SEG_COLOR} />
           </div>
-        ))
+        ))}
+        </div>
       ) : (
         <div className="px-4 pt-3 pb-4 border-t-2 mt-2" style={{ borderColor: `${SEG_COLOR}40`, background: `${SEG_COLOR}08` }}>
           <div className="flex items-center justify-between mb-2">

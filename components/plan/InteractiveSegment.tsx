@@ -137,7 +137,8 @@ export function InteractiveSegment({ tag, name, reachable, desc, color, bg, topi
        *  In print mode we render EVERY topic's pathway so nothing is hidden
        *  in the saved PDF. */}
       {printing ? (
-        topics.map((t) => (
+        <div className="print-pathway-grid">
+        {topics.map((t) => (
           <div
             key={t.num}
             className="px-4 pt-3 pb-4 border-t-2 mt-2"
@@ -148,17 +149,18 @@ export function InteractiveSegment({ tag, name, reachable, desc, color, bg, topi
                 <div className="text-[10px] uppercase tracking-wider font-extrabold text-gray-500">
                   Pathway for
                 </div>
-                <div className="text-base font-extrabold" style={{ color }}>
+                <div className="text-sm font-extrabold" style={{ color }}>
                   {t.t}
                 </div>
               </div>
               <div className="text-[10px] text-gray-500 italic">
-                {t.pathway.length} stage{t.pathway.length === 1 ? "" : "s"}
+                {t.pathway.length}st
               </div>
             </div>
             <MilestoneRoadmap milestones={t.pathway} color={color} />
           </div>
-        ))
+        ))}
+        </div>
       ) : (
         <div
           className="px-4 pt-3 pb-4 border-t-2 mt-2"

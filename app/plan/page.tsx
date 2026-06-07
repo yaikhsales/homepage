@@ -38,6 +38,8 @@ import { MidSizeSegment } from "@/components/plan/MidSizeSegment";
 import { InteractiveSegment } from "@/components/plan/InteractiveSegment";
 import { FloatingGlass } from "@/components/plan/FloatingGlass";
 import { BodyTranslator } from "@/components/plan/BodyTranslator";
+import { PrintCover } from "@/components/plan/PrintCover";
+import { PrintEndPage } from "@/components/plan/PrintEndPage";
 
 const NAV: NavItem[] = [
   { id: "executive-summary", label: "Executive Summary",     labelKey: "nav.executive" },
@@ -152,6 +154,8 @@ export default async function PlanPage() {
 
       <main className="flex-1 max-w-4xl mx-auto px-5 sm:px-8 lg:px-12 py-10 lg:py-14">
         <BodyTranslator />
+        {/* Print-only cover (page 1 of the saved PDF). Hidden on screen. */}
+        <PrintCover />
         <PlanHero />
 
         {/* 01 — Executive Summary */}
@@ -927,17 +931,9 @@ export default async function PlanPage() {
           <p className="mt-1">By accessing this page you agree not to share its contents without permission.</p>
         </footer>
 
-        {/* Print-only clickable footer — every saved PDF lands on this link,
-         *  and the @page @bottom-center repeats the same text on each sheet.
-         */}
-        <a
-          href="https://www.yaikh.com"
-          className="print-footer-link"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Yai · Strategic DTV · www.yaikh.com
-        </a>
+        {/* Print-only end page (last sheet of the saved PDF). Contact +
+         *  clickable www.yaikh.com + Texlink Technologies block. */}
+        <PrintEndPage about={about} />
       </main>
     </div>
   );
