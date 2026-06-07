@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { MilestoneRoadmap, type Milestone } from "./MilestoneRoadmap";
+import { usePrintMode } from "@/lib/usePrintMode";
 
 /**
  * Mid-size Cambodia factories segment with INTERACTIVE per-factory pathway.
@@ -133,7 +134,9 @@ const COHORTS = Array.from(new Set(FACTORIES.map((f) => f.cohort))).sort((a, b) 
 
 export function MidSizeSegment() {
   const [activeIdx, setActiveIdx] = useState(0);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenState, setIsOpen] = useState(false);
+  const printing = usePrintMode();
+  const isOpen = isOpenState || printing;
   const active = FACTORIES[activeIdx];
 
   return (
@@ -247,24 +250,49 @@ export function MidSizeSegment() {
         })}
       </div>
 
-      {/* Active factory's pathway — switches as user hovers a card above */}
-      <div className="px-4 pt-3 pb-4 border-t-2 mt-2" style={{ borderColor: `${SEG_COLOR}40`, background: `${SEG_COLOR}08` }}>
-        <div className="flex items-center justify-between mb-2">
-          <div>
-            <div className="text-[10px] uppercase tracking-wider font-extrabold text-gray-500">
-              Pathway for
+      {/* Active factory's pathway — switches as user hovers a card above.
+       *  In print: render EVERY factory's pathway so PDF is complete. */}
+      {printing ? (
+        FACTORIES.map((f) => (
+          <div
+            key={f.num}
+            className="px-4 pt-3 pb-4 border-t-2 mt-2"
+            style={{ borderColor: `${SEG_COLOR}40`, background: `${SEG_COLOR}08` }}
+          >
+            <div className="flex items-center justify-between mb-2">
+              <div>
+                <div className="text-[10px] uppercase tracking-wider font-extrabold text-gray-500">
+                  Pathway for
+                </div>
+                <div className="text-base font-extrabold" style={{ color: SEG_COLOR }}>
+                  {f.t} <span className="text-gray-500 font-normal text-xs">· {f.loc}</span>
+                </div>
+              </div>
+              <div className="text-[10px] text-gray-500 italic">
+                {f.pathway.length} stage{f.pathway.length === 1 ? "" : "s"}
+              </div>
             </div>
-            <div className="text-base font-extrabold" style={{ color: SEG_COLOR }}>
-              {active.t} <span className="text-gray-500 font-normal text-xs">· {active.loc}</span>
+            <MilestoneRoadmap milestones={f.pathway} color={SEG_COLOR} />
+          </div>
+        ))
+      ) : (
+        <div className="px-4 pt-3 pb-4 border-t-2 mt-2" style={{ borderColor: `${SEG_COLOR}40`, background: `${SEG_COLOR}08` }}>
+          <div className="flex items-center justify-between mb-2">
+            <div>
+              <div className="text-[10px] uppercase tracking-wider font-extrabold text-gray-500">
+                Pathway for
+              </div>
+              <div className="text-base font-extrabold" style={{ color: SEG_COLOR }}>
+                {active.t} <span className="text-gray-500 font-normal text-xs">· {active.loc}</span>
+              </div>
+            </div>
+            <div className="text-[10px] text-gray-500 italic">
+              Hover a factory above to switch · {active.pathway.length} stage{active.pathway.length === 1 ? "" : "s"}
             </div>
           </div>
-          <div className="text-[10px] text-gray-500 italic">
-            Hover a factory above to switch · {active.pathway.length} stage{active.pathway.length === 1 ? "" : "s"}
-          </div>
+          <MilestoneRoadmap milestones={active.pathway} color={SEG_COLOR} />
         </div>
-
-        <MilestoneRoadmap milestones={active.pathway} color={SEG_COLOR} />
-      </div>
+      )}
       </>}
     </div>
   );

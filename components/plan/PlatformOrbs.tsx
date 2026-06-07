@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import { usePrintMode } from "@/lib/usePrintMode";
 
 type Mod = { n: string; soon?: boolean; confirmed?: boolean; desc: string };
 type Cat = { name: string; mods: Mod[] };
@@ -120,6 +121,7 @@ type Selected = { mod: Mod; cat: string; band: Band } | null;
 
 export function PlatformOrbs() {
   const [sel, setSel] = useState<Selected>(null);
+  const printing = usePrintMode();
 
   return (
     <div>
@@ -182,6 +184,39 @@ export function PlatformOrbs() {
           ))}
         </div>
       </div>
+
+      {/* Print-only module catalogue — every agent + description.
+       *  On screen, descriptions hide behind the tap-to-open modal; in print
+       *  we expand them all so the PDF carries the full module reference. */}
+      {printing && (
+        <div className="mt-6 space-y-4 break-inside-auto">
+          {BANDS.map((band) => (
+            <div key={band.id} className="rounded-lg overflow-hidden border" style={{ borderColor: band.color }}>
+              <div className="text-white text-xs font-extrabold uppercase tracking-wider px-3 py-2" style={{ background: band.color }}>
+                {band.name}
+              </div>
+              <div className="p-3 space-y-2">
+                {band.cats.map((cat) => (
+                  <div key={cat.name}>
+                    <div className="text-[10px] font-bold uppercase tracking-wider text-yai-navy/70 mb-1">
+                      {cat.name}
+                    </div>
+                    <ul className="space-y-1">
+                      {cat.mods.map((m) => (
+                        <li key={m.n} className="text-[11px] leading-snug">
+                          <span className="font-extrabold text-yai-navy">{m.n}</span>
+                          {m.soon && <span className="text-[9px] uppercase tracking-wider text-gray-400 ml-1">soon</span>}
+                          <span className="text-gray-700"> — {m.desc}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* agent detail modal */}
       <AnimatePresence>

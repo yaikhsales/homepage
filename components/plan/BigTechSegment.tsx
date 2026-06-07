@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { MilestoneRoadmap, type Milestone } from "./MilestoneRoadmap";
+import { usePrintMode } from "@/lib/usePrintMode";
 
 /**
  * Big-tech & strategic partners segment with INTERACTIVE per-partner pathway.
@@ -190,7 +191,9 @@ const STATUS_COLOR: Record<Status, string> = { done: "#10B981", progress: "#F370
 
 export function BigTechSegment() {
   const [activeIdx, setActiveIdx] = useState(0);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenState, setIsOpen] = useState(false);
+  const printing = usePrintMode();
+  const isOpen = isOpenState || printing;
   const active = PARTNERS[activeIdx];
 
   return (
@@ -303,36 +306,61 @@ export function BigTechSegment() {
         })}
       </ul>
 
-      {/* Active partner's pathway — switches as user hovers a card above */}
-      <div className="px-4 pt-3 pb-4 border-t-2 mt-2" style={{ borderColor: `${SEG_COLOR}40`, background: `${SEG_COLOR}08` }}>
-        <div className="flex items-center justify-between mb-2">
-          <div>
-            <div className="text-[10px] uppercase tracking-wider font-extrabold text-gray-500">
-              Pathway for
+      {/* Active partner's pathway — switches as user hovers a card above.
+       *  In print: render EVERY partner's pathway so PDF is complete. */}
+      {printing ? (
+        PARTNERS.map((p) => (
+          <div
+            key={p.num}
+            className="px-4 pt-3 pb-4 border-t-2 mt-2"
+            style={{ borderColor: `${SEG_COLOR}40`, background: `${SEG_COLOR}08` }}
+          >
+            <div className="flex items-center justify-between mb-2">
+              <div>
+                <div className="text-[10px] uppercase tracking-wider font-extrabold text-gray-500">
+                  Pathway for
+                </div>
+                <div className="text-base font-extrabold" style={{ color: SEG_COLOR }}>
+                  {p.t}
+                </div>
+              </div>
+              <div className="text-[10px] text-gray-500 italic">
+                {p.pathway.length} stages
+              </div>
             </div>
-            <div className="text-base font-extrabold" style={{ color: SEG_COLOR }}>
-              {active.url ? (
-                <a
-                  href={active.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:underline inline-flex items-baseline gap-1"
-                >
-                  {active.t}
-                  <span className="text-[11px] opacity-70">↗</span>
-                </a>
-              ) : (
-                active.t
-              )}
+            <MilestoneRoadmap milestones={p.pathway} color={SEG_COLOR} />
+          </div>
+        ))
+      ) : (
+        <div className="px-4 pt-3 pb-4 border-t-2 mt-2" style={{ borderColor: `${SEG_COLOR}40`, background: `${SEG_COLOR}08` }}>
+          <div className="flex items-center justify-between mb-2">
+            <div>
+              <div className="text-[10px] uppercase tracking-wider font-extrabold text-gray-500">
+                Pathway for
+              </div>
+              <div className="text-base font-extrabold" style={{ color: SEG_COLOR }}>
+                {active.url ? (
+                  <a
+                    href={active.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:underline inline-flex items-baseline gap-1"
+                  >
+                    {active.t}
+                    <span className="text-[11px] opacity-70">↗</span>
+                  </a>
+                ) : (
+                  active.t
+                )}
+              </div>
+            </div>
+            <div className="text-[10px] text-gray-500 italic">
+              Hover a partner above to switch · {active.pathway.length} stages
             </div>
           </div>
-          <div className="text-[10px] text-gray-500 italic">
-            Hover a partner above to switch · {active.pathway.length} stages
-          </div>
+          <MilestoneRoadmap milestones={active.pathway} color={SEG_COLOR} />
         </div>
-
-        <MilestoneRoadmap milestones={active.pathway} color={SEG_COLOR} />
-      </div>
+      )}
       </>}
     </div>
   );

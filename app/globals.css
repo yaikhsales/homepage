@@ -151,6 +151,23 @@
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
+
+  /* CRITICAL: Framer Motion sets inline opacity:0 + transform on initial render
+   * for whileInView/initial animations. When the user prints from the top of
+   * the page, sections that haven't scrolled into view never animate in — so
+   * they're invisible on paper. Forcing every element opaque + un-transformed
+   * in print mode rescues all of them. */
+  *, *::before, *::after {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* Make sure any conditionally-hidden interactive panels we forced open
+   * actually flow on the page (no fixed positioning sticking them off-page). */
+  [class*="fixed"] { position: static !important; }
 }
 
 /* On screen, the inline print-only link is hidden. */

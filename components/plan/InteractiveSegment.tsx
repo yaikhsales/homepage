@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { MilestoneRoadmap, type Milestone } from "./MilestoneRoadmap";
+import { usePrintMode } from "@/lib/usePrintMode";
 
 /**
  * Generic interactive market-segment block.
@@ -36,7 +37,10 @@ const STATUS_COLOR: Record<Status, string> = { done: "#10B981", progress: "#F370
 
 export function InteractiveSegment({ tag, name, reachable, desc, color, bg, topics }: Props) {
   const [activeIdx, setActiveIdx] = useState(0);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenState, setIsOpen] = useState(false);
+  const printing = usePrintMode();
+  // In print: force expanded so the topic grid + every pathway renders.
+  const isOpen = isOpenState || printing;
   const active = topics[activeIdx];
 
   return (
@@ -129,27 +133,53 @@ export function InteractiveSegment({ tag, name, reachable, desc, color, bg, topi
         })}
       </ul>
 
-      {/* Active topic's pathway — switches as user hovers a card above */}
-      <div
-        className="px-4 pt-3 pb-4 border-t-2 mt-2"
-        style={{ borderColor: `${color}40`, background: `${color}08` }}
-      >
-        <div className="flex items-center justify-between mb-2">
-          <div>
-            <div className="text-[10px] uppercase tracking-wider font-extrabold text-gray-500">
-              Pathway for
+      {/* Active topic's pathway — switches as user hovers a card above.
+       *  In print mode we render EVERY topic's pathway so nothing is hidden
+       *  in the saved PDF. */}
+      {printing ? (
+        topics.map((t) => (
+          <div
+            key={t.num}
+            className="px-4 pt-3 pb-4 border-t-2 mt-2"
+            style={{ borderColor: `${color}40`, background: `${color}08` }}
+          >
+            <div className="flex items-center justify-between mb-2">
+              <div>
+                <div className="text-[10px] uppercase tracking-wider font-extrabold text-gray-500">
+                  Pathway for
+                </div>
+                <div className="text-base font-extrabold" style={{ color }}>
+                  {t.t}
+                </div>
+              </div>
+              <div className="text-[10px] text-gray-500 italic">
+                {t.pathway.length} stage{t.pathway.length === 1 ? "" : "s"}
+              </div>
             </div>
-            <div className="text-base font-extrabold" style={{ color }}>
-              {active.t}
+            <MilestoneRoadmap milestones={t.pathway} color={color} />
+          </div>
+        ))
+      ) : (
+        <div
+          className="px-4 pt-3 pb-4 border-t-2 mt-2"
+          style={{ borderColor: `${color}40`, background: `${color}08` }}
+        >
+          <div className="flex items-center justify-between mb-2">
+            <div>
+              <div className="text-[10px] uppercase tracking-wider font-extrabold text-gray-500">
+                Pathway for
+              </div>
+              <div className="text-base font-extrabold" style={{ color }}>
+                {active.t}
+              </div>
+            </div>
+            <div className="text-[10px] text-gray-500 italic">
+              Hover a topic above to switch · {active.pathway.length} stage{active.pathway.length === 1 ? "" : "s"}
             </div>
           </div>
-          <div className="text-[10px] text-gray-500 italic">
-            Hover a topic above to switch · {active.pathway.length} stage{active.pathway.length === 1 ? "" : "s"}
-          </div>
+          <MilestoneRoadmap milestones={active.pathway} color={color} />
         </div>
-
-        <MilestoneRoadmap milestones={active.pathway} color={color} />
-      </div>
+      )}
       </>}
     </div>
   );

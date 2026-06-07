@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { usePrintMode } from "@/lib/usePrintMode";
 
 type Split = { pct: number; color: string; label: string; description?: string };
 type Member = { alias: string; name: string; lead?: boolean; support?: boolean };
@@ -112,6 +113,9 @@ const PILLAR_HEIGHT = 300; // px
 export function TeamClusters() {
   const [selected, setSelected] = useState<number>(1);
   const cluster = CLUSTERS.find((c) => c.num === selected)!;
+  const printing = usePrintMode();
+  // In print: every cluster's detail panel is shown stacked.
+  const detailsToRender: Cluster[] = printing ? CLUSTERS : [cluster];
 
   return (
     <>
@@ -189,8 +193,9 @@ export function TeamClusters() {
         })}
       </div>
 
-      {/* Animated single detail panel for the selected cluster */}
+      {/* Detail panel(s). Screen: animated single (selected). Print: all 5 stacked. */}
       <AnimatePresence mode="wait">
+        {detailsToRender.map((cluster) => (
         <motion.div
           key={cluster.num}
           initial={{ opacity: 0, y: 12, scale: 0.97 }}
@@ -273,6 +278,7 @@ export function TeamClusters() {
             </p>
           )}
         </motion.div>
+        ))}
       </AnimatePresence>
 
       <p className="text-xs text-gray-400 italic mt-3 text-center">
