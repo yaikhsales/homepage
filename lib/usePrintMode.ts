@@ -23,8 +23,19 @@ export function usePrintMode(): boolean {
     window.addEventListener("afterprint", onAfter);
 
     const mql = window.matchMedia?.("print");
+    // Initial check — Puppeteer's emulateMediaType('print') sets this true
+    // BEFORE the hook subscribes, so without this the PDF generator never
+    // triggers expanded mode.
+    if (mql?.matches) setPrinting(true);
     const onMql = (e: MediaQueryListEvent) => setPrinting(e.matches);
     mql?.addEventListener?.("change", onMql);
+
+    // Also honour ?print=1 query — explicit override for Puppeteer-driven
+    // renders, in case media emulation is unreliable.
+    try {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("print") === "1") setPrinting(true);
+    } catch {}
 
     return () => {
       window.removeEventListener("beforeprint", onBefore);

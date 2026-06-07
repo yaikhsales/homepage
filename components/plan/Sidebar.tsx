@@ -76,22 +76,32 @@ export function Sidebar({
     router.refresh();
   };
 
-  const onPrint = () => {
-    // One-time tip: tell the user to uncheck "Headers and footers" in the
-    // browser's print dialog so the date / URL / title strip is removed and
-    // only our @bottom-center "Yai · Strategic DTV · www.yaikh.com" footer
-    // appears on each page.
+  const [pdfBusy, setPdfBusy] = useState(false);
+  const onPrint = async () => {
+    if (pdfBusy) return;
+    setPdfBusy(true);
     try {
-      if (typeof window !== "undefined" && !localStorage.getItem("yai-print-tip-seen")) {
-        alert(
-          "Tip for the best PDF:\n\n" +
-            "In the print dialog → open 'More settings' → uncheck 'Headers and footers'.\n\n" +
-            "That removes the browser date/URL strip so only the Yai · Strategic DTV · www.yaikh.com footer prints."
-        );
-        localStorage.setItem("yai-print-tip-seen", "1");
+      const res = await fetch("/api/pdf", { credentials: "include" });
+      if (!res.ok) {
+        const txt = await res.text();
+        throw new Error(`PDF API ${res.status}: ${txt}`);
       }
-    } catch {}
-    window.print();
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "yai-strategic-dtv.pdf";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      // Give the browser a tick to start the download before revoking.
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+    } catch (err) {
+      console.error("[Download PDF] failed", err);
+      alert("PDF generation failed. Please try again, or use Ctrl+P as a fallback.");
+    } finally {
+      setPdfBusy(false);
+    }
   };
 
   return (
@@ -201,9 +211,10 @@ export function Sidebar({
         <div className="px-4 pt-2 pb-4 space-y-2">
           <button
             onClick={onPrint}
-            className="w-full text-xs bg-white/10 hover:bg-white/20 text-white py-2 rounded transition"
+            disabled={pdfBusy}
+            className="w-full text-xs bg-white/10 hover:bg-white/20 text-white py-2 rounded transition disabled:opacity-60 disabled:cursor-wait"
           >
-            {t("sidebar.download_pdf")}
+            {pdfBusy ? "Generating PDF…" : t("sidebar.download_pdf")}
           </button>
           <button
             onClick={onLogout}
