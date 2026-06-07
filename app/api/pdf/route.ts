@@ -62,35 +62,31 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "unauthorised" }, { status: 401 });
   }
 
-  // Build the origin URL the headless browser should hit. We always go to
-  // localhost when possible (avoids needing public DNS resolution and any
-  // CDN cache); fall back to the public host if PORT isn't known.
-  const host = headers().get("host") ?? "localhost:3000";
-  const proto = headers().get("x-forwarded-proto") ?? "http";
-  const origin = `${proto}://${host}`;
+  // Headless browser navigates to localhost on the same container so it
+  // doesn't loop through Railway's edge proxy + SSL termination.
+  const port = process.env.PORT ?? "3000";
+  const origin = `http://127.0.0.1:${port}`;
 
   let browser;
   try {
+    console.log("[api/pdf] launching browser, origin=", origin);
     browser = await getBrowser();
     const page = await browser.newPage();
 
-    // Mirror the caller's session cookie so the headless tab loads
-    // /plan as the same authenticated user. Domain must be the host
-    // without the protocol/port for puppeteer's cookie API.
-    const cookieDomain = host.replace(/:\d+$/, "");
+    // Mirror the caller's session cookie onto the localhost tab.
     await page.setCookie({
       name: COOKIE_NAME,
       value: session!,
-      domain: cookieDomain,
+      domain: "127.0.0.1",
       path: "/",
       httpOnly: false,
-      secure: proto === "https",
+      secure: false,
     });
 
-    // Print mode — both via media emulation AND via ?print=1 (the
-    // usePrintMode hook checks both, so this is belt-and-braces).
+    // Print mode — both via media emulation AND via ?print=1 query.
     await page.emulateMediaType("print");
 
+    console.log("[api/pdf] navigating to", `${origin}/plan?print=1`);
     await page.goto(`${origin}/plan?print=1`, {
       waitUntil: "networkidle0",
       timeout: 45_000,
@@ -127,9 +123,15 @@ export async function GET(req: NextRequest) {
     });
   } catch (err) {
     console.error("[api/pdf] failure", err);
-    const message = err instanceof Error ? err.message : "unknown";
+    const message = err instanceof Error ? err.message : String(err);
+    const stack = err instanceof Error ? err.stack : undefined;
     return NextResponse.json(
-      { error: "pdf-generation-failed", detail: message },
+      {
+        error: "pdf-generation-failed",
+        detail: message,
+        stack: stack?.split("\n").slice(0, 5).join(" | "),
+        env: process.env.NODE_ENV,
+      },
       { status: 500 }
     );
   } finally {

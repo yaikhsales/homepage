@@ -83,8 +83,15 @@ export function Sidebar({
     try {
       const res = await fetch("/api/pdf", { credentials: "include" });
       if (!res.ok) {
-        const txt = await res.text();
-        throw new Error(`PDF API ${res.status}: ${txt}`);
+        let detail = "";
+        try {
+          const j = await res.json();
+          detail = `\n\nServer said:\n${j.detail || j.error || JSON.stringify(j)}`;
+          if (j.stack) detail += `\n\n${j.stack}`;
+        } catch {
+          detail = `\n\n${await res.text()}`;
+        }
+        throw new Error(`PDF API ${res.status}${detail}`);
       }
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
@@ -98,7 +105,8 @@ export function Sidebar({
       setTimeout(() => URL.revokeObjectURL(url), 2000);
     } catch (err) {
       console.error("[Download PDF] failed", err);
-      alert("PDF generation failed. Please try again, or use Ctrl+P as a fallback.");
+      const msg = err instanceof Error ? err.message : String(err);
+      alert(`PDF generation failed.\n${msg}\n\nFallback: use Ctrl+P.`);
     } finally {
       setPdfBusy(false);
     }
