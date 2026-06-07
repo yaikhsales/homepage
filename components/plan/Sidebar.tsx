@@ -76,7 +76,23 @@ export function Sidebar({
     router.refresh();
   };
 
-  const onPrint = () => window.print();
+  const onPrint = () => {
+    // One-time tip: tell the user to uncheck "Headers and footers" in the
+    // browser's print dialog so the date / URL / title strip is removed and
+    // only our @bottom-center "Yai · Strategic DTV · www.yaikh.com" footer
+    // appears on each page.
+    try {
+      if (typeof window !== "undefined" && !localStorage.getItem("yai-print-tip-seen")) {
+        alert(
+          "Tip for the best PDF:\n\n" +
+            "In the print dialog → open 'More settings' → uncheck 'Headers and footers'.\n\n" +
+            "That removes the browser date/URL strip so only the Yai · Strategic DTV · www.yaikh.com footer prints."
+        );
+        localStorage.setItem("yai-print-tip-seen", "1");
+      }
+    } catch {}
+    window.print();
+  };
 
   return (
     <>

@@ -17,8 +17,8 @@ const allura = Allura({
 });
 
 export const metadata: Metadata = {
-  title: "Yai — Business Plan",
-  description: "Confidential. Yai / Texlink Technologies business plan and strategy portal.",
+  title: "Yai · Strategic DTV",
+  description: "Confidential. Yai / Texlink Technologies — Strategic DTV portal.",
   robots: { index: false, follow: false },
   icons: {
     icon: "/icon.svg",

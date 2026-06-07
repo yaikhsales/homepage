@@ -921,11 +921,23 @@ export default async function PlanPage() {
           </Card>
         </Section>
 
-        {/* Footer */}
+        {/* Footer (screen only) */}
         <footer className="mt-20 pt-10 border-t border-yai-border text-center text-sm text-gray-500 no-print">
           <p>Confidential — Yai / Texlink Technologies Co., Ltd.</p>
           <p className="mt-1">By accessing this page you agree not to share its contents without permission.</p>
         </footer>
+
+        {/* Print-only clickable footer — every saved PDF lands on this link,
+         *  and the @page @bottom-center repeats the same text on each sheet.
+         */}
+        <a
+          href="https://www.yaikh.com"
+          className="print-footer-link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Yai · Strategic DTV · www.yaikh.com
+        </a>
       </main>
     </div>
   );

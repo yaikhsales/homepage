@@ -49,13 +49,112 @@
   .sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
 }
 
-@media print {
-  aside, .no-print { display: none !important; }
-  main { margin-left: 0 !important; max-width: 100% !important; padding: 0 !important; }
-  body { background: #fff !important; }
-  section { break-inside: avoid; }
-  h2 { break-after: avoid; }
+/* ─────────────── PRINT / PDF EXPORT ─────────────── */
+@page {
+  size: A4;
+  /* Top tight (no browser header), bottom wider for our footer. */
+  margin: 1.4cm 1.2cm 2.2cm 1.2cm;
+
+  /* Custom per-page footer — overrides browser default URL/date strip when
+   * the user unchecks "Headers and footers" in the print dialog. */
+  @bottom-center {
+    content: "Yai · Strategic DTV   ·   www.yaikh.com   ·   page " counter(page) " / " counter(pages);
+    font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+    font-size: 9pt;
+    color: #1E4DAA;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  /* Suppress the default top header area — these have no `content`, so the
+   * browser's date/title chrome has nothing to render into. */
+  @top-left   { content: ""; }
+  @top-center { content: ""; }
+  @top-right  { content: ""; }
 }
+
+@media print {
+  /* Hide chrome that's not meant for paper. */
+  aside,
+  .no-print,
+  nav.no-print,
+  button,
+  [role="button"] { display: none !important; }
+
+  /* Open up the main column to use the full page width. */
+  main {
+    margin-left: 0 !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  body {
+    background: #fff !important;
+    color: #111 !important;
+    /* Tighter base size for print so more content fits per page. */
+    font-size: 11pt;
+  }
+
+  /* Re-scale html font-size for print so all rem-based Tailwind sizes shrink
+   * to a sensible print baseline (was a 15-21px fluid screen value). */
+  html { font-size: 12pt !important; }
+
+  /* Section pacing — keep each section together when it fits; otherwise
+   * allow a clean break BEFORE a new section so headings start on a fresh
+   * area, not orphaned at the bottom of a page. */
+  section {
+    break-inside: auto;
+    break-before: auto;
+    page-break-inside: auto;
+  }
+  /* Avoid splitting headings from their following content. */
+  h1, h2, h3, h4 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+  /* Cards / images should not be split across pages. */
+  .card,
+  .rounded-xl,
+  .rounded-2xl,
+  img,
+  svg,
+  figure,
+  table {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Make sure images don't push off the right edge. */
+  img { max-width: 100% !important; height: auto !important; }
+
+  /* Hyperlinks remain readable + clickable in the saved PDF. */
+  a {
+    color: #1E4DAA !important;
+    text-decoration: none !important;
+  }
+
+  /* Inline footer at the very end of the document — gives a clickable
+   * www.yaikh.com link (the @bottom-center version above is plain text). */
+  .print-footer-link {
+    display: block !important;
+    text-align: center;
+    margin-top: 1.5cm;
+    padding-top: 0.6cm;
+    border-top: 1px solid #d6d6d6;
+    color: #1E4DAA;
+    font-size: 9.5pt;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  /* Force-color so backgrounds/brand colors print exactly as on screen. */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
+
+/* On screen, the inline print-only link is hidden. */
+.print-footer-link { display: none; }
 
 /* Hide Google Translate's injected top banner — we drive translation via our own UK/CN flag buttons */
 .goog-te-banner-frame.skiptranslate { display: none !important; }
