@@ -97,41 +97,8 @@ export function Sidebar({
     router.refresh();
   };
 
-  const [pdfBusy, setPdfBusy] = useState(false);
-  const onPrint = async () => {
-    if (pdfBusy) return;
-    setPdfBusy(true);
-    try {
-      const res = await fetch("/api/pdf", { credentials: "include" });
-      if (!res.ok) {
-        let detail = "";
-        try {
-          const j = await res.json();
-          detail = `\n\nServer said:\n${j.detail || j.error || JSON.stringify(j)}`;
-          if (j.stack) detail += `\n\n${j.stack}`;
-        } catch {
-          detail = `\n\n${await res.text()}`;
-        }
-        throw new Error(`PDF API ${res.status}${detail}`);
-      }
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "yai-strategic-dtv.pdf";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      // Give the browser a tick to start the download before revoking.
-      setTimeout(() => URL.revokeObjectURL(url), 2000);
-    } catch (err) {
-      console.error("[Download PDF] failed", err);
-      const msg = err instanceof Error ? err.message : String(err);
-      alert(`PDF generation failed.\n${msg}\n\nFallback: use Ctrl+P.`);
-    } finally {
-      setPdfBusy(false);
-    }
-  };
+  // PDF download removed for now — server-side Puppeteer generation lives
+  // in app/api/pdf/route.ts and will be wired back up later.
 
   return (
     <>
@@ -261,15 +228,8 @@ export function Sidebar({
           </div>
         </div>
 
-        {/* Action buttons */}
+        {/* Action buttons — PDF download removed for now; will revisit later */}
         <div className="px-4 pt-2 pb-4 space-y-2">
-          <button
-            onClick={onPrint}
-            disabled={pdfBusy}
-            className="w-full text-xs bg-white/10 hover:bg-white/20 text-white py-2 rounded transition disabled:opacity-60 disabled:cursor-wait"
-          >
-            {pdfBusy ? "Generating PDF…" : t("sidebar.download_pdf")}
-          </button>
           <button
             onClick={onLogout}
             className="w-full text-xs text-white/60 hover:text-white py-1 transition"

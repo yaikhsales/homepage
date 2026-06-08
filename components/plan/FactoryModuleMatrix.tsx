@@ -85,6 +85,8 @@ const known: Array<[string, string, Status]> = [
   ["YTM · Machine Maintenance + TPM Shop",               "YY", "full"],
   // CA factory is in the middle of YQMS rollout
   ["YQMS · Quality Mgmt (6 stages + Fini Check)",        "CA", "impl"],
+  // CA Platform — implementing (Laravel + Mongo + Mobile + AIoT roll-out underway)
+  ["Platform · Laravel + Mongo + Mobile + AIoT",         "CA", "impl"],
   // Digital Audit — YW + BZ partly use (not factories), IDFL testing
   ["Digital Audit · 8S · AIoT · Waste",                  "YW",   "impl"],
   ["Digital Audit · 8S · AIoT · Waste",                  "BZ",   "impl"],
