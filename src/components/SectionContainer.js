@@ -7,7 +7,7 @@ const SectionContainer = ({ section, onModuleClick, onGMChatClick, botVersion = 
   // Central Section (Management Dashboard)
   if (section.isCentral) {
       return (
-          <div className={`relative flex flex-col mx-2 shrink-0 ${isDropdownOpen ? '' : 'apple-fade-in-delay'}`}>
+          <div className={`relative flex flex-col mx-2 shrink-0 hover:z-[100] ${isDropdownOpen ? '' : 'apple-fade-in-delay'}`}>
              {/* GM Bot Icon - Positioned absolutely at the top, doesn't affect label position */}
              <div className="absolute -top-24 left-1/2 -translate-x-1/2 group flex flex-col items-center gap-2 z-20">
                 {!isDropdownOpen && <div className="absolute inset-0 rounded-full bg-purple-400/20 blur-xl group-hover:bg-purple-400/30 transition-all duration-500 scale-150"></div>}
@@ -51,7 +51,7 @@ const SectionContainer = ({ section, onModuleClick, onGMChatClick, botVersion = 
   const isAdministration = section.id === 'admin-section';
   
   return (
-    <div className={`flex flex-col mx-2 ${isDropdownOpen ? '' : 'apple-fade-in-delay-2'}`}>
+    <div className={`relative flex flex-col mx-2 hover:z-[100] ${isDropdownOpen ? '' : 'apple-fade-in-delay-2'}`}>
        {/* Big Section Label (Spans all children) */}
        <div className="w-full text-white font-bold text-center py-2 rounded-lg mb-4 text-sm md:text-base h-[38px] flex items-center justify-center transition-all duration-300 bg-white bg-opacity-20 backdrop-blur-sm px-3 md:px-4 shadow-sm">
           {translateModuleTitle(section.title)}

@@ -10,7 +10,7 @@ const ColumnGroup = ({ group, onModuleClick, botVersion = 'default', onBotModule
   const isWhiteGroup = group.id === 'prepro-col' || group.id === 'prodmat-col';
   
   return (
-    <div className="flex flex-col w-[110px] sm:w-[120px] md:w-[130px] shrink-0">
+    <div className="relative flex flex-col w-[110px] sm:w-[120px] md:w-[130px] shrink-0 hover:z-[100]">
       {/* Sub Label - Always show frame, even if title is empty - Big label size matching QA but rounded */}
       <div className="mb-5 flex justify-center h-[38px] items-center">
         <div className={`w-full text-center py-2 rounded-lg text-sm md:text-base font-semibold flex items-center justify-center transition-all duration-300 bg-white bg-opacity-20 backdrop-blur-sm px-3 shadow-sm ${group.title ? 'text-white' : 'text-transparent'}`}>
@@ -23,7 +23,7 @@ const ColumnGroup = ({ group, onModuleClick, botVersion = 'default', onBotModule
         {group.modules.map((mod, idx) => (
           <div 
             key={idx}
-            className={isDropdownOpen ? '' : 'apple-fade-in-delay'}
+            className={`relative hover:z-[100] ${isDropdownOpen ? '' : 'apple-fade-in-delay'}`}
             style={isDropdownOpen ? {} : { 
               animationDelay: `${0.6 + idx * 0.1}s`,
               opacity: 0 
