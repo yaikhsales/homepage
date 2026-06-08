@@ -1,21 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-/* Pinned floating glass card — Yai brand panel.
- * Locked to the top-right of the viewport with position: fixed.
- * Expands wider when the sidebar is collapsed so it can host more content. */
+/* Q&A floating glass panel — draggable by the header, resizable from the
+ * bottom-right corner. Items area scrolls internally so all questions are
+ * accessible regardless of panel height. */
 
-const PANEL_W = 220;          // width when sidebar visible
-const PANEL_W_EXPANDED = 440;  // width when sidebar collapsed
-const PANEL_H = 780;
-const TOP_OFFSET  = 24;
-const RIGHT_OFFSET = 24;
+const DEFAULT_W = 260;
+const DEFAULT_H = 560;
+const MIN_W = 200;
+const MIN_H = 200;
+const MAX_W = 720;
+const MAX_H = 1200;
+const POS_KEY  = "yai-glass-v2-pos";
+const SIZE_KEY = "yai-glass-v2-size";
 
-/** Q&A items shown in the floating glass panel. Each one is a numbered
- *  card. If `anchor` is set, the card is clickable and smooth-scrolls to
- *  that DOM id. If omitted, the card renders as a 'for discussion'
- *  placeholder — no link, dimmer styling, italic note. */
 const QA_ITEMS: Array<{ n: number; text: string; anchor?: string; note?: string }> = [
   { n: 1, text: "Sales plan covering at least the next six to twelve months",                          anchor: "sales-expenses-budget" },
   { n: 2, text: "How we plan to market the Texlink platform",                                          anchor: "customers" },
@@ -30,87 +29,146 @@ const QA_ITEMS: Array<{ n: number; text: string; anchor?: string; note?: string 
 
 export function FloatingGlass() {
   const [mounted, setMounted] = useState(false);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  // Position is measured from top-left of viewport so the panel can be
+  // dragged anywhere — including over by the blue sidebar on the left.
+  const [pos, setPos] = useState({ x: 0, y: 24 });
+  const [size, setSize] = useState({ w: DEFAULT_W, h: DEFAULT_H });
+  const dragRef = useRef<{ kind: "move" | "resize" | null; ox: number; oy: number; sw: number; sh: number }>({
+    kind: null, ox: 0, oy: 0, sw: 0, sh: 0,
+  });
 
   useEffect(() => {
     setMounted(true);
-    try { localStorage.removeItem("yai-glass-pos"); } catch {}
+    if (typeof window === "undefined") return;
 
-    // React to sidebar collapse so the glass can stretch to use the space.
+    // Initial position — right side, with a fallback for the saved value.
+    const defaultX = Math.max(0, window.innerWidth - DEFAULT_W - 24);
+    let nextPos = { x: defaultX, y: 24 };
     try {
-      if (typeof window !== "undefined") {
-        const saved = localStorage.getItem("yai-sidebar-collapsed");
-        if (saved === "1") setSidebarCollapsed(true);
+      const raw = localStorage.getItem(POS_KEY);
+      if (raw) {
+        const p = JSON.parse(raw);
+        if (typeof p.x === "number" && typeof p.y === "number") nextPos = p;
       }
     } catch {}
-    const onSidebar = (e: Event) => {
-      const detail = (e as CustomEvent<boolean>).detail;
-      setSidebarCollapsed(Boolean(detail));
-    };
-    window.addEventListener("yai-sidebar-collapsed", onSidebar);
-    return () => window.removeEventListener("yai-sidebar-collapsed", onSidebar);
+    setPos(clampPos(nextPos.x, nextPos.y, size.w, size.h));
+
+    try {
+      const raw = localStorage.getItem(SIZE_KEY);
+      if (raw) {
+        const s = JSON.parse(raw);
+        if (typeof s.w === "number" && typeof s.h === "number") {
+          setSize({
+            w: clamp(s.w, MIN_W, Math.min(MAX_W, window.innerWidth - 16)),
+            h: clamp(s.h, MIN_H, Math.min(MAX_H, window.innerHeight - 16)),
+          });
+        }
+      }
+    } catch {}
+    // Stale cleanup from earlier prototypes
+    try {
+      localStorage.removeItem("yai-glass-pos");
+    } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (!mounted) return null;
+  // Persist position + size whenever they change (post-mount).
+  useEffect(() => {
+    if (!mounted) return;
+    try { localStorage.setItem(POS_KEY,  JSON.stringify(pos));  } catch {}
+    try { localStorage.setItem(SIZE_KEY, JSON.stringify(size)); } catch {}
+  }, [mounted, pos, size]);
 
-  const width = sidebarCollapsed ? PANEL_W_EXPANDED : PANEL_W;
+  // ── drag (move) + resize handlers ────────────────────────────────────────
+  const onMoveStart = (e: React.PointerEvent) => {
+    const target = e.target as HTMLElement;
+    // Don't start dragging when the user is clicking a Q&A link or button.
+    if (target.closest("a, button, input, textarea, select")) return;
+    e.preventDefault();
+    dragRef.current = {
+      kind: "move",
+      ox: e.clientX - pos.x,
+      oy: e.clientY - pos.y,
+      sw: size.w, sh: size.h,
+    };
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+  };
+
+  const onResizeStart = (e: React.PointerEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dragRef.current = {
+      kind: "resize",
+      ox: e.clientX,
+      oy: e.clientY,
+      sw: size.w, sh: size.h,
+    };
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+  };
+
+  const onPointerMove = (e: React.PointerEvent) => {
+    const d = dragRef.current;
+    if (!d.kind) return;
+    if (d.kind === "move") {
+      setPos(clampPos(e.clientX - d.ox, e.clientY - d.oy, size.w, size.h));
+    } else if (d.kind === "resize") {
+      const w = clamp(d.sw + (e.clientX - d.ox), MIN_W, Math.min(MAX_W, window.innerWidth  - pos.x - 8));
+      const h = clamp(d.sh + (e.clientY - d.oy), MIN_H, Math.min(MAX_H, window.innerHeight - pos.y - 8));
+      setSize({ w, h });
+    }
+  };
+
+  const onPointerUp = (e: React.PointerEvent) => {
+    dragRef.current = { kind: null, ox: 0, oy: 0, sw: 0, sh: 0 };
+    try { (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId); } catch {}
+  };
+
+  if (!mounted) return null;
 
   return (
     <div
       className="fixed z-40 no-print select-none"
-      style={{ top: `${TOP_OFFSET}px`, right: `${RIGHT_OFFSET}px` }}
+      style={{ top: `${pos.y}px`, left: `${pos.x}px` }}
     >
       <div
-        className="relative rounded-3xl overflow-hidden transition-[width] duration-500 ease-out"
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
+        className="relative rounded-3xl overflow-hidden touch-none flex flex-col"
         style={{
-          width: `${width}px`,
-          height: `${PANEL_H}px`,
-          maxWidth: "calc(100vw - 40px)",
-          // Much lighter blur so text behind is still legible, no white wash.
+          width: `${size.w}px`,
+          height: `${size.h}px`,
           backdropFilter: "blur(8px) saturate(160%)",
           WebkitBackdropFilter: "blur(8px) saturate(160%)",
-          // Nearly invisible tint — content behind dominates the look.
-          background: "rgba(255, 255, 255, 0.04)",
-          // Soft outer shadow for floating elevation; subtle inner highlight only.
-          boxShadow:
-            "0 20px 50px -20px rgba(10,31,71,0.3), 0 2px 6px rgba(10,31,71,0.05), inset 0 1px 0 rgba(255,255,255,0.45)",
+          background: "rgba(255, 255, 255, 0.06)",
+          boxShadow: "0 20px 50px -20px rgba(10,31,71,0.3), 0 2px 6px rgba(10,31,71,0.05), inset 0 1px 0 rgba(255,255,255,0.45)",
           border: "1px solid rgba(255,255,255,0.5)",
         }}
       >
-        {/* Soft specular sheen at the top — only ~15% opacity so it doesn't block content */}
+        {/* Edge highlights */}
+        <div className="absolute inset-x-0 top-0 h-[20%] pointer-events-none" style={{ background: "linear-gradient(180deg, rgba(255,255,255,0.18) 0%, transparent 100%)" }} />
+        <div className="absolute inset-y-0 left-0 w-px pointer-events-none" style={{ background: "linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.7) 30%, rgba(255,255,255,0.2) 70%, transparent 100%)" }} />
+        <div className="absolute inset-y-0 right-0 w-px pointer-events-none" style={{ background: "linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.3) 30%, rgba(255,255,255,0.1) 70%, transparent 100%)" }} />
+
+        {/* Header — drag handle */}
         <div
-          className="absolute inset-x-0 top-0 h-[20%] pointer-events-none"
-          style={{
-            background:
-              "linear-gradient(180deg, rgba(255,255,255,0.18) 0%, transparent 100%)",
-          }}
-        />
-        {/* Left-edge highlight */}
-        <div
-          className="absolute inset-y-0 left-0 w-px pointer-events-none"
-          style={{
-            background:
-              "linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.7) 30%, rgba(255,255,255,0.2) 70%, transparent 100%)",
-          }}
-        />
-        {/* Right-edge highlight */}
-        <div
-          className="absolute inset-y-0 right-0 w-px pointer-events-none"
-          style={{
-            background:
-              "linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.3) 30%, rgba(255,255,255,0.1) 70%, transparent 100%)",
-          }}
-        />
-        {/* Q&A header — pinned top-center */}
-        <div className="absolute inset-x-0 top-4 flex justify-center pointer-events-none">
-          <h2 className="text-yai-navy/85 font-extrabold tracking-[0.18em] text-base sm:text-lg">
+          onPointerDown={onMoveStart}
+          className="relative cursor-grab active:cursor-grabbing pt-3 pb-2 px-4 shrink-0"
+          title="Drag to move"
+        >
+          {/* drag indicator dots */}
+          <div className="absolute top-2 left-1/2 -translate-x-1/2 flex gap-1 opacity-50">
+            <span className="w-1 h-1 rounded-full bg-yai-navy/60" />
+            <span className="w-1 h-1 rounded-full bg-yai-navy/60" />
+            <span className="w-1 h-1 rounded-full bg-yai-navy/60" />
+          </div>
+          <h2 className="text-yai-navy/85 font-extrabold tracking-[0.18em] text-base sm:text-lg text-center mt-2">
             Q&amp;A
           </h2>
         </div>
 
-        {/* Q&A items — numbered clickable jumps, or a 'for discussion'
-         *  placeholder when no anchor is set. */}
-        <div className="absolute inset-x-0 top-14 px-4 space-y-2.5">
+        {/* Items — scrollable so every question is reachable regardless of size */}
+        <div className="flex-1 overflow-y-auto px-4 pt-1 pb-4 space-y-2.5 sidebar-scroll">
           {QA_ITEMS.map((q) =>
             q.anchor ? (
               <a
@@ -165,8 +223,37 @@ export function FloatingGlass() {
             )
           )}
         </div>
+
+        {/* Resize handle — bottom-right corner */}
+        <div
+          onPointerDown={onResizeStart}
+          title="Drag to resize"
+          className="absolute bottom-1 right-1 w-5 h-5 cursor-nwse-resize flex items-end justify-end p-0.5 text-yai-navy/40 hover:text-yai-navy/70 transition"
+        >
+          <svg viewBox="0 0 16 16" className="w-4 h-4" fill="currentColor">
+            <circle cx="14" cy="14" r="1" />
+            <circle cx="14" cy="10" r="1" />
+            <circle cx="10" cy="14" r="1" />
+            <circle cx="14" cy="6"  r="1" />
+            <circle cx="10" cy="10" r="1" />
+            <circle cx="6"  cy="14" r="1" />
+          </svg>
+        </div>
       </div>
     </div>
   );
 }
 
+function clamp(n: number, lo: number, hi: number) {
+  return Math.max(lo, Math.min(hi, n));
+}
+
+function clampPos(x: number, y: number, w: number, h: number) {
+  if (typeof window === "undefined") return { x, y };
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  return {
+    x: clamp(x, -(w - 80), vw - 80),
+    y: clamp(y, 0, Math.max(0, vh - 80)),
+  };
+}
