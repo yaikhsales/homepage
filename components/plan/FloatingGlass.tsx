@@ -3,24 +3,41 @@
 import { useEffect, useState } from "react";
 
 /* Pinned floating glass card — Yai brand panel.
- * Locked to the top-right of the viewport with position: fixed, no longer
- * draggable. Stays put when the page scrolls. */
+ * Locked to the top-right of the viewport with position: fixed.
+ * Expands wider when the sidebar is collapsed so it can host more content. */
 
-const PANEL_W = 220;
+const PANEL_W = 220;          // width when sidebar visible
+const PANEL_W_EXPANDED = 440;  // width when sidebar collapsed
 const PANEL_H = 780;
-const TOP_OFFSET  = 24;   // gap from the very top of the viewport
-const RIGHT_OFFSET = 24;  // gap from the right edge
+const TOP_OFFSET  = 24;
+const RIGHT_OFFSET = 24;
 
 export function FloatingGlass() {
   const [mounted, setMounted] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    // Clean up any stale dragged position from when the panel was draggable.
     try { localStorage.removeItem("yai-glass-pos"); } catch {}
+
+    // React to sidebar collapse so the glass can stretch to use the space.
+    try {
+      if (typeof window !== "undefined") {
+        const saved = localStorage.getItem("yai-sidebar-collapsed");
+        if (saved === "1") setSidebarCollapsed(true);
+      }
+    } catch {}
+    const onSidebar = (e: Event) => {
+      const detail = (e as CustomEvent<boolean>).detail;
+      setSidebarCollapsed(Boolean(detail));
+    };
+    window.addEventListener("yai-sidebar-collapsed", onSidebar);
+    return () => window.removeEventListener("yai-sidebar-collapsed", onSidebar);
   }, []);
 
   if (!mounted) return null;
+
+  const width = sidebarCollapsed ? PANEL_W_EXPANDED : PANEL_W;
 
   return (
     <div
@@ -28,9 +45,9 @@ export function FloatingGlass() {
       style={{ top: `${TOP_OFFSET}px`, right: `${RIGHT_OFFSET}px` }}
     >
       <div
-        className="relative rounded-3xl overflow-hidden"
+        className="relative rounded-3xl overflow-hidden transition-[width] duration-500 ease-out"
         style={{
-          width: `${PANEL_W}px`,
+          width: `${width}px`,
           height: `${PANEL_H}px`,
           maxWidth: "calc(100vw - 40px)",
           // Much lighter blur so text behind is still legible, no white wash.

@@ -21,6 +21,27 @@ export function Sidebar({
   // Default true so SSR + first client render agree (sidebar visible, x:0) — avoids hydration mismatch.
   // Updated after mount via matchMedia; also reacts to resize.
   const [isDesktop, setIsDesktop] = useState(true);
+  // Desktop-only collapse — when true, sidebar shrinks to 0 width and a
+  // floating tab on the far left reopens it. Persisted in localStorage.
+  const [collapsed, setCollapsed] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const saved = localStorage.getItem("yai-sidebar-collapsed");
+    if (saved === "1") setCollapsed(true);
+  }, []);
+
+  const toggleCollapsed = () => {
+    setCollapsed((c) => {
+      const next = !c;
+      try { localStorage.setItem("yai-sidebar-collapsed", next ? "1" : "0"); } catch {}
+      // Broadcast so FloatingGlass (or anything else) can react.
+      try {
+        window.dispatchEvent(new CustomEvent("yai-sidebar-collapsed", { detail: next }));
+      } catch {}
+      return next;
+    });
+  };
   const router = useRouter();
   const lang = useLang();
   const t = (key: string, fallback?: string) => translate(lang, key, fallback);
@@ -145,14 +166,28 @@ export function Sidebar({
         )}
       </AnimatePresence>
 
+      {/* Floating reopen tab — visible only when collapsed on desktop. */}
+      {collapsed && isDesktop && (
+        <button
+          onClick={toggleCollapsed}
+          aria-label="Open sidebar"
+          className="hidden md:flex no-print fixed left-0 top-1/2 -translate-y-1/2 z-50 items-center justify-center w-6 h-20 rounded-r-lg bg-yai-navy text-white/80 hover:text-white shadow-lg border-y border-r border-white/15"
+          title="Open menu"
+        >
+          <span className="text-lg leading-none">›</span>
+        </button>
+      )}
+
       {/* Sidebar */}
       <motion.aside
         initial={false}
         animate={{
           x: isDesktop || open ? 0 : "-100%",
+          width: collapsed && isDesktop ? 0 : 288, // 18rem = 288px = w-72
         }}
         transition={{ type: "spring", damping: 30, stiffness: 240 }}
-        className="sidebar w-72 bg-yai-navy text-white min-h-screen md:sticky md:top-0 md:max-h-screen md:overflow-y-auto sidebar-scroll no-print fixed md:relative inset-y-0 left-0 z-50 md:translate-x-0"
+        style={{ overflow: collapsed && isDesktop ? "hidden" : undefined }}
+        className="sidebar bg-yai-navy text-white min-h-screen md:sticky md:top-0 md:max-h-screen md:overflow-y-auto sidebar-scroll no-print fixed md:relative inset-y-0 left-0 z-50 md:translate-x-0 shrink-0"
       >
         <div className="px-5 pt-5 pb-4 border-b border-white/10">
           <div className="flex items-center gap-4">
@@ -163,7 +198,18 @@ export function Sidebar({
               className="h-14 w-14 rounded-lg object-cover shadow-lg ring-1 ring-white/20 shrink-0"
             />
             <div className="flex-1 min-w-0 leading-tight">
-              <div className="text-sm text-white font-semibold truncate">{t("sidebar.company")}</div>
+              <div className="flex items-start justify-between gap-1">
+                <div className="text-sm text-white font-semibold truncate">{t("sidebar.company")}</div>
+                {/* Collapse button — desktop only */}
+                <button
+                  onClick={toggleCollapsed}
+                  aria-label="Hide sidebar"
+                  className="hidden md:flex shrink-0 items-center justify-center w-5 h-5 rounded text-white/55 hover:text-white hover:bg-white/10 transition"
+                  title="Hide menu"
+                >
+                  <span className="text-xs leading-none">‹</span>
+                </button>
+              </div>
               <div className="flex items-center justify-between gap-2 mt-1">
                 <div className="text-[10px] uppercase tracking-[0.15em] text-yai-orange/90 font-bold">{t("sidebar.tagline")}</div>
                 <LanguageToggle />
