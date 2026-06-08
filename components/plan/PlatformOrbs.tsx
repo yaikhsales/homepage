@@ -129,9 +129,11 @@ const AVATAR_OVERRIDES: Record<string, number> = {
   "Support Ticket": 11, "Y Shop": 12, "Gate Pass": 13, "Meeting Room": 14,
   "Car Booking": 15, "Fire Alarm": 16, "CCTV": 17,
   "Digital Audit": 18, "Energy": 19, "Air": 20, "Water": 21, "Waste": 22, "Chemical": 23,
-  "Shipping": 24, "E-Government": 26,
-  // Shipping Bill — agent-25 was the uniform face the user didn't want.
-  // Pin to agent-38 (business attire, currently unused by any module).
+  "Shipping": 24,
+  // E-Government — represents the government, so it gets the uniformed
+  // avatar (agent-25). Freed up from Shipping Bill.
+  "E-Government": 25,
+  // Shipping Bill — business attire, currently unused by any module.
   "Shipping Bill": 38,
 };
 const AVATAR_BY_NAME = new Map<string, number>();
