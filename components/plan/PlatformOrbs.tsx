@@ -22,6 +22,13 @@ const BANDS: Band[] = [
         ],
       },
       {
+        name: "Billing",
+        mods: [
+          { n: "Purchase Request", desc: "I handle purchase requests — from raising to approval routing and PO creation." },
+          { n: "Bill Claim", desc: "I process expense and bill claims — submission, approval and reimbursement straight back to the claimant." },
+        ],
+      },
+      {
         name: "HR",
         mods: [
           { n: "YHR", desc: "I'm the HR core — employee records, contracts, leave and the full worker lifecycle in one place." },
@@ -36,9 +43,7 @@ const BANDS: Band[] = [
         name: "Admin",
         mods: [
           { n: "Support Ticket", desc: "I take internal support requests — log, assign and track every ticket to resolution." },
-          { n: "Purchase Request", desc: "I handle purchase requests — from raising to approval routing and PO creation." },
           { n: "Y Shop", desc: "I run the internal shop — staff purchases, stock and orders." },
-          { n: "Money Claim", desc: "I process expense and money claims — submission, approval and reimbursement." },
           { n: "Gate Pass", desc: "I issue and verify gate passes — people and goods in and out, logged and authorised." },
           { n: "Meeting Room", desc: "I manage meeting-room bookings — availability, scheduling and conflicts." },
           { n: "Car Booking", desc: "I handle company-car bookings — requests, allocation and the schedule." },
