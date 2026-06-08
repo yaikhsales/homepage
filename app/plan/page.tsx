@@ -815,10 +815,11 @@ export default async function PlanPage() {
             </div>
           </div>
 
-          {/* Live P&L roll-up — auto-aggregates the admin Sales + Salary + Expenses stores */}
-          <div className="mt-8">
+          {/* Sales / Expenses / Budget — auto-aggregates the admin Sales + Salary + Expenses stores.
+              The id is the anchor target for the Q&A panel's 'Sales plan' link. */}
+          <div id="sales-expenses-budget" className="mt-8 scroll-mt-8">
             <div className="flex items-baseline justify-between gap-3 mb-3 flex-wrap">
-              <h3 className="font-extrabold text-yai-navy text-xl">Live P&amp;L roll-up · 2024 → today</h3>
+              <h3 className="font-extrabold text-yai-navy text-xl">Sales Expenses and Budget</h3>
               <span className="text-[10px] uppercase tracking-wider text-gray-500">
                 Sourced from admin · Sales · Salaries · Expenses
               </span>
