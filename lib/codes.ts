@@ -5,7 +5,7 @@ import "server-only";
 
 export type CodeEntry = { code: string; label: string };
 
-const DEFAULT_CODES = "YAI2026:Master code";
+const DEFAULT_CODES = "012026:Master code";
 
 let cache: CodeEntry[] | null = null;
 
