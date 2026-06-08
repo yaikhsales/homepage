@@ -46,13 +46,13 @@ const NAV: NavItem[] = [
   { id: "problem",           label: "The Problem",            labelKey: "nav.problem" },
   { id: "solution",          label: "The Solution",           labelKey: "nav.solution" },
   { id: "architecture",      label: "Product Architecture",   labelKey: "nav.architecture" },
+  { id: "tech",              label: "Technology Stack",       labelKey: "nav.tech" },
   { id: "modules",           label: "Agents & Skills",        labelKey: "nav.modules" },
   { id: "pricing",           label: "Pricing & Packaging",    labelKey: "nav.pricing" },
   { id: "customers",         label: "Target Customers",       labelKey: "nav.customers" },
-  { id: "tech",              label: "Technology Stack",       labelKey: "nav.tech" },
+  { id: "gtm",               label: "Go-to-Market Milestones", labelKey: "nav.gtm" },
   { id: "team",              label: "Team",                   labelKey: "nav.team" },
   { id: "capital",           label: "Capital Efficiency",     labelKey: "nav.capital" },
-  { id: "gtm",               label: "Go-to-Market Milestones", labelKey: "nav.gtm" },
   { id: "traction",          label: "Traction & Pilots",      labelKey: "nav.traction" },
   { id: "oc-budget",         label: "OC & Live Budget Update", labelKey: "nav.oc_budget" },
   { id: "competition",       label: "Competitive Landscape",  labelKey: "nav.competition" },
@@ -342,8 +342,16 @@ export default async function PlanPage() {
           <StageLadder />
         </Section>
 
-        {/* 05 — Modules */}
-        <Section id="modules" kicker={kicker(5, "Agents & Skills")} title="The Agents & Their Skills">
+        {/* 05 — Tech */}
+        <Section id="tech" kicker={kicker(5, "Technology")} title="Technology Stack">
+          <Thesis>
+            Different layer, different stack. Cloud SaaS at Layer 1, model-agnostic LLM agents at Layer 2, own-compute on solar at Layer 3 — each tuned for its job, none locked in.
+          </Thesis>
+          <TechStackLayers />
+        </Section>
+
+        {/* 06 — Modules */}
+        <Section id="modules" kicker={kicker(6, "Agents & Skills")} title="The Agents & Their Skills">
           <Thesis>
             The full platform, laid out exactly like the live dashboard — Administration, Management, Operations. Every module is an Ai agent. Tap one to hear what it does.
           </Thesis>
@@ -360,8 +368,8 @@ export default async function PlanPage() {
           <ChatDemo />
         </Section>
 
-        {/* 06 — Pricing */}
-        <Section id="pricing" kicker={kicker(6, "Pricing & Packaging")} title="Pricing & Packaging">
+        {/* 07 — Pricing */}
+        <Section id="pricing" kicker={kicker(7, "Pricing & Packaging")} title="Pricing & Packaging">
           <Thesis>
             All great marches start with one step. That step is $120 a year — five key members stepping up to digitalization. Simple tasks lead all the way to Full Ai in one year. Who would have thought this was possible?
           </Thesis>
@@ -369,51 +377,16 @@ export default async function PlanPage() {
           <PricingStaircase />
         </Section>
 
-        {/* 07 — Customers */}
-        <Section id="customers" kicker={kicker(7, "Target Customers")} title="Target Customers">
+        {/* 08 — Customers */}
+        <Section id="customers" kicker={kicker(8, "Target Customers")} title="Target Customers">
           <Thesis>
             Five customer clusters across Cambodia — each climbs a different segment of the Yai ladder, from $120 admin modules to multi-factory Ai.
           </Thesis>
           <TargetCustomersChart />
         </Section>
 
-        {/* 08 — Tech */}
-        <Section id="tech" kicker={kicker(8, "Technology")} title="Technology Stack">
-          <Thesis>
-            Different layer, different stack. Cloud SaaS at Layer 1, model-agnostic LLM agents at Layer 2, own-compute on solar at Layer 3 — each tuned for its job, none locked in.
-          </Thesis>
-          <TechStackLayers />
-        </Section>
-
-        {/* 09 — Team */}
-        <Section id="team" kicker={kicker(9, "Team")} title="Team">
-          <Thesis>
-            20 engineers across 5 specialised clusters — owner-led, factory-embedded. Adding sales and customer success next.
-          </Thesis>
-
-          {/* 5 cluster circles (interactive — tap to see each group's experience mix) */}
-          <h3 className="font-bold text-yai-navy text-xl mb-1">Engineering — 5 clusters · 20 engineers</h3>
-          <p className="text-sm text-gray-600 mb-4">Cambodia-based. Each cluster owns its slice of the platform end-to-end.</p>
-          <TeamClusters />
-        </Section>
-
-        {/* 10 — Capital Efficiency */}
-        <Section id="capital" kicker={kicker(10, "Capital Efficiency")} title="The Capital Efficiency Story">
-          <Thesis>
-            Built for ~$205K to date and ~$370K through 2027 — what would cost $5M–$10M anywhere else. And the same small dollar in compounds upward — at every Ai layer, the value multiplies.
-          </Thesis>
-
-          {/* Roadmap timeline — past spend curve + every module climbing the 3 Ai layers */}
-          <h3 className="font-bold text-yai-navy text-xl mb-1">How ~$205K built 17 module families</h3>
-          <p className="text-sm text-gray-600 mb-4 max-w-3xl">
-            One chart, every module. The spend curve at the top is what we&rsquo;ve <strong>actually paid</strong> in Cambodia engineering salaries — team grew from 3 engineers in May 2024 (Rich, Virot, Dilan) to <strong>22 by May 2026</strong>, with monthly burn now ~$14K and bonuses on top. Each row below is a real module: orange = Digitalization built, blue = Agentic layer on top, dark green = Full Ai. Every step right of <strong>TODAY</strong> is value added on the same engineering base.
-          </p>
-          <RoadmapTimeline mode="spend" quarterlySpendK={roadmap.quarterlySpendK} headcount={roadmap.headcount} />
-
-        </Section>
-
-        {/* 11 — Go-to-Market Milestones (merged: was 11 Financials + 12 GTM) */}
-        <Section id="gtm" kicker={kicker(11, "Go-to-Market Milestones")} title="Go-to-Market Milestones">
+        {/* 09 — Go-to-Market Milestones (merged: was 11 Financials + 12 GTM) */}
+        <Section id="gtm" kicker={kicker(9, "Go-to-Market Milestones")} title="Go-to-Market Milestones">
           {/* GTM foundation — 3 things needed before / alongside the per-segment milestones */}
           <h3 className="font-bold text-yai-navy text-xl mb-3">GTM foundation — what makes the milestones possible</h3>
           <p className="text-sm text-gray-600 mb-5 max-w-3xl">
@@ -761,12 +734,39 @@ export default async function PlanPage() {
         </Section>
 
 
+        {/* 10 — Team */}
+        <Section id="team" kicker={kicker(10, "Team")} title="Team">
+          <Thesis>
+            20 engineers across 5 specialised clusters — owner-led, factory-embedded. Adding sales and customer success next.
+          </Thesis>
+
+          {/* 5 cluster circles (interactive — tap to see each group's experience mix) */}
+          <h3 className="font-bold text-yai-navy text-xl mb-1">Engineering — 5 clusters · 20 engineers</h3>
+          <p className="text-sm text-gray-600 mb-4">Cambodia-based. Each cluster owns its slice of the platform end-to-end.</p>
+          <TeamClusters />
+        </Section>
+
+        {/* 11 — Capital Efficiency */}
+        <Section id="capital" kicker={kicker(11, "Capital Efficiency")} title="The Capital Efficiency Story">
+          <Thesis>
+            Built for ~$205K to date and ~$370K through 2027 — what would cost $5M–$10M anywhere else. And the same small dollar in compounds upward — at every Ai layer, the value multiplies.
+          </Thesis>
+
+          {/* Roadmap timeline — past spend curve + every module climbing the 3 Ai layers */}
+          <h3 className="font-bold text-yai-navy text-xl mb-1">How ~$205K built 17 module families</h3>
+          <p className="text-sm text-gray-600 mb-4 max-w-3xl">
+            One chart, every module. The spend curve at the top is what we&rsquo;ve <strong>actually paid</strong> in Cambodia engineering salaries — team grew from 3 engineers in May 2024 (Rich, Virot, Dilan) to <strong>22 by May 2026</strong>, with monthly burn now ~$14K and bonuses on top. Each row below is a real module: orange = Digitalization built, blue = Agentic layer on top, dark green = Full Ai. Every step right of <strong>TODAY</strong> is value added on the same engineering base.
+          </p>
+          <RoadmapTimeline mode="spend" quarterlySpendK={roadmap.quarterlySpendK} headcount={roadmap.headcount} />
+
+        </Section>
+
         {/* 12 — Traction */}
         <Section id="traction" kicker={kicker(12, "Traction")} title="Traction & Pilots">
           <FactoryModuleMatrix />
         </Section>
 
-        {/* 15 — Competition */}
+
         {/* 13 — OC & Live Budget Update */}
         <Section id="oc-budget" kicker={kicker(13, "OC & Budget")} title="OC & Live Budget Update">
           <Thesis>
@@ -842,7 +842,7 @@ export default async function PlanPage() {
           <CompetitiveLandscape />
         </Section>
 
-        {/* 18 — Risks */}
+        {/* 15 — Risks */}
         <Section id="risks" kicker={kicker(15, "Risks")} title="Risks & Mitigations">
           <Thesis>
             Honest about where this could go wrong — and what&apos;s in place against each.
@@ -864,7 +864,7 @@ export default async function PlanPage() {
           </div>
         </Section>
 
-        {/* 19 — Resources */}
+        {/* 16 — Resources */}
         <Section id="resources" kicker={kicker(16, "Resources")} title="Resource Requirements">
           <Thesis>
             What&apos;s needed from the investor over the next 12 months — not a fundraise, a continuation.

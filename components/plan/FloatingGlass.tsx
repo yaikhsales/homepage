@@ -85,7 +85,14 @@ export function FloatingGlass() {
               "linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.3) 30%, rgba(255,255,255,0.1) 70%, transparent 100%)",
           }}
         />
-        {/* Empty — reserved for a different purpose */}
+        {/* Q&A header — pinned top-center */}
+        <div className="absolute inset-x-0 top-4 flex justify-center pointer-events-none">
+          <h2 className="text-yai-navy/85 font-extrabold tracking-[0.18em] text-base sm:text-lg">
+            Q&amp;A
+          </h2>
+        </div>
+
+        {/* Q&A content goes here — reserved */}
       </div>
     </div>
   );
