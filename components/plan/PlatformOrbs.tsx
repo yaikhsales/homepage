@@ -27,6 +27,7 @@ const BANDS: Band[] = [
           { n: "Purchase Request", desc: "I handle purchase requests — from raising to approval routing and PO creation." },
           { n: "Bill Claim", desc: "I process expense and bill claims — submission, approval and reimbursement straight back to the claimant." },
           { n: "Salary Bill", confirmed: true, desc: "I run payroll end to end — wages, overtime and deductions — then pay everyone out straight to their ABA or WING account. Each person sees every payment and payslip detail right inside the Yai app." },
+          { n: "Shipping Bill", desc: "I handle the paperwork side of shipping — bills of lading, freight invoices, customs declarations, duty + clearance fees — and reconcile every charge against the consignment so nothing slips through." },
         ],
       },
       {
@@ -62,13 +63,7 @@ const BANDS: Band[] = [
           { n: "Chemical", desc: "I manage chemical inventory and MRSL / ZDHC compliance." },
         ],
       },
-      {
-        name: "Shipping",
-        mods: [
-          { n: "Shipping", confirmed: true, desc: "I handle freight both ways — importing raw materials and machines, and exporting finished goods by FCL and LCL — tracking every container, customs step and delivery end to end." },
-          { n: "Shipping Bill", desc: "I handle the paperwork side of shipping — bills of lading, freight invoices, customs declarations, duty + clearance fees — and reconcile every charge against the consignment so nothing slips through." },
-        ],
-      },
+      { name: "Shipping", mods: [{ n: "Shipping", confirmed: true, desc: "I handle freight both ways — importing raw materials and machines, and exporting finished goods by FCL and LCL — tracking every container, customs step and delivery end to end." }] },
       { name: "E-Gov", mods: [{ n: "E-Government", confirmed: true, desc: "I connect directly to every government portal — the Tax portal, the Customs portal, and each ministry's compliance portal. I also run the communication channel with each government body, handling official PR and correspondence and keeping the systems updated with every new announcement." }] },
     ],
   },
@@ -121,12 +116,30 @@ const BANDS: Band[] = [
   },
 ];
 
-// one unique face per module — assigned by order across the whole platform (1..N)
+// One unique face per module. The default is positional (i+1) across all
+// BANDS, but AVATAR_OVERRIDES pins specific modules so reordering doesn't
+// shuffle everyone else's face.
+const AVATAR_OVERRIDES: Record<string, number> = {
+  // Administration band — locked to their previous positions so adding
+  // Shipping Bill to Billing earlier in the iteration doesn't make YHR
+  // suddenly inherit Org Chart's face, etc.
+  "Accountant": 1, "IEWS": 2,
+  "Purchase Request": 3, "Bill Claim": 4, "Salary Bill": 5,
+  "YHR": 6, "Org Chart": 7, "Training": 8, "Temporary Worker": 9, "Speak Up": 10,
+  "Support Ticket": 11, "Y Shop": 12, "Gate Pass": 13, "Meeting Room": 14,
+  "Car Booking": 15, "Fire Alarm": 16, "CCTV": 17,
+  "Digital Audit": 18, "Energy": 19, "Air": 20, "Water": 21, "Waste": 22, "Chemical": 23,
+  "Shipping": 24, "E-Government": 26,
+  // Shipping Bill — agent-25 was the uniform face the user didn't want.
+  // Pin to agent-38 (business attire, currently unused by any module).
+  "Shipping Bill": 38,
+};
 const AVATAR_BY_NAME = new Map<string, number>();
 BANDS.flatMap((b) => b.cats)
   .flatMap((c) => c.mods)
   .forEach((m, i) => AVATAR_BY_NAME.set(m.n, i + 1));
-const avatarOf = (name: string) => AVATAR_BY_NAME.get(name) ?? 1;
+const avatarOf = (name: string) =>
+  AVATAR_OVERRIDES[name] ?? AVATAR_BY_NAME.get(name) ?? 1;
 
 type Selected = { mod: Mod; cat: string; band: Band } | null;
 
