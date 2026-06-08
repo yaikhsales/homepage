@@ -28,7 +28,9 @@ export function LoginCard() {
       });
       const data = await res.json();
       if (res.ok && data.ok) {
-        router.push("/plan");
+        // replace, not push — otherwise the login URL stays in history and
+        // hitting Chrome's Back from /plan lands back on the login page.
+        router.replace("/plan");
       } else {
         setError(data.error || "Invalid code");
         setShake((n) => n + 1);
