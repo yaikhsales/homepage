@@ -12,6 +12,7 @@ import { useState, type ReactNode } from "react";
  */
 
 interface Props {
+  id?: string;           // optional DOM id — anchor target for in-page links
   num: string;           // "01", "02", ...
   tag: string;           // short uppercase chip text e.g. "OFFLINE"
   title: string;         // bar title
@@ -24,6 +25,7 @@ interface Props {
 }
 
 export function GtmEnablerBar({
+  id,
   num,
   tag,
   title,
@@ -37,7 +39,7 @@ export function GtmEnablerBar({
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className={`rounded-xl border border-yai-border bg-white ${isOpen ? "" : "shadow-sm"}`}>
+    <div id={id} className={`rounded-xl border border-yai-border bg-white scroll-mt-8 ${isOpen ? "" : "shadow-sm"}`}>
       <button
         type="button"
         onClick={() => setIsOpen((o) => !o)}

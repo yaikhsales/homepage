@@ -13,11 +13,16 @@ const TOP_OFFSET  = 24;
 const RIGHT_OFFSET = 24;
 
 /** Q&A items shown in the floating glass panel. Each one is a numbered
- *  clickable card that smooth-scrolls to its anchor target. */
-const QA_ITEMS: Array<{ n: number; text: string; anchor: string }> = [
-  { n: 1, text: "Sales plan covering at least the next six to twelve months", anchor: "sales-expenses-budget" },
-  { n: 2, text: "How we plan to market the Texlink platform",                 anchor: "customers" },
-  { n: 3, text: "Exhibitions and events (offline)",                           anchor: "gtm" },
+ *  card. If `anchor` is set, the card is clickable and smooth-scrolls to
+ *  that DOM id. If omitted, the card renders as a 'for discussion'
+ *  placeholder — no link, dimmer styling, italic note. */
+const QA_ITEMS: Array<{ n: number; text: string; anchor?: string; note?: string }> = [
+  { n: 1, text: "Sales plan covering at least the next six to twelve months",                          anchor: "sales-expenses-budget" },
+  { n: 2, text: "How we plan to market the Texlink platform",                                          anchor: "customers" },
+  { n: 3, text: "Exhibitions and events (offline)",                                                    anchor: "gtm" },
+  { n: 4, text: "Core Applications retain for YW",                                                     note: "for discussion" },
+  { n: 5, text: "A complete list of all Admin modules, together with their current acceptance status", anchor: "traction" },
+  { n: 6, text: "A phased approach to starting the business",                                          anchor: "pricing" },
 ];
 
 export function FloatingGlass() {
@@ -100,32 +105,55 @@ export function FloatingGlass() {
           </h2>
         </div>
 
-        {/* Q&A items — numbered clickable jumps into the plan */}
+        {/* Q&A items — numbered clickable jumps, or a 'for discussion'
+         *  placeholder when no anchor is set. */}
         <div className="absolute inset-x-0 top-14 px-4 space-y-2.5">
-          {QA_ITEMS.map((q) => (
-            <a
-              key={q.n}
-              href={`#${q.anchor}`}
-              onClick={(e) => {
-                e.preventDefault();
-                const el = document.getElementById(q.anchor);
-                if (el) {
-                  el.scrollIntoView({ behavior: "smooth", block: "start" });
-                  history.replaceState(null, "", `#${q.anchor}`);
-                }
-              }}
-              className="block rounded-xl border border-white/45 bg-white/60 backdrop-blur-sm px-3 py-2.5 text-yai-navy hover:bg-white/85 hover:border-yai-blue/40 hover:shadow-md transition group"
-            >
-              <div className="flex items-start gap-2">
-                <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yai-blue text-white text-[10px] font-extrabold shrink-0 mt-0.5">
-                  {q.n}
-                </span>
-                <span className="text-[11.5px] leading-snug font-semibold group-hover:text-yai-blue transition">
-                  {q.text}
-                </span>
+          {QA_ITEMS.map((q) =>
+            q.anchor ? (
+              <a
+                key={q.n}
+                href={`#${q.anchor}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  const el = document.getElementById(q.anchor!);
+                  if (el) {
+                    el.scrollIntoView({ behavior: "smooth", block: "start" });
+                    history.replaceState(null, "", `#${q.anchor}`);
+                  }
+                }}
+                className="block rounded-xl border border-white/45 bg-white/60 backdrop-blur-sm px-3 py-2.5 text-yai-navy hover:bg-white/85 hover:border-yai-blue/40 hover:shadow-md transition group"
+              >
+                <div className="flex items-start gap-2">
+                  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yai-blue text-white text-[10px] font-extrabold shrink-0 mt-0.5">
+                    {q.n}
+                  </span>
+                  <span className="text-[11.5px] leading-snug font-semibold group-hover:text-yai-blue transition">
+                    {q.text}
+                  </span>
+                </div>
+              </a>
+            ) : (
+              <div
+                key={q.n}
+                className="rounded-xl border border-dashed border-yai-navy/25 bg-white/35 backdrop-blur-sm px-3 py-2.5 text-yai-navy/70"
+                title="No link attached — to be discussed"
+              >
+                <div className="flex items-start gap-2">
+                  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yai-navy/40 text-white text-[10px] font-extrabold shrink-0 mt-0.5">
+                    {q.n}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <div className="text-[11.5px] leading-snug font-semibold">{q.text}</div>
+                    {q.note && (
+                      <div className="text-[9.5px] uppercase tracking-[0.15em] italic text-yai-orange/80 mt-0.5">
+                        {q.note}
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
-            </a>
-          ))}
+            )
+          )}
         </div>
       </div>
     </div>

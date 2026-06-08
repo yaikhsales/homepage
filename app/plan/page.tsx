@@ -419,9 +419,10 @@ export default async function PlanPage() {
               <SalesTeamProfile />
             </GtmEnablerBar>
             <GtmEnablerBar
+              id="sales-approaches"
               num="03"
               tag="PROCESS"
-              title="Clear Sales &amp; Promotion Steps"
+              title="Sales approaches"
               desc="Primary funnel: printed invitation → weekly 15-20 min online demo → on-site in-person presentation → package commitment ($120 / $750 / $1,000+). Parallel channels: government top-down, app user growth (2.5K → 100K), word of mouth, non-garment expansion."
               color="#1E4DAA"
               bg="#E8EEF8"
