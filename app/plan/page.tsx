@@ -156,7 +156,7 @@ export default async function PlanPage() {
 
       <FloatingGlass />
 
-      <main className="flex-1 max-w-4xl mx-auto px-5 sm:px-8 lg:px-12 py-10 lg:py-14">
+      <main className="flex-1 max-w-4xl px-5 sm:px-8 lg:px-12 py-10 lg:py-14">
         <BodyTranslator />
         <PlanHero />
 
