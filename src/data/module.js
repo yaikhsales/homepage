@@ -95,8 +95,8 @@ export const DASHBOARD_DATA = [
             title: "Shipping Bill",
             image: "IMG/avatars/agent-38.png",
             status: "active",
-            popupTitle: "OPERATIONS · YPI",
-            description: "I deliver garment technical specs in Khmer — construction, measurements and machine settings on the floor."
+            popupTitle: "ADMINISTRATION · BILLING",
+            description: "I manage the payment of shipping and freight bills, ensuring all customs duties and transport invoices are accurate, recorded, and paid on time."
           }
         ]
       },
@@ -322,7 +322,7 @@ export const DASHBOARD_DATA = [
           {
             id: "management-dashboard",
             title: "Management Dashboard",
-            image: "IMG/avatars/agent-27.png",
+            image: "IMG/avatars/agent-28.png",
             status: "active",
             popupTitle: "MANAGEMENT · DASHBOARD",
             description: "I'm the GM's data keeper. Every number in the company runs through me — production, sales, finance, HR, compliance — so the General Manager's single screen knows literally everything, live."
@@ -330,7 +330,7 @@ export const DASHBOARD_DATA = [
           {
             id: "sop",
             title: "SOP",
-            image: "IMG/avatars/agent-28.png",
+            image: "IMG/avatars/agent-27.png",
             status: "active",
             demoType: "VIEW_SOP_MAP",
             popupTitle: "MANAGEMENT · DASHBOARD",
@@ -456,7 +456,9 @@ export const DASHBOARD_DATA = [
             title: "YPI",
             image: "IMG/avatars/agent-26.png",
             status: "active",
-            demoType: "EXTERNAL_URL"
+            demoType: "EXTERNAL_URL",
+            popupTitle: "OPERATIONS · YPI",
+            description: "I got all the technical details in 3 languages or even more, from 1st sample to shipment every technical details."
           }
         ]
       },
