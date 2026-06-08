@@ -12,6 +12,14 @@ const PANEL_H = 780;
 const TOP_OFFSET  = 24;
 const RIGHT_OFFSET = 24;
 
+/** Q&A items shown in the floating glass panel. Each one is a numbered
+ *  clickable card that smooth-scrolls to its anchor target. */
+const QA_ITEMS: Array<{ n: number; text: string; anchor: string }> = [
+  { n: 1, text: "Sales plan covering at least the next six to twelve months", anchor: "sales-expenses-budget" },
+  { n: 2, text: "How we plan to market the Texlink platform",                 anchor: "customers" },
+  { n: 3, text: "Exhibitions and events (offline)",                           anchor: "gtm" },
+];
+
 export function FloatingGlass() {
   const [mounted, setMounted] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -94,27 +102,30 @@ export function FloatingGlass() {
 
         {/* Q&A items — numbered clickable jumps into the plan */}
         <div className="absolute inset-x-0 top-14 px-4 space-y-2.5">
-          <a
-            href="#sales-expenses-budget"
-            onClick={(e) => {
-              e.preventDefault();
-              const el = document.getElementById("sales-expenses-budget");
-              if (el) {
-                el.scrollIntoView({ behavior: "smooth", block: "start" });
-                history.replaceState(null, "", "#sales-expenses-budget");
-              }
-            }}
-            className="block rounded-xl border border-white/45 bg-white/60 backdrop-blur-sm px-3 py-2.5 text-yai-navy hover:bg-white/85 hover:border-yai-blue/40 hover:shadow-md transition group"
-          >
-            <div className="flex items-start gap-2">
-              <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yai-blue text-white text-[10px] font-extrabold shrink-0 mt-0.5">
-                1
-              </span>
-              <span className="text-[11.5px] leading-snug font-semibold group-hover:text-yai-blue transition">
-                Sales plan covering at least the next six to twelve months
-              </span>
-            </div>
-          </a>
+          {QA_ITEMS.map((q) => (
+            <a
+              key={q.n}
+              href={`#${q.anchor}`}
+              onClick={(e) => {
+                e.preventDefault();
+                const el = document.getElementById(q.anchor);
+                if (el) {
+                  el.scrollIntoView({ behavior: "smooth", block: "start" });
+                  history.replaceState(null, "", `#${q.anchor}`);
+                }
+              }}
+              className="block rounded-xl border border-white/45 bg-white/60 backdrop-blur-sm px-3 py-2.5 text-yai-navy hover:bg-white/85 hover:border-yai-blue/40 hover:shadow-md transition group"
+            >
+              <div className="flex items-start gap-2">
+                <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yai-blue text-white text-[10px] font-extrabold shrink-0 mt-0.5">
+                  {q.n}
+                </span>
+                <span className="text-[11.5px] leading-snug font-semibold group-hover:text-yai-blue transition">
+                  {q.text}
+                </span>
+              </div>
+            </a>
+          ))}
         </div>
       </div>
     </div>
