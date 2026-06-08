@@ -1,83 +1,34 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
-/* Draggable floating glass card — Yai brand panel.
- * (Screen-size detection lives in globals.css via the clamp() root font;
- *  that part doesn't need any UI here.) */
+/* Pinned floating glass card — Yai brand panel.
+ * Locked to the top-right of the viewport with position: fixed, no longer
+ * draggable. Stays put when the page scrolls. */
 
-const PANEL_W = 220;   // narrower so it doesn't crowd page content (was 336)
-const PANEL_H = 780;   // height unchanged
+const PANEL_W = 220;
+const PANEL_H = 780;
+const TOP_OFFSET  = 24;   // gap from the very top of the viewport
+const RIGHT_OFFSET = 24;  // gap from the right edge
 
 export function FloatingGlass() {
   const [mounted, setMounted] = useState(false);
-  const [pos, setPos] = useState({ x: 30, y: 80 });
-  const dragRef = useRef({ dragging: false, offsetX: 0, offsetY: 0 });
 
-  // Restore saved position on mount
   useEffect(() => {
     setMounted(true);
-    if (typeof window === "undefined") return;
-    const saved = localStorage.getItem("yai-glass-pos");
-    if (saved) {
-      try {
-        const p = JSON.parse(saved);
-        if (typeof p.x === "number" && typeof p.y === "number") {
-          setPos(clamp(p.x, p.y));
-        }
-      } catch {
-        /* ignore */
-      }
-    }
+    // Clean up any stale dragged position from when the panel was draggable.
+    try { localStorage.removeItem("yai-glass-pos"); } catch {}
   }, []);
-
-  // Persist position
-  useEffect(() => {
-    if (!mounted) return;
-    localStorage.setItem("yai-glass-pos", JSON.stringify(pos));
-  }, [pos, mounted]);
-
-  const onPointerDown = (e: React.PointerEvent) => {
-    // Don't start drag if user is interacting with form/buttons inside the panel
-    const target = e.target as HTMLElement;
-    if (target.closest("button, a, input, textarea, select")) return;
-
-    e.preventDefault();
-    dragRef.current = {
-      dragging: true,
-      offsetX: e.clientX - pos.x,
-      offsetY: e.clientY - pos.y,
-    };
-    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
-  };
-
-  const onPointerMove = (e: React.PointerEvent) => {
-    if (!dragRef.current.dragging) return;
-    setPos(clamp(e.clientX - dragRef.current.offsetX, e.clientY - dragRef.current.offsetY));
-  };
-
-  const onPointerUp = (e: React.PointerEvent) => {
-    dragRef.current.dragging = false;
-    try {
-      (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
-    } catch {
-      /* already released */
-    }
-  };
 
   if (!mounted) return null;
 
   return (
     <div
       className="fixed z-40 no-print select-none"
-      style={{ left: `${pos.x}px`, top: `${pos.y}px` }}
+      style={{ top: `${TOP_OFFSET}px`, right: `${RIGHT_OFFSET}px` }}
     >
       <div
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={onPointerUp}
-        onPointerCancel={onPointerUp}
-        className="relative rounded-3xl overflow-hidden touch-none cursor-grab active:cursor-grabbing transition-shadow"
+        className="relative rounded-3xl overflow-hidden"
         style={{
           width: `${PANEL_W}px`,
           height: `${PANEL_H}px`,
@@ -123,12 +74,3 @@ export function FloatingGlass() {
   );
 }
 
-function clamp(x: number, y: number) {
-  const vw = typeof window !== "undefined" ? window.innerWidth : 1280;
-  const vh = typeof window !== "undefined" ? window.innerHeight : 800;
-  // Allow the panel to slide partly off-screen, but keep at least 60px visible
-  return {
-    x: Math.max(-(PANEL_W - 80), Math.min(vw - 80, x)),
-    y: Math.max(0, Math.min(vh - 80, y)),
-  };
-}
