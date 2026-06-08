@@ -26,6 +26,7 @@ const BANDS: Band[] = [
         mods: [
           { n: "Purchase Request", desc: "I handle purchase requests — from raising to approval routing and PO creation." },
           { n: "Bill Claim", desc: "I process expense and bill claims — submission, approval and reimbursement straight back to the claimant." },
+          { n: "Salary Bill", confirmed: true, desc: "I run payroll end to end — wages, overtime and deductions — then pay everyone out straight to their ABA or WING account. Each person sees every payment and payslip detail right inside the Yai app." },
         ],
       },
       {
@@ -33,7 +34,6 @@ const BANDS: Band[] = [
         mods: [
           { n: "YHR", desc: "I'm the HR core — employee records, contracts, leave and the full worker lifecycle in one place." },
           { n: "Org Chart", confirmed: true, desc: "I keep the company's structure live — every role, reporting line and headcount — and hold all the structural records you need for compliance. The moment someone joins or resigns, the chart updates itself in real time." },
-          { n: "Salary Bill", confirmed: true, desc: "I run payroll end to end — wages, overtime and deductions — then pay everyone out straight to their ABA or WING account. Each person sees every payment and payslip detail right inside the Yai app." },
           { n: "Training", desc: "I plan and track training — schedules, attendance and the skills record for every worker." },
           { n: "Temporary Worker", desc: "I manage temporary-worker requests — raising, approving and tracking short-term labour on the floor." },
           { n: "Speak Up", desc: "I'm the anonymous grievance channel — workers raise concerns safely and I route them to the right people." },
@@ -62,7 +62,13 @@ const BANDS: Band[] = [
           { n: "Chemical", desc: "I manage chemical inventory and MRSL / ZDHC compliance." },
         ],
       },
-      { name: "Shipping", mods: [{ n: "Shipping", confirmed: true, desc: "I handle freight both ways — importing raw materials and machines, and exporting finished goods by FCL and LCL — tracking every container, customs step and delivery end to end." }] },
+      {
+        name: "Shipping",
+        mods: [
+          { n: "Shipping", confirmed: true, desc: "I handle freight both ways — importing raw materials and machines, and exporting finished goods by FCL and LCL — tracking every container, customs step and delivery end to end." },
+          { n: "Shipping Bill", desc: "I handle the paperwork side of shipping — bills of lading, freight invoices, customs declarations, duty + clearance fees — and reconcile every charge against the consignment so nothing slips through." },
+        ],
+      },
       { name: "E-Gov", mods: [{ n: "E-Government", confirmed: true, desc: "I connect directly to every government portal — the Tax portal, the Customs portal, and each ministry's compliance portal. I also run the communication channel with each government body, handling official PR and correspondence and keeping the systems updated with every new announcement." }] },
     ],
   },
