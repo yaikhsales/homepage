@@ -53,8 +53,8 @@ const NAV: NavItem[] = [
   { id: "gtm",               label: "Go-to-Market Milestones", labelKey: "nav.gtm" },
   { id: "team",              label: "Team",                   labelKey: "nav.team" },
   { id: "capital",           label: "Capital Efficiency",     labelKey: "nav.capital" },
-  { id: "traction",          label: "Traction & Pilots",      labelKey: "nav.traction" },
   { id: "oc-budget",         label: "OC & Live Budget Update", labelKey: "nav.oc_budget" },
+  { id: "traction",          label: "Traction & Pilots",      labelKey: "nav.traction" },
   { id: "competition",       label: "Competitive Landscape",  labelKey: "nav.competition" },
   { id: "risks",             label: "Risks & Mitigations",    labelKey: "nav.risks" },
   { id: "resources",         label: "Resource Requirements",  labelKey: "nav.resources" },
@@ -761,14 +761,8 @@ export default async function PlanPage() {
 
         </Section>
 
-        {/* 12 — Traction */}
-        <Section id="traction" kicker={kicker(12, "Traction")} title="Traction & Pilots">
-          <FactoryModuleMatrix />
-        </Section>
-
-
-        {/* 13 — OC & Live Budget Update */}
-        <Section id="oc-budget" kicker={kicker(13, "OC & Budget")} title="OC & Live Budget Update">
+        {/* 12 — OC & Live Budget Update */}
+        <Section id="oc-budget" kicker={kicker(12, "OC & Budget")} title="OC & Live Budget Update">
           <Thesis>
             Quarterly Operating Committee update + half-year budget refresh + capex / purchase
             applications — delivered on the cadence the parent expects.
@@ -832,6 +826,12 @@ export default async function PlanPage() {
             <LiveBudgetSummary />
           </div>
         </Section>
+
+        {/* 13 — Traction */}
+        <Section id="traction" kicker={kicker(13, "Traction")} title="Traction & Pilots">
+          <FactoryModuleMatrix />
+        </Section>
+
 
         <Section id="competition" kicker={kicker(14, "Competitive Landscape")} title="Competitive Landscape">
           <Thesis>

@@ -198,78 +198,67 @@ function blurbColor(v: Layer["variant"]) {
 /* -------------------------------------------------------------------------- */
 
 export function StageLadder() {
+  // Reverse so the flow reads left → right: Today (paper/Excel) → Digitalization → Agentic → Full Ai
+  const stages = [...LAYERS].reverse();
+
   return (
     <div className="relative">
-      {/* Evolution arrow rail (desktop only) */}
-      <div className="hidden md:flex absolute -left-2 top-0 bottom-0 w-10 flex-col items-center pointer-events-none select-none z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="text-yai-blue"
-        >
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 19V5M5 12l7-7 7 7"/>
-          </svg>
-        </motion.div>
-        <div className="flex-1 w-px bg-gradient-to-b from-yai-blue via-yai-blue/40 to-gray-300 my-2"></div>
-        <div className="[writing-mode:vertical-rl] rotate-180 text-[10px] font-bold tracking-[0.25em] uppercase text-yai-blue/60 py-2">
-          Evolution
-        </div>
-        <div className="flex-1 w-px bg-gradient-to-b from-gray-300 to-gray-200 my-2"></div>
+      {/* Evolution arrow rail — left-to-right horizontal */}
+      <div className="hidden md:flex items-center justify-center gap-3 mb-3 text-yai-blue/70 select-none">
+        <span className="text-[10px] font-bold tracking-[0.25em] uppercase">Old way</span>
+        <div className="flex-1 h-px bg-gradient-to-r from-gray-300 via-yai-blue/40 to-yai-blue" />
+        <span className="text-[10px] font-bold tracking-[0.25em] uppercase text-yai-blue">Evolution →</span>
+        <div className="flex-1 h-px bg-gradient-to-r from-yai-blue via-yai-blue/40 to-gray-300" />
+        <span className="text-[10px] font-bold tracking-[0.25em] uppercase">Full Ai</span>
       </div>
 
-      <div className="md:ml-10 space-y-3">
-        {LAYERS.map((l, i) => (
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+        {stages.map((l, i) => (
           <motion.div
             key={l.num}
-            initial={{ opacity: 0, x: -30 }}
+            initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.55, delay: i * 0.1 }}
-            className={`rounded-2xl overflow-hidden ${panelClass(l.variant)}`}
+            transition={{ duration: 0.5, delay: i * 0.1 }}
+            className={`rounded-2xl overflow-hidden flex flex-col ${panelClass(l.variant)}`}
           >
-            <div className="flex flex-col md:flex-row">
-              {/* Left badge / title block */}
-              <div className="md:w-72 shrink-0 p-5 md:p-6 md:border-r md:border-current/10">
-                <div className={`inline-block text-[10px] font-extrabold tracking-[0.18em] px-2 py-1 rounded ${badgeClass(l.variant)}`}>
-                  {l.num === "Today" ? "TODAY" : `LAYER ${l.num}`}
-                </div>
-                <h3 className={`text-2xl font-extrabold mt-3 ${l.variant === "before" ? "text-gray-600" : ""}`}>
-                  {l.name}
-                </h3>
-                <p className={`text-[11px] italic mt-1 ${l.variant === "before" ? "text-gray-500" : "opacity-80"}`}>
-                  {l.subtitle}
-                </p>
-                <p className={`text-sm leading-relaxed mt-3 ${blurbColor(l.variant)}`}>
-                  {l.blurb}
-                </p>
+            {/* Header — badge, title, subtitle, blurb */}
+            <div className="p-4 md:p-5 md:border-b md:border-current/10">
+              <div className={`inline-block text-[9px] font-extrabold tracking-[0.18em] px-2 py-1 rounded ${badgeClass(l.variant)}`}>
+                {l.num === "Today" ? "TODAY" : `LAYER ${l.num}`}
               </div>
+              <h3 className={`text-lg font-extrabold mt-2 leading-tight ${l.variant === "before" ? "text-gray-600" : ""}`}>
+                {l.name}
+              </h3>
+              <p className={`text-[10.5px] italic mt-1 ${l.variant === "before" ? "text-gray-500" : "opacity-80"}`}>
+                {l.subtitle}
+              </p>
+              <p className={`text-[12px] leading-snug mt-2 ${blurbColor(l.variant)}`}>
+                {l.blurb}
+              </p>
+            </div>
 
-              {/* Right icons row */}
-              <div className={`flex-1 p-5 md:p-6 flex flex-wrap items-center justify-around gap-4 md:gap-2 ${iconColor(l.variant)}`}>
-                {l.icons.map((ic, j) => (
-                  <motion.div
-                    key={j}
-                    initial={{ opacity: 0, y: 8 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.3 }}
-                    transition={{ duration: 0.4, delay: i * 0.1 + j * 0.08 }}
-                    className="flex flex-col items-center text-center min-w-[64px] max-w-[110px]"
-                  >
-                    <div className="w-10 h-10">{ic.node}</div>
-                    <div className={`text-[10.5px] leading-tight mt-2 ${l.variant === "before" ? "text-gray-500" : "opacity-90"}`}>
-                      {ic.label}
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
+            {/* Icons — 2-column grid inside the column */}
+            <div className={`flex-1 p-3 md:p-4 grid grid-cols-2 gap-3 items-start ${iconColor(l.variant)}`}>
+              {l.icons.map((ic, j) => (
+                <motion.div
+                  key={j}
+                  initial={{ opacity: 0, y: 6 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.35, delay: i * 0.08 + j * 0.05 }}
+                  className="flex flex-col items-center text-center"
+                >
+                  <div className="w-8 h-8">{ic.node}</div>
+                  <div className={`text-[9.5px] leading-tight mt-1.5 ${l.variant === "before" ? "text-gray-500" : "opacity-90"}`}>
+                    {ic.label}
+                  </div>
+                </motion.div>
+              ))}
             </div>
           </motion.div>
         ))}
       </div>
-
     </div>
   );
 }

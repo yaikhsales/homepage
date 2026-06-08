@@ -171,15 +171,15 @@ type Chip = { icon: React.ReactNode; label: string; brand?: string };
 
 function ChipGrid({ items, accent }: { items: Chip[]; accent: string }) {
   return (
-    <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-2 mt-2">
+    <div className="grid grid-cols-2 gap-2">
       {items.map((it, i) => (
         <div
           key={i}
-          className="flex flex-col items-center gap-1 px-2 py-2.5 rounded-lg bg-white/12 border border-white/25 backdrop-blur-sm"
+          className="flex flex-col items-center gap-1 px-1.5 py-2 rounded-lg bg-white/12 border border-white/25 backdrop-blur-sm"
         >
           <div className={accent}>{it.icon}</div>
-          <div className="text-[10px] font-bold text-center leading-tight">{it.label}</div>
-          {it.brand && <div className="text-[8px] uppercase tracking-wider opacity-70">{it.brand}</div>}
+          <div className="text-[9.5px] font-bold text-center leading-tight">{it.label}</div>
+          {it.brand && <div className="text-[7.5px] uppercase tracking-wider opacity-70">{it.brand}</div>}
         </div>
       ))}
     </div>
@@ -188,15 +188,15 @@ function ChipGrid({ items, accent }: { items: Chip[]; accent: string }) {
 
 function ChipGridLight({ items }: { items: Chip[] }) {
   return (
-    <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-2 mt-2">
+    <div className="grid grid-cols-2 gap-2">
       {items.map((it, i) => (
         <div
           key={i}
-          className="flex flex-col items-center gap-1 px-2 py-2.5 rounded-lg bg-white border border-yai-orange/30"
+          className="flex flex-col items-center gap-1 px-1.5 py-2 rounded-lg bg-white border border-yai-orange/30"
         >
-          <div className="text-yai-orange w-7 h-7">{it.icon}</div>
-          <div className="text-[10px] font-bold text-yai-navy text-center leading-tight">{it.label}</div>
-          {it.brand && <div className="text-[8px] uppercase tracking-wider text-gray-500">{it.brand}</div>}
+          <div className="text-yai-orange w-6 h-6">{it.icon}</div>
+          <div className="text-[9.5px] font-bold text-yai-navy text-center leading-tight">{it.label}</div>
+          {it.brand && <div className="text-[7.5px] uppercase tracking-wider text-gray-500">{it.brand}</div>}
         </div>
       ))}
     </div>
@@ -251,56 +251,66 @@ export function TechStackLayers() {
     { icon: <span className="block w-7 h-7">{Icon.bank}</span>,     label: "ABA · Wing", brand: "payouts" },
   ];
 
+  // 4 columns reading left → right: Today (old way) → Layer 1 → Layer 2 → Layer 3 Full Ai
   return (
-    <div className="space-y-3">
-      {/* Layer 3 — Luxury dark green */}
-      <div className="rounded-xl p-5 text-white border-2 border-[#0E3B2E]" style={{ background: "linear-gradient(to right, #0A3327, #1A5742)" }}>
-        <div className="flex items-center gap-2 mb-1">
-          <span className="text-[10px] font-extrabold uppercase tracking-[0.18em] bg-amber-400 text-[#0A3327] px-2 py-0.5 rounded">Layer 3</span>
-          <span className="text-[11px] uppercase tracking-wider opacity-80">Full Ai · sovereign compute</span>
-        </div>
-        <h3 className="text-base font-bold">On-site Ai · solar-powered · multi-factory mesh</h3>
-        <ChipGrid items={layer3} accent="text-amber-300 w-7 h-7" />
+    <div>
+      {/* Evolution rail */}
+      <div className="hidden md:flex items-center justify-center gap-3 mb-3 text-yai-blue/70 select-none">
+        <span className="text-[10px] font-bold tracking-[0.25em] uppercase">Old way</span>
+        <div className="flex-1 h-px bg-gradient-to-r from-gray-300 via-yai-blue/40 to-yai-blue" />
+        <span className="text-[10px] font-bold tracking-[0.25em] uppercase text-yai-blue">Evolution →</span>
+        <div className="flex-1 h-px bg-gradient-to-r from-yai-blue via-yai-blue/40 to-gray-300" />
+        <span className="text-[10px] font-bold tracking-[0.25em] uppercase">Full Ai</span>
       </div>
 
-      {/* Layer 2 — Royal blue */}
-      <div className="rounded-xl p-5 text-white border-2 border-yai-blue" style={{ background: "linear-gradient(to right, #1E4DAA, #2A5DC4)" }}>
-        <div className="flex items-center gap-2 mb-1">
-          <span className="text-[10px] font-extrabold uppercase tracking-[0.18em] bg-white text-yai-blue px-2 py-0.5 rounded">Layer 2</span>
-          <span className="text-[11px] uppercase tracking-wider opacity-80">Agentic · model-agnostic</span>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+        {/* Today — what Yai replaces (left-most) */}
+        <div className="rounded-xl p-4 text-gray-600 border-2 border-dashed border-gray-300 bg-gray-50 flex flex-col">
+          <span className="self-start text-[9px] font-extrabold uppercase tracking-[0.18em] bg-gray-300 text-gray-700 px-2 py-0.5 rounded">Today</span>
+          <div className="text-[10.5px] uppercase tracking-wider text-gray-500 mt-2">The old tech</div>
+          <h3 className="text-sm font-bold text-gray-700 leading-tight mt-1">Paper · ledgers · scattered chat · manual signatures</h3>
+          <div className="grid grid-cols-2 gap-2 mt-3 flex-1 content-start">
+            {today.map((it, i) => (
+              <div
+                key={i}
+                className="flex flex-col items-center gap-1 px-1 py-2 rounded-lg bg-white border border-dashed border-gray-300"
+              >
+                <div className="text-gray-400 w-6 h-6">{it.icon}</div>
+                <div className="text-[9.5px] font-bold text-gray-700 text-center leading-tight">{it.label}</div>
+                {it.brand && <div className="text-[7.5px] uppercase tracking-wider text-gray-400">{it.brand}</div>}
+              </div>
+            ))}
+          </div>
         </div>
-        <h3 className="text-base font-bold">Swappable LLMs · voice + chat + dashboards</h3>
-        <ChipGrid items={layer2} accent="text-amber-300 w-7 h-7" />
-      </div>
 
-      {/* Layer 1 — Orange light */}
-      <div className="rounded-xl p-5 text-yai-navy border-2 border-yai-orange/40" style={{ background: "linear-gradient(to right, #FFF1E0, #FFD9B5)" }}>
-        <div className="flex items-center gap-2 mb-1">
-          <span className="text-[10px] font-extrabold uppercase tracking-[0.18em] bg-yai-orange text-white px-2 py-0.5 rounded">Layer 1</span>
-          <span className="text-[11px] uppercase tracking-wider text-yai-orange">Digitalization · the foundation</span>
+        {/* Layer 1 — Digitalization (orange) */}
+        <div className="rounded-xl p-4 text-yai-navy border-2 border-yai-orange/40 flex flex-col" style={{ background: "linear-gradient(to bottom, #FFF1E0, #FFD9B5)" }}>
+          <span className="self-start text-[9px] font-extrabold uppercase tracking-[0.18em] bg-yai-orange text-white px-2 py-0.5 rounded">Layer 1</span>
+          <div className="text-[10.5px] uppercase tracking-wider text-yai-orange mt-2">The foundation</div>
+          <h3 className="text-sm font-bold leading-tight mt-1">Cloud-first SaaS · mobile-native · AIoT-connected</h3>
+          <div className="mt-3 flex-1">
+            <ChipGridLight items={layer1} />
+          </div>
         </div>
-        <h3 className="text-base font-bold">Cloud-first SaaS · mobile-native · AIoT-connected</h3>
-        <ChipGridLight items={layer1} />
-      </div>
 
-      {/* Today — what Yai replaces */}
-      <div className="rounded-xl p-5 text-gray-600 border-2 border-dashed border-gray-300 bg-gray-50">
-        <div className="flex items-center gap-2 mb-1">
-          <span className="text-[10px] font-extrabold uppercase tracking-[0.18em] bg-gray-300 text-gray-700 px-2 py-0.5 rounded">Today</span>
-          <span className="text-[11px] uppercase tracking-wider text-gray-500">What Yai replaces · the old tech</span>
+        {/* Layer 2 — Agentic (blue) */}
+        <div className="rounded-xl p-4 text-white border-2 border-yai-blue flex flex-col" style={{ background: "linear-gradient(to bottom, #1E4DAA, #2A5DC4)" }}>
+          <span className="self-start text-[9px] font-extrabold uppercase tracking-[0.18em] bg-white text-yai-blue px-2 py-0.5 rounded">Layer 2</span>
+          <div className="text-[10.5px] uppercase tracking-wider opacity-80 mt-2">Model-agnostic</div>
+          <h3 className="text-sm font-bold leading-tight mt-1">Swappable LLMs · voice + chat + dashboards</h3>
+          <div className="mt-3 flex-1">
+            <ChipGrid items={layer2} accent="text-amber-300 w-6 h-6" />
+          </div>
         </div>
-        <h3 className="text-base font-bold text-gray-700">Paper · ledgers · scattered chat · manual signatures</h3>
-        <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-2 mt-2">
-          {today.map((it, i) => (
-            <div
-              key={i}
-              className="flex flex-col items-center gap-1 px-2 py-2.5 rounded-lg bg-white border border-dashed border-gray-300"
-            >
-              <div className="text-gray-400 w-7 h-7">{it.icon}</div>
-              <div className="text-[10px] font-bold text-gray-700 text-center leading-tight">{it.label}</div>
-              {it.brand && <div className="text-[8px] uppercase tracking-wider text-gray-400">{it.brand}</div>}
-            </div>
-          ))}
+
+        {/* Layer 3 — Full Ai (dark green, right-most) */}
+        <div className="rounded-xl p-4 text-white border-2 border-[#0E3B2E] flex flex-col" style={{ background: "linear-gradient(to bottom, #0A3327, #1A5742)" }}>
+          <span className="self-start text-[9px] font-extrabold uppercase tracking-[0.18em] bg-amber-400 text-[#0A3327] px-2 py-0.5 rounded">Layer 3</span>
+          <div className="text-[10.5px] uppercase tracking-wider opacity-80 mt-2">Sovereign compute</div>
+          <h3 className="text-sm font-bold leading-tight mt-1">On-site Ai · solar-powered · multi-factory mesh</h3>
+          <div className="mt-3 flex-1">
+            <ChipGrid items={layer3} accent="text-amber-300 w-6 h-6" />
+          </div>
         </div>
       </div>
     </div>
