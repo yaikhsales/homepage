@@ -754,7 +754,7 @@ export default async function PlanPage() {
           </Thesis>
 
           {/* Roadmap timeline — past spend curve + every module climbing the 3 Ai layers */}
-          <h3 className="font-bold text-yai-navy text-xl mb-1">How ~$205K built 17 module families</h3>
+          <h3 id="capital-investment" className="font-bold text-yai-navy text-xl mb-1 scroll-mt-8">How ~$205K built 17 module families</h3>
           <p className="text-sm text-gray-600 mb-4 max-w-3xl">
             One chart, every module. The spend curve at the top is what we&rsquo;ve <strong>actually paid</strong> in Cambodia engineering salaries — team grew from 3 engineers in May 2024 (Rich, Virot, Dilan) to <strong>22 by May 2026</strong>, with monthly burn now ~$14K and bonuses on top. Each row below is a real module: orange = Digitalization built, blue = Agentic layer on top, dark green = Full Ai. Every step right of <strong>TODAY</strong> is value added on the same engineering base.
           </p>
@@ -769,52 +769,9 @@ export default async function PlanPage() {
             applications — delivered on the cadence the parent expects.
           </Thesis>
 
-          <div className="grid sm:grid-cols-3 gap-4 mt-6">
-            <div className="rounded-xl border border-yai-border bg-white p-4 shadow-sm">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-yai-blue text-white text-xs font-extrabold">Q</span>
-                <h4 className="font-extrabold text-yai-navy text-sm leading-tight">Quarterly OC update</h4>
-              </div>
-              <p className="text-xs text-gray-600 leading-snug">
-                Every 3 months. Short deck or written brief — KPIs vs targets, wins / losses, cash
-                &amp; burn, risks, decisions the OC needs to make.
-              </p>
-              <div className="text-[10px] uppercase tracking-wider font-extrabold text-yai-blue mt-3">
-                Cadence
-              </div>
-              <div className="text-xs font-semibold text-yai-navy">Q1 · Q2 · Q3 · Q4</div>
-            </div>
-
-            <div className="rounded-xl border border-yai-border bg-white p-4 shadow-sm">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-yai-orange text-white text-xs font-extrabold">H</span>
-                <h4 className="font-extrabold text-yai-navy text-sm leading-tight">Half-year budget refresh</h4>
-              </div>
-              <p className="text-xs text-gray-600 leading-snug">
-                Every 6 months. Refreshed FY P&amp;L forecast — revenue, costs, headcount, capex —
-                with variance vs the original year-start plan.
-              </p>
-              <div className="text-[10px] uppercase tracking-wider font-extrabold text-yai-orange mt-3">
-                Cadence
-              </div>
-              <div className="text-xs font-semibold text-yai-navy">March · September</div>
-            </div>
-
-            <div className="rounded-xl border border-yai-border bg-white p-4 shadow-sm">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-yai-green text-white text-xs font-extrabold">$</span>
-                <h4 className="font-extrabold text-yai-navy text-sm leading-tight">Purchase applications</h4>
-              </div>
-              <p className="text-xs text-gray-600 leading-snug">
-                Submitted alongside the half-year budget. Larger purchases needing OC sign-off
-                before commitment — equipment, software, contractors, hires above threshold.
-              </p>
-              <div className="text-[10px] uppercase tracking-wider font-extrabold text-yai-green mt-3">
-                Format
-              </div>
-              <div className="text-xs font-semibold text-yai-navy">Arnold&rsquo;s template</div>
-            </div>
-          </div>
+          {/* The three OC cards (Quarterly / Half-year / Purchase apps) used to
+              sit here. Removed — both topics are now Q&A items linking back to
+              this section, and the cadence detail lives in the conversation. */}
 
           {/* Sales / Expenses / Budget — auto-aggregates the admin Sales + Salary + Expenses stores.
               The id is the anchor target for the Q&A panel's 'Sales plan' link. */}

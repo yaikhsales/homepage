@@ -23,6 +23,9 @@ const QA_ITEMS: Array<{ n: number; text: string; anchor?: string; note?: string 
   { n: 4, text: "Core Applications retain for YW",                                                     note: "for discussion" },
   { n: 5, text: "A complete list of all Admin modules, together with their current acceptance status", anchor: "traction" },
   { n: 6, text: "A phased approach to starting the business",                                          anchor: "pricing" },
+  { n: 7, text: "A quarterly OC update",                                                               anchor: "oc-budget" },
+  { n: 8, text: "A half-year budget update, together with any purchase applications",                  anchor: "oc-budget" },
+  { n: 9, text: "Investment being of the YW Group",                                                    anchor: "capital-investment", note: "documentation for capital investment" },
 ];
 
 export function FloatingGlass() {
@@ -127,9 +130,16 @@ export function FloatingGlass() {
                   <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-yai-blue text-white text-[10px] font-extrabold shrink-0 mt-0.5">
                     {q.n}
                   </span>
-                  <span className="text-[11.5px] leading-snug font-semibold group-hover:text-yai-blue transition">
-                    {q.text}
-                  </span>
+                  <div className="min-w-0 flex-1">
+                    <span className="text-[11.5px] leading-snug font-semibold group-hover:text-yai-blue transition">
+                      {q.text}
+                    </span>
+                    {q.note && (
+                      <div className="text-[9.5px] uppercase tracking-[0.15em] italic text-yai-orange/80 mt-0.5">
+                        {q.note}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </a>
             ) : (
