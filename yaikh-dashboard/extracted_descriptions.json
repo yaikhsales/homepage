@@ -1,0 +1,197 @@
+[
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-1.png?v=3",
+    "title": "ADMINISTRATION · ACCOUNTANT",
+    "description": "“I run the whole accounting function — income, expenses, invoicing, taxes and the company's books — and keep every ledger reconciled in real time.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-2.png?v=3",
+    "title": "ADMINISTRATION · ACCOUNTANT",
+    "description": "“I handle e-invoicing — issuing and validating invoices through CamInv / the GDT e-invoice system so every invoice is compliant and traceable.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-3.png?v=3",
+    "title": "ADMINISTRATION · BILLING",
+    "description": "“I handle purchase requests — from raising to approval routing and PO creation.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-4.png?v=3",
+    "title": "ADMINISTRATION · BILLING",
+    "description": "“I process expense and bill claims — submission, approval and reimbursement straight back to the claimant.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-5.png?v=3",
+    "title": "ADMINISTRATION · BILLING",
+    "description": "“I run payroll end to end — wages, overtime and deductions — then pay everyone out straight to their ABA or WING account. Each person sees every payment and payslip detail right inside the Yai app.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-38.png?v=3",
+    "title": "ADMINISTRATION · BILLING",
+    "description": "“I handle the paperwork side of shipping — bills of lading, freight invoices, customs declarations, duty + clearance fees — and reconcile every charge against the consignment so nothing slips through.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-6.png?v=3",
+    "title": "ADMINISTRATION · HR",
+    "description": "“I'm the HR core — employee records, contracts, leave and the full worker lifecycle in one place.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-7.png?v=3",
+    "title": "ADMINISTRATION · HR",
+    "description": "“I keep the company's structure live — every role, reporting line and headcount — and hold all the structural records you need for compliance. The moment someone joins or resigns, the chart updates itself in real time.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-8.png?v=3",
+    "title": "ADMINISTRATION · HR",
+    "description": "“I plan and track training — schedules, attendance and the skills record for every worker.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-9.png?v=3",
+    "title": "ADMINISTRATION · HR",
+    "description": "“I manage temporary-worker requests — raising, approving and tracking short-term labour on the floor.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-10.png?v=3",
+    "title": "ADMINISTRATION · HR",
+    "description": "“I'm the anonymous grievance channel — workers raise concerns safely and I route them to the right people.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-11.png?v=3",
+    "title": "ADMINISTRATION · ADMIN",
+    "description": "“I take internal support requests — log, assign and track every ticket to resolution.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-12.png?v=3",
+    "title": "ADMINISTRATION · ADMIN",
+    "description": "“I run the internal shop — staff purchases, stock and orders.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-13.png?v=3",
+    "title": "ADMINISTRATION · ADMIN",
+    "description": "“I issue and verify gate passes — people and goods in and out, logged and authorised.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-14.png?v=3",
+    "title": "ADMINISTRATION · ADMIN",
+    "description": "“I manage meeting-room bookings — availability, scheduling and conflicts.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-15.png?v=3",
+    "title": "ADMINISTRATION · ADMIN",
+    "description": "“I handle company-car bookings — requests, allocation and the schedule.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-16.png?v=3",
+    "title": "ADMINISTRATION · ADMIN",
+    "description": "“I monitor the fire-alarm and life-safety systems across the whole site.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-17.png?v=3",
+    "title": "ADMINISTRATION · ADMIN",
+    "description": "“I connect to the CCTV system — live and recorded camera access for security.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-18.png?v=3",
+    "title": "ADMINISTRATION · CSR",
+    "description": "“I run digital compliance audits — WRAP, BSCI, HIGG and ILO evidence collected and scored automatically.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-19.png?v=3",
+    "title": "ADMINISTRATION · CSR",
+    "description": "“I track energy use — kWh, efficiency and renewable share across the factory.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-20.png?v=3",
+    "title": "ADMINISTRATION · CSR",
+    "description": "“I monitor air emissions — AQI, CO2 and air-quality data for compliance.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-21.png?v=3",
+    "title": "ADMINISTRATION · CSR",
+    "description": "“I monitor water — usage and effluent/wastewater levels for environmental reporting.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-22.png?v=3",
+    "title": "ADMINISTRATION · CSR",
+    "description": "“I track waste — solid waste, recycling rates and disposal records.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-23.png?v=3",
+    "title": "ADMINISTRATION · CSR",
+    "description": "“I manage chemical inventory and MRSL / ZDHC compliance.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-24.png?v=3",
+    "title": "ADMINISTRATION · SHIPPING",
+    "description": "“I handle freight both ways — importing raw materials and machines, and exporting finished goods by FCL and LCL — tracking every container, customs step and delivery end to end.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-25.png?v=3",
+    "title": "ADMINISTRATION · E-GOV",
+    "description": "“I connect directly to every government portal — the Tax portal, the Customs portal, and each ministry's compliance portal. I also run the communication channel with each government body, handling official PR and correspondence and keeping the systems updated with every new announcement.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-27.png?v=3",
+    "title": "MANAGEMENT · DASHBOARD",
+    "description": "“I'm the GM's data keeper. Every number in the company runs through me — production, sales, finance, HR, compliance — so the General Manager's single screen knows literally everything, live.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-28.png?v=3",
+    "title": "MANAGEMENT · DASHBOARD",
+    "description": "“I'm the process police. Every standard operating procedure lives with me — searchable, versioned and always current — and nobody here does anything without going through my process first.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-29.png?v=3",
+    "title": "MANAGEMENT · NOTICEABLE",
+    "description": "“I run the algorithms for top management. When the chat agent can't give you the answer, I take over — I trace exactly where it went wrong, work out what happened, and fix it.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-30.png?v=3",
+    "title": "OPERATIONS · QA",
+    "description": "“I'm quality management — inline and final QC, defects, AQL and corrective actions.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-31.png?v=3",
+    "title": "OPERATIONS · QA",
+    "description": "“I escalate quality issues — flagging defects and calling out the right people the moment something needs attention.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-32.png?v=3",
+    "title": "OPERATIONS · PRODUCTION",
+    "description": "“I run floor control — line balancing, output and live production status.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-33.png?v=3",
+    "title": "OPERATIONS · PRODUCTION",
+    "description": "“I'm all about quantities — from your fabric rolls, to the cut panels, to the finished goods, to the cartons ready to export. Ask me how many, anywhere in the flow.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-34.png?v=3",
+    "title": "OPERATIONS · PRODUCTION",
+    "description": "“I handle costing & efficiency — SAM, line efficiency and cost per garment.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-35.png?v=3",
+    "title": "OPERATIONS · PRODUCTION",
+    "description": "“I manage time & motion — SAM studies, method and capacity planning.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-36.png?v=3",
+    "title": "OPERATIONS · PRODUCTION",
+    "description": "“I'm the shop-floor time view — operation breakdowns right at the station.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-37.png?v=3",
+    "title": "OPERATIONS · 4DP",
+    "description": "“I'm the production plan — scheduling orders across lines day by day.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-38.png?v=3",
+    "title": "OPERATIONS · YPI",
+    "description": "“I deliver garment technical specs in Khmer — construction, measurements and machine settings on the floor.”"
+  },
+  {
+    "src": "https://yai-plan-production.up.railway.app/images/generated/agent-39.png?v=3",
+    "title": "OPERATIONS · MRP",
+    "description": "“I run material requirements planning — fabric and trims, what's needed and when.”"
+  }
+]

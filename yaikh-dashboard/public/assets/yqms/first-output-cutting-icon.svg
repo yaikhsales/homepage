@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <!-- ══ CUTTING SCENE ══ -->
+  <g transform="translate(15, 20)">
+    <!-- Fabric Roll -->
+    <path d="M80 40 L150 40 C165 40 165 75 150 75 L80 75 C65 75 65 40 80 40" stroke="#1D4ED8" stroke-width="10" fill="white"/>
+    <circle cx="150" cy="57" r="10" stroke="#1D4ED8" stroke-width="6" fill="white"/>
+    <path d="M110 75 L110 130 L160 130 L160 75" stroke="#1D4ED8" stroke-width="10" fill="white" stroke-linejoin="round"/>
+    
+    <!-- Scissors -->
+    <g transform="translate(10, 40) rotate(-10)">
+      <!-- Handles -->
+      <circle cx="25" cy="25" r="20" stroke="#F59E0B" stroke-width="12" fill="white"/>
+      <circle cx="25" cy="75" r="20" stroke="#F59E0B" stroke-width="12" fill="white"/>
+      <!-- Blades -->
+      <path d="M45 35 L120 75" stroke="#1D4ED8" stroke-width="14" stroke-linecap="round"/>
+      <path d="M45 65 L120 25" stroke="#1D4ED8" stroke-width="14" stroke-linecap="round"/>
+      <!-- Pivot -->
+      <circle cx="75" cy="50" r="8" fill="#1D4ED8"/>
+    </g>
+  </g>
+</svg>

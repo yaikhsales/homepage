@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <!-- ══ FOLDER ══ -->
+  <g transform="translate(15, 20)">
+    <!-- Folder Body -->
+    <path d="M0 10 Q0 0 10 0 L60 0 Q70 0 75 10 L85 25 L160 25 Q170 25 170 35 L170 130 Q170 140 160 140 L10 140 Q0 140 0 130 Z" stroke="#1D4ED8" stroke-width="10" fill="white" stroke-linejoin="round"/>
+    
+    <!-- Checkmark inside folder -->
+    <path d="M50 90 L80 120 L135 60" stroke="#F59E0B" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    
+    <!-- Paper lines at top -->
+    <line x1="100" y1="45" x2="140" y2="45" stroke="#1D4ED8" stroke-width="6" stroke-linecap="round"/>
+    <line x1="100" y1="60" x2="130" y2="60" stroke="#1D4ED8" stroke-width="6" stroke-linecap="round"/>
+  </g>
+</svg>

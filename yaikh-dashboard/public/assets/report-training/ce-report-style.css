@@ -1,0 +1,103 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #1e293b;
+    margin: 0;
+    padding: 40px;
+    background-color: #f8fafc;
+}
+.report-container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    padding: 60px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    border-radius: 24px;
+}
+.header {
+    border-bottom: 4px solid #10b981;
+    padding-bottom: 20px;
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.header-title h1 {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #10b981;
+    letter-spacing: -0.025em;
+}
+.header-title p {
+    margin: 4px 0 0;
+    font-weight: 700;
+    color: #64748b;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+.logo {
+    font-size: 24px;
+    font-weight: 900;
+    color: #1e293b;
+    letter-spacing: -1px;
+}
+.section {
+    margin-bottom: 30px;
+}
+.section h2 {
+    font-size: 18px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #334155;
+    margin-bottom: 12px;
+    border-left: 6px solid #10b981;
+    padding-left: 12px;
+}
+.section p {
+    line-height: 1.6;
+}
+.highlight-box {
+    background: #f0fdf4;
+    border: 1px solid #dcfce7;
+    padding: 20px;
+    border-radius: 16px;
+    margin: 20px 0;
+}
+.highlight-box h3 {
+    margin-top: 0;
+    font-size: 14px;
+    color: #15803d;
+    text-transform: uppercase;
+}
+.table-data {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+.table-data th {
+    background: #f1f5f9;
+    padding: 12px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    border-bottom: 2px solid #e2e8f0;
+}
+.table-data td {
+    padding: 12px;
+    font-size: 13px;
+    border-bottom: 1px solid #f1f5f9;
+}
+.footer {
+    margin-top: 60px;
+    text-align: center;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 30px;
+    color: #94a3b8;
+    font-size: 12px;
+}
+@media print {
+    body { background: white; padding: 0; }
+    .report-container { box-shadow: none; border-radius: 0; }
+}
