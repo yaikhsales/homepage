@@ -111,7 +111,14 @@ function Nav() {
             </div>
             <a href="#pricing"   className="hover:text-yai-orange transition">{t("nav.pricing")}</a>
             <a href="#impact"    className="hover:text-yai-orange transition">{t("nav.flashcards")}</a>
-            <a href="#impact"    className="hover:text-yai-orange transition">{t("nav.experience")}</a>
+            <a
+              href="http://localhost:3002"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-yai-orange transition"
+            >
+              {t("nav.experience")}
+            </a>
             <a href="#contact"   className="hover:text-yai-orange transition">{t("nav.chat")}</a>
           </div>
         </div>
