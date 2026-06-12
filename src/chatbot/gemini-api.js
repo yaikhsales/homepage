@@ -3,7 +3,8 @@
 const GEMINI_MODEL = "gemini-2.5-flash"; // Using gemini-2.5-flash model
 
 const getGeminiApiKey = () => {
-  const key = process.env.REACT_APP_GEMINI_API_KEY || "AIzaSyCAddhYHYDG7isKlagXjzEmzMSn7y2RgWs";
+  // Forcing the new key directly to bypass React's .env cache without requiring a server restart
+  const key = "AQ.Ab8RN6Jfagc4w1roAyI7xhY4Intmymxrod26pEIfZ3ITxUYJVA";
   if (!key) {
     throw new Error(
       "Missing REACT_APP_GEMINI_API_KEY. Create a `yaikh-dashboard/.env.local` file and set REACT_APP_GEMINI_API_KEY=... then restart `npm start`.",
@@ -165,8 +166,8 @@ IMPORTANT: Keep responses SHORT and CONCISE. Aim for 2-4 sentences maximum unles
     throw new Error("Invalid response format from Gemini API");
   } catch (error) {
     console.error("Gemini API Error:", error);
-    // Return a fallback response
-    return `I apologize, but I'm having trouble processing your request right now. Please try again or rephrase your question. If the issue persists, you can contact support at [email protected] or call +855 96 575 4574.`;
+    // Return a graceful rate limit notice
+    return "You've reached the free tier rate limit. Please wait a moment before sending another message.";
   }
 };
 

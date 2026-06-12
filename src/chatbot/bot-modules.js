@@ -2837,6 +2837,34 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                 return; // Don't process duplicate message
             }
         }
+
+        // Demo Rate Limiting: Max 1 question per chat
+        if (currentBotState) {
+            const userMessageCount = currentBotState.messages.filter(msg => msg.from === 'user').length;
+            if (userMessageCount >= 1) {
+                setBotStates(prev => {
+                    const botState = prev[botId];
+                    const userMsg = { from: 'user', text: message };
+                    const botMsg = { from: 'bot', text: "You have reached your limit of 1 question for this demo. If you want to chat more, please visit ChatGPT or Gemini directly." };
+                    
+                    const updatedMessages = [...botState.messages, userMsg, botMsg];
+                    const updatedHistory = botState.currentChatId ? botState.chatHistory.map(chat =>
+                        chat.id === botState.currentChatId ? { ...chat, messages: updatedMessages, updatedAt: new Date().toISOString() } : chat
+                    ) : botState.chatHistory;
+                    
+                    return {
+                        ...prev,
+                        [botId]: {
+                            ...prev[botId],
+                            messages: updatedMessages,
+                            isTyping: false,
+                            chatHistory: updatedHistory
+                        }
+                    };
+                });
+                return; // Prevent further processing
+            }
+        }
         
         // Handle Admin PA module selection
         if (botId === 'admin-bot') {

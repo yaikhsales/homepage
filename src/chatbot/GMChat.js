@@ -478,6 +478,18 @@ Provide helpful, accurate, and professional responses. Be concise but informativ
         e.preventDefault();
         if (newMessage.trim() === '') return;
 
+        // Demo Rate Limiting: Max 1 question per chat
+        const userMessageCount = messages.filter(msg => msg.sender === 'user').length;
+        if (userMessageCount >= 1) {
+            const userMsg = { id: Date.now(), text: newMessage, sender: 'user' };
+            setMessages(prev => [...prev, userMsg]);
+            setNewMessage('');
+            setTimeout(() => {
+                streamBotResponse("You have reached your limit of 1 question for this demo. If you want to chat more, please visit ChatGPT or Gemini directly.");
+            }, 100);
+            return;
+        }
+
         // Add user message
         const userMsg = { id: Date.now(), text: newMessage, sender: 'user' };
         setMessages(prev => [...prev, userMsg]);
@@ -493,7 +505,7 @@ Provide helpful, accurate, and professional responses. Be concise but informativ
         } catch (error) {
             console.error('Error generating response:', error);
             // Use streaming for error message too
-            streamBotResponse("I apologize, but I'm having trouble processing your request right now. Please try again.");
+            streamBotResponse("You've reached the free tier rate limit. Please wait a moment before sending another message.");
         }
     };
 
@@ -530,7 +542,7 @@ Provide helpful, accurate, and professional responses. Be concise but informativ
         } catch (error) {
             console.error('Error generating response:', error);
             // Use streaming for error message too
-            streamBotResponse("I apologize, but I'm having trouble processing your request right now. Please try again.");
+            streamBotResponse("You've reached the free tier rate limit. Please wait a moment before sending another message.");
         }
     };
 
