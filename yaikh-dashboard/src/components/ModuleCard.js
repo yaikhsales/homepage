@@ -85,9 +85,9 @@ const ModuleCard = ({ data, onClick, botVersion = 'default', onBotClick, isDropd
       <div
         onClick={handleCardClick}
         className={`
-              absolute inset-0 bg-white rounded-lg border-2 shadow-sm transition ease-in-out duration-500 flex flex-col justify-between cursor-pointer
+              absolute inset-0 bg-white rounded-lg border border-gray-200/40 shadow-sm transition ease-in-out duration-500 flex flex-col justify-between cursor-pointer
               overflow-hidden
-              bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white from-60% ${data.highlight ? 'to-orange-200' : 'to-green-200'}
+              ${data.highlight ? 'bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white from-60% to-orange-100' : ''}
               ${isComingSoon ? '' : 'group-hover:-translate-y-1 group-hover:scale-105 group-hover:shadow-lg'}
           `}
       >

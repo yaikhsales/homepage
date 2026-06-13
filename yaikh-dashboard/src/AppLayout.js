@@ -22,6 +22,12 @@ const AppLayout = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  // When mounted under yaikh-com at /dashboard (post-absorption), the
+  // root constellation lives at /dashboard. When run standalone (V2 dev
+  // server on :3002), it lives at /. Treat both as "home" so the agent
+  // grid renders in either context.
+  const isHome = location.pathname === "/" || location.pathname === "/dashboard";
+
   const [isGMChatOpen, setGMChatOpen] = useState(false);
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [isYaiDataBotOpen, setYaiDataBotOpen] = useState(false);
@@ -1138,7 +1144,7 @@ const AppLayout = () => {
       style={{ position: "relative", zIndex: 1, scrollBehavior: "smooth" }}
     >
       {/* Theme Background - Show on home page and dashboard, but not on full-screen forms */}
-      {(location.pathname === "/" ||
+      {(isHome ||
         location.pathname.startsWith("/dashboard")) &&
         !location.pathname.includes("purchase-requisition-form") &&
         !location.pathname.includes("verify-pr") &&
@@ -1192,7 +1198,7 @@ const AppLayout = () => {
         !location.pathname.includes("ce") && <Header />}
 
       {/* Chatbot Icon & Dropdown - Only show on home page - Prominent First View */}
-      {location.pathname === "/" && (
+      {isHome && (
         <div className="fixed top-20 left-6 z-[60] text-white animate-in fade-in slide-in-from-left duration-1000">
 
           <div className="flex items-center gap-4">
@@ -1302,13 +1308,13 @@ const AppLayout = () => {
       )}
       {isGMChatOpen && <GMChat onClose={() => setGMChatOpen(false)} />}
       <main
-        className={`flex-1 relative ${location.pathname === "/" ? "p-4 md:p-6" : "p-0"} overflow-x-auto`}
+        className={`flex-1 relative ${isHome ? "p-4 md:p-6" : "p-0"} overflow-x-auto`}
       >
         {/* === BACKGROUND LAYERS === */}
         {/* Background is now handled by ThemeBackground component in thems.js */}
 
         {/* Conditionally render dashboard content or other views */}
-        {location.pathname === "/" ? (
+        {isHome ? (
           <>
             <style>{`
                             @keyframes fadeInUp {
@@ -1425,7 +1431,7 @@ const AppLayout = () => {
             </div>
 
             {/* General AI Agent Button - Right Side Bottom */}
-            {location.pathname === "/" && (
+            {isHome && (
               <button
                 onClick={() => setGeneralAIAgentOpen(true)}
                 className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 flex items-center justify-center group"
