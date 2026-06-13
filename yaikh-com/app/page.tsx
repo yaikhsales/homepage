@@ -97,7 +97,7 @@ function Nav() {
                   {/* Transparent submenu — inherits the nav's text colour,
                       only the word Portal shows. */}
                   <a
-                    href="http://localhost:3003"
+                    href="https://yai-plan-production-c1a7.up.railway.app"
                     target="_blank"
                     rel="noopener noreferrer"
                     role="menuitem"
@@ -122,7 +122,7 @@ function Nav() {
         <div className="flex items-center gap-3 shrink-0">
           <LangFlags scrolled={scrolled} />
           <a
-            href="https://yai-plan-production.up.railway.app"
+            href="https://yai-plan-production-c1a7.up.railway.app"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block text-center px-5 py-2 rounded-full bg-yai-orange text-white hover:bg-yai-orange/90 transition shadow-lg leading-[1.1]"
@@ -723,7 +723,7 @@ function LayerStory() {
       name: t("layer.today.name"),
       sub: t("layer.today.sub"),
       desc: t("layer.today.desc"),
-      icons: ["Paper reports", "Ledger books", "WhatsApp", "Manual signing", "Chasing approvals"],
+      icons: [t("chip.today.1"), t("chip.today.2"), t("chip.today.3"), t("chip.today.4"), t("chip.today.5")],
       variant: "before",
     },
     {
@@ -731,7 +731,7 @@ function LayerStory() {
       name: t("layer.l1.name"),
       sub: t("layer.l1.sub"),
       desc: t("layer.l1.desc"),
-      icons: ["Smart UIs", "Chat agents", "Mobile apps", "AIoT", "LLMs"],
+      icons: [t("chip.l1.1"), t("chip.l1.2"), t("chip.l1.3"), t("chip.l1.4"), t("chip.l1.5")],
       variant: "l1",
     },
     {
@@ -739,7 +739,7 @@ function LayerStory() {
       name: t("layer.l2.name"),
       sub: t("layer.l2.sub"),
       desc: t("layer.l2.desc"),
-      icons: ["Agentic skills", "Auto-queue tasks", "Human escalation", "SOP monitoring", "Process policing"],
+      icons: [t("chip.l2.1"), t("chip.l2.2"), t("chip.l2.3"), t("chip.l2.4"), t("chip.l2.5")],
       variant: "l2",
     },
     {
@@ -747,7 +747,7 @@ function LayerStory() {
       name: t("layer.l3.name"),
       sub: t("layer.l3.sub"),
       desc: t("layer.l3.desc"),
-      icons: ["Human + Ai sync", "Proven results", "Confident capital", "Clone-to-country", "Multi-territory"],
+      icons: [t("chip.l3.1"), t("chip.l3.2"), t("chip.l3.3"), t("chip.l3.4"), t("chip.l3.5")],
       variant: "l3",
     },
   ];
@@ -849,6 +849,7 @@ function LayerStory() {
  *  - l2      · three Ai agents handing tasks between each other
  *  - l3      · a central Yai brain emitting signals to many factories */
 function LayerAnimation({ variant }: { variant: string }) {
+  const { t } = useLang();
   if (variant === "before") {
     /* The chaotic office scene — multiple stick figures, printer spitting
        paper, growing pile, scattered fluttering papers, non-stop chat. */
@@ -1138,11 +1139,11 @@ function LayerAnimation({ variant }: { variant: string }) {
        reference. Connected by dashed lines, each speaks in sequence: their
        portrait gets a bright amber ring + a labelled speech bubble pops in. */
     const AGENTS = [
-      { x: 15, y: 30, img: "/images/agent-9.png",  name: "Production", msg: "Request",     alert: false, anim: 1 },
-      { x: 50, y: 22, img: "/images/agent-22.png", name: "QC",         msg: "Defects ↑",   alert: true,  anim: 2 },
-      { x: 85, y: 30, img: "/images/agent-10.png", name: "Dashboard",  msg: "→ GM",        alert: false, anim: 3 },
-      { x: 22, y: 72, img: "/images/agent-11.png", name: "YTM",        msg: "Machine ✕",   alert: true,  anim: 4 },
-      { x: 78, y: 72, img: "/images/agent-30.png", name: "MRP",        msg: "Fabric ↺",    alert: true,  anim: 5 },
+      { x: 15, y: 30, img: "/images/agent-9.png",  name: "Production", msg: t("agent.msg.request"), alert: false, anim: 1 },
+      { x: 50, y: 22, img: "/images/agent-22.png", name: "QC",         msg: t("agent.msg.defects"), alert: true,  anim: 2 },
+      { x: 85, y: 30, img: "/images/agent-10.png", name: "Dashboard",  msg: t("agent.msg.toGM"),    alert: false, anim: 3 },
+      { x: 22, y: 72, img: "/images/agent-11.png", name: "YTM",        msg: t("agent.msg.machine"), alert: true,  anim: 4 },
+      { x: 78, y: 72, img: "/images/agent-30.png", name: "MRP",        msg: t("agent.msg.fabric"),  alert: true,  anim: 5 },
     ];
     const EDGES: Array<[number, number]> = [
       [0, 1], [1, 2], [0, 3], [3, 4], [4, 2], [1, 3], [1, 4], [0, 2],
@@ -1214,7 +1215,7 @@ function LayerAnimation({ variant }: { variant: string }) {
         <g transform="translate(22 99)">
           <rect x="-18" y="-5.5" width="36" height="11" rx="5.5" fill="#10B981" />
           <text x="0" y="2.4" textAnchor="middle" fontSize="8.5" fontWeight="900" fill="#fff" letterSpacing="0.6">
-            READY
+            {t("ready")}
           </text>
         </g>
       </g>
@@ -2999,7 +3000,7 @@ function Footer() {
         </FooterCol>
         <FooterCol title="Company">
           <FooterLink href="mailto:gamini@yaikh.com">Contact</FooterLink>
-          <FooterLink href="https://yai-plan-production.up.railway.app">Strategic DTV portal</FooterLink>
+          <FooterLink href="https://yai-plan-production-c1a7.up.railway.app">Strategic DTV portal</FooterLink>
         </FooterCol>
       </div>
       <div className="border-t border-white/10">
