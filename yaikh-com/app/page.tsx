@@ -97,7 +97,7 @@ function Nav() {
                   {/* Transparent submenu — inherits the nav's text colour,
                       only the word Portal shows. */}
                   <a
-                    href="https://yai-plan-production.up.railway.app"
+                    href="http://localhost:3003"
                     target="_blank"
                     rel="noopener noreferrer"
                     role="menuitem"
@@ -111,12 +111,7 @@ function Nav() {
             </div>
             <a href="#pricing"   className="hover:text-yai-orange transition">{t("nav.pricing")}</a>
             <a href="#impact"    className="hover:text-yai-orange transition">{t("nav.flashcards")}</a>
-            <a
-              href="http://localhost:3002"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-yai-orange transition"
-            >
+            <a href="/experience" className="hover:text-yai-orange transition">
               {t("nav.experience")}
             </a>
             <a href="#contact"   className="hover:text-yai-orange transition">{t("nav.chat")}</a>
