@@ -76,8 +76,9 @@ function Nav() {
               scrolled ? "text-yai-navy/80" : "text-white/90"
             }`}
           >
-            <a href="#product"   className="hover:text-yai-orange transition">{t("nav.product")}</a>
-            <a href="#customers" className="hover:text-yai-orange transition">{t("nav.customers")}</a>
+            <a href="/about" className="hover:text-yai-orange transition">{t("nav.about")}</a>
+            <a href="/#product"  className="hover:text-yai-orange transition">{t("nav.product")}</a>
+            <a href="/about" className="hover:text-yai-orange transition">{t("nav.customers")}</a>
             {/* Partners — click opens a small submenu with Portal */}
             <div className="relative" onMouseLeave={() => setPartnersOpen(false)}>
               <button
@@ -2983,9 +2984,11 @@ function Footer() {
             className="w-20 h-20 rounded-full drop-shadow-2xl"
           />
           <p className="mt-4 text-[12.5px] leading-relaxed text-white/55">
-            Texlink Technologies Co., Ltd.<br />
-            Phnom Penh, Cambodia.<br />
-            Ai-Native Manufacturing Intelligence Platform.
+            <span className="text-white/75 font-semibold">Texlink Technologies Co., Ltd.</span><br />
+            <span className="text-white/55">Reg. 1000542518 · 03 Oct 2025</span><br />
+            TSF-038A Kolap Street, Damnak Village,<br />
+            Sen Sok, Phnom Penh, Cambodia.<br />
+            <span className="italic text-white/65">Ai-Native Manufacturing Intelligence Platform.</span>
           </p>
         </div>
         <FooterCol title="Product">

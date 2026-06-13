@@ -35,3 +35,6 @@ next-env.d.ts
 
 # Vercel
 .vercel
+
+# Strip source maps from the absorbed dashboard build
+public/dashboard/**/*.map

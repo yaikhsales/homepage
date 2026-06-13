@@ -13,6 +13,7 @@ export const LANGS: Lang[] = ["en", "km", "zh", "ja", "ko", "bn", "hi"];
 
 const D: Record<string, string[]> = {
   /* ── NAV ── */
+  "nav.about":      ["About", "អំពី", "关于", "私たちについて", "회사 소개", "সম্পর্কে", "हमारे बारे में"],
   "nav.product":    ["Product", "ផលិតផល", "产品", "製品", "제품", "পণ্য", "उत्पाद"],
   "nav.customers":  ["Customers", "អតិថិជន", "客户", "顧客", "고객", "গ্রাহক", "ग्राहक"],
   "nav.partners":   ["Partners", "ដៃគូ", "合作伙伴", "パートナー", "파트너", "অংশীদার", "साझेदार"],
