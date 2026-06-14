@@ -2,40 +2,26 @@
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
-  async redirects() {
-    return [
-      // /experience → /dashboard (no index.html suffix). V2's BrowserRouter
-      // has no basename — it expects the URL bar to be exactly "/" or
-      // "/dashboard" to match its <Route path="/dashboard"> rule that
-      // renders AppLayout (the agent constellation). If we redirect to
-      // /dashboard/index.html, BrowserRouter sees the literal string
-      // ".../index.html" and falls through to an empty fallback view.
-      {
-        source: "/experience",
-        destination: "/dashboard",
-        permanent: false,
-      },
-    ];
-  },
-  // trailingSlash:false is the Next.js default — it strips trailing
-  // slashes via 308. We need /dashboard to actually serve the CRA
-  // index.html, so the rewrites below run on the post-strip URL.
+  // /experience serves the absorbed CRA dashboard directly — no
+  // intermediate /dashboard URL, no redirect chain. The CRA build
+  // emits assets prefixed with /experience (set via homepage in
+  // yaikh-dashboard/package.json) so URLs like /experience/static/...
+  // resolve to the real files in public/experience/.
   async rewrites() {
     return [
-      // /dashboard exact → serve the CRA SPA entry. URL bar stays at
-      // /dashboard, which is exactly what BrowserRouter matches.
+      // /experience exact → serve the CRA SPA entry. URL bar stays at
+      // /experience, which AppLayout's isHome gate matches to render
+      // the agent constellation.
       {
-        source: "/dashboard",
-        destination: "/dashboard/index.html",
+        source: "/experience",
+        destination: "/experience/index.html",
       },
-      // Deep links inside the CRA app (e.g. /dashboard/yhr,
-      // /dashboard/accountant/verify-pr) — fall back to index.html so
-      // the BrowserRouter takes over client-side. Excludes /static/*
-      // /assets/* and anything ending in a file extension so real
-      // asset URLs still resolve directly.
+      // Deep links inside the CRA (e.g. /experience/yhr) → index.html
+      // so BrowserRouter handles them client-side. Excludes /static/*
+      // /assets/* and anything ending in a file extension.
       {
-        source: "/dashboard/:path((?!static|assets|.*\\..*).*)",
-        destination: "/dashboard/index.html",
+        source: "/experience/:path((?!static|assets|.*\\..*).*)",
+        destination: "/experience/index.html",
       },
     ];
   },

@@ -64,6 +64,23 @@ const ModuleCard = ({ data, onClick, botVersion = 'default', onBotClick, isDropd
             className={`w-full h-full object-contain transition-all duration-300 group-hover:scale-110 ${isDropdownOpen ? 'rounded-2xl' : 'rounded-3xl'
               }`}
             style={iconStyle}
+            onError={(e) => {
+              // Heavy media is intentionally not in the build (videos →
+              // Drive, images → Mongo, per yaikh-ops). Until the runtime
+              // asset CDN is wired up, swap the broken module image for
+              // a Yai-orange placeholder with the module's initial so
+              // the constellation stays fully visible.
+              const initial = (data.title || '?').charAt(0).toUpperCase();
+              e.target.onerror = null;
+              e.target.src =
+                "data:image/svg+xml;utf8," +
+                encodeURIComponent(
+                  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80">
+                     <rect width="80" height="80" rx="16" fill="#F37021"/>
+                     <text x="50%" y="58%" font-family="Inter,system-ui,sans-serif" font-size="38" font-weight="800" text-anchor="middle" fill="#fff">${initial}</text>
+                   </svg>`
+                );
+            }}
           />
         </div>
       );

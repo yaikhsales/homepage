@@ -22,11 +22,43 @@ const AppLayout = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // When mounted under yaikh-com at /dashboard (post-absorption), the
-  // root constellation lives at /dashboard. When run standalone (V2 dev
-  // server on :3002), it lives at /. Treat both as "home" so the agent
-  // grid renders in either context.
-  const isHome = location.pathname === "/" || location.pathname === "/dashboard";
+  // The BrowserRouter basename (= PUBLIC_URL, "/experience" at build time)
+  // strips the prefix, so the router-internal home path is always "/" —
+  // both standalone (V2 dev :3002) and embedded under yaikh-com. The
+  // constellation renders when pathname is exactly "/".
+  const isHome = location.pathname === "/";
+
+  // ── Draggable Yai Data panel ──────────────────────────────────────
+  // The whole chatbot icon + dropdown can be dragged anywhere. The
+  // "Yai Data" header is the drag handle (cursor-move).
+  const [yaiPanelPos, setYaiPanelPos] = useState({ x: 24, y: 80 });
+  const yaiDragRef = useRef({ dragging: false });
+
+  const handleYaiPanelMouseDown = (e) => {
+    if (e.button !== 0) return;
+    e.preventDefault();
+    yaiDragRef.current = {
+      dragging: true,
+      startX: e.clientX,
+      startY: e.clientY,
+      origX: yaiPanelPos.x,
+      origY: yaiPanelPos.y,
+    };
+    const move = (ev) => {
+      if (!yaiDragRef.current.dragging) return;
+      setYaiPanelPos({
+        x: yaiDragRef.current.origX + (ev.clientX - yaiDragRef.current.startX),
+        y: yaiDragRef.current.origY + (ev.clientY - yaiDragRef.current.startY),
+      });
+    };
+    const up = () => {
+      yaiDragRef.current.dragging = false;
+      document.removeEventListener('mousemove', move);
+      document.removeEventListener('mouseup', up);
+    };
+    document.addEventListener('mousemove', move);
+    document.addEventListener('mouseup', up);
+  };
 
   const [isGMChatOpen, setGMChatOpen] = useState(false);
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -1197,11 +1229,14 @@ const AppLayout = () => {
         !location.pathname.includes("money-claim") &&
         !location.pathname.includes("ce") && <Header />}
 
-      {/* Chatbot Icon & Dropdown - Only show on home page - Prominent First View */}
+      {/* Yai Data panel — draggable, no rectangular container, ~40%
+          bigger text. Items float independently with their own glow. */}
       {isHome && (
-        <div className="fixed top-20 left-6 z-[60] text-white animate-in fade-in slide-in-from-left duration-1000">
-
-          <div className="flex items-center gap-4">
+        <div
+          className="fixed z-[60] text-white animate-in fade-in slide-in-from-left duration-1000"
+          style={{ left: yaiPanelPos.x, top: yaiPanelPos.y, userSelect: 'none' }}
+        >
+          <div className="flex items-center gap-5">
             <div className="relative">
               <button
                 ref={yaiDataButtonRef}
@@ -1212,73 +1247,74 @@ const AppLayout = () => {
                 <img
                   src="assets/modules-image/chatbot.png"
                   alt="AI Assistant"
-                  className="w-16 h-16 rounded-full object-cover border-2 border-cyan-400/50 relative z-10"
+                  className="w-20 h-20 rounded-full object-cover border-2 border-cyan-400/50 relative z-10"
                 />
-                {/* Gradient Overlay - Only show when dropdown is closed */}
                 {!isDropdownOpen && (
                   <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-cyan-400/20 via-blue-500/20 to-purple-500/20 mix-blend-screen pointer-events-none"></div>
                 )}
               </button>
             </div>
+            {/* Drag handle — "Yai Data" header */}
             <div
-              className={`text-white font-bold text-xl tracking-wide drop-shadow-[0_0_10px_rgba(59,130,246,0.8)] bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent ${isDropdownOpen ? "" : "animate-pulse"}`}
+              onMouseDown={handleYaiPanelMouseDown}
+              title="Drag to move"
+              className={`text-white font-bold text-3xl tracking-wide cursor-move drop-shadow-[0_0_10px_rgba(59,130,246,0.8)] bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent ${isDropdownOpen ? "" : "animate-pulse"}`}
             >
               Yai Data
             </div>
           </div>
 
+          {/* Floating items — no enclosing box, each row has its own glow */}
           {isDropdownOpen && (
-            <div className="absolute top-full mt-2 w-72 bg-slate-800/80 backdrop-blur-lg border border-white/10 rounded-lg shadow-2xl animate-in fade-in zoom-in-95 duration-200">
-              <ul className="p-2">
-                <li
-                  onClick={() => {
-                    setYaiVersion("yai1");
-                    setBotModuleContext(null);
-                    setYaiDataBotOpen(true);
-                    setDropdownOpen(false);
-                  }}
-                  className="relative flex items-center justify-between gap-4 px-4 py-3 rounded-md hover:bg-orange-500/10 cursor-pointer group transition-all border border-transparent hover:border-orange-500/30"
-                >
-                  <div className="flex items-center gap-4">
-                    <img
-                      src="assets/modules-image/yai1.png"
-                      alt="Yai 1"
-                      className="w-14 h-14 rounded-full object-cover border-2 border-orange-400/50 drop-shadow-[0_0_8px_rgba(251,146,60,0.6)] flex-shrink-0"
-                    />
-                    <span className="bg-gradient-to-r from-orange-400 via-amber-400 to-orange-500 bg-clip-text text-transparent font-bold text-lg drop-shadow-[0_0_4px_rgba(251,146,60,0.4)] whitespace-nowrap">
-                      Yai 1
-                    </span>
-                  </div>
-                  <ChevronRight
-                    size={20}
-                    className="text-orange-400/70 group-hover:text-orange-300 transition-colors flex-shrink-0"
+            <ul className="mt-4 flex flex-col gap-3 animate-in fade-in slide-in-from-top-2 duration-200">
+              <li
+                onClick={() => {
+                  setYaiVersion("yai1");
+                  setBotModuleContext(null);
+                  setYaiDataBotOpen(true);
+                  setDropdownOpen(false);
+                }}
+                className="relative flex items-center justify-between gap-4 pr-4 py-2 pl-2 rounded-2xl bg-slate-900/30 backdrop-blur-sm hover:bg-yai-blue/20 cursor-pointer group transition-all shadow-[0_0_20px_-4px_rgba(30,77,170,0.4)]"
+              >
+                <div className="flex items-center gap-5">
+                  <img
+                    src="assets/modules-image/yai1.png"
+                    alt="Yai 1"
+                    className="w-16 h-16 rounded-full object-cover border-2 border-yai-blue/60 drop-shadow-[0_0_12px_rgba(30,77,170,0.8)] flex-shrink-0"
                   />
-                </li>
-                <li
-                  onClick={() => {
-                    setYaiVersion("yai2");
-                    setYaiDataBotOpen(true);
-                    setDropdownOpen(false);
-                  }}
-                  className="relative flex items-center justify-between gap-4 px-4 py-3 rounded-md hover:bg-gray-500/10 cursor-pointer group transition-all border border-transparent hover:border-gray-500/30"
-                >
-                  <div className="flex items-center gap-4">
-                    <img
-                      src="assets/modules-image/yai2.png"
-                      alt="Yai 2"
-                      className="w-14 h-14 rounded-full object-cover border-2 border-gray-400/50 drop-shadow-[0_0_8px_rgba(156,163,175,0.6)] flex-shrink-0"
-                    />
-                    <span className="bg-gradient-to-r from-gray-400 via-slate-400 to-gray-500 bg-clip-text text-transparent font-bold text-lg drop-shadow-[0_0_4px_rgba(156,163,175,0.4)] whitespace-nowrap">
-                      Yai 2
-                    </span>
-                  </div>
-                  <ChevronRight
-                    size={20}
-                    className="text-gray-400/70 group-hover:text-gray-300 transition-colors flex-shrink-0"
+                  <span className="bg-gradient-to-r from-yai-blue via-blue-400 to-yai-blue bg-clip-text text-transparent font-bold text-3xl drop-shadow-[0_0_6px_rgba(30,77,170,0.5)] whitespace-nowrap">
+                    Yai 1
+                  </span>
+                </div>
+                <ChevronRight
+                  size={28}
+                  className="text-yai-blue/80 group-hover:text-blue-300 transition-colors flex-shrink-0"
+                />
+              </li>
+              <li
+                onClick={() => {
+                  setYaiVersion("yai2");
+                  setYaiDataBotOpen(true);
+                  setDropdownOpen(false);
+                }}
+                className="relative flex items-center justify-between gap-4 pr-4 py-2 pl-2 rounded-2xl bg-slate-900/30 backdrop-blur-sm hover:bg-emerald-500/20 cursor-pointer group transition-all shadow-[0_0_20px_-4px_rgba(16,185,129,0.4)]"
+              >
+                <div className="flex items-center gap-5">
+                  <img
+                    src="assets/modules-image/yai2.png"
+                    alt="Yai 2"
+                    className="w-16 h-16 rounded-full object-cover border-2 border-emerald-400/60 drop-shadow-[0_0_12px_rgba(16,185,129,0.8)] flex-shrink-0"
                   />
-                </li>
-              </ul>
-            </div>
+                  <span className="bg-gradient-to-r from-emerald-400 via-green-400 to-emerald-500 bg-clip-text text-transparent font-bold text-3xl drop-shadow-[0_0_6px_rgba(16,185,129,0.5)] whitespace-nowrap">
+                    Yai 2
+                  </span>
+                </div>
+                <ChevronRight
+                  size={28}
+                  className="text-emerald-400/80 group-hover:text-emerald-300 transition-colors flex-shrink-0"
+                />
+              </li>
+            </ul>
           )}
         </div>
       )}

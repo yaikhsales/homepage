@@ -1277,21 +1277,21 @@ const BotVersion2 = ({
                       onVersionChange("yai1");
                       setDropdownOpen(false);
                     }}
-                    className="relative flex items-center justify-between gap-4 px-4 py-3 rounded-md hover:bg-orange-500/10 cursor-pointer group transition-all border border-transparent hover:border-orange-500/30"
+                    className="relative flex items-center justify-between gap-4 px-4 py-3 rounded-md hover:bg-yai-blue/15 cursor-pointer group transition-all border border-transparent hover:border-yai-blue/40"
                   >
                     <div className="flex items-center gap-4">
                       <img
                         src="assets/modules-image/yai1.png"
                         alt="Yai 1"
-                        className="w-14 h-14 rounded-full object-cover border-2 border-orange-400/50 drop-shadow-[0_0_8px_rgba(251,146,60,0.6)] flex-shrink-0"
+                        className="w-14 h-14 rounded-full object-cover border-2 border-yai-blue/60 drop-shadow-[0_0_8px_rgba(30,77,170,0.7)] flex-shrink-0"
                       />
-                      <span className="bg-gradient-to-r from-orange-400 via-amber-400 to-orange-500 bg-clip-text text-transparent font-bold text-lg drop-shadow-[0_0_4px_rgba(251,146,60,0.4)] whitespace-nowrap">
+                      <span className="bg-gradient-to-r from-yai-blue via-blue-400 to-yai-blue bg-clip-text text-transparent font-bold text-lg drop-shadow-[0_0_4px_rgba(30,77,170,0.5)] whitespace-nowrap">
                         Yai 1
                       </span>
                     </div>
                     <ChevronRight
                       size={20}
-                      className="text-orange-400/70 group-hover:text-orange-300 transition-colors flex-shrink-0"
+                      className="text-yai-blue/80 group-hover:text-blue-300 transition-colors flex-shrink-0"
                     />
                   </li>
                   <li
