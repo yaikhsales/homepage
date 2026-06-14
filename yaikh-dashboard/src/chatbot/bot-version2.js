@@ -1144,7 +1144,7 @@ const BotVersion2 = ({
       {/* Back Button - Top Left (Fixed Position) */}
       <button
         onClick={onClose}
-        className="absolute top-4 left-4 z-[250] flex items-center gap-2 px-4 py-2 bg-slate-800/70 hover:bg-slate-700/80 text-white rounded-lg backdrop-blur-sm transition-colors font-medium shadow-lg"
+        className="absolute top-4 left-4 z-[250] flex items-center gap-2 px-4 py-2 bg-emerald-500/80 hover:bg-emerald-500 text-white rounded-lg backdrop-blur-sm transition-colors font-medium shadow-lg"
       >
         <ChevronRight size={18} className="rotate-180" /> Back
       </button>
@@ -1249,23 +1249,23 @@ const BotVersion2 = ({
               <button
                 onClick={() => setDropdownOpen((prev) => !prev)}
                 className={`relative rounded-full hover:scale-110 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-900 z-10 pointer-events-auto ${isDropdownOpen ? "" : "bot-icon-glow-v2"}`}
-                aria-label="Yai Data"
+                aria-label="Yai Agents"
               >
                 <img
-                  src="/assets/modules-image/chatbot.png"
-                  alt="Yai Data"
-                  className="w-16 h-16 rounded-full object-cover border-2 border-cyan-400/50 relative z-10"
+                  src="/assets/modules-image/yai2.png"
+                  alt="Yai Agents"
+                  className="w-16 h-16 rounded-full object-cover border-2 border-emerald-400/60 relative z-10"
                 />
-                {/* Gradient Overlay - Only show when dropdown is closed */}
+                {/* Gradient Overlay - Emerald (Big Brain context) */}
                 {!isDropdownOpen && (
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-cyan-400/20 via-blue-500/20 to-purple-500/20 mix-blend-screen pointer-events-none"></div>
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-emerald-400/30 via-green-400/20 to-emerald-500/30 mix-blend-screen pointer-events-none"></div>
                 )}
               </button>
             </div>
             <span
-              className={`text-white font-bold text-lg tracking-wide drop-shadow-[0_0_10px_rgba(59,130,246,0.8)] bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent pointer-events-auto ${isDropdownOpen ? "" : "animate-pulse"}`}
+              className={`text-white font-bold text-lg tracking-wide drop-shadow-[0_0_10px_rgba(16,185,129,0.8)] bg-gradient-to-r from-emerald-400 via-green-400 to-emerald-500 bg-clip-text text-transparent pointer-events-auto ${isDropdownOpen ? "" : "animate-pulse"}`}
             >
-              Yai Data
+              Yai Agents
             </span>
 
             {/* Dropdown Menu */}

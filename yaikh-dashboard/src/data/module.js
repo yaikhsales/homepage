@@ -340,7 +340,7 @@ export const DASHBOARD_DATA = [
       },
       {
         id: "noticeable-col",
-        title: "Noticeable",
+        title: "Data Scientist",
         modules: [
           {
             id: "system-analysis",

@@ -5088,10 +5088,10 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
             {/* Background */}
             <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 transition-colors duration-300"></div>
 
-            {/* Back Button - Top Left */}
+            {/* Back Button - Top Left — Yai Blue (Agent Collective context) */}
             <button
                 onClick={onClose}
-                className="absolute top-4 left-4 z-50 flex items-center gap-2 px-4 py-2 bg-slate-800/70 hover:bg-slate-700/80 text-white rounded-lg backdrop-blur-sm transition-colors font-medium shadow-lg pointer-events-auto"
+                className="absolute top-4 left-4 z-50 flex items-center gap-2 px-4 py-2 bg-yai-blue/80 hover:bg-yai-blue text-white rounded-lg backdrop-blur-sm transition-colors font-medium shadow-lg pointer-events-auto"
             >
                 <ChevronRight size={18} className="rotate-180" /> Back
             </button>
@@ -5190,21 +5190,21 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                         <button
                             onClick={() => setDropdownOpen(prev => !prev)}
                             className={`relative rounded-full hover:scale-110 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-900 z-10 pointer-events-auto ${isDropdownOpen ? '' : 'bot-icon-glow-modules'}`}
-                            aria-label="Yai Data"
+                            aria-label="Yai Agents"
                         >
                             <img
-                                src="/assets/modules-image/chatbot.png"
-                                alt="Yai Data"
-                                className="w-16 h-16 rounded-full object-cover border-2 border-cyan-400/50 relative z-10"
+                                src="/assets/modules-image/yai1.png"
+                                alt="Yai Agents"
+                                className="w-16 h-16 rounded-full object-cover border-2 border-yai-blue/60 relative z-10"
                             />
-                            {/* Gradient Overlay - Only show when dropdown is closed */}
+                            {/* Gradient Overlay - Yai Blue (Agent Collective context) */}
                             {!isDropdownOpen && (
-                                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-cyan-400/20 via-blue-500/20 to-purple-500/20 mix-blend-screen pointer-events-none"></div>
+                                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-yai-blue/30 via-blue-400/20 to-yai-blue/30 mix-blend-screen pointer-events-none"></div>
                             )}
                         </button>
                     </div>
-                    <span className={`text-white font-bold text-lg tracking-wide drop-shadow-[0_0_10px_rgba(59,130,246,0.8)] bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent pointer-events-auto ${isDropdownOpen ? '' : 'animate-pulse'}`}>
-                        Yai Data
+                    <span className={`text-white font-bold text-lg tracking-wide drop-shadow-[0_0_10px_rgba(30,77,170,0.8)] bg-gradient-to-r from-yai-blue via-blue-400 to-yai-blue bg-clip-text text-transparent pointer-events-auto ${isDropdownOpen ? '' : 'animate-pulse'}`}>
+                        Yai Agents
                     </span>
 
                     {/* Dropdown Menu */}

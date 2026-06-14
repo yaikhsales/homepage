@@ -1260,7 +1260,7 @@ const AppLayout = () => {
               title="Drag to move"
               className={`text-white font-bold text-3xl tracking-wide cursor-move drop-shadow-[0_0_10px_rgba(59,130,246,0.8)] bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent ${isDropdownOpen ? "" : "animate-pulse"}`}
             >
-              Yai Data
+              Yai Agents
             </div>
           </div>
 
@@ -1283,7 +1283,7 @@ const AppLayout = () => {
                     className="w-16 h-16 rounded-full object-cover border-2 border-yai-blue/60 drop-shadow-[0_0_12px_rgba(30,77,170,0.8)] flex-shrink-0"
                   />
                   <span className="bg-gradient-to-r from-yai-blue via-blue-400 to-yai-blue bg-clip-text text-transparent font-bold text-3xl drop-shadow-[0_0_6px_rgba(30,77,170,0.5)] whitespace-nowrap">
-                    Yai 1
+                    Agent Collective
                   </span>
                 </div>
                 <ChevronRight
@@ -1306,7 +1306,7 @@ const AppLayout = () => {
                     className="w-16 h-16 rounded-full object-cover border-2 border-emerald-400/60 drop-shadow-[0_0_12px_rgba(16,185,129,0.8)] flex-shrink-0"
                   />
                   <span className="bg-gradient-to-r from-emerald-400 via-green-400 to-emerald-500 bg-clip-text text-transparent font-bold text-3xl drop-shadow-[0_0_6px_rgba(16,185,129,0.5)] whitespace-nowrap">
-                    Yai 2
+                    Big Brain
                   </span>
                 </div>
                 <ChevronRight

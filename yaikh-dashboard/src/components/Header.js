@@ -23,22 +23,17 @@ const Header = () => {
 
   return (
     <header className="bg-yai-navy/95 backdrop-blur shadow-md px-4 sm:px-6 py-2 flex justify-between items-center sticky top-0 z-50 h-14 sm:h-16">
-      {/* Left: Orange Yai logo — click returns to yaikh-com homepage */}
+      {/* Left: Home button — click returns to yaikh-com homepage */}
       <button
         onClick={goHome}
-        aria-label="Back to yaikh.com"
-        className="flex-shrink-0 rounded-full overflow-hidden ring-2 ring-yai-orange/40 hover:ring-yai-orange transition-all hover:scale-105"
-      >
-        <img src="/logo.jpg" alt="Yai" className="h-10 w-10 sm:h-11 sm:w-11 object-cover" />
-      </button>
-
-      {/* Right: "Experience" button — same destination, more discoverable */}
-      <button
-        onClick={goHome}
+        aria-label="Back to yaikh.com homepage"
         className="px-4 sm:px-6 py-1.5 sm:py-2 rounded-full bg-yai-orange text-white text-sm sm:text-base font-semibold hover:bg-yai-orange/90 transition shadow-md flex items-center gap-2"
       >
-        <span>← Experience</span>
+        <span>← Home</span>
       </button>
+
+      {/* Right side intentionally empty — Experience duplicate removed. */}
+      <div />
     </header>
   );
 };
