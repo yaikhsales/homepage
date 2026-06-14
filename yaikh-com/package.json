@@ -6,7 +6,12 @@
     "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "avatars": "node scripts/generate-avatars.mjs",
+    "avatars:christmas": "node scripts/generate-avatars.mjs --theme=christmas",
+    "avatars:newyear": "node scripts/generate-avatars.mjs --theme=newyear",
+    "avatars:midautumn": "node scripts/generate-avatars.mjs --theme=midautumn",
+    "avatars:khmernewyear": "node scripts/generate-avatars.mjs --theme=khmernewyear"
   },
   "dependencies": {
     "@google/genai": "^2.8.0",
