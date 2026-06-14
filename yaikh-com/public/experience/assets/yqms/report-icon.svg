@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+
+  <!-- ── Back page (furthest) ── -->
+  <rect x="62" y="30" width="88" height="110" rx="8" stroke="#2563EB" stroke-width="3" fill="white" opacity="0.5"/>
+  <!-- folded corner back -->
+  <polyline points="132,30 150,30 150,48" stroke="#2563EB" stroke-width="2.5" stroke-linejoin="round" opacity="0.5" fill="none"/>
+  <line x1="132" y1="30" x2="150" y2="48" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
+
+  <!-- ── Middle page ── -->
+  <rect x="52" y="38" width="88" height="110" rx="8" stroke="#2563EB" stroke-width="3" fill="white" opacity="0.75"/>
+  <!-- folded corner middle -->
+  <polyline points="122,38 140,38 140,56" stroke="#2563EB" stroke-width="2.5" stroke-linejoin="round" opacity="0.75" fill="none"/>
+  <line x1="122" y1="38" x2="140" y2="56" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" opacity="0.75"/>
+
+  <!-- ── Front page ── -->
+  <rect x="40" y="48" width="90" height="112" rx="8" stroke="#2563EB" stroke-width="3.5" fill="white"/>
+  <!-- folded corner front -->
+  <polyline points="112,48 130,48 130,66" stroke="#2563EB" stroke-width="3" stroke-linejoin="round" fill="none"/>
+  <line x1="112" y1="48" x2="130" y2="66" stroke="#2563EB" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- ── Text lines (upper part of front page) ── -->
+  <line x1="54" y1="76"  x2="112" y2="76"  stroke="#2563EB" stroke-width="3"   stroke-linecap="round"/>
+  <line x1="54" y1="88"  x2="112" y2="88"  stroke="#2563EB" stroke-width="3"   stroke-linecap="round"/>
+  <line x1="54" y1="100" x2="100" y2="100" stroke="#2563EB" stroke-width="3"   stroke-linecap="round"/>
+  <line x1="54" y1="112" x2="106" y2="112" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- ── Bar chart (lower part of front page) ── -->
+  <!-- Bars -->
+  <rect x="56"  y="136" width="14" height="16" rx="2" stroke="#2563EB" stroke-width="2.5" fill="none"/>
+  <rect x="76"  y="126" width="14" height="26" rx="2" stroke="#2563EB" stroke-width="2.5" fill="none"/>
+  <rect x="96"  y="130" width="14" height="22" rx="2" stroke="#2563EB" stroke-width="2.5" fill="none"/>
+  <!-- Baseline -->
+  <line x1="54" y1="153" x2="116" y2="153" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- ── Trend arrow over bars ── -->
+  <polyline points="58,148 74,132 90,140 106,120" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Arrowhead -->
+  <polyline points="97,118 106,120 104,129" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>

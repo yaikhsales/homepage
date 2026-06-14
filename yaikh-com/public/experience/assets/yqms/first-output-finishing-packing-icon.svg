@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 210" fill="none" stroke="#2563EB" stroke-linecap="round" stroke-linejoin="round">
+
+  <!-- ══ CLIPBOARD BACK (top-left, taller) ══ -->
+  <rect x="18" y="12" width="64" height="88" rx="5" stroke-width="4.5" fill="white"/>
+  <!-- Clip -->
+  <rect x="34" y="5"  width="32" height="14" rx="6" stroke-width="4" fill="white"/>
+  <!-- Checklist rows -->
+  <polyline points="26,36 30,41 37,32" stroke-width="3.5" fill="none"/>
+  <line x1="42" y1="37" x2="74" y2="37" stroke-width="3"/>
+  <polyline points="26,50 30,55 37,46" stroke-width="3.5" fill="none"/>
+  <line x1="42" y1="51" x2="74" y2="51" stroke-width="3"/>
+  <polyline points="26,64 30,69 37,60" stroke-width="3.5" fill="none"/>
+  <line x1="42" y1="65" x2="74" y2="65" stroke-width="3"/>
+  <polyline points="26,78 30,83 37,74" stroke-width="3.5" fill="none"/>
+  <line x1="42" y1="79" x2="74" y2="79" stroke-width="3"/>
+  <line x1="26" y1="91" x2="72" y2="91" stroke-width="3"/>
+
+  <!-- ══ CLIPBOARD FRONT (overlapping, slightly right+down) ══ -->
+  <rect x="52" y="44" width="58" height="90" rx="5" stroke-width="4.5" fill="white"/>
+  <!-- Clip -->
+  <rect x="68" y="37" width="26" height="14" rx="6" stroke-width="4" fill="white"/>
+  <!-- Checklist rows -->
+  <polyline points="59,66 63,71 70,62" stroke-width="3.5" fill="none"/>
+  <line x1="75" y1="67" x2="103" y2="67" stroke-width="3"/>
+  <polyline points="59,80 63,85 70,76" stroke-width="3.5" fill="none"/>
+  <line x1="75" y1="81" x2="103" y2="81" stroke-width="3"/>
+  <polyline points="59,94 63,99 70,90" stroke-width="3.5" fill="none"/>
+  <line x1="75" y1="95" x2="103" y2="95" stroke-width="3"/>
+  <line x1="59" y1="109" x2="103" y2="109" stroke-width="3"/>
+  <line x1="59" y1="122" x2="90"  y2="122" stroke-width="3"/>
+
+  <!-- ══ CLOUD UPLOAD (top-right) ══ -->
+  <path d="M132 44 C132 33 141 25 152 27 C155 18 166 13 176 20 C183 20 188 30 184 38 C190 41 189 52 183 55 L140 55 C132 55 132 44 132 44 Z"
+        stroke-width="4.5" fill="white"/>
+  <!-- Upload arrow (going UP into cloud) -->
+  <line x1="162" y1="72" x2="162" y2="57" stroke-width="4.5"/>
+  <polyline points="154,66 162,57 170,66" stroke-width="4.5" fill="none"/>
+
+  <!-- ══ OPEN BOX (center-bottom, 3-D perspective) ══ -->
+  <!-- Box front face -->
+  <path d="M68 152 L68 200 L166 200 L166 152 Z" stroke-width="5" fill="white"/>
+  <!-- Box right side panel -->
+  <path d="M166 152 L184 138 L184 186 L166 200 Z" stroke-width="5" fill="white"/>
+  <!-- Box top edge (fold crease) -->
+  <line x1="68" y1="152" x2="166" y2="152" stroke-width="5"/>
+  <!-- Left flap open (rotated up-left) -->
+  <path d="M68 152 L52 126 L116 126 L116 152" stroke-width="4.5" fill="white"/>
+  <!-- Right flap open (rotated up-right) -->
+  <path d="M166 152 L184 126 L116 126" stroke-width="4.5" fill="white"/>
+  <!-- Tape line across box top -->
+  <line x1="100" y1="152" x2="138" y2="152" stroke-width="5.5"/>
+  <!-- Upload arrow inside box -->
+  <line x1="117" y1="184" x2="117" y2="162" stroke-width="5"/>
+  <polyline points="108,172 117,162 126,172" stroke-width="5" fill="none"/>
+
+</svg>

@@ -24,7 +24,7 @@ const ModuleCard = ({ data, onClick, botVersion = 'default', onBotClick, isDropd
       return (
         <div className={`relative flex items-center justify-center ${isDropdownOpen ? 'w-14 h-14' : 'w-20 h-20 group-hover:w-21 group-hover:h-21'} transition-all duration-300`}>
           <img
-            src="/IMG/unavail.avif"
+            src={`${process.env.PUBLIC_URL}/IMG/unavail.avif`}
             alt="Coming Soon"
             className={`w-full h-full object-contain transition-all duration-300 group-hover:scale-110 ${isDropdownOpen ? 'rounded-2xl' : 'rounded-3xl'}`}
             style={iconStyle}
@@ -59,7 +59,7 @@ const ModuleCard = ({ data, onClick, botVersion = 'default', onBotClick, isDropd
         <div className={`relative flex items-center justify-center ${isDropdownOpen ? 'w-14 h-14' : 'w-20 h-20 group-hover:w-21 group-hover:h-21'
           } transition-all duration-300`}>
           <img
-            src={`/${data.image}`}
+            src={`${process.env.PUBLIC_URL}/${data.image}`}
             alt={data.title}
             className={`w-full h-full object-contain transition-all duration-300 group-hover:scale-110 ${isDropdownOpen ? 'rounded-2xl' : 'rounded-3xl'
               }`}
@@ -125,7 +125,7 @@ const ModuleCard = ({ data, onClick, botVersion = 'default', onBotClick, isDropd
           {/* Avatar Side */}
           <div className="shrink-0 flex items-start">
              <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center overflow-hidden border-2 border-white shadow-sm">
-                <img src={`/${data.image}`} alt={data.title} className="w-16 h-16 object-contain" />
+                <img src={`${process.env.PUBLIC_URL}/${data.image}`} alt={data.title} className="w-16 h-16 object-contain" />
              </div>
           </div>
 

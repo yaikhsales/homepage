@@ -20,9 +20,11 @@
  *   node scripts/generate-avatars.mjs --force                  # regenerate even if file exists
  *   node scripts/generate-avatars.mjs agent-28 agent-7         # specific files only
  *
- * Output:
- *   default theme  → public/experience/IMG/avatars/<file>.png            (overwrites live)
- *   other themes   → public/experience/IMG/avatars/themes/<theme>/<file>.png
+ * Output (writes to the CRA SOURCE dir so a subsequent `npm run build` picks
+ * them up — writing to public/experience/ directly would be overwritten by
+ * the next build):
+ *   default theme  → yaikh-dashboard/public/IMG/avatars/<file>.png
+ *   other themes   → yaikh-dashboard/public/IMG/avatars/themes/<theme>/<file>.png
  *
  * Style: 3D Pixar-character business portrait, navy + Yai-orange brand
  * accents, head-and-shoulders, soft pastel background. Each theme adds a
@@ -81,14 +83,31 @@ async function extractModules() {
 }
 
 // ── theme catalogue ─────────────────────────────────────────────────────────
+// Photorealistic LinkedIn-style corporate headshot — matches the IEWS
+// constellation portrait style (client/public/agents/*.jpg). Each portrait
+// represents a HUMAN professional (NOT a robot, NOT a cartoon, NOT a 3D
+// character). Diverse Southeast-Asian professionals, since the deployment
+// context is Cambodia.
 const STYLE_BASE =
-  " Render as a stylised 3D Pixar-character portrait: head and shoulders, " +
-  "centred and facing camera, friendly confident professional expression, " +
-  "navy-blue business suit with a crisp Yai-orange (#F37021) tie or pocket " +
-  "square as the brand accent, soft volumetric studio lighting, soft pastel " +
-  "off-white background with a hint of pale blue, square 1:1 framing, " +
-  "clean modern editorial-illustration finish, sharp edges, no text, no " +
-  "logos, no watermarks, no clutter behind the subject.";
+  " Photograph this person as a high-quality professional corporate " +
+  "headshot, photorealistic, NOT a cartoon, NOT a 3D-render, NOT a robot — " +
+  "render as a real human being. TIGHT chest-up crop — the subject MUST " +
+  "fill the entire frame: face large and dominant, shoulders touching the " +
+  "left/right edges, head almost touching the top edge. Minimise empty " +
+  "backdrop — no more than a thin border of background visible. Centred " +
+  "and facing camera, slight friendly smile, confident expression. " +
+  "Modern Southeast-Asian / Cambodian-Khmer professional in their 30s, " +
+  "diverse ethnicity across portraits (vary gender, hair, complexion). " +
+  "Wearing a tailored business suit — navy, charcoal or mid-grey — with a " +
+  "crisp shirt and a Yai-orange (#F37021) tie OR a discreet orange pocket " +
+  "square as the brand accent (women: an orange silk scarf knot, or pearl " +
+  "earrings with a navy blouse). MINIMAL clean studio backdrop — soft " +
+  "neutral off-white / very pale grey, smooth even gradient, NO office " +
+  "scene, NO plants, NO furniture, NO windows, NO desk, NO computer, NO " +
+  "glass partitions, NO bokeh objects — just the subject on a clean " +
+  "seamless studio background like a professional press photo. Soft even " +
+  "studio lighting. Square 1:1 framing, sharp focus on the face, no text, " +
+  "no logos, no watermarks.";
 
 const THEMES = {
   default: {
@@ -153,16 +172,33 @@ function parseArgs(argv) {
   return { theme, force, limit, ids };
 }
 
-// ── image call ──────────────────────────────────────────────────────────────
-async function generateOne(ai, model, prompt) {
-  const res = await ai.models.generateContent({
-    model,
-    contents: [{ role: "user", parts: [{ text: prompt }] }],
-    config: { responseModalities: ["IMAGE"] },
-  });
-  const part = res.candidates?.[0]?.content?.parts?.find(p => p.inlineData?.data);
-  if (!part) throw new Error("no image in response");
-  return Buffer.from(part.inlineData.data, "base64");
+// ── image call (with retry-on-429) ──────────────────────────────────────────
+const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+async function generateOne(ai, model, prompt, { maxRetries = 6 } = {}) {
+  let attempt = 0;
+  while (true) {
+    try {
+      const res = await ai.models.generateContent({
+        model,
+        contents: [{ role: "user", parts: [{ text: prompt }] }],
+        config: { responseModalities: ["IMAGE"] },
+      });
+      const part = res.candidates?.[0]?.content?.parts?.find(p => p.inlineData?.data);
+      if (!part) throw new Error("no image in response");
+      return Buffer.from(part.inlineData.data, "base64");
+    } catch (err) {
+      const msg = String(err?.message || err);
+      const is429 = msg.includes("429") || msg.includes("RESOURCE_EXHAUSTED") || msg.includes("quota");
+      if (!is429 || attempt >= maxRetries) throw err;
+      // Exponential backoff: 15s, 30s, 60s, 90s, 120s, 150s — Vertex image quota
+      // is per-minute so wait at least 60s after the first burst.
+      const wait = attempt === 0 ? 15_000 : Math.min(150_000, 30_000 * attempt);
+      console.log(`    ↻ quota — retry in ${Math.round(wait/1000)}s (attempt ${attempt + 1}/${maxRetries})`);
+      await sleep(wait);
+      attempt++;
+    }
+  }
 }
 
 // ── main ────────────────────────────────────────────────────────────────────
@@ -194,9 +230,13 @@ async function main() {
     process.exit(1);
   }
 
+  // Write to the CRA SOURCE dir so a `npm run build` in yaikh-dashboard
+  // copies them into yaikh-com/public/experience/IMG/avatars/. Writing
+  // directly into public/experience/ would be silently overwritten by the
+  // next build.
   const outDir = themeCfg.folderSlug
-    ? path.join(MONOREPO, "yaikh-com", "public", "experience", "IMG", "avatars", "themes", themeCfg.folderSlug)
-    : path.join(MONOREPO, "yaikh-com", "public", "experience", "IMG", "avatars");
+    ? path.join(MONOREPO, "yaikh-dashboard", "public", "IMG", "avatars", "themes", themeCfg.folderSlug)
+    : path.join(MONOREPO, "yaikh-dashboard", "public", "IMG", "avatars");
   await fs.mkdir(outDir, { recursive: true });
 
   console.log(`▶ theme=${theme}  model=${model}  modules=${modules.length}  out=${path.relative(MONOREPO, outDir)}`);
@@ -204,38 +244,40 @@ async function main() {
   const ai = new GoogleGenAI({ vertexai: true, project, location });
 
   let done = 0, skipped = 0, failed = 0;
-  const CONCURRENCY = 4;
+  // Vertex image-gen quota is per-minute and low (often 5-10 RPM on new
+  // projects). Run serially with a small spacer so we stay under the limit
+  // and let the per-call retry/backoff handle the rest.
+  const INTER_REQUEST_MS = 8_000;
 
-  // Simple chunked-parallel runner
-  for (let i = 0; i < modules.length; i += CONCURRENCY) {
-    const batch = modules.slice(i, i + CONCURRENCY);
-    await Promise.all(batch.map(async (mod) => {
-      const fileName = path.basename(mod.image);
-      const outPath  = path.join(outDir, fileName);
+  for (let i = 0; i < modules.length; i++) {
+    const mod      = modules[i];
+    const fileName = path.basename(mod.image);
+    const outPath  = path.join(outDir, fileName);
 
-      if (!force) {
-        try {
-          await fs.access(outPath);
-          skipped++;
-          console.log(`  ⏭  ${fileName} (exists)`);
-          return;
-        } catch { /* fall through and generate */ }
-      }
-
-      const prompt =
-        `Portrait of "${mod.title}" — an AI agent whose role: ${mod.description}` +
-        STYLE_BASE + themeCfg.suffix;
-
+    if (!force) {
       try {
-        const buf = await generateOne(ai, model, prompt);
-        await fs.writeFile(outPath, buf);
-        done++;
-        console.log(`  ✓ ${fileName}  (${mod.title})`);
-      } catch (err) {
-        failed++;
-        console.error(`  ✗ ${fileName}  ${err.message}`);
-      }
-    }));
+        await fs.access(outPath);
+        skipped++;
+        console.log(`  ⏭  ${fileName} (exists)`);
+        continue;
+      } catch { /* fall through and generate */ }
+    }
+
+    const prompt =
+      `Portrait of "${mod.title}" — an AI agent whose role: ${mod.description}` +
+      STYLE_BASE + themeCfg.suffix;
+
+    try {
+      const buf = await generateOne(ai, model, prompt);
+      await fs.writeFile(outPath, buf);
+      done++;
+      console.log(`  ✓ ${fileName}  (${mod.title})  [${done + failed}/${modules.length - skipped}]`);
+    } catch (err) {
+      failed++;
+      console.error(`  ✗ ${fileName}  ${err.message}`);
+    }
+
+    if (i < modules.length - 1) await sleep(INTER_REQUEST_MS);
   }
 
   console.log(`\n▶ done=${done}  skipped=${skipped}  failed=${failed}`);

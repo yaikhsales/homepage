@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <!-- ══ MEETING SCENE ══ -->
+  <g transform="translate(25, 45)">
+    <!-- Table -->
+    <path d="M10 70 L140 70 L155 105 L-5 105 Z" stroke="#1D4ED8" stroke-width="10" fill="white" stroke-linejoin="round"/>
+    <!-- Paper on Table -->
+    <rect x="55" y="75" width="45" height="25" stroke="#F59E0B" stroke-width="6" fill="white"/>
+    
+    <!-- Middle Person -->
+    <circle cx="75" cy="20" r="18" stroke="#1D4ED8" stroke-width="10" fill="white"/>
+    <path d="M40 60 Q75 40 110 60" stroke="#1D4ED8" stroke-width="10" fill="none" stroke-linecap="round"/>
+
+    <!-- Left Person -->
+    <circle cx="20" cy="45" r="15" stroke="#1D4ED8" stroke-width="9" fill="white"/>
+    <path d="M-10 70 Q20 50 50 70" stroke="#1D4ED8" stroke-width="9" fill="none" stroke-linecap="round"/>
+    
+    <!-- Right Person -->
+    <circle cx="130" cy="45" r="15" stroke="#1D4ED8" stroke-width="9" fill="white"/>
+    <path d="M100 70 Q130 50 160 70" stroke="#1D4ED8" stroke-width="9" fill="none" stroke-linecap="round"/>
+  </g>
+</svg>

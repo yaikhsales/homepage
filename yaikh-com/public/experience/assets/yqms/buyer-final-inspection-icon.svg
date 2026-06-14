@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <!-- ══ CLIPBOARD BACK ══ -->
+  <rect x="110" y="15" width="60" height="85" rx="5" stroke="#2563EB" stroke-width="7" fill="white"/>
+  <rect x="128" y="8" width="24" height="13" rx="4" stroke="#2563EB" stroke-width="6" fill="white"/>
+
+  <!-- ══ CLIPBOARD FRONT ══ -->
+  <rect x="95" y="5" width="65" height="95" rx="6" stroke="#2563EB" stroke-width="8" fill="white"/>
+  <rect x="115" y="-3" width="28" height="15" rx="5" stroke="#2563EB" stroke-width="7" fill="white"/>
+
+  <!-- ══ STACKED BOOKS ══ -->
+  <rect x="30" y="150" width="140" height="20" rx="6" stroke="#2563EB" stroke-width="8" fill="white"/>
+  <rect x="40" y="130" width="125" height="20" rx="6" stroke="#2563EB" stroke-width="8" fill="white"/>
+
+  <!-- ══ MAGNIFYING GLASS ══ -->
+  <circle cx="75" cy="100" r="54" fill="#2563EB"/>
+  <circle cx="75" cy="100" r="40" fill="white"/>
+  <polyline points="55,102 70,117 100,82" stroke="#2563EB" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <line x1="105" y1="130" x2="135" y2="160" stroke="#2563EB" stroke-width="18" stroke-linecap="round"/>
+
+  <!-- ══ BUYER RIBBON ══ -->
+  <g transform="rotate(-12 60 55)">
+    <path d="M0 40 L135 40 L145 55 L135 70 L0 70 Z" fill="#2563EB"/>
+    <path d="M0 40 L18 55 L0 70 Z" fill="white"/>
+    <text x="75" y="62" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="950" fill="white" text-anchor="middle" letter-spacing="0.5">BUYER</text>
+  </g>
+
+  <!-- ══ BOLD GOLD SEAL ══ -->
+  <path d="M158 82 L146 115 L158 105 L170 115 L158 82" fill="#FBBF24" stroke="#B45309" stroke-width="3" stroke-linejoin="round"/>
+  <circle cx="158" cy="78" r="24" fill="white" stroke="#2563EB" stroke-width="7"/>
+  <circle cx="158" cy="78" r="20" fill="#FBBF24"/>
+  <circle cx="158" cy="78" r="15" fill="none" stroke="white" stroke-width="3" stroke-dasharray="4 4"/>
+  <polyline points="148,78 153,83 165,68" stroke="white" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>

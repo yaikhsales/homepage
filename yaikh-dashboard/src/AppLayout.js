@@ -1247,7 +1247,7 @@ const AppLayout = () => {
                 <img
                   src="assets/modules-image/chatbot.png"
                   alt="AI Assistant"
-                  className="w-20 h-20 rounded-full object-cover border-2 border-cyan-400/50 relative z-10"
+                  className="w-20 h-20 rounded-full object-contain bg-slate-950/60 border-2 border-cyan-400/50 shadow-[0_0_14px_rgba(34,211,238,0.55)] relative z-10"
                 />
                 {!isDropdownOpen && (
                   <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-cyan-400/20 via-blue-500/20 to-purple-500/20 mix-blend-screen pointer-events-none"></div>
@@ -1280,7 +1280,7 @@ const AppLayout = () => {
                   <img
                     src="assets/modules-image/yai1.png"
                     alt="Yai 1"
-                    className="w-16 h-16 rounded-full object-cover border-2 border-yai-blue/60 drop-shadow-[0_0_12px_rgba(30,77,170,0.8)] flex-shrink-0"
+                    className="w-16 h-16 rounded-2xl object-contain p-1 bg-slate-950/60 border-2 border-yai-blue/60 shadow-[0_0_14px_rgba(30,77,170,0.6)] flex-shrink-0"
                   />
                   <span className="bg-gradient-to-r from-yai-blue via-blue-400 to-yai-blue bg-clip-text text-transparent font-bold text-3xl drop-shadow-[0_0_6px_rgba(30,77,170,0.5)] whitespace-nowrap">
                     Agent Collective
@@ -1303,7 +1303,7 @@ const AppLayout = () => {
                   <img
                     src="assets/modules-image/yai2.png"
                     alt="Yai 2"
-                    className="w-16 h-16 rounded-full object-cover border-2 border-emerald-400/60 drop-shadow-[0_0_12px_rgba(16,185,129,0.8)] flex-shrink-0"
+                    className="w-16 h-16 rounded-2xl object-contain p-1 bg-slate-950/60 border-2 border-emerald-400/60 shadow-[0_0_14px_rgba(16,185,129,0.6)] flex-shrink-0"
                   />
                   <span className="bg-gradient-to-r from-emerald-400 via-green-400 to-emerald-500 bg-clip-text text-transparent font-bold text-3xl drop-shadow-[0_0_6px_rgba(16,185,129,0.5)] whitespace-nowrap">
                     Big Brain

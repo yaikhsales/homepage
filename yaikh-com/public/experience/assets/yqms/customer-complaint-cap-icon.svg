@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <!-- ══ SPEECH BUBBLE (Top Left) ══ -->
+  <g transform="translate(20, 20)">
+    <circle cx="40" cy="40" r="35" stroke="#1D4ED8" stroke-width="5" fill="white"/>
+    <path d="M30 65 L20 80 L50 70" stroke="#1D4ED8" stroke-width="5" fill="white" stroke-linejoin="round"/>
+    <rect x="36" y="20" width="8" height="25" rx="4" fill="#F59E0B"/>
+    <circle cx="40" cy="55" r="6" fill="#F59E0B"/>
+  </g>
+
+  <!-- ══ CLIPBOARD (Right) ══ -->
+  <g transform="translate(100, 30)">
+    <rect x="10" y="10" width="80" height="110" rx="8" stroke="#1D4ED8" stroke-width="5" fill="white"/>
+    <!-- Clip -->
+    <rect x="35" y="0" width="30" height="15" rx="4" stroke="#1D4ED8" stroke-width="5" fill="white"/>
+    <!-- Checkmark on paper -->
+    <path d="M30 75 L45 95 L105 35" stroke="#F59E0B" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
+
+  <!-- ══ GEAR (Bottom Right) ══ -->
+  <g transform="translate(120, 150)">
+    <circle cx="0" cy="0" r="18" stroke="#1D4ED8" stroke-width="6" fill="white"/>
+    <g stroke="#1D4ED8" stroke-width="6" stroke-linecap="round">
+      <path d="M0 -25 L0 -18"/>
+      <path d="M0 18 L0 25"/>
+      <path d="M-25 0 L-18 0"/>
+      <path d="M18 0 L25 0"/>
+      <path d="M-18 -18 L-13 -13"/>
+      <path d="M13 13 L18 18"/>
+      <path d="M-18 18 L-13 13"/>
+      <path d="M13 -13 L18 -18"/>
+    </g>
+  </g>
+
+  <!-- ══ WRENCH (Central Diagonal) ══ -->
+  <g transform="translate(50, 140) rotate(-40)">
+     <!-- Handle -->
+     <path d="M0 0 L80 0" stroke="#1D4ED8" stroke-width="18" stroke-linecap="round"/>
+     <!-- Open Head -->
+     <path d="M75 -22 A22 22 0 1 1 75 22 L75 10 L100 10 L100 -10 L75 -10 Z" fill="white" stroke="#1D4ED8" stroke-width="8" stroke-linejoin="round"/>
+  </g>
+</svg>
