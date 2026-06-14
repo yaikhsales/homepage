@@ -86,8 +86,26 @@ async function extractModules() {
 // Photorealistic LinkedIn-style corporate headshot — matches the IEWS
 // constellation portrait style (client/public/agents/*.jpg). Each portrait
 // represents a HUMAN professional (NOT a robot, NOT a cartoon, NOT a 3D
-// character). Diverse Southeast-Asian professionals, since the deployment
-// context is Cambodia.
+// character). Diverse SE-Asian / Khmer faces, deliberately varied.
+
+// 12-slot diversity cycle. Each module gets ONE slot (indexed by position in
+// the module list) so we get a deliberately varied cast rather than the
+// model defaulting to the same 30s smiling person every call.
+const DIVERSITY_VARIANTS = [
+  "early-30s Cambodian-Khmer woman, shoulder-length straight black hair, no glasses",
+  "mid-40s Cambodian-Khmer man, side-parted hair greying at the temples, rectangular dark-rimmed glasses",
+  "late-30s Khmer-Chinese woman, neat bob haircut, no glasses, subtle pearl earrings",
+  "early-50s Cambodian-Khmer man, distinguished salt-and-pepper hair, no glasses, slight smile",
+  "early-30s Cambodian-Khmer man, short black hair, clean-shaven, warm friendly smile",
+  "late-40s Cambodian-Khmer woman, long hair tied back in a low bun, no glasses",
+  "mid-30s Khmer-Vietnamese man, modern undercut, neatly trimmed short beard, no glasses",
+  "early-30s Cambodian-Khmer woman, layered shoulder-length hair, square-frame glasses",
+  "mid-50s Cambodian-Khmer woman, elegant short grey hair, no glasses, confident expression",
+  "late-20s Cambodian-Khmer man, very short hair, no facial hair, fresh confident look",
+  "early-40s Cambodian-Khmer woman, long straight hair worn down, subtle makeup",
+  "late-30s Cambodian-Khmer man, neatly cropped hair, light stubble, calm assured expression",
+];
+
 const STYLE_BASE =
   " Photograph this person as a high-quality professional corporate " +
   "headshot, photorealistic, NOT a cartoon, NOT a 3D-render, NOT a robot — " +
@@ -96,18 +114,46 @@ const STYLE_BASE =
   "left/right edges, head almost touching the top edge. Minimise empty " +
   "backdrop — no more than a thin border of background visible. Centred " +
   "and facing camera, slight friendly smile, confident expression. " +
-  "Modern Southeast-Asian / Cambodian-Khmer professional in their 30s, " +
-  "diverse ethnicity across portraits (vary gender, hair, complexion). " +
-  "Wearing a tailored business suit — navy, charcoal or mid-grey — with a " +
-  "crisp shirt and a Yai-orange (#F37021) tie OR a discreet orange pocket " +
-  "square as the brand accent (women: an orange silk scarf knot, or pearl " +
-  "earrings with a navy blouse). MINIMAL clean studio backdrop — soft " +
-  "neutral off-white / very pale grey, smooth even gradient, NO office " +
-  "scene, NO plants, NO furniture, NO windows, NO desk, NO computer, NO " +
-  "glass partitions, NO bokeh objects — just the subject on a clean " +
-  "seamless studio background like a professional press photo. Soft even " +
-  "studio lighting. Square 1:1 framing, sharp focus on the face, no text, " +
-  "no logos, no watermarks.";
+  "MINIMAL clean studio backdrop — soft neutral off-white / very pale " +
+  "grey, smooth even gradient, NO office, NO plants, NO furniture, NO " +
+  "windows, NO desk, NO bokeh objects. Soft even studio lighting. Square " +
+  "1:1 framing, sharp focus on the face, no text, no logos, no watermarks.";
+
+// Module-specific persona overrides — replaces the diversity-cycle persona
+// when a particular agent should look a specific way. Matched by `mod.id`.
+const PERSONA_OVERRIDES = {
+  sop:   "mid-30s Cambodian-Khmer woman, neat hair pulled back, calm authoritative expression, no glasses",
+  "e-gov": "early-40s Cambodian-Khmer woman, shoulder-length hair, dignified composed expression, subtle makeup",
+};
+
+// Module-specific appearance overrides — replaces the default business-suit
+// instruction when the role demands a uniform. Matched by `mod.id`.
+const APPEARANCE_OVERRIDES = {
+  sop:
+    " Wear the formal uniform of a Cambodian National Police officer: " +
+    "peaked cap with insignia, dark-navy uniform tunic with shoulder " +
+    "epaulettes, white shirt and tie, polished badge on the chest. " +
+    "Skip the business-suit description above.",
+  "e-gov":
+    " Wear the formal Cambodian civil-servant uniform: light khaki or " +
+    "olive government-administrator uniform shirt with shoulder bars and " +
+    "embroidered ministry insignia on the chest, dignified posture. Skip " +
+    "the business-suit description above.",
+  cctv:
+    " Wear a navy security-supervisor uniform with an embroidered " +
+    "monitoring-control patch, a thin black tie, and a discreet earpiece. " +
+    "Skip the business-suit description above.",
+  "fire-alarm":
+    " Wear a professional fire-marshal officer uniform: dark-red " +
+    "fire-services tunic with reflective trim and shoulder epaulettes, " +
+    "white shirt underneath. Skip the business-suit description above.",
+};
+
+// Default attire (used when no override matches).
+const DEFAULT_ATTIRE =
+  " Wear a tailored business suit — navy, charcoal or mid-grey — with a " +
+  "crisp shirt and a Yai-orange (#F37021) tie if male, OR an orange silk " +
+  "scarf knot at the collar if female. Keep the Yai-orange accent visible.";
 
 const THEMES = {
   default: {
@@ -263,9 +309,14 @@ async function main() {
       } catch { /* fall through and generate */ }
     }
 
+    const persona = PERSONA_OVERRIDES[mod.id]
+      || DIVERSITY_VARIANTS[i % DIVERSITY_VARIANTS.length];
+    const attire  = APPEARANCE_OVERRIDES[mod.id] || DEFAULT_ATTIRE;
     const prompt =
-      `Portrait of "${mod.title}" — an AI agent whose role: ${mod.description}` +
-      STYLE_BASE + themeCfg.suffix;
+      `Photorealistic corporate headshot of an AI agent named "${mod.title}". ` +
+      `Their role: ${mod.description} ` +
+      `The person depicted: ${persona}.` +
+      attire + STYLE_BASE + themeCfg.suffix;
 
     try {
       const buf = await generateOne(ai, model, prompt);
