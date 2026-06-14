@@ -5130,9 +5130,9 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                     .bot-icon-glow-modules {
                         animation: pulse-glow 2s ease-in-out infinite;
                     }
-                    /* Primary spinner — hugs the 64px logo tight (68px ring,
-                       just 2px outside the logo edge). 3 sides solid yai-blue +
-                       1 transparent for the classic loading-wheel rotation. */
+                    /* One ring — hugs the 64px logo with 2px clearance, three
+                       sides solid yai-blue + one transparent to give the
+                       continuous spinning highlight. That's it. */
                     .rotating-ring-modules {
                         position: absolute;
                         top: 50%;
@@ -5147,20 +5147,6 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                         pointer-events: none;
                         z-index: 5;
                         box-shadow: 0 0 10px rgba(30, 77, 170, 0.5);
-                    }
-                    /* Static outer halo — tight 76px ring framing the logo
-                       (8px gap from logo edge); always visible. */
-                    .rotating-ring-2-modules {
-                        position: absolute;
-                        top: 50%;
-                        left: 50%;
-                        transform: translate(-50%, -50%);
-                        width: 76px;
-                        height: 76px;
-                        border: 1.5px solid rgba(30, 77, 170, 0.30);
-                        border-radius: 50%;
-                        pointer-events: none;
-                        z-index: 4;
                     }
                     .sparkle-modules {
                         position: absolute;
@@ -5181,7 +5167,6 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                         {!isDropdownOpen && (
                             <>
                                 <div className="rotating-ring-modules"></div>
-                                <div className="rotating-ring-2-modules"></div>
 
                                 {/* Sparkles - Only show when dropdown is closed */}
                                 <div className="sparkle-modules sparkle-1-modules"></div>
