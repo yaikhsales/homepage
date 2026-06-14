@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
     X, Plus, Grid3x3, Mic, Send, Sparkles,
-    Wallet, UserCog, HeartHandshake, Megaphone, Factory,
-    BarChart3, Lightbulb, Handshake, ClipboardCheck, MessageCircle,
+    Wallet, UserCog, HeartHandshake, Factory,
+    BarChart3, Lightbulb, ClipboardCheck, MessageCircle,
+    Users, Truck, Package, TrendingUp, Heart, Leaf,
     Copy, Edit2, RefreshCw, MoreVertical,
     Menu, Trash2, ChevronRight, ChevronDown, Volume2
 } from 'lucide-react';
@@ -11,167 +12,125 @@ import { KHMER_NEW_YEAR } from '../thems';
 import { useKhmerTTS } from "./useKhmerTTS";
 import { VolumeX } from "lucide-react";
 
-// Predefined 10 bots for each moduleContext
+// 13 PA agents — single source of truth. The earlier hardcoded
+// per-PA module-selection branches (Admin PA / Finance PA / CSR PA /
+// HR PA) are now dead code: their bot names no longer exist in this
+// list, so those `if` branches never fire and every agent renders
+// uniformly from its own `suggestedActions`. To extend, add an entry
+// here — no other file needs to change.
 const PREDEFINED_BOTS = [
     {
-        id: 'finance-bot',
-        name: 'Finance PA',
-        description: 'AI assistant for financial management, budgeting, and accounting',
+        id: 'accounting-bot',
+        name: 'Accounting PA',
+        description: 'Finance, AP/AR, invoicing, and accounting assistant',
         icon: Wallet,
         bgGradient: 'from-green-500 to-emerald-500',
         lightBg: 'bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50',
         lightAccent: 'from-green-200 to-emerald-200',
         textColor: 'text-green-800',
         borderColor: 'border-green-200',
-        // Original suggested actions - commented out but kept for future use
-        // suggestedActions: [
-        //     { text: 'Purchase Request appr', highlight: true },
-        //     { text: 'Supp Payment Request' },
-        //     { text: 'E-invoice' },
-        //     { text: 'Generate Invoice' },
-        //     { text: 'Data' }
-        // ],
-        suggestedActions: [] // Module boxes will be shown instead
+        suggestedActions: [
+            { text: 'Purchase Request approval', highlight: true },
+            { text: 'Supplier Payment Request' },
+            { text: 'E-invoice queue' },
+            { text: 'Bill Claim status' },
+            { text: 'Generate Invoice' },
+        ],
+    },
+    {
+        id: 'hr-bot',
+        name: 'HR PA',
+        description: 'Attendance, payroll, training, and people-operations assistant',
+        icon: Users,
+        bgGradient: 'from-indigo-500 to-blue-500',
+        lightBg: 'bg-gradient-to-br from-indigo-50 via-blue-50 to-violet-50',
+        lightAccent: 'from-indigo-200 to-blue-200',
+        textColor: 'text-indigo-800',
+        borderColor: 'border-indigo-200',
+        suggestedActions: [
+            { text: 'Attendance summary', highlight: true },
+            { text: 'Training schedule' },
+            { text: 'Org chart' },
+            { text: 'Leave requests' },
+            { text: 'Salary bill review' },
+        ],
     },
     {
         id: 'admin-bot',
         name: 'Admin PA',
-        description: 'Administrative assistant for daily operations and management',
+        description: 'Daily ops: tickets, gate-pass, meeting rooms, transport',
         icon: UserCog,
         bgGradient: 'from-blue-500 to-cyan-500',
         lightBg: 'bg-gradient-to-br from-blue-50 via-cyan-50 to-sky-50',
         lightAccent: 'from-blue-200 to-cyan-200',
         textColor: 'text-blue-800',
         borderColor: 'border-blue-200',
-        suggestedActions: [] // Module boxes will be shown instead
-    },
-    {
-        id: 'hr-bot',
-        name: 'HR PA',
-        description: 'Human resources and employee management assistant',
-        icon: UserCog,
-        bgGradient: 'from-indigo-500 to-blue-500',
-        lightBg: 'bg-gradient-to-br from-indigo-50 via-blue-50 to-violet-50',
-        lightAccent: 'from-indigo-200 to-blue-200',
-        textColor: 'text-indigo-800',
-        borderColor: 'border-indigo-200',
-        suggestedActions: [] // Module boxes will be shown instead
+        suggestedActions: [
+            { text: 'Support tickets', highlight: true },
+            { text: 'Meeting Room booking' },
+            { text: 'Car booking' },
+            { text: 'Gate Pass requests' },
+            { text: 'Temporary Worker' },
+        ],
     },
     {
         id: 'csr-bot',
         name: 'CSR PA',
-        description: 'Corporate social responsibility and sustainability assistant',
+        description: 'CSR / sustainability: air, water, energy, waste',
         icon: HeartHandshake,
         bgGradient: 'from-purple-500 to-pink-500',
         lightBg: 'bg-gradient-to-br from-purple-50 via-pink-50 to-rose-50',
         lightAccent: 'from-purple-200 to-pink-200',
         textColor: 'text-purple-800',
         borderColor: 'border-purple-200',
-        // Original suggested actions - commented out but kept for future use
-        // suggestedActions: [
-        //     { text: 'Induction Training', highlight: true },
-        //     { text: 'Monthly 6S Report' },
-        //     { text: 'Compliance Certificate' },
-        //     { text: 'Audit Checklist' },
-        //     { text: 'CSR Equipment Handling' }
-        // ],
-        suggestedActions: [] // Module boxes will be shown instead
-    },
-    {
-        id: 'ppc-bot',
-        name: 'PPC PA',
-        description: 'Pay-per-click and digital marketing campaign assistant',
-        icon: Megaphone,
-        bgGradient: 'from-orange-500 to-red-500',
-        lightBg: 'bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50',
-        lightAccent: 'from-orange-200 to-amber-200',
-        textColor: 'text-orange-800',
-        borderColor: 'border-orange-200',
         suggestedActions: [
-            { text: 'Order Status', highlight: true },
-            { text: 'Delay Alert' },
-            { text: 'Need Your Action' },
-            { text: 'Supplier Alert' },
-            { text: 'Master Plan' },
-            { text: 'Line Plan' }
-        ]
+            { text: 'Air Temperature & Humidity', highlight: true },
+            { text: 'Water log' },
+            { text: 'Waste Management' },
+            { text: 'Electricity report' },
+            { text: 'Chemical inventory' },
+        ],
     },
     {
-        id: 'productions-bot',
-        name: 'Productions PA',
-        description: 'Production planning and manufacturing operations assistant',
-        icon: Factory,
-        bgGradient: 'from-indigo-500 to-blue-500',
-        lightBg: 'bg-gradient-to-br from-indigo-50 via-blue-50 to-violet-50',
-        lightAccent: 'from-indigo-200 to-blue-200',
-        textColor: 'text-indigo-800',
-        borderColor: 'border-indigo-200',
+        id: 'shipping-bot',
+        name: 'Shipping PA',
+        description: 'Container plans, customs clearance, dispatch tracking',
+        icon: Truck,
+        bgGradient: 'from-cyan-500 to-sky-500',
+        lightBg: 'bg-gradient-to-br from-cyan-50 via-sky-50 to-blue-50',
+        lightAccent: 'from-cyan-200 to-sky-200',
+        textColor: 'text-cyan-800',
+        borderColor: 'border-cyan-200',
         suggestedActions: [
-            { text: 'Plan production schedule', highlight: true },
-            { text: 'Track inventory levels' },
-            { text: 'Optimize workflow' },
-            { text: 'Monitor quality metrics' },
-            { text: 'Production Status' }
-        ]
+            { text: 'Container plan', highlight: true },
+            { text: 'Shipping Bill' },
+            { text: 'Customs clearance' },
+            { text: 'Delivery schedule' },
+            { text: 'Dispatch tracking' },
+        ],
     },
     {
-        id: 'ytm-bot',
-        name: 'YTM PA',
-        description: 'YTM (Yield to Maturity) and production tracking assistant',
-        icon: BarChart3,
-        bgGradient: 'from-teal-500 to-cyan-500',
-        lightBg: 'bg-gradient-to-br from-teal-50 via-cyan-50 to-sky-50',
-        lightAccent: 'from-teal-200 to-cyan-200',
-        textColor: 'text-teal-800',
-        borderColor: 'border-teal-200',
+        id: 'mrp-bot',
+        name: 'MRP PA',
+        description: 'Material requirements planning, BOM, inventory, supplier orders',
+        icon: Package,
+        bgGradient: 'from-red-500 to-orange-500',
+        lightBg: 'bg-gradient-to-br from-red-50 via-orange-50 to-amber-50',
+        lightAccent: 'from-red-200 to-orange-200',
+        textColor: 'text-red-800',
+        borderColor: 'border-red-200',
         suggestedActions: [
-            { text: 'Dashboard Analytics', highlight: true },
-            { text: 'Repair Machine Status' },
-            { text: 'Maintenance Schedule' },
-            { text: 'Late Maintenance Alert' },
-            { text: 'Machine Invoice' }
-        ]
+            { text: 'Material plan', highlight: true },
+            { text: 'Inventory levels' },
+            { text: 'Supplier orders' },
+            { text: 'Stock alerts' },
+            { text: 'BOM review' },
+        ],
     },
     {
-        id: 'pd-bot',
-        name: 'PD PA',
-        description: 'Product development and design innovation assistant',
-        icon: Lightbulb,
-        bgGradient: 'from-amber-500 to-yellow-500',
-        lightBg: 'bg-gradient-to-br from-amber-50 via-yellow-50 to-lime-50',
-        lightAccent: 'from-amber-200 to-yellow-200',
-        textColor: 'text-amber-800',
-        borderColor: 'border-amber-200',
-        suggestedActions: [
-            { text: 'Create product roadmap', highlight: true },
-            { text: 'Design new feature' },
-            { text: 'Review product specs' },
-            { text: 'Analyze user feedback' },
-            { text: 'Plan product launch' }
-        ]
-    },
-    {
-        id: 'sale-bot',
-        name: 'Sale PA',
-        description: 'Sales management and customer relationship assistant',
-        icon: Handshake,
-        bgGradient: 'from-rose-500 to-pink-500',
-        lightBg: 'bg-gradient-to-br from-rose-50 via-pink-50 to-fuchsia-50',
-        lightAccent: 'from-rose-200 to-pink-200',
-        textColor: 'text-rose-800',
-        borderColor: 'border-rose-200',
-        suggestedActions: [
-            { text: 'Sale Order Update Status', highlight: true },
-            { text: 'Buyer Replied' },
-            { text: 'Quotation update' },
-            { text: 'You got 3 email to replied' },
-            { text: 'Customer Factory Visit' }
-        ]
-    },
-    {
-        id: 'qms-bot',
-        name: 'QMS PA',
-        description: 'Quality management system and compliance assistant',
+        id: 'qa-bot',
+        name: 'QA PA',
+        description: 'Quality assurance, defect inspection, third-party audits',
         icon: ClipboardCheck,
         bgGradient: 'from-violet-500 to-purple-500',
         lightBg: 'bg-gradient-to-br from-violet-50 via-purple-50 to-indigo-50',
@@ -179,17 +138,107 @@ const PREDEFINED_BOTS = [
         textColor: 'text-violet-800',
         borderColor: 'border-violet-200',
         suggestedActions: [
-            { text: 'Hight Defect Rate Inspection', highlight: true },
-            { text: 'Thirt party schedule' },
+            { text: 'High Defect Rate inspection', highlight: true },
+            { text: 'Third-party audit schedule' },
+            { text: 'Customer complaints' },
+            { text: 'Pre-production meeting' },
+            { text: 'Quality report' },
+        ],
+    },
+    {
+        id: 'production-bot',
+        name: 'Production PA',
+        description: 'Line planning, workflow, throughput, daily production',
+        icon: Factory,
+        bgGradient: 'from-orange-500 to-amber-500',
+        lightBg: 'bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50',
+        lightAccent: 'from-orange-200 to-amber-200',
+        textColor: 'text-orange-800',
+        borderColor: 'border-orange-200',
+        suggestedActions: [
+            { text: 'Plan production schedule', highlight: true },
+            { text: 'Track inventory levels' },
+            { text: 'Optimize workflow' },
+            { text: 'Monitor quality metrics' },
+            { text: 'Production status' },
+        ],
+    },
+    {
+        id: 'ce-bot',
+        name: 'CE PA',
+        description: 'Customer Engagement: visits, feedback, satisfaction',
+        icon: Heart,
+        bgGradient: 'from-pink-500 to-rose-500',
+        lightBg: 'bg-gradient-to-br from-pink-50 via-rose-50 to-red-50',
+        lightAccent: 'from-pink-200 to-rose-200',
+        textColor: 'text-pink-800',
+        borderColor: 'border-pink-200',
+        suggestedActions: [
+            { text: 'Customer Factory Visit', highlight: true },
             { text: 'Buyer Visit' },
-            { text: 'Pre Production Meeting Schedule' },
-            { text: 'You got 4 email to replied' }
-        ]
+            { text: 'Feedback review' },
+            { text: 'Satisfaction score' },
+            { text: 'Engagement report' },
+        ],
+    },
+    {
+        id: 'ytm-bot',
+        name: 'YTM PA',
+        description: 'Maintenance, repairs, machine analytics',
+        icon: BarChart3,
+        bgGradient: 'from-teal-500 to-cyan-500',
+        lightBg: 'bg-gradient-to-br from-teal-50 via-cyan-50 to-sky-50',
+        lightAccent: 'from-teal-200 to-cyan-200',
+        textColor: 'text-teal-800',
+        borderColor: 'border-teal-200',
+        suggestedActions: [
+            { text: 'Dashboard analytics', highlight: true },
+            { text: 'Repair machine status' },
+            { text: 'Maintenance schedule' },
+            { text: 'Late maintenance alert' },
+            { text: 'Machine invoice' },
+        ],
+    },
+    {
+        id: '4dp-bot',
+        name: '4DP PA',
+        description: 'Design / pattern / sample / spec — the 4DP design pipeline',
+        icon: Lightbulb,
+        bgGradient: 'from-amber-500 to-yellow-500',
+        lightBg: 'bg-gradient-to-br from-amber-50 via-yellow-50 to-lime-50',
+        lightAccent: 'from-amber-200 to-yellow-200',
+        textColor: 'text-amber-800',
+        borderColor: 'border-amber-200',
+        suggestedActions: [
+            { text: 'Design roadmap', highlight: true },
+            { text: 'Pattern review' },
+            { text: 'Sample approval' },
+            { text: 'Spec sheet' },
+            { text: 'Trim approval' },
+        ],
+    },
+    {
+        id: 'ypi-bot',
+        name: 'YPI PA',
+        description: 'Yai Process Improvement: kaizen, SOP, efficiency',
+        icon: TrendingUp,
+        bgGradient: 'from-lime-500 to-green-500',
+        lightBg: 'bg-gradient-to-br from-lime-50 via-green-50 to-emerald-50',
+        lightAccent: 'from-lime-200 to-green-200',
+        textColor: 'text-lime-800',
+        borderColor: 'border-lime-200',
+        suggestedActions: [
+            { text: 'Production improvement', highlight: true },
+            { text: 'Efficiency audit' },
+            { text: 'SOP review' },
+            { text: 'Process optimization' },
+            { text: 'Kaizen plan' },
+        ],
     },
     {
         id: 'social-bot',
         name: 'Social PA',
-        description: 'Social media management and engagement assistant',
+        description: 'Social media: TikTok, Facebook, YouTube, Instagram, LinkedIn',
         icon: MessageCircle,
         bgGradient: 'from-sky-500 to-blue-500',
         lightBg: 'bg-gradient-to-br from-sky-50 via-blue-50 to-cyan-50',
@@ -197,14 +246,16 @@ const PREDEFINED_BOTS = [
         textColor: 'text-sky-800',
         borderColor: 'border-sky-200',
         suggestedActions: [
-            { text: 'Tiktok Comment', highlight: true },
-            { text: 'Facebook Comment' },
-            { text: 'Youtube Comment' },
-            { text: 'Instagram Comment' },
-            { text: 'Linkedin Comment' }
-        ]
-    }
+            { text: 'TikTok comments', highlight: true },
+            { text: 'Facebook comments' },
+            { text: 'YouTube comments' },
+            { text: 'Instagram comments' },
+            { text: 'LinkedIn comments' },
+        ],
+    },
 ];
+// eslint-disable-next-line no-unused-vars
+const _UNUSED_ICONS = Leaf; // keep Leaf imported for future agents
 
 const GREETING_NAME = 'Mr. Khun';
 
@@ -1284,8 +1335,10 @@ const PhoneFrame = ({
                                             <h2 className={`text-3xl font-light leading-tight ${bot.textColor || 'text-gray-800'}`}>Where should we start?</h2>
                                         )}
                                     </div>
-                                    {(botId === 'admin-bot' && !adminPAModule) || (botId === 'finance-bot' && !financePAModule) || (botId === 'csr-bot' && !csrPAModule) || (botId === 'hr-bot' && !hrPAModule) ? (
-                                        // Module Boxes for Admin PA, Finance PA, CSR PA, or HR PA
+                                    {/* Legacy module-box flow disabled for the new 13-agent set —
+                                        all bots now render their own `suggestedActions` uniformly. */}
+                                    {false ? (
+                                        // Module Boxes for Admin PA, Finance PA, CSR PA, or HR PA (dead code)
                                         <div className="space-y-4 mt-8">
                                             <p className={`text-sm ${bot.textColor || 'text-gray-600'} mb-4`}>Select a module:</p>
                                             <div className="grid grid-cols-1 gap-3">
@@ -5213,7 +5266,7 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                                             alt="Yai 1"
                                             className="w-14 h-14 rounded-full object-cover border-2 border-yai-blue/60 drop-shadow-[0_0_8px_rgba(30,77,170,0.7)] flex-shrink-0"
                                         />
-                                        <span className="bg-gradient-to-r from-yai-blue via-blue-400 to-yai-blue bg-clip-text text-transparent font-bold text-lg drop-shadow-[0_0_4px_rgba(30,77,170,0.5)] whitespace-nowrap">Yai 1</span>
+                                        <span className="bg-gradient-to-r from-yai-blue via-blue-400 to-yai-blue bg-clip-text text-transparent font-bold text-lg drop-shadow-[0_0_4px_rgba(30,77,170,0.5)] whitespace-nowrap">Agent Collective</span>
                                     </div>
                                     <ChevronRight size={20} className="text-yai-blue/80 group-hover:text-blue-300 transition-colors flex-shrink-0" />
                                 </li>
@@ -5227,10 +5280,10 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                                     <div className="flex items-center gap-4">
                                         <img
                                             src="assets/modules-image/yai2.png"
-                                            alt="Yai 2"
-                                            className="w-14 h-14 rounded-full object-cover border-2 border-gray-400/50 drop-shadow-[0_0_8px_rgba(156,163,175,0.6)] flex-shrink-0"
+                                            alt="Big Brain"
+                                            className="w-14 h-14 rounded-full object-contain bg-slate-950/60 border-2 border-emerald-400/60 shadow-[0_0_10px_rgba(16,185,129,0.6)] flex-shrink-0"
                                         />
-                                        <span className="bg-gradient-to-r from-gray-400 via-slate-400 to-gray-500 bg-clip-text text-transparent font-bold text-lg drop-shadow-[0_0_4px_rgba(156,163,175,0.4)] whitespace-nowrap">Yai 2</span>
+                                        <span className="bg-gradient-to-r from-emerald-400 via-green-400 to-emerald-500 bg-clip-text text-transparent font-bold text-lg drop-shadow-[0_0_4px_rgba(16,185,129,0.5)] whitespace-nowrap">Big Brain</span>
                                     </div>
                                     <ChevronRight size={20} className="text-gray-400/70 group-hover:text-gray-300 transition-colors flex-shrink-0" />
                                 </li>
