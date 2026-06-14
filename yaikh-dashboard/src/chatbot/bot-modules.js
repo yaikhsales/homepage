@@ -5130,36 +5130,34 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                     .bot-icon-glow-modules {
                         animation: pulse-glow 2s ease-in-out infinite;
                     }
-                    /* Primary spinner — 3 sides of solid blue + 1 transparent.
-                       The transparent side creates the spinning "gap" effect,
-                       same pattern as a classic loading wheel — but the ring
-                       itself stays continuously visible around the logo. */
+                    /* Primary spinner — hugs the 64px logo tight (68px ring,
+                       just 2px outside the logo edge). 3 sides solid yai-blue +
+                       1 transparent for the classic loading-wheel rotation. */
                     .rotating-ring-modules {
                         position: absolute;
                         top: 50%;
                         left: 50%;
                         transform: translate(-50%, -50%);
-                        width: 82px;
-                        height: 82px;
-                        border: 3px solid #1E4DAA;
+                        width: 68px;
+                        height: 68px;
+                        border: 2.5px solid #1E4DAA;
                         border-bottom-color: transparent;
                         border-radius: 50%;
                         animation: rotate-ring 1.6s linear infinite;
                         pointer-events: none;
                         z-index: 5;
-                        box-shadow: 0 0 18px rgba(30, 77, 170, 0.55);
+                        box-shadow: 0 0 10px rgba(30, 77, 170, 0.5);
                     }
-                    /* Static outer halo — a continuous soft circle so visitors
-                       always see the logo framed even when the spinner gap
-                       is rotated to a specific side. */
+                    /* Static outer halo — tight 76px ring framing the logo
+                       (8px gap from logo edge); always visible. */
                     .rotating-ring-2-modules {
                         position: absolute;
                         top: 50%;
                         left: 50%;
                         transform: translate(-50%, -50%);
-                        width: 96px;
-                        height: 96px;
-                        border: 2px solid rgba(30, 77, 170, 0.25);
+                        width: 76px;
+                        height: 76px;
+                        border: 1.5px solid rgba(30, 77, 170, 0.30);
                         border-radius: 50%;
                         pointer-events: none;
                         z-index: 4;
