@@ -5130,34 +5130,39 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                     .bot-icon-glow-modules {
                         animation: pulse-glow 2s ease-in-out infinite;
                     }
+                    /* Primary spinner — 3 sides of solid blue + 1 transparent.
+                       The transparent side creates the spinning "gap" effect,
+                       same pattern as a classic loading wheel — but the ring
+                       itself stays continuously visible around the logo. */
                     .rotating-ring-modules {
                         position: absolute;
                         top: 50%;
                         left: 50%;
                         transform: translate(-50%, -50%);
-                        width: 80px;
-                        height: 80px;
-                        border: 3px solid transparent;
-                        border-top-color: #1E4DAA;
-                        border-right-color: #1E4DAA;
+                        width: 82px;
+                        height: 82px;
+                        border: 3px solid #1E4DAA;
+                        border-bottom-color: transparent;
                         border-radius: 50%;
-                        animation: rotate-ring 2.2s linear infinite;
+                        animation: rotate-ring 1.6s linear infinite;
                         pointer-events: none;
                         z-index: 5;
-                        box-shadow: 0 0 14px rgba(30, 77, 170, 0.4);
+                        box-shadow: 0 0 18px rgba(30, 77, 170, 0.55);
                     }
+                    /* Static outer halo — a continuous soft circle so visitors
+                       always see the logo framed even when the spinner gap
+                       is rotated to a specific side. */
                     .rotating-ring-2-modules {
                         position: absolute;
                         top: 50%;
                         left: 50%;
                         transform: translate(-50%, -50%);
-                        width: 92px;
-                        height: 92px;
-                        border: 2px dashed rgba(30, 77, 170, 0.55);
+                        width: 96px;
+                        height: 96px;
+                        border: 2px solid rgba(30, 77, 170, 0.25);
                         border-radius: 50%;
-                        animation: rotate-ring 6s linear infinite reverse;
                         pointer-events: none;
-                        z-index: 5;
+                        z-index: 4;
                     }
                     .sparkle-modules {
                         position: absolute;
