@@ -5135,28 +5135,29 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                         top: 50%;
                         left: 50%;
                         transform: translate(-50%, -50%);
-                        width: 72px;
-                        height: 72px;
-                        border: 2px solid transparent;
-                        border-top-color: rgba(59, 130, 246, 0.6);
-                        border-right-color: rgba(139, 92, 246, 0.6);
+                        width: 80px;
+                        height: 80px;
+                        border: 3px solid transparent;
+                        border-top-color: #1E4DAA;
+                        border-right-color: #1E4DAA;
                         border-radius: 50%;
-                        animation: rotate-ring 3s linear infinite;
+                        animation: rotate-ring 2.2s linear infinite;
                         pointer-events: none;
+                        z-index: 5;
+                        box-shadow: 0 0 14px rgba(30, 77, 170, 0.4);
                     }
                     .rotating-ring-2-modules {
                         position: absolute;
                         top: 50%;
                         left: 50%;
                         transform: translate(-50%, -50%);
-                        width: 80px;
-                        height: 80px;
-                        border: 2px solid transparent;
-                        border-bottom-color: rgba(139, 92, 246, 0.4);
-                        border-left-color: rgba(59, 130, 246, 0.4);
+                        width: 92px;
+                        height: 92px;
+                        border: 2px dashed rgba(30, 77, 170, 0.55);
                         border-radius: 50%;
-                        animation: rotate-ring 4s linear infinite reverse;
+                        animation: rotate-ring 6s linear infinite reverse;
                         pointer-events: none;
+                        z-index: 5;
                     }
                     .sparkle-modules {
                         position: absolute;
@@ -5203,7 +5204,7 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                             )}
                         </button>
                     </div>
-                    <span className={`text-white font-bold text-lg tracking-wide drop-shadow-[0_0_10px_rgba(30,77,170,0.8)] bg-gradient-to-r from-yai-blue via-blue-400 to-yai-blue bg-clip-text text-transparent pointer-events-auto ${isDropdownOpen ? '' : 'animate-pulse'}`}>
+                    <span className={`text-yai-blue font-bold text-lg tracking-wide drop-shadow-sm pointer-events-auto ${isDropdownOpen ? '' : 'animate-pulse'}`}>
                         Yai Agents
                     </span>
 
