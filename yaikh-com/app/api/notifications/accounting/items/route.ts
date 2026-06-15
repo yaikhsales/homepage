@@ -29,8 +29,11 @@ type TopicConfig = {
   nextStatusMap: Record<string, string>;
 };
 
+// Keys MUST match the suggestedAction text fields on the accounting-bot
+// in bot-modules.js (PREDEFINED_BOTS) — the dashboard looks up topic
+// config by pill label.
 const TOPICS: Record<string, TopicConfig> = {
-  "Pending PR approvals": {
+  "Purchase Request": {
     collection: "purchase_requests",
     filter: { status: { $in: ["draft", "submitted", "supervisor_approved", "manager_approved"] } },
     nextStatusMap: {
@@ -41,7 +44,7 @@ const TOPICS: Record<string, TopicConfig> = {
       "finance_approved":    "paid",
     },
   },
-  "Bill claims to verify": {
+  "Bill Claim": {
     collection: "bill_claims",
     filter: { status: { $in: ["Manager Approved"] } },
     nextStatusMap: {
@@ -50,7 +53,7 @@ const TOPICS: Record<string, TopicConfig> = {
       "Accounting Verified":  "Reimbursed",
     },
   },
-  "Salary bill status": {
+  "Salary Bill": {
     collection: "salary_bills",
     filter: { status: { $in: ["Submitted", "Accounting Review"] } },
     nextStatusMap: {
@@ -60,7 +63,7 @@ const TOPICS: Record<string, TopicConfig> = {
       "Finance Approved":    "Paid",
     },
   },
-  "Unpaid shipping bills": {
+  "Shipping Bill": {
     collection: "shipping_bills",
     filter: { status: { $nin: ["Reimbursed", "Paid", "Closed", "Rejected"] } },
     nextStatusMap: {
@@ -69,10 +72,18 @@ const TOPICS: Record<string, TopicConfig> = {
       "Accounting Verified":  "Reimbursed",
     },
   },
-  "IEWS e-invoice queue": {
+  "IEWS": {
     collection: "iews_sync_log",
     filter: {},
     nextStatusMap: {},
+  },
+  "Accountant": {
+    // General-ledger / books work — pending journal entries to post,
+    // period close, etc. No collection seeded yet; reserved for the
+    // dedicated accountant module work.
+    collection: "journal_entries",
+    filter: { status: { $in: ["draft"] } },
+    nextStatusMap: { "draft": "posted" },
   },
 };
 

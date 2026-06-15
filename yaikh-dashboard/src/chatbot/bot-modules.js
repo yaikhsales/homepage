@@ -30,11 +30,12 @@ const PREDEFINED_BOTS = [
         textColor: 'text-green-800',
         borderColor: 'border-green-200',
         suggestedActions: [
-            { text: 'Pending PR approvals', highlight: true },
-            { text: 'Bill claims to verify' },
-            { text: 'Salary bill status' },
-            { text: 'Unpaid shipping bills' },
-            { text: 'IEWS e-invoice queue' },
+            { text: 'Purchase Request', highlight: true },
+            { text: 'Bill Claim' },
+            { text: 'Salary Bill' },
+            { text: 'Shipping Bill' },
+            { text: 'IEWS' },
+            { text: 'Accountant' },
         ],
     },
     {

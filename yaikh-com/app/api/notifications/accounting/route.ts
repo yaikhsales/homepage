@@ -48,12 +48,16 @@ export async function GET() {
       }),
     ]);
 
+    // Keys MUST match the suggestedAction `text` fields on the
+    // accounting-bot in bot-modules.js (PREDEFINED_BOTS) — the dashboard
+    // looks up badge values by pill label.
     const counts: Record<string, number> = {
-      "Pending PR approvals":  prPending,
-      "Bill claims to verify": bcToVerify,
-      "Salary bill status":    salReview,
-      "Unpaid shipping bills": sbUnpaid,
-      "IEWS e-invoice queue":  0,
+      "Purchase Request": prPending,
+      "Bill Claim":       bcToVerify,
+      "Salary Bill":      salReview,
+      "Shipping Bill":    sbUnpaid,
+      "IEWS":             0,
+      "Accountant":       0,
     };
 
     return NextResponse.json({ ok: true, counts });
