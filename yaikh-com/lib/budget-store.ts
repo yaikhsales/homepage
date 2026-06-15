@@ -38,36 +38,49 @@ export const EMPTY_STORE: Store = {
   actuals: DEFAULT_ACTUALS,
 };
 
+import { readAdminDoc, writeAdminDoc } from "@/lib/admin-mongo";
+
+const SECTION = "budget-actuals";
+
+function hydrate(parsed: Partial<Store>): Store {
+  const fix = (arr: (number | null)[] | undefined) => {
+    const out = [...(arr || [])];
+    while (out.length < 12) out.push(null);
+    return out.slice(0, 12);
+  };
+  const fixStr = (arr: (string | null)[] | undefined) => {
+    const out = [...(arr || [])];
+    while (out.length < 12) out.push(null);
+    return out.slice(0, 12);
+  };
+  return {
+    updatedAt: parsed.updatedAt ?? null,
+    updatedBy: parsed.updatedBy ?? null,
+    actuals: {
+      expense: fix(parsed.actuals?.expense),
+      income:  fix(parsed.actuals?.income),
+      notes:   fixStr(parsed.actuals?.notes),
+    },
+  };
+}
+
 export async function readStore(): Promise<Store> {
+  const fromMongo = await readAdminDoc<Store>(SECTION);
+  if (fromMongo) return hydrate(fromMongo);
   try {
     const text = await fs.readFile(FILE, "utf-8");
-    const parsed = JSON.parse(text) as Store;
-    // Defensive: ensure arrays are length-12.
-    const fix = (arr: (number | null)[] | undefined) => {
-      const out = [...(arr || [])];
-      while (out.length < 12) out.push(null);
-      return out.slice(0, 12);
-    };
-    const fixStr = (arr: (string | null)[] | undefined) => {
-      const out = [...(arr || [])];
-      while (out.length < 12) out.push(null);
-      return out.slice(0, 12);
-    };
-    return {
-      updatedAt: parsed.updatedAt ?? null,
-      updatedBy: parsed.updatedBy ?? null,
-      actuals: {
-        expense: fix(parsed.actuals?.expense),
-        income:  fix(parsed.actuals?.income),
-        notes:   fixStr(parsed.actuals?.notes),
-      },
-    };
+    return hydrate(JSON.parse(text) as Partial<Store>);
   } catch {
     return EMPTY_STORE;
   }
 }
 
 export async function writeStore(store: Store): Promise<void> {
-  await fs.mkdir(path.dirname(FILE), { recursive: true });
-  await fs.writeFile(FILE, JSON.stringify(store, null, 2), "utf-8");
+  await writeAdminDoc(SECTION, store as unknown as Record<string, unknown>);
+  try {
+    await fs.mkdir(path.dirname(FILE), { recursive: true });
+    await fs.writeFile(FILE, JSON.stringify(store, null, 2), "utf-8");
+  } catch (err) {
+    console.warn("[budget-store] fs snapshot failed (Mongo write succeeded):", err instanceof Error ? err.message : err);
+  }
 }

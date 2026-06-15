@@ -58,21 +58,35 @@ export const SEED_EVENTS_STORE: EventsStore = {
   ],
 };
 
+import { readAdminDoc, writeAdminDoc } from "@/lib/admin-mongo";
+
+const SECTION = "events";
+
+function hydrate(parsed: Partial<EventsStore>): EventsStore {
+  return {
+    updatedAt: parsed.updatedAt ?? null,
+    updatedBy: parsed.updatedBy ?? null,
+    albums: parsed.albums ?? SEED_EVENTS_STORE.albums,
+  };
+}
+
 export async function readEventsStore(): Promise<EventsStore> {
+  const fromMongo = await readAdminDoc<EventsStore>(SECTION);
+  if (fromMongo) return hydrate(fromMongo);
   try {
     const text = await fs.readFile(FILE, "utf-8");
-    const parsed = JSON.parse(text) as EventsStore;
-    return {
-      updatedAt: parsed.updatedAt ?? null,
-      updatedBy: parsed.updatedBy ?? null,
-      albums: parsed.albums ?? SEED_EVENTS_STORE.albums,
-    };
+    return hydrate(JSON.parse(text) as Partial<EventsStore>);
   } catch {
     return { ...SEED_EVENTS_STORE };
   }
 }
 
 export async function writeEventsStore(store: EventsStore): Promise<void> {
-  await fs.mkdir(path.dirname(FILE), { recursive: true });
-  await fs.writeFile(FILE, JSON.stringify(store, null, 2), "utf-8");
+  await writeAdminDoc(SECTION, store as unknown as Record<string, unknown>);
+  try {
+    await fs.mkdir(path.dirname(FILE), { recursive: true });
+    await fs.writeFile(FILE, JSON.stringify(store, null, 2), "utf-8");
+  } catch (err) {
+    console.warn("[events-store] fs snapshot failed (Mongo write succeeded):", err instanceof Error ? err.message : err);
+  }
 }

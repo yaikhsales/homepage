@@ -43,12 +43,12 @@ const DATA_DIR = path.resolve(__dirname, "..", "data");
 
 /** [section name (Mongo _id), file basename]. Add a row as each admin tab is wired. */
 const SECTIONS = [
-  ["sales-income", "sales-income.json"],
-  ["salaries",     "salaries.json"],
-  ["expenses",     "expenses.json"],
-  ["budget",       "budget.json"],
-  ["about",        "about.json"],
-  ["events",       "events.json"],
+  ["sales-income",   "sales-income.json"],
+  ["salary-history", "salary-history.json"],
+  ["expenses",       "expenses.json"],
+  ["budget-actuals", "budget-actuals.json"],
+  ["about",          "about.json"],
+  ["events",         "events.json"],
 ];
 
 async function main() {

@@ -54,24 +54,37 @@ export const SEED_ABOUT_STORE: AboutStore = {
   },
 };
 
+import { readAdminDoc, writeAdminDoc } from "@/lib/admin-mongo";
+
+const SECTION = "about";
+
+function hydrate(parsed: Partial<AboutStore>): AboutStore {
+  return {
+    updatedAt: parsed.updatedAt ?? null,
+    updatedBy: parsed.updatedBy ?? null,
+    a1: { ...SEED_ABOUT_STORE.a1, ...(parsed.a1 || {}) },
+    a2: { ...SEED_ABOUT_STORE.a2, ...(parsed.a2 || {}) },
+    a3: { ...SEED_ABOUT_STORE.a3, ...(parsed.a3 || {}) },
+  };
+}
+
 export async function readAboutStore(): Promise<AboutStore> {
+  const fromMongo = await readAdminDoc<AboutStore>(SECTION);
+  if (fromMongo) return hydrate(fromMongo);
   try {
     const text = await fs.readFile(FILE, "utf-8");
-    const parsed = JSON.parse(text) as Partial<AboutStore>;
-    // Merge with seed so missing fields default cleanly
-    return {
-      updatedAt: parsed.updatedAt ?? null,
-      updatedBy: parsed.updatedBy ?? null,
-      a1: { ...SEED_ABOUT_STORE.a1, ...(parsed.a1 || {}) },
-      a2: { ...SEED_ABOUT_STORE.a2, ...(parsed.a2 || {}) },
-      a3: { ...SEED_ABOUT_STORE.a3, ...(parsed.a3 || {}) },
-    };
+    return hydrate(JSON.parse(text) as Partial<AboutStore>);
   } catch {
     return { ...SEED_ABOUT_STORE };
   }
 }
 
 export async function writeAboutStore(store: AboutStore): Promise<void> {
-  await fs.mkdir(path.dirname(FILE), { recursive: true });
-  await fs.writeFile(FILE, JSON.stringify(store, null, 2), "utf-8");
+  await writeAdminDoc(SECTION, store as unknown as Record<string, unknown>);
+  try {
+    await fs.mkdir(path.dirname(FILE), { recursive: true });
+    await fs.writeFile(FILE, JSON.stringify(store, null, 2), "utf-8");
+  } catch (err) {
+    console.warn("[about-store] fs snapshot failed (Mongo write succeeded):", err instanceof Error ? err.message : err);
+  }
 }

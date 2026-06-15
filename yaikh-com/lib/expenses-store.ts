@@ -162,25 +162,36 @@ function floatAiToTop(cats: ExpenseCategory[]): ExpenseCategory[] {
   return [...ai, ...rest];
 }
 
+import { readAdminDoc, writeAdminDoc } from "@/lib/admin-mongo";
+
+const SECTION = "expenses";
+
+function hydrate(parsed: Partial<ExpensesStore>): ExpensesStore {
+  return {
+    updatedAt: parsed.updatedAt ?? null,
+    updatedBy: parsed.updatedBy ?? null,
+    months: buildMonths(parsed.months),
+    categories: floatAiToTop(parsed.categories ?? SEED_EXPENSES_STORE.categories),
+  };
+}
+
 export async function readExpensesStore(): Promise<ExpensesStore> {
+  const fromMongo = await readAdminDoc<ExpensesStore>(SECTION);
+  if (fromMongo) return hydrate(fromMongo);
   try {
     const text = await fs.readFile(FILE, "utf-8");
-    const parsed = JSON.parse(text) as ExpensesStore;
-    return {
-      updatedAt: parsed.updatedAt ?? null,
-      updatedBy: parsed.updatedBy ?? null,
-      months: buildMonths(parsed.months),
-      categories: floatAiToTop(parsed.categories ?? SEED_EXPENSES_STORE.categories),
-    };
+    return hydrate(JSON.parse(text) as Partial<ExpensesStore>);
   } catch {
-    return {
-      ...SEED_EXPENSES_STORE,
-      months: buildMonths(SEED_EXPENSES_STORE.months),
-    };
+    return { ...SEED_EXPENSES_STORE, months: buildMonths(SEED_EXPENSES_STORE.months) };
   }
 }
 
 export async function writeExpensesStore(store: ExpensesStore): Promise<void> {
-  await fs.mkdir(path.dirname(FILE), { recursive: true });
-  await fs.writeFile(FILE, JSON.stringify(store, null, 2), "utf-8");
+  await writeAdminDoc(SECTION, store as unknown as Record<string, unknown>);
+  try {
+    await fs.mkdir(path.dirname(FILE), { recursive: true });
+    await fs.writeFile(FILE, JSON.stringify(store, null, 2), "utf-8");
+  } catch (err) {
+    console.warn("[expenses-store] fs snapshot failed (Mongo write succeeded):", err instanceof Error ? err.message : err);
+  }
 }

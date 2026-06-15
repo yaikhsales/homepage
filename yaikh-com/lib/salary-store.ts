@@ -181,25 +181,36 @@ function buildMonths(stored: string[] | undefined): string[] {
   return Array.from(merged).sort();
 }
 
+import { readAdminDoc, writeAdminDoc } from "@/lib/admin-mongo";
+
+const SECTION = "salary-history";
+
+function hydrate(parsed: Partial<SalaryStore>): SalaryStore {
+  return {
+    updatedAt: parsed.updatedAt ?? null,
+    updatedBy: parsed.updatedBy ?? null,
+    months: buildMonths(parsed.months),
+    members: parsed.members ?? SEED_SALARY_STORE.members,
+  };
+}
+
 export async function readSalaryStore(): Promise<SalaryStore> {
+  const fromMongo = await readAdminDoc<SalaryStore>(SECTION);
+  if (fromMongo) return hydrate(fromMongo);
   try {
     const text = await fs.readFile(FILE, "utf-8");
-    const parsed = JSON.parse(text) as SalaryStore;
-    return {
-      updatedAt: parsed.updatedAt ?? null,
-      updatedBy: parsed.updatedBy ?? null,
-      months: buildMonths(parsed.months),
-      members: parsed.members ?? SEED_SALARY_STORE.members,
-    };
+    return hydrate(JSON.parse(text) as Partial<SalaryStore>);
   } catch {
-    return {
-      ...SEED_SALARY_STORE,
-      months: buildMonths(SEED_SALARY_STORE.months),
-    };
+    return { ...SEED_SALARY_STORE, months: buildMonths(SEED_SALARY_STORE.months) };
   }
 }
 
 export async function writeSalaryStore(store: SalaryStore): Promise<void> {
-  await fs.mkdir(path.dirname(FILE), { recursive: true });
-  await fs.writeFile(FILE, JSON.stringify(store, null, 2), "utf-8");
+  await writeAdminDoc(SECTION, store as unknown as Record<string, unknown>);
+  try {
+    await fs.mkdir(path.dirname(FILE), { recursive: true });
+    await fs.writeFile(FILE, JSON.stringify(store, null, 2), "utf-8");
+  } catch (err) {
+    console.warn("[salary-store] fs snapshot failed (Mongo write succeeded):", err instanceof Error ? err.message : err);
+  }
 }
