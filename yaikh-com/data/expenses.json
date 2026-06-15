@@ -1,0 +1,222 @@
+{
+  "updatedAt": "2026-06-08T18:11:04.000Z",
+  "updatedBy": "admin",
+  "months": [],
+  "categories": [
+    {
+      "id": "ai-fees",
+      "name": "Ai Fees",
+      "detail": "Anthropic / Google Cloud / OpenAI API + token-usage fees.",
+      "color": "#8B5CF6",
+      "items": [
+        {
+          "id": "ai-monthly",
+          "name": "Monthly Ai usage",
+          "frequency": "recurring",
+          "monthly": {
+            "2026-06": { "amount": 100 },
+            "2026-07": { "amount": 100 },
+            "2026-08": { "amount": 250 },
+            "2026-09": { "amount": 250 },
+            "2026-10": { "amount": 250 },
+            "2026-11": { "amount": 400 },
+            "2026-12": { "amount": 400 }
+          }
+        }
+      ]
+    },
+    {
+      "id": "computers",
+      "name": "Computers",
+      "detail": "Compute hardware — workstations, servers, peripherals.",
+      "color": "#1E4DAA",
+      "items": [
+        {
+          "id": "mini-pc",
+          "name": "Mini PC set",
+          "unitPrice": 550,
+          "unitLabel": "$550 / unit · 17 units planned",
+          "frequency": "one-off",
+          "monthly": {}
+        },
+        {
+          "id": "laptop",
+          "name": "Laptop",
+          "unitPrice": 450,
+          "unitLabel": "$450 / unit · 5 units planned",
+          "frequency": "one-off",
+          "monthly": {
+            "2026-12": { "amount": 1000 }
+          }
+        },
+        {
+          "id": "tv",
+          "name": "TV (Meeting room)",
+          "unitPrice": 400,
+          "unitLabel": "$400 / unit · 2 units",
+          "frequency": "one-off",
+          "monthly": {
+            "2026-09": { "amount": 350 }
+          }
+        },
+        {
+          "id": "server-ai-llm",
+          "name": "Server-class PC · Ai Server (own LLM)",
+          "unitPrice": 600,
+          "unitLabel": "$600 / unit · 2 units",
+          "frequency": "one-off",
+          "monthly": {}
+        },
+        {
+          "id": "printer",
+          "name": "Printer / Scanner",
+          "unitPrice": 350,
+          "unitLabel": "$350 / unit · 2 units",
+          "frequency": "one-off",
+          "monthly": {
+            "2026-11": { "amount": 600 }
+          }
+        }
+      ]
+    },
+    {
+      "id": "furniture",
+      "name": "Furniture",
+      "detail": "Office furniture for the Phnom Penh team.",
+      "color": "#6D4FB6",
+      "items": [
+        {
+          "id": "chair",
+          "name": "High-back chair",
+          "unitPrice": 45,
+          "unitLabel": "$45 / unit · 25 units",
+          "frequency": "one-off",
+          "monthly": {}
+        },
+        {
+          "id": "table-m",
+          "name": "M-size table",
+          "unitPrice": 150,
+          "unitLabel": "$150 / unit · 7 units",
+          "frequency": "one-off",
+          "monthly": {}
+        }
+      ]
+    },
+    {
+      "id": "dev-equipment",
+      "name": "Development equipment",
+      "detail": "AIoT + edge-hardware kit for platform development.",
+      "color": "#0A3327",
+      "items": [
+        { "id": "ecart",       "name": "E-cart framework",       "unitPrice": 2500, "unitLabel": "$2,500 · 1 unit",       "frequency": "one-off", "monthly": {} },
+        { "id": "ai-face-cam", "name": "Ai face-ID Camera",      "unitPrice":  175, "unitLabel": "$175 / unit · 4 units", "frequency": "one-off", "monthly": {} },
+        { "id": "wifi-eq",     "name": "Wi-Fi Equipment",        "unitPrice":  450, "unitLabel": "$450 / unit · 4 units", "frequency": "one-off", "monthly": {} },
+        { "id": "net-eq",      "name": "Networking Equipment",   "unitPrice":  450, "unitLabel": "$450 / unit · 2 units", "frequency": "one-off", "monthly": {} },
+        { "id": "iot-temp",    "name": "IoT Temperature Sensor", "unitPrice":  250, "unitLabel": "$250 · set",            "frequency": "one-off", "monthly": {} },
+        { "id": "electric",    "name": "Electric Meter",         "unitPrice":  400, "unitLabel": "$400 · set",            "frequency": "one-off", "monthly": {} }
+      ]
+    },
+    {
+      "id": "admin-shop",
+      "name": "Admin Shop / Office Supplies",
+      "detail": "Consumables for the office.",
+      "color": "#D4A017",
+      "items": [
+        { "id": "office-acc",  "name": "Office accessories", "unitPrice": 250, "unitLabel": "$250 · 5 sets",  "frequency": "recurring", "monthly": {} },
+        { "id": "whiteboard",  "name": "White board + pens", "unitPrice": 250, "unitLabel": "$250 · set",     "frequency": "one-off",   "monthly": {} },
+        { "id": "a4-paper",    "name": "A4 Paper",           "unitPrice": 100, "unitLabel": "$100 · 1 box",   "frequency": "recurring", "monthly": {} }
+      ]
+    },
+    {
+      "id": "villa-rent",
+      "name": "Villa Rent + Utilities",
+      "detail": "Office rent + internet + electricity in Phnom Penh.",
+      "color": "#F37021",
+      "items": [
+        {
+          "id": "rent",
+          "name": "Villa rent",
+          "frequency": "recurring",
+          "monthly": {
+            "2026-06": { "amount": 700 },
+            "2026-07": { "amount": 700 },
+            "2026-08": { "amount": 700 },
+            "2026-09": { "amount": 700 },
+            "2026-10": { "amount": 700 },
+            "2026-11": { "amount": 700 },
+            "2026-12": { "amount": 700 },
+            "2027-01": { "amount": 700 },
+            "2027-02": { "amount": 700 },
+            "2027-03": { "amount": 700 },
+            "2027-04": { "amount": 700 }
+          }
+        },
+        {
+          "id": "internet",
+          "name": "Internet + 5G",
+          "frequency": "recurring",
+          "monthly": {
+            "2026-06": { "amount": 200 },
+            "2026-07": { "amount": 200 },
+            "2026-08": { "amount": 200 },
+            "2026-09": { "amount": 200 },
+            "2026-10": { "amount": 200 },
+            "2026-11": { "amount": 200 },
+            "2026-12": { "amount": 200 },
+            "2027-01": { "amount": 200 },
+            "2027-02": { "amount": 200 },
+            "2027-03": { "amount": 200 },
+            "2027-04": { "amount": 200 }
+          }
+        },
+        {
+          "id": "electric",
+          "name": "Electricity bill",
+          "frequency": "recurring",
+          "monthly": {
+            "2026-07": { "amount": 100 },
+            "2026-08": { "amount": 100 },
+            "2026-09": { "amount": 100 },
+            "2026-10": { "amount": 100 },
+            "2026-11": { "amount": 100 },
+            "2026-12": { "amount": 100 },
+            "2027-01": { "amount": 100 },
+            "2027-02": { "amount": 100 },
+            "2027-03": { "amount": 100 },
+            "2027-04": { "amount": 100 },
+            "2027-05": { "amount": 100 }
+          }
+        }
+      ]
+    },
+    {
+      "id": "petty-cash",
+      "name": "Petty Cash + Sales Promotion",
+      "detail": "Local-spend buffer + outreach materials (printed invites, swag, taxi reimbursements).",
+      "color": "#EF4444",
+      "items": [
+        { "id": "petty", "name": "Petty cash", "frequency": "recurring", "monthly": {} },
+        {
+          "id": "promotion",
+          "name": "Sales promotion expenses",
+          "frequency": "recurring",
+          "monthly": {
+            "2026-06": { "amount": 250 },
+            "2026-07": { "amount": 250 },
+            "2026-08": { "amount": 250 },
+            "2026-09": { "amount": 250 },
+            "2026-10": { "amount": 250 },
+            "2026-11": { "amount": 250 },
+            "2026-12": { "amount": 250 },
+            "2027-01": { "amount": 250 },
+            "2027-02": { "amount": 250 },
+            "2027-03": { "amount": 250 },
+            "2027-04": { "amount": 250 },
+            "2027-05": { "amount": 250 }
+          }
+        }
+      ]
+    }
+  ]
+}
