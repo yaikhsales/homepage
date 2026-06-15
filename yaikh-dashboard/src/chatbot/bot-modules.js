@@ -2109,13 +2109,22 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
     const [isDropdownOpen, setDropdownOpen] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
 
-    // Auto-open the Yai Agents dropdown ~700ms after mount so new users
-    // see "Agent Collective" + "Big Brain" reveal themselves — no need to
-    // hunt for the click target. Fires once per mount; user can still
-    // close + reopen normally afterwards.
+    // Auto-open the Yai Agents dropdown ~700ms after mount so FIRST-time
+    // users see "Agent Collective" + "Big Brain" reveal themselves.
+    // localStorage flag makes it a one-shot — after the first reveal the
+    // user knows where the click target is, so subsequent visits stay
+    // quiet. Clear the flag in DevTools (or use private/incognito) to
+    // see the reveal again.
     useEffect(() => {
         if (!onVersionChange) return; // no menu to show
-        const t = setTimeout(() => setDropdownOpen(true), 700);
+        const SEEN_KEY = 'yai-agents-dropdown-seen-v1';
+        try {
+            if (window.localStorage.getItem(SEEN_KEY) === '1') return;
+        } catch (_) { /* private mode / SSR — fall through and reveal */ }
+        const t = setTimeout(() => {
+            setDropdownOpen(true);
+            try { window.localStorage.setItem(SEEN_KEY, '1'); } catch (_) {}
+        }, 700);
         return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
