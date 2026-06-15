@@ -40,7 +40,7 @@ const D: Record<string, string[]> = {
   "portal.b2": ["Interactive demos", "ការបង្ហាញអន្តរសកម្ម", "交互式演示", "インタラクティブデモ", "인터랙티브 데모", "ইন্টারঅ্যাকটিভ ডেমো", "इंटरैक्टिव डेमो"],
   "portal.b3": ["Capital-efficiency model", "គំរូប្រសិទ្ធភាពទុន", "资本效率模型", "資本効率モデル", "자본 효율성 모델", "পুঁজি-দক্ষতা মডেল", "पूँजी-दक्षता मॉडल"],
   "portal.cta": ["Open portal", "បើកផតថល", "进入门户", "ポータルを開く", "포털 열기", "পোর্টাল খুলুন", "पोर्टल खोलें"],
-  "portal.sub": ["Opens yai-plan-production.up.railway.app", "បើក yai-plan-production.up.railway.app", "打开 yai-plan-production.up.railway.app", "yai-plan-production.up.railway.app を開く", "yai-plan-production.up.railway.app 열기", "yai-plan-production.up.railway.app খুলবে", "yai-plan-production.up.railway.app खोलेगा"],
+  "portal.sub": ["Opens the strategic partner portal", "បើកផតថលដៃគូយុទ្ធសាស្ត្រ", "打开战略合作伙伴门户", "戦略パートナーポータルを開く", "전략 파트너 포털 열기", "কৌশলগত অংশীদার পোর্টাল খুলবে", "रणनीतिक भागीदार पोर्टल खोलेगा"],
 
   /* ── EXPERIENCE landing page (/experience) ── */
   "exp.eyebrow": ["The experience", "បទពិសោធន៍", "体验", "体験", "체험", "অভিজ্ঞতা", "अनुभव"],
