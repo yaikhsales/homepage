@@ -3001,8 +3001,13 @@ function Footer() {
         </FooterCol>
         <FooterCol title="Company">
           <FooterLink href="mailto:gamini@yaikh.com">Contact</FooterLink>
-          <FooterLink href="https://main.yaikh.com/login"
-            target="_self">Strategic DTV portal</FooterLink>
+          <a 
+  href="https://main.yaikh.com/login" 
+  target="_self"
+  className="block text-[13px] text-white/60 hover:text-yai-orange transition"
+>
+  Strategic DTV portal
+</a>
         </FooterCol>
       </div>
       <div className="border-t border-white/10">
