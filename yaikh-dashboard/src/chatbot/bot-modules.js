@@ -371,7 +371,15 @@ const PhoneFrame = ({
     onResetHrPAModule,
     botLanguage,
     languages,
-    onUpdateBotLanguage
+    onUpdateBotLanguage,
+    // Agentic in-chat pending-items flow (Accounting PA).
+    // onPostBotMessage appends a new bot message to the conversation
+    // (used to surface pending items as a chat card list rather than a
+    // popup modal). onUpdateBotMessage lets us mutate a specific
+    // already-posted message — e.g. remove a row when its Approve
+    // button is clicked and the action persists in Mongo.
+    onPostBotMessage,
+    onUpdateBotMessage,
 }) => {
     const messagesEndRef = useRef(null);
     const inputRef = useRef(null);
@@ -1490,11 +1498,51 @@ const PhoneFrame = ({
                                                             onClick={() => {
                                                                 // Accounting PA: tapping a pill TOGGLES the topic filter
                                                                 // — UNLESS that pill has a pending-items badge, in which
-                                                                // case open the action modal instead so the user can
-                                                                // approve/advance the items without typing.
+                                                                // case fetch the items and post them as an in-chat agent
+                                                                // message with inline Approve buttons (no popup). The
+                                                                // user can drive the queue right from the conversation.
                                                                 if (isAccountingFilter) {
-                                                                    if (badgeCount > 0) {
-                                                                        setPendingModalTopic(action.text);
+                                                                    if (badgeCount > 0 && onPostBotMessage) {
+                                                                        // Optimistic loading message — replaced once the
+                                                                        // fetch resolves.
+                                                                        onPostBotMessage({
+                                                                            from: 'bot',
+                                                                            type: 'pending_items',
+                                                                            topic: action.text,
+                                                                            text: `Loading ${badgeCount} item${badgeCount === 1 ? '' : 's'} for "${action.text}"…`,
+                                                                            items: [],
+                                                                            collection: null,
+                                                                            nextStatusMap: {},
+                                                                            loading: true,
+                                                                        });
+                                                                        fetch(`/api/notifications/accounting/items?topic=${encodeURIComponent(action.text)}`)
+                                                                            .then(r => r.json())
+                                                                            .then(data => {
+                                                                                if (!onUpdateBotMessage) return;
+                                                                                // Update the most recently posted pending_items
+                                                                                // message for this topic by mutating the last
+                                                                                // message via a functional updater.
+                                                                                const lastIdx = (messages?.length || 0);
+                                                                                onUpdateBotMessage(lastIdx, (prev) => ({
+                                                                                    ...prev,
+                                                                                    text: data?.ok
+                                                                                        ? `Here ${data.items.length === 1 ? 'is' : 'are'} ${data.items.length} ${action.text.toLowerCase()} item${data.items.length === 1 ? '' : 's'} awaiting action. Tap Approve to advance each one.`
+                                                                                        : `Couldn't load items: ${data?.error || 'unknown error'}`,
+                                                                                    items: data?.items || [],
+                                                                                    collection: data?.collection || null,
+                                                                                    nextStatusMap: data?.nextStatusMap || {},
+                                                                                    loading: false,
+                                                                                }));
+                                                                            })
+                                                                            .catch(() => {
+                                                                                if (!onUpdateBotMessage) return;
+                                                                                const lastIdx = (messages?.length || 0);
+                                                                                onUpdateBotMessage(lastIdx, (prev) => ({
+                                                                                    ...prev,
+                                                                                    text: '(Network error fetching items.)',
+                                                                                    loading: false,
+                                                                                }));
+                                                                            });
                                                                     } else {
                                                                         setActiveTopic(prev => prev === action.text ? null : action.text);
                                                                     }
@@ -1689,6 +1737,79 @@ const PhoneFrame = ({
                                                             <div className="hidden text-xs text-gray-500 mt-2 p-4 bg-gray-50 rounded-lg border border-gray-200">
                                                                 Image preview: {msg.imageName}
                                                             </div>
+                                                        </div>
+                                                    )}
+                                                    {msg.type === 'pending_items' && (
+                                                        <div className="mt-2 space-y-2">
+                                                            {msg.loading && (
+                                                                <div className="text-xs text-gray-500 italic">Loading…</div>
+                                                            )}
+                                                            {!msg.loading && (msg.items || []).length === 0 && (
+                                                                <div className="text-xs text-gray-500 italic">No items to action — you're all caught up.</div>
+                                                            )}
+                                                            {!msg.loading && (msg.items || []).map((item) => {
+                                                                const itemId = String(item._id);
+                                                                const nextStatus = (msg.nextStatusMap || {})[item.status];
+                                                                const headline = item.no || item.title || itemId.slice(-6);
+                                                                const subline = [
+                                                                    item.claimant || item.vendor || item.requester?.name || item.period,
+                                                                    item.dept || item.category || item.cycle,
+                                                                    item.description || item.note,
+                                                                ].filter(Boolean).join(' · ');
+                                                                const amount = item.amount ?? item.net ?? item.totalAmount;
+                                                                const isAdvancing = msg.advancingId === itemId;
+                                                                return (
+                                                                    <div key={itemId} className="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                                                                        <div className="flex items-center gap-2 mb-1 flex-wrap">
+                                                                            <span className="font-mono text-[11px] text-gray-700">{headline}</span>
+                                                                            <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-800 ring-1 ring-amber-200">{item.status}</span>
+                                                                            {typeof amount === 'number' && (
+                                                                                <span className="ml-auto text-xs font-semibold text-gray-900">${amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                                                                            )}
+                                                                        </div>
+                                                                        {subline && (
+                                                                            <div className="text-[11px] text-gray-600 mb-2 leading-snug">{subline}</div>
+                                                                        )}
+                                                                        <button
+                                                                            onClick={() => {
+                                                                                if (!nextStatus || !msg.collection || !onUpdateBotMessage) return;
+                                                                                onUpdateBotMessage(idx, (prev) => ({ ...prev, advancingId: itemId }));
+                                                                                fetch('/api/notifications/accounting/action', {
+                                                                                    method: 'POST',
+                                                                                    headers: { 'Content-Type': 'application/json' },
+                                                                                    body: JSON.stringify({ collection: msg.collection, id: itemId, toStatus: nextStatus }),
+                                                                                })
+                                                                                    .then(r => r.json())
+                                                                                    .then(d => {
+                                                                                        if (!d?.ok) throw new Error(d?.error || 'Action failed');
+                                                                                        onUpdateBotMessage(idx, (prev) => {
+                                                                                            // Drop the row from this message if its new status
+                                                                                            // is no longer in the "actionable" range (no next step).
+                                                                                            const updatedItems = (prev.items || []).map(it =>
+                                                                                                String(it._id) === itemId ? d.item : it
+                                                                                            ).filter(it => (prev.nextStatusMap || {})[it.status]);
+                                                                                            return { ...prev, items: updatedItems, advancingId: null };
+                                                                                        });
+                                                                                        // Tell the parent to refresh badge counts on the pills.
+                                                                                        fetch('/api/notifications/accounting')
+                                                                                            .then(r => r.json())
+                                                                                            .then(nd => { if (nd?.ok) setNotifCounts(nd.counts || {}); })
+                                                                                            .catch(() => {});
+                                                                                    })
+                                                                                    .catch(() => {
+                                                                                        onUpdateBotMessage(idx, (prev) => ({ ...prev, advancingId: null }));
+                                                                                    });
+                                                                            }}
+                                                                            disabled={!nextStatus || isAdvancing}
+                                                                            className={`px-3 py-1.5 rounded-md text-[11px] font-semibold text-white transition-all ${
+                                                                                nextStatus ? 'bg-gradient-to-r from-emerald-500 to-green-500 hover:shadow-md' : 'bg-gray-300 cursor-not-allowed'
+                                                                            } ${isAdvancing ? 'opacity-60' : ''}`}
+                                                                        >
+                                                                            {isAdvancing ? '…' : (nextStatus ? `Approve → ${nextStatus}` : 'Done')}
+                                                                        </button>
+                                                                    </div>
+                                                                );
+                                                            })}
                                                         </div>
                                                     )}
                                                     {msg.type === 'social-media' && msg.iconUrl && (
@@ -1957,13 +2078,9 @@ const PhoneFrame = ({
                     </div>
                 </div>
             </div>
-            {pendingModalTopic && botId === 'accounting-bot' && (
-                <PendingItemsModal
-                    topic={pendingModalTopic}
-                    onClose={() => setPendingModalTopic(null)}
-                    onAction={refreshNotifCounts}
-                />
-            )}
+            {/* Modal flow superseded by in-chat agentic cards — keeping
+                pendingModalTopic state slot harmless for now in case any
+                other branch references it. */}
         </div>
     );
 };
@@ -5851,6 +5968,17 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                                             bot={bot}
                                             messages={botState.messages}
                                             onSendMessage={(msg) => handleSendMessage(bot.id, msg)}
+                                            onPostBotMessage={(message) => setBotStates(prev => {
+                                                const bs = prev[bot.id];
+                                                if (!bs) return prev;
+                                                return { ...prev, [bot.id]: { ...bs, messages: [...bs.messages, message] } };
+                                            })}
+                                            onUpdateBotMessage={(messageIdx, updater) => setBotStates(prev => {
+                                                const bs = prev[bot.id];
+                                                if (!bs) return prev;
+                                                const messages = bs.messages.map((m, i) => i === messageIdx ? updater(m) : m);
+                                                return { ...prev, [bot.id]: { ...bs, messages } };
+                                            })}
                                             inputValue={botState.input}
                                             setInputValue={(value) => handleInputChange(bot.id, value)}
                                             isTyping={botState.isTyping}
