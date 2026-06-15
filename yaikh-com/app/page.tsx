@@ -122,7 +122,7 @@ function Nav() {
         <div className="flex items-center gap-3 shrink-0">
           <LangFlags scrolled={scrolled} />
           <a
-            href="/SDTV"
+            href="https://main.yaikh.com/login"
             target="_self"
             className="inline-block text-center px-5 py-2 rounded-full bg-yai-orange text-white hover:bg-yai-orange/90 transition shadow-lg leading-[1.1]"
           >
