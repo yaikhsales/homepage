@@ -1,0 +1,236 @@
+{
+  "updatedAt": "2026-06-15T07:00:00.000Z",
+  "updatedBy": "admin",
+  "months": [
+    "2026-06", "2026-07", "2026-08", "2026-09", "2026-10", "2026-11", "2026-12",
+    "2027-01", "2027-02", "2027-03", "2027-04", "2027-05", "2027-06",
+    "2027-07", "2027-08", "2027-09", "2027-10", "2027-11", "2027-12",
+    "2028-01", "2028-02", "2028-03", "2028-04", "2028-05"
+  ],
+  "streams": [
+    {
+      "id": "cloud-starter",
+      "name": "Cloud Starter",
+      "category": "cloud",
+      "certainty": "planned",
+      "unitPrice": 120,
+      "unitLabel": "$120 / yr",
+      "tierLabel": "5 key members",
+      "detail": "5 key members",
+      "monthly": {
+        "2026-06": { "planned": 120,  "customers": 1 },
+        "2026-07": { "planned": 240,  "customers": 2 },
+        "2026-08": { "planned": 240,  "customers": 2 },
+        "2026-09": { "planned": 120,  "customers": 1 },
+        "2026-10": { "planned": 240,  "customers": 2 },
+        "2026-11": { "planned": 240,  "customers": 2 },
+        "2026-12": { "planned": 240,  "customers": 2 },
+        "2027-01": { "planned": 360,  "customers": 3 },
+        "2027-02": { "planned": 360,  "customers": 3 },
+        "2027-03": { "planned": 600,  "customers": 5 },
+        "2027-04": { "planned": 600,  "customers": 5 },
+        "2027-05": { "planned": 600,  "customers": 5 },
+        "2027-06": { "planned": 600,  "customers": 5 }
+      }
+    },
+    {
+      "id": "cloud-growth",
+      "name": "Cloud Growth",
+      "category": "cloud",
+      "certainty": "planned",
+      "unitPrice": 750,
+      "unitLabel": "$750 / yr",
+      "tierLabel": "5 → 300 users · whole department",
+      "detail": "5 → 300 users · whole department",
+      "monthly": {
+        "2026-07": { "planned": 750,  "customers": 1 },
+        "2026-08": { "planned": 750,  "customers": 1 },
+        "2026-09": { "planned": 750,  "customers": 1 },
+        "2026-10": { "planned": 750,  "customers": 1 },
+        "2026-11": { "planned": 750,  "customers": 1 },
+        "2026-12": { "planned": 750,  "customers": 1 },
+        "2027-01": { "planned": 1500, "customers": 2 },
+        "2027-02": { "planned": 750,  "customers": 1 },
+        "2027-03": { "planned": 1500, "customers": 2 },
+        "2027-04": { "planned": 750,  "customers": 1 },
+        "2027-05": { "planned": 1500, "customers": 2 },
+        "2027-06": { "planned": 750,  "customers": 1 }
+      }
+    },
+    {
+      "id": "cloud-enterprise",
+      "name": "Cloud Enterprise",
+      "category": "cloud",
+      "certainty": "planned",
+      "unitPrice": 1200,
+      "unitLabel": "$1,200 / yr",
+      "tierLabel": "300 → 1,000 users · whole factory",
+      "detail": "300 → 1,000 users · whole factory",
+      "monthly": {
+        "2026-12": { "planned": 1200, "customers": 1 },
+        "2027-01": { "planned": 1200, "customers": 1 },
+        "2027-02": { "planned": 1200, "customers": 1 },
+        "2027-03": { "planned": 1200, "customers": 1 },
+        "2027-04": { "planned": 2400, "customers": 2 },
+        "2027-05": { "planned": 2400, "customers": 2 },
+        "2027-06": { "planned": 2400, "customers": 2 }
+      }
+    },
+    {
+      "id": "ai-server",
+      "name": "Ai Server",
+      "category": "hardware",
+      "certainty": "planned",
+      "unitPrice": 2500,
+      "unitLabel": "$2,500 (one-off)",
+      "tierLabel": "1,000+ users · dedicated server",
+      "detail": "1,000+ users · dedicated server",
+      "monthly": {
+        "2026-12": { "planned": 2500, "customers": 1 },
+        "2027-01": { "planned": 2500, "customers": 1 },
+        "2027-02": { "planned": 2500, "customers": 1 },
+        "2027-03": { "planned": 2500, "customers": 1 },
+        "2027-04": { "planned": 2500, "customers": 1 },
+        "2027-05": { "planned": 2500, "customers": 1 },
+        "2027-06": { "planned": 2500, "customers": 1 }
+      }
+    },
+    {
+      "id": "administrative-tools",
+      "name": "Administrative Tools",
+      "category": "addon",
+      "certainty": "planned",
+      "unitPrice": 5000,
+      "unitLabel": "$5,000 / yr",
+      "tierLabel": "Activated after Ai Server · admin module stack",
+      "detail": "Activated after Ai Server · admin module stack",
+      "monthly": {
+        "2026-12": { "planned": 5000, "customers": 1 },
+        "2027-01": { "planned": 5000, "customers": 1 },
+        "2027-02": { "planned": 5000, "customers": 1 },
+        "2027-03": { "planned": 5000, "customers": 1 },
+        "2027-04": { "planned": 5000, "customers": 1 },
+        "2027-05": { "planned": 5000, "customers": 1 },
+        "2027-06": { "planned": 5000, "customers": 1 }
+      }
+    },
+    {
+      "id": "operation-tools",
+      "name": "Operation Tools",
+      "category": "addon",
+      "certainty": "planned",
+      "unitPrice": 10000,
+      "unitLabel": "$10,000 / yr",
+      "tierLabel": "Activated after Ai Server · ops module stack",
+      "detail": "Activated after Ai Server · ops module stack",
+      "monthly": {
+        "2027-01": { "planned": 10000, "customers": 1 },
+        "2027-03": { "planned": 10000, "customers": 1 },
+        "2027-05": { "planned": 10000, "customers": 1 }
+      }
+    },
+    {
+      "id": "agentic",
+      "name": "Agentic",
+      "category": "addon",
+      "certainty": "planned",
+      "unitPrice": 5000,
+      "unitLabel": "$5,000 / yr",
+      "tierLabel": "After ~6 months · 10 agents + 35 mini",
+      "detail": "After ~6 months · 10 agents + 35 mini",
+      "monthly": {
+        "2027-03": { "planned": 5000, "customers": 1 },
+        "2027-05": { "planned": 5000, "customers": 1 }
+      }
+    },
+    {
+      "id": "big-ai-brain",
+      "name": "Big Ai Brain",
+      "category": "addon",
+      "certainty": "planned",
+      "unitPrice": 5000,
+      "unitLabel": "$5,000 / yr",
+      "tierLabel": "Boss · after ~1 year · 5 factories 1 chat",
+      "detail": "Boss · after ~1 year · 5 factories 1 chat",
+      "monthly": {
+        "2027-03": { "planned": 5000, "customers": 1 },
+        "2027-05": { "planned": 5000, "customers": 1 }
+      }
+    },
+    {
+      "id": "worker-p2p-marketplace",
+      "name": "Worker P2P Marketplace",
+      "category": "ecom",
+      "certainty": "uncertain",
+      "unitPrice": 0,
+      "unitLabel": "Take-rate · variable / user",
+      "tierLabel": "Planned reach: 100,000 garment workers",
+      "detail": "Planned reach: 100,000 garment workers",
+      "monthly": {
+        "2026-06": { "customers": 2000 },
+        "2026-07": { "customers": 3000 },
+        "2026-08": { "customers": 3000 },
+        "2026-09": { "customers": 3000 },
+        "2026-10": { "customers": 2000 },
+        "2026-11": { "customers": 2000 },
+        "2026-12": { "customers": 2000 },
+        "2027-01": { "customers": 4000 },
+        "2027-02": { "customers": 4000 },
+        "2027-03": { "customers": 4000 },
+        "2027-04": { "customers": 4000 },
+        "2027-05": { "customers": 4000 },
+        "2027-06": { "customers": 4000 }
+      }
+    },
+    {
+      "id": "service-provider-marketplace",
+      "name": "Service Provider Marketplace",
+      "category": "ecom",
+      "certainty": "uncertain",
+      "unitPrice": 0,
+      "unitLabel": "Take-rate + listing · variable / provider",
+      "tierLabel": "Planned reach: ~1,000 service providers",
+      "detail": "Planned reach: ~1,000 service providers",
+      "monthly": {
+        "2026-06": { "customers": 5 },
+        "2026-07": { "customers": 5 },
+        "2026-08": { "customers": 5 },
+        "2026-09": { "customers": 5 },
+        "2026-10": { "customers": 5 },
+        "2026-11": { "customers": 5 },
+        "2026-12": { "customers": 5 },
+        "2027-01": { "customers": 5 },
+        "2027-02": { "customers": 5 },
+        "2027-03": { "customers": 5 },
+        "2027-04": { "customers": 5 },
+        "2027-05": { "customers": 5 },
+        "2027-06": { "customers": 5 }
+      }
+    },
+    {
+      "id": "factory-supply-marketplace",
+      "name": "Factory Supply Marketplace",
+      "category": "ecom",
+      "certainty": "uncertain",
+      "unitPrice": 0,
+      "unitLabel": "Wholesale margin · variable / SKU",
+      "tierLabel": "Planned reach: 100 curated SKUs · target $100K GMV / month",
+      "detail": "Planned reach: 100 curated SKUs · target $100K GMV / month",
+      "monthly": {
+        "2026-06": { "customers": 5 },
+        "2026-07": { "customers": 5 },
+        "2026-08": { "customers": 5 },
+        "2026-09": { "customers": 5 },
+        "2026-10": { "customers": 5 },
+        "2026-11": { "customers": 5 },
+        "2026-12": { "customers": 5 },
+        "2027-01": { "customers": 5 },
+        "2027-02": { "customers": 5 },
+        "2027-03": { "customers": 5 },
+        "2027-04": { "customers": 5 },
+        "2027-05": { "customers": 5 },
+        "2027-06": { "customers": 5 }
+      }
+    }
+  ]
+}
