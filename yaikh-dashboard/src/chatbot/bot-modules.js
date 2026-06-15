@@ -1890,6 +1890,17 @@ const PhoneFrame = ({
 const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 'yai1' }) => {
     const [isDropdownOpen, setDropdownOpen] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
+
+    // Auto-open the Yai Agents dropdown ~700ms after mount so new users
+    // see "Agent Collective" + "Big Brain" reveal themselves — no need to
+    // hunt for the click target. Fires once per mount; user can still
+    // close + reopen normally afterwards.
+    useEffect(() => {
+        if (!onVersionChange) return; // no menu to show
+        const t = setTimeout(() => setDropdownOpen(true), 700);
+        return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     const scrollContainerRef = useRef(null);
     const scrollbarTrackRef = useRef(null);
     const scrollbarRef = useRef(null);
@@ -5427,14 +5438,43 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
 
                     {/* Dropdown Menu */}
                     {isDropdownOpen && onVersionChange && (
-                        <div className="absolute top-full mt-2 left-0 w-72 bg-white/90 backdrop-blur-lg border border-white/20 rounded-lg shadow-2xl animate-in fade-in zoom-in-95 duration-200 z-[60] pointer-events-auto">
+                        <div
+                            className="absolute top-full mt-2 left-0 w-72 bg-white/90 backdrop-blur-lg border border-white/20 rounded-lg shadow-2xl z-[60] pointer-events-auto"
+                            style={{
+                                animation: 'yaiDropdownReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) both',
+                                transformOrigin: 'top left',
+                            }}
+                        >
+                            <style>{`
+                                @keyframes yaiDropdownReveal {
+                                    0%   { opacity: 0; transform: translateY(-8px) scale(0.96); }
+                                    100% { opacity: 1; transform: translateY(0)    scale(1);    }
+                                }
+                                @keyframes yaiItemSlideIn {
+                                    0%   { opacity: 0; transform: translateX(-14px); }
+                                    100% { opacity: 1; transform: translateX(0);     }
+                                }
+                                .yai-menu-item { animation: yaiItemSlideIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+                                @keyframes yaiPulseHint {
+                                    0%, 100% { box-shadow: 0 0 0 0 rgba(30, 77, 170, 0); }
+                                    50%      { box-shadow: 0 0 0 6px rgba(30, 77, 170, 0.15); }
+                                }
+                                @keyframes yaiPulseHintGreen {
+                                    0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+                                    50%      { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.15); }
+                                }
+                            `}</style>
                             <ul className="p-2">
                                 <li
                                     onClick={() => {
                                         onVersionChange('yai1');
                                         setDropdownOpen(false);
                                     }}
-                                    className="relative flex items-center justify-between gap-4 px-4 py-3 rounded-md hover:bg-yai-blue/15 cursor-pointer group transition-all border border-transparent hover:border-yai-blue/40"
+                                    style={{
+                                        animationDelay: '0.35s',
+                                        animation: 'yaiItemSlideIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both, yaiPulseHint 2.2s ease-in-out 1.4s 3',
+                                    }}
+                                    className="yai-menu-item relative flex items-center justify-between gap-4 px-4 py-3 rounded-md hover:bg-yai-blue/15 cursor-pointer group transition-all border border-transparent hover:border-yai-blue/40"
                                 >
                                     <div className="flex items-center gap-4">
                                         <img
@@ -5451,7 +5491,10 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                                         onVersionChange('yai2');
                                         setDropdownOpen(false);
                                     }}
-                                    className="relative flex items-center justify-between gap-4 px-4 py-3 rounded-md hover:bg-gray-500/10 cursor-pointer group transition-all border border-transparent hover:border-gray-500/30"
+                                    style={{
+                                        animation: 'yaiItemSlideIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.85s both, yaiPulseHintGreen 2.2s ease-in-out 1.9s 3',
+                                    }}
+                                    className="yai-menu-item relative flex items-center justify-between gap-4 px-4 py-3 rounded-md hover:bg-gray-500/10 cursor-pointer group transition-all border border-transparent hover:border-gray-500/30"
                                 >
                                     <div className="flex items-center gap-4">
                                         <img
