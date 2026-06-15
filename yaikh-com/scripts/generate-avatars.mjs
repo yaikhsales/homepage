@@ -88,22 +88,47 @@ async function extractModules() {
 // represents a HUMAN professional (NOT a robot, NOT a cartoon, NOT a 3D
 // character). Diverse SE-Asian / Khmer faces, deliberately varied.
 
-// 12-slot diversity cycle. Each module gets ONE slot (indexed by position in
-// the module list) so we get a deliberately varied cast rather than the
-// model defaulting to the same 30s smiling person every call.
+// 30-slot diversity cycle for ~39 agents. Every slot is meant to feel like
+// a visibly DIFFERENT person — not just a clothes/hair tweak on the same
+// face. Mixes ethnicity broadly (Khmer, Khmer-Chinese, Khmer-Indian,
+// Khmer-Vietnamese, Khmer-Thai, Khmer-Lao, Khmer-French, Khmer-Japanese,
+// expat South-Asian, expat Filipina), ages 28–62, and distinctive
+// physical anchors (jawline, complexion, hair texture, glasses style,
+// small unique features) so the model produces faces that can't be
+// confused at thumbnail size.
 const DIVERSITY_VARIANTS = [
-  "early-30s Cambodian-Khmer woman, shoulder-length straight black hair, no glasses",
-  "mid-40s Cambodian-Khmer man, side-parted hair greying at the temples, rectangular dark-rimmed glasses",
-  "late-30s Khmer-Chinese woman, neat bob haircut, no glasses, subtle pearl earrings",
-  "early-50s Cambodian-Khmer man, distinguished salt-and-pepper hair, no glasses, slight smile",
-  "early-30s Cambodian-Khmer man, short black hair, clean-shaven, warm friendly smile",
-  "late-40s Cambodian-Khmer woman, long hair tied back in a low bun, no glasses",
-  "mid-30s Khmer-Vietnamese man, modern undercut, neatly trimmed short beard, no glasses",
-  "early-30s Cambodian-Khmer woman, layered shoulder-length hair, square-frame glasses",
-  "mid-50s Cambodian-Khmer woman, elegant short grey hair, no glasses, confident expression",
-  "late-20s Cambodian-Khmer man, very short hair, no facial hair, fresh confident look",
-  "early-40s Cambodian-Khmer woman, long straight hair worn down, subtle makeup",
-  "late-30s Cambodian-Khmer man, neatly cropped hair, light stubble, calm assured expression",
+  // — Women
+  "28-year-old Cambodian-Khmer woman, long straight black hair parted in the middle, almond eyes, no glasses, soft golden complexion, gentle smile, small mole near upper lip",
+  "34-year-old Khmer-Chinese woman, sharp bob haircut to chin length, pale porcelain complexion, no glasses, narrow eyes, faint dimples",
+  "41-year-old Khmer-Indian woman, deeply tanned warm complexion, thick wavy dark hair pulled back in a low ponytail, large expressive dark eyes, gold stud earrings, no glasses",
+  "47-year-old Cambodian-Khmer woman, distinguished short pixie cut already greying at the front, tortoise-shell cat-eye reading glasses, confident slight smile, warm olive skin, faint laugh lines",
+  "31-year-old Khmer-Vietnamese woman, long layered hair below the shoulders, oval face, light freckles across the nose bridge, round wire-frame glasses, fair complexion",
+  "55-year-old Cambodian-Khmer woman, elegant grey-and-white short hair styled in soft waves, no glasses, deep warm complexion, dignified composed look, pearl drop earrings",
+  "29-year-old Filipina-Khmer woman, naturally curly shoulder-length hair, golden-brown skin, full lips, no glasses, bright direct gaze",
+  "38-year-old Khmer-Japanese woman, neat blunt-cut bob just above the shoulders, very fair complexion, monolid eyes, no glasses, restrained calm expression",
+  "44-year-old Cambodian-Khmer woman, long hair worn down with a slight wave, medium brown highlights, light warm complexion, square dark-frame glasses, faint smile lines",
+  "33-year-old Khmer-Thai woman, side-swept asymmetric short hair, sun-kissed honey complexion, no glasses, small nose stud, easy confident smile",
+  "50-year-old Cambodian-Khmer woman, salt-and-pepper hair in a chic short cut, no glasses, warm brown complexion, strong jawline, motherly assured expression",
+  "27-year-old Cambodian-Khmer woman, very long straight hair past the shoulders, fair golden complexion, no glasses, fresh youthful look, small heart-shaped face",
+  "42-year-old Khmer-Indian woman, long dark hair in a single braid pulled forward over one shoulder, rich umber complexion, intelligent calm eyes, no glasses",
+  "36-year-old Khmer-French woman, light brown wavy hair styled in loose curls, hazel-green eyes, fair complexion with light freckles, no glasses, warm half-smile",
+  "60-year-old Cambodian-Khmer woman, fully grey hair in a neat short cut, deep warm brown complexion, kind crinkled eyes, no glasses, grandmotherly authority",
+  // — Men
+  "30-year-old Cambodian-Khmer man, very short cropped hair, clean-shaven, warm light-brown complexion, square jaw, no glasses, direct friendly gaze",
+  "45-year-old Khmer-Chinese man, side-parted hair just starting to grey at the temples, pale complexion, rectangular dark-rimmed glasses, slim build, intellectual look",
+  "39-year-old Khmer-Indian man, full neatly trimmed beard, deep mahogany complexion, thick black hair styled back, no glasses, strong brow, warm assured smile",
+  "52-year-old Cambodian-Khmer man, distinguished salt-and-pepper hair, weathered tan complexion, no glasses, executive confidence, slight smile lines",
+  "28-year-old Khmer-Vietnamese man, modern undercut hairstyle longer on top, light stubble, fair complexion, no glasses, fresh youthful confidence",
+  "48-year-old Cambodian-Khmer man, fully bald with a neatly trimmed dark goatee, deep warm complexion, no glasses, calm grounded presence",
+  "35-year-old Khmer-Thai man, longer wavy black hair styled back, sun-kissed olive complexion, no facial hair, no glasses, easy magnetic smile",
+  "57-year-old Cambodian-Khmer man, fully grey hair worn longer, neat full grey beard, warm tanned complexion, gold-rimmed half-moon glasses, sage-like wise expression",
+  "33-year-old Filipino-Khmer man, short curly black hair, brown complexion, clean-shaven, no glasses, broad shoulders hint, warm open smile",
+  "41-year-old Khmer-Lao man, short neat hair with side part, light olive complexion, light moustache, no glasses, friendly approachable look",
+  "62-year-old Cambodian-Khmer man, fully silver hair, weathered warm complexion, no glasses, deep set eyes with crinkles, statesman gravitas",
+  "29-year-old Cambodian-Khmer man, very tidy short black hair, clean-shaven, fair complexion, no glasses, bright energetic young-professional vibe",
+  "46-year-old Khmer-Japanese man, neat short hair greying lightly at the sides, narrow monolid eyes, pale complexion, no glasses, restrained calm presence",
+  "37-year-old South-Asian expat man (Indian heritage living in Cambodia), thick dark hair styled back, deep brown complexion, full neat beard, dark-rimmed round glasses, articulate look",
+  "54-year-old Cambodian-Khmer man, short greying hair, neat moustache only (no beard), warm tan complexion, no glasses, fatherly authoritative smile",
 ];
 
 const STYLE_BASE =
@@ -309,13 +334,23 @@ async function main() {
       } catch { /* fall through and generate */ }
     }
 
+    // Pull a deterministic but well-distributed slot — `i * 7 % len` walks
+    // the persona table in a stride of 7 so adjacent agents in the module
+    // list never share the same slot, breaking the "all the women in the
+    // Admin column look identical" failure mode.
+    const slot    = (i * 7) % DIVERSITY_VARIANTS.length;
     const persona = PERSONA_OVERRIDES[mod.id]
-      || DIVERSITY_VARIANTS[i % DIVERSITY_VARIANTS.length];
+      || DIVERSITY_VARIANTS[slot];
     const attire  = APPEARANCE_OVERRIDES[mod.id] || DEFAULT_ATTIRE;
+    // Lead the prompt with the PERSON, not the role. The model tends to
+    // anchor on whatever comes first; if "AI agent named X" leads, every
+    // output drifts toward a generic professional. Anchoring on the
+    // specific human description forces visible variation.
     const prompt =
-      `Photorealistic corporate headshot of an AI agent named "${mod.title}". ` +
-      `Their role: ${mod.description} ` +
-      `The person depicted: ${persona}.` +
+      `Photorealistic corporate headshot of a real human being: ${persona}. ` +
+      `This person is depicted as the AI agent "${mod.title}" whose role is: ${mod.description}. ` +
+      `Their face MUST visibly match every detail of the description above — ` +
+      `do NOT default to a generic 30s smiling professional.` +
       attire + STYLE_BASE + themeCfg.suffix;
 
     try {
