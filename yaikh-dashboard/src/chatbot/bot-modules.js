@@ -257,7 +257,10 @@ const PREDEFINED_BOTS = [
 // eslint-disable-next-line no-unused-vars
 const _UNUSED_ICONS = Leaf; // keep Leaf imported for future agents
 
-const GREETING_NAME = 'Mr. Khun';
+// Default greeting target when no auth context is available.
+// Once login lands, pass the logged-in user's name to getDynamicGreeting
+// directly; until then everyone is a "Guest".
+const GREETING_NAME = 'Guest';
 
 /* Dynamic greeting — date-aware (holidays first, then time-of-day) and
  * user-aware (logged-in name, else "Visitor"). When the auth layer
@@ -273,18 +276,21 @@ function getDynamicGreeting(name) {
     const hour = now.getHours();
 
     // ── Holidays (highest priority) ─────────────────────────
+    // Friendly day-greetings only. Never a "How may I help" question —
+    // these are well-wishes, not service prompts. The user picks a topic
+    // pill or types a message when they're ready.
     // Khmer New Year (Apr 13–16) — and lead-up week (Apr 7–12)
     if (m === 4 && d >= 13 && d <= 16) {
         return {
             line1: `🌸 Sok San Khmer New Year, ${who}!`,
-            line2: 'Wishing you health and prosperity. How can I help today?',
+            line2: 'Wishing you health and prosperity.',
             festive: 'khmer-ny',
         };
     }
     if (m === 4 && d >= 7 && d <= 12) {
         return {
             line1: `🌸 Khmer New Year is coming, ${who}!`,
-            line2: 'How can I help you wrap up before the holiday?',
+            line2: 'May your week wind down peacefully.',
             festive: 'khmer-ny',
         };
     }
@@ -292,7 +298,7 @@ function getDynamicGreeting(name) {
     if (m === 1 && d === 1) {
         return {
             line1: `🎉 Happy New Year ${now.getFullYear()}, ${who}!`,
-            line2: "Let's make this year great. How can I help?",
+            line2: 'Wishing you a year full of wins.',
             festive: 'new-year',
         };
     }
@@ -300,7 +306,7 @@ function getDynamicGreeting(name) {
     if ((m === 12 && d >= 24) || (m === 1 && d === 2)) {
         return {
             line1: `🎄 Happy Holidays, ${who}!`,
-            line2: 'How can I help today?',
+            line2: 'Wishing you a warm, restful break.',
             festive: 'holidays',
         };
     }
@@ -308,7 +314,7 @@ function getDynamicGreeting(name) {
     if (m === 9 && d >= 15 && d <= 30) {
         return {
             line1: `🌕 Happy Mid-Autumn, ${who}!`,
-            line2: 'How can I help today?',
+            line2: 'Wishing you a bright, peaceful season.',
             festive: 'mid-autumn',
         };
     }
@@ -323,7 +329,7 @@ function getDynamicGreeting(name) {
 
     return {
         line1: `${timeWord}, ${who}`,
-        line2: 'How may I help you today?',
+        line2: 'Wishing you a productive day.',
         festive: null,
     };
 }
@@ -374,6 +380,25 @@ const PhoneFrame = ({
     const [isListening, setIsListening] = useState(false);
     const [uploadedImage, setUploadedImage] = useState(null);
     const fileInputRef = useRef(null);
+
+    // Accounting PA topic-filter mode. Tapping a starter pill SETS the
+    // active topic instead of firing the pill text as a chat message.
+    // The textarea placeholder updates ("Ask about <topic>"); submitting
+    // a typed message prepends "[Topic: <topic>] " so Gemini scopes its
+    // answer. Notif counts come from /api/notifications/accounting and
+    // render as a small red badge inside each pill when > 0.
+    const [activeTopic, setActiveTopic] = useState(null);
+    const [notifCounts, setNotifCounts] = useState({});
+
+    useEffect(() => {
+        if (botId !== 'accounting-bot') return;
+        let cancelled = false;
+        fetch('/api/notifications/accounting')
+            .then(r => r.json())
+            .then(d => { if (!cancelled && d?.ok) setNotifCounts(d.counts || {}); })
+            .catch(() => { /* silent — badge just doesn't render */ });
+        return () => { cancelled = true; };
+    }, [botId]);
 
     const startListening = () => {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -1138,12 +1163,17 @@ const PhoneFrame = ({
     const handleSend = (e) => {
         e.preventDefault();
         if (!inputValue.trim() && !uploadedImage) return;
-        
+
         let finalMessage = inputValue.trim();
+        // Accounting PA: if a topic filter is active, prepend it so the
+        // backend (and Gemini) know the scope of the question.
+        if (botId === 'accounting-bot' && activeTopic) {
+            finalMessage = `[Topic: ${activeTopic}] ${finalMessage}`;
+        }
         if (uploadedImage) {
             finalMessage += ` [IMAGE_DATA:${uploadedImage}]`;
         }
-        
+
         onSendMessage(finalMessage);
         setInputValue('');
         setUploadedImage(null);
@@ -1438,34 +1468,56 @@ const PhoneFrame = ({
                                         // Regular Suggested Actions or Admin PA Module Actions
                                         suggestedActions.length > 0 && (
                                             <div className="flex flex-col gap-2 mt-8">
-                                                {suggestedActions.map((action, idx) => (
-                                                    <button
-                                                        key={idx}
-                                                        onClick={() => {
-                                                            // Mark action as used immediately for Admin PA modules
-                                                            if (botId === 'admin-bot' && adminPAModule && onMarkActionUsed) {
-                                                                onMarkActionUsed(adminPAModule, action.text);
-                                                            }
-                                                            // Mark action as used immediately for Finance PA modules
-                                                            if (botId === 'finance-bot' && financePAModule && onMarkFinanceActionUsed) {
-                                                                onMarkFinanceActionUsed(financePAModule, action.text);
-                                                            }
-                                                            // Mark action as used immediately for CSR PA modules
-                                                            if (botId === 'csr-bot' && csrPAModule && onMarkCsrActionUsed) {
-                                                                onMarkCsrActionUsed(csrPAModule, action.text);
-                                                            }
-                                                            // Mark action as used immediately for HR PA modules
-                                                            if (botId === 'hr-bot' && hrPAModule && onMarkHrActionUsed) {
-                                                                onMarkHrActionUsed(hrPAModule, action.text);
-                                                            }
-                                                            onSendMessage(action.text);
-                                                        }}
-                                                        className={`text-left px-5 py-3 rounded-full bg-gradient-to-r ${bot.lightAccent || 'from-gray-100 to-gray-200'} border ${bot.borderColor || 'border-gray-200'} text-sm ${bot.textColor || 'text-gray-800'} hover:opacity-80 hover:shadow-md transition flex items-center gap-2 font-medium`}
-                                                    >
-                                                        {action.highlight && <Sparkles size={16} className={`text-${bot.bgGradient.split('-')[1]}-500`} />}
-                                                        {action.text}
-                                                    </button>
-                                                ))}
+                                                {suggestedActions.map((action, idx) => {
+                                                    const isAccountingFilter = botId === 'accounting-bot';
+                                                    const isActiveTopic = isAccountingFilter && activeTopic === action.text;
+                                                    const badgeCount = isAccountingFilter ? (notifCounts[action.text] || 0) : 0;
+                                                    return (
+                                                        <button
+                                                            key={idx}
+                                                            onClick={() => {
+                                                                // Accounting PA: tapping a pill TOGGLES the topic filter
+                                                                // instead of firing the pill text as a chat message.
+                                                                if (isAccountingFilter) {
+                                                                    setActiveTopic(prev => prev === action.text ? null : action.text);
+                                                                    return;
+                                                                }
+                                                                // Mark action as used immediately for Admin PA modules
+                                                                if (botId === 'admin-bot' && adminPAModule && onMarkActionUsed) {
+                                                                    onMarkActionUsed(adminPAModule, action.text);
+                                                                }
+                                                                // Mark action as used immediately for Finance PA modules
+                                                                if (botId === 'finance-bot' && financePAModule && onMarkFinanceActionUsed) {
+                                                                    onMarkFinanceActionUsed(financePAModule, action.text);
+                                                                }
+                                                                // Mark action as used immediately for CSR PA modules
+                                                                if (botId === 'csr-bot' && csrPAModule && onMarkCsrActionUsed) {
+                                                                    onMarkCsrActionUsed(csrPAModule, action.text);
+                                                                }
+                                                                // Mark action as used immediately for HR PA modules
+                                                                if (botId === 'hr-bot' && hrPAModule && onMarkHrActionUsed) {
+                                                                    onMarkHrActionUsed(hrPAModule, action.text);
+                                                                }
+                                                                onSendMessage(action.text);
+                                                            }}
+                                                            className={`text-left px-5 py-3 rounded-full bg-gradient-to-r ${bot.lightAccent || 'from-gray-100 to-gray-200'} border ${bot.borderColor || 'border-gray-200'} text-sm ${bot.textColor || 'text-gray-800'} hover:opacity-80 hover:shadow-md transition flex items-center gap-2 font-medium ${isActiveTopic ? 'ring-2 ring-offset-1 ring-emerald-500 shadow-md' : ''}`}
+                                                        >
+                                                            {action.highlight && <Sparkles size={16} className={`text-${bot.bgGradient.split('-')[1]}-500`} />}
+                                                            <span className="flex-1">{action.text}</span>
+                                                            {badgeCount > 0 && (
+                                                                <span
+                                                                    className="ml-auto inline-flex items-center justify-center min-w-[1.5rem] h-5 px-1.5 rounded-full bg-red-500 text-white text-[11px] font-bold leading-none shadow-sm"
+                                                                    title={`${badgeCount} pending`}
+                                                                >
+                                                                    {badgeCount}
+                                                                </span>
+                                                            )}
+                                                            {isActiveTopic && (
+                                                                <X size={14} className="text-emerald-700/80 ml-1" />
+                                                            )}
+                                                        </button>
+                                                    );
+                                                })}
                                             </div>
                                         )
                                     )}
@@ -1830,7 +1882,11 @@ const PhoneFrame = ({
                                         value={inputValue}
                                         onChange={(e) => setInputValue(e.target.value)}
                                         onKeyDown={handleKeyPress}
-                                        placeholder={`Ask ${bot.name}`}
+                                        placeholder={
+                                            botId === 'accounting-bot' && activeTopic
+                                                ? `Ask about ${activeTopic}`
+                                                : `Ask ${bot.name}`
+                                        }
                                         rows={3}
                                         className={`w-full bg-transparent border-0 outline-none resize-none px-4 pt-3 pb-1 text-base leading-relaxed cursor-text ${bot.textColor || 'text-gray-800'} placeholder:${bot.textColor || 'text-gray-400'}`}
                                         style={{ minHeight: '4.5rem', maxHeight: '22.5rem', overflowY: 'auto' }}
