@@ -389,6 +389,18 @@ const PhoneFrame = ({
     // render as a small red badge inside each pill when > 0.
     const [activeTopic, setActiveTopic] = useState(null);
     const [notifCounts, setNotifCounts] = useState({});
+    // Pending Items modal — opens when user taps a pill that has a
+    // count badge. Lets them act on the records (Approve / Advance) without
+    // typing into chat.
+    const [pendingModalTopic, setPendingModalTopic] = useState(null);
+
+    const refreshNotifCounts = React.useCallback(() => {
+        if (botId !== 'accounting-bot') return;
+        fetch('/api/notifications/accounting')
+            .then(r => r.json())
+            .then(d => { if (d?.ok) setNotifCounts(d.counts || {}); })
+            .catch(() => {});
+    }, [botId]);
 
     useEffect(() => {
         if (botId !== 'accounting-bot') return;
@@ -1477,9 +1489,15 @@ const PhoneFrame = ({
                                                             key={idx}
                                                             onClick={() => {
                                                                 // Accounting PA: tapping a pill TOGGLES the topic filter
-                                                                // instead of firing the pill text as a chat message.
+                                                                // — UNLESS that pill has a pending-items badge, in which
+                                                                // case open the action modal instead so the user can
+                                                                // approve/advance the items without typing.
                                                                 if (isAccountingFilter) {
-                                                                    setActiveTopic(prev => prev === action.text ? null : action.text);
+                                                                    if (badgeCount > 0) {
+                                                                        setPendingModalTopic(action.text);
+                                                                    } else {
+                                                                        setActiveTopic(prev => prev === action.text ? null : action.text);
+                                                                    }
                                                                     return;
                                                                 }
                                                                 // Mark action as used immediately for Admin PA modules
@@ -1937,6 +1955,150 @@ const PhoneFrame = ({
                             </form>
                         </div>
                     </div>
+                </div>
+            </div>
+            {pendingModalTopic && botId === 'accounting-bot' && (
+                <PendingItemsModal
+                    topic={pendingModalTopic}
+                    onClose={() => setPendingModalTopic(null)}
+                    onAction={refreshNotifCounts}
+                />
+            )}
+        </div>
+    );
+};
+
+/* Pending Items modal — opens when the user taps an Accounting PA pill
+ * that has a count badge. Fetches the records contributing to the count,
+ * lets the user Approve/Advance each one inline, refreshes after each
+ * action, and tells the parent to refresh badge counts on close. */
+const PendingItemsModal = ({ topic, onClose, onAction }) => {
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [items, setItems] = useState([]);
+    const [collection, setCollection] = useState(null);
+    const [nextStatusMap, setNextStatusMap] = useState({});
+    const [advancingId, setAdvancingId] = useState(null);
+
+    const fetchItems = React.useCallback(() => {
+        setLoading(true);
+        setError(null);
+        fetch(`/api/notifications/accounting/items?topic=${encodeURIComponent(topic)}`)
+            .then(r => r.json())
+            .then(d => {
+                if (!d?.ok) throw new Error(d?.error || 'Failed to load');
+                setItems(d.items || []);
+                setCollection(d.collection);
+                setNextStatusMap(d.nextStatusMap || {});
+            })
+            .catch(err => setError(err.message || String(err)))
+            .finally(() => setLoading(false));
+    }, [topic]);
+
+    useEffect(() => { fetchItems(); }, [fetchItems]);
+
+    const advance = (item) => {
+        const toStatus = nextStatusMap[item.status];
+        if (!toStatus || !collection) return;
+        setAdvancingId(String(item._id));
+        fetch('/api/notifications/accounting/action', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ collection, id: String(item._id), toStatus }),
+        })
+            .then(r => r.json())
+            .then(d => {
+                if (!d?.ok) throw new Error(d?.error || 'Action failed');
+                // Replace the row in place with the updated doc
+                setItems(prev => prev.map(it =>
+                    String(it._id) === String(item._id) ? d.item : it
+                ).filter(it => {
+                    // If the new status is now a "done" terminal for this topic,
+                    // drop the row from the list so the modal reflects reality.
+                    const stillActionable = !!nextStatusMap[it.status];
+                    return stillActionable;
+                }));
+                if (onAction) onAction();
+            })
+            .catch(err => setError(err.message || String(err)))
+            .finally(() => setAdvancingId(null));
+    };
+
+    return (
+        <div
+            className="fixed inset-0 z-[200] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
+            onClick={() => { if (onAction) onAction(); onClose(); }}
+        >
+            <div
+                className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[85vh] overflow-hidden flex flex-col"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between sticky top-0 bg-white">
+                    <div>
+                        <h3 className="text-lg font-bold text-gray-800">{topic}</h3>
+                        <p className="text-xs text-gray-500 mt-0.5">
+                            {loading ? 'Loading…' : `${items.length} item${items.length === 1 ? '' : 's'} awaiting action`}
+                        </p>
+                    </div>
+                    <button onClick={() => { if (onAction) onAction(); onClose(); }} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                        <X size={20} className="text-gray-500" />
+                    </button>
+                </div>
+
+                <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                    {error && (
+                        <div className="px-3 py-2 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+                            {error}
+                        </div>
+                    )}
+                    {!loading && !error && items.length === 0 && (
+                        <div className="text-center py-10 text-sm text-gray-500">
+                            🎉 Nothing pending in this topic. You're all caught up.
+                        </div>
+                    )}
+                    {items.map((it) => {
+                        const nextStatus = nextStatusMap[it.status];
+                        const id = String(it._id);
+                        const isAdvancing = advancingId === id;
+                        // Pretty-print a 1-line summary from common fields
+                        const headline = it.no || it.title || id.slice(-6);
+                        const subline = [
+                            it.claimant || it.vendor || it.requester?.name || it.period,
+                            it.dept || it.category || it.cycle,
+                            it.description || it.note,
+                        ].filter(Boolean).join(' · ');
+                        const amount = it.amount ?? it.net ?? it.totalAmount;
+                        return (
+                            <div key={id} className="bg-gray-50 border border-gray-200 rounded-xl p-4 flex items-start gap-3">
+                                <div className="flex-1 min-w-0">
+                                    <div className="flex items-center gap-2 mb-1">
+                                        <span className="font-mono text-xs text-gray-700">{headline}</span>
+                                        <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 ring-1 ring-amber-200">{it.status}</span>
+                                        {typeof amount === 'number' && (
+                                            <span className="ml-auto text-sm font-semibold text-gray-900">${amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                                        )}
+                                    </div>
+                                    {subline && (
+                                        <div className="text-xs text-gray-600 truncate">{subline}</div>
+                                    )}
+                                </div>
+                                <button
+                                    onClick={() => advance(it)}
+                                    disabled={!nextStatus || isAdvancing}
+                                    className={`flex-shrink-0 px-3 py-2 rounded-lg text-xs font-semibold text-white transition-all ${
+                                        nextStatus ? 'bg-gradient-to-r from-emerald-500 to-green-500 hover:shadow-md' : 'bg-gray-300 cursor-not-allowed'
+                                    } ${isAdvancing ? 'opacity-60' : ''}`}
+                                    title={nextStatus ? `Advance to ${nextStatus}` : 'No next step'}
+                                >
+                                    {isAdvancing ? '…' : (nextStatus ? `Approve → ${nextStatus}` : 'Done')}
+                                </button>
+                            </div>
+                        );
+                    })}
+                </div>
+                <div className="px-5 py-3 bg-gray-50 border-t border-gray-100 text-xs text-gray-500 flex justify-between">
+                    <span>Tap × or outside to close. Actions persist to Mongo immediately.</span>
+                    <button onClick={fetchItems} className="text-blue-600 hover:text-blue-700 font-medium">Refresh</button>
                 </div>
             </div>
         </div>
