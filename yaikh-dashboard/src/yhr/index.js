@@ -1,27 +1,48 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, MessageCircle, Video, FileText } from "lucide-react";
+import {
+  ArrowLeft,
+  MessageCircle,
+  Video,
+  FileText,
+  UserPlus,
+  MessageSquare,
+  ClipboardCheck,
+  Gift,
+  Calculator,
+  Database,
+  Stamp,
+  ShieldCheck,
+  CalendarCheck,
+  Banknote,
+  TrendingUp,
+  Receipt,
+  LogOut,
+  Utensils,
+} from "lucide-react";
 import GeneralAIAgent from "../general-ag";
 import VideoViewer from "../components/VideoViewer";
 import DocumentViewer from "../components/DocumentViewer";
 import { useTranslation } from "../translate/TranslationContext";
 
-// Mapping function to match module titles to sub-icon image filenames
-const getYHRIconImage = (title) => {
-  const titleToImageMap = {
-    Recruitment: "recruitment.png",
-    Interview: "arrange-interview.jpg",
-    Onboarding: "onboarding.png",
-    Attendant: "attendant.png",
-    "Benefit Profile": "benefit-profile.png",
-    Payroll: "payroll.png",
-    NSSF: "NSSF.webp",
-    "Visa and Work Permit": "visa-work-permit.png",
-    FWCMS: "FWCMS.png",
-    Canteen: "food-canteen.png",
-  };
+const YHR_ICONS = {
+  Recruitment: UserPlus,
+  Interview: MessageSquare,
+  Onboarding: ClipboardCheck,
+  "Benefit Profile": Gift,
+  Payroll: Calculator,
+  FWCMS: Database,
+  "Visa and Work Permit": Stamp,
+  NSSF: ShieldCheck,
+  Canteen: Utensils,
+};
 
-  return titleToImageMap[title] || null;
+const SALARY_BILL_ICONS = {
+  Attendant: CalendarCheck,
+  "Monthly Salary": Banknote,
+  Incentive: TrendingUp,
+  "Permit Fee": Receipt,
+  "Resign Payment": LogOut,
 };
 
 const YHR = ({ onBack }) => {
@@ -73,13 +94,11 @@ const YHR = ({ onBack }) => {
       title: "Recruitment",
       color: "bg-gradient-to-br from-blue-500 to-blue-600",
       shadow: "shadow-blue-200",
-      hasWhiteBg: true,
     },
     {
       title: "Interview",
       color: "bg-gradient-to-br from-green-500 to-green-600",
       shadow: "shadow-green-200",
-      hasWhiteBg: true,
     },
     {
       title: "Onboarding",
@@ -102,7 +121,6 @@ const YHR = ({ onBack }) => {
       color: "bg-gradient-to-br from-pink-500 to-pink-600",
       shadow: "shadow-pink-200",
       hasSubMenu: true,
-      hasWhiteBg: true,
     },
     {
       title: "Visa and Work Permit",
@@ -113,7 +131,6 @@ const YHR = ({ onBack }) => {
       title: "NSSF",
       color: "bg-gradient-to-br from-teal-500 to-teal-600",
       shadow: "shadow-teal-200",
-      hasWhiteBg: true,
     },
   ];
 
@@ -145,17 +162,6 @@ const YHR = ({ onBack }) => {
       shadow: "shadow-orange-200",
     },
   ];
-
-  const getSalaryBillIconImage = (title) => {
-    const titleToImageMap = {
-      Attendant: "attendant.png",
-      "Monthly Salary": "monthly-salary.png",
-      Incentive: "weekly-incentive.png",
-      "Permit Fee": "permit-fee.png",
-      "Resign Payment": "resign-payment.png",
-    };
-    return titleToImageMap[title] || null;
-  };
 
   const handleSalaryBillClick = (module) => {
     if (module.hasSubMenu && module.title === "Attendant") {
@@ -250,7 +256,7 @@ const YHR = ({ onBack }) => {
                 </h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-6 auto-rows-fr">
                   {yhrModules.map((module, idx) => {
-                    const iconImage = getYHRIconImage(module.title);
+                    const Icon = YHR_ICONS[module.title];
                     return (
                       <button
                         key={idx}
@@ -323,19 +329,14 @@ const YHR = ({ onBack }) => {
                         <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
                         {/* Icon Container */}
-                        <div
-                          className={`relative z-10 flex items-center justify-center w-20 h-20 mb-2 ${module.hasWhiteBg ? "bg-white rounded-lg p-2 shadow-lg" : ""}`}
-                        >
-                          {iconImage ? (
-                            <img
-                              src={`/assets/icons/sub-icons/${iconImage}`}
-                              alt={module.title}
-                              className={`w-full h-full object-contain ${module.hasWhiteBg ? "" : "drop-shadow-2xl"}`}
+                        <div className="relative z-10 flex items-center justify-center w-20 h-20 mb-2 bg-white/15 rounded-2xl backdrop-blur-sm ring-1 ring-white/25 shadow-inner">
+                          {Icon ? (
+                            <Icon
+                              className="w-11 h-11 text-white drop-shadow-lg"
+                              strokeWidth={1.75}
                             />
                           ) : (
-                            <div className="w-full h-full bg-white/20 rounded-lg flex items-center justify-center">
-                              <div className="w-12 h-12 bg-white/30 rounded"></div>
-                            </div>
+                            <div className="w-11 h-11 bg-white/30 rounded" />
                           )}
                         </div>
 
@@ -359,7 +360,7 @@ const YHR = ({ onBack }) => {
                 </h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-6 auto-rows-fr">
                   {salaryBillModules.map((module, idx) => {
-                    const iconImage = getSalaryBillIconImage(module.title);
+                    const Icon = SALARY_BILL_ICONS[module.title];
                     return (
                       <button
                         key={idx}
@@ -392,17 +393,14 @@ const YHR = ({ onBack }) => {
                         <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
                         {/* Icon Container */}
-                        <div className="relative z-10 flex items-center justify-center w-20 h-20 mb-2">
-                          {iconImage ? (
-                            <img
-                              src={`/assets/icons/sub-icons/${iconImage}`}
-                              alt={module.title}
-                              className="w-full h-full object-contain drop-shadow-2xl"
+                        <div className="relative z-10 flex items-center justify-center w-20 h-20 mb-2 bg-white/15 rounded-2xl backdrop-blur-sm ring-1 ring-white/25 shadow-inner">
+                          {Icon ? (
+                            <Icon
+                              className="w-11 h-11 text-white drop-shadow-lg"
+                              strokeWidth={1.75}
                             />
                           ) : (
-                            <div className="w-full h-full bg-white/20 rounded-lg flex items-center justify-center">
-                              <div className="w-12 h-12 bg-white/30 rounded"></div>
-                            </div>
+                            <div className="w-11 h-11 bg-white/30 rounded" />
                           )}
                         </div>
 
