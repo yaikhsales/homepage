@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Search,
@@ -34,7 +34,7 @@ const VisaWorkPermit = ({ onBack }) => {
 
   const tabs = [{ id: "all", label: "Visa & Permit Records", count: 6 }];
 
-  const records = [
+  const [records, setRecords] = useState([
     {
       id: 1,
       name: "Zhang Li",
@@ -107,7 +107,61 @@ const VisaWorkPermit = ({ onBack }) => {
       expiry: "Jan 15, 2027",
       photo: "/assets/Yaikh-Uploads/H01_00004198_20251215163335.jpeg",
     },
-  ];
+  ]);
+
+  /* Visa & Work Permit: one row per foreign worker showing their active visa+permit. */
+  const joinVisasWPsAndEmployees = useCallback((visas, wps, emps) => {
+    const empByNo = new Map(emps.map((e) => [e.no, e]));
+    const visaByEmp = new Map();
+    const wpByEmp = new Map();
+    visas.filter((v) => v.status === "active").forEach((v) => visaByEmp.set(v.employee_no, v));
+    wps.filter((w) => w.status === "active").forEach((w) => wpByEmp.set(w.employee_no, w));
+    const empNos = new Set([...visaByEmp.keys(), ...wpByEmp.keys()]);
+    return Array.from(empNos).map((empNo, idx) => {
+      const e = empByNo.get(empNo) || {};
+      const v = visaByEmp.get(empNo);
+      const w = wpByEmp.get(empNo);
+      return {
+        id: empNo || idx + 1,
+        no: empNo,
+        name: e.name_en || e.name_kh || "—",
+        gender: e.sex === "M" ? "MALE" : e.sex === "F" ? "FEMALE" : "—",
+        age: e.dob ? new Date().getFullYear() - parseInt(String(e.dob).slice(0, 4), 10) : "",
+        nationality: e.nationality || "—",
+        department: e.section || e.line || "—",
+        position: e.skill_grade || "—",
+        visaType: v?.visa_type || "—",
+        status: v?.status?.toUpperCase() || "—",
+        expiry: v?.expires_at || w?.expires_at || "—",
+        permitNo: w?.permit_no || "—",
+        permitExpiry: w?.expires_at || "—",
+        photo: "/assets/icons/sub-icons/visa-work-permit.png",
+        _mongo: { employee: e, visa: v, work_permit: w },
+      };
+    });
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    Promise.all([
+      fetch("/api/visas").then((r) => r.json()),
+      fetch("/api/work-permits").then((r) => r.json()),
+      fetch("/api/workforce-master").then((r) => r.json()),
+    ])
+      .then(([visaRes, wpRes, empRes]) => {
+        if (cancelled) return;
+        if (visaRes?.ok && wpRes?.ok && empRes?.ok) {
+          const joined = joinVisasWPsAndEmployees(
+            visaRes.items || [],
+            wpRes.items || [],
+            empRes.items || []
+          );
+          if (joined.length > 0) setRecords(joined);
+        }
+      })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, [joinVisasWPsAndEmployees]);
 
   const handleBack = () => {
     if (onBack) onBack();

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Search,
@@ -305,6 +305,52 @@ const Recruitment = ({ onBack }) => {
     //   photo: "/assets/about-us/teams/chhorng.jpg",
     // },
   ]);
+
+  /* Map a /api/candidates doc to the UI row shape used above.
+   * Falls back gracefully when the doc lacks the dashboard-specific extras. */
+  const mapDocToApplicant = useCallback((doc, idx) => {
+    const sub = doc.submitted_at ? new Date(doc.submitted_at) : new Date(doc.createdAt || Date.now());
+    const fmtDate = sub.toLocaleDateString("en-US", { month: "short", day: "2-digit", year: "numeric" });
+    const fmtTime = sub.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: true });
+    const dobYear = doc.dob ? parseInt(String(doc.dob).slice(0, 4), 10) : null;
+    const age = dobYear ? new Date().getFullYear() - dobYear : null;
+    return {
+      id: doc.no || doc._id || idx + 1,
+      no: doc.no,
+      name: doc.name_en || doc.name_kh || "—",
+      gender: doc.sex === "M" ? "MALE" : doc.sex === "F" ? "FEMALE" : "—",
+      age: age ?? "",
+      phone: doc.phone || "—",
+      department: doc.dept || "—",
+      position: doc.position || "—",
+      status: doc.status_phase || "PHASE 1: REVIEW",
+      subStatus: doc.status_sub || (doc.stage ? doc.stage.toUpperCase() : "NEW APPLICANT"),
+      type: doc.applicant_type || "Staff",
+      date: fmtDate,
+      time: fmtTime,
+      photo: doc.photo_url || teamPhotos[idx % teamPhotos.length],
+      _mongo: doc,
+    };
+  }, []);
+
+  /* Fetch live candidates from Mongo on mount. If the API is unreachable or
+   * empty, the fallback `applicantsList` initial state stays visible. */
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/candidates")
+      .then((r) => r.json())
+      .then((j) => {
+        if (!cancelled && j?.ok && Array.isArray(j.items) && j.items.length > 0) {
+          setApplicantsList(j.items.map(mapDocToApplicant));
+        }
+      })
+      .catch(() => {
+        /* offline / API down — keep fallback list */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [mapDocToApplicant]);
 
   const handleBack = () => {
     if (onBack) onBack();

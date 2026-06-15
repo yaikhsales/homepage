@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Search,
@@ -35,7 +35,7 @@ const NSSF = ({ onBack }) => {
 
   const tabs = [{ id: "all", label: "NSSF Records", count: 7 }];
 
-  const records = [
+  const [records, setRecords] = useState([
     {
       id: 1,
       name: "Dot Sreynoch",
@@ -127,7 +127,41 @@ const NSSF = ({ onBack }) => {
       lastContribution: "Jan 2026",
       photo: "/assets/Yaikh-Uploads/H01_00004199_20260110100611.jpeg",
     },
-  ];
+  ]);
+
+  /* NSSF: show every active worker with their NSSF status and current month's contribution. */
+  const mapEmpToNSSF = useCallback((e, idx, latestPeriod) => ({
+    id: e.no || idx + 1,
+    no: e.no,
+    name: e.name_en || e.name_kh || "—",
+    gender: e.sex === "M" ? "MALE" : e.sex === "F" ? "FEMALE" : "—",
+    age: e.dob ? new Date().getFullYear() - parseInt(String(e.dob).slice(0, 4), 10) : "",
+    nssfNumber: e.nssf_no || "—",
+    department: e.section || e.line || "—",
+    position: e.skill_grade || "—",
+    status: e.nssf_no ? "ACTIVE" : "PENDING",
+    type: e.nationality === "KH" ? "Worker" : "Staff",
+    lastContribution: latestPeriod || "—",
+    photo: "/assets/icons/sub-icons/NSSF.webp",
+    _mongo: e,
+  }), []);
+
+  useEffect(() => {
+    let cancelled = false;
+    Promise.all([
+      fetch("/api/workforce-master?status=active").then((r) => r.json()),
+      fetch("/api/nssf-contributions").then((r) => r.json()),
+    ])
+      .then(([empRes, nssfRes]) => {
+        if (cancelled) return;
+        if (empRes?.ok && Array.isArray(empRes.items) && empRes.items.length > 0) {
+          const latest = (nssfRes?.items || [])[0]?.period || null;
+          setRecords(empRes.items.map((e, i) => mapEmpToNSSF(e, i, latest)));
+        }
+      })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, [mapEmpToNSSF]);
 
   const handleBack = () => {
     if (onBack) onBack();

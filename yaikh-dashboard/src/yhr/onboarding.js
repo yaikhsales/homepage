@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Search,
@@ -51,7 +51,7 @@ const Onboarding = ({ onBack }) => {
 
   const tabs = [{ id: "onboarding", label: "Onboarding", count: 2 }];
 
-  const applicants = [
+  const [applicants, setApplicants] = useState([
     {
       id: 1,
       name: "Dot Sreynoch",
@@ -202,7 +202,44 @@ const Onboarding = ({ onBack }) => {
     //   time: "10:00 AM",
     //   photo: "/assets/about-us/teams/Ton-Noeun.jpeg",
     // },
-  ];
+  ]);
+
+  /* Onboarding shows hired candidates + their onboarding checklist progress.
+   * Fetch hired candidates from Mongo and map into the UI shape. */
+  const mapHiredDoc = useCallback((doc, idx) => {
+    const sub = doc.submitted_at ? new Date(doc.submitted_at) : new Date(doc.createdAt || Date.now());
+    const dobYear = doc.dob ? parseInt(String(doc.dob).slice(0, 4), 10) : null;
+    return {
+      id: doc.no || idx + 1,
+      no: doc.no,
+      name: doc.name_en || doc.name_kh || "—",
+      gender: doc.sex === "M" ? "MALE" : doc.sex === "F" ? "FEMALE" : "—",
+      age: dobYear ? new Date().getFullYear() - dobYear : "",
+      phone: doc.phone || "—",
+      department: doc.dept || "—",
+      position: doc.position || "—",
+      status: doc.status_phase || "PHASE 3: ONBOARDING",
+      subStatus: doc.status_sub || "DRAFT CONTRACT",
+      type: doc.applicant_type || "Staff",
+      date: sub.toLocaleDateString("en-US", { month: "short", day: "2-digit", year: "numeric" }),
+      time: sub.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: true }),
+      photo: doc.photo_url || "/assets/icons/sub-icons/onboarding.png",
+      _mongo: doc,
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/candidates?stage=hired")
+      .then((r) => r.json())
+      .then((j) => {
+        if (!cancelled && j?.ok && Array.isArray(j.items) && j.items.length > 0) {
+          setApplicants(j.items.map(mapHiredDoc));
+        }
+      })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, [mapHiredDoc]);
 
   const handleBack = () => {
     if (onBack) onBack();

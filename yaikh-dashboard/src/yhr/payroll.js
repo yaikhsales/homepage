@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Search,
@@ -34,7 +34,7 @@ const Payroll = ({ onBack }) => {
 
   const tabs = [{ id: "all", label: "Payroll Records", count: 8 }];
 
-  const records = [
+  const [records, setRecords] = useState([
     {
       id: 1,
       name: "Dot Sreynoch",
@@ -147,7 +147,63 @@ const Payroll = ({ onBack }) => {
       date: "Feb 05, 2026",
       photo: "/assets/Yaikh-Uploads/H01_00004202_20260110100639.jpeg",
     },
-  ];
+  ]);
+
+  /* Payroll page = per-employee monthly view. Join workforce_master with
+   * benefit_profiles to derive each worker's gross monthly pay. */
+  const joinEmpAndBenefits = useCallback((employees, benefits) => {
+    const benefitByEmp = new Map();
+    benefits.forEach((b) => {
+      const prev = benefitByEmp.get(b.employee_no);
+      if (!prev || (b.effective_from || "") > (prev.effective_from || "")) {
+        benefitByEmp.set(b.employee_no, b);
+      }
+    });
+    return employees
+      .filter((e) => e.status === "active")
+      .map((e, idx) => {
+        const b = benefitByEmp.get(e.no) || {};
+        const gross =
+          (b.base_salary_usd || 0) +
+          (b.attendance_bonus_usd || 0) +
+          (b.seniority_usd || 0) +
+          (b.transport_usd || 0) +
+          (b.meal_usd || 0) +
+          (b.rice_allowance_usd || 0);
+        return {
+          id: e.no || idx + 1,
+          no: e.no,
+          name: e.name_en || e.name_kh || "—",
+          gender: e.sex === "M" ? "MALE" : e.sex === "F" ? "FEMALE" : "—",
+          age: e.dob ? new Date().getFullYear() - parseInt(String(e.dob).slice(0, 4), 10) : "",
+          phone: "—",
+          department: e.section || e.line || "—",
+          position: e.skill_grade || "—",
+          status: "PAID",
+          salary: `$${gross.toFixed(2)}`,
+          type: e.nationality === "KH" ? "Worker" : "Staff",
+          date: e.hire_date || "—",
+          photo: "/assets/icons/sub-icons/payroll.png",
+          _mongo: { employee: e, benefit: b },
+        };
+      });
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    Promise.all([
+      fetch("/api/workforce-master?status=active").then((r) => r.json()),
+      fetch("/api/benefit-profiles").then((r) => r.json()),
+    ])
+      .then(([empRes, bpRes]) => {
+        if (cancelled) return;
+        if (empRes?.ok && bpRes?.ok && Array.isArray(empRes.items) && empRes.items.length > 0) {
+          setRecords(joinEmpAndBenefits(empRes.items, bpRes.items || []));
+        }
+      })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, [joinEmpAndBenefits]);
 
   const handleBack = () => {
     if (onBack) onBack();

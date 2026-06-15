@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Search,
@@ -50,7 +50,7 @@ const Interview = ({ onBack }) => {
 
   const tabs = [{ id: "interviews", label: "Interviews", count: 2 }];
 
-  const applicants = [
+  const [applicants, setApplicants] = useState([
     {
       id: 1,
       name: "Dot Sreynoch",
@@ -201,7 +201,45 @@ const Interview = ({ onBack }) => {
       time: "04:30 PM",
       photo: "/assets/Yaikh-Uploads/H01_00004216_20260114093811.jpeg",
     },
-  ];
+  ]);
+
+  /* Map /api/candidates docs (filtered to stage=interview) into UI shape. */
+  const mapCandidateDoc = useCallback((doc, idx) => {
+    const sub = doc.submitted_at ? new Date(doc.submitted_at) : new Date(doc.createdAt || Date.now());
+    const fmtDate = sub.toLocaleDateString("en-US", { month: "short", day: "2-digit", year: "numeric" });
+    const fmtTime = sub.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: true });
+    const dobYear = doc.dob ? parseInt(String(doc.dob).slice(0, 4), 10) : null;
+    return {
+      id: doc.no || idx + 1,
+      no: doc.no,
+      name: doc.name_en || doc.name_kh || "—",
+      gender: doc.sex === "M" ? "MALE" : doc.sex === "F" ? "FEMALE" : "—",
+      age: dobYear ? new Date().getFullYear() - dobYear : "",
+      phone: doc.phone || "—",
+      department: doc.dept || "—",
+      position: doc.position || "—",
+      status: doc.status_phase || "PHASE 2: INTERVIEW",
+      subStatus: doc.status_sub || "SCHEDULED",
+      type: doc.applicant_type || "Staff",
+      date: fmtDate,
+      time: fmtTime,
+      photo: doc.photo_url || "/assets/icons/sub-icons/arrange-interview.jpg",
+      _mongo: doc,
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/candidates?stage=interview")
+      .then((r) => r.json())
+      .then((j) => {
+        if (!cancelled && j?.ok && Array.isArray(j.items) && j.items.length > 0) {
+          setApplicants(j.items.map(mapCandidateDoc));
+        }
+      })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, [mapCandidateDoc]);
 
   const handleBack = () => {
     if (onBack) onBack();
