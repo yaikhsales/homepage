@@ -98,8 +98,7 @@ function Nav() {
                   {/* Transparent submenu — inherits the nav's text colour,
                       only the word Portal shows. */}
                   <a
-                    href="https://main.yaikh.com/login"
-            target="_self"
+                    href="SDTV"
                     role="menuitem"
                     onClick={() => setPartnersOpen(false)}
                     className="block text-[13px] font-semibold hover:text-yai-orange transition whitespace-nowrap"
@@ -3001,13 +3000,7 @@ function Footer() {
         </FooterCol>
         <FooterCol title="Company">
           <FooterLink href="mailto:gamini@yaikh.com">Contact</FooterLink>
-          <a 
-  href="https://main.yaikh.com/login" 
-  target="_self"
-  className="block text-[13px] text-white/60 hover:text-yai-orange transition"
->
-  Strategic DTV portal
-</a>
+          <FooterLink href="/SDTV">Strategic DTV portal</FooterLink>
         </FooterCol>
       </div>
       <div className="border-t border-white/10">
