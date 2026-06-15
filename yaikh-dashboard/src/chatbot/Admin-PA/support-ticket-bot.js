@@ -1,7 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { X, Send, Plus, Menu, Trash2, Sparkles } from 'lucide-react';
 
-const API_ENDPOINT = 'https://dev.yaikh.com/api/ai-agent';
+const YAIKH_COM_BASE =
+    process.env.REACT_APP_YAIKH_COM ||
+    (typeof window !== 'undefined' && window.location.hostname === 'localhost'
+        ? 'http://localhost:3001'
+        : '');
+const API_ENDPOINT = `${YAIKH_COM_BASE}/api/ai-chat/admin`;
 const MODULE_NAME = 'support_ticket';
 
 const SupportTicketBot = ({ onClose }) => {
@@ -48,8 +53,9 @@ const SupportTicketBot = ({ onClose }) => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
-    // API call function
-    const callAPI = async (message) => {
+    // API call — talks to yaikh-com's /api/ai-chat/admin (Vertex AI Gemini,
+    // server-side, reads support_tickets from Mongo for grounding).
+    const callAPI = async (message, history) => {
         try {
             const response = await fetch(API_ENDPOINT, {
                 method: 'POST',
@@ -57,19 +63,20 @@ const SupportTicketBot = ({ onClose }) => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    message: message,
-                    module: MODULE_NAME
-                })
+                    message,
+                    history: (history || [])
+                        .filter((m) => m && m.text)
+                        .map((m) => ({ role: m.from === 'user' ? 'user' : 'model', text: m.text })),
+                }),
             });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
             const data = await response.json();
-            return data.response || data.message || 'I received your request, but the response format was unexpected.';
+            if (!response.ok || data.ok === false) {
+                throw new Error(data.error || `HTTP ${response.status}`);
+            }
+            return data.reply || data.text || data.message || 'No reply text returned.';
         } catch (error) {
-            console.error('API Error:', error);
+            console.error('Admin PA API error:', error);
             return `Sorry, I encountered an error: ${error.message}. Please try again later.`;
         }
     };
@@ -156,7 +163,7 @@ const SupportTicketBot = ({ onClose }) => {
 
         // Call API
         try {
-            const botResponse = await callAPI(userMessage);
+            const botResponse = await callAPI(userMessage, messages);
             const botMsg = { from: 'bot', text: botResponse };
             const finalMessages = [...updatedMessages, botMsg];
             setMessages(finalMessages);
