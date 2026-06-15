@@ -78,7 +78,7 @@ export default function RootLayout({
       "Ai-Native Manufacturing Intelligence Platform — modernises factories from paper-based operations into agentic Ai. Built on Claude (Anthropic) and Google Cloud, by a 20-engineer Cambodian team.",
     foundingLocation: { "@type": "Place", name: "Phnom Penh, Cambodia" },
     areaServed: { "@type": "Place", name: "ASEAN" },
-    sameAs: ["https://www.yaikh.com/plan-login"],
+    sameAs: ["https://www.yaikh.com/SDTV"],
     knowsAbout: [
       "Manufacturing Intelligence",
       "Agentic Ai",

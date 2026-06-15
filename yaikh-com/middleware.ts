@@ -5,14 +5,14 @@ import type { NextRequest } from "next/server";
 // signature verification happens in the page server component (Node
 // runtime, lib/auth.ts).
 //
-// Unauthenticated visitors to /plan/* are bounced to /plan-login (NOT to
-// /, which is the public yaikh.com marketing homepage and would silently
-// erase the visitor's intent).
+// Unauthenticated visitors to /plan/* are bounced to /SDTV (the Strategic
+// DTV access-code page), NOT to /, which is the public yaikh.com marketing
+// homepage and would silently erase the visitor's intent.
 export function middleware(req: NextRequest) {
   const session = req.cookies.get("yai_session");
   if (!session?.value) {
     const url = req.nextUrl.clone();
-    url.pathname = "/plan-login";
+    url.pathname = "/SDTV";
     url.searchParams.set("redirected", "1");
     return NextResponse.redirect(url);
   }
