@@ -224,33 +224,43 @@ export const SEED_SALES_STORE: SalesStore = {
   ],
 };
 
+import { readAdminDoc, writeAdminDoc } from "@/lib/admin-mongo";
+
+const SECTION = "sales-income";
+
+/** Merge a stored SalesStore against the in-code SEED.
+ * SEED metadata (price, labels, detail) flows through as source of truth;
+ * the user's saved monthly cells are preserved per stream id.
+ */
+function mergeWithSeed(parsed: SalesStore): SalesStore {
+  const saved = parsed.streams ?? [];
+  const savedById = new Map(saved.map((s) => [s.id, s]));
+  const merged = SEED_SALES_STORE.streams.map((seed) => {
+    const prev = savedById.get(seed.id);
+    return { ...seed, monthly: prev?.monthly ?? seed.monthly };
+  });
+  const seedIds = new Set(SEED_SALES_STORE.streams.map((s) => s.id));
+  const extra = saved.filter((s) => !seedIds.has(s.id));
+  return {
+    updatedAt: parsed.updatedAt ?? null,
+    updatedBy: parsed.updatedBy ?? null,
+    months: buildMonths(parsed.months),
+    streams: [...merged, ...extra],
+  };
+}
+
 export async function readSalesStore(): Promise<SalesStore> {
+  // Primary: Mongo (survives Railway redeploys)
+  const fromMongo = await readAdminDoc<SalesStore>(SECTION);
+  if (fromMongo) return mergeWithSeed(fromMongo);
+
+  // Fallback: data/sales-income.json on disk (committed to git as the seeded baseline)
   try {
     const text = await fs.readFile(FILE, "utf-8");
     const parsed = JSON.parse(text) as SalesStore;
-    const saved = parsed.streams ?? [];
-    const savedById = new Map(saved.map((s) => [s.id, s]));
-
-    // Merge by seed order. For each seed stream, take its METADATA
-    // (name, category, certainty, unitPrice, unitLabel, tierLabel, detail)
-    // as the source of truth — so price / label corrections in code always
-    // flow through — but PRESERVE the user's saved `monthly` cells.
-    // Any extra saved stream not in the seed is appended at the end.
-    const merged = SEED_SALES_STORE.streams.map((seed) => {
-      const prev = savedById.get(seed.id);
-      return { ...seed, monthly: prev?.monthly ?? seed.monthly };
-    });
-    const seedIds = new Set(SEED_SALES_STORE.streams.map((s) => s.id));
-    const extra = saved.filter((s) => !seedIds.has(s.id));
-    const mergedStreams = [...merged, ...extra];
-
-    return {
-      updatedAt: parsed.updatedAt ?? null,
-      updatedBy: parsed.updatedBy ?? null,
-      months: buildMonths(parsed.months),
-      streams: mergedStreams,
-    };
+    return mergeWithSeed(parsed);
   } catch {
+    // Last resort: in-code SEED defaults.
     return {
       ...SEED_SALES_STORE,
       months: buildMonths(SEED_SALES_STORE.months),
@@ -259,6 +269,15 @@ export async function readSalesStore(): Promise<SalesStore> {
 }
 
 export async function writeSalesStore(store: SalesStore): Promise<void> {
-  await fs.mkdir(path.dirname(FILE), { recursive: true });
-  await fs.writeFile(FILE, JSON.stringify(store, null, 2), "utf-8");
+  // Primary: Mongo. Survives every redeploy.
+  await writeAdminDoc(SECTION, store as unknown as Record<string, unknown>);
+
+  // Secondary: write a fs snapshot too. Cheap insurance — local-dev visibility
+  // and a recoverable backup if the Mongo cluster ever has a bad day.
+  try {
+    await fs.mkdir(path.dirname(FILE), { recursive: true });
+    await fs.writeFile(FILE, JSON.stringify(store, null, 2), "utf-8");
+  } catch (err) {
+    console.warn("[sales-store] fs snapshot failed (Mongo write succeeded):", err instanceof Error ? err.message : err);
+  }
 }
