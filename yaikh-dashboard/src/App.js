@@ -41,6 +41,8 @@ import WeeklyIncentive from "./salary-bill/weekly-incentive";
 import PermitFee from "./salary-bill/permit-fee";
 import ResignPayment from "./salary-bill/resign-payment";
 import SalaryBill from "./salary-bill/salary-bill";
+import BillClaim from "./bill-claim/bill-claim";
+import ShippingBill from "./shipping-bill/shipping-bill";
 import CE from "./ce/ce";
 import StandardTime from "./ce/standard-time";
 import ProductDevelopment from "./ce/product-development";
@@ -228,6 +230,14 @@ export default function App() {
           <Route
             path="salary-bill"
             element={<SalaryBill onBack={handleBack} />}
+          />
+          <Route
+            path="bill-claim"
+            element={<BillClaim onBack={handleBack} />}
+          />
+          <Route
+            path="shipping-bill"
+            element={<ShippingBill onBack={handleBack} />}
           />
           <Route
             path="monthly-salary"

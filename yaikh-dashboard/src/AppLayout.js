@@ -145,6 +145,12 @@ const AppLayout = () => {
       } else if (demoType === "SUBMENU_SALARY_BILL") {
         // Navigate directly to Salary Bill component
         navigate("/dashboard/salary-bill");
+      } else if (demoType === "SUBMENU_BILL_CLAIM") {
+        // Navigate directly to Bill Claim component
+        navigate("/dashboard/bill-claim");
+      } else if (demoType === "SUBMENU_SHIPPING_BILL") {
+        // Navigate directly to Shipping Bill component
+        navigate("/dashboard/shipping-bill");
       } else if (demoType === "SUBMENU_WATER") {
         // Navigate directly to Water component
         navigate("/dashboard/water");
@@ -176,7 +182,7 @@ const AppLayout = () => {
                   color: "bg-cyan-500 text-white",
                 },
               ]
-            : id === "pr-admin"
+            : id === "pr-admin" || id === "purchase-request"
               ? [
                   {
                     title: "Purchase Request",
@@ -1282,8 +1288,8 @@ const AppLayout = () => {
                     alt="Yai 1"
                     className="w-16 h-16 rounded-2xl object-contain p-1 bg-slate-950/60 border-2 border-yai-blue/60 shadow-[0_0_14px_rgba(30,77,170,0.6)] flex-shrink-0"
                   />
-                  <span className="bg-gradient-to-r from-yai-blue via-blue-400 to-yai-blue bg-clip-text text-transparent font-bold text-3xl drop-shadow-[0_0_6px_rgba(30,77,170,0.5)] whitespace-nowrap">
-                    Agent Collective
+                  <span className="bg-gradient-to-r from-yai-blue via-blue-400 to-yai-blue bg-clip-text text-transparent font-bold text-3xl leading-tight drop-shadow-[0_0_6px_rgba(30,77,170,0.5)]">
+                    Agent<br />Collective
                   </span>
                 </div>
                 <ChevronRight
@@ -1305,8 +1311,8 @@ const AppLayout = () => {
                     alt="Yai 2"
                     className="w-16 h-16 rounded-2xl object-contain p-1 bg-slate-950/60 border-2 border-emerald-400/60 shadow-[0_0_14px_rgba(16,185,129,0.6)] flex-shrink-0"
                   />
-                  <span className="bg-gradient-to-r from-emerald-400 via-green-400 to-emerald-500 bg-clip-text text-transparent font-bold text-3xl drop-shadow-[0_0_6px_rgba(16,185,129,0.5)] whitespace-nowrap">
-                    Big Brain
+                  <span className="bg-gradient-to-r from-emerald-400 via-green-400 to-emerald-500 bg-clip-text text-transparent font-bold text-3xl leading-tight drop-shadow-[0_0_6px_rgba(16,185,129,0.5)]">
+                    Big<br />Brain
                   </span>
                 </div>
                 <ChevronRight

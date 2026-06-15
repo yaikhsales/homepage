@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
-    X, Plus, Grid3x3, Mic, Send, Sparkles,
+    X, Plus, Grid3x3, Mic, Send, Sparkles, Paperclip,
     Wallet, UserCog, HeartHandshake, Factory,
     BarChart3, Lightbulb, ClipboardCheck, MessageCircle,
     Users, Truck, Package, TrendingUp, Heart, Leaf,
@@ -1734,7 +1734,7 @@ const PhoneFrame = ({
                             )}
                             <form onSubmit={handleSend} className="relative">
                                 <input type="file" ref={fileInputRef} onChange={handleImageUpload} accept="image/*" className="hidden" />
-                                <div className={`flex items-center px-4 py-3 rounded-full border ${bot.borderColor || 'border-gray-200'} bg-white shadow-md focus-within:ring-2 focus-within:ring-opacity-30 focus-within:border-transparent transition-all ${bot.bgGradient.includes('green') ? 'focus-within:ring-green-400' :
+                                <div className={`flex flex-col rounded-2xl border ${bot.borderColor || 'border-gray-200'} bg-white shadow-md focus-within:ring-2 focus-within:ring-opacity-30 focus-within:border-transparent transition-all ${bot.bgGradient.includes('green') ? 'focus-within:ring-green-400' :
                                         bot.bgGradient.includes('blue') ? 'focus-within:ring-blue-400' :
                                             bot.bgGradient.includes('purple') ? 'focus-within:ring-purple-400' :
                                                 bot.bgGradient.includes('orange') ? 'focus-within:ring-orange-400' :
@@ -1746,52 +1746,58 @@ const PhoneFrame = ({
                                                                         bot.bgGradient.includes('sky') ? 'focus-within:ring-sky-400' : 'focus-within:ring-blue-400'
                                     }`}
                                 >
-                                    <button
-                                        type="button"
-                                        onClick={() => fileInputRef.current?.click()}
-                                        title="Upload Image"
-                                        className={`p-1.5 hover:bg-gray-100 rounded-full transition-colors mr-2`}
-                                    >
-                                        <Plus size={18} className={bot.textColor || 'text-gray-600'} />
-                                    </button>
-                                    <input
+                                    <textarea
                                         ref={inputRef}
-                                        type="text"
                                         value={inputValue}
                                         onChange={(e) => setInputValue(e.target.value)}
-                                        onKeyPress={handleKeyPress}
+                                        onKeyDown={handleKeyPress}
                                         placeholder={`Ask ${bot.name}`}
-                                        className={`flex-1 bg-transparent border-0 outline-none ${bot.textColor || 'text-gray-800'} placeholder:${bot.textColor || 'text-gray-400'} text-base`}
+                                        rows={3}
+                                        className={`w-full bg-transparent border-0 outline-none resize-none px-4 pt-3 pb-1 text-base leading-relaxed cursor-text ${bot.textColor || 'text-gray-800'} placeholder:${bot.textColor || 'text-gray-400'}`}
+                                        style={{ minHeight: '4.5rem', maxHeight: '22.5rem', overflowY: 'auto' }}
                                     />
-                                    {(!inputValue.trim() && !uploadedImage) || isListening ? (
-                                        <>
-                                            <span className={`text-xs ${bot.textColor || 'text-gray-500'} mr-2 hidden sm:inline`}>{isListening ? "Listening..." : (isTyping ? "Thinking" : "Fast")}</span>
-                                            <button
-                                                type="button"
-                                                className={`p-1.5 hover:bg-gray-100 rounded-full transition-colors ml-2`}
-                                            >
-                                                <Grid3x3 size={18} className={bot.textColor || 'text-gray-600'} />
-                                            </button>
-                                            <button
-                                                type="button"
-                                                onClick={startListening}
-                                                disabled={isListening}
-                                                title="Dictate message"
-                                                className={`p-1.5 rounded-full transition-colors ml-2 relative ${isListening ? 'bg-red-500 hover:bg-red-600' : 'hover:bg-gray-100'}`}
-                                            >
-                                                <Mic size={18} className={isListening ? 'text-white animate-pulse' : (bot.textColor || 'text-gray-600')} />
-                                                {isListening && <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-400 rounded-full animate-ping"></span>}
-                                            </button>
-                                        </>
-                                    ) : null}
-                                    {(inputValue.trim() || uploadedImage) && !isListening && (
+                                    <div className="flex items-center justify-end gap-1 px-3 pb-2">
+                                        {(isListening || isTyping) && (
+                                            <span className={`text-xs ${bot.textColor || 'text-gray-500'} mr-auto pl-1 animate-pulse`}>
+                                                {isListening ? "Listening…" : "Thinking…"}
+                                            </span>
+                                        )}
+                                        <button
+                                            type="button"
+                                            onClick={() => fileInputRef.current?.click()}
+                                            title="Attach photo or file"
+                                            className="p-1.5 hover:bg-gray-100 rounded-full transition-colors"
+                                        >
+                                            <Paperclip size={18} className={bot.textColor || 'text-gray-600'} />
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={startListening}
+                                            disabled={isListening}
+                                            title="Voice chat"
+                                            className={`p-1.5 rounded-full transition-colors relative ${isListening ? 'bg-red-500 hover:bg-red-600' : 'hover:bg-gray-100'}`}
+                                        >
+                                            <Mic size={18} className={isListening ? 'text-white animate-pulse' : (bot.textColor || 'text-gray-600')} />
+                                            {isListening && <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-400 rounded-full animate-ping"></span>}
+                                        </button>
                                         <button
                                             type="submit"
-                                            className={`p-1.5 bg-gradient-to-r ${bot.bgGradient} hover:opacity-90 rounded-full transition-all ml-2 shadow-md`}
+                                            disabled={!inputValue.trim() && !uploadedImage}
+                                            title="Send to agent"
+                                            aria-label="Send"
+                                            className={`p-0.5 rounded-full transition-all ml-1 ${
+                                                (inputValue.trim() || uploadedImage)
+                                                    ? 'opacity-100 hover:scale-110 cursor-pointer'
+                                                    : 'opacity-40 cursor-not-allowed'
+                                            }`}
                                         >
-                                            <Send size={18} className="text-white" />
+                                            <img
+                                                src="/assets/modules-image/yai1.png"
+                                                alt="Send"
+                                                className="w-10 h-10 rounded-full object-cover shadow-md ring-2 ring-yai-blue/50"
+                                            />
                                         </button>
-                                    )}
+                                    </div>
                                 </div>
                             </form>
                         </div>

@@ -13,3 +13,12 @@ next-env.d.ts
 .idea
 .claude
 *.tsbuildinfo
+
+# Source maps — debug only, never needed in prod
+*.map
+
+# Training video assets — bulky, should live on a CDN. Skip them
+# from Railway deploys so we stay under the Cloudflare 100MB cap.
+public/experience/assets/short-video-training
+public/experience/assets/yqms/**/*.mp4
+*.mp4

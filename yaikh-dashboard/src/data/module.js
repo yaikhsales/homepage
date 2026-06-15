@@ -78,6 +78,7 @@ export const DASHBOARD_DATA = [
             title: "Bill Claim",
             image: "IMG/avatars/agent-4.png",
             status: "active",
+            demoType: "SUBMENU_BILL_CLAIM",
             popupTitle: "ADMINISTRATION · BILLING",
             description: "I process expense and bill claims — submission, approval and reimbursement straight back to the claimant."
           },
@@ -95,6 +96,7 @@ export const DASHBOARD_DATA = [
             title: "Shipping Bill",
             image: "IMG/avatars/agent-38.png",
             status: "active",
+            demoType: "SUBMENU_SHIPPING_BILL",
             popupTitle: "ADMINISTRATION · BILLING",
             description: "I manage the payment of shipping and freight bills, ensuring all customs duties and transport invoices are accurate, recorded, and paid on time."
           }
