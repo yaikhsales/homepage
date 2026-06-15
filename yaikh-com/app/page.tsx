@@ -98,7 +98,8 @@ function Nav() {
                   {/* Transparent submenu — inherits the nav's text colour,
                       only the word Portal shows. */}
                   <a
-                    href="SDTV"
+                    href="/SDTV"
+                    target="_self"
                     role="menuitem"
                     onClick={() => setPartnersOpen(false)}
                     className="block text-[13px] font-semibold hover:text-yai-orange transition whitespace-nowrap"
@@ -121,7 +122,7 @@ function Nav() {
         <div className="flex items-center gap-3 shrink-0">
           <LangFlags scrolled={scrolled} />
           <a
-            href="https://main.yaikh.com/login"
+            href="/SDTV"
             target="_self"
             className="inline-block text-center px-5 py-2 rounded-full bg-yai-orange text-white hover:bg-yai-orange/90 transition shadow-lg leading-[1.1]"
           >
