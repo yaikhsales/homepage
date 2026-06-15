@@ -46,7 +46,33 @@ homepage/
 
 ---
 
-## 4. Verify all green in 3 commands
+## 4. Standard local dev commands — fixed user shorthand
+
+The user uses short phrases to mean specific things. Follow these literally — don't second-guess the port or the app.
+
+| User says | Means |
+|---|---|
+| **"fire up 3001"** / "dev 3001 up" / "start 3001" | Start `yaikh-com` Next.js dev server on port **3001**, then verify `http://localhost:3001/` returns the marketing home (Ai-Native Manufacturing Intelligence Platform). |
+| **"fire up dashboard"** / "start dashboard" | Start `yaikh-dashboard` CRA dev server (CRA defaults to port 3000) — for live HMR while editing dashboard source. |
+| **"rebuild experience"** / "push to experience" | Run `npm run build` inside `yaikh-dashboard/` — outputs to `yaikh-com/public/experience/`, viewable at `http://localhost:3001/experience` once `yaikh-com` is up. |
+
+### "fire up 3001" recipe
+
+```bash
+cd E:\Antigravity\yaikh-monorepo\yaikh-com
+npm run dev      # binds to port 3001 per package.json
+# expect "Ready in …" within ~15s
+# then verify:
+#   GET http://localhost:3001/           → 200 (marketing home)
+#   GET http://localhost:3001/experience → 200 (dashboard CRA bundle)
+#   GET http://localhost:3001/api/db-ping → {"connected":true,"ms":N}
+```
+
+If port 3001 is already taken by something else, stop the squatter — never let Next.js auto-bump to 3002 (it would silently break /api/db-ping URLs in tests and screenshots).
+
+---
+
+## 5. Verify all green in 3 commands
 
 ```bash
 # 1. Marketing site
@@ -62,13 +88,13 @@ curl -s https://yaikh-com-production.up.railway.app/api/db-ping
 # expect: {"connected":true,"ms":<number>}
 ```
 
-If any of these fail, read section 5 before debugging.
+If any of these fail, read section 6 before debugging.
 
 ---
 
-## 5. Gotchas we've already paid for — do NOT re-debug from scratch
+## 6. Gotchas we've already paid for — do NOT re-debug from scratch
 
-### 5a. `/api/db-ping` returns 503 with `tlsv1 alert internal error: SSL alert number 80`
+### 6a. `/api/db-ping` returns 503 with `tlsv1 alert internal error: SSL alert number 80`
 
 **Two possible causes — check in this order:**
 
@@ -78,17 +104,17 @@ If any of these fail, read section 5 before debugging.
 
 If both look right but it still fails, run `nslookup -type=SRV _mongodb._tcp.yaikhhomepage.pt9xtbm.mongodb.net` to confirm the cluster's SRV record still exists.
 
-### 5b. The poisoned-promise bug itself (open follow-up)
+### 6b. The poisoned-promise bug itself (open follow-up)
 
 `yaikh-com/lib/mongo.ts` caches the connect *promise*, not the resolved client. A real fix would `.catch` the rejection and clear the cache so the next request retries. Worth a small PR, but not blocking.
 
-### 5c. Stale README
+### 6c. Stale README
 
 `README.md` still references `yai-plan/` as a separate folder. It was absorbed into `yaikh-com/` (commit `b5e9990`). Don't `cd yai-plan` — it won't exist.
 
 ---
 
-## 6. Parallel-session etiquette
+## 7. Parallel-session etiquette
 
 Multiple sessions run against this repo simultaneously. To avoid stomping:
 
@@ -100,7 +126,7 @@ Multiple sessions run against this repo simultaneously. To avoid stomping:
 
 ---
 
-## 7. Where to find the rest
+## 8. Where to find the rest
 
 - `HANDOFF.md` — broader project handoff context (long-running notes)
 - `PROJECT_REPORT.md` — status / progress narrative
