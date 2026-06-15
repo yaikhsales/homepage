@@ -45,16 +45,21 @@ const YEAR = 2026;
 const T = (yyyy_mm_dd, hh_mm) => new Date(`${yyyy_mm_dd}T${hh_mm}:00+07:00`);
 
 function build(no, base) {
+  const noStr = `ST-${YEAR}-${String(no).padStart(4, "0")}`;
   const created = base.timeline[0].dateTime;
+  // Stable photo per ticket (picsum.photos is rock-solid and gives a real-looking
+  // image keyed by the ticket no). Override per ticket via base.photo if needed.
+  const photo =
+    base.photo ?? `https://picsum.photos/seed/${encodeURIComponent(noStr)}/240/180`;
   return {
-    no: `ST-${YEAR}-${String(no).padStart(4, "0")}`,
+    no: noStr,
     from: base.from,
     dept: base.dept,
     nature: base.nature,
     subject: base.subject,
     description: base.description,
     urgency: base.urgency || "Normal",
-    photo: base.photo ?? null,
+    photo,
     status: base.status,
     assignee: base.assignee ?? null,
     date: created.toISOString().slice(0, 10),
