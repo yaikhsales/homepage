@@ -89,7 +89,7 @@ Each Yai chat agent (PA) consumes one or more digitalization modules. This table
 | Chat agent (PA) | Sub-modules feeding it | Mongo collections | Git branch |
 |---|---|---|---|
 | Accounting PA | Accountant, IEWS, Purchase Request, Bill Claim, Salary Bill, Shipping Bill | `purchase_requests`, `bill_claims`, `salary_bills`, `shipping_bills`, `journal_entries`, `iews_sync_log` | `agent/accounting` |
-| HR PA | YHR, Org Chart, Training, Temporary Worker | `attendance`, `leave_requests`, `training`, `org_chart`, `temp_workers` | `agent/hr` |
+| HR PA ✅ YHR wired | YHR ✅, Org Chart, Training, Temporary Worker, Speak Up | `workforce_master` ✅, `job_postings` ✅, `candidates` ✅, `interviews` ✅, `onboarding_records` ✅, `benefit_profiles` ✅, `payroll_runs` ✅, `visas` ✅, `work_permits` ✅, `nssf_contributions` ✅, `attendance`, `leave_requests`, `training`, `org_chart`, `temp_workers`, `speak_up` | `agent/hr` |
 | Admin PA ✅ support_tickets wired | Support Ticket ✅, Y Shop, Gate Pass, Meeting Room | `support_tickets` ✅, `y_shop`, `gate_passes`, `meeting_rooms` | `agent/admin` |
 | CSR PA | Digital Audit, Energy, Air, Water | `digital_audits`, `energy_meters`, `air_logs`, `water_logs` | `agent/csr` |
 | Shipping PA | Shipping + MRP | `shipments`, `containers`, `materials`, `bom`, `stock` | `agent/shipping` |
@@ -102,6 +102,8 @@ Each Yai chat agent (PA) consumes one or more digitalization modules. This table
 | Social PA | (no sub-modules yet) | `social_posts`, `social_comments` | `agent/social` |
 
 **Not yet owned by any chat agent** — leave alone until the user revisits: Management Dashboard, SOP, System Analysis, E-GOVERNMENT.
+
+**HR / Accounting boundary on payroll** — confirmed 2026-06-15: HR PA owns the *calculation* (`payroll_runs`, `nssf_contributions`). Accounting PA owns the *bill* (`salary_bills`). Handoff = HR finalizes the `PAY-YYYY-MM` run and sets `salary_bill_no` to the `SAL-YYYY-NNN` record Accounting cuts. The YHR dashboard "Salary Bill" column shows the calculation read-out, but the bill / bank-transfer side is Accounting's lane.
 
 **Where data starts → where it lands:**
 1. User submits a form in `yaikh-dashboard/src/<module>/` (e.g. `src/bill-claim/`).
