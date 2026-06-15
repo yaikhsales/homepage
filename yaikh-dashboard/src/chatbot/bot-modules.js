@@ -30,11 +30,11 @@ const PREDEFINED_BOTS = [
         textColor: 'text-green-800',
         borderColor: 'border-green-200',
         suggestedActions: [
-            { text: 'Purchase Request approval', highlight: true },
-            { text: 'Supplier Payment Request' },
-            { text: 'E-invoice queue' },
-            { text: 'Bill Claim status' },
-            { text: 'Generate Invoice' },
+            { text: 'Pending PR approvals', highlight: true },
+            { text: 'Bill claims to verify' },
+            { text: 'Salary bill status' },
+            { text: 'Unpaid shipping bills' },
+            { text: 'IEWS e-invoice queue' },
         ],
     },
     {
@@ -48,11 +48,11 @@ const PREDEFINED_BOTS = [
         textColor: 'text-indigo-800',
         borderColor: 'border-indigo-200',
         suggestedActions: [
-            { text: 'Attendance summary', highlight: true },
+            { text: 'Attendance today', highlight: true },
+            { text: 'Open leave requests' },
             { text: 'Training schedule' },
-            { text: 'Org chart' },
-            { text: 'Leave requests' },
-            { text: 'Salary bill review' },
+            { text: 'Org chart updates' },
+            { text: 'Temp worker requests' },
         ],
     },
     {
@@ -66,11 +66,11 @@ const PREDEFINED_BOTS = [
         textColor: 'text-blue-800',
         borderColor: 'border-blue-200',
         suggestedActions: [
-            { text: 'Support tickets', highlight: true },
-            { text: 'Meeting Room booking' },
-            { text: 'Car booking' },
-            { text: 'Gate Pass requests' },
-            { text: 'Temporary Worker' },
+            { text: 'Open support tickets', highlight: true },
+            { text: 'Meeting room bookings' },
+            { text: 'Gate passes today' },
+            { text: 'Y Shop orders' },
+            { text: 'Visitors today' },
         ],
     },
     {
@@ -84,11 +84,11 @@ const PREDEFINED_BOTS = [
         textColor: 'text-purple-800',
         borderColor: 'border-purple-200',
         suggestedActions: [
-            { text: 'Air Temperature & Humidity', highlight: true },
-            { text: 'Water log' },
-            { text: 'Waste Management' },
-            { text: 'Electricity report' },
-            { text: 'Chemical inventory' },
+            { text: 'Air temperature today', highlight: true },
+            { text: 'Water usage log' },
+            { text: 'Energy consumption' },
+            { text: 'Compliance audits' },
+            { text: 'Environmental alerts' },
         ],
     },
     {
@@ -103,10 +103,10 @@ const PREDEFINED_BOTS = [
         borderColor: 'border-cyan-200',
         suggestedActions: [
             { text: 'Container plan', highlight: true },
-            { text: 'Shipping Bill' },
             { text: 'Customs clearance' },
             { text: 'Delivery schedule' },
-            { text: 'Dispatch tracking' },
+            { text: 'Inventory levels' },
+            { text: 'Material plan' },
         ],
     },
     {
@@ -121,10 +121,10 @@ const PREDEFINED_BOTS = [
         borderColor: 'border-red-200',
         suggestedActions: [
             { text: 'Material plan', highlight: true },
-            { text: 'Inventory levels' },
-            { text: 'Supplier orders' },
-            { text: 'Stock alerts' },
             { text: 'BOM review' },
+            { text: 'Stock alerts' },
+            { text: 'Supplier orders' },
+            { text: 'Reorder points' },
         ],
     },
     {
@@ -138,11 +138,11 @@ const PREDEFINED_BOTS = [
         textColor: 'text-violet-800',
         borderColor: 'border-violet-200',
         suggestedActions: [
-            { text: 'High Defect Rate inspection', highlight: true },
-            { text: 'Third-party audit schedule' },
+            { text: 'Recent defect inspections', highlight: true },
             { text: 'Customer complaints' },
-            { text: 'Pre-production meeting' },
-            { text: 'Quality report' },
+            { text: 'Open call-outs' },
+            { text: 'Third-party audits' },
+            { text: 'Quality reports' },
         ],
     },
     {
@@ -156,10 +156,10 @@ const PREDEFINED_BOTS = [
         textColor: 'text-orange-800',
         borderColor: 'border-orange-200',
         suggestedActions: [
-            { text: 'Plan production schedule', highlight: true },
-            { text: 'Track inventory levels' },
-            { text: 'Optimize workflow' },
-            { text: 'Monitor quality metrics' },
+            { text: "Today's production plan", highlight: true },
+            { text: 'WIP by line' },
+            { text: 'Cutting throughput' },
+            { text: 'Finishing throughput' },
             { text: 'Production status' },
         ],
     },
@@ -174,11 +174,11 @@ const PREDEFINED_BOTS = [
         textColor: 'text-pink-800',
         borderColor: 'border-pink-200',
         suggestedActions: [
-            { text: 'Customer Factory Visit', highlight: true },
-            { text: 'Buyer Visit' },
-            { text: 'Feedback review' },
-            { text: 'Satisfaction score' },
-            { text: 'Engagement report' },
+            { text: 'Standard time updates', highlight: true },
+            { text: 'Productivity by line' },
+            { text: 'Machine allocation' },
+            { text: 'Skill inventory' },
+            { text: 'Cost center summary' },
         ],
     },
     {
@@ -192,11 +192,11 @@ const PREDEFINED_BOTS = [
         textColor: 'text-teal-800',
         borderColor: 'border-teal-200',
         suggestedActions: [
-            { text: 'Dashboard analytics', highlight: true },
-            { text: 'Repair machine status' },
+            { text: 'Machine downtime', highlight: true },
+            { text: 'Repair queue' },
             { text: 'Maintenance schedule' },
-            { text: 'Late maintenance alert' },
-            { text: 'Machine invoice' },
+            { text: 'Late maintenance alerts' },
+            { text: 'Spare parts stock' },
         ],
     },
     {
@@ -210,11 +210,11 @@ const PREDEFINED_BOTS = [
         textColor: 'text-amber-800',
         borderColor: 'border-amber-200',
         suggestedActions: [
-            { text: 'Design roadmap', highlight: true },
-            { text: 'Pattern review' },
-            { text: 'Sample approval' },
-            { text: 'Spec sheet' },
-            { text: 'Trim approval' },
+            { text: 'Sample approvals', highlight: true },
+            { text: 'Pattern review queue' },
+            { text: 'Spec sheets' },
+            { text: 'Trim approvals' },
+            { text: 'Design roadmap' },
         ],
     },
     {
@@ -228,11 +228,11 @@ const PREDEFINED_BOTS = [
         textColor: 'text-lime-800',
         borderColor: 'border-lime-200',
         suggestedActions: [
-            { text: 'Production improvement', highlight: true },
-            { text: 'Efficiency audit' },
-            { text: 'SOP review' },
+            { text: 'Open Kaizen projects', highlight: true },
+            { text: 'SOP review queue' },
+            { text: 'Efficiency audits' },
             { text: 'Process optimization' },
-            { text: 'Kaizen plan' },
+            { text: 'Improvement KPIs' },
         ],
     },
     {
@@ -258,6 +258,75 @@ const PREDEFINED_BOTS = [
 const _UNUSED_ICONS = Leaf; // keep Leaf imported for future agents
 
 const GREETING_NAME = 'Mr. Khun';
+
+/* Dynamic greeting — date-aware (holidays first, then time-of-day) and
+ * user-aware (logged-in name, else "Visitor"). When the auth layer
+ * lands, pass the current user's name in via prop/context instead of
+ * GREETING_NAME. Returns { line1, line2, festive } so the renderer can
+ * apply festive styling when a holiday is in season.
+ */
+function getDynamicGreeting(name) {
+    const who = name || 'Visitor';
+    const now = new Date();
+    const m = now.getMonth() + 1; // 1-12
+    const d = now.getDate();
+    const hour = now.getHours();
+
+    // ── Holidays (highest priority) ─────────────────────────
+    // Khmer New Year (Apr 13–16) — and lead-up week (Apr 7–12)
+    if (m === 4 && d >= 13 && d <= 16) {
+        return {
+            line1: `🌸 Sok San Khmer New Year, ${who}!`,
+            line2: 'Wishing you health and prosperity. How can I help today?',
+            festive: 'khmer-ny',
+        };
+    }
+    if (m === 4 && d >= 7 && d <= 12) {
+        return {
+            line1: `🌸 Khmer New Year is coming, ${who}!`,
+            line2: 'How can I help you wrap up before the holiday?',
+            festive: 'khmer-ny',
+        };
+    }
+    // Western New Year — Jan 1
+    if (m === 1 && d === 1) {
+        return {
+            line1: `🎉 Happy New Year ${now.getFullYear()}, ${who}!`,
+            line2: "Let's make this year great. How can I help?",
+            festive: 'new-year',
+        };
+    }
+    // Christmas / NYE week (Dec 24 – Jan 2)
+    if ((m === 12 && d >= 24) || (m === 1 && d === 2)) {
+        return {
+            line1: `🎄 Happy Holidays, ${who}!`,
+            line2: 'How can I help today?',
+            festive: 'holidays',
+        };
+    }
+    // Mid-Autumn approx (Sept 15–30)
+    if (m === 9 && d >= 15 && d <= 30) {
+        return {
+            line1: `🌕 Happy Mid-Autumn, ${who}!`,
+            line2: 'How can I help today?',
+            festive: 'mid-autumn',
+        };
+    }
+    // Pchum Ben — Cambodia Ancestor Day, ~mid Sept to early Oct (varies)
+    // Skipping precise window for now; calc lunar date later if needed.
+
+    // ── Default: time-of-day greeting ───────────────────────
+    let timeWord = 'Hello';
+    if (hour < 12) timeWord = 'Good morning';
+    else if (hour < 17) timeWord = 'Good afternoon';
+    else timeWord = 'Good evening';
+
+    return {
+        line1: `${timeWord}, ${who}`,
+        line2: 'How may I help you today?',
+        festive: null,
+    };
+}
 
 // Phone Frame Component with Gemini Chatbot Inside
 const PhoneFrame = ({
@@ -1326,14 +1395,24 @@ const PhoneFrame = ({
                                 // Welcome Screen
                                 <div className="space-y-6 pt-8">
                                     <div>
-                                        <p className={`text-sm ${bot.textColor || 'text-gray-600'} mb-2`}>Hi {GREETING_NAME}</p>
-                                        {KHMER_NEW_YEAR.isActive ? (
-                                            <h2 className="text-3xl font-light leading-tight text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 to-red-500 font-khmer">
-                                                សួស្តីឆ្នាំថ្មី I am {bot.name}.<br/><span className="text-2xl text-gray-700">How can I assist your enterprise today?</span>
-                                            </h2>
-                                        ) : (
-                                            <h2 className={`text-3xl font-light leading-tight ${bot.textColor || 'text-gray-800'}`}>Where should we start?</h2>
-                                        )}
+                                        {(() => {
+                                            const g = getDynamicGreeting(GREETING_NAME);
+                                            const festiveGradient = g.festive === 'khmer-ny'
+                                                ? 'text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 to-red-500'
+                                                : g.festive === 'new-year' || g.festive === 'holidays'
+                                                    ? 'text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-rose-500'
+                                                    : g.festive === 'mid-autumn'
+                                                        ? 'text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-600'
+                                                        : null;
+                                            return (
+                                                <>
+                                                    <p className={`text-sm ${bot.textColor || 'text-gray-600'} mb-2`}>{g.line1}</p>
+                                                    <h2 className={`text-2xl sm:text-3xl font-light leading-tight ${festiveGradient || bot.textColor || 'text-gray-800'}`}>
+                                                        {g.line2}
+                                                    </h2>
+                                                </>
+                                            );
+                                        })()}
                                     </div>
                                     {/* Legacy module-box flow disabled for the new 13-agent set —
                                         all bots now render their own `suggestedActions` uniformly. */}
@@ -2896,6 +2975,97 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                 return; // Don't process duplicate message
             }
         }
+
+        // ────────────────────────────────────────────────────────────
+        // Accounting PA — new Mongo-grounded Gemini backend.
+        // Routes to yaikh-com /api/ai-chat/accounting, which reads the
+        // PA's collections (PRs, bill claims, salary bills, shipping
+        // bills) and calls Gemini 2.5 Flash. Bypasses the legacy
+        // demo-rate-limit + Admin/Finance/CSR/HR module branches.
+        // Other PAs continue on the old path until their own
+        // /api/ai-chat/<pa> endpoint lands.
+        if (botId === 'accounting-bot') {
+            const priorMessages = currentBotState?.messages || [];
+            const history = priorMessages
+                .filter(m => m.from === 'user' || m.from === 'bot')
+                .slice(-10)
+                .map(m => ({
+                    role: m.from === 'user' ? 'user' : 'model',
+                    text: typeof m.text === 'string' ? m.text : ''
+                }));
+
+            setBotStates(prev => {
+                const bs = prev[botId];
+                const userMsg = { from: 'user', text: message };
+                const updatedMessages = [...bs.messages, userMsg];
+                const updatedHistory = bs.currentChatId
+                    ? bs.chatHistory.map(chat =>
+                        chat.id === bs.currentChatId
+                            ? { ...chat, messages: updatedMessages, updatedAt: new Date().toISOString() }
+                            : chat
+                    )
+                    : bs.chatHistory;
+                return {
+                    ...prev,
+                    [botId]: {
+                        ...bs,
+                        messages: updatedMessages,
+                        isTyping: true,
+                        chatHistory: updatedHistory,
+                    },
+                };
+            });
+
+            fetch('/api/ai-chat/accounting', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message, history }),
+            })
+                .then(r => r.json())
+                .then(data => {
+                    const replyText = data?.ok
+                        ? data.reply
+                        : `(Backend error: ${data?.error || 'unknown'})`;
+                    setBotStates(prev => {
+                        const bs = prev[botId];
+                        const botMsg = { from: 'bot', text: replyText };
+                        const updatedMessages = [...bs.messages, botMsg];
+                        const updatedHistory = bs.currentChatId
+                            ? bs.chatHistory.map(chat =>
+                                chat.id === bs.currentChatId
+                                    ? { ...chat, messages: updatedMessages, updatedAt: new Date().toISOString() }
+                                    : chat
+                            )
+                            : bs.chatHistory;
+                        return {
+                            ...prev,
+                            [botId]: {
+                                ...bs,
+                                messages: updatedMessages,
+                                isTyping: false,
+                                chatHistory: updatedHistory,
+                            },
+                        };
+                    });
+                })
+                .catch(err => {
+                    setBotStates(prev => {
+                        const bs = prev[botId];
+                        const botMsg = { from: 'bot', text: `(Network error: ${err?.message || String(err)})` };
+                        return {
+                            ...prev,
+                            [botId]: {
+                                ...bs,
+                                messages: [...bs.messages, botMsg],
+                                isTyping: false,
+                            },
+                        };
+                    });
+                });
+            return;
+        }
+        // End Accounting PA intercept
+        // ────────────────────────────────────────────────────────────
 
         // Demo Rate Limiting: Max 1 question per chat
         if (currentBotState) {
