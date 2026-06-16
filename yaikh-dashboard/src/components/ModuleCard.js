@@ -22,7 +22,7 @@ const ModuleCard = ({ data, onClick, botVersion = 'default', onBotClick, isDropd
         WebkitFilter: 'none',
       };
       return (
-        <div className={`relative flex items-center justify-center ${isDropdownOpen ? 'w-14 h-14' : 'w-20 h-20 group-hover:w-21 group-hover:h-21'} transition-all duration-300`}>
+        <div className={`relative flex items-center justify-center w-20 h-20 group-hover:w-21 group-hover:h-21 transition-all duration-300`}>
           <img
             src={`${process.env.PUBLIC_URL}/IMG/unavail.avif`}
             alt="Coming Soon"
@@ -56,8 +56,7 @@ const ModuleCard = ({ data, onClick, botVersion = 'default', onBotClick, isDropd
       };
 
       return (
-        <div className={`relative flex items-center justify-center ${isDropdownOpen ? 'w-14 h-14' : 'w-20 h-20 group-hover:w-21 group-hover:h-21'
-          } transition-all duration-300`}>
+        <div className={`relative flex items-center justify-center w-20 h-20 group-hover:w-21 group-hover:h-21 transition-all duration-300`}>
           <img
             src={`${process.env.PUBLIC_URL}/${data.image}`}
             alt={data.title}
