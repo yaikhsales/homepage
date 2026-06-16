@@ -71,8 +71,47 @@ const GeneralAIAgent = ({ onClose, moduleContext = null }) => {
   const fileInputRef = useRef(null);
   const recognitionRef = useRef(null);
 
+  // When the floating chat is opened on a module that funnels into
+  // Accounting PA, surface data-grounded starter questions that hit
+  // the real Mongo backend — not the legacy "What is X?" placeholders.
+  const accountingTopic = getAccountingTopic(moduleContext);
+
   // Generate module-specific suggestions
   const getSuggestions = () => {
+    if (accountingTopic === 'Purchase Request') {
+      return [
+        { text: 'PRs awaiting GM approval', question: 'Which PRs are currently awaiting GM (manager) approval?' },
+        { text: 'Highest valued PR',         question: 'What is the highest valued purchase request right now and who raised it?' },
+        { text: 'PRs missing 3rd quotation', question: 'List the PRs flagged for missing a 3rd quotation.' },
+        { text: 'What are the categories?',  question: 'What categories of purchase requests do we have in the system?' },
+      ];
+    }
+    if (accountingTopic === 'Bill Claim') {
+      return [
+        { text: 'Claims to verify',     question: 'Which bill claims are awaiting accounting verification?' },
+        { text: 'Total reimbursed MTD', question: 'How much have we reimbursed in bill claims this month?' },
+        { text: 'Top categories',       question: 'What are the top categories of bill claims this month?' },
+      ];
+    }
+    if (accountingTopic === 'Salary Bill') {
+      return [
+        { text: 'Latest salary batch',   question: 'What is the status of the latest salary bill batch?' },
+        { text: 'Salary MTD',            question: 'What is the total salary paid month-to-date?' },
+        { text: 'Variance vs prior',     question: 'Show salary batches with significant variance vs the prior month.' },
+      ];
+    }
+    if (accountingTopic === 'Shipping Bill') {
+      return [
+        { text: 'Unpaid shipping bills', question: 'Which shipping bills are currently unpaid?' },
+        { text: 'Container-cost bills',  question: 'Show shipping bills tied to specific containers.' },
+        { text: 'Bills awaiting verify', question: 'Which shipping bills are waiting on Accounting verification?' },
+      ];
+    }
+    if (accountingTopic === 'IEWS' || accountingTopic === 'Accountant') {
+      return [
+        { text: 'What can you tell me?', question: `What records do you have in the ${accountingTopic} area?` },
+      ];
+    }
     if (!moduleContext) {
       return [
         {
@@ -1067,12 +1106,16 @@ RESPONSE FORMATTING RULES:
                 </div>
                 <div>
                   <h2 className="text-white font-bold text-sm">
-                    {moduleContext ? moduleContext : "Yai AI Agent"}
+                    {accountingTopic
+                      ? `${accountingTopic} PA`
+                      : (moduleContext ? moduleContext : "Yai AI Agent")}
                   </h2>
                   <p className="text-white/80 text-xs">
-                    {moduleContext
-                      ? `${moduleContext} Assistant`
-                      : "General Assistant"}
+                    {accountingTopic
+                      ? "Live from Mongo · grounded answers"
+                      : (moduleContext
+                          ? `${moduleContext} Assistant`
+                          : "General Assistant")}
                   </p>
                 </div>
               </div>
@@ -1093,12 +1136,16 @@ RESPONSE FORMATTING RULES:
                     <Sparkles className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                    {moduleContext ? moduleContext : "Yai AI Agent"}
+                    {accountingTopic
+                      ? `${accountingTopic} PA`
+                      : (moduleContext ? moduleContext : "Yai AI Agent")}
                   </h3>
                   <p className="text-sm text-gray-600 mb-6">
-                    {moduleContext
-                      ? `Ask me anything about ${moduleContext} module and its sub-modules!`
-                      : "Ask me anything about Yaikh modules, general questions, or any topic!"}
+                    {accountingTopic
+                      ? `Ask me anything about ${accountingTopic} — I read live records from Mongo.`
+                      : (moduleContext
+                          ? `Ask me anything about ${moduleContext} module and its sub-modules!`
+                          : "Ask me anything about Yaikh modules, general questions, or any topic!")}
                   </p>
                   <div className="flex flex-wrap gap-2 justify-center">
                     {getSuggestions().map((suggestion, idx) => (
