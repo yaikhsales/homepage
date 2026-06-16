@@ -396,8 +396,18 @@ const PhoneFrame = ({
     // a typed message prepends "[Topic: <topic>] " so Gemini scopes its
     // answer. Notif counts come from /api/notifications/accounting and
     // render as a small red badge inside each pill when > 0.
-    const [activeTopic, setActiveTopic] = useState(null);
+    const [activeTopic, setActiveTopic] = useState(initialTopic);
     const [notifCounts, setNotifCounts] = useState({});
+
+    // If the parent re-passes a different initialTopic (e.g. user navigates
+    // from Purchase Request → Bill Claim sub-menu while BotModules is still
+    // mounted), re-sync the active topic. Tracked at mount-level only.
+    useEffect(() => {
+        if (initialTopic && initialTopic !== activeTopic) {
+            setActiveTopic(initialTopic);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [initialTopic]);
     // Pending Items modal — opens when user taps a pill that has a
     // count badge. Lets them act on the records (Approve / Advance) without
     // typing into chat.
@@ -2230,7 +2240,15 @@ const PendingItemsModal = ({ topic, onClose, onAction }) => {
     );
 };
 
-const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 'yai1' }) => {
+const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 'yai1', botsFilter = null, initialTopic = null }) => {
+    // When BotModules is mounted from a sub-menu (e.g. Purchase Request),
+    // botsFilter scopes the horizontal scroll to a single PA so the user
+    // doesn't see the full constellation. initialTopic pre-sets the
+    // accounting topic filter so the same PA opens already focused on
+    // the right sub-module — no extra click needed.
+    const visibleBots = botsFilter
+        ? PREDEFINED_BOTS.filter(b => botsFilter.includes(b.id))
+        : PREDEFINED_BOTS;
     const [isDropdownOpen, setDropdownOpen] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
 
@@ -5962,7 +5980,7 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                     }
                 `}</style>
                     <div className="flex gap-2 sm:gap-4 md:gap-6 items-stretch justify-start w-max h-full min-h-full flex-1">
-                        {PREDEFINED_BOTS.map((bot) => {
+                        {visibleBots.map((bot) => {
                             const botState = botStates[bot.id];
                             return (
                                 <div

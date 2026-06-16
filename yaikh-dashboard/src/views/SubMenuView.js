@@ -17,6 +17,7 @@ import { ArrowLeft, MessageCircle, Video } from "lucide-react";
 import { IconRenderer } from "../components/IconRenderer";
 import { useTranslation } from "../translate/TranslationContext";
 import GeneralAIAgent from "../general-ag";
+import BotModules from "../chatbot/bot-modules";
 import VideoViewer from "../components/VideoViewer";
 
 // Mapping function to match card titles to sub-icon image filenames
@@ -1084,8 +1085,23 @@ const SubMenuView = () => {
         </button>
       )}
 
-      {/* Bot Modal for All Modules */}
-      {isBotOpen && selectedBotModule && (
+      {/* Bot Modal — Accounting-PA sub-menus mount the real BotModules
+          Accounting PA (same component the home dropdown opens), scoped
+          to a single PA + with the topic pre-selected. Non-accounting
+          sub-menus keep the legacy GeneralAIAgent. One PA → one UI. */}
+      {isBotOpen && selectedBotModule && isAccountingSubmenu && (
+        <BotModules
+          onClose={() => {
+            setIsBotOpen(false);
+            setSelectedBotModule(null);
+          }}
+          moduleContext={selectedBotModule}
+          currentVersion="yai1"
+          botsFilter={["accounting-bot"]}
+          initialTopic={selectedBotModule}
+        />
+      )}
+      {isBotOpen && selectedBotModule && !isAccountingSubmenu && (
         <GeneralAIAgent
           onClose={() => {
             setIsBotOpen(false);
