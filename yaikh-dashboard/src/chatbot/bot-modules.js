@@ -381,6 +381,10 @@ const PhoneFrame = ({
     // button is clicked and the action persists in Mongo.
     onPostBotMessage,
     onUpdateBotMessage,
+    // Pre-selected accounting topic when PhoneFrame is mounted from a
+    // sub-menu page (e.g. "Purchase Request"). Null in the default
+    // multi-bot launcher flow.
+    initialTopic = null,
 }) => {
     const messagesEndRef = useRef(null);
     const inputRef = useRef(null);
@@ -5992,6 +5996,7 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                                         <PhoneFrame
                                             key={`phoneframe-${bot.id}-${botLanguages[bot.id]?.code || 'en'}`}
                                             bot={bot}
+                                            initialTopic={bot.id === 'accounting-bot' ? initialTopic : null}
                                             messages={botState.messages}
                                             onSendMessage={(msg) => handleSendMessage(bot.id, msg)}
                                             onPostBotMessage={(message) => setBotStates(prev => {

@@ -12,6 +12,20 @@ const ACCOUNTING_SUBMENU_TITLES = new Set([
   "IEWS",
   "Accountant",
 ]);
+
+// Direct URL load / hard refresh drops React Router state, so `title`
+// and `cards` are missing. Map URL :moduleId → canonical title so the
+// PA still wakes up on land. Cards stay missing on direct loads (a
+// separate fix), but the agent itself greets the user.
+const MODULE_ID_TO_TITLE = {
+  "purchase-request": "Purchase Request",
+  "pr-admin": "Purchase Request",
+  "bill-claim": "Bill Claim",
+  "salary-bill": "Salary Bill",
+  "shipping-bill": "Shipping Bill",
+  "iews": "IEWS",
+  "accountant": "Accountant",
+};
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { ArrowLeft, MessageCircle, Video } from "lucide-react";
 import { IconRenderer } from "../components/IconRenderer";
@@ -682,7 +696,10 @@ const SubMenuView = () => {
   const navigate = useNavigate();
   const { moduleId } = useParams();
   const { state } = useLocation();
-  const { title = "Submenu", cards = [], isGrouped = false } = state || {};
+  const { title: stateTitle, cards = [], isGrouped = false } = state || {};
+  // Fall back to a moduleId-derived title when state is missing
+  // (direct URL / refresh) so the Accounting PA still wakes up.
+  const title = stateTitle || MODULE_ID_TO_TITLE[moduleId] || "Submenu";
   const theme = "normal"; // Default theme
   const { translateModuleTitle, t } = useTranslation();
   const [selectedBotModule, setSelectedBotModule] = useState(null);
