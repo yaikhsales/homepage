@@ -63,6 +63,18 @@ const AppLayout = () => {
   const [isGMChatOpen, setGMChatOpen] = useState(false);
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [isYaiDataBotOpen, setYaiDataBotOpen] = useState(false);
+
+  // Auto-reveal the Agent Collective / Big Brain menu ~700ms after the
+  // page mounts so the user sees the two options unfold themselves on
+  // every fresh load. This is the dropdown on the AppLayout landing
+  // view — NOT the one inside BotModules. Refresh = re-fire (component
+  // remounts), internal React Router nav that doesn't unmount AppLayout
+  // stays quiet.
+  useEffect(() => {
+    const t = setTimeout(() => setDropdownOpen(true), 700);
+    return () => clearTimeout(t);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [isGeneralAIAgentOpen, setGeneralAIAgentOpen] = useState(false);
   const [yaiVersion, setYaiVersion] = useState("yai1"); // 'yai1' or 'yai2'
   const [botModuleContext, setBotModuleContext] = useState(null);
