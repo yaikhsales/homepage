@@ -1107,12 +1107,12 @@ RESPONSE FORMATTING RULES:
                 <div>
                   <h2 className="text-white font-bold text-sm">
                     {accountingTopic
-                      ? `${accountingTopic} PA`
+                      ? "Accounting PA"
                       : (moduleContext ? moduleContext : "Yai AI Agent")}
                   </h2>
                   <p className="text-white/80 text-xs">
                     {accountingTopic
-                      ? "Live from Mongo · grounded answers"
+                      ? `Topic: ${accountingTopic} · Live from Mongo`
                       : (moduleContext
                           ? `${moduleContext} Assistant`
                           : "General Assistant")}
@@ -1137,12 +1137,12 @@ RESPONSE FORMATTING RULES:
                   </div>
                   <h3 className="text-lg font-semibold text-gray-800 mb-2">
                     {accountingTopic
-                      ? `${accountingTopic} PA`
+                      ? "Accounting PA"
                       : (moduleContext ? moduleContext : "Yai AI Agent")}
                   </h3>
                   <p className="text-sm text-gray-600 mb-6">
                     {accountingTopic
-                      ? `Ask me anything about ${accountingTopic} — I read live records from Mongo.`
+                      ? `Topic: ${accountingTopic} — I read live records from Mongo and answer grounded.`
                       : (moduleContext
                           ? `Ask me anything about ${moduleContext} module and its sub-modules!`
                           : "Ask me anything about Yaikh modules, general questions, or any topic!")}
