@@ -1399,8 +1399,14 @@ const PhoneFrame = ({
                                             alt={selectedLanguage}
                                             className="w-6 h-6 object-contain rounded-sm"
                                             onError={(e) => {
-                                                console.error('Flag image failed to load:', flagImage);
-                                                e.target.src = languages[0].flagImage;
+                                                // Hide instead of resetting to the same bad URL — the
+                                                // legacy fallback fell back to `languages[0].flagImage`,
+                                                // which is THIS image, so onError fired forever and
+                                                // pinned the renderer (white screen). One log, then bail.
+                                                if (e.target.dataset.flagFailed) return;
+                                                e.target.dataset.flagFailed = 'true';
+                                                e.target.style.display = 'none';
+                                                console.warn('Flag image missing:', flagImage);
                                             }}
                                         />
                                         <ChevronDown 
