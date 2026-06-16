@@ -4312,12 +4312,12 @@ const ShowListRequest = ({ onBack }) => {
         />
       )}
 
-      {/* Bot Button - Bottom Right */}
+      {/* Bot Button - Bottom Right (toggles open/closed) */}
       <button
-        onClick={() => setIsBotOpen(true)}
+        onClick={() => setIsBotOpen((v) => !v)}
         className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 flex items-center justify-center group"
-        aria-label="Ask Show List Request bot"
-        title="Ask Show List Request bot"
+        aria-label={isBotOpen ? "Hide assistant" : "Ask Show List Request bot"}
+        title={isBotOpen ? "Hide assistant" : "Ask Show List Request bot"}
       >
         <MessageCircle className="w-8 h-8 group-hover:rotate-12 transition-transform" />
       </button>

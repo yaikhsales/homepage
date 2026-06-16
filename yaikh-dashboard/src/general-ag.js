@@ -29,6 +29,32 @@ import {
 import { DASHBOARD_DATA } from "./data/module";
 import { KHMER_NEW_YEAR } from "./thems";
 
+/* Map a floating-chat moduleContext to the Accounting PA topic that
+ * actually owns that data. Any module that funnels into Accounting
+ * (anything under Purchase Request, plus Bill Claim / Salary Bill /
+ * Shipping Bill / IEWS / Accountant) should route through the
+ * Mongo-grounded /api/ai-chat/accounting backend instead of the legacy
+ * hardcoded-key Gemini call. Other module contexts (HR, CSR, etc.)
+ * stay on the old path until their own Topic PAs are wired.
+ */
+const ACCOUNTING_TOPIC_MAP = {
+  "Purchase Request":   "Purchase Request",
+  "Show List Request":  "Purchase Request",
+  "Master List":        "Purchase Request",
+  "Purchaser Workspace":"Purchase Request",
+  "My Confirm Received":"Purchase Request",
+  "Documents Joiner":   "Purchase Request",
+  "Bill Claim":         "Bill Claim",
+  "Salary Bill":        "Salary Bill",
+  "Shipping Bill":      "Shipping Bill",
+  IEWS:                 "IEWS",
+  Accountant:           "Accountant",
+};
+function getAccountingTopic(moduleContext) {
+  if (!moduleContext) return null;
+  return ACCOUNTING_TOPIC_MAP[moduleContext] || null;
+}
+
 const GeneralAIAgent = ({ onClose, moduleContext = null }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -767,29 +793,50 @@ RESPONSE FORMATTING RULES:
                 chatHistoryForGemini,
               );
             } else {
-              // Determine bot name based on module context (like Yai 1 bot)
-              let botName = "Yai";
-              if (moduleContext) {
-                const moduleToBotMap = {
-                  ACCOUNTANT: "Finance PA",
-                  "Verify PR": "Finance PA",
-                  "Approval PR": "Finance PA",
-                  "Pay PR": "Finance PA",
-                  "PURCHASE REQUEST": "Admin PA",
-                  YHR: "HR PA",
-                  CE: "CE Assistant",
-                  YTM: "YTM PA",
-                  "Salary Bill": "HR PA",
-                };
-                botName = moduleToBotMap[moduleContext] || moduleContext;
+              // If this module funnels into Accounting PA, route to the
+              // real Mongo-grounded Topic PA backend so the floating
+              // chat answers from live records — same agent the user
+              // sees on the Accounting PA card, just embedded here.
+              const accountingTopic = getAccountingTopic(moduleContext);
+              if (accountingTopic) {
+                const historyForBackend = chatHistoryForGemini.slice(-10).map((m) => ({
+                  role: m.from === "user" ? "user" : "model",
+                  text: m.text,
+                }));
+                responsePromise = fetch("/api/ai-chat/accounting", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    message: `[Topic: ${accountingTopic}] ${userMessage}`,
+                    history: historyForBackend,
+                  }),
+                })
+                  .then((r) => r.json())
+                  .then((d) => (d?.ok ? d.reply : `(Backend error: ${d?.error || "unknown"})`));
+              } else {
+                // Non-accounting module — fall back to legacy direct Gemini call
+                let botName = "Yai";
+                if (moduleContext) {
+                  const moduleToBotMap = {
+                    ACCOUNTANT: "Finance PA",
+                    "Verify PR": "Finance PA",
+                    "Approval PR": "Finance PA",
+                    "Pay PR": "Finance PA",
+                    "PURCHASE REQUEST": "Admin PA",
+                    YHR: "HR PA",
+                    CE: "CE Assistant",
+                    YTM: "YTM PA",
+                    "Salary Bill": "HR PA",
+                  };
+                  botName = moduleToBotMap[moduleContext] || moduleContext;
+                }
+                responsePromise = generateGeminiResponse(
+                  userMessage,
+                  botName,
+                  yaikhContext,
+                  chatHistoryForGemini,
+                );
               }
-
-              responsePromise = generateGeminiResponse(
-                userMessage,
-                botName,
-                yaikhContext,
-                chatHistoryForGemini,
-              );
             }
 
             responsePromise
