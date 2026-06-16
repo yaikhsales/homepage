@@ -1359,9 +1359,16 @@ const PhoneFrame = ({
                                     Menu
                                 </button>
                             </div>
-                            {/* Bot Name - Centered */}
+                            {/* Bot Name - Centered. For Accounting PA, the
+                                identity shifts to the active topic agent so the
+                                user knows "I'm now talking to the Purchase
+                                Request specialist", not the parent PA. */}
                             <div className="absolute left-1/2 transform -translate-x-1/2">
-                                <span className={`text-sm font-semibold ${bot.textColor || 'text-gray-800'}`}>{bot.name}</span>
+                                <span className={`text-sm font-semibold ${bot.textColor || 'text-gray-800'}`}>
+                                    {botId === 'accounting-bot' && activeTopic
+                                        ? `${activeTopic} PA`
+                                        : bot.name}
+                                </span>
                             </div>
                             {/* Right Side - Language Selector and Bot Avatar */}
                             <div className="flex items-center gap-2">
