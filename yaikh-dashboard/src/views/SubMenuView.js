@@ -1,4 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+
+// Sub-menu titles that belong to the Accounting PA. When the user
+// lands on one of these the floating bot bubble wears the PA's
+// green/emerald palette AND the chat auto-opens after a short
+// delay — the PA introduces itself instead of sleeping as a bubble.
+const ACCOUNTING_SUBMENU_TITLES = new Set([
+  "Purchase Request",
+  "Bill Claim",
+  "Salary Bill",
+  "Shipping Bill",
+  "IEWS",
+  "Accountant",
+]);
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { ArrowLeft, MessageCircle, Video } from "lucide-react";
 import { IconRenderer } from "../components/IconRenderer";
@@ -675,6 +688,21 @@ const SubMenuView = () => {
   const [isBotOpen, setIsBotOpen] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState(null);
 
+  // Auto-greet on Accounting-PA sub-menus. The PA pops itself open
+  // ~700ms after the page mounts with the topic pre-scoped, so the
+  // user lands on the page and is met by the PA instead of having to
+  // click a bubble. Non-accounting modules stay silent (bubble only).
+  const isAccountingSubmenu = ACCOUNTING_SUBMENU_TITLES.has(title);
+  useEffect(() => {
+    if (!isAccountingSubmenu) return;
+    const t = setTimeout(() => {
+      setSelectedBotModule(title);
+      setIsBotOpen(true);
+    }, 700);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [title]);
+
   // Determine if cards is grouped structure
   const isGroupedStructure = isGrouped || (cards && cards.grouped === true);
 
@@ -1048,7 +1076,7 @@ const SubMenuView = () => {
             setSelectedBotModule(title);
             setIsBotOpen(true);
           }}
-          className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 flex items-center justify-center group"
+          className={`fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-r ${isAccountingSubmenu ? "from-green-500 to-emerald-500" : "from-orange-500 to-amber-500"} text-white rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 flex items-center justify-center group`}
           aria-label={`Ask ${title} bot`}
           title={`Ask ${title} bot`}
         >
