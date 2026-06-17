@@ -6106,11 +6106,16 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                                             }}
                                         />
                                     </div>
-                                    {/* Bot Name Label */}
+                                    {/* Bot Name Label — keep the empty
+                                        spacer div in compact mount so the
+                                        phone-frame layout doesn't shift; just
+                                        hide the visible chip. */}
                                     <div className="flex-shrink-0 text-center w-full px-2 py-1">
-                                        <span className={`inline-block px-3 py-1 sm:px-4 sm:py-1.5 bg-gradient-to-r ${bot.bgGradient} text-white text-xs sm:text-sm font-semibold rounded-lg shadow-lg whitespace-nowrap border-2 border-white/30`}>
-                                            {bot.name}
-                                        </span>
+                                        {!isCompactMount && (
+                                            <span className={`inline-block px-3 py-1 sm:px-4 sm:py-1.5 bg-gradient-to-r ${bot.bgGradient} text-white text-xs sm:text-sm font-semibold rounded-lg shadow-lg whitespace-nowrap border-2 border-white/30`}>
+                                                {bot.name}
+                                            </span>
+                                        )}
                                     </div>
                                 </div>
                             );
