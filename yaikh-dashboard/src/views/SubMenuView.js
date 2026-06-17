@@ -15,8 +15,8 @@ const ACCOUNTING_SUBMENU_TITLES = new Set([
 
 // Direct URL load / hard refresh drops React Router state, so `title`
 // and `cards` are missing. Map URL :moduleId → canonical title so the
-// PA still wakes up on land. Cards stay missing on direct loads (a
-// separate fix), but the agent itself greets the user.
+// PA still wakes up on land. Cards arrays below seed the tile grid
+// so a bookmarked / shared URL still shows the sub-modules.
 const MODULE_ID_TO_TITLE = {
   "purchase-request": "Purchase Request",
   "pr-admin": "Purchase Request",
@@ -26,6 +26,23 @@ const MODULE_ID_TO_TITLE = {
   "iews": "IEWS",
   "accountant": "Accountant",
 };
+
+// Cards-by-moduleId fallback. Mirrors the inline arrays in
+// AppLayout.handleModuleClick — must stay in sync until both call
+// sites share one source. Only the Accounting-PA-owned sub-menus
+// are seeded for now because that's where direct-URL load matters
+// most (the PA needs the tiles to look like a real page).
+const MODULE_ID_TO_CARDS = {
+  "purchase-request": [
+    { title: "Purchase Request",   icon: "FileText",    color: "bg-yellow-500 text-black", action: "/dashboard/purchase-requisition-form", isPurchaseRequest: true },
+    { title: "Show Lists Request", icon: "Layout",      color: "bg-sky-400 text-black",    image: "assets/icons/sub-icons/show-list-request.png",  isPurchaseRequest: true },
+    { title: "Master List",        icon: "FileCheck",   color: "bg-blue-500 text-white",   image: "assets/icons/sub-icons/master-list.jpg",        isPurchaseRequest: true },
+    { title: "Purchaser Workspace",icon: "Briefcase",   color: "bg-green-500 text-white",  image: "assets/icons/sub-icons/purchaser-workspace.png",isPurchaseRequest: true },
+    { title: "My Confirm Received",icon: "CheckCircle", color: "bg-orange-500 text-white", image: "assets/icons/sub-icons/my-confirm-recieved.png",isPurchaseRequest: true },
+    { title: "Documents Joiner",   icon: "Plus",        color: "bg-red-500 text-white",    image: "assets/icons/sub-icons/document-joiner.png",    isPurchaseRequest: true },
+  ],
+};
+MODULE_ID_TO_CARDS["pr-admin"] = MODULE_ID_TO_CARDS["purchase-request"];
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { ArrowLeft, MessageCircle, Video } from "lucide-react";
 import { IconRenderer } from "../components/IconRenderer";
@@ -696,10 +713,14 @@ const SubMenuView = () => {
   const navigate = useNavigate();
   const { moduleId } = useParams();
   const { state } = useLocation();
-  const { title: stateTitle, cards = [], isGrouped = false } = state || {};
-  // Fall back to a moduleId-derived title when state is missing
-  // (direct URL / refresh) so the Accounting PA still wakes up.
+  const { title: stateTitle, cards: stateCards, isGrouped = false } = state || {};
+  // Fall back to a moduleId-derived title/cards when state is missing
+  // (direct URL / refresh) so the Accounting PA still wakes up AND the
+  // tile grid still shows.
   const title = stateTitle || MODULE_ID_TO_TITLE[moduleId] || "Submenu";
+  const cards = (stateCards && (Array.isArray(stateCards) ? stateCards.length : true))
+    ? stateCards
+    : (MODULE_ID_TO_CARDS[moduleId] || []);
   const theme = "normal"; // Default theme
   const { translateModuleTitle, t } = useTranslation();
   const [selectedBotModule, setSelectedBotModule] = useState(null);
