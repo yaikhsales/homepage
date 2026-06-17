@@ -1108,8 +1108,10 @@ const SubMenuView = () => {
         </div>
       )}
 
-      {/* Bot Button - Bottom Right for All Modules */}
-      {!hasNoData && (
+      {/* Bot Button - Bottom Right for All Modules.
+          Hide while the chat is already open (panel auto-opens for
+          Accounting PA sub-menus) so the bubble and panel don't stack. */}
+      {!hasNoData && !isBotOpen && (
         <button
           onClick={() => {
             setSelectedBotModule(title);

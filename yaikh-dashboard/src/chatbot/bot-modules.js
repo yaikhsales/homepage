@@ -5705,18 +5705,26 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                 }
             `}</style>
 
-            {/* Background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 transition-colors duration-300"></div>
+            {/* Background — gated in compact mode so the page underneath
+                stays visible through transparent gaps of the phone-frame */}
+            {!isCompactMount && (
+                <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 transition-colors duration-300"></div>
+            )}
 
-            {/* Back Button - Top Left — Yai Blue (Agent Collective context) */}
-            <button
-                onClick={onClose}
-                className="absolute top-4 left-4 z-50 flex items-center gap-2 px-4 py-2 bg-yai-blue/80 hover:bg-yai-blue text-white rounded-lg backdrop-blur-sm transition-colors font-medium shadow-lg pointer-events-auto"
-            >
-                <ChevronRight size={18} className="rotate-180" /> Back
-            </button>
+            {/* Back Button + Yai Agents header — only meaningful in the
+                full-screen Agent Collective view; hide in the sub-menu
+                compact mount where the page already has Back / Home. */}
+            {!isCompactMount && (
+                <button
+                    onClick={onClose}
+                    className="absolute top-4 left-4 z-50 flex items-center gap-2 px-4 py-2 bg-yai-blue/80 hover:bg-yai-blue text-white rounded-lg backdrop-blur-sm transition-colors font-medium shadow-lg pointer-events-auto"
+                >
+                    <ChevronRight size={18} className="rotate-180" /> Back
+                </button>
+            )}
 
             {/* Yai Data Header with Dropdown - Top Left */}
+            {!isCompactMount && (
             <div className="absolute top-4 left-32 z-50 pointer-events-none">
                 <style>{`
                     @keyframes float {
@@ -5891,6 +5899,7 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                     )}
                 </div>
             </div>
+            )}
 
             {/* Overlay to close dropdown when clicking outside */}
             {isDropdownOpen && (
@@ -5904,7 +5913,7 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
             <div className="flex-1 flex flex-col overflow-hidden min-h-0">
                 <div
                     ref={scrollContainerRef}
-                    className="flex-1 overflow-x-scroll overflow-y-hidden scroll-smooth px-2 sm:px-4 pt-20 sm:pt-24 custom-scrollbar"
+                    className={`flex-1 overflow-x-scroll overflow-y-hidden scroll-smooth ${isCompactMount ? "px-0 pt-0" : "px-2 sm:px-4 pt-20 sm:pt-24"} custom-scrollbar`}
                     style={{
                         scrollbarGutter: 'stable',
                         WebkitOverflowScrolling: 'touch',
@@ -6098,7 +6107,9 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                     </div>
                 </div>
 
-                {/* Custom Footer Scrollbar */}
+                {/* Custom Footer Scrollbar — only relevant when multiple
+                    PAs share a row. Hidden in compact (single-PA) mount. */}
+                {!isCompactMount && (
                 <div className="flex-shrink-0 px-4 sm:px-8 py-2 bg-white/50 backdrop-blur-sm border-t border-gray-200">
                     <div
                         ref={scrollbarTrackRef}
@@ -6121,6 +6132,7 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                         </div>
                     </div>
                 </div>
+                )}
             </div>
 
         </div>
