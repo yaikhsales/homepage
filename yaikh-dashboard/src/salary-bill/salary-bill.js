@@ -6,6 +6,7 @@ import {
     Plus, X, Loader2, RefreshCw
 } from 'lucide-react';
 import GeneralAIAgent from '../general-ag';
+import BotModules from '../chatbot/bot-modules';
 import { useTranslation } from '../translate/TranslationContext';
 import CaptureField from '../components/CaptureField';
 
@@ -23,6 +24,12 @@ const SalaryBill = ({ onBack }) => {
     const navigate = useNavigate();
     const { t } = useTranslation();
     const [isBotOpen, setIsBotOpen] = useState(false);
+    // Accounting PA greets on land — same auto-open behavior as the
+    // Purchase Request sub-menu.
+    useEffect(() => {
+        const t = setTimeout(() => setIsBotOpen(true), 700);
+        return () => clearTimeout(t);
+    }, []);
 
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -263,20 +270,25 @@ const SalaryBill = ({ onBack }) => {
                 </div>
             </div>
 
-            {/* Bot Button */}
-            <button
-                onClick={() => setIsBotOpen(true)}
-                className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 flex items-center justify-center group"
-                aria-label="Ask Salary Bill bot"
-                title="Ask Salary Bill bot"
-            >
-                <MessageCircle className="w-8 h-8 group-hover:rotate-12 transition-transform" />
-            </button>
+            {/* Accounting PA — green bubble, hidden while panel open */}
+            {!isBotOpen && (
+                <button
+                    onClick={() => setIsBotOpen(true)}
+                    className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 flex items-center justify-center group"
+                    aria-label="Ask Accounting PA"
+                    title="Ask Accounting PA"
+                >
+                    <MessageCircle className="w-8 h-8 group-hover:rotate-12 transition-transform" />
+                </button>
+            )}
 
             {isBotOpen && (
-                <GeneralAIAgent
+                <BotModules
                     onClose={() => setIsBotOpen(false)}
                     moduleContext="Salary Bill"
+                    currentVersion="yai1"
+                    botsFilter={["accounting-bot"]}
+                    initialTopic="Salary Bill"
                 />
             )}
 
