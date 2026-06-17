@@ -1515,11 +1515,22 @@ const PhoneFrame = ({
                                     ) : (
                                         // Regular Suggested Actions or Admin PA Module Actions
                                         suggestedActions.length > 0 && (
-                                            <div className="flex flex-col gap-2 mt-8">
+                                            <div className={`${botId === 'accounting-bot' ? 'flex flex-wrap gap-1.5 mt-4 justify-start' : 'flex flex-col gap-2 mt-8'}`}>
                                                 {suggestedActions.map((action, idx) => {
                                                     const isAccountingFilter = botId === 'accounting-bot';
                                                     const isActiveTopic = isAccountingFilter && activeTopic === action.text;
                                                     const badgeCount = isAccountingFilter ? (notifCounts[action.text] || 0) : 0;
+                                                    // Short one-word label for the accounting topic chips so 6 fit
+                                                    // in 2 rows inside the compact panel, leaving room for chat text.
+                                                    const SHORT_LABEL = {
+                                                        'Purchase Request': 'Purchase',
+                                                        'Bill Claim':       'Claims',
+                                                        'Salary Bill':      'Salary',
+                                                        'Shipping Bill':    'Shipping',
+                                                        'Accountant':       'Account',
+                                                        'IEWS':             'IEWS',
+                                                    };
+                                                    const chipLabel = isAccountingFilter ? (SHORT_LABEL[action.text] || action.text) : action.text;
                                                     return (
                                                         <button
                                                             key={idx}
@@ -1594,10 +1605,10 @@ const PhoneFrame = ({
                                                                 }
                                                                 onSendMessage(action.text);
                                                             }}
-                                                            className={`text-left px-5 py-3 rounded-full bg-gradient-to-r ${bot.lightAccent || 'from-gray-100 to-gray-200'} border ${bot.borderColor || 'border-gray-200'} text-sm ${bot.textColor || 'text-gray-800'} hover:opacity-80 hover:shadow-md transition flex items-center gap-2 font-medium ${isActiveTopic ? 'ring-2 ring-offset-1 ring-emerald-500 shadow-md' : ''}`}
+                                                            className={`text-left rounded-full bg-gradient-to-r ${bot.lightAccent || 'from-gray-100 to-gray-200'} border ${bot.borderColor || 'border-gray-200'} ${bot.textColor || 'text-gray-800'} hover:opacity-80 hover:shadow-md transition flex items-center font-medium ${isAccountingFilter ? 'px-3 py-1.5 gap-1.5 text-xs' : 'px-5 py-3 gap-2 text-sm flex-1'} ${isActiveTopic ? 'ring-2 ring-offset-1 ring-emerald-500 shadow-md' : ''}`}
                                                         >
-                                                            {action.highlight && <Sparkles size={16} className={`text-${bot.bgGradient.split('-')[1]}-500`} />}
-                                                            <span className="flex-1">{action.text}</span>
+                                                            {action.highlight && !isAccountingFilter && <Sparkles size={16} className={`text-${bot.bgGradient.split('-')[1]}-500`} />}
+                                                            <span className={isAccountingFilter ? '' : 'flex-1'}>{chipLabel}</span>
                                                             {badgeCount > 0 && (
                                                                 <span
                                                                     className="ml-auto inline-flex items-center justify-center min-w-[1.5rem] h-5 px-1.5 rounded-full bg-red-500 text-white text-[11px] font-bold leading-none shadow-sm"
