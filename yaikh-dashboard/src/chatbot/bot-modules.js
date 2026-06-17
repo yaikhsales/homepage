@@ -5407,10 +5407,18 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
         document.addEventListener('mouseup', handleMouseUp);
     };
 
+    // Compact mount = single-PA mode (sub-menu auto-open). Anchor the
+    // chat to the bottom-right as a phone-frame-sized panel instead of
+    // a full-screen modal so the page behind (e.g. the 6 PR tiles) stays
+    // visible and interactive — full-screen was eating the entire sub-menu.
+    const isCompactMount = botsFilter && botsFilter.length === 1;
+    const outerClass = isCompactMount
+        ? `fixed bottom-6 right-6 z-[200] w-[400px] h-[680px] max-h-[92vh] flex flex-col overflow-hidden rounded-3xl shadow-2xl transition-all duration-300 ease-out ${isClosing ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`
+        : `fixed inset-0 z-[200] flex flex-col overflow-hidden transition-all duration-300 ease-out ${isClosing ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`;
+
     return (
         <div
-            className={`fixed inset-0 z-[200] flex flex-col overflow-hidden transition-all duration-300 ease-out ${isClosing ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
-                }`}
+            className={outerClass}
             style={{
                 animation: isClosing ? 'none' : 'fadeInScale 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)'
             }}
