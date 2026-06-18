@@ -72,8 +72,16 @@ async function extractModules() {
 
   // Match each `{ id: "...", title: "...", image: "IMG/avatars/...", ... description: "..." }`
   // object that lives inside a `modules: [ ... ]` array.
+  //
+  // CRITICAL: the gap between fields uses [^{}] (no braces) so the regex
+  // can't accidentally span a parent group { id: "billing-col" ... modules: [ {
+  // id: "purchase-request" ... image: "..." } ] } and capture the OUTER id
+  // with the INNER image. The all-[\s\S]*? gap had that bug, which is why
+  // PERSONA_OVERRIDES["purchase-request"] never matched (mod.id was
+  // "billing-col"). Restricting to non-brace chars forces the match to
+  // stay inside one object literal.
   const out = [];
-  const re = /\{\s*id:\s*"([^"]+)",[\s\S]*?title:\s*"([^"]+)",[\s\S]*?image:\s*"(IMG\/avatars\/[^"]+\.png)"[\s\S]*?description:\s*"([^"]+)"[\s\S]*?\}/g;
+  const re = /\{\s*id:\s*"([^"]+)",[^{}]*?title:\s*"([^"]+)",[^{}]*?image:\s*"(IMG\/avatars\/[^"]+\.png)"[^{}]*?description:\s*"([^"]+)"[^{}]*?\}/g;
   let m;
   while ((m = re.exec(src)) !== null) {
     const [, id, title, image, description] = m;
@@ -139,6 +147,8 @@ const STYLE_BASE =
   "left/right edges, head almost touching the top edge. Minimise empty " +
   "backdrop — no more than a thin border of background visible. Centred " +
   "and facing camera, slight friendly smile, confident expression. " +
+  "Subject is BARE-HEADED — absolutely NO cap, NO hat, NO turban, NO " +
+  "headwear of any kind, unless an attire override explicitly demands one. " +
   "MINIMAL clean studio backdrop — soft neutral off-white / very pale " +
   "grey, smooth even gradient, NO office, NO plants, NO furniture, NO " +
   "windows, NO desk, NO bokeh objects. Soft even studio lighting. Square " +
@@ -147,8 +157,30 @@ const STYLE_BASE =
 // Module-specific persona overrides — replaces the diversity-cycle persona
 // when a particular agent should look a specific way. Matched by `mod.id`.
 const PERSONA_OVERRIDES = {
-  sop:   "mid-30s Cambodian-Khmer woman, neat hair pulled back, calm authoritative expression, no glasses",
+  sop:   "mid-30s Cambodian-Khmer woman, neat hair pulled back in a low bun, calm authoritative expression, no glasses",
   "e-gov": "early-40s Cambodian-Khmer woman, shoulder-length hair, dignified composed expression, subtle makeup",
+  // Refinements from user feedback:
+  waste:
+    "38-year-old Cambodian-Khmer MAN (definitely male), neat short jet-black hair, light golden complexion, no facial hair, no glasses, environmentally-conscious calm grounded expression",
+  "purchase-request":
+    "Mr. Pichara Lim, a 50-year-old Cambodian-Khmer MAN (gender: male, masculine features, square jaw, strong brow). Khmer ethnicity — warm honey-brown complexion typical of Cambodian Phnom Penh professionals, wider rounded Khmer face shape, distinctive Khmer cheekbones. Short neatly side-parted jet-black hair with subtle salt-and-pepper greying at the temples. Clean-shaven (no beard, no moustache). No glasses. Dignified procurement-veteran calm expression. This is unambiguously a Khmer man — do NOT render a woman, do NOT render Indian or African features.",
+  yhr:
+    "35-year-old Cambodian-Khmer woman (NOT Indian, NOT South-Asian — NO bindi, NO sari), shoulder-length straight black hair, fair Khmer complexion, almond eyes, no glasses, gentle approachable HR-professional smile",
+  "support-ticket":
+    "Mr. Borey Chea, a 32-year-old Cambodian-Khmer MAN (gender: male). Distinctly Khmer features — warm golden-tan Phnom Penh complexion, wider rounded Khmer face shape with strong cheekbones, dark espresso-brown almond-shaped eyes. Tidy short jet-black hair with a clean side part. Clean-shaven (no beard, no moustache, no facial hair of any kind). No glasses. Warm friendly helpful customer-service smile. Khmer-Cambodian, NOT South-Asian.",
+  "salary-bill":
+    "36-year-old Eurasian man of Cambodian-French heritage, mixed Khmer + European features — lighter olive complexion, hazel-brown eyes, light-brown wavy hair styled neatly, slim European nose with Khmer cheekbones, clean-shaven, no glasses, polished payroll-officer look",
+  "shipping-bill":
+    "45-year-old Eurasian woman of Cambodian-British heritage, mixed features — fair complexion with a subtle Khmer warmth, soft ash-blonde streaks through medium-brown hair worn at shoulder length, hazel-green eyes, no glasses, composed logistics-manager expression",
+  // Round 2 — break the "two near-identical East-Asian women" pattern:
+  "meeting-room":
+    "29-year-old Cambodian-Khmer woman (DEFINITELY Khmer, NOT Japanese, NOT Chinese, NOT Korean), warm sun-kissed Cambodian complexion, distinctively Khmer wider rounded face shape with strong cheekbones, full natural lips, dark espresso-brown eyes (NOT monolid), thick wavy black hair worn loose past the shoulders with a centre part, single small gold hoop earrings, no glasses, bright welcoming meeting-coordinator smile",
+  mrp:
+    "Mr. Sokha Vann, a 48-year-old Cambodian-Khmer FATHER and HUSBAND. He is a man. Masculine bone structure: broad square jaw, strong brow ridge, prominent masculine nose, visible Adam's apple, no makeup. Warm tan weathered Khmer complexion from years on factory floors. Very short military-style black hair greying at the temples. Thick black moustache (no beard). Broad shoulders, masculine chest. No glasses. Calm authoritative production-veteran expression. This is unambiguously a man — do NOT render a woman.",
+  // Air — environmental monitoring agent, was rendering as African-American.
+  // Anchor as Cambodian-Khmer for regional consistency.
+  air:
+    "Mr. Veasna Ros, a 36-year-old Cambodian-Khmer MAN (gender: male). Warm sun-tanned Khmer complexion from outdoor environmental monitoring work. Wider rounded Khmer face with distinctive Cambodian cheekbones. Short neat jet-black hair, clean-shaven (no beard, no moustache). Broad shoulders. No glasses. Calm observant expression. Cambodian-Khmer ethnicity — NOT African, NOT South-Asian, NOT East-Asian.",
 };
 
 // Module-specific appearance overrides — replaces the default business-suit
@@ -156,8 +188,9 @@ const PERSONA_OVERRIDES = {
 const APPEARANCE_OVERRIDES = {
   sop:
     " Wear the formal uniform of a Cambodian National Police officer: " +
-    "peaked cap with insignia, dark-navy uniform tunic with shoulder " +
-    "epaulettes, white shirt and tie, polished badge on the chest. " +
+    "dark-navy uniform tunic with shoulder epaulettes, white shirt and " +
+    "navy tie, polished metal badge on the chest, ribbon bars over the " +
+    "left breast pocket. NO cap, NO hat — head bare. " +
     "Skip the business-suit description above.",
   "e-gov":
     " Wear the formal Cambodian civil-servant uniform: light khaki or " +
