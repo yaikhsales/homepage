@@ -194,6 +194,33 @@ const AppLayout = () => {
                   color: "bg-cyan-500 text-white",
                 },
               ]
+            : id === "iews"
+              ? [
+                  {
+                    title: "Income",
+                    icon: "TrendingUp",
+                    color: "bg-emerald-500 text-white",
+                    isIews: true,
+                  },
+                  {
+                    title: "Expenses",
+                    icon: "TrendingDown",
+                    color: "bg-rose-500 text-white",
+                    isIews: true,
+                  },
+                  {
+                    title: "Withholding",
+                    icon: "FileBadge",
+                    color: "bg-amber-500 text-black",
+                    isIews: true,
+                  },
+                  {
+                    title: "Salaries",
+                    icon: "BadgeDollarSign",
+                    color: "bg-indigo-500 text-white",
+                    isIews: true,
+                  },
+                ]
             : id === "pr-admin" || id === "purchase-request"
               ? [
                   {
@@ -1484,11 +1511,15 @@ const AppLayout = () => {
               </div>
             </div>
 
-            {/* General AI Agent Button - Right Side Bottom */}
-            {isHome && (
+            {/* General AI Agent Button - Right Side Bottom.
+                Brand-colored by active version: Agent Collective = Yai
+                Orange, Big Brain = Yai Blue. Hidden when the Big Brain
+                PA panel is already open (the user is IN the agent — a
+                second icon would be redundant). */}
+            {isHome && !isYaiDataBotOpen && (
               <button
                 onClick={() => setGeneralAIAgentOpen(true)}
-                className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 flex items-center justify-center group"
+                className={`fixed bottom-6 right-6 z-50 w-16 h-16 ${yaiVersion === 'yai2' ? 'bg-yai-blue hover:bg-yai-blue/90' : 'bg-yai-orange hover:bg-yai-orange/90'} text-white rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 flex items-center justify-center group`}
                 aria-label="General AI Agent"
               >
                 <Sparkles className="w-8 h-8 group-hover:rotate-12 transition-transform" />
