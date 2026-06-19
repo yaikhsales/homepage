@@ -93,6 +93,10 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
     const db = await getDb();
     const col = db.collection(COLLECTION);
 
+    // Cast to any: the MongoDB driver's UpdateFilter<Document> can't
+    // infer that `timeline` is an array on an untyped collection, so
+    // $push.timeline fails strict typecheck. Runtime is correct — the
+    // schema doc lists timeline as an array of events.
     const r = await col.findOneAndUpdate(
       { _id },
       {
@@ -105,7 +109,7 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
             description: eventDesc,
           },
         },
-      },
+      } as any,
       { returnDocument: "after" }
     );
 
