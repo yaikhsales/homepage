@@ -1512,17 +1512,23 @@ const AppLayout = () => {
             </div>
 
             {/* General AI Agent Button - Right Side Bottom.
-                Brand-colored by active version: Agent Collective = Yai
-                Orange, Big Brain = Yai Blue. Hidden when the Big Brain
-                PA panel is already open (the user is IN the agent — a
-                second icon would be redundant). */}
+                Branded Yai logo whose color matches the active version —
+                Agent Collective uses the orange-textured Yai mark,
+                Big Brain uses the blue-textured one. Image IS the
+                button (no separate bg), with a brand-tinted ring to
+                read clearly against any backdrop. Hidden when the
+                Big Brain PA panel is open. */}
             {isHome && !isYaiDataBotOpen && (
               <button
                 onClick={() => setGeneralAIAgentOpen(true)}
-                className={`fixed bottom-6 right-6 z-50 w-16 h-16 ${yaiVersion === 'yai2' ? 'bg-yai-blue hover:bg-yai-blue/90' : 'bg-yai-orange hover:bg-yai-orange/90'} text-white rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 flex items-center justify-center group`}
+                className={`fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full overflow-hidden shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 ring-2 ring-offset-2 ring-offset-slate-900 ${yaiVersion === 'yai2' ? 'ring-yai-blue' : 'ring-yai-orange'}`}
                 aria-label="General AI Agent"
               >
-                <Sparkles className="w-8 h-8 group-hover:rotate-12 transition-transform" />
+                <img
+                  src={yaiVersion === 'yai2' ? '/assets/modules-image/yai1.png' : '/assets/icons/sub-icons/yai.png'}
+                  alt="Yai Agent"
+                  className="w-full h-full object-cover"
+                />
               </button>
             )}
           </>
