@@ -417,23 +417,31 @@ const PhoneFrame = ({
     // typing into chat.
     const [pendingModalTopic, setPendingModalTopic] = useState(null);
 
+    // Map bot id → notifications API slug. Add new PAs here once their
+    // /api/notifications/<slug> endpoint is wired up.
+    const NOTIF_SLUG = {
+        'accounting-bot': 'accounting',
+        'hr-bot':         'hr',
+    };
+    const notifSlug = NOTIF_SLUG[botId];
+
     const refreshNotifCounts = React.useCallback(() => {
-        if (botId !== 'accounting-bot') return;
-        fetch('/api/notifications/accounting')
+        if (!notifSlug) return;
+        fetch(`/api/notifications/${notifSlug}`)
             .then(r => r.json())
             .then(d => { if (d?.ok) setNotifCounts(d.counts || {}); })
             .catch(() => {});
-    }, [botId]);
+    }, [notifSlug]);
 
     useEffect(() => {
-        if (botId !== 'accounting-bot') return;
+        if (!notifSlug) return;
         let cancelled = false;
-        fetch('/api/notifications/accounting')
+        fetch(`/api/notifications/${notifSlug}`)
             .then(r => r.json())
             .then(d => { if (!cancelled && d?.ok) setNotifCounts(d.counts || {}); })
             .catch(() => { /* silent — badge just doesn't render */ });
         return () => { cancelled = true; };
-    }, [botId]);
+    }, [notifSlug]);
 
     const startListening = () => {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -1515,9 +1523,11 @@ const PhoneFrame = ({
                                     ) : (
                                         // Regular Suggested Actions or Admin PA Module Actions
                                         suggestedActions.length > 0 && (
-                                            <div className={`${botId === 'accounting-bot' ? 'flex flex-wrap gap-1.5 mt-4 justify-start' : 'flex flex-col gap-2 mt-8'}`}>
+                                            <div className={`${notifSlug ? 'flex flex-wrap gap-1.5 mt-4 justify-start' : 'flex flex-col gap-2 mt-8'}`}>
                                                 {suggestedActions.map((action, idx) => {
-                                                    const isAccountingFilter = botId === 'accounting-bot';
+                                                    // PAs with notifications + topic filtering. Adds HR alongside
+                                                    // Accounting — both use the same chip-toggle / pending-items flow.
+                                                    const isAccountingFilter = !!notifSlug;
                                                     const isActiveTopic = isAccountingFilter && activeTopic === action.text;
                                                     const badgeCount = isAccountingFilter ? (notifCounts[action.text] || 0) : 0;
                                                     // Short one-word label for the accounting topic chips so 6 fit
@@ -1554,7 +1564,7 @@ const PhoneFrame = ({
                                                                             nextStatusMap: {},
                                                                             loading: true,
                                                                         });
-                                                                        fetch(`/api/notifications/accounting/items?topic=${encodeURIComponent(action.text)}`)
+                                                                        fetch(`/api/notifications/${notifSlug}/items?topic=${encodeURIComponent(action.text)}`)
                                                                             .then(r => r.json())
                                                                             .then(data => {
                                                                                 if (!onUpdateBotMessage) return;
@@ -1813,7 +1823,7 @@ const PhoneFrame = ({
                                                                             onClick={() => {
                                                                                 if (!nextStatus || !msg.collection || !onUpdateBotMessage) return;
                                                                                 onUpdateBotMessage(idx, (prev) => ({ ...prev, advancingId: itemId }));
-                                                                                fetch('/api/notifications/accounting/action', {
+                                                                                fetch(`/api/notifications/${notifSlug}/action`, {
                                                                                     method: 'POST',
                                                                                     headers: { 'Content-Type': 'application/json' },
                                                                                     body: JSON.stringify({ collection: msg.collection, id: itemId, toStatus: nextStatus }),
@@ -1830,7 +1840,7 @@ const PhoneFrame = ({
                                                                                             return { ...prev, items: updatedItems, advancingId: null };
                                                                                         });
                                                                                         // Tell the parent to refresh badge counts on the pills.
-                                                                                        fetch('/api/notifications/accounting')
+                                                                                        fetch(`/api/notifications/${notifSlug}`)
                                                                                             .then(r => r.json())
                                                                                             .then(nd => { if (nd?.ok) setNotifCounts(nd.counts || {}); })
                                                                                             .catch(() => {});

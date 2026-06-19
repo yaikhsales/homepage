@@ -146,19 +146,71 @@ const nssfContributions = [
   { no: "NSSF-2026-06", period: "2026-06", run_date: "2026-06-13", worker_count: 320, employer_share_usd: 2058.00, employee_share_usd: 1212.00, total_usd: 3270.00, status: "draft" },
 ];
 
+/* ─── HR PA topic-pill backing collections ──────────────────────────────────
+ * The 5 HR PA suggested-action pills (Attendance today / Open leave requests
+ * / Training schedule / Org chart updates / Temp worker requests) need their
+ * own backing collections so the HR notifications endpoint can return real
+ * counts and items. Mirroring the Accounting PA pattern.
+ */
+const todayISO = new Date().toISOString().slice(0, 10);
+
+/* Attendance — today's roster check (status ∈ present|late|absent|leave) */
+const attendanceToday = [
+  { no: "ATT-2026-0001", date: todayISO, employee: "EMP-2026-0001", name: "Sok Pisey",     line: "L1", status: "present", clockIn: "07:25", clockOut: null },
+  { no: "ATT-2026-0002", date: todayISO, employee: "EMP-2026-0002", name: "Heng Vichea",   line: "L1", status: "late",    clockIn: "07:48", clockOut: null, lateMinutes: 18 },
+  { no: "ATT-2026-0003", date: todayISO, employee: "EMP-2026-0003", name: "Chea Sophea",   line: "L2", status: "absent",  clockIn: null,    clockOut: null, reason: "no-show" },
+  { no: "ATT-2026-0004", date: todayISO, employee: "EMP-2026-0004", name: "Ros Sokha",     line: "L2", status: "leave",   clockIn: null,    clockOut: null, leaveRef: "LR-2026-0007" },
+  { no: "ATT-2026-0005", date: todayISO, employee: "EMP-2026-0005", name: "Mao Sreyleak",  line: "L3", status: "absent",  clockIn: null,    clockOut: null, reason: "sick" },
+];
+
+/* Leave requests awaiting approval */
+const leaveRequests = [
+  { no: "LR-2026-0010", employee: "EMP-2026-0011", name: "Vorn Dany",   type: "Annual",   from: "2026-06-22", to: "2026-06-24", days: 3, reason: "Family event",         status: "pending" },
+  { no: "LR-2026-0011", employee: "EMP-2026-0017", name: "Sao Bopha",   type: "Sick",     from: "2026-06-19", to: "2026-06-19", days: 1, reason: "Doctor appointment",   status: "pending" },
+  { no: "LR-2026-0012", employee: "EMP-2026-0023", name: "Khun Visal",  type: "Annual",   from: "2026-07-01", to: "2026-07-05", days: 5, reason: "Trip to province",     status: "pending" },
+  { no: "LR-2026-0013", employee: "EMP-2026-0031", name: "Ly Sothy",    type: "Maternity",from: "2026-07-10", to: "2026-10-10", days: 92,reason: "Maternity (90+2 days)",status: "pending" },
+];
+
+/* Training sessions scheduled in next 30 days */
+const trainingSessions = [
+  { no: "TR-2026-0008", title: "Sewing line refresher",        trainer: "Internal · QA Lead", date: "2026-06-21", time: "08:00–10:00", room: "Training Room A",  enrolled: 24, status: "scheduled" },
+  { no: "TR-2026-0009", title: "Forklift safety re-certify",   trainer: "External · Cambo-Safety", date: "2026-06-24", time: "13:00–17:00", room: "Warehouse 2",  enrolled: 6,  status: "scheduled" },
+  { no: "TR-2026-0010", title: "Fire drill",                    trainer: "Admin · Fire Marshal", date: "2026-06-27", time: "10:30–11:30", room: "Whole factory", enrolled: 318,status: "scheduled" },
+  { no: "TR-2026-0011", title: "GMP induction (new hires)",     trainer: "HR · Onboarding Lead", date: "2026-07-01", time: "08:00–12:00", room: "Training Room A",enrolled: 12, status: "scheduled" },
+];
+
+/* Pending org-chart updates */
+const orgChartChanges = [
+  { no: "OCC-2026-0005", change: "Promote Sok Pisey → Line Leader (L1)",        effective: "2026-07-01", requestedBy: "Production Manager", status: "pending" },
+  { no: "OCC-2026-0006", change: "Transfer Heng Vichea L1 → L3 (capacity rebalance)", effective: "2026-06-25", requestedBy: "Production Manager", status: "pending" },
+  { no: "OCC-2026-0007", change: "Add new role: QA Trainer reporting to QA Manager", effective: "2026-07-15", requestedBy: "QA Manager",         status: "pending" },
+];
+
+/* Temp worker requests awaiting fulfillment */
+const tempWorkerRequests = [
+  { no: "TWR-2026-0012", line: "L2", role: "Helper",   headcount: 6, from: "2026-06-24", to: "2026-07-31", reason: "Style PO-2026-088 ramp-up",    status: "pending" },
+  { no: "TWR-2026-0013", line: "L4", role: "Operator", headcount: 4, from: "2026-07-01", to: "2026-09-30", reason: "Cover maternity leaves x2",    status: "pending" },
+  { no: "TWR-2026-0014", line: "L1", role: "Helper",   headcount: 3, from: "2026-06-25", to: "2026-07-15", reason: "Short-term cleaning support",  status: "pending" },
+];
+
 const stamp = (doc) => ({ ...doc, createdAt: now(), updatedAt: now() });
 
 const seedMap = {
-  workforce_master:    workforceMaster,
-  job_postings:        jobPostings,
-  candidates:          candidates,
-  interviews:          interviews,
-  onboarding_records:  onboardingRecords,
-  benefit_profiles:    benefitProfiles,
-  payroll_runs:        payrollRuns,
-  visas:               visas,
-  work_permits:        workPermits,
-  nssf_contributions:  nssfContributions,
+  workforce_master:      workforceMaster,
+  job_postings:          jobPostings,
+  candidates:            candidates,
+  interviews:            interviews,
+  onboarding_records:    onboardingRecords,
+  benefit_profiles:      benefitProfiles,
+  payroll_runs:          payrollRuns,
+  visas:                 visas,
+  work_permits:          workPermits,
+  nssf_contributions:    nssfContributions,
+  attendance_today:      attendanceToday,
+  leave_requests:        leaveRequests,
+  training_sessions:     trainingSessions,
+  org_chart_changes:     orgChartChanges,
+  temp_worker_requests:  tempWorkerRequests,
 };
 
 const client = new MongoClient(uri);
