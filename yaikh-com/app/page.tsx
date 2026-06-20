@@ -66,7 +66,7 @@ function Nav() {
               <span className="block font-serif font-semibold text-[15px] tracking-tight">
                 {t("slogan1")}
               </span>
-              <span className="block text-[12px] font-semibold tracking-tight max-w-[24ch] mt-0.5">
+              <span className="block text-[12px] font-semibold tracking-tight max-w-[20ch] mt-0.5">
                 {t("slogan2")}
               </span>
             </span>
@@ -114,8 +114,8 @@ function Nav() {
             <a href="/experience" className="hover:text-yai-orange transition">
               {t("nav.experience")}
             </a>
-            <a href="#contact"   className="hover:text-yai-orange transition">{t("nav.chat")}</a>
-            <a href="#join"      className="hover:text-yai-orange transition font-semibold">{t("nav.join")}</a>
+            <a href="#contact"   className="hover:text-yai-orange transition whitespace-nowrap">{t("nav.chat")}</a>
+            <a href="#join"      className="hover:text-yai-orange transition font-semibold whitespace-nowrap">{t("nav.join")}</a>
           </div>
         </div>
 
