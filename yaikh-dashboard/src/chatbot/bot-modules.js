@@ -336,6 +336,79 @@ function getDynamicGreeting(name) {
     };
 }
 
+/* Inline chart card — renders the CSR PA's chart payload as a tiny
+ * SVG line/bar chart inside the in-chat pending_items message. No
+ * external chart lib — series ≤ 30 points, fixed viewBox, scales to
+ * the panel width. Keeps the bundle lean and the card snappy. */
+const InlineChart = ({ chart }) => {
+    if (!chart || !Array.isArray(chart.series) || chart.series.length === 0) return null;
+    const W = 320, H = 120, PAD_L = 28, PAD_R = 8, PAD_T = 8, PAD_B = 22;
+    const innerW = W - PAD_L - PAD_R;
+    const innerH = H - PAD_T - PAD_B;
+    const ys = chart.series.map(p => p.y);
+    const minY = Math.min(...ys, 0);
+    const maxY = Math.max(...ys, 1);
+    const range = maxY - minY || 1;
+    const xStep = chart.series.length > 1 ? innerW / (chart.series.length - 1) : 0;
+    const yFor = (y) => PAD_T + innerH - ((y - minY) / range) * innerH;
+    const xFor = (i) => PAD_L + i * xStep;
+
+    const ticks = [maxY, minY + range / 2, minY].map(v => +v.toFixed(1));
+    const stroke = chart.kind === 'bar' ? '#a855f7' : '#8b5cf6';
+
+    return (
+        <div className="bg-white border border-purple-100 rounded-lg p-2 shadow-sm">
+            <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto">
+                {/* gridlines + y-axis labels */}
+                {ticks.map((t, i) => {
+                    const y = yFor(t);
+                    return (
+                        <g key={i}>
+                            <line x1={PAD_L} y1={y} x2={W - PAD_R} y2={y} stroke="#f1f5f9" strokeWidth="1" />
+                            <text x={PAD_L - 4} y={y + 3} fontSize="8" fill="#94a3b8" textAnchor="end">{t}</text>
+                        </g>
+                    );
+                })}
+                {/* data */}
+                {chart.kind === 'bar' ? (
+                    chart.series.map((p, i) => {
+                        const barW = Math.max(2, xStep * 0.6);
+                        const cy = yFor(p.y);
+                        const cx = xFor(i);
+                        return (
+                            <rect key={i} x={cx - barW / 2} y={cy} width={barW} height={PAD_T + innerH - cy} fill={stroke} rx="1.5" />
+                        );
+                    })
+                ) : (
+                    <>
+                        <polyline
+                            fill="none"
+                            stroke={stroke}
+                            strokeWidth="1.8"
+                            points={chart.series.map((p, i) => `${xFor(i)},${yFor(p.y)}`).join(' ')}
+                        />
+                        {chart.series.map((p, i) => (
+                            <circle key={i} cx={xFor(i)} cy={yFor(p.y)} r="2" fill={stroke} />
+                        ))}
+                    </>
+                )}
+                {/* x-axis labels — first / middle / last */}
+                {[0, Math.floor(chart.series.length / 2), chart.series.length - 1]
+                    .filter((v, i, a) => a.indexOf(v) === i)
+                    .map((i) => (
+                        <text key={i} x={xFor(i)} y={H - 6} fontSize="8" fill="#64748b" textAnchor="middle">
+                            {chart.series[i]?.x}
+                        </text>
+                    ))}
+            </svg>
+            <div className="text-[10px] text-gray-500 mt-1 px-1 flex items-center justify-between">
+                <span>{chart.unit}</span>
+                <span className="text-purple-700 font-medium">{chart.kind === 'bar' ? 'bar' : 'line'}</span>
+            </div>
+        </div>
+    );
+};
+
 // Phone Frame Component with Gemini Chatbot Inside
 const PhoneFrame = ({
     bot,
@@ -423,6 +496,8 @@ const PhoneFrame = ({
     const NOTIF_SLUG = {
         'accounting-bot': 'accounting',
         'hr-bot':         'hr',
+        'admin-bot':      'admin',
+        'csr-bot':        'csr',
     };
     const notifSlug = NOTIF_SLUG[botId];
 
@@ -1548,6 +1623,18 @@ const PhoneFrame = ({
                                                         'Org chart updates':    'Org',
                                                         'Temp worker requests': 'Temp',
                                                         'Speak Up':             'Speak Up',
+                                                        // Admin PA
+                                                        'Open support tickets':   'Tickets',
+                                                        'Meeting room bookings':  'Rooms',
+                                                        'Gate passes today':      'Gates',
+                                                        'Y Shop orders':          'Y Shop',
+                                                        'Visitors today':         'Visitors',
+                                                        // CSR PA
+                                                        'Air temperature today':  'Air',
+                                                        'Water usage log':        'Water',
+                                                        'Energy consumption':     'Energy',
+                                                        'Compliance audits':      'Audits',
+                                                        'Environmental alerts':   'Alerts',
                                                     };
                                                     const chipLabel = isAccountingFilter ? (SHORT_LABEL[action.text] || action.text) : action.text;
                                                     return (
@@ -1560,15 +1647,19 @@ const PhoneFrame = ({
                                                                 // message with inline Approve buttons (no popup). The
                                                                 // user can drive the queue right from the conversation.
                                                                 if (isAccountingFilter) {
-                                                                    if (badgeCount > 0 && onPostBotMessage) {
-                                                                        // Optimistic loading message — replaced once the
-                                                                        // fetch resolves.
+                                                                    // Tap behavior:
+                                                                    //  • Always fetch — chart topics (CSR sensors) have no
+                                                                    //    "pending" rows but still surface the chart on tap.
+                                                                    //  • If only a topic filter (no badge, no chart), toggle
+                                                                    //    the filter and exit.
+                                                                    if (onPostBotMessage) {
                                                                         onPostBotMessage({
                                                                             from: 'bot',
                                                                             type: 'pending_items',
                                                                             topic: action.text,
-                                                                            text: `Loading ${badgeCount} item${badgeCount === 1 ? '' : 's'} for "${action.text}"…`,
+                                                                            text: `Loading "${action.text}"…`,
                                                                             items: [],
+                                                                            chart: null,
                                                                             collection: null,
                                                                             nextStatusMap: {},
                                                                             loading: true,
@@ -1577,20 +1668,34 @@ const PhoneFrame = ({
                                                                             .then(r => r.json())
                                                                             .then(data => {
                                                                                 if (!onUpdateBotMessage) return;
-                                                                                // Update the most recently posted pending_items
-                                                                                // message for this topic by mutating the last
-                                                                                // message via a functional updater.
                                                                                 const lastIdx = (messages?.length || 0);
-                                                                                onUpdateBotMessage(lastIdx, (prev) => ({
-                                                                                    ...prev,
-                                                                                    text: data?.ok
-                                                                                        ? `Here ${data.items.length === 1 ? 'is' : 'are'} ${data.items.length} ${action.text.toLowerCase()} item${data.items.length === 1 ? '' : 's'} awaiting action. Tap Approve to advance each one.`
-                                                                                        : `Couldn't load items: ${data?.error || 'unknown error'}`,
-                                                                                    items: data?.items || [],
-                                                                                    collection: data?.collection || null,
-                                                                                    nextStatusMap: data?.nextStatusMap || {},
-                                                                                    loading: false,
-                                                                                }));
+                                                                                onUpdateBotMessage(lastIdx, (prev) => {
+                                                                                    if (!data?.ok) {
+                                                                                        return { ...prev, text: `Couldn't load: ${data?.error || 'unknown error'}`, loading: false };
+                                                                                    }
+                                                                                    if (data.chart) {
+                                                                                        return {
+                                                                                            ...prev,
+                                                                                            text: `${action.text} — ${data.chart.summary || ''}`,
+                                                                                            chart: data.chart,
+                                                                                            items: [],
+                                                                                            collection: data.collection || null,
+                                                                                            loading: false,
+                                                                                        };
+                                                                                    }
+                                                                                    const n = (data.items || []).length;
+                                                                                    return {
+                                                                                        ...prev,
+                                                                                        text: n === 0
+                                                                                            ? `No pending items for "${action.text}".`
+                                                                                            : `Here ${n === 1 ? 'is' : 'are'} ${n} ${action.text.toLowerCase()} item${n === 1 ? '' : 's'} awaiting action. Tap Approve to advance each one.`,
+                                                                                        items: data.items || [],
+                                                                                        chart: null,
+                                                                                        collection: data.collection || null,
+                                                                                        nextStatusMap: data.nextStatusMap || {},
+                                                                                        loading: false,
+                                                                                    };
+                                                                                });
                                                                             })
                                                                             .catch(() => {
                                                                                 if (!onUpdateBotMessage) return;
@@ -1601,9 +1706,8 @@ const PhoneFrame = ({
                                                                                     loading: false,
                                                                                 }));
                                                                             });
-                                                                    } else {
-                                                                        setActiveTopic(prev => prev === action.text ? null : action.text);
                                                                     }
+                                                                    setActiveTopic(prev => prev === action.text ? null : action.text);
                                                                     return;
                                                                 }
                                                                 // Mark action as used immediately for Admin PA modules
@@ -1802,7 +1906,11 @@ const PhoneFrame = ({
                                                             {msg.loading && (
                                                                 <div className="text-xs text-gray-500 italic">Loading…</div>
                                                             )}
-                                                            {!msg.loading && (msg.items || []).length === 0 && (
+                                                            {/* CSR sensor topics return a chart payload instead of rows. */}
+                                                            {!msg.loading && msg.chart && (
+                                                                <InlineChart chart={msg.chart} />
+                                                            )}
+                                                            {!msg.loading && !msg.chart && (msg.items || []).length === 0 && (
                                                                 <div className="text-xs text-gray-500 italic">No items to action — you're all caught up.</div>
                                                             )}
                                                             {!msg.loading && (msg.items || []).map((item) => {
