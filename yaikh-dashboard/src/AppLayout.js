@@ -163,6 +163,9 @@ const AppLayout = () => {
       } else if (demoType === "SUBMENU_SHIPPING_BILL") {
         // Navigate directly to Shipping Bill component
         navigate("/dashboard/shipping-bill");
+      } else if (demoType === "SUBMENU_SPEAK_UP") {
+        // Navigate directly to Speak Up component (HR PA — anonymous grievance channel)
+        navigate("/dashboard/speak-up");
       } else if (demoType === "SUBMENU_WATER") {
         // Navigate directly to Water component
         navigate("/dashboard/water");

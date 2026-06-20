@@ -55,6 +55,7 @@ export const DASHBOARD_DATA = [
             title: "IEWS",
             image: "IMG/avatars/agent-2.png",
             status: "active",
+            demoType: "SUBMENU_IEWS",
             popupTitle: "ADMINISTRATION · ACCOUNTANT",
             description: "I handle e-invoicing — issuing and validating invoices through CamInv / the GDT e-invoice system so every invoice is compliant and traceable."
           }
@@ -147,6 +148,7 @@ export const DASHBOARD_DATA = [
             title: "Speak Up",
             image: "IMG/avatars/agent-10.png",
             status: "active",
+            demoType: "SUBMENU_SPEAK_UP",
             popupTitle: "ADMINISTRATION · HR",
             description: "I'm the anonymous grievance channel — workers raise concerns safely and I route them to the right people."
           }
