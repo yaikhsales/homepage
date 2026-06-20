@@ -115,6 +115,7 @@ function Nav() {
               {t("nav.experience")}
             </a>
             <a href="#contact"   className="hover:text-yai-orange transition">{t("nav.chat")}</a>
+            <a href="#join"      className="hover:text-yai-orange transition font-semibold">{t("nav.join")}</a>
           </div>
         </div>
 
