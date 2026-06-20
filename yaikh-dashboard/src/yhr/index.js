@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
@@ -21,6 +21,7 @@ import {
   Utensils,
 } from "lucide-react";
 import GeneralAIAgent from "../general-ag";
+import BotModules from "../chatbot/bot-modules";
 import VideoViewer from "../components/VideoViewer";
 import DocumentViewer from "../components/DocumentViewer";
 import { useTranslation } from "../translate/TranslationContext";
@@ -52,6 +53,12 @@ const YHR = ({ onBack }) => {
   const [showFWCMSSubMenu, setShowFWCMSSubMenu] = useState(false);
   const [showBenefitSubMenu, setShowBenefitSubMenu] = useState(false);
   const [isBotOpen, setIsBotOpen] = useState(false);
+  // HR PA greets on land — same auto-open pattern as the Accounting
+  // billing pages. Pre-scopes the HR PA chip filter to "Attendance today".
+  useEffect(() => {
+    const t = setTimeout(() => setIsBotOpen(true), 700);
+    return () => clearTimeout(t);
+  }, []);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [selectedDocument, setSelectedDocument] = useState(null);
 
@@ -563,21 +570,26 @@ const YHR = ({ onBack }) => {
         ) : null}
       </div>
 
-      {/* Bot Button - Bottom Right */}
-      <button
-        onClick={() => setIsBotOpen(true)}
-        className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 flex items-center justify-center group"
-        aria-label="Ask YHR bot"
-        title="Ask YHR bot"
-      >
-        <MessageCircle className="w-8 h-8 group-hover:rotate-12 transition-transform" />
-      </button>
+      {/* HR PA — indigo/blue bubble (hidden while panel open) */}
+      {!isBotOpen && (
+        <button
+          onClick={() => setIsBotOpen(true)}
+          className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-r from-indigo-500 to-blue-500 text-white rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 flex items-center justify-center group"
+          aria-label="Ask HR PA"
+          title="Ask HR PA"
+        >
+          <MessageCircle className="w-8 h-8 group-hover:rotate-12 transition-transform" />
+        </button>
+      )}
 
-      {/* Bot Modal */}
+      {/* HR PA compact panel */}
       {isBotOpen && (
-        <GeneralAIAgent
+        <BotModules
           onClose={() => setIsBotOpen(false)}
           moduleContext="YHR"
+          currentVersion="yai1"
+          botsFilter={["hr-bot"]}
+          initialTopic="Attendance today"
         />
       )}
       {selectedVideo && (

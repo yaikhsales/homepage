@@ -13,6 +13,25 @@ const ACCOUNTING_SUBMENU_TITLES = new Set([
   "Accountant",
 ]);
 
+// Sub-menu titles owned by the HR PA. Same auto-open + indigo/blue
+// branded bubble + topic pre-scoping as the accounting flow, just a
+// different PA. Title → initialTopic map below picks the right pill.
+const HR_SUBMENU_TITLES = new Set([
+  "YHR",
+  "Org Chart",
+  "Training",
+  "Temporary Worker",
+  "Speak Up",
+]);
+
+const HR_TITLE_TO_TOPIC = {
+  "YHR":              "Attendance today",
+  "Org Chart":        "Org chart updates",
+  "Training":         "Training schedule",
+  "Temporary Worker": "Temp worker requests",
+  "Speak Up":         null, // no matching pill; PA opens unfocused
+};
+
 // Direct URL load / hard refresh drops React Router state, so `title`
 // and `cards` are missing. Map URL :moduleId → canonical title so the
 // PA still wakes up on land. Cards arrays below seed the tile grid
@@ -43,6 +62,13 @@ const MODULE_ID_TO_CARDS = {
   ],
 };
 MODULE_ID_TO_CARDS["pr-admin"] = MODULE_ID_TO_CARDS["purchase-request"];
+
+MODULE_ID_TO_CARDS["iews"] = [
+  { title: "Income",      icon: "TrendingUp",      color: "bg-emerald-500 text-white", isIews: true },
+  { title: "Expenses",    icon: "TrendingDown",    color: "bg-rose-500 text-white",    isIews: true },
+  { title: "Withholding", icon: "FileBadge",       color: "bg-amber-500 text-black",   isIews: true },
+  { title: "Salaries",    icon: "BadgeDollarSign", color: "bg-indigo-500 text-white",  isIews: true },
+];
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { ArrowLeft, MessageCircle, Video } from "lucide-react";
 import { IconRenderer } from "../components/IconRenderer";
@@ -727,13 +753,27 @@ const SubMenuView = () => {
   const [isBotOpen, setIsBotOpen] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState(null);
 
-  // Auto-greet on Accounting-PA sub-menus. The PA pops itself open
-  // ~700ms after the page mounts with the topic pre-scoped, so the
-  // user lands on the page and is met by the PA instead of having to
-  // click a bubble. Non-accounting modules stay silent (bubble only).
+  // Auto-greet on PA-owned sub-menus. The PA pops itself open ~700ms
+  // after the page mounts with the topic pre-scoped, so the user lands
+  // on the page and is met by the right PA. Non-PA modules stay silent
+  // (bubble only).
   const isAccountingSubmenu = ACCOUNTING_SUBMENU_TITLES.has(title);
+  const isHrSubmenu = HR_SUBMENU_TITLES.has(title);
+  const isPaSubmenu = isAccountingSubmenu || isHrSubmenu;
+  // initialTopic: accounting maps title→pill 1:1; HR has its own map.
+  const paInitialTopic = isAccountingSubmenu
+    ? title
+    : (isHrSubmenu ? HR_TITLE_TO_TOPIC[title] : null);
+  const paBotsFilter = isAccountingSubmenu
+    ? ["accounting-bot"]
+    : (isHrSubmenu ? ["hr-bot"] : null);
+  // Bubble palette matches the owning PA's brand gradient.
+  const paBubbleGradient = isAccountingSubmenu
+    ? "from-green-500 to-emerald-500"
+    : (isHrSubmenu ? "from-indigo-500 to-blue-500" : "from-orange-500 to-amber-500");
+
   useEffect(() => {
-    if (!isAccountingSubmenu) return;
+    if (!isPaSubmenu) return;
     const t = setTimeout(() => {
       setSelectedBotModule(title);
       setIsBotOpen(true);
@@ -1117,7 +1157,7 @@ const SubMenuView = () => {
             setSelectedBotModule(title);
             setIsBotOpen(true);
           }}
-          className={`fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-r ${isAccountingSubmenu ? "from-green-500 to-emerald-500" : "from-orange-500 to-amber-500"} text-white rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 flex items-center justify-center group`}
+          className={`fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-r ${paBubbleGradient} text-white rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 flex items-center justify-center group`}
           aria-label={`Ask ${title} bot`}
           title={`Ask ${title} bot`}
         >
@@ -1125,11 +1165,11 @@ const SubMenuView = () => {
         </button>
       )}
 
-      {/* Bot Modal — Accounting-PA sub-menus mount the real BotModules
-          Accounting PA (same component the home dropdown opens), scoped
-          to a single PA + with the topic pre-selected. Non-accounting
-          sub-menus keep the legacy GeneralAIAgent. One PA → one UI. */}
-      {isBotOpen && selectedBotModule && isAccountingSubmenu && (
+      {/* Bot Modal — PA-owned sub-menus mount the real BotModules
+          (same component the home dropdown opens), scoped to a single
+          PA + with the topic pre-selected. Non-PA sub-menus keep the
+          legacy GeneralAIAgent. One PA → one UI. */}
+      {isBotOpen && selectedBotModule && isPaSubmenu && (
         <BotModules
           onClose={() => {
             setIsBotOpen(false);
@@ -1137,11 +1177,11 @@ const SubMenuView = () => {
           }}
           moduleContext={selectedBotModule}
           currentVersion="yai1"
-          botsFilter={["accounting-bot"]}
-          initialTopic={selectedBotModule}
+          botsFilter={paBotsFilter}
+          initialTopic={paInitialTopic}
         />
       )}
-      {isBotOpen && selectedBotModule && !isAccountingSubmenu && (
+      {isBotOpen && selectedBotModule && !isPaSubmenu && (
         <GeneralAIAgent
           onClose={() => {
             setIsBotOpen(false);

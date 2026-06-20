@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Calendar, Check, Clock, ExternalLink, Search, X, MessageCircle } from 'lucide-react';
 import GeneralAIAgent from '../general-ag';
+import BotModules from '../chatbot/bot-modules';
 
 const RequestWorkerList = ({ onBack }) => {
     const navigate = useNavigate();
     const [isBotOpen, setIsBotOpen] = useState(false);
+    // HR PA greets on land, pre-scoped to Temp worker requests pill.
+    useEffect(() => {
+        const t = setTimeout(() => setIsBotOpen(true), 700);
+        return () => clearTimeout(t);
+    }, []);
     const [fromDate, setFromDate] = useState('2025-12-23');
     const [toDate, setToDate] = useState('2025-12-23');
     const [requests, setRequests] = useState([
@@ -311,21 +317,25 @@ const RequestWorkerList = ({ onBack }) => {
                 </div>
             </div>
             
-            {/* Bot Button - Bottom Right */}
-            <button
-                onClick={() => setIsBotOpen(true)}
-                className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 flex items-center justify-center group"
-                aria-label="Ask Request Worker List bot"
-                title="Ask Request Worker List bot"
-            >
-                <MessageCircle className="w-8 h-8 group-hover:rotate-12 transition-transform" />
-            </button>
-            
-            {/* Bot Modal */}
+            {/* HR PA — indigo bubble (hidden while panel open) */}
+            {!isBotOpen && (
+                <button
+                    onClick={() => setIsBotOpen(true)}
+                    className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-r from-indigo-500 to-blue-500 text-white rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 flex items-center justify-center group"
+                    aria-label="Ask HR PA"
+                    title="Ask HR PA"
+                >
+                    <MessageCircle className="w-8 h-8 group-hover:rotate-12 transition-transform" />
+                </button>
+            )}
+
             {isBotOpen && (
-                <GeneralAIAgent 
+                <BotModules
                     onClose={() => setIsBotOpen(false)}
                     moduleContext="Request Worker List"
+                    currentVersion="yai1"
+                    botsFilter={["hr-bot"]}
+                    initialTopic="Temp worker requests"
                 />
             )}
         </div>
