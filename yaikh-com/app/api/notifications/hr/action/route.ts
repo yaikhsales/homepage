@@ -24,6 +24,7 @@ const ALLOWED_COLLECTIONS = new Set([
   "training_sessions",
   "org_chart_changes",
   "temp_worker_requests",
+  "speak_up_grievances",
 ]);
 
 export async function POST(req: Request) {

@@ -54,6 +54,7 @@ const PREDEFINED_BOTS = [
             { text: 'Training schedule' },
             { text: 'Org chart updates' },
             { text: 'Temp worker requests' },
+            { text: 'Speak Up' },
         ],
     },
     {
@@ -1530,15 +1531,23 @@ const PhoneFrame = ({
                                                     const isAccountingFilter = !!notifSlug;
                                                     const isActiveTopic = isAccountingFilter && activeTopic === action.text;
                                                     const badgeCount = isAccountingFilter ? (notifCounts[action.text] || 0) : 0;
-                                                    // Short one-word label for the accounting topic chips so 6 fit
-                                                    // in 2 rows inside the compact panel, leaving room for chat text.
+                                                    // Short one-word label for compact PA chips so 6 fit in 2 rows
+                                                    // inside the panel, leaving room for chat text.
                                                     const SHORT_LABEL = {
-                                                        'Purchase Request': 'Purchase',
-                                                        'Bill Claim':       'Claims',
-                                                        'Salary Bill':      'Salary',
-                                                        'Shipping Bill':    'Shipping',
-                                                        'Accountant':       'Account',
-                                                        'IEWS':             'IEWS',
+                                                        // Accounting PA
+                                                        'Purchase Request':     'Purchase',
+                                                        'Bill Claim':           'Claims',
+                                                        'Salary Bill':          'Salary',
+                                                        'Shipping Bill':        'Shipping',
+                                                        'Accountant':           'Account',
+                                                        'IEWS':                 'IEWS',
+                                                        // HR PA
+                                                        'Attendance today':     'Attend',
+                                                        'Open leave requests':  'Leave',
+                                                        'Training schedule':    'Training',
+                                                        'Org chart updates':    'Org',
+                                                        'Temp worker requests': 'Temp',
+                                                        'Speak Up':             'Speak Up',
                                                     };
                                                     const chipLabel = isAccountingFilter ? (SHORT_LABEL[action.text] || action.text) : action.text;
                                                     return (

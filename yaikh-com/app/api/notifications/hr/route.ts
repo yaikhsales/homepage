@@ -31,7 +31,7 @@ export async function GET() {
     const todayISO = new Date().toISOString().slice(0, 10);
     const in30 = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
 
-    const [attentionToday, leaveOpen, trainingNext30, orgPending, tempPending] = await Promise.all([
+    const [attentionToday, leaveOpen, trainingNext30, orgPending, tempPending, speakUpOpen] = await Promise.all([
       // Attendance items that need HR attention today (absent + late)
       db.collection("attendance_today").countDocuments({
         date: todayISO,
@@ -44,6 +44,10 @@ export async function GET() {
       }),
       db.collection("org_chart_changes").countDocuments({ status: "pending" }),
       db.collection("temp_worker_requests").countDocuments({ status: "pending" }),
+      // Speak Up: anonymous worker grievances awaiting HR triage
+      db.collection("speak_up_grievances").countDocuments({
+        status: { $in: ["open", "reviewing"] },
+      }),
     ]);
 
     const counts: Record<string, number> = {
@@ -52,6 +56,7 @@ export async function GET() {
       "Training schedule":    trainingNext30,
       "Org chart updates":    orgPending,
       "Temp worker requests": tempPending,
+      "Speak Up":             speakUpOpen,
     };
 
     return NextResponse.json({ ok: true, counts });

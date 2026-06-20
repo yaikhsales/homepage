@@ -193,6 +193,20 @@ const tempWorkerRequests = [
   { no: "TWR-2026-0014", line: "L1", role: "Helper",   headcount: 3, from: "2026-06-25", to: "2026-07-15", reason: "Short-term cleaning support",  status: "pending" },
 ];
 
+/* Speak Up — anonymous worker grievances. Submitted via the Speak Up
+ * channel by an anonymized handle (alias). HR PA triages by category,
+ * routes to the right resolver (line manager / HR / compliance / safety),
+ * and tracks status. Workers can check their own submission by alias. */
+const speakUpGrievances = [
+  { no: "SU-2026-0021", alias: "Pisey-L1-anon",  category: "Wage",       subject: "OT in 2026-05 not paid", body: "Worked 32 hrs overtime in May, payroll shows only 18 hrs. Need correction.", line: "L1", submittedAt: "2026-06-15T08:42:00Z", status: "open",     priority: "high" },
+  { no: "SU-2026-0022", alias: "anon-L2-7321",   category: "Safety",     subject: "Sewing machine belt guard missing", body: "Operator station 12 on L2 — belt guard fell off last week, not yet replaced. Risk of finger injury.", line: "L2", submittedAt: "2026-06-16T11:05:00Z", status: "reviewing",priority: "high" },
+  { no: "SU-2026-0023", alias: "blue-fox-99",    category: "Harassment", subject: "Supervisor verbal abuse",  body: "Line supervisor on L3 shouts at workers in front of others when targets are missed. Two operators considering leaving.", line: "L3", submittedAt: "2026-06-17T16:20:00Z", status: "open",     priority: "high" },
+  { no: "SU-2026-0024", alias: "anon-FT-4488",   category: "Hours",      subject: "Friday OT mandatory?",     body: "Manager keeps saying Friday 18:00–20:00 OT is mandatory. CLC says it must be voluntary. Need clarification.", line: "L1", submittedAt: "2026-06-18T07:30:00Z", status: "open",     priority: "medium" },
+  { no: "SU-2026-0025", alias: "anon-FT-1206",   category: "Environment",subject: "Canteen drinking water tap broken", body: "Cold-water tap broken since Mon. Workers buying bottled water with own money.", line: "shared", submittedAt: "2026-06-18T12:10:00Z", status: "open",  priority: "medium" },
+  { no: "SU-2026-0026", alias: "anon-L4-2299",   category: "Wage",       subject: "Attendance bonus missing", body: "Zero absences in May but $10 attendance bonus not on payslip.", line: "L4", submittedAt: "2026-06-15T09:14:00Z", status: "resolved", resolvedAt: "2026-06-17T15:00:00Z", resolution: "Payroll correction issued in next cycle.", priority: "medium" },
+  { no: "SU-2026-0027", alias: "anon-L2-8810",   category: "Other",      subject: "Locker key replacement", body: "Lost locker key, gate guard says wait until HR opens locker bank again. Need locker access.", line: "L2", submittedAt: "2026-06-18T14:00:00Z", status: "reviewing",priority: "low" },
+];
+
 const stamp = (doc) => ({ ...doc, createdAt: now(), updatedAt: now() });
 
 const seedMap = {
@@ -211,6 +225,7 @@ const seedMap = {
   training_sessions:     trainingSessions,
   org_chart_changes:     orgChartChanges,
   temp_worker_requests:  tempWorkerRequests,
+  speak_up_grievances:   speakUpGrievances,
 };
 
 const client = new MongoClient(uri);

@@ -98,6 +98,12 @@ You are a teammate, not a chatbot. Be direct and useful.`,
       "visas",
       "work_permits",
       "nssf_contributions",
+      "attendance_today",
+      "leave_requests",
+      "training_sessions",
+      "org_chart_changes",
+      "temp_worker_requests",
+      "speak_up_grievances",
     ],
     contextLimitPerCollection: 15,
     systemPrompt: `You are the HR PA for a Cambodian garment factory operated by TexLink Technologies / Yaikh.
@@ -113,6 +119,12 @@ You assist the HR team, line leaders, and managers with the full employee lifecy
  - Payroll Runs (PAY-YYYY-MM): monthly batch on the 25th. HR finalizes the calc here, then hands off to Accounting via salary_bill_no (the SAL-YYYY-NNN record they cut).
  - NSSF Contributions (NSSF-YYYY-MM): monthly filing — 1.3% occupational risk (employer) + 3.4% health care (2.6% employer + 0.8% employee) on insurable salary, due by the 15th of the following month.
  - Visas (VIS) and Work Permits (WP): foreign staff annual renewal via Cambodia MFAIC + MLVT.
+ - Attendance Today (ATT): today's roster check — present | late | absent | leave. Reference clock-in time when flagging "late".
+ - Leave Requests (LR): annual / sick / maternity. Maternity = 90 days statutory minimum.
+ - Training Sessions (TR): internal + external. Refresher, safety re-cert, fire drill, GMP induction. Track date / time / room / enrolled count.
+ - Org Chart Changes (OCC): promotions, transfers, new roles. status ∈ {pending, approved, applied}.
+ - Temp Worker Requests (TWR): line-leader asks for short-term helpers/operators when ramping a style or covering leaves.
+ - Speak Up (SU): ANONYMOUS worker grievance channel. Workers submit by alias (e.g. "Pisey-L1-anon", "blue-fox-99"). Categories ∈ {Wage, Safety, Harassment, Hours, Environment, Other}. Status flow: open → reviewing → resolved → closed. Treat every grievance seriously and confidentially — NEVER reveal or speculate on the real identity behind an alias. When summarising, group by category, sort by priority (high first), and surface high-priority safety/harassment items at the top of any reply.
 
 Boundary contract with the Accounting PA: HR owns the CALCULATION (payroll_runs, nssf_contributions). Accounting owns the BILL (salary_bills). Don't restate Accounting's view — point the user there when they ask about the bank-transfer side.
 

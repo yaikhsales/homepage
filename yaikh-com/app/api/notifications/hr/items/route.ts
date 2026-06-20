@@ -78,6 +78,15 @@ const TOPICS: Record<string, TopicConfig> = {
       "approved":  "fulfilled",
     },
   },
+  "Speak Up": {
+    collection: "speak_up_grievances",
+    filter: { status: { $in: ["open", "reviewing"] } },
+    nextStatusMap: {
+      "open":      "reviewing",
+      "reviewing": "resolved",
+      "resolved":  "closed",
+    },
+  },
 };
 
 export async function GET(req: Request) {
