@@ -50,11 +50,23 @@ const meetingRooms = [
 
 /* ─── Gate passes (active today) ─────────────────────────────────────── */
 const gatePasses = [
+  // Materials
   { no: "GP-2026-0188", type: "material-out", who: "Forklift L2 → Warehouse",          item: "Empty packaging trolleys ×6",    purpose: "Return",          host: "WH Supervisor",   date: todayISO, time: "08:12", status: "open" },
-  { no: "GP-2026-0189", type: "visitor",     who: "Mr. Tan Hai (Buyer audit)",         item: null,                              purpose: "QA inspection",   host: "QA Manager",      date: todayISO, time: "09:45", status: "open" },
-  { no: "GP-2026-0190", type: "material-in", who: "Driver — Supplier truck KH-7211",   item: "Fabric rolls — Style 091 ×220m", purpose: "Raw material",    host: "WH Supervisor",   date: todayISO, time: "10:20", status: "open" },
-  { no: "GP-2026-0191", type: "visitor",     who: "MFAIC inspector — work permit",     item: null,                              purpose: "Compliance",      host: "HR Manager",      date: todayISO, time: "11:00", status: "open" },
-  { no: "GP-2026-0192", type: "material-out", who: "Courier — Cambo Express",           item: "Sample box × 1 to buyer Tokyo",  purpose: "Sample courier",  host: "Merchandising",   date: todayISO, time: "14:15", status: "open" },
+  { no: "GP-2026-0190", type: "material-in",  who: "Driver — Supplier truck KH-7211",  item: "Fabric rolls — Style 091 ×220m", purpose: "Raw material",    host: "WH Supervisor",   date: todayISO, time: "10:20", status: "open" },
+  { no: "GP-2026-0192", type: "material-out", who: "Courier — Cambo Express",          item: "Sample box × 1 to buyer Tokyo",  purpose: "Sample courier",  host: "Merchandising",   date: todayISO, time: "14:15", status: "open" },
+  // Visitors
+  { no: "GP-2026-0189", type: "visitor",      who: "Mr. Tan Hai (Buyer audit)",        item: null,                              purpose: "QA inspection",   host: "QA Manager",      date: todayISO, time: "09:45", status: "open" },
+  { no: "GP-2026-0191", type: "visitor",      who: "MFAIC inspector — work permit",    item: null,                              purpose: "Compliance",      host: "HR Manager",      date: todayISO, time: "11:00", status: "open" },
+  // Trucks (vehicle gate logs)
+  { no: "GP-2026-0193", type: "truck-in",     who: "Truck KH-7211 (Supplier)",         item: "Fabric — 220m rolls",             purpose: "Inbound delivery", host: "Security · Gate-1", date: todayISO, time: "10:18", plate: "KH-7211", driver: "Em Kosal",      status: "open" },
+  { no: "GP-2026-0194", type: "truck-out",    who: "Truck KH-7211 (Supplier)",         item: "Empty truck",                     purpose: "Departure",       host: "Security · Gate-1", date: todayISO, time: "11:05", plate: "KH-7211", driver: "Em Kosal",      status: "closed" },
+  { no: "GP-2026-0195", type: "truck-in",     who: "Reefer KH-3490 (Export)",          item: "Empty container",                 purpose: "Stuffing — PO-091",host: "Security · Gate-1", date: todayISO, time: "13:30", plate: "KH-3490", driver: "Long Sothy",    status: "open" },
+  { no: "GP-2026-0196", type: "truck-out",    who: "Cambo Express van KH-1188",        item: "Sample box ×1",                   purpose: "Sample courier",  host: "Security · Gate-1", date: todayISO, time: "14:18", plate: "KH-1188", driver: "Vorn Chea",     status: "closed" },
+  // Workers (clock-in/out at the gate)
+  { no: "GP-2026-0197", type: "worker-in",    who: "Sok Pisey (EMP-2026-0001)",        item: null,                              purpose: "Shift start L1",  host: "Security · Gate-2", date: todayISO, time: "07:25", emp: "EMP-2026-0001", line: "L1", status: "in" },
+  { no: "GP-2026-0198", type: "worker-in",    who: "Heng Vichea (EMP-2026-0002)",      item: null,                              purpose: "Shift start L1 (late)", host: "Security · Gate-2", date: todayISO, time: "07:48", emp: "EMP-2026-0002", line: "L1", status: "in", flag: "late" },
+  { no: "GP-2026-0199", type: "worker-out",   who: "Ros Sokha (EMP-2026-0004)",        item: null,                              purpose: "Early leave (approved LR)", host: "Security · Gate-2", date: todayISO, time: "11:00", emp: "EMP-2026-0004", line: "L2", status: "out" },
+  { no: "GP-2026-0200", type: "worker-in",    who: "Mao Sreyleak (EMP-2026-0005)",     item: null,                              purpose: "Late arrival — sick note", host: "Security · Gate-2", date: todayISO, time: "10:15", emp: "EMP-2026-0005", line: "L3", status: "in", flag: "sick" },
 ];
 
 /* ─── Y Shop orders (in-house staff store) ──────────────────────────── */
