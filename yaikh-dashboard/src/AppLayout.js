@@ -133,10 +133,16 @@ const AppLayout = () => {
   const handleModuleClick = (module) => {
     if (module.demoType) {
       const { demoType, id, title } = module;
-      if (id === "meeting" && title === "Meeting Room") {
+      if ((id === "meeting" || id === "meeting-room") && title === "Meeting Room") {
         navigate("/dashboard/meeting-room");
-      } else if (id === "car" && title === "My Car Booking") {
+      } else if ((id === "car" || id === "car-booking") && (title === "My Car Booking" || title === "Car Booking")) {
         navigate("/dashboard/car-booking");
+      } else if (id === "gate-pass") {
+        navigate("/dashboard/gatepass");
+      } else if (id === "fire-alarm") {
+        navigate("/dashboard/fire-alarm");
+      } else if (id === "cctv") {
+        navigate("/dashboard/cctv");
       } else if (id === "system-analysis" && title === "System Analysis") {
         navigate("/dashboard/system-analysis");
       } else if (demoType === "IMAGE_VIEW")

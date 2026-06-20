@@ -29,6 +29,8 @@ import ChecklistAttendance from "./yhr/checklist-attendance";
 import MyAttendance from "./yhr/my-attendance";
 import YHR from "./yhr/index";
 import SpeakUp from "./speak-up/speak-up";
+import FireAlarm from "./fire-alarm/fire-alarm";
+import CCTV from "./cctv/cctv";
 import Recruitment from "./yhr/recruitment";
 import Interview from "./yhr/interview";
 import Onboarding from "./yhr/onboarding";
@@ -209,6 +211,8 @@ export default function App() {
           <Route path="pay-pr" element={<PayPR onBack={handleBack} />} />
           <Route path="yhr" element={<YHR onBack={handleBack} />} />
           <Route path="speak-up" element={<SpeakUp onBack={handleBack} />} />
+          <Route path="fire-alarm" element={<FireAlarm onBack={handleBack} />} />
+          <Route path="cctv" element={<CCTV onBack={handleBack} />} />
           <Route
             path="recruitment"
             element={<Recruitment onBack={handleBack} />}

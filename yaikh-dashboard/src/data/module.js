@@ -208,6 +208,7 @@ export const DASHBOARD_DATA = [
             title: "Fire Alarm",
             image: "IMG/avatars/agent-16.png",
             status: "active",
+            demoType: "SUBMENU_FIRE_ALARM",
             popupTitle: "ADMINISTRATION · ADMIN",
             description: "I monitor the fire-alarm and life-safety systems across the whole site."
           },
