@@ -17,6 +17,7 @@ import {
   Trash2,
 } from "lucide-react";
 import GeneralAIAgent from "../general-ag";
+import BotModules from "../chatbot/bot-modules";
 import { useTranslation } from "../translate/TranslationContext";
 import AuditPlanTimeline from "./audit-timeline";
 import AuditCalendar from "./audit-calendar";
@@ -29,6 +30,11 @@ const AuditPlan = ({ onBack }) => {
   const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [isBotOpen, setIsBotOpen] = useState(false);
+  // CSR PA greets on land — pre-scoped to Compliance audits
+  useEffect(() => {
+    const t = setTimeout(() => setIsBotOpen(true), 700);
+    return () => clearTimeout(t);
+  }, []);
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [selectedDocument, setSelectedDocument] = useState(null);
@@ -887,21 +893,25 @@ const AuditPlan = ({ onBack }) => {
         </div>
       </div>
 
-      {/* Bot Button - Bottom Right */}
-      <button
-        onClick={() => setIsBotOpen(true)}
-        className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 flex items-center justify-center group"
-        aria-label="Ask Audit Plan bot"
-        title="Ask Audit Plan bot"
-      >
-        <MessageCircle className="w-8 h-8 group-hover:rotate-12 transition-transform" />
-      </button>
+      {/* CSR PA — purple/pink bubble */}
+      {!isBotOpen && (
+        <button
+          onClick={() => setIsBotOpen(true)}
+          className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 flex items-center justify-center group"
+          aria-label="Ask CSR PA"
+          title="Ask CSR PA"
+        >
+          <MessageCircle className="w-8 h-8 group-hover:rotate-12 transition-transform" />
+        </button>
+      )}
 
-      {/* Bot Modal for All Modules */}
       {isBotOpen && (
-        <GeneralAIAgent
+        <BotModules
           onClose={() => setIsBotOpen(false)}
           moduleContext="Audit Plan"
+          currentVersion="yai1"
+          botsFilter={["csr-bot"]}
+          initialTopic="Compliance audits"
         />
       )}
 

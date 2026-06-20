@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ChevronLeft,
@@ -20,10 +20,16 @@ import ImageViewer from "../components/ImageViewer";
 import VideoViewer from "../components/VideoViewer";
 import DocumentViewer from "../components/DocumentViewer";
 import GeneralAIAgent from "../general-ag";
+import BotModules from "../chatbot/bot-modules";
 
 const YShop = ({ onBack }) => {
   const navigate = useNavigate();
   const [isBotOpen, setIsBotOpen] = useState(false);
+  // Admin PA greets on land — pre-scoped to Y Shop orders
+  useEffect(() => {
+    const t = setTimeout(() => setIsBotOpen(true), 700);
+    return () => clearTimeout(t);
+  }, []);
   const [searchQuery, setSearchQuery] = useState("");
   const [dateRange, setDateRange] = useState("01/12/2025 / 30/12/2025");
   const [department, setDepartment] = useState("Office");
@@ -748,21 +754,25 @@ const YShop = ({ onBack }) => {
         />
       )}
 
-      {/* Bot Button - Bottom Right */}
-      <button
-        onClick={() => setIsBotOpen(true)}
-        className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 flex items-center justify-center group"
-        aria-label="Ask Y Shop bot"
-        title="Ask Y Shop bot"
-      >
-        <MessageCircle className="w-8 h-8 group-hover:rotate-12 transition-transform" />
-      </button>
+      {/* Admin PA — blue/cyan bubble (hidden while panel open) */}
+      {!isBotOpen && (
+        <button
+          onClick={() => setIsBotOpen(true)}
+          className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 flex items-center justify-center group"
+          aria-label="Ask Admin PA"
+          title="Ask Admin PA"
+        >
+          <MessageCircle className="w-8 h-8 group-hover:rotate-12 transition-transform" />
+        </button>
+      )}
 
-      {/* Bot Modal */}
       {isBotOpen && (
-        <GeneralAIAgent
+        <BotModules
           onClose={() => setIsBotOpen(false)}
           moduleContext="Y Shop"
+          currentVersion="yai1"
+          botsFilter={["admin-bot"]}
+          initialTopic="Y Shop orders"
         />
       )}
     </div>

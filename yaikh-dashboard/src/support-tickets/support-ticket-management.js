@@ -12,6 +12,7 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import GeneralAIAgent from "../general-ag";
+import BotModules from "../chatbot/bot-modules";
 import { useTranslation } from "../translate/TranslationContext";
 import VideoViewer from "../components/VideoViewer";
 import DocumentViewer from "../components/DocumentViewer";
@@ -56,6 +57,11 @@ const SupportTicketManagement = ({ onBack, currentUser }) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [isBotOpen, setIsBotOpen] = useState(false);
+  // Admin PA greets on land
+  useEffect(() => {
+    const t = setTimeout(() => setIsBotOpen(true), 700);
+    return () => clearTimeout(t);
+  }, []);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [selectedDocument, setSelectedDocument] = useState(null);
   const [activeView, setActiveView] = useState("list");
@@ -446,16 +452,24 @@ const SupportTicketManagement = ({ onBack, currentUser }) => {
         />
       )}
 
-      <button
-        onClick={() => setIsBotOpen(true)}
-        className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 flex items-center justify-center group"
-        title="Ask Admin PA about tickets"
-      >
-        <MessageCircle className="w-8 h-8 group-hover:rotate-12 transition-transform" />
-      </button>
+      {!isBotOpen && (
+        <button
+          onClick={() => setIsBotOpen(true)}
+          className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 flex items-center justify-center group"
+          title="Ask Admin PA about tickets"
+        >
+          <MessageCircle className="w-8 h-8 group-hover:rotate-12 transition-transform" />
+        </button>
+      )}
 
       {isBotOpen && (
-        <GeneralAIAgent onClose={() => setIsBotOpen(false)} moduleContext="Support Ticket Management" />
+        <BotModules
+          onClose={() => setIsBotOpen(false)}
+          moduleContext="Support Tickets"
+          currentVersion="yai1"
+          botsFilter={["admin-bot"]}
+          initialTopic="Open support tickets"
+        />
       )}
       {selectedVideo && (
         <VideoViewer videoPath={selectedVideo} onClose={() => setSelectedVideo(null)} />

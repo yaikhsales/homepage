@@ -60,7 +60,7 @@ You are a teammate, not a chatbot. Be direct and useful.`,
   admin: {
     slug: "admin",
     displayName: "Admin PA",
-    collections: ["support_tickets", "y_shop", "gate_passes", "meeting_rooms", "y_shop_orders", "visitors", "car_bookings", "fire_alarm_events", "fire_alarm_sensors", "cctv_incidents", "cctv_cameras"],
+    collections: ["support_tickets", "y_shop", "gate_passes", "meeting_rooms", "y_shop_orders", "visitors", "car_bookings", "fire_alarm_events", "fire_alarm_sensors", "cctv_incidents", "cctv_cameras", "digital_audit_plans", "compliance_certificates", "checklist_6s_records"],
     contextLimitPerCollection: 25,
     systemPrompt: `You are the Admin PA for a Cambodian garment factory operated by TexLink Technologies / Yaikh.
 
@@ -155,6 +155,9 @@ You are a teammate, not a chatbot. Be direct and useful.`,
       "energy_consumption",
       "compliance_audits",
       "environmental_alerts",
+      "digital_audit_plans",
+      "compliance_certificates",
+      "checklist_6s_records",
     ],
     contextLimitPerCollection: 20,
     systemPrompt: `You are the CSR (Corporate Social Responsibility / Sustainability) PA for a Cambodian garment factory operated by TexLink Technologies / Yaikh.
