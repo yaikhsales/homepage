@@ -72,13 +72,39 @@ const visitors = [
   { no: "VST-2026-0063", name: "Driver — KH-7211",   company: "Fabric supplier",   host: "WH Supervisor",purpose: "Raw-material delivery",  checkIn: `${todayISO}T10:20:00`, checkOut: `${todayISO}T11:30:00`, status: "out", badge: "V-063" },
 ];
 
+/* ─── Car bookings (shared company vehicles) ────────────────────────── */
+const carBookings = [
+  { no: "CAR-2026-0044", vehicle: "Camry · KH-2178",    driver: "Khun Sokchea",  requester: "Sales · Sok Pisey",    purpose: "Buyer pickup — Airport → factory", date: todayISO,    start: "13:00", end: "16:00", status: "confirmed" },
+  { no: "CAR-2026-0045", vehicle: "Hilux · KH-9921",    driver: "Vorn Dany",     requester: "Logistics · Heng Vichea",purpose: "Sihanoukville port — clearance docs",date: todayISO,    start: "06:30", end: "20:00", status: "in-progress" },
+  { no: "CAR-2026-0046", vehicle: "Van H1 · KH-4188",   driver: "Mao Sopheak",   requester: "HR · Ros Sokha",       purpose: "New-hire pickup — Kandal",         date: tomorrowISO, start: "07:00", end: "10:00", status: "pending" },
+  { no: "CAR-2026-0047", vehicle: "Camry · KH-2178",    driver: "Khun Sokchea",  requester: "GM Office",            purpose: "MoC visit — Phnom Penh",           date: tomorrowISO, start: "08:30", end: "13:00", status: "pending" },
+];
+
+/* ─── Fire-alarm events (sensor pulls + scheduled drills) ───────────── */
+const fireAlarmEvents = [
+  { no: "FA-2026-0011", type: "drill",       location: "Whole factory", trigger: "scheduled",       detectedAt: "2026-06-27T10:30:00", clearedAt: null,                          severity: "info",   status: "scheduled", note: "Quarterly drill — fire-marshal led" },
+  { no: "FA-2026-0012", type: "false-alarm", location: "Sewing-L2",     trigger: "smoke sensor 12", detectedAt: "2026-06-17T15:42:00", clearedAt: "2026-06-17T15:47:00",         severity: "low",    status: "closed",    note: "Steam from ironing station; sensor recalibrated" },
+  { no: "FA-2026-0013", type: "real-event",  location: "Warehouse-2",   trigger: "smoke sensor 03", detectedAt: "2026-06-10T03:15:00", clearedAt: "2026-06-10T03:32:00",         severity: "medium", status: "closed",    note: "Forklift overheating — isolated, full report filed" },
+  { no: "FA-2026-0014", type: "maintenance", location: "Sewing-L1",     trigger: "annual service",  detectedAt: "2026-06-30T09:00:00", clearedAt: null,                          severity: "info",   status: "scheduled", note: "Vendor: SafetyFirst Cambodia. 6 detectors due service." },
+];
+
+/* ─── CCTV incidents / health ────────────────────────────────────────── */
+const cctvIncidents = [
+  { no: "CCTV-2026-0028", camera: "CAM-12 (Main Gate)",  type: "device-offline",   detectedAt: `${todayISO}T07:14:00`, clearedAt: null, status: "open",     priority: "high",   note: "Camera shows no feed since 07:14 — possible PoE failure" },
+  { no: "CCTV-2026-0029", camera: "CAM-04 (Warehouse-1)", type: "motion-after-hrs", detectedAt: "2026-06-18T22:47:00", clearedAt: "2026-06-18T22:51:00", status: "resolved", priority: "medium", note: "Confirmed: security guard rounds" },
+  { no: "CCTV-2026-0030", camera: "CAM-19 (Canteen)",     type: "device-offline",   detectedAt: "2026-06-16T13:00:00", clearedAt: "2026-06-16T15:30:00", status: "resolved", priority: "low",    note: "Power-strip tripped; restored" },
+];
+
 const stamp = (doc) => ({ ...doc, createdAt: now(), updatedAt: now() });
 
 const seedMap = {
-  meeting_rooms: meetingRooms,
-  gate_passes:   gatePasses,
-  y_shop_orders: yShopOrders,
-  visitors:      visitors,
+  meeting_rooms:     meetingRooms,
+  gate_passes:       gatePasses,
+  y_shop_orders:     yShopOrders,
+  visitors:          visitors,
+  car_bookings:      carBookings,
+  fire_alarm_events: fireAlarmEvents,
+  cctv_incidents:    cctvIncidents,
 };
 
 const client = new MongoClient(uri);
