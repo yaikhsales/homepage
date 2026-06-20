@@ -1,25 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-    ArrowLeft, MessageCircle, Video, WifiOff, Activity, ShieldCheck,
-    Loader2, RefreshCw, Camera,
+    ArrowLeft, MessageCircle, Video, WifiOff, ShieldAlert, ScanFace,
+    Loader2, RefreshCw, AlertTriangle,
 } from 'lucide-react';
 import BotModules from '../chatbot/bot-modules';
 
-const TYPES = [
-    { key: 'device-offline',   title: 'Offline',           icon: WifiOff,     color: 'bg-gradient-to-br from-red-500 to-red-600',     blurb: 'Camera not reporting' },
-    { key: 'motion-after-hrs', title: 'After-hours motion', icon: Activity,   color: 'bg-gradient-to-br from-amber-500 to-amber-600', blurb: 'Detected outside hours' },
-    { key: 'tampering',        title: 'Tampering',         icon: Camera,      color: 'bg-gradient-to-br from-rose-500 to-pink-600',   blurb: 'Obscured or moved' },
-];
-
-const PRIORITY_STYLE = {
-    high:   'bg-red-50 text-red-700 ring-1 ring-red-200',
-    medium: 'bg-amber-50 text-amber-700 ring-1 ring-amber-200',
-    low:    'bg-slate-50 text-slate-600 ring-1 ring-slate-200',
-};
-const STATUS_STYLE = {
-    open:     'bg-red-100 text-red-700 border border-red-200',
-    resolved: 'bg-emerald-100 text-emerald-700 border border-emerald-200',
+const STATUS_RING = {
+    live:    'ring-emerald-500/60',
+    offline: 'ring-red-500/60',
 };
 
 const CCTV = ({ onBack }) => {
@@ -30,159 +19,209 @@ const CCTV = ({ onBack }) => {
         return () => clearTimeout(t);
     }, []);
 
-    const [items, setItems] = useState([]);
+    const [cameras, setCameras] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [activeType, setActiveType] = useState(null);
+    const [zoneFilter, setZoneFilter] = useState(null);
+    const [selectedCam, setSelectedCam] = useState(null);
 
-    const fetchItems = useCallback(() => {
+    const fetchCameras = useCallback(() => {
         setLoading(true);
         setError(null);
-        const qs = activeType ? `?type=${encodeURIComponent(activeType)}` : '';
-        fetch(`/api/cctv-incidents${qs}`)
+        fetch('/api/cctv-cameras')
             .then(r => r.json())
             .then(d => {
                 if (!d?.ok) throw new Error(d?.error || 'Failed to load');
-                setItems(d.items || []);
+                setCameras(d.items || []);
             })
             .catch(err => setError(err.message || String(err)))
             .finally(() => setLoading(false));
-    }, [activeType]);
-    useEffect(() => { fetchItems(); }, [fetchItems]);
+    }, []);
+    useEffect(() => { fetchCameras(); }, [fetchCameras]);
 
-    const counts = items.reduce((acc, it) => {
-        acc.total++;
-        if (it.status === 'open') acc.open++;
-        if (it.priority === 'high') acc.high++;
-        if (it.type === 'device-offline') acc.offline++;
-        return acc;
-    }, { total: 0, open: 0, high: 0, offline: 0 });
+    const visibleCams = zoneFilter ? cameras.filter(c => c.zone === zoneFilter) : cameras;
+    const total      = cameras.length;
+    const live       = cameras.filter(c => c.status === 'live').length;
+    const offline    = cameras.filter(c => c.status === 'offline').length;
+    const faceAlerts = cameras.filter(c => c.faceAlert && c.faceAlert.priority === 'high').length;
+    const zones      = Array.from(new Set(cameras.map(c => c.zone))).sort();
 
     return (
-        <div className="min-h-screen bg-slate-900 text-white">
-            {/* Header */}
-            <div className="bg-slate-950/80 backdrop-blur px-6 py-4 flex items-center justify-between border-b border-white/10 sticky top-0 z-30">
+        <div className="min-h-screen bg-slate-950 text-white">
+            <div className="bg-black/60 backdrop-blur px-6 py-4 flex items-center justify-between border-b border-white/10 sticky top-0 z-30">
                 <div className="flex items-center gap-3">
-                    <button
-                        onClick={onBack ? onBack : () => navigate(-1)}
-                        className="p-2 rounded-lg hover:bg-white/10 transition"
-                        aria-label="Back"
-                    >
+                    <button onClick={onBack ? onBack : () => navigate(-1)} className="p-2 rounded-lg hover:bg-white/10 transition" aria-label="Back">
                         <ArrowLeft size={20} />
                     </button>
-                    <Video size={26} className="text-blue-400" />
+                    <Video size={26} className="text-cyan-400" />
                     <div>
-                        <h1 className="text-xl font-bold leading-tight">CCTV</h1>
-                        <p className="text-xs text-slate-400">Camera health & incident log</p>
+                        <h1 className="text-xl font-bold leading-tight">CCTV Wall</h1>
+                        <p className="text-xs text-slate-400">{total} cameras · {live} live · {offline} offline</p>
                     </div>
                 </div>
-                <button
-                    onClick={fetchItems}
-                    className="p-2 rounded-lg hover:bg-white/10 transition"
-                    title="Refresh"
-                >
+                <button onClick={fetchCameras} className="p-2 rounded-lg hover:bg-white/10 transition" title="Refresh">
                     <RefreshCw size={18} />
                 </button>
             </div>
 
             {/* KPI strip */}
             <div className="px-6 pt-6 grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <Kpi label="Total incidents" value={counts.total}   accent="from-slate-700 to-slate-800" />
-                <Kpi label="Open"            value={counts.open}    accent="from-red-600 to-red-700" />
-                <Kpi label="Offline cams"    value={counts.offline} accent="from-amber-600 to-amber-700" />
-                <Kpi label="High priority"   value={counts.high}    accent="from-rose-600 to-rose-700" />
+                <Kpi label="Cameras"        value={total}      accent="from-slate-700 to-slate-800" />
+                <Kpi label="Live"           value={live}       accent="from-emerald-600 to-emerald-700" />
+                <Kpi label="Offline"        value={offline}    accent="from-red-600 to-red-700" pulse={offline > 0} />
+                <Kpi label="Face alerts"    value={faceAlerts} accent="from-rose-600 to-pink-700" pulse={faceAlerts > 0} />
             </div>
 
-            {/* Type filter tiles */}
-            <div className="px-6 pt-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {/* Zone chips */}
+            <div className="px-6 pt-4 flex flex-wrap gap-2">
                 <button
-                    onClick={() => setActiveType(null)}
-                    className={`p-3 rounded-xl border transition text-left ${activeType === null ? 'border-white bg-white text-slate-900' : 'border-white/15 bg-white/5 hover:bg-white/10'}`}
-                >
-                    <div className="font-bold text-sm">All</div>
-                    <div className="text-[11px] opacity-70 mt-0.5">{items.length} item{items.length === 1 ? '' : 's'}</div>
-                </button>
-                {TYPES.map(t => {
-                    const Icon = t.icon;
-                    const n = items.filter(i => i.type === t.key).length;
-                    const isActive = activeType === t.key;
-                    return (
-                        <button
-                            key={t.key}
-                            onClick={() => setActiveType(isActive ? null : t.key)}
-                            className={`p-3 rounded-xl text-white text-left transition relative ${t.color} shadow-md ${isActive ? 'ring-2 ring-white scale-[1.02]' : 'hover:scale-[1.02]'}`}
-                        >
-                            <Icon size={20} className="opacity-80" />
-                            <div className="font-bold text-sm mt-1">{t.title}</div>
-                            <div className="text-[11px] opacity-80 mt-0.5">{t.blurb}</div>
-                            <div className="absolute top-2 right-2 bg-black/30 px-2 py-0.5 rounded-full text-[11px] font-bold">{n}</div>
-                        </button>
-                    );
-                })}
+                    onClick={() => setZoneFilter(null)}
+                    className={`px-3 py-1.5 rounded-full text-xs font-semibold transition ${zoneFilter === null ? 'bg-white text-slate-900' : 'bg-white/10 text-white hover:bg-white/20'}`}
+                >All zones</button>
+                {zones.map(z => (
+                    <button
+                        key={z}
+                        onClick={() => setZoneFilter(zoneFilter === z ? null : z)}
+                        className={`px-3 py-1.5 rounded-full text-xs font-semibold transition ${zoneFilter === z ? 'bg-white text-slate-900' : 'bg-white/10 text-white hover:bg-white/20'}`}
+                    >{z}</button>
+                ))}
             </div>
 
-            {/* Records */}
+            {/* Camera grid */}
             <div className="px-6 py-6">
-                <div className="bg-white/5 border border-white/10 rounded-xl overflow-hidden">
-                    <div className="px-4 py-3 border-b border-white/10 flex items-center justify-between">
-                        <h2 className="font-semibold text-sm">
-                            {activeType ? `${activeType} incidents` : 'All CCTV incidents'}
-                        </h2>
-                        {loading && <Loader2 size={16} className="animate-spin text-blue-400" />}
+                {loading && (
+                    <div className="text-center py-10 text-slate-400 text-sm flex items-center justify-center gap-2">
+                        <Loader2 size={16} className="animate-spin" /> Loading cameras…
                     </div>
-                    {error && (
-                        <div className="px-4 py-3 text-sm text-red-300 bg-red-500/10">{error}</div>
-                    )}
-                    {!loading && !error && items.length === 0 && (
-                        <div className="px-4 py-10 text-center text-slate-400">
-                            <ShieldCheck size={32} className="mx-auto mb-2 opacity-60" />
-                            <p className="text-sm">No incidents under this filter.</p>
-                        </div>
-                    )}
-                    {!loading && items.length > 0 && (
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-sm">
-                                <thead>
-                                    <tr className="text-left text-xs uppercase tracking-wider text-slate-400 border-b border-white/10">
-                                        <th className="px-4 py-2">No.</th>
-                                        <th className="px-4 py-2">Camera</th>
-                                        <th className="px-4 py-2">Type</th>
-                                        <th className="px-4 py-2">Detected</th>
-                                        <th className="px-4 py-2">Cleared</th>
-                                        <th className="px-4 py-2">Priority</th>
-                                        <th className="px-4 py-2">Status</th>
-                                        <th className="px-4 py-2">Note</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {items.map(it => (
-                                        <tr key={it._id} className="border-b border-white/5 hover:bg-white/5">
-                                            <td className="px-4 py-2 font-mono text-[11px] text-slate-300">{it.no}</td>
-                                            <td className="px-4 py-2">{it.camera}</td>
-                                            <td className="px-4 py-2">{it.type}</td>
-                                            <td className="px-4 py-2 text-[12px] text-slate-300">{(it.detectedAt || '').replace('T', ' ').slice(0, 16)}</td>
-                                            <td className="px-4 py-2 text-[12px] text-slate-300">{it.clearedAt ? it.clearedAt.replace('T', ' ').slice(0, 16) : '—'}</td>
-                                            <td className="px-4 py-2">
-                                                <span className={`text-[11px] px-2 py-0.5 rounded-full font-semibold ${PRIORITY_STYLE[it.priority] || PRIORITY_STYLE.medium}`}>
-                                                    {it.priority}
-                                                </span>
-                                            </td>
-                                            <td className="px-4 py-2">
-                                                <span className={`text-[11px] px-2 py-1 rounded-md font-semibold ${STATUS_STYLE[it.status] || STATUS_STYLE.open}`}>
-                                                    {it.status}
-                                                </span>
-                                            </td>
-                                            <td className="px-4 py-2 text-[12px] text-slate-300 max-w-md truncate" title={it.note}>{it.note}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    )}
-                </div>
+                )}
+                {error && (
+                    <div className="px-4 py-3 text-sm text-red-300 bg-red-500/10 rounded-lg">{error}</div>
+                )}
+                {!loading && (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                        {visibleCams.map(cam => {
+                            const isOffline = cam.status === 'offline';
+                            const hasAlert  = cam.faceAlert && cam.faceAlert.priority === 'high';
+                            return (
+                                <button
+                                    key={cam.no}
+                                    onClick={() => setSelectedCam(cam)}
+                                    className={`relative aspect-video rounded-xl overflow-hidden ring-2 ${hasAlert ? 'ring-red-500 animate-pulse' : STATUS_RING[cam.status] || 'ring-slate-700'} text-left transition hover:scale-[1.02]`}
+                                >
+                                    {/* Fake camera tile background — simulated feed */}
+                                    <div className={`absolute inset-0 ${isOffline ? 'bg-slate-900' : 'bg-gradient-to-br from-slate-700 to-slate-900'}`}>
+                                        {isOffline ? (
+                                            <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-500">
+                                                <WifiOff size={28} className="mb-1" />
+                                                <span className="text-[10px] uppercase tracking-wider">No signal</span>
+                                            </div>
+                                        ) : (
+                                            <>
+                                                {/* CRT scan lines */}
+                                                <div className="absolute inset-0 opacity-20" style={{
+                                                    background: 'repeating-linear-gradient(0deg, rgba(255,255,255,0.05), rgba(255,255,255,0.05) 1px, transparent 1px, transparent 3px)',
+                                                }} />
+                                                {/* LIVE dot */}
+                                                <div className="absolute top-1.5 left-1.5 flex items-center gap-1">
+                                                    <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                                                    <span className="text-[9px] font-bold text-white/90">LIVE</span>
+                                                </div>
+                                            </>
+                                        )}
+
+                                        {/* Face-alert overlay */}
+                                        {hasAlert && (
+                                            <>
+                                                <div className="absolute inset-0 bg-red-500/10" />
+                                                {/* Face-scan box (centered) */}
+                                                <svg viewBox="0 0 100 56" className="absolute inset-0 w-full h-full pointer-events-none">
+                                                    <rect x="36" y="14" width="28" height="28" fill="none" stroke="#f87171" strokeWidth="0.8" strokeDasharray="2,1.5">
+                                                        <animate attributeName="opacity" values="0.4;1;0.4" dur="1.6s" repeatCount="indefinite" />
+                                                    </rect>
+                                                    <line x1="40" y1="20" x2="44" y2="20" stroke="#f87171" strokeWidth="0.6" />
+                                                    <line x1="40" y1="20" x2="40" y2="24" stroke="#f87171" strokeWidth="0.6" />
+                                                    <line x1="60" y1="20" x2="56" y2="20" stroke="#f87171" strokeWidth="0.6" />
+                                                    <line x1="60" y1="20" x2="60" y2="24" stroke="#f87171" strokeWidth="0.6" />
+                                                    <line x1="40" y1="36" x2="44" y2="36" stroke="#f87171" strokeWidth="0.6" />
+                                                    <line x1="40" y1="36" x2="40" y2="32" stroke="#f87171" strokeWidth="0.6" />
+                                                    <line x1="60" y1="36" x2="56" y2="36" stroke="#f87171" strokeWidth="0.6" />
+                                                    <line x1="60" y1="36" x2="60" y2="32" stroke="#f87171" strokeWidth="0.6" />
+                                                </svg>
+                                                <div className="absolute top-1.5 right-1.5 bg-red-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1 shadow-lg">
+                                                    <ScanFace size={10} /> ALERT
+                                                </div>
+                                            </>
+                                        )}
+
+                                        {/* Camera label */}
+                                        <div className="absolute bottom-1.5 left-1.5 right-1.5 bg-black/70 text-white text-[10px] px-1.5 py-1 rounded">
+                                            <div className="font-mono font-bold">{cam.no}</div>
+                                            <div className="opacity-80 truncate">{cam.location}</div>
+                                        </div>
+                                    </div>
+                                </button>
+                            );
+                        })}
+                    </div>
+                )}
             </div>
 
-            {/* Admin PA — blue/cyan bubble (hidden while panel open) */}
+            {/* Selected camera detail */}
+            {selectedCam && (
+                <div className="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setSelectedCam(null)}>
+                    <div className="bg-slate-900 border border-white/15 rounded-2xl max-w-lg w-full p-5 shadow-2xl" onClick={e => e.stopPropagation()}>
+                        <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center gap-2">
+                                <Video size={20} className="text-cyan-400" />
+                                <div>
+                                    <div className="font-mono text-xs text-slate-400">{selectedCam.no}</div>
+                                    <div className="font-bold">{selectedCam.location}</div>
+                                </div>
+                            </div>
+                            <button onClick={() => setSelectedCam(null)} className="p-1 hover:bg-white/10 rounded">✕</button>
+                        </div>
+                        <div className="aspect-video bg-slate-800 rounded-lg mb-3 flex items-center justify-center text-slate-500">
+                            {selectedCam.status === 'offline' ? <WifiOff size={48} /> : <Video size={48} />}
+                        </div>
+                        <div className="space-y-1.5 text-sm">
+                            <Row label="Zone"        value={selectedCam.zone} />
+                            <Row label="Status"      value={selectedCam.status} />
+                            <Row label="Resolution"  value={selectedCam.resolution} />
+                            <Row label="Last frame"  value={(selectedCam.lastFrameAt || '').replace('T', ' ').slice(0, 16)} />
+                            {selectedCam.note && <Row label="Note" value={selectedCam.note} />}
+                        </div>
+                        {selectedCam.faceAlert && (
+                            <div className="mt-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+                                <div className="flex items-center gap-2 text-red-300 font-semibold text-sm mb-1">
+                                    <ScanFace size={16} /> Face-detection alert · {selectedCam.faceAlert.priority}
+                                </div>
+                                <div className="text-xs text-slate-300 space-y-0.5">
+                                    <div><span className="text-slate-400">ID:</span> <span className="font-mono">{selectedCam.faceAlert.id}</span></div>
+                                    <div><span className="text-slate-400">Confidence:</span> {(selectedCam.faceAlert.confidence * 100).toFixed(1)}%</div>
+                                    <div><span className="text-slate-400">Match:</span> {selectedCam.faceAlert.matchedAgainst}</div>
+                                    <div><span className="text-slate-400">Captured:</span> {(selectedCam.faceAlert.capturedAt || '').replace('T', ' ').slice(0, 16)}</div>
+                                    <div className="text-slate-200 mt-1.5">{selectedCam.faceAlert.note}</div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
+
+            {/* Face-alert banner */}
+            {faceAlerts > 0 && (
+                <div className="fixed top-20 right-6 z-40 bg-red-600/95 text-white px-4 py-2.5 rounded-lg shadow-2xl border border-red-400/50 max-w-sm">
+                    <div className="flex items-center gap-2">
+                        <AlertTriangle size={16} className="text-amber-200" />
+                        <div className="text-sm font-bold">{faceAlerts} suspicious face detection</div>
+                    </div>
+                    <p className="text-[11px] opacity-90 mt-0.5">
+                        AI face-scan flagged an unrecognised person at the Main Gate. Tap CAM-02 for details.
+                    </p>
+                </div>
+            )}
+
+            {/* Admin PA */}
             {!isBotOpen && (
                 <button
                     onClick={() => setIsBotOpen(true)}
@@ -193,7 +232,6 @@ const CCTV = ({ onBack }) => {
                     <MessageCircle className="w-8 h-8 group-hover:rotate-12 transition-transform" />
                 </button>
             )}
-
             {isBotOpen && (
                 <BotModules
                     onClose={() => setIsBotOpen(false)}
@@ -207,11 +245,15 @@ const CCTV = ({ onBack }) => {
     );
 };
 
-const Kpi = ({ label, value, accent }) => (
-    <div className={`rounded-xl p-3 bg-gradient-to-br ${accent} shadow-md`}>
+const Kpi = ({ label, value, accent, pulse }) => (
+    <div className={`rounded-xl p-3 bg-gradient-to-br ${accent} shadow-md ${pulse ? 'animate-pulse' : ''}`}>
         <div className="text-[11px] uppercase tracking-wider opacity-80">{label}</div>
         <div className="text-2xl font-bold mt-1">{value}</div>
     </div>
+);
+
+const Row = ({ label, value }) => (
+    <div className="flex"><div className="w-24 text-slate-400">{label}:</div><div className="text-slate-200">{value}</div></div>
 );
 
 export default CCTV;

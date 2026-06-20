@@ -1,192 +1,218 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-    ArrowLeft, MessageCircle, Flame, AlertTriangle, ShieldCheck, Calendar,
-    Wrench, Loader2, RefreshCw, MapPin,
+    ArrowLeft, MessageCircle, Flame, AlertTriangle, ShieldCheck, BatteryLow,
+    Loader2, RefreshCw,
 } from 'lucide-react';
 import BotModules from '../chatbot/bot-modules';
 
-const TYPES = [
-    { key: 'drill',       title: 'Drill',         icon: Calendar,       color: 'bg-gradient-to-br from-blue-500 to-blue-600',     blurb: 'Scheduled fire-drill' },
-    { key: 'false-alarm', title: 'False Alarm',   icon: AlertTriangle,  color: 'bg-gradient-to-br from-amber-500 to-amber-600',   blurb: 'Sensor pulled, no real event' },
-    { key: 'real-event',  title: 'Real Event',    icon: Flame,          color: 'bg-gradient-to-br from-red-500 to-red-600',       blurb: 'Confirmed incident' },
-    { key: 'maintenance', title: 'Maintenance',   icon: Wrench,         color: 'bg-gradient-to-br from-slate-500 to-slate-600',   blurb: 'Detector service / replacement' },
-];
-
-const SEVERITY_STYLE = {
-    info:   'bg-blue-50 text-blue-700 ring-1 ring-blue-200',
-    low:    'bg-slate-50 text-slate-700 ring-1 ring-slate-200',
-    medium: 'bg-amber-50 text-amber-700 ring-1 ring-amber-200',
-    high:   'bg-red-50 text-red-700 ring-1 ring-red-200',
-};
-const STATUS_STYLE = {
-    scheduled: 'bg-blue-100 text-blue-700 border border-blue-200',
-    open:      'bg-red-100 text-red-700 border border-red-200',
-    closed:    'bg-slate-100 text-slate-600 border border-slate-200',
+const STATE_COLOR = {
+    ok:            { fill: '#22c55e', stroke: '#16a34a', label: 'OK',          chip: 'bg-emerald-100 text-emerald-700' },
+    'low-battery': { fill: '#f59e0b', stroke: '#d97706', label: 'Low battery', chip: 'bg-amber-100 text-amber-700' },
+    faulty:        { fill: '#ef4444', stroke: '#b91c1c', label: 'Faulty',      chip: 'bg-red-100 text-red-700' },
 };
 
 const FireAlarm = ({ onBack }) => {
     const navigate = useNavigate();
     const [isBotOpen, setIsBotOpen] = useState(false);
-    // Admin PA greets on land.
     useEffect(() => {
         const t = setTimeout(() => setIsBotOpen(true), 700);
         return () => clearTimeout(t);
     }, []);
 
-    const [items, setItems] = useState([]);
+    const [sensors, setSensors] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [activeType, setActiveType] = useState(null);
+    const [hovered, setHovered] = useState(null);
 
-    const fetchItems = useCallback(() => {
+    const fetchSensors = useCallback(() => {
         setLoading(true);
         setError(null);
-        const qs = activeType ? `?type=${encodeURIComponent(activeType)}` : '';
-        fetch(`/api/fire-alarm-events${qs}`)
+        fetch('/api/fire-alarm-sensors')
             .then(r => r.json())
             .then(d => {
                 if (!d?.ok) throw new Error(d?.error || 'Failed to load');
-                setItems(d.items || []);
+                setSensors(d.items || []);
             })
             .catch(err => setError(err.message || String(err)))
             .finally(() => setLoading(false));
-    }, [activeType]);
-    useEffect(() => { fetchItems(); }, [fetchItems]);
+    }, []);
+    useEffect(() => { fetchSensors(); }, [fetchSensors]);
 
-    const counts = items.reduce((acc, it) => {
-        acc.total++;
-        if (it.status === 'scheduled') acc.scheduled++;
-        if (it.severity === 'high') acc.high++;
-        if (it.type === 'real-event') acc.real++;
+    // Group sensors by building
+    const buildings = sensors.reduce((acc, s) => {
+        const b = s.building;
+        if (!acc[b]) acc[b] = { id: b, name: s.buildingName, sensors: [] };
+        acc[b].sensors.push(s);
         return acc;
-    }, { total: 0, scheduled: 0, high: 0, real: 0 });
+    }, {});
+    const buildingList = Object.values(buildings);
+
+    const total      = sensors.length;
+    const ok         = sensors.filter(s => s.state === 'ok').length;
+    const lowBattery = sensors.filter(s => s.state === 'low-battery').length;
+    const faulty     = sensors.filter(s => s.state === 'faulty').length;
 
     return (
         <div className="min-h-screen bg-slate-900 text-white">
-            {/* Header */}
             <div className="bg-slate-950/80 backdrop-blur px-6 py-4 flex items-center justify-between border-b border-white/10 sticky top-0 z-30">
                 <div className="flex items-center gap-3">
-                    <button
-                        onClick={onBack ? onBack : () => navigate(-1)}
-                        className="p-2 rounded-lg hover:bg-white/10 transition"
-                        aria-label="Back"
-                    >
+                    <button onClick={onBack ? onBack : () => navigate(-1)} className="p-2 rounded-lg hover:bg-white/10 transition" aria-label="Back">
                         <ArrowLeft size={20} />
                     </button>
                     <Flame size={26} className="text-red-400" />
                     <div>
-                        <h1 className="text-xl font-bold leading-tight">Fire Alarm & Life Safety</h1>
-                        <p className="text-xs text-slate-400">Sensor pulls · drills · maintenance windows</p>
+                        <h1 className="text-xl font-bold leading-tight">Fire Alarm Floor Plan</h1>
+                        <p className="text-xs text-slate-400">{buildingList.length} buildings · {total} sensors</p>
                     </div>
                 </div>
-                <button
-                    onClick={fetchItems}
-                    className="p-2 rounded-lg hover:bg-white/10 transition"
-                    title="Refresh"
-                >
+                <button onClick={fetchSensors} className="p-2 rounded-lg hover:bg-white/10 transition" title="Refresh">
                     <RefreshCw size={18} />
                 </button>
             </div>
 
             {/* KPI strip */}
             <div className="px-6 pt-6 grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <Kpi label="Total events" value={counts.total}     accent="from-slate-700 to-slate-800" />
-                <Kpi label="Scheduled"    value={counts.scheduled} accent="from-blue-600 to-blue-700" />
-                <Kpi label="Real events"  value={counts.real}      accent="from-red-600 to-red-700" />
-                <Kpi label="High severity" value={counts.high}     accent="from-amber-600 to-amber-700" />
+                <Kpi label="Total sensors" value={total}      accent="from-slate-700 to-slate-800" />
+                <Kpi label="OK"            value={ok}         accent="from-emerald-600 to-emerald-700" />
+                <Kpi label="Low battery"   value={lowBattery} accent="from-amber-600 to-amber-700" pulse={lowBattery > 0} />
+                <Kpi label="Faulty"        value={faulty}     accent="from-red-600 to-red-700"     pulse={faulty > 0} />
             </div>
 
-            {/* Type filter tiles */}
-            <div className="px-6 pt-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <button
-                    onClick={() => setActiveType(null)}
-                    className={`p-3 rounded-xl border transition text-left ${activeType === null ? 'border-white bg-white text-slate-900' : 'border-white/15 bg-white/5 hover:bg-white/10'}`}
-                >
-                    <div className="font-bold text-sm">All</div>
-                    <div className="text-[11px] opacity-70 mt-0.5">{items.length} item{items.length === 1 ? '' : 's'}</div>
-                </button>
-                {TYPES.map(t => {
-                    const Icon = t.icon;
-                    const n = items.filter(i => i.type === t.key).length;
-                    const isActive = activeType === t.key;
-                    return (
-                        <button
-                            key={t.key}
-                            onClick={() => setActiveType(isActive ? null : t.key)}
-                            className={`p-3 rounded-xl text-white text-left transition relative ${t.color} shadow-md ${isActive ? 'ring-2 ring-white scale-[1.02]' : 'hover:scale-[1.02]'}`}
-                        >
-                            <Icon size={20} className="opacity-80" />
-                            <div className="font-bold text-sm mt-1">{t.title}</div>
-                            <div className="text-[11px] opacity-80 mt-0.5">{t.blurb}</div>
-                            <div className="absolute top-2 right-2 bg-black/30 px-2 py-0.5 rounded-full text-[11px] font-bold">{n}</div>
-                        </button>
-                    );
-                })}
-            </div>
-
-            {/* Records */}
-            <div className="px-6 py-6">
-                <div className="bg-white/5 border border-white/10 rounded-xl overflow-hidden">
-                    <div className="px-4 py-3 border-b border-white/10 flex items-center justify-between">
-                        <h2 className="font-semibold text-sm">
-                            {activeType ? `${activeType} events` : 'All fire-alarm events'}
-                        </h2>
-                        {loading && <Loader2 size={16} className="animate-spin text-red-400" />}
+            {/* Legend */}
+            <div className="px-6 pt-4 flex flex-wrap gap-3 text-xs">
+                {Object.entries(STATE_COLOR).map(([k, v]) => (
+                    <div key={k} className="flex items-center gap-1.5 bg-white/5 px-3 py-1.5 rounded-full">
+                        <span className="w-3 h-3 rounded-full" style={{ background: v.fill, border: `1.5px solid ${v.stroke}` }} />
+                        <span>{v.label}</span>
                     </div>
-                    {error && (
-                        <div className="px-4 py-3 text-sm text-red-300 bg-red-500/10">{error}</div>
-                    )}
-                    {!loading && !error && items.length === 0 && (
-                        <div className="px-4 py-10 text-center text-slate-400">
-                            <ShieldCheck size={32} className="mx-auto mb-2 opacity-60" />
-                            <p className="text-sm">No events under this filter.</p>
+                ))}
+            </div>
+
+            {/* Floor-plan grid — each building is a card with sensors as dots */}
+            <div className="px-6 py-6">
+                {loading && (
+                    <div className="text-center py-10 text-slate-400 text-sm flex items-center justify-center gap-2">
+                        <Loader2 size={16} className="animate-spin" /> Loading floor plan…
+                    </div>
+                )}
+                {error && (
+                    <div className="px-4 py-3 text-sm text-red-300 bg-red-500/10 rounded-lg">{error}</div>
+                )}
+                {!loading && buildingList.length > 0 && (
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                        {buildingList.map(b => {
+                            const bFaulty = b.sensors.filter(s => s.state === 'faulty').length;
+                            const bLow    = b.sensors.filter(s => s.state === 'low-battery').length;
+                            return (
+                                <div key={b.id} className="bg-white/5 border border-white/10 rounded-xl overflow-hidden">
+                                    <div className="px-4 py-2 border-b border-white/10 flex items-center justify-between">
+                                        <div>
+                                            <div className="font-semibold text-sm">{b.id} · {b.name}</div>
+                                            <div className="text-[11px] text-slate-400">{b.sensors.length} sensors</div>
+                                        </div>
+                                        <div className="flex items-center gap-1.5 text-[11px]">
+                                            {bFaulty > 0 && <span className="bg-red-500/20 text-red-300 px-2 py-0.5 rounded-full font-semibold">{bFaulty} faulty</span>}
+                                            {bLow    > 0 && <span className="bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full font-semibold">{bLow} low</span>}
+                                            {bFaulty + bLow === 0 && <span className="bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full font-semibold">all clear</span>}
+                                        </div>
+                                    </div>
+                                    {/* SVG floor plan */}
+                                    <div className="aspect-[2/1] bg-gradient-to-br from-slate-800 to-slate-900 relative">
+                                        <svg viewBox="0 0 100 50" preserveAspectRatio="none" className="absolute inset-0 w-full h-full">
+                                            {/* building outline */}
+                                            <rect x="1" y="1" width="98" height="48" fill="none" stroke="#475569" strokeWidth="0.6" strokeDasharray="2,1" rx="1.5" />
+                                            {/* sensors as dots */}
+                                            {b.sensors.map(s => {
+                                                const c = STATE_COLOR[s.state] || STATE_COLOR.ok;
+                                                const x = (s.xPct / 100) * 96 + 2;
+                                                const y = (s.yPct / 100) * 46 + 2;
+                                                const isHover = hovered === s.no;
+                                                return (
+                                                    <g key={s.no} onMouseEnter={() => setHovered(s.no)} onMouseLeave={() => setHovered(null)} style={{ cursor: 'pointer' }}>
+                                                        {s.state !== 'ok' && (
+                                                            <circle cx={x} cy={y} r={isHover ? 4.5 : 3.5} fill={c.fill} opacity="0.25">
+                                                                <animate attributeName="r" values={`${isHover ? 4.5 : 3.5};${isHover ? 6.5 : 5.5};${isHover ? 4.5 : 3.5}`} dur="1.8s" repeatCount="indefinite" />
+                                                            </circle>
+                                                        )}
+                                                        <circle cx={x} cy={y} r={isHover ? 2.4 : 1.8} fill={c.fill} stroke={c.stroke} strokeWidth="0.4" />
+                                                    </g>
+                                                );
+                                            })}
+                                        </svg>
+                                        {/* hover tooltip */}
+                                        {hovered && b.sensors.find(s => s.no === hovered) && (() => {
+                                            const s = b.sensors.find(x => x.no === hovered);
+                                            const c = STATE_COLOR[s.state] || STATE_COLOR.ok;
+                                            return (
+                                                <div className="absolute top-2 left-2 bg-slate-950/95 border border-white/15 rounded-lg px-3 py-2 text-xs shadow-lg z-10">
+                                                    <div className="font-mono text-[11px] text-slate-300">{s.no}</div>
+                                                    <div className="font-semibold mt-0.5">{s.type} · {s.buildingName}</div>
+                                                    <div className="mt-1 flex items-center gap-1.5">
+                                                        <span className={`px-1.5 py-0.5 rounded-md ${c.chip} font-semibold text-[10px]`}>{c.label}</span>
+                                                        <span className="text-slate-400 text-[10px]">battery {s.battery}%</span>
+                                                    </div>
+                                                    {s.note && <div className="mt-1 text-slate-400 text-[10px] max-w-[260px]">{s.note}</div>}
+                                                </div>
+                                            );
+                                        })()}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
+
+                {/* Anomalies table */}
+                {!loading && (lowBattery + faulty) > 0 && (
+                    <div className="mt-6 bg-white/5 border border-white/10 rounded-xl overflow-hidden">
+                        <div className="px-4 py-3 border-b border-white/10 flex items-center gap-2">
+                            <AlertTriangle size={14} className="text-red-400" />
+                            <h2 className="font-semibold text-sm">Anomalies — needs attention</h2>
                         </div>
-                    )}
-                    {!loading && items.length > 0 && (
                         <div className="overflow-x-auto">
                             <table className="w-full text-sm">
                                 <thead>
                                     <tr className="text-left text-xs uppercase tracking-wider text-slate-400 border-b border-white/10">
-                                        <th className="px-4 py-2">No.</th>
+                                        <th className="px-4 py-2">Sensor</th>
+                                        <th className="px-4 py-2">Building</th>
                                         <th className="px-4 py-2">Type</th>
-                                        <th className="px-4 py-2">Location</th>
-                                        <th className="px-4 py-2">Detected</th>
-                                        <th className="px-4 py-2">Cleared</th>
-                                        <th className="px-4 py-2">Severity</th>
-                                        <th className="px-4 py-2">Status</th>
+                                        <th className="px-4 py-2">State</th>
+                                        <th className="px-4 py-2">Battery</th>
                                         <th className="px-4 py-2">Note</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {items.map(it => (
-                                        <tr key={it._id} className="border-b border-white/5 hover:bg-white/5">
-                                            <td className="px-4 py-2 font-mono text-[11px] text-slate-300">{it.no}</td>
-                                            <td className="px-4 py-2">{it.type}</td>
-                                            <td className="px-4 py-2 flex items-center gap-1 text-[12px]"><MapPin size={11} className="opacity-60" />{it.location}</td>
-                                            <td className="px-4 py-2 text-[12px] text-slate-300">{(it.detectedAt || '').replace('T', ' ').slice(0, 16)}</td>
-                                            <td className="px-4 py-2 text-[12px] text-slate-300">{it.clearedAt ? it.clearedAt.replace('T', ' ').slice(0, 16) : '—'}</td>
-                                            <td className="px-4 py-2">
-                                                <span className={`text-[11px] px-2 py-0.5 rounded-full font-semibold ${SEVERITY_STYLE[it.severity] || SEVERITY_STYLE.info}`}>
-                                                    {it.severity}
-                                                </span>
-                                            </td>
-                                            <td className="px-4 py-2">
-                                                <span className={`text-[11px] px-2 py-1 rounded-md font-semibold ${STATUS_STYLE[it.status] || STATUS_STYLE.open}`}>
-                                                    {it.status}
-                                                </span>
-                                            </td>
-                                            <td className="px-4 py-2 text-[12px] text-slate-300 max-w-md truncate" title={it.note}>{it.note}</td>
-                                        </tr>
-                                    ))}
+                                    {sensors.filter(s => s.state !== 'ok').map(s => {
+                                        const c = STATE_COLOR[s.state] || STATE_COLOR.ok;
+                                        return (
+                                            <tr key={s.no} className="border-b border-white/5 hover:bg-white/5">
+                                                <td className="px-4 py-2 font-mono text-[11px] text-slate-300">{s.no}</td>
+                                                <td className="px-4 py-2 text-[12px]">{s.buildingName}</td>
+                                                <td className="px-4 py-2 text-[12px]">{s.type}</td>
+                                                <td className="px-4 py-2"><span className={`text-[11px] px-2 py-0.5 rounded-full font-semibold ${c.chip}`}>{c.label}</span></td>
+                                                <td className="px-4 py-2 text-[12px] flex items-center gap-1">
+                                                    {s.battery < 20 && <BatteryLow size={12} className="text-amber-400" />}
+                                                    {s.battery}%
+                                                </td>
+                                                <td className="px-4 py-2 text-[12px] text-slate-300 max-w-md">{s.note}</td>
+                                            </tr>
+                                        );
+                                    })}
                                 </tbody>
                             </table>
                         </div>
-                    )}
-                </div>
+                    </div>
+                )}
+                {!loading && (lowBattery + faulty) === 0 && total > 0 && (
+                    <div className="mt-6 px-4 py-6 text-center bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
+                        <ShieldCheck size={32} className="mx-auto mb-2 text-emerald-400" />
+                        <p className="text-sm text-emerald-300">All sensors green. No anomalies.</p>
+                    </div>
+                )}
             </div>
 
-            {/* Admin PA — blue/cyan bubble (hidden while panel open) */}
+            {/* Admin PA */}
             {!isBotOpen && (
                 <button
                     onClick={() => setIsBotOpen(true)}
@@ -197,7 +223,6 @@ const FireAlarm = ({ onBack }) => {
                     <MessageCircle className="w-8 h-8 group-hover:rotate-12 transition-transform" />
                 </button>
             )}
-
             {isBotOpen && (
                 <BotModules
                     onClose={() => setIsBotOpen(false)}
@@ -211,8 +236,8 @@ const FireAlarm = ({ onBack }) => {
     );
 };
 
-const Kpi = ({ label, value, accent }) => (
-    <div className={`rounded-xl p-3 bg-gradient-to-br ${accent} shadow-md`}>
+const Kpi = ({ label, value, accent, pulse }) => (
+    <div className={`rounded-xl p-3 bg-gradient-to-br ${accent} shadow-md ${pulse ? 'animate-pulse' : ''}`}>
         <div className="text-[11px] uppercase tracking-wider opacity-80">{label}</div>
         <div className="text-2xl font-bold mt-1">{value}</div>
     </div>
