@@ -18,7 +18,7 @@ const D: Record<string, string[]> = {
   "nav.customers":  ["Customers", "អតិថិជន", "客户", "顧客", "고객", "গ্রাহক", "ग्राहक"],
   "nav.partners":   ["Partners", "ដៃគូ", "合作伙伴", "パートナー", "파트너", "অংশীদার", "साझेदार"],
   "nav.pricing":    ["Pricing", "តម្លៃ", "价格", "料金", "가격", "মূল্য", "मूल्य"],
-  "nav.flashcards": ["Flashcards", "កាតរូបភាព", "闪卡", "フラッシュカード", "플래시카드", "ফ্ল্যাশকার্ড", "फ्लैशकार्ड"],
+  "nav.subscription": ["Subscription", "ការជាវ",     "订阅",   "サブスク",        "구독",         "সাবস্ক্রিপশন",        "सदस्यता"],
   "nav.experience": ["Experience", "បទពិសោធន៍", "体验", "体験", "경험", "অভিজ্ঞতা", "अनुभव"],
   "nav.portal":     ["Strategic DTV", "Strategic DTV", "Strategic DTV", "Strategic DTV", "Strategic DTV", "Strategic DTV", "Strategic DTV"],
   "nav.portalSub":  ["Strategic plan portal", "ផតថលផែនការយុទ្ធសាស្ត្រ", "战略计划门户", "戦略計画ポータル", "전략 계획 포털", "কৌশলগত পরিকল্পনা পোর্টাল", "रणनीतिक योजना पोर्टल"],
