@@ -78,7 +78,7 @@ function Nav() {
           >
             <a href="/about" className="hover:text-yai-orange transition">{t("nav.about")}</a>
             <a href="/#product"  className="hover:text-yai-orange transition">{t("nav.product")}</a>
-            <a href="/about" className="hover:text-yai-orange transition">{t("nav.customers")}</a>
+            <a href="#customers" className="hover:text-yai-orange transition">{t("nav.customers")}</a>
             {/* Partners — click opens a small submenu with Portal */}
             <div className="relative" onMouseLeave={() => setPartnersOpen(false)}>
               <button
