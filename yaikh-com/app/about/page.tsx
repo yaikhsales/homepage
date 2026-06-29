@@ -25,6 +25,7 @@ interface TeamMember {
   name: string;
   image: string;
   linkedin?: string;
+  role?: string;
 }
 
 const ABOUT_CONTENT = [
@@ -46,8 +47,8 @@ const ABOUT_CONTENT = [
 ];
 
 const TEAM: TeamMember[] = [
-  { name: "Arnold",             image: "/assets/about-us/teams/Mr-Arnold.png", linkedin: "https://www.linkedin.com/in/sin-lam-yeung-898a22418/" },
-  { name: "Gamini K",           image: "/assets/about-us/teams/gamini.png", linkedin: "https://www.linkedin.com/in/gaminisg/" },
+  { name: "Sin Lam Yeung — Arnold", image: "/assets/about-us/teams/Mr-Arnold.png", linkedin: "https://www.linkedin.com/in/sin-lam-yeung-898a22418/", role: "Founder / Director" },
+  { name: "Gamini K",           image: "/assets/about-us/teams/gamini.png", linkedin: "https://www.linkedin.com/in/gaminisg/", role: "Director" },
   { name: "Peang Sereysothirich", image: "/assets/about-us/teams/rich.png" },
   { name: "Van Virot",          image: "/assets/about-us/teams/virot.jpg", linkedin: "https://www.linkedin.com/in/van-virot-120bb0298/" },
   { name: "Samnang Keo",        image: "/assets/about-us/teams/samnang.png", linkedin: "https://www.linkedin.com/in/samnang23/" },
@@ -283,6 +284,11 @@ export default function CustomersPage() {
                     <p className="text-[10px] md:text-xs font-medium text-white/90 text-center leading-tight">
                       {m.name}
                     </p>
+                    {m.role && (
+                      <p className="text-[9px] md:text-[10px] text-yai-orange/90 text-center leading-tight mt-0.5">
+                        {m.role}
+                      </p>
+                    )}
                     {/* Individual LinkedIn profile — small icon under the name.
                         Falls back to "#" until each member's URL is filled in. */}
                     <a
