@@ -49,7 +49,7 @@ const ABOUT_CONTENT = [
 const TEAM: TeamMember[] = [
   { name: "Sin Lam Yeung — Arnold", image: "/assets/about-us/teams/Mr-Arnold.png", linkedin: "https://www.linkedin.com/in/sin-lam-yeung-898a22418/", role: "Founder / Director" },
   { name: "Gamini K",           image: "/assets/about-us/teams/gamini.png", linkedin: "https://www.linkedin.com/in/gaminisg/", role: "Director" },
-  { name: "Peang Sereysothirich", image: "/assets/about-us/teams/rich.png" },
+  { name: "Peang Sereysothirich", image: "/assets/about-us/teams/rich.png", linkedin: "https://www.linkedin.com/in/sothirich/" },
   { name: "Van Virot",          image: "/assets/about-us/teams/virot.jpg", linkedin: "https://www.linkedin.com/in/van-virot-120bb0298/" },
   { name: "Samnang Keo",        image: "/assets/about-us/teams/samnang.png", linkedin: "https://www.linkedin.com/in/samnang23/" },
   { name: "Dilan Lakmal",       image: "/assets/about-us/teams/dilan.jpg" },
