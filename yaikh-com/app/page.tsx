@@ -2989,6 +2989,42 @@ function Footer() {
             Sen Sok, Phnom Penh, Cambodia.<br />
             <span className="italic text-white/65">Ai-Native Manufacturing Intelligence Platform.</span>
           </p>
+          {/* Social — LinkedIn / YouTube / TikTok. Hrefs default to "#" until set. */}
+          <div className="mt-5 flex items-center gap-3">
+            <a
+              href="https://www.linkedin.com/company/texlinkai/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Yai on LinkedIn"
+              className="text-white/70 hover:text-[#0A66C2] transition-colors"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5" aria-hidden="true">
+                <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z" />
+              </svg>
+            </a>
+            <a
+              href="https://www.youtube.com/@yaikh"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Yai on YouTube"
+              className="text-white/70 hover:text-[#FF0000] transition-colors"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5" aria-hidden="true">
+                <path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3.02 3.02 0 0 0 2.12 2.14C4.5 20.45 12 20.45 12 20.45s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z" />
+              </svg>
+            </a>
+            <a
+              href="https://www.tiktok.com/@yaikh2025"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Yai on TikTok"
+              className="text-white/70 hover:text-white transition-colors"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5" aria-hidden="true">
+                <path d="M16.6 5.82a4.28 4.28 0 0 1-1.01-2.82h-3.3v12.86a2.59 2.59 0 0 1-2.59 2.5 2.59 2.59 0 0 1-2.59-2.59 2.59 2.59 0 0 1 3.39-2.46V9.94a5.99 5.99 0 0 0-.8-.05 5.92 5.92 0 1 0 5.92 5.92V9.01a7.57 7.57 0 0 0 4.43 1.42V7.13a4.28 4.28 0 0 1-3.46-1.31z" />
+              </svg>
+            </a>
+          </div>
         </div>
         <FooterCol title="Product">
           <FooterLink href="#product">The platform</FooterLink>

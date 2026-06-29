@@ -24,6 +24,7 @@ import { ArrowLeft, FileText, X } from "lucide-react";
 interface TeamMember {
   name: string;
   image: string;
+  linkedin?: string;
 }
 
 const ABOUT_CONTENT = [
@@ -45,14 +46,14 @@ const ABOUT_CONTENT = [
 ];
 
 const TEAM: TeamMember[] = [
-  { name: "Arnold",             image: "/assets/about-us/teams/Mr-Arnold.png" },
-  { name: "Gamini K",           image: "/assets/about-us/teams/gamini.png" },
+  { name: "Arnold",             image: "/assets/about-us/teams/Mr-Arnold.png", linkedin: "https://www.linkedin.com/in/sin-lam-yeung-898a22418/" },
+  { name: "Gamini K",           image: "/assets/about-us/teams/gamini.png", linkedin: "https://www.linkedin.com/in/gaminisg/" },
   { name: "Peang Sereysothirich", image: "/assets/about-us/teams/rich.png" },
-  { name: "Van Virot",          image: "/assets/about-us/teams/virot.jpg" },
-  { name: "Samnang Keo",        image: "/assets/about-us/teams/samnang.png" },
+  { name: "Van Virot",          image: "/assets/about-us/teams/virot.jpg", linkedin: "https://www.linkedin.com/in/van-virot-120bb0298/" },
+  { name: "Samnang Keo",        image: "/assets/about-us/teams/samnang.png", linkedin: "https://www.linkedin.com/in/samnang23/" },
   { name: "Dilan Lakmal",       image: "/assets/about-us/teams/dilan.jpg" },
   { name: "Samipath Yasomi",    image: "/assets/about-us/teams/yasomi.png" },
-  { name: "Pich Daly",          image: "/assets/about-us/teams/daly.png" },
+  { name: "Pich Daly",          image: "/assets/about-us/teams/daly.png", linkedin: "https://www.linkedin.com/in/daly-pich-6ba6ab40b/" },
   { name: "Chhang Mengchhay",   image: "/assets/about-us/teams/chhay.png" },
   { name: "Chhim Seangleng",    image: "/assets/about-us/teams/seangleng.jpg" },
   { name: "Koem Chichhong",     image: "/assets/about-us/teams/chhorng.jpg" },
@@ -262,7 +263,7 @@ export default function CustomersPage() {
               <h3 className="text-base md:text-lg xl:text-xl font-bold text-white mb-2 md:mb-3 text-center uppercase tracking-wider">
                 Team Members
               </h3>
-              <div className="grid grid-cols-3 md:grid-cols-5 gap-2 md:gap-3 content-start">
+              <div className="grid grid-cols-3 md:grid-cols-5 gap-x-3 gap-y-5 md:gap-x-5 md:gap-y-7 content-start">
                 {TEAM.map((m) => (
                   <div key={m.name} className="flex flex-col items-center">
                     <img
@@ -282,6 +283,19 @@ export default function CustomersPage() {
                     <p className="text-[10px] md:text-xs font-medium text-white/90 text-center leading-tight">
                       {m.name}
                     </p>
+                    {/* Individual LinkedIn profile — small icon under the name.
+                        Falls back to "#" until each member's URL is filled in. */}
+                    <a
+                      href={m.linkedin || "#"}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`${m.name} on LinkedIn`}
+                      className="mt-1.5 inline-flex items-center justify-center text-[#0A66C2] hover:scale-110 transition-transform"
+                    >
+                      <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4" aria-hidden="true">
+                        <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z" />
+                      </svg>
+                    </a>
                   </div>
                 ))}
               </div>
