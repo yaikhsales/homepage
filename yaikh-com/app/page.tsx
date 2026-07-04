@@ -114,6 +114,7 @@ function Nav() {
             <a href="/experience" className="hover:text-yai-orange transition">
               {t("nav.experience")}
             </a>
+            <a href="/ai-feed"   className="hover:text-yai-orange transition whitespace-nowrap">Ai feed</a>
             <a href="#contact"   className="hover:text-yai-orange transition whitespace-nowrap">{t("nav.chat")}</a>
             <a href="#join"      className="hover:text-yai-orange transition font-semibold whitespace-nowrap">{t("nav.join")}</a>
           </div>
