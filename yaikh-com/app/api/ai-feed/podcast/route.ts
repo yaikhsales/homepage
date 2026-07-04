@@ -6,7 +6,7 @@
  */
 
 import { NextResponse } from "next/server";
-import { getEpisodeMeta, ensureEpisode, todayKey } from "@/lib/ai-feed-podcast";
+import { getEpisodeMeta, ensureEpisode, listEpisodes, todayKey } from "@/lib/ai-feed-podcast";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
@@ -31,8 +31,17 @@ export async function GET() {
   const bad = unconfigured();
   if (bad) return bad;
   try {
-    const meta = await getEpisodeMeta(todayKey());
-    return NextResponse.json({ ok: true, exists: !!meta, episode: meta });
+    const [meta, episodes] = await Promise.all([
+      getEpisodeMeta(todayKey()),
+      listEpisodes(14),
+    ]);
+    return NextResponse.json({
+      ok: true,
+      today: todayKey(),
+      exists: !!meta,
+      episode: meta,
+      episodes,
+    });
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     return NextResponse.json({ ok: false, error: msg }, { status: 500 });

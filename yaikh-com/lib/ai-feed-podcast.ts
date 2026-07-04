@@ -166,6 +166,25 @@ export async function getEpisodeMeta(dateKey = todayKey()): Promise<EpisodeMeta 
   };
 }
 
+/** Most recent ready episodes, newest first — for the player's picker. */
+export async function listEpisodes(limit = 14): Promise<EpisodeMeta[]> {
+  const db = await getDb();
+  const docs = await db
+    .collection(COLLECTION)
+    .find({ status: "ready" }, { projection: { audio: 0, script: 0 } })
+    .sort({ _id: -1 })
+    .limit(limit)
+    .toArray();
+  return docs.map((doc) => ({
+    date: String(doc._id),
+    status: doc.status,
+    createdAt: doc.createdAt,
+    durationSec: doc.durationSec,
+    sizeBytes: doc.sizeBytes,
+    stories: doc.stories,
+  }));
+}
+
 export async function getEpisodeAudio(dateKey = todayKey()): Promise<Buffer | null> {
   const db = await getDb();
   const doc = await db

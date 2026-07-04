@@ -865,3 +865,9 @@
 body { top: 0 !important; }
 .goog-tooltip, .goog-tooltip:hover { background: none !important; box-shadow: none !important; }
 .goog-text-highlight { background-color: transparent !important; box-shadow: none !important; }
+
+/* Yai Ai Brief podcast player — equalizer bars (see app/ai-feed/PodcastPlayer.tsx) */
+@keyframes yai-eq {
+  0%   { height: 6px; }
+  100% { height: 30px; }
+}
