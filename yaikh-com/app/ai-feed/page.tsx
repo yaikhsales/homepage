@@ -1,32 +1,35 @@
-"use client";
-
 import Link from "next/link";
+import { fetchAiFeed, SOURCES, type FeedItem } from "@/lib/ai-feed";
 
-/* Starter posts — real content lands in a follow-up pass.
- * Structure kept generic (date · tag · title · lede) so any future
- * source (Substack, RSS, internal CMS) can hydrate this shape. */
-type FeedPost = {
-  date: string;
-  tag: string;
-  title: string;
-  lede: string;
-  href?: string;
+// ISR — page rebuilds at most once every 15 min. First request after the
+// window triggers a background refetch; readers always get a fast cached
+// hit. No cron infra needed.
+export const revalidate = 900;
+
+export const metadata = {
+  title: "Ai feed — Yai",
+  description: "Live Ai news from the world's top labs and outlets.",
 };
 
-const POSTS: FeedPost[] = [
-  {
-    date: "Coming soon",
-    tag: "Introducing",
-    title: "The Yai Ai feed — what to expect",
-    lede:
-      "Field notes from Cambodia's first Ai-Native manufacturing platform. Product updates, agent behaviour, lessons from the factory floor, and the model choices behind them.",
-  },
-];
+function relativeTime(ms: number): string {
+  if (!ms) return "";
+  const diff = Date.now() - ms;
+  const m = Math.floor(diff / 60_000);
+  if (m < 1) return "just now";
+  if (m < 60) return `${m} min ago`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h} hr ago`;
+  const d = Math.floor(h / 24);
+  if (d < 30) return `${d} day${d === 1 ? "" : "s"} ago`;
+  return new Date(ms).toISOString().slice(0, 10);
+}
 
-export default function AiFeedPage() {
+export default async function AiFeedPage() {
+  const { items, errors } = await fetchAiFeed({ perSourceLimit: 5, totalLimit: 20 });
+
   return (
     <main className="min-h-screen bg-yai-bg text-yai-navy">
-      {/* Header bar — mirrors /subscribe */}
+      {/* Header bar */}
       <div className="bg-yai-navy text-white">
         <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
           <Link href="/" className="font-serif text-2xl font-semibold hover:text-yai-orange transition">
@@ -39,53 +42,110 @@ export default function AiFeedPage() {
       </div>
 
       {/* Hero */}
-      <section className="max-w-4xl mx-auto px-6 pt-16 pb-10">
-        <p className="text-[11px] uppercase tracking-[0.22em] text-yai-orange font-bold">
-          Ai feed
-        </p>
+      <section className="max-w-5xl mx-auto px-6 pt-14 pb-8">
+        <p className="text-[11px] uppercase tracking-[0.22em] text-yai-orange font-bold">Ai feed</p>
         <h1 className="mt-3 font-serif text-4xl md:text-5xl lg:text-6xl leading-tight">
-          Field notes from the <em className="text-yai-amber not-italic font-serif italic">Ai-Native</em> factory.
+          The world&rsquo;s top <em className="text-yai-amber not-italic font-serif italic">Ai</em> news.
         </h1>
         <p className="mt-5 text-yai-navy/70 text-base md:text-lg max-w-2xl leading-relaxed">
-          Product updates, agent behaviour, model choices and lessons from
-          Cambodia's first Ai-Native Manufacturing Intelligence Platform.
+          Live headlines from the labs and outlets shaping Ai. Refreshes every 15 minutes.
         </p>
+        <SourceStrip />
       </section>
 
-      {/* Feed list */}
-      <section className="max-w-4xl mx-auto px-6 pb-24">
-        <ul className="divide-y divide-yai-border">
-          {POSTS.map((p, i) => (
-            <li key={i} className="py-8">
-              <div className="flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-yai-navy/50 font-bold">
-                <span>{p.date}</span>
-                <span className="w-1 h-1 rounded-full bg-yai-navy/30" />
-                <span className="text-yai-orange">{p.tag}</span>
-              </div>
-              <h2 className="mt-3 font-serif text-2xl md:text-3xl leading-snug">
-                {p.href ? (
-                  <Link href={p.href} className="hover:text-yai-orange transition">
-                    {p.title}
-                  </Link>
-                ) : (
-                  p.title
-                )}
-              </h2>
-              <p className="mt-3 text-yai-navy/70 leading-relaxed">{p.lede}</p>
-            </li>
-          ))}
-        </ul>
+      {/* Feed */}
+      <section className="max-w-5xl mx-auto px-6 pb-24">
+        {items.length === 0 ? (
+          <EmptyState errors={errors} />
+        ) : (
+          <ul className="space-y-6">
+            {items.map((it) => (
+              <FeedCard key={it.url} item={it} />
+            ))}
+          </ul>
+        )}
 
-        {/* Placeholder call-out for the empty state */}
-        <div className="mt-6 rounded-2xl border border-dashed border-yai-border p-8 text-center text-yai-navy/55">
-          <p className="text-sm">
-            More posts are on the way. Want the feed in your inbox?{" "}
-            <a href="mailto:gamini@yaikh.com" className="text-yai-orange hover:underline">
-              gamini@yaikh.com
-            </a>
+        {items.length > 0 && errors.length > 0 && (
+          <p className="mt-8 text-[11px] text-yai-navy/40 text-center">
+            Some sources unreachable: {errors.map((e) => e.split(":")[0]).join(", ")}
           </p>
-        </div>
+        )}
       </section>
     </main>
+  );
+}
+
+function SourceStrip() {
+  return (
+    <div className="mt-8 flex flex-wrap items-center gap-2">
+      <span className="text-[10px] uppercase tracking-[0.18em] text-yai-navy/40 font-bold mr-2">
+        Sources
+      </span>
+      {SOURCES.map((s) => (
+        <span
+          key={s.name}
+          className="text-[11px] px-2.5 py-1 rounded-full border border-yai-border bg-white/60 text-yai-navy/70"
+        >
+          {s.name}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function FeedCard({ item }: { item: FeedItem }) {
+  return (
+    <li>
+      <a
+        href={item.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group block rounded-2xl border border-yai-border bg-white/70 hover:bg-white hover:shadow-card-hover transition-all overflow-hidden"
+      >
+        <div className="flex flex-col md:flex-row">
+          {item.image && (
+            <div className="md:w-64 md:shrink-0 bg-yai-navy/5">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={item.image}
+                alt=""
+                loading="lazy"
+                className="w-full h-48 md:h-full object-cover"
+              />
+            </div>
+          )}
+          <div className="p-5 md:p-6 flex-1 min-w-0">
+            <div className="flex items-center gap-3 text-[11px] uppercase tracking-[0.16em] font-bold">
+              <span className="text-yai-orange">{item.source}</span>
+              <span className="w-1 h-1 rounded-full bg-yai-navy/30" />
+              <span className="text-yai-navy/50">{relativeTime(item.publishedAt)}</span>
+            </div>
+            <h2 className="mt-2 font-serif text-xl md:text-2xl leading-snug group-hover:text-yai-orange transition-colors">
+              {item.title}
+            </h2>
+            {item.summary && (
+              <p className="mt-2 text-yai-navy/70 text-sm md:text-[15px] leading-relaxed line-clamp-3">
+                {item.summary}
+              </p>
+            )}
+          </div>
+        </div>
+      </a>
+    </li>
+  );
+}
+
+function EmptyState({ errors }: { errors: string[] }) {
+  return (
+    <div className="rounded-2xl border border-dashed border-yai-border p-10 text-center">
+      <p className="text-yai-navy/70">
+        No headlines available right now. The feed refreshes on the next request.
+      </p>
+      {errors.length > 0 && (
+        <p className="mt-3 text-[11px] text-yai-navy/40">
+          {errors.length} source{errors.length === 1 ? "" : "s"} unreachable.
+        </p>
+      )}
+    </div>
   );
 }

@@ -1,0 +1,141 @@
+/**
+ * Aggregates the top Ai news feeds into a single normalized list.
+ *
+ * Sources are all public RSS/Atom endpoints. Failures are isolated per
+ * source (one broken feed does not blank the page). Extracts the best
+ * available image + a short lede from each item.
+ */
+
+import Parser from "rss-parser";
+
+export type FeedItem = {
+  source: string;
+  sourceTag: string;
+  title: string;
+  url: string;
+  summary: string;
+  image: string | null;
+  publishedAt: number;
+};
+
+type Source = { name: string; tag: string; url: string };
+
+// Top 5 curated Ai sources — 3 labs + 2 news outlets.
+export const SOURCES: Source[] = [
+  { name: "OpenAI",          tag: "Lab",  url: "https://openai.com/blog/rss.xml" },
+  { name: "Google DeepMind", tag: "Lab",  url: "https://deepmind.google/blog/rss.xml" },
+  { name: "TechCrunch AI",   tag: "News", url: "https://techcrunch.com/category/artificial-intelligence/feed/" },
+  { name: "Ars Technica",    tag: "News", url: "https://arstechnica.com/tag/artificial-intelligence/feed/" },
+  { name: "Wired AI",        tag: "News", url: "https://www.wired.com/feed/tag/ai/latest/rss" },
+];
+
+// Parser typed with the custom fields we look for.
+type Item = {
+  title?: string;
+  link?: string;
+  isoDate?: string;
+  pubDate?: string;
+  contentSnippet?: string;
+  content?: string;
+  "content:encoded"?: string;
+  enclosure?: { url?: string };
+  "media:content"?: { $?: { url?: string } } | Array<{ $?: { url?: string } }>;
+  "media:thumbnail"?: { $?: { url?: string } } | Array<{ $?: { url?: string } }>;
+};
+
+const parser: Parser<Record<string, unknown>, Item> = new Parser({
+  headers: {
+    // Some CDNs 403 the default node fetch UA; a browser-ish UA works.
+    "User-Agent":
+      "Mozilla/5.0 (compatible; YaikhAiFeedBot/1.0; +https://yaikh.com/ai-feed)",
+    Accept: "application/rss+xml, application/atom+xml, application/xml, text/xml, */*",
+  },
+  customFields: {
+    item: [
+      ["media:content", "media:content"],
+      ["media:thumbnail", "media:thumbnail"],
+      ["content:encoded", "content:encoded"],
+    ],
+  },
+});
+
+function pickImage(item: Item): string | null {
+  const mediaContent = item["media:content"];
+  const mediaThumb = item["media:thumbnail"];
+  const firstMedia = Array.isArray(mediaContent) ? mediaContent[0] : mediaContent;
+  const firstThumb = Array.isArray(mediaThumb) ? mediaThumb[0] : mediaThumb;
+  const fromMedia = firstMedia?.$?.url || firstThumb?.$?.url;
+  if (fromMedia) return fromMedia;
+
+  const fromEnclosure = item.enclosure?.url;
+  if (fromEnclosure) return fromEnclosure;
+
+  const html = item["content:encoded"] || item.content || "";
+  const m = html.match(/<img[^>]+src=["']([^"']+)["']/i);
+  return m ? m[1] : null;
+}
+
+function stripHtml(s: string): string {
+  return s
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&#39;/g, "'")
+    .replace(/&quot;/g, '"')
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function truncate(s: string, n = 220): string {
+  return s.length <= n ? s : s.slice(0, n).replace(/\s+\S*$/, "") + "…";
+}
+
+async function fetchOne(src: Source): Promise<FeedItem[]> {
+  const feed = await parser.parseURL(src.url);
+  const items = (feed.items || []) as Item[];
+
+  return items
+    .filter((it) => it.title && it.link)
+    .map<FeedItem>((it) => {
+      const raw = it.contentSnippet || it.content || it["content:encoded"] || "";
+      const summary = truncate(stripHtml(raw));
+      const iso = it.isoDate || it.pubDate;
+      const publishedAt = iso ? new Date(iso).getTime() : 0;
+      return {
+        source: src.name,
+        sourceTag: src.tag,
+        title: it.title!.trim(),
+        url: it.link!,
+        summary,
+        image: pickImage(it),
+        publishedAt,
+      };
+    });
+}
+
+/**
+ * Fetches all sources in parallel and returns a merged, sorted list.
+ * `perSourceLimit` prevents one busy feed from dominating.
+ */
+export async function fetchAiFeed(opts?: {
+  perSourceLimit?: number;
+  totalLimit?: number;
+}): Promise<{ items: FeedItem[]; errors: string[] }> {
+  const perSourceLimit = opts?.perSourceLimit ?? 5;
+  const totalLimit = opts?.totalLimit ?? 20;
+
+  const settled = await Promise.allSettled(SOURCES.map(fetchOne));
+  const errors: string[] = [];
+  const all: FeedItem[] = [];
+
+  settled.forEach((res, i) => {
+    if (res.status === "fulfilled") {
+      all.push(...res.value.slice(0, perSourceLimit));
+    } else {
+      errors.push(`${SOURCES[i].name}: ${res.reason?.message || res.reason}`);
+    }
+  });
+
+  all.sort((a, b) => b.publishedAt - a.publishedAt);
+  return { items: all.slice(0, totalLimit), errors };
+}
