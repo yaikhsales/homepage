@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { fetchAiFeed, SOURCES, type FeedItem } from "@/lib/ai-feed";
+import PodcastPlayer from "./PodcastPlayer";
 
 // ISR — page rebuilds at most once every 15 min. First request after the
 // window triggers a background refetch; readers always get a fast cached
@@ -57,6 +58,7 @@ export default async function AiFeedPage() {
 
       {/* Feed */}
       <section className="max-w-5xl mx-auto px-6 pb-24">
+        <PodcastPlayer />
         {items.length === 0 ? (
           <EmptyState errors={errors} />
         ) : (
