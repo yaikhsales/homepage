@@ -48,7 +48,9 @@ export default async function AiFeedPage() {
           The world&rsquo;s top <em className="text-yai-amber not-italic font-serif italic">Ai</em> news.
         </h1>
         <p className="mt-5 text-yai-navy/70 text-base md:text-lg max-w-2xl leading-relaxed">
-          Live headlines from the labs and outlets shaping Ai. Refreshes every 15 minutes.
+          Live headlines from the labs and outlets shaping Ai — rewritten in the Yai
+          editorial voice for factory operators. Refreshes every 15 minutes; every
+          card links back to the original source.
         </p>
         <SourceStrip />
       </section>
@@ -103,22 +105,26 @@ function FeedCard({ item }: { item: FeedItem }) {
         className="group block rounded-2xl border border-yai-border bg-white/70 hover:bg-white hover:shadow-card-hover transition-all overflow-hidden"
       >
         <div className="flex flex-col md:flex-row">
-          {item.image && (
-            <div className="md:w-64 md:shrink-0 bg-yai-navy/5">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={item.image}
-                alt=""
-                loading="lazy"
-                className="w-full h-48 md:h-full object-cover"
-              />
-            </div>
-          )}
+          <div className="md:w-64 md:shrink-0 bg-yai-navy/5">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={item.image ?? undefined}
+              alt=""
+              loading="lazy"
+              className="w-full h-48 md:h-full object-cover"
+            />
+          </div>
           <div className="p-5 md:p-6 flex-1 min-w-0">
             <div className="flex items-center gap-3 text-[11px] uppercase tracking-[0.16em] font-bold">
               <span className="text-yai-orange">{item.source}</span>
               <span className="w-1 h-1 rounded-full bg-yai-navy/30" />
               <span className="text-yai-navy/50">{relativeTime(item.publishedAt)}</span>
+              {item.rewritten && (
+                <>
+                  <span className="w-1 h-1 rounded-full bg-yai-navy/30" />
+                  <span className="text-yai-amber" title={item.originalTitle}>Yai edit</span>
+                </>
+              )}
             </div>
             <h2 className="mt-2 font-serif text-xl md:text-2xl leading-snug group-hover:text-yai-orange transition-colors">
               {item.title}
@@ -128,6 +134,9 @@ function FeedCard({ item }: { item: FeedItem }) {
                 {item.summary}
               </p>
             )}
+            <p className="mt-3 text-[11px] text-yai-navy/45">
+              Read at {item.source} <span aria-hidden>↗</span>
+            </p>
           </div>
         </div>
       </a>

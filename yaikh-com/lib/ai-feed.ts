@@ -7,6 +7,8 @@
  */
 
 import Parser from "rss-parser";
+import { ensureImages } from "./ai-feed-image";
+import { rewriteBatch } from "./ai-feed-rewrite";
 
 export type FeedItem = {
   source: string;
@@ -16,6 +18,8 @@ export type FeedItem = {
   summary: string;
   image: string | null;
   publishedAt: number;
+  rewritten?: boolean;
+  originalTitle?: string;
 };
 
 type Source = { name: string; tag: string; url: string };
@@ -137,5 +141,25 @@ export async function fetchAiFeed(opts?: {
   });
 
   all.sort((a, b) => b.publishedAt - a.publishedAt);
-  return { items: all.slice(0, totalLimit), errors };
+  const top = all.slice(0, totalLimit);
+
+  // Fan out both enrichments in parallel — they don't depend on each other.
+  const [withImages, rewrites] = await Promise.all([
+    ensureImages(top),
+    rewriteBatch(top.map((it) => ({ source: it.source, title: it.title, summary: it.summary }))),
+  ]);
+
+  const keyRewritten = process.env.GEMINI_API_KEY ? true : false;
+  const enriched: FeedItem[] = withImages.map((it, i) => {
+    const r = rewrites[i];
+    return {
+      ...it,
+      originalTitle: it.title,
+      title: r.title,
+      summary: r.summary,
+      rewritten: keyRewritten,
+    };
+  });
+
+  return { items: enriched, errors };
 }
