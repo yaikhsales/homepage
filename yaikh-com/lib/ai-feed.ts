@@ -20,6 +20,9 @@ export type FeedItem = {
   publishedAt: number;
   rewritten?: boolean;
   originalTitle?: string;
+  brands: string[];
+  countries: string[];
+  topics: string[];
 };
 
 type Source = { name: string; tag: string; url: string };
@@ -113,8 +116,37 @@ async function fetchOne(src: Source): Promise<FeedItem[]> {
         summary,
         image: pickImage(it),
         publishedAt,
+        brands: [],
+        countries: [],
+        topics: [],
       };
     });
+}
+
+/**
+ * Fire-and-forget archive: upsert enriched items into `ai_feed_items` so
+ * the lookup history (by brand / country / topic) deepens with every
+ * refresh. Never blocks or fails the page render.
+ */
+async function archiveItems(items: FeedItem[]): Promise<void> {
+  if (!process.env.MONGO_URL || items.length === 0) return;
+  try {
+    const { getDb } = await import("./mongo");
+    const db = await getDb();
+    const col = db.collection("ai_feed_items");
+    await col.bulkWrite(
+      items.map((it) => ({
+        updateOne: {
+          filter: { url: it.url },
+          update: { $set: { ...it, archivedAt: new Date() } },
+          upsert: true,
+        },
+      })),
+      { ordered: false }
+    );
+  } catch (err) {
+    console.error("[ai-feed] archive failed:", err instanceof Error ? err.message : err);
+  }
 }
 
 /**
@@ -158,8 +190,13 @@ export async function fetchAiFeed(opts?: {
       title: r.title,
       summary: r.summary,
       rewritten: keyRewritten,
+      brands: r.brands,
+      countries: r.countries,
+      topics: r.topics,
     };
   });
+
+  await archiveItems(enriched);
 
   return { items: enriched, errors };
 }

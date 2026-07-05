@@ -176,6 +176,18 @@ export async function getEpisodeMeta(dateKey = todayKey()): Promise<EpisodeMeta 
   };
 }
 
+/** Every date that has a ready episode, newest first — feeds the calendar picker. */
+export async function listEpisodeDates(limit = 366): Promise<string[]> {
+  const db = await getDb();
+  const docs = await db
+    .collection(COLLECTION)
+    .find({ status: "ready" }, { projection: { _id: 1 } })
+    .sort({ _id: -1 })
+    .limit(limit)
+    .toArray();
+  return docs.map((d) => String(d._id));
+}
+
 /** Most recent ready episodes, newest first — for the player's picker. */
 export async function listEpisodes(limit = 14): Promise<EpisodeMeta[]> {
   const db = await getDb();

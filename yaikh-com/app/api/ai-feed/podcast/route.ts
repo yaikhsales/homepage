@@ -6,7 +6,7 @@
  */
 
 import { NextResponse } from "next/server";
-import { getEpisodeMeta, ensureEpisode, listEpisodes, todayKey } from "@/lib/ai-feed-podcast";
+import { getEpisodeMeta, ensureEpisode, listEpisodes, listEpisodeDates, todayKey } from "@/lib/ai-feed-podcast";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
@@ -31,9 +31,10 @@ export async function GET() {
   const bad = unconfigured();
   if (bad) return bad;
   try {
-    const [meta, episodes] = await Promise.all([
+    const [meta, episodes, dates] = await Promise.all([
       getEpisodeMeta(todayKey()),
       listEpisodes(14),
+      listEpisodeDates(366),
     ]);
     return NextResponse.json({
       ok: true,
@@ -41,6 +42,7 @@ export async function GET() {
       exists: !!meta,
       episode: meta,
       episodes,
+      dates,
     });
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);

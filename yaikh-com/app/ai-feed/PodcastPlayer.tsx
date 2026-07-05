@@ -23,6 +23,79 @@ type Phase = "checking" | "unavailable" | "idle" | "generating" | "ready" | "fai
 const POS_KEY = "yai-brief-pos";
 const WIDGET_W = 288;
 
+function EpisodeCalendar({
+  month,
+  setMonth,
+  dates,
+  selected,
+  today,
+  onPick,
+}: {
+  month: string; // "YYYY-MM"
+  setMonth: (m: string) => void;
+  dates: string[];
+  selected: string | null;
+  today: string;
+  onPick: (date: string) => void;
+}) {
+  const [y, m] = month.split("-").map(Number);
+  const first = new Date(y, m - 1, 1);
+  const daysInMonth = new Date(y, m, 0).getDate();
+  const startPad = first.getDay(); // 0 = Sunday
+  const has = new Set(dates);
+
+  const shift = (delta: number) => {
+    const d = new Date(y, m - 1 + delta, 1);
+    setMonth(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`);
+  };
+
+  const monthLabel = first.toLocaleDateString("en-GB", { month: "long", year: "numeric" });
+
+  return (
+    <div className="mt-2 rounded-xl bg-white/5 border border-white/10 p-2">
+      <div className="flex items-center justify-between px-1 mb-1.5">
+        <button onClick={() => shift(-1)} aria-label="Previous month" className="text-white/50 hover:text-white px-1.5">‹</button>
+        <span className="text-[11px] font-semibold text-white/80">{monthLabel}</span>
+        <button onClick={() => shift(1)} aria-label="Next month" className="text-white/50 hover:text-white px-1.5">›</button>
+      </div>
+      <div className="grid grid-cols-7 gap-0.5 text-center">
+        {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => (
+          <span key={i} className="text-[9px] text-white/35 py-0.5">{d}</span>
+        ))}
+        {Array.from({ length: startPad }).map((_, i) => (
+          <span key={`pad-${i}`} />
+        ))}
+        {Array.from({ length: daysInMonth }).map((_, i) => {
+          const day = i + 1;
+          const iso = `${month}-${String(day).padStart(2, "0")}`;
+          const available = has.has(iso);
+          const isSelected = iso === selected;
+          const isToday = iso === today;
+          return (
+            <button
+              key={iso}
+              disabled={!available}
+              onClick={() => onPick(iso)}
+              className={`text-[10px] rounded-md py-1 transition ${
+                isSelected
+                  ? "bg-yai-orange text-white font-bold"
+                  : available
+                  ? "bg-yai-orange/15 text-yai-amber font-semibold hover:bg-yai-orange/30 cursor-pointer"
+                  : "text-white/25 cursor-default"
+              } ${isToday && !isSelected ? "ring-1 ring-yai-amber/50" : ""}`}
+            >
+              {day}
+            </button>
+          );
+        })}
+      </div>
+      <p className="mt-1.5 px-1 text-[9px] text-white/35">
+        Highlighted days have an episode · {dates.length} in the archive
+      </p>
+    </div>
+  );
+}
+
 function fmt(sec: number): string {
   if (!isFinite(sec) || sec < 0) sec = 0;
   const m = Math.floor(sec / 60);
@@ -40,8 +113,11 @@ export default function PodcastPlayer() {
   const [phase, setPhase] = useState<Phase>("checking");
   const [today, setToday] = useState<string>("");
   const [episodes, setEpisodes] = useState<Meta[]>([]);
+  const [dates, setDates] = useState<string[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
   const [collapsed, setCollapsed] = useState(false);
+  const [calOpen, setCalOpen] = useState(false);
+  const [calMonth, setCalMonth] = useState<string | null>(null); // "YYYY-MM"
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playing, setPlaying] = useState(false);
@@ -105,7 +181,9 @@ export default function PodcastPlayer() {
       if (!data.ok) { setPhase("unavailable"); return; }
       setToday(data.today);
       setEpisodes(data.episodes ?? []);
+      setDates(data.dates ?? []);
       setSelected((cur) => cur ?? data.episodes?.[0]?.date ?? null);
+      setCalMonth((cur) => cur ?? (data.today as string).slice(0, 7));
 
       const ep: Meta | null = data.episode;
       if (ep?.status === "generating") setPhase("generating");
@@ -268,22 +346,45 @@ export default function PodcastPlayer() {
                 </span>
               </div>
 
-              {/* Episode chips */}
-              <div className="mt-2 flex gap-1.5 overflow-x-auto pb-0.5">
-                {episodes.map((e) => (
-                  <button
-                    key={e.date}
-                    onClick={() => selectEpisode(e.date)}
-                    className={`text-[10px] px-2 py-0.5 rounded-full border whitespace-nowrap transition ${
-                      e.date === selected
-                        ? "border-yai-orange bg-yai-orange/20 text-yai-amber font-semibold"
-                        : "border-white/15 text-white/55 hover:text-white hover:border-white/40"
-                    }`}
-                  >
-                    {niceDate(e.date, today)}
-                  </button>
-                ))}
+              {/* Episode chips + calendar toggle */}
+              <div className="mt-2 flex items-center gap-1.5">
+                <div className="flex gap-1.5 overflow-x-auto pb-0.5 flex-1 min-w-0">
+                  {episodes.slice(0, 5).map((e) => (
+                    <button
+                      key={e.date}
+                      onClick={() => selectEpisode(e.date)}
+                      className={`text-[10px] px-2 py-0.5 rounded-full border whitespace-nowrap transition ${
+                        e.date === selected
+                          ? "border-yai-orange bg-yai-orange/20 text-yai-amber font-semibold"
+                          : "border-white/15 text-white/55 hover:text-white hover:border-white/40"
+                      }`}
+                    >
+                      {niceDate(e.date, today)}
+                    </button>
+                  ))}
+                </div>
+                <button
+                  onClick={() => setCalOpen((v) => !v)}
+                  aria-label="Browse episodes by date"
+                  className={`shrink-0 text-[12px] px-1.5 py-0.5 rounded transition ${
+                    calOpen ? "bg-yai-orange/20 text-yai-amber" : "text-white/55 hover:text-white"
+                  }`}
+                >
+                  📅
+                </button>
               </div>
+
+              {/* Calendar look-up */}
+              {calOpen && calMonth && (
+                <EpisodeCalendar
+                  month={calMonth}
+                  setMonth={setCalMonth}
+                  dates={dates}
+                  selected={selected}
+                  today={today}
+                  onPick={(d) => { selectEpisode(d); setCalOpen(false); }}
+                />
+              )}
             </>
           )}
 

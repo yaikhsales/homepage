@@ -10,7 +10,7 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
 const MODEL = "gemini-2.5-flash";
-const MAX_OUTPUT_TOKENS = 4096;
+const MAX_OUTPUT_TOKENS = 8192;
 
 type RewriteInput = {
   source: string;
@@ -21,23 +21,50 @@ type RewriteInput = {
 type RewriteOutput = {
   title: string;
   summary: string;
+  brands: string[];
+  countries: string[];
+  topics: string[];
 };
+
+const BRANDS = [
+  "OpenAI", "Anthropic", "Google", "Meta", "Microsoft", "xAI", "Mistral",
+  "Alibaba", "DeepSeek", "ByteDance", "Nvidia", "Amazon", "Apple",
+  "Midjourney", "Cursor", "Other",
+] as const;
+
+const TOPICS = [
+  "Models", "Agents", "Hardware", "Business", "Regulation", "Safety",
+  "Creative", "Research", "Manufacturing",
+] as const;
 
 const SYSTEM = `You are the editor of "Yai Ai feed" — a live Ai news brief for a
 manufacturing-industry audience (garment, footwear, bags, softgoods factories
-in Cambodia and Asia). Rewrite each incoming headline and summary in a
-punchy, factual editorial voice.
+in Cambodia and Asia). For each incoming story: rewrite the headline and
+summary in a punchy, factual editorial voice, AND classify it.
 
-Rules:
+Rewrite rules:
 - Never invent facts, quotes, numbers or entities. Only reshape what's given.
 - Title: <= 85 characters. Present tense. Concrete. No clickbait, no emoji, no all-caps.
 - Summary: 1–2 sentences (<= 240 characters total). Plain English. If the story
   has an obvious relevance angle for factory operators, hint at it in one clause.
 - Preserve any proper nouns exactly as written.
+
+Classification rules:
+- brands: which major Ai players the story is about. Use ONLY names from this
+  list: ${BRANDS.join(", ")}. Google covers DeepMind/Gemini. Empty array if none apply.
+- countries: country of origin of the companies/actors in the story
+  (e.g. "USA", "China", "France", "UK", "Japan"). Short common names. Max 3.
+- topics: 1–2 from ONLY this list: ${TOPICS.join(", ")}.
 - Return ONLY a JSON array in the same order as the input.`;
 
 function passthrough(items: RewriteInput[]): RewriteOutput[] {
-  return items.map((it) => ({ title: it.title, summary: it.summary }));
+  return items.map((it) => ({
+    title: it.title,
+    summary: it.summary,
+    brands: [],
+    countries: [],
+    topics: [],
+  }));
 }
 
 export async function rewriteBatch(items: RewriteInput[]): Promise<RewriteOutput[]> {
@@ -72,8 +99,11 @@ export async function rewriteBatch(items: RewriteInput[]): Promise<RewriteOutput
             properties: {
               title: { type: Type.STRING },
               summary: { type: Type.STRING },
+              brands: { type: Type.ARRAY, items: { type: Type.STRING } },
+              countries: { type: Type.ARRAY, items: { type: Type.STRING } },
+              topics: { type: Type.ARRAY, items: { type: Type.STRING } },
             },
-            required: ["title", "summary"],
+            required: ["title", "summary", "brands", "countries", "topics"],
           },
         },
       },
@@ -90,6 +120,9 @@ export async function rewriteBatch(items: RewriteInput[]): Promise<RewriteOutput
     return parsed.map((p, i) => ({
       title: p.title?.trim() || items[i].title,
       summary: p.summary?.trim() || items[i].summary,
+      brands: Array.isArray(p.brands) ? p.brands.filter(Boolean) : [],
+      countries: Array.isArray(p.countries) ? p.countries.filter(Boolean) : [],
+      topics: Array.isArray(p.topics) ? p.topics.filter(Boolean) : [],
     }));
   } catch (err) {
     console.error("[ai-feed-rewrite] Gemini call failed:", err);
