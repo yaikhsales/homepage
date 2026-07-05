@@ -73,10 +73,13 @@ export default function FeedList({ items }: { items: FeedItem[] }) {
           </div>
           <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1">
             {playersInFeed.map((p) => (
-              <button
+              <div
                 key={p.brand}
+                role="button"
+                tabIndex={0}
                 onClick={() => setBrand(brand === p.brand ? null : p.brand)}
-                className={`shrink-0 w-44 text-left rounded-xl border p-3 transition ${
+                onKeyDown={(e) => { if (e.key === "Enter") setBrand(brand === p.brand ? null : p.brand); }}
+                className={`shrink-0 w-48 text-left rounded-xl border p-3 transition cursor-pointer ${
                   brand === p.brand
                     ? "border-yai-orange bg-yai-orange/10 shadow-orange-glow"
                     : "border-yai-border bg-white/70 hover:bg-white hover:shadow-card-hover"
@@ -90,7 +93,26 @@ export default function FeedList({ items }: { items: FeedItem[] }) {
                   {p.country} · {p.hq}
                 </div>
                 <div className="mt-1 text-[11px] text-yai-navy/70 leading-snug line-clamp-2">{p.blurb}</div>
-              </button>
+                {p.links && (
+                  <div className="mt-2 flex items-center gap-2.5 text-[10px] font-semibold">
+                    {p.links.site && (
+                      <PlayerLink href={p.links.site} label={`${p.name} official site`}>🌐 Site</PlayerLink>
+                    )}
+                    {p.links.pricing && (
+                      <PlayerLink href={p.links.pricing} label={`${p.name} pricing`}>💲 Fees</PlayerLink>
+                    )}
+                    {p.links.x && (
+                      <PlayerLink href={p.links.x} label={`${p.name} on X`}>𝕏</PlayerLink>
+                    )}
+                    {p.links.facebook && (
+                      <PlayerLink href={p.links.facebook} label={`${p.name} on Facebook`}>f</PlayerLink>
+                    )}
+                    {p.links.tiktok && (
+                      <PlayerLink href={p.links.tiktok} label={`${p.name} on TikTok`}>♪ TikTok</PlayerLink>
+                    )}
+                  </div>
+                )}
+              </div>
             ))}
           </div>
         </div>
@@ -142,6 +164,21 @@ export default function FeedList({ items }: { items: FeedItem[] }) {
         </ul>
       )}
     </>
+  );
+}
+
+function PlayerLink({ href, label, children }: { href: string; label: string; children: React.ReactNode }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={label}
+      onClick={(e) => e.stopPropagation()}
+      className="text-yai-navy/50 hover:text-yai-orange transition whitespace-nowrap"
+    >
+      {children}
+    </a>
   );
 }
 
