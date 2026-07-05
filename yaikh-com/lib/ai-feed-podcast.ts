@@ -88,11 +88,21 @@ async function writeScript(
         parts: [{ text: `${SCRIPT_PROMPT}\n\nToday's date: ${dateKey}\n\nStories:\n${input}` }],
       },
     ],
-    config: { temperature: 0.7, maxOutputTokens: 2048 },
+    config: {
+      temperature: 0.7,
+      maxOutputTokens: 8192,
+      // Thinking tokens count against maxOutputTokens on 2.5 Flash and were
+      // truncating the dialogue — a scripted format needs no deliberation.
+      thinkingConfig: { thinkingBudget: 0 },
+    },
   });
   const text = res.text?.trim();
   if (!text || !text.includes("Dara:") || !text.includes("Maly:")) {
     throw new Error("script generation returned an unusable script");
+  }
+  const words = text.split(/\s+/).length;
+  if (words < 250) {
+    throw new Error(`script too short (${words} words) — refusing to cut a stub episode`);
   }
   return text;
 }

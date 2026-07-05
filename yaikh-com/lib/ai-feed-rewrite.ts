@@ -61,6 +61,9 @@ export async function rewriteBatch(items: RewriteInput[]): Promise<RewriteOutput
       config: {
         temperature: 0.4,
         maxOutputTokens: MAX_OUTPUT_TOKENS,
+        // Thinking tokens count against maxOutputTokens on 2.5 Flash —
+        // structured rewriting needs the budget for output, not deliberation.
+        thinkingConfig: { thinkingBudget: 0 },
         responseMimeType: "application/json",
         responseSchema: {
           type: Type.ARRAY,
