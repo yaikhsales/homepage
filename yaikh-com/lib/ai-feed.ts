@@ -207,7 +207,9 @@ export async function fetchAiFeed(opts?: {
   // Interleave curated series (History + Timeline) from Mongo so the feed
   // is never just today's news. We pick a small random slice each render
   // — same story doesn't dominate two visits in a row.
-  const seriesItems = await fetchSeriesSample(6);
+  // Pull 8 random curated items (up from 6) and put one near the top so
+  // the series is visible without scrolling; then interleave the rest.
+  const seriesItems = await fetchSeriesSample(8);
   const mixed = interleave(enriched, seriesItems);
 
   return { items: mixed, errors };
@@ -253,14 +255,21 @@ async function fetchSeriesSample(limit: number): Promise<FeedItem[]> {
   }
 }
 
-/** Insert `series` items into `news` at roughly every-3rd position. */
+/**
+ * Insert `series` items into `news`: one right after the first live news
+ * card so the series is visible without scrolling, then every 3rd slot.
+ */
 function interleave(news: FeedItem[], series: FeedItem[]): FeedItem[] {
   if (series.length === 0) return news;
   const out: FeedItem[] = [];
   let s = 0;
   for (let i = 0; i < news.length; i++) {
     out.push(news[i]);
-    if (i % 3 === 2 && s < series.length) out.push(series[s++]);
+    // Slot the first series card immediately after the first news card,
+    // then keep dropping one every 3rd position.
+    if ((i === 0 || (i > 0 && i % 3 === 2)) && s < series.length) {
+      out.push(series[s++]);
+    }
   }
   while (s < series.length) out.push(series[s++]);
   return out;
