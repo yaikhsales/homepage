@@ -211,15 +211,22 @@ export async function fetchAiFeed(opts?: {
   // Interleave curated series (History + Timeline) from Mongo so the feed
   // is never just today's news. We pick a small random slice each render
   // — same story doesn't dominate two visits in a row.
-  // Pull ALL series items (12 history + 47 timeline = 59) so the History
-  // and Timeline filter chips show real counts. Interleave a random subset
-  // of 8 near the top; the rest sit at the bottom of the feed so the
-  // filter can reveal them without another network fetch.
+  // Pull ALL series items (12 history + 47 timeline = 59). Two rules:
+  //   1. Only Timeline items get spotlighted at the top (rotated randomly
+  //      each render for discovery).
+  //   2. History is ALWAYS presented in EP1→EP12 order at the bottom so
+  //      the History filter chip reveals a clean sequence.
   const allSeries = await fetchAllSeries();
-  const shuffled = allSeries.slice().sort(() => Math.random() - 0.5);
-  const spotlight = shuffled.slice(0, 8);
-  const rest = shuffled.slice(8);
-  const mixed = interleave(enriched, spotlight).concat(rest);
+  const timeline = allSeries.filter((s) => s.series === "timeline");
+  const history  = allSeries.filter((s) => s.series === "history")
+                    .sort((a, b) => (a.seriesEpisode ?? 0) - (b.seriesEpisode ?? 0));
+  const spotlightIdx = new Set<number>();
+  while (spotlightIdx.size < Math.min(8, timeline.length)) {
+    spotlightIdx.add(Math.floor(Math.random() * timeline.length));
+  }
+  const spotlight = [...spotlightIdx].sort((a, b) => a - b).map((i) => timeline[i]);
+  const restTimeline = timeline.filter((_, i) => !spotlightIdx.has(i));
+  const mixed = interleave(enriched, spotlight).concat(restTimeline).concat(history);
 
   return { items: mixed, errors };
 }
