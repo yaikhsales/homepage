@@ -23,6 +23,12 @@ export type FeedItem = {
   brands: string[];
   countries: string[];
   topics: string[];
+  /** "history" for Yai Ai History episodes, "timeline" for model releases,
+   *  undefined for live RSS-driven news. */
+  series?: "history" | "timeline";
+  seriesEpisode?: number;
+  seriesBrand?: string;
+  seriesVersion?: string;
 };
 
 type Source = { name: string; tag: string; url: string };
@@ -198,5 +204,64 @@ export async function fetchAiFeed(opts?: {
 
   await archiveItems(enriched);
 
-  return { items: enriched, errors };
+  // Interleave curated series (History + Timeline) from Mongo so the feed
+  // is never just today's news. We pick a small random slice each render
+  // — same story doesn't dominate two visits in a row.
+  const seriesItems = await fetchSeriesSample(6);
+  const mixed = interleave(enriched, seriesItems);
+
+  return { items: mixed, errors };
+}
+
+/**
+ * Pulls a random sample of curated Yai series items (history + model
+ * timelines) from Mongo. Returns [] on any failure — never blocks live news.
+ */
+async function fetchSeriesSample(limit: number): Promise<FeedItem[]> {
+  if (!process.env.MONGO_URL) return [];
+  try {
+    const { getDb } = await import("./mongo");
+    const db = await getDb();
+    const col = db.collection("ai_feed_items");
+    const docs = await col
+      .aggregate([
+        { $match: { series: { $in: ["history", "timeline"] } } },
+        { $sample: { size: limit } },
+      ])
+      .toArray();
+    return docs.map((d) => ({
+      source: d.source,
+      sourceTag: d.sourceTag,
+      title: d.title,
+      url: d.url,
+      summary: d.summary,
+      image: d.image,
+      publishedAt: d.publishedAt,
+      rewritten: d.rewritten,
+      originalTitle: d.originalTitle,
+      brands: d.brands ?? [],
+      countries: d.countries ?? [],
+      topics: d.topics ?? [],
+      series: d.series,
+      seriesEpisode: d.seriesEpisode,
+      seriesBrand: d.seriesBrand,
+      seriesVersion: d.seriesVersion,
+    }));
+  } catch (err) {
+    console.error("[ai-feed] fetchSeriesSample failed:", err instanceof Error ? err.message : err);
+    return [];
+  }
+}
+
+/** Insert `series` items into `news` at roughly every-3rd position. */
+function interleave(news: FeedItem[], series: FeedItem[]): FeedItem[] {
+  if (series.length === 0) return news;
+  const out: FeedItem[] = [];
+  let s = 0;
+  for (let i = 0; i < news.length; i++) {
+    out.push(news[i]);
+    if (i % 3 === 2 && s < series.length) out.push(series[s++]);
+  }
+  while (s < series.length) out.push(series[s++]);
+  return out;
 }

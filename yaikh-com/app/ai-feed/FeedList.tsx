@@ -239,10 +239,20 @@ function FeedCard({ item }: { item: FeedItem }) {
           </div>
           <div className="p-5 md:p-6 flex-1 min-w-0">
             <div className="flex items-center gap-3 text-[11px] uppercase tracking-[0.16em] font-bold">
-              <span className="text-yai-orange">{item.source}</span>
+              {item.series === "history" ? (
+                <span className="px-2 py-0.5 rounded-full bg-yai-amber/25 text-yai-navy border border-yai-amber/50">
+                  📚 Yai History{item.seriesEpisode ? ` · EP${item.seriesEpisode}` : ""}
+                </span>
+              ) : item.series === "timeline" ? (
+                <span className="px-2 py-0.5 rounded-full bg-yai-orange/15 text-yai-orange border border-yai-orange/40">
+                  🕰 Timeline{item.seriesBrand ? ` · ${item.seriesBrand}` : ""}
+                </span>
+              ) : (
+                <span className="text-yai-orange">{item.source}</span>
+              )}
               <span className="w-1 h-1 rounded-full bg-yai-navy/30" />
               <span className="text-yai-navy/50">{relativeTime(item.publishedAt)}</span>
-              {item.rewritten && (
+              {item.rewritten && !item.series && (
                 <>
                   <span className="w-1 h-1 rounded-full bg-yai-navy/30" />
                   <span className="text-yai-amber" title={item.originalTitle}>Yai edit</span>
@@ -274,7 +284,8 @@ function FeedCard({ item }: { item: FeedItem }) {
                 </span>
               ))}
               <span className="ml-auto text-[11px] text-yai-navy/45">
-                Read at {item.source} <span aria-hidden>↗</span>
+                {item.series ? "Read on yaikh.com" : `Read at ${item.source}`}{" "}
+                <span aria-hidden>↗</span>
               </span>
             </div>
           </div>
