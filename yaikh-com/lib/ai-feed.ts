@@ -33,13 +33,17 @@ export type FeedItem = {
 
 type Source = { name: string; tag: string; url: string };
 
-// Top 5 curated Ai sources — 3 labs + 2 news outlets.
+// Curated Ai sources — labs + Western news + China news.
 export const SOURCES: Source[] = [
-  { name: "OpenAI",          tag: "Lab",  url: "https://openai.com/blog/rss.xml" },
-  { name: "Google DeepMind", tag: "Lab",  url: "https://deepmind.google/blog/rss.xml" },
-  { name: "TechCrunch AI",   tag: "News", url: "https://techcrunch.com/category/artificial-intelligence/feed/" },
-  { name: "Ars Technica",    tag: "News", url: "https://arstechnica.com/tag/artificial-intelligence/feed/" },
-  { name: "Wired AI",        tag: "News", url: "https://www.wired.com/feed/tag/ai/latest/rss" },
+  { name: "OpenAI",          tag: "Lab",   url: "https://openai.com/blog/rss.xml" },
+  { name: "Google DeepMind", tag: "Lab",   url: "https://deepmind.google/blog/rss.xml" },
+  { name: "TechCrunch AI",   tag: "News",  url: "https://techcrunch.com/category/artificial-intelligence/feed/" },
+  { name: "Ars Technica",    tag: "News",  url: "https://arstechnica.com/tag/artificial-intelligence/feed/" },
+  { name: "Wired AI",        tag: "News",  url: "https://www.wired.com/feed/tag/ai/latest/rss" },
+  // Chinese Ai coverage — headlines land in Chinese, translated + rewritten
+  // to English in the Yai voice by the same Gemini rewrite pass.
+  { name: "QbitAI (量子位)", tag: "China", url: "https://www.qbitai.com/feed" },
+  { name: "36Kr",            tag: "China", url: "https://36kr.com/feed" },
 ];
 
 // Parser typed with the custom fields we look for.

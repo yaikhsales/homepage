@@ -25,6 +25,7 @@ import { GoogleGenAI, Type } from "@google/genai";
 //   npx tsx scripts/seed-history-and-timelines.mjs
 import { HISTORY_EPISODES } from "../data/ai-history-episodes.ts";
 import { MODEL_TIMELINES } from "../data/ai-model-timelines.ts";
+import { brandTile, historyTile } from "./lib-brand-tiles.mjs";
 
 const MODEL = "gemini-2.5-flash";
 
@@ -93,35 +94,7 @@ async function rewriteBatch(ai, systemPrompt, items) {
   }));
 }
 
-/** SVG data-URI tile matching the same style as lib/ai-feed-image.ts. */
-function sourceTile(source, initialsOverride) {
-  const palette = {
-    "Yai History":       ["#0A1F47", "#F5C26B"],
-    "OpenAI":            ["#0F172A", "#10A37F"],
-    "Anthropic":         ["#0A1F47", "#D97757"],
-    "Google":            ["#0B2545", "#4F86F7"],
-    "Meta":              ["#0A1F47", "#0866FF"],
-    "xAI":               ["#111111", "#F0F0F0"],
-    "Mistral":           ["#0A1F47", "#FA520F"],
-    "DeepSeek":          ["#111827", "#4D6BFE"],
-    "Alibaba":           ["#0A1F47", "#FF6A00"],
-  };
-  const [c1, c2] = palette[source] || ["#0A1F47", "#F37021"];
-  const initials = (initialsOverride ??
-    source.split(/\s+/).map((w) => w[0]).join("").slice(0, 3)).toUpperCase();
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
-    <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="${c1}"/>
-      <stop offset="1" stop-color="${c2}"/>
-    </linearGradient></defs>
-    <rect width="800" height="500" fill="url(#g)"/>
-    <text x="50%" y="52%" fill="white" font-family="Georgia, serif" font-weight="700"
-          font-size="180" text-anchor="middle" opacity="0.9">${initials}</text>
-    <text x="50%" y="82%" fill="white" font-family="system-ui, sans-serif"
-          font-size="26" letter-spacing="4" text-anchor="middle" opacity="0.7">${source.toUpperCase()}</text>
-  </svg>`;
-  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
-}
+// Tile helpers live in scripts/lib-brand-tiles.mjs.
 
 async function main() {
   if (!process.env.MONGO_URL) throw new Error("MONGO_URL not set");
@@ -168,7 +141,7 @@ async function main() {
               title: r.title,
               url: `https://yaikh.com/ai-feed#${h.id}`,
               summary: r.summary,
-              image: sourceTile("Yai History", `EP${h.ep}`),
+              image: historyTile(h.ep, h.year),
               publishedAt,
               rewritten: true,
               originalTitle: h.title,
@@ -234,7 +207,7 @@ async function main() {
               title: r.title,
               url: `https://yaikh.com/ai-feed#${t.id}`,
               summary: r.summary,
-              image: sourceTile(t.brand),
+              image: brandTile(t.brand),
               publishedAt,
               rewritten: true,
               originalTitle: `${t.brand} ${t.version} — ${t.headline}`,

@@ -44,10 +44,16 @@ summary in a punchy, factual editorial voice, AND classify it.
 
 Rewrite rules:
 - Never invent facts, quotes, numbers or entities. Only reshape what's given.
-- Title: <= 85 characters. Present tense. Concrete. No clickbait, no emoji, no all-caps.
-- Summary: 1–2 sentences (<= 240 characters total). Plain English. If the story
-  has an obvious relevance angle for factory operators, hint at it in one clause.
-- Preserve any proper nouns exactly as written.
+- **Input may be in Chinese (中文).** If so: translate to English AND rewrite
+  in the Yai voice in the SAME step. Never leave any Chinese characters in
+  the output title or summary. Keep company/product names in Latin script
+  (Alibaba, ByteDance, Qwen, DeepSeek, Doubao, etc.) rather than Hanzi.
+- Title: <= 85 characters. English. Present tense. Concrete. No clickbait,
+  no emoji, no all-caps.
+- Summary: 1–2 sentences (<= 240 characters total). English, plain. If the
+  story has an obvious relevance angle for factory operators, hint at it
+  in one clause.
+- Preserve any proper nouns exactly as written (in English form).
 
 Classification rules:
 - brands: which major Ai players the story is about. Use ONLY names from this
