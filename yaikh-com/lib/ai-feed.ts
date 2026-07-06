@@ -207,29 +207,35 @@ export async function fetchAiFeed(opts?: {
   // Interleave curated series (History + Timeline) from Mongo so the feed
   // is never just today's news. We pick a small random slice each render
   // — same story doesn't dominate two visits in a row.
-  // Pull 8 random curated items (up from 6) and put one near the top so
-  // the series is visible without scrolling; then interleave the rest.
-  const seriesItems = await fetchSeriesSample(8);
-  const mixed = interleave(enriched, seriesItems);
+  // Pull ALL series items (12 history + 47 timeline = 59) so the History
+  // and Timeline filter chips show real counts. Interleave a random subset
+  // of 8 near the top; the rest sit at the bottom of the feed so the
+  // filter can reveal them without another network fetch.
+  const allSeries = await fetchAllSeries();
+  const shuffled = allSeries.slice().sort(() => Math.random() - 0.5);
+  const spotlight = shuffled.slice(0, 8);
+  const rest = shuffled.slice(8);
+  const mixed = interleave(enriched, spotlight).concat(rest);
 
   return { items: mixed, errors };
 }
 
 /**
- * Pulls a random sample of curated Yai series items (history + model
- * timelines) from Mongo. Returns [] on any failure — never blocks live news.
+ * Pulls every curated Yai series item (history + model timelines) from
+ * Mongo — bounded 12 + 47 ≈ 59 documents, safe to load in full so the
+ * History / Timeline / Models filter chips reflect the real archive size.
+ * Returns [] on any failure — never blocks live news.
  */
-async function fetchSeriesSample(limit: number): Promise<FeedItem[]> {
+async function fetchAllSeries(): Promise<FeedItem[]> {
   if (!process.env.MONGO_URL) return [];
   try {
     const { getDb } = await import("./mongo");
     const db = await getDb();
     const col = db.collection("ai_feed_items");
     const docs = await col
-      .aggregate([
-        { $match: { series: { $in: ["history", "timeline"] } } },
-        { $sample: { size: limit } },
-      ])
+      .find({ series: { $in: ["history", "timeline"] } })
+      // History by episode #, then timeline by version release date.
+      .sort({ seriesEpisode: 1, seriesReleased: -1 })
       .toArray();
     return docs.map((d) => ({
       source: d.source,
@@ -250,7 +256,7 @@ async function fetchSeriesSample(limit: number): Promise<FeedItem[]> {
       seriesVersion: d.seriesVersion,
     }));
   } catch (err) {
-    console.error("[ai-feed] fetchSeriesSample failed:", err instanceof Error ? err.message : err);
+    console.error("[ai-feed] fetchAllSeries failed:", err instanceof Error ? err.message : err);
     return [];
   }
 }
