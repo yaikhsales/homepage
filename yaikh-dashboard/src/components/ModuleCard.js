@@ -1,6 +1,42 @@
 import React from "react";
 import { useTranslation } from '../translate/TranslationContext';
 
+/* App-style icon for the flip front. Emoji reads as a conventional app
+   icon on a phone home screen; falls back to the module initial. Keyed by
+   module id so the presentation looks like real apps before revealing the
+   Ai agent face. */
+const MODULE_EMOJI = {
+  accountant: "🧮", iews: "🌐", "purchase-request": "🛒", "bill-claim": "🧾",
+  "salary-bill": "💵", "shipping-bill": "📑", yhr: "👥", "org-chart": "🗂️",
+  training: "🎓", "temporary-worker": "🧑‍🏭", "speak-up": "📢",
+  "support-ticket": "🎫", "y-shop": "🏪", "gate-pass": "🛂",
+  "meeting-room": "📅", "car-booking": "🚗", "fire-alarm": "🚨", cctv: "📹",
+  "digital-audit": "✅", energy: "⚡", air: "🌬️", water: "💧", waste: "♻️",
+  chemical: "🧪", shipping: "🚢", "e-government": "🏛️",
+  "management-dashboard": "📊", sop: "📘", "system-analysis": "🔬",
+  yqms: "🔍", "call-out": "📞", fc: "🧵", ywip: "🏭", ce: "📐", ytm: "🔧",
+  "ytm-shop": "🛠️", "4dp": "🎨", ypi: "💡", mrp: "📦",
+};
+
+/* A palette of app-tile gradients; picked deterministically per module so
+   each card keeps a stable colour across flips, like a home-screen grid. */
+const APP_GRADIENTS = [
+  "linear-gradient(135deg,#F37021,#FF9E5E)", // Yai orange
+  "linear-gradient(135deg,#0055A5,#3B82F6)", // blue
+  "linear-gradient(135deg,#0EA5A5,#22D3C5)", // teal
+  "linear-gradient(135deg,#7C3AED,#A78BFA)", // violet
+  "linear-gradient(135deg,#059669,#34D399)", // green
+  "linear-gradient(135deg,#DB2777,#F472B6)", // pink
+  "linear-gradient(135deg,#D97706,#FBBF24)", // amber
+  "linear-gradient(135deg,#475569,#94A3B8)", // slate
+];
+
+function hashId(id = "") {
+  let h = 0;
+  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
+  return h;
+}
+
 const ModuleCard = ({ data, onClick, botVersion = 'default', onBotClick, isDropdownOpen = false, isLightOn = false, isAdministration = false, isOrangeGroup = false, isWhiteGroup = false, theme = 'normal' }) => {
   const { t, translateModuleTitle } = useTranslation();
   const isComingSoon = data.status === "coming-soon";
@@ -48,39 +84,59 @@ const ModuleCard = ({ data, onClick, botVersion = 'default', onBotClick, isDropd
       );
     }
     if (data.image) {
-      // Display icons in their original colors without any filters
-      const iconStyle = {
-        mixBlendMode: 'normal',
-        filter: 'none',
-        WebkitFilter: 'none',
-      };
+      const iconStyle = { mixBlendMode: 'normal', filter: 'none', WebkitFilter: 'none' };
+      const rounded = isDropdownOpen ? 'rounded-2xl' : 'rounded-3xl';
+
+      // Flip front — an app-style icon tile (emoji on a stable gradient),
+      // so the constellation first reads like a conventional app grid.
+      const emoji = MODULE_EMOJI[data.id] || null;
+      const gradient = APP_GRADIENTS[hashId(data.id) % APP_GRADIENTS.length];
+      const initial = (data.title || '?').charAt(0).toUpperCase();
 
       return (
-        <div className={`relative flex items-center justify-center w-20 h-20 group-hover:w-21 group-hover:h-21 transition-all duration-300`}>
-          <img
-            src={`${process.env.PUBLIC_URL}/${data.image}`}
-            alt={data.title}
-            className={`w-full h-full object-contain transition-all duration-300 group-hover:scale-110 ${isDropdownOpen ? 'rounded-2xl' : 'rounded-3xl'
-              }`}
-            style={iconStyle}
-            onError={(e) => {
-              // Heavy media is intentionally not in the build (videos →
-              // Drive, images → Mongo, per yaikh-ops). Until the runtime
-              // asset CDN is wired up, swap the broken module image for
-              // a Yai-orange placeholder with the module's initial so
-              // the constellation stays fully visible.
-              const initial = (data.title || '?').charAt(0).toUpperCase();
-              e.target.onerror = null;
-              e.target.src =
-                "data:image/svg+xml;utf8," +
-                encodeURIComponent(
-                  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80">
-                     <rect width="80" height="80" rx="16" fill="#F37021"/>
-                     <text x="50%" y="58%" font-family="Inter,system-ui,sans-serif" font-size="38" font-weight="800" text-anchor="middle" fill="#fff">${initial}</text>
-                   </svg>`
-                );
-            }}
-          />
+        <div className="yai-flip-scene relative w-20 h-20 group-hover:w-21 group-hover:h-21 transition-all duration-300">
+          <div
+            className="yai-flip-card"
+            /* Desync each card so they don't flip in unison. */
+            style={{ animationDelay: `-${hashId(data.id) % 4400}ms` }}
+          >
+            {/* FRONT — conventional app icon */}
+            <div className="yai-flip-face">
+              <div
+                className={`w-full h-full ${rounded} flex items-center justify-center shadow-sm`}
+                style={{ background: gradient }}
+              >
+                {emoji ? (
+                  <span style={{ fontSize: 40, lineHeight: 1 }}>{emoji}</span>
+                ) : (
+                  <span style={{ fontFamily: 'Inter,system-ui,sans-serif', fontSize: 34, fontWeight: 800, color: '#fff' }}>
+                    {initial}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* BACK — the Ai agent face */}
+            <div className="yai-flip-face yai-flip-back">
+              <img
+                src={`${process.env.PUBLIC_URL}/${data.image}`}
+                alt={data.title}
+                className={`w-full h-full object-contain ${rounded}`}
+                style={iconStyle}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src =
+                    "data:image/svg+xml;utf8," +
+                    encodeURIComponent(
+                      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80">
+                         <rect width="80" height="80" rx="16" fill="#F37021"/>
+                         <text x="50%" y="58%" font-family="Inter,system-ui,sans-serif" font-size="38" font-weight="800" text-anchor="middle" fill="#fff">${initial}</text>
+                       </svg>`
+                    );
+                }}
+              />
+            </div>
+          </div>
         </div>
       );
     }
