@@ -87,52 +87,43 @@ const ModuleCard = ({ data, onClick, botVersion = 'default', onBotClick, isDropd
       const iconStyle = { mixBlendMode: 'normal', filter: 'none', WebkitFilter: 'none' };
       const rounded = isDropdownOpen ? 'rounded-2xl' : 'rounded-3xl';
 
-      // Flip front — an app-style icon tile (emoji on a stable gradient),
-      // so the constellation first reads like a conventional app grid.
+      // Big topic emoji (no background tile); falls back to a bold initial.
       const emoji = MODULE_EMOJI[data.id] || null;
-      const gradient = APP_GRADIENTS[hashId(data.id) % APP_GRADIENTS.length];
       const initial = (data.title || '?').charAt(0).toUpperCase();
 
       return (
-        <div className="yai-flip-scene relative w-20 h-20 group-hover:w-21 group-hover:h-21 transition-all duration-300">
-          {/* All cards share one timeline → they flip in unison. */}
-          <div className="yai-flip-card">
-            {/* FRONT — conventional app icon */}
-            <div className="yai-flip-face">
-              <div
-                className={`w-full h-full ${rounded} flex items-center justify-center shadow-sm`}
-                style={{ background: gradient }}
-              >
-                {emoji ? (
-                  <span style={{ fontSize: 40, lineHeight: 1 }}>{emoji}</span>
-                ) : (
-                  <span style={{ fontFamily: 'Inter,system-ui,sans-serif', fontSize: 34, fontWeight: 800, color: '#fff' }}>
-                    {initial}
-                  </span>
-                )}
-              </div>
-            </div>
+        // Large media area that fills the card so it's easy to read.
+        <div className="yai-fade-scene w-24 h-24 group-hover:w-[104px] group-hover:h-[104px] transition-all duration-300">
+          {/* ICON — big emoji, transparent background */}
+          <div className="yai-fade-face yai-fade-icon">
+            {emoji ? (
+              <span style={{ fontSize: 76, lineHeight: 1 }}>{emoji}</span>
+            ) : (
+              <span style={{ fontFamily: 'Inter,system-ui,sans-serif', fontSize: 60, fontWeight: 800, color: '#F37021' }}>
+                {initial}
+              </span>
+            )}
+          </div>
 
-            {/* BACK — the Ai agent face */}
-            <div className="yai-flip-face yai-flip-back">
-              <img
-                src={`${process.env.PUBLIC_URL}/${data.image}`}
-                alt={data.title}
-                className={`w-full h-full object-contain ${rounded}`}
-                style={iconStyle}
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src =
-                    "data:image/svg+xml;utf8," +
-                    encodeURIComponent(
-                      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80">
-                         <rect width="80" height="80" rx="16" fill="#F37021"/>
-                         <text x="50%" y="58%" font-family="Inter,system-ui,sans-serif" font-size="38" font-weight="800" text-anchor="middle" fill="#fff">${initial}</text>
-                       </svg>`
-                    );
-                }}
-              />
-            </div>
+          {/* FACE — the Ai agent, filling the space */}
+          <div className="yai-fade-face yai-fade-back">
+            <img
+              src={`${process.env.PUBLIC_URL}/${data.image}`}
+              alt={data.title}
+              className={`w-full h-full object-cover ${rounded}`}
+              style={iconStyle}
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src =
+                  "data:image/svg+xml;utf8," +
+                  encodeURIComponent(
+                    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80">
+                       <rect width="80" height="80" rx="16" fill="#F37021"/>
+                       <text x="50%" y="58%" font-family="Inter,system-ui,sans-serif" font-size="38" font-weight="800" text-anchor="middle" fill="#fff">${initial}</text>
+                     </svg>`
+                  );
+              }}
+            />
           </div>
         </div>
       );
