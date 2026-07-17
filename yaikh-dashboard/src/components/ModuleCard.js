@@ -8,7 +8,7 @@ import { useTranslation } from '../translate/TranslationContext';
 const MODULE_EMOJI = {
   accountant: "🧮", iews: "🌐", "purchase-request": "🛒", "bill-claim": "🧾",
   "salary-bill": "💵", "shipping-bill": "📑", yhr: "👥", "org-chart": "🗂️",
-  training: "🎓", "temporary-worker": "🧑‍🏭", "speak-up": "📢",
+  training: "🎓", "temp-worker": "🧑‍🏭", "speak-up": "📢",
   "support-ticket": "🎫", "y-shop": "🏪", "gate-pass": "🛂",
   "meeting-room": "📅", "car-booking": "🚗", "fire-alarm": "🚨", cctv: "📹",
   "digital-audit": "✅", energy: "⚡", air: "🌬️", water: "💧", waste: "♻️",
@@ -95,11 +95,8 @@ const ModuleCard = ({ data, onClick, botVersion = 'default', onBotClick, isDropd
 
       return (
         <div className="yai-flip-scene relative w-20 h-20 group-hover:w-21 group-hover:h-21 transition-all duration-300">
-          <div
-            className="yai-flip-card"
-            /* Desync each card so they don't flip in unison. */
-            style={{ animationDelay: `-${hashId(data.id) % 4400}ms` }}
-          >
+          {/* All cards share one timeline → they flip in unison. */}
+          <div className="yai-flip-card">
             {/* FRONT — conventional app icon */}
             <div className="yai-flip-face">
               <div
