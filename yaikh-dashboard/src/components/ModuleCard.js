@@ -93,24 +93,24 @@ const ModuleCard = ({ data, onClick, botVersion = 'default', onBotClick, isDropd
 
       return (
         // Large media area that fills the card so it's easy to read.
-        <div className="yai-fade-scene w-24 h-24 group-hover:w-[104px] group-hover:h-[104px] transition-all duration-300">
+        <div className="yai-fade-scene w-20 h-20 group-hover:w-[88px] group-hover:h-[88px] transition-all duration-300">
           {/* ICON — big emoji, transparent background */}
           <div className="yai-fade-face yai-fade-icon">
             {emoji ? (
-              <span style={{ fontSize: 76, lineHeight: 1 }}>{emoji}</span>
+              <span style={{ fontSize: 60, lineHeight: 1 }}>{emoji}</span>
             ) : (
-              <span style={{ fontFamily: 'Inter,system-ui,sans-serif', fontSize: 60, fontWeight: 800, color: '#F37021' }}>
+              <span style={{ fontFamily: 'Inter,system-ui,sans-serif', fontSize: 48, fontWeight: 800, color: '#F37021' }}>
                 {initial}
               </span>
             )}
           </div>
 
-          {/* FACE — the Ai agent, filling the space */}
+          {/* FACE — the Ai agent, crisp (object-contain, never upscaled/cropped) */}
           <div className="yai-fade-face yai-fade-back">
             <img
               src={`${process.env.PUBLIC_URL}/${data.image}`}
               alt={data.title}
-              className={`w-full h-full object-cover ${rounded}`}
+              className={`w-full h-full object-contain ${rounded}`}
               style={iconStyle}
               onError={(e) => {
                 e.target.onerror = null;
