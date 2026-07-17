@@ -94,15 +94,24 @@ const ModuleCard = ({ data, onClick, botVersion = 'default', onBotClick, isDropd
       return (
         // Large media area that fills the card so it's easy to read.
         <div className="yai-fade-scene w-20 h-20 group-hover:w-[88px] group-hover:h-[88px] transition-all duration-300">
-          {/* ICON — big emoji, transparent background */}
+          {/* ICON — AI-generated, transparent PNG that fills the tile.
+              Falls back to the topic emoji, then a bold initial. */}
           <div className="yai-fade-face yai-fade-icon">
-            {emoji ? (
-              <span style={{ fontSize: 60, lineHeight: 1 }}>{emoji}</span>
-            ) : (
-              <span style={{ fontFamily: 'Inter,system-ui,sans-serif', fontSize: 48, fontWeight: 800, color: '#F37021' }}>
-                {initial}
-              </span>
-            )}
+            <img
+              src={`${process.env.PUBLIC_URL}/IMG/icons/${data.id}.png`}
+              alt=""
+              className="w-full h-full object-contain"
+              onError={(e) => {
+                // No generated icon → swap in an inline emoji/initial tile.
+                e.target.onerror = null;
+                const glyph = emoji || initial;
+                e.target.src =
+                  "data:image/svg+xml;utf8," +
+                  encodeURIComponent(
+                    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80"><text x="50%" y="54%" font-size="${emoji ? 52 : 44}" font-weight="800" font-family="Inter,system-ui,sans-serif" fill="#F37021" text-anchor="middle" dominant-baseline="central">${glyph}</text></svg>`
+                  );
+              }}
+            />
           </div>
 
           {/* FACE — the Ai agent, crisp (object-contain, never upscaled/cropped) */}
