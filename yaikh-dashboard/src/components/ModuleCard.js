@@ -95,8 +95,9 @@ const ModuleCard = ({ data, onClick, botVersion = 'default', onBotClick, isDropd
         // Large media area that fills the card so it's easy to read.
         <div className="yai-fade-scene w-20 h-20 group-hover:w-[88px] group-hover:h-[88px] transition-all duration-300">
           {/* ICON — AI-generated, transparent PNG that fills the tile.
-              Falls back to the topic emoji, then a bold initial. */}
-          <div className="yai-fade-face yai-fade-icon">
+              White backing so it's a clean plate (the card is white too)
+              and fully occludes the face during its phase. */}
+          <div className="yai-fade-face yai-fade-icon bg-white">
             <img
               src={`${process.env.PUBLIC_URL}/IMG/icons/${data.id}.png`}
               alt=""
@@ -114,8 +115,9 @@ const ModuleCard = ({ data, onClick, botVersion = 'default', onBotClick, isDropd
             />
           </div>
 
-          {/* FACE — the Ai agent, crisp (object-contain, never upscaled/cropped) */}
-          <div className="yai-fade-face yai-fade-back">
+          {/* FACE — the Ai agent, crisp. White backing fills the object-
+              contain margins so the icon can never bleed through/tint it. */}
+          <div className="yai-fade-face yai-fade-back bg-white">
             <img
               src={`${process.env.PUBLIC_URL}/${data.image}`}
               alt={data.title}
