@@ -251,14 +251,18 @@ function Transactions() {
 
   // Client-side filter + sort — the range is ≤3 days so the set is small.
   const [statusFilter, setStatusFilter] = useState("ALL");
+  const [q, setQ] = useState("");
   const [sort, setSort] = useState<{ key: "amount" | "date"; dir: 1 | -1 }>({ key: "date", dir: -1 });
   const toggleSort = (key: "amount" | "date") =>
     setSort((s) => (s.key === key ? { key, dir: s.dir === 1 ? -1 : 1 } : { key, dir: -1 }));
   const sortArrow = (key: "amount" | "date") => (sort.key === key ? (sort.dir === 1 ? " ↑" : " ↓") : "");
 
   const statuses = Array.from(new Set((rows ?? []).map((t) => String(t.status ?? "").toUpperCase()).filter(Boolean)));
+  const ql = q.trim().toLowerCase();
   const visible = (rows ?? [])
     .filter((t) => statusFilter === "ALL" || String(t.status).toUpperCase() === statusFilter)
+    .filter((t) => !ql || [t.tran_id, t.company, t.contact_name, t.email, t.plan]
+      .some((f) => String(f ?? "").toLowerCase().includes(ql)))
     .sort((a, b) => {
       const v = sort.key === "amount"
         ? (Number(a.amount) || 0) - (Number(b.amount) || 0)
@@ -273,7 +277,7 @@ function Transactions() {
   const pageSafe = Math.min(page, totalPages);
   const paged = visible.slice((pageSafe - 1) * PAGE_SIZE, pageSafe * PAGE_SIZE);
   // Jump back to page 1 whenever the filtered/sorted set changes underneath us.
-  useEffect(() => { setPage(1); }, [statusFilter, sort, rows]);
+  useEffect(() => { setPage(1); }, [statusFilter, sort, rows, q]);
 
   return (
     <div className="bg-white border border-gray-200 rounded-xl p-5">
@@ -284,12 +288,24 @@ function Transactions() {
         <label className="text-xs font-semibold text-yai-navy/70">To
           <input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="input mt-1 block" />
         </label>
+        <label className="text-xs font-semibold text-yai-navy/70 flex-1 min-w-[220px]">Search
+          <div className="relative mt-1">
+            <svg viewBox="0 0 24 24" className="w-4 h-4 absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" />
+            </svg>
+            <input value={q} onChange={(e) => setQ(e.target.value)} className="input" style={{ paddingLeft: "2rem", paddingRight: q ? "2rem" : undefined }}
+              placeholder="Transaction, customer, email, plan…" />
+            {q && <button onClick={() => setQ("")} aria-label="Clear search"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 text-lg leading-none">×</button>}
+          </div>
+        </label>
         <button onClick={load} disabled={loading} title="Reload" aria-label="Reload"
-          className="w-9 h-9 flex items-center justify-center rounded-lg border border-gray-200 text-yai-navy hover:border-yai-navy/40 hover:shadow-sm disabled:opacity-50 transition">
+          className="h-[38px] px-3 flex items-center gap-1.5 rounded-lg border border-gray-200 text-yai-navy text-xs font-semibold hover:border-yai-navy/40 hover:shadow-sm disabled:opacity-50 transition">
           <svg viewBox="0 0 24 24" className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M21 12a9 9 0 1 1-2.64-6.36" />
             <path d="M21 3v6h-6" />
           </svg>
+          Reload
         </button>
       </div>
 
