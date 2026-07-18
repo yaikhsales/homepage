@@ -3043,12 +3043,36 @@ function Footer() {
         </FooterCol>
       </div>
       <div className="border-t border-white/10">
-        <div className="max-w-[1600px] mx-auto px-6 lg:px-10 py-5 flex flex-col sm:flex-row gap-2 justify-between text-[11.5px] text-white/45">
-          <span>© {new Date().getFullYear()} Texlink Technologies Co., Ltd. · Made in Cambodia</span>
-          <span>www.yaikh.com</span>
+        <div className="max-w-[1600px] mx-auto px-6 lg:px-10 py-5 flex flex-col sm:flex-row sm:items-center gap-3 justify-between text-[11.5px] text-white/45">
+          <span>© {new Date().getFullYear()} Texlink Technologies Co., Ltd. · Made in Cambodia · www.yaikh.com</span>
+          <div className="flex items-center gap-2.5 sm:ml-auto">
+            <span className="text-[11px] uppercase tracking-[0.16em] font-bold text-white/60 shrink-0">We accept</span>
+            <PaymentStrip />
+          </div>
         </div>
       </div>
     </footer>
+  );
+}
+
+/* ABA-required "We accept" strip. Each brand SVG carries its own tile, so the
+ * logos sit directly on the footer — no wrapper background. */
+function PaymentStrip() {
+  const brands = [
+    { src: "/brand/aba.svg", alt: "ABA" },
+    { src: "/brand/khqr.svg", alt: "KHQR" },
+    { src: "/brand/visa.svg", alt: "Visa" },
+    { src: "/brand/mastercard.svg", alt: "Mastercard" },
+    { src: "/brand/unionpay.svg", alt: "UnionPay" },
+    { src: "/brand/jcb.svg", alt: "JCB" },
+  ];
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      {brands.map((b) => (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img key={b.alt} src={b.src} alt={b.alt} className="h-5 w-auto block rounded-[3px]" />
+      ))}
+    </div>
   );
 }
 
