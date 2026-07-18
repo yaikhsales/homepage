@@ -179,7 +179,9 @@ function Collect() {
 interface Txn {
   tran_id: string; amount?: string | number; currency?: string; status?: string;
   date?: string; payType?: string; refunded?: string | number;
-  company?: string; plan?: string; source?: string; raw: Record<string, unknown>;
+  company?: string; plan?: string; source?: string;
+  contact_name?: string; email?: string; paid_at?: string;
+  raw: Record<string, unknown>;
 }
 
 function Transactions() {
@@ -282,9 +284,12 @@ function Transactions() {
         <label className="text-xs font-semibold text-yai-navy/70">To
           <input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="input mt-1 block" />
         </label>
-        <button onClick={load} disabled={loading}
-          className={`px-4 py-2 rounded-lg text-sm font-semibold ${loading ? "bg-gray-300 text-gray-500" : "bg-yai-navy text-white hover:shadow-md"}`}>
-          {loading ? "Loading…" : "Reload"}
+        <button onClick={load} disabled={loading} title="Reload" aria-label="Reload"
+          className="w-9 h-9 flex items-center justify-center rounded-lg border border-gray-200 text-yai-navy hover:border-yai-navy/40 hover:shadow-sm disabled:opacity-50 transition">
+          <svg viewBox="0 0 24 24" className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 12a9 9 0 1 1-2.64-6.36" />
+            <path d="M21 3v6h-6" />
+          </svg>
         </button>
       </div>
 
@@ -432,7 +437,23 @@ function TxnDetail({ txn, onClose, onRefunded }: { txn: Txn; onClose: () => void
           <Info label="Method" value={txn.payType ?? "—"} />
           <Info label="Refunded" value={Number(txn.refunded) > 0 ? `${txn.refunded} ${txn.currency ?? ""}` : "—"} />
           <Info label="Date" value={txn.date ?? "—"} />
+          {txn.paid_at && <Info label="Paid at" value={txn.paid_at} />}
         </div>
+
+        {/* Customer & order context from our ledger — so a paid-out transaction
+            keeps its who/what even after ABA's 3-day list drops it. */}
+        {(txn.company || txn.contact_name || txn.email || txn.plan) && (
+          <div className="border-t border-gray-100 pt-4 mb-4">
+            <div className="text-xs font-bold text-yai-navy mb-2">Customer & order</div>
+            <div className="grid grid-cols-2 gap-3 text-sm">
+              {txn.company && <Info label="Company" value={txn.company} />}
+              {txn.contact_name && <Info label="Contact" value={txn.contact_name} />}
+              {txn.email && <Info label="Email" value={txn.email} />}
+              {txn.plan && <Info label="Plan" value={txn.plan} />}
+              {txn.source && <Info label="Source" value={txn.source} />}
+            </div>
+          </div>
+        )}
 
         {/* Refund only exists for money actually captured — pending/declined
             transactions have nothing to refund. */}
@@ -476,6 +497,9 @@ function mapLedger(o: Record<string, unknown>): Txn {
     company: g("company") as string,
     plan: g("plan") as string,
     source: g("source") as string,
+    contact_name: g("contact_name") as string,
+    email: g("email") as string,
+    paid_at: String(g("paid_at") ?? "").replace("T", " ").slice(0, 19) || undefined,
     raw: o,
   };
 }
