@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 type AccordionCtx = {
   openId: string | null;
@@ -21,6 +21,20 @@ export function AccordionProvider({
   defaultOpenId?: string | null;
 }) {
   const [openId, setOpenId] = useState<string | null>(defaultOpenId);
+
+  // Open whichever section the URL hash points at — so clicking a sidebar
+  // nav link (which sets #section-id) also expands that section, and a
+  // shared/bookmarked link lands with the right one open.
+  useEffect(() => {
+    const syncFromHash = () => {
+      const id = window.location.hash.replace(/^#/, "");
+      if (id) setOpenId(id);
+    };
+    syncFromHash();
+    window.addEventListener("hashchange", syncFromHash);
+    return () => window.removeEventListener("hashchange", syncFromHash);
+  }, []);
+
   return <Ctx.Provider value={{ openId, setOpenId }}>{children}</Ctx.Provider>;
 }
 
