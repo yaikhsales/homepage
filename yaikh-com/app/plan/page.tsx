@@ -212,7 +212,7 @@ export default async function PlanPage() {
         </Section>
 
         {/* 02 — Problem */}
-        <Section id="problem" kicker={kicker(2, "The Problem")} title="The Sandwich">
+        <Section id="problem" kicker={kicker(2, "The Problem")} title="The Sandwich" collapsible>
           {/* TOP ROW — Brand + Government */}
           <div className="grid md:grid-cols-2 gap-3 items-start">
             <Card noPadding className="overflow-hidden">
@@ -272,7 +272,7 @@ export default async function PlanPage() {
         </Section>
 
         {/* 03 — Solution */}
-        <Section id="solution" kicker={kicker(3, "The Solution")} title="The Solution — An Ai Platform that Saves Jobs">
+        <Section id="solution" kicker={kicker(3, "The Solution")} title="The Solution — An Ai Platform that Saves Jobs" collapsible>
           <Thesis>
             One fully integrated platform, left to right — built to upgrade itself as the business progresses.
           </Thesis>
@@ -335,7 +335,7 @@ export default async function PlanPage() {
         </Section>
 
         {/* 04 — Architecture (with ChatDemo) */}
-        <Section id="architecture" kicker={kicker(4, "Architecture")} title="From Paper to Full Ai — Three Yai Layers">
+        <Section id="architecture" kicker={kicker(4, "Architecture")} title="From Paper to Full Ai — Three Yai Layers" collapsible>
           <Thesis>
             Adopt one layer at a time — each builds on the one below, nothing gets ripped out.
           </Thesis>
@@ -344,7 +344,7 @@ export default async function PlanPage() {
         </Section>
 
         {/* 05 — Tech */}
-        <Section id="tech" kicker={kicker(5, "Technology")} title="Technology Stack">
+        <Section id="tech" kicker={kicker(5, "Technology")} title="Technology Stack" collapsible>
           <Thesis>
             Different layer, different stack. Cloud SaaS at Layer 1, model-agnostic LLM agents at Layer 2, own-compute on solar at Layer 3 — each tuned for its job, none locked in.
           </Thesis>
@@ -352,7 +352,7 @@ export default async function PlanPage() {
         </Section>
 
         {/* 06 — Modules */}
-        <Section id="modules" kicker={kicker(6, "Agents & Skills")} title="The Agents & Their Skills">
+        <Section id="modules" kicker={kicker(6, "Agents & Skills")} title="The Agents & Their Skills" collapsible>
           <Thesis>
             The full platform, laid out exactly like the live dashboard — Administration, Management, Operations. Every module is an Ai agent. Tap one to hear what it does.
           </Thesis>
@@ -370,7 +370,7 @@ export default async function PlanPage() {
         </Section>
 
         {/* 07 — Pricing */}
-        <Section id="pricing" kicker={kicker(7, "Pricing & Packaging")} title="Pricing & Packaging">
+        <Section id="pricing" kicker={kicker(7, "Pricing & Packaging")} title="Pricing & Packaging" collapsible>
           <Thesis>
             All great marches start with one step. That step is $120 a year — five key members stepping up to digitalization. Simple tasks lead all the way to Full Ai in one year. Who would have thought this was possible?
           </Thesis>
@@ -379,7 +379,7 @@ export default async function PlanPage() {
         </Section>
 
         {/* 08 — Customers */}
-        <Section id="customers" kicker={kicker(8, "Target Customers")} title="Target Customers">
+        <Section id="customers" kicker={kicker(8, "Target Customers")} title="Target Customers" collapsible>
           <Thesis>
             Five customer clusters across Cambodia — each climbs a different segment of the Yai ladder, from $120 admin modules to multi-factory Ai.
           </Thesis>
@@ -387,7 +387,7 @@ export default async function PlanPage() {
         </Section>
 
         {/* 09 — Go-to-Market Milestones (merged: was 11 Financials + 12 GTM) */}
-        <Section id="gtm" kicker={kicker(9, "Go-to-Market Milestones")} title="Go-to-Market Milestones">
+        <Section id="gtm" kicker={kicker(9, "Go-to-Market Milestones")} title="Go-to-Market Milestones" collapsible>
           {/* GTM foundation — 3 things needed before / alongside the per-segment milestones */}
           <h3 className="font-bold text-yai-navy text-xl mb-3">GTM foundation — what makes the milestones possible</h3>
           <p className="text-sm text-gray-600 mb-5 max-w-3xl">
@@ -737,7 +737,7 @@ export default async function PlanPage() {
 
 
         {/* 10 — Team */}
-        <Section id="team" kicker={kicker(10, "Team")} title="Team">
+        <Section id="team" kicker={kicker(10, "Team")} title="Team" collapsible>
           <Thesis>
             20 engineers across 5 specialised clusters — owner-led, factory-embedded. Adding sales and customer success next.
           </Thesis>
@@ -756,7 +756,7 @@ export default async function PlanPage() {
         </Section>
 
         {/* 11 — Capital Efficiency */}
-        <Section id="capital" kicker={kicker(11, "Capital Efficiency")} title="The Capital Efficiency Story">
+        <Section id="capital" kicker={kicker(11, "Capital Efficiency")} title="The Capital Efficiency Story" collapsible>
           <Thesis>
             Built for ~$205K to date and ~$370K through 2027 — what would cost $5M–$10M anywhere else. And the same small dollar in compounds upward — at every Ai layer, the value multiplies.
           </Thesis>
@@ -771,7 +771,7 @@ export default async function PlanPage() {
         </Section>
 
         {/* 12 — OC & Live Budget Update */}
-        <Section id="oc-budget" kicker={kicker(12, "OC & Budget")} title="OC & Live Budget Update">
+        <Section id="oc-budget" kicker={kicker(12, "OC & Budget")} title="OC & Live Budget Update" collapsible>
           <Thesis>
             Quarterly Operating Committee update + half-year budget refresh + capex / purchase
             applications — delivered on the cadence the parent expects.
@@ -795,12 +795,12 @@ export default async function PlanPage() {
         </Section>
 
         {/* 13 — Traction */}
-        <Section id="traction" kicker={kicker(13, "Traction")} title="Traction & Pilots">
+        <Section id="traction" kicker={kicker(13, "Traction")} title="Traction & Pilots" collapsible>
           <FactoryModuleMatrix />
         </Section>
 
 
-        <Section id="competition" kicker={kicker(14, "Competitive Landscape")} title="Competitive Landscape">
+        <Section id="competition" kicker={kicker(14, "Competitive Landscape")} title="Competitive Landscape" collapsible>
           <Thesis>
             6 tiers of competitors mapped, with prices and weaknesses — but in 90% of Cambodian
             sales conversations the real opponent is paper, spreadsheets, and 10-year-old legacy.
@@ -810,7 +810,7 @@ export default async function PlanPage() {
         </Section>
 
         {/* 15 — Risks */}
-        <Section id="risks" kicker={kicker(15, "Risks")} title="Risks & Mitigations">
+        <Section id="risks" kicker={kicker(15, "Risks")} title="Risks & Mitigations" collapsible>
           <Thesis>
             Honest about where this could go wrong — and what&apos;s in place against each.
           </Thesis>
@@ -832,7 +832,7 @@ export default async function PlanPage() {
         </Section>
 
         {/* 16 — Resources */}
-        <Section id="resources" kicker={kicker(16, "Resources")} title="Resource Requirements">
+        <Section id="resources" kicker={kicker(16, "Resources")} title="Resource Requirements" collapsible>
           <Thesis>
             What&apos;s needed from the investor over the next 12 months — not a fundraise, a continuation.
           </Thesis>
@@ -854,7 +854,7 @@ export default async function PlanPage() {
         </Section>
 
         {/* 17 — About Yai */}
-        <Section id="appendix" kicker={kicker(17, "About Yai")} title="About Yai">
+        <Section id="appendix" kicker={kicker(17, "About Yai")} title="About Yai" collapsible>
           <Thesis>
             Credentials, product preview, and contact. Image slots are admin-managed from{" "}
             <code className="text-xs bg-gray-100 px-1 rounded">/admin/about</code>.
