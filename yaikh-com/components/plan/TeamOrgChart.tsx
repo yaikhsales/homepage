@@ -94,12 +94,12 @@ const TEAMS: Team[] = [
   {
     name: "Operations Systems",
     accent: "#0A1F47",
-    lead: { name: "Dilan Lakmal" },
+    lead: { name: "Dilan Lakmal", role: "Lead Production System Dev · FC · Database" },
     members: [
-      { name: "Samipath Yasomi" },
-      { name: "Koem Chichhong" },
-      { name: "Young Sengheang" },
-      { name: "Proeurng Sokhim" },
+      { name: "Samipath Yasomi", role: "YPI · Gate Pass Dev" },
+      { name: "Koem Chichhong", role: "CE · YTM Dev" },
+      { name: "Young Sengheang", role: "QMS" },
+      { name: "Proeurng Sokhim", role: "QMS · Training" },
     ],
   },
 ];
