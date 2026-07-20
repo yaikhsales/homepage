@@ -25,6 +25,7 @@ import { TargetCustomersChart } from "@/components/plan/TargetCustomersChart";
 import { TechStackLayers } from "@/components/plan/TechStackLayers";
 import { TeamClusters } from "@/components/plan/TeamClusters";
 import { TeamOrgChart } from "@/components/plan/TeamOrgChart";
+import { Collapsible } from "@/components/plan/Collapsible";
 import { RoadmapTimeline } from "@/components/plan/RoadmapTimeline";
 import { MilestoneRoadmap } from "@/components/plan/MilestoneRoadmap";
 import { BigTechSegment } from "@/components/plan/BigTechSegment";
@@ -209,6 +210,31 @@ export default async function PlanPage() {
               </li>
             </ol>
           </div>
+
+          {/* Collapsible tab — hidden until the chevron is clicked */}
+          <Collapsible
+            title="Executive Summary — full detail"
+            subtitle="Click to expand the supporting context"
+          >
+            <p className="mb-3">
+              <strong className="text-yai-navy">The opportunity.</strong> Yai (Ai MIP) has
+              been proven inside live garment, footwear and bag factories for five years.
+              It is now opening to the wider industry for the first time — a three-layer
+              path from paper-based chaos to executive-level Ai.
+            </p>
+            <p className="mb-3">
+              <strong className="text-yai-navy">Why now.</strong> Brands are mandating
+              digital, governments are mandating reporting, and factory owners are caught
+              in the middle with ~20 disconnected systems and no integration. Yai replaces
+              that stack with one source of truth, an agentic layer, and a full-Ai
+              strategic layer on top.
+            </p>
+            <p>
+              <strong className="text-yai-navy">The team.</strong> 20 Cambodia-based
+              engineers across five specialised clusters, owner-led and factory-embedded,
+              backed by 40 years of combined industry experience (see Section 10).
+            </p>
+          </Collapsible>
         </Section>
 
         {/* 02 — Problem */}
