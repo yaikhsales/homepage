@@ -85,10 +85,10 @@ const TEAMS: Team[] = [
   {
     name: "Mobile Apps",
     accent: "#2D9D9A",
-    lead: { name: "Samnang Keo" },
+    lead: { name: "Samnang Keo", role: "Lead App Dev · Ai Server Master" },
     members: [
       { name: "Chhang Mengchhay", role: "App Dev · E-commerce · Banking · E-payment" },
-      { name: "Yeom Chetra" },
+      { name: "Yeom Chetra", role: "AIoT Hardware · Production App · Sensors" },
     ],
   },
   {
