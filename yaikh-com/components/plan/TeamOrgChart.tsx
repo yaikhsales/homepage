@@ -71,14 +71,17 @@ const TEAMS: Team[] = [
     members: [
       { name: "Voun Thida", role: "Payroll · MOL System Integration" },
       { name: "Van Phanith", role: "HR System" },
-      { name: "Ton Noeun" },
     ],
   },
   {
     name: "Neural Net + Finance",
     accent: "#1A5742",
     lead: { name: "Van Virot" },
-    members: [{ name: "Sobon Menghorng" }, { name: "Chhim Seangleng" }, { name: "Dot Sreynoch", role: "Digital Audit" }],
+    members: [
+      { name: "Sobon Menghorng" },
+      { name: "Chhim Seangleng" },
+      { name: "Ton Noeun", role: "TPM · MRP · FC" },
+    ],
   },
   {
     name: "Mobile Apps",
