@@ -49,7 +49,7 @@ type Team = { name: string; accent: string; lead: Person; members: Person[] };
 
 const LEADERSHIP: Person[] = [
   { name: "Sin Lam Yeung — Arnold", role: "Founder / Director" },
-  { name: "Gamini K", role: "Director" },
+  { name: "Gamini K", role: "Director · Financial & E-Gov Applications" },
 ];
 
 const TEAMS: Team[] = [
