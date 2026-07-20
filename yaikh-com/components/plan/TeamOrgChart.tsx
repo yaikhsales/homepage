@@ -68,7 +68,11 @@ const TEAMS: Team[] = [
     name: "Architecture",
     accent: "#F37021",
     lead: { name: "Peang Sereysothirich", role: "Chief Architecture · Server Master" },
-    members: [{ name: "Voun Thida" }, { name: "Van Phanith" }, { name: "Ton Noeun" }],
+    members: [
+      { name: "Voun Thida", role: "Payroll · MOL System Integration" },
+      { name: "Van Phanith", role: "HR System" },
+      { name: "Ton Noeun" },
+    ],
   },
   {
     name: "Neural Net + Finance",
