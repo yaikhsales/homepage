@@ -191,8 +191,10 @@ function Transactions() {
   const [detail, setDetail] = useState<Txn | null>(null);
   const [checking, setChecking] = useState<string | null>(null);
   const [src, setSrc] = useState<"ledger" | "aba">("aba");
-  const today = new Date().toISOString().slice(0, 10);
-  const monthAgo = new Date(Date.now() - 30 * 86400_000).toISOString().slice(0, 10);
+  // Default window in ICT days — a UTC "today" is yesterday for the first 7
+  // hours of a Cambodian day, which would silently hide the newest payments.
+  const today = ictDay(Date.now());
+  const monthAgo = ictDay(Date.now() - 30 * 86400_000);
   const [from, setFrom] = useState(monthAgo);
   const [to, setTo] = useState(today);
 
@@ -202,7 +204,7 @@ function Transactions() {
       // 1) Prefer our durable Mongo ledger — no 3-day cap, has customer details.
       const m = await fetch("/api/payway/merchant/payments", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ from: `${from}T00:00:00.000Z`, to: `${to}T23:59:59.999Z` }),
+        body: JSON.stringify({ from: ictDayStart(from), to: ictDayEnd(to) }),
       }).then((x) => x.json());
       if (m?.enabled) {
         setSrc("ledger");
@@ -212,7 +214,7 @@ function Transactions() {
 
       // 2) Fallback: ABA live list — capped at 3 days, so clamp the window.
       setSrc("aba");
-      const fromAba = new Date(Date.now() - 2 * 86400_000).toISOString().slice(0, 10);
+      const fromAba = ictDay(Date.now() - 2 * 86400_000);
       const r = await fetch("/api/payway/merchant/transactions", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ from_date: `${fromAba} 00:00:00`, to_date: `${to} 23:59:59` }),
@@ -350,7 +352,7 @@ function Transactions() {
                 <th className="py-2 pr-3">Status</th>
                 <th className="py-2 pr-3">Refunded</th>
                 <th className="py-2 pr-3 cursor-pointer select-none hover:text-yai-navy" onClick={() => toggleSort("date")}>
-                  Date{sortArrow("date")}
+                  Date · ICT{sortArrow("date")}
                 </th>
                 <th className="py-2 text-right">Actions</th>
               </tr>
@@ -499,6 +501,21 @@ function TxnDetail({ txn, onClose, onRefunded }: { txn: Txn; onClose: () => void
 }
 
 /* ─── helpers ────────────────────────────────────────────────────────── */
+// The ledger stores UTC (as it should); Cambodia runs ICT = UTC+7, so every
+// timestamp is converted for display. "sv-SE" formats as "YYYY-MM-DD HH:MM:SS",
+// which keeps the column lexicographically sortable — the Date sort relies on it.
+const ICT = "Asia/Phnom_Penh";
+function toIct(iso?: string): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  return isNaN(d.getTime()) ? String(iso) : d.toLocaleString("sv-SE", { timeZone: ICT });
+}
+// A calendar day the merchant picks is an ICT day — turn it into the UTC
+// instant the ledger actually stores, or the window is 7 hours out.
+const ictDay = (ms: number) => new Date(ms).toLocaleDateString("sv-SE", { timeZone: ICT });
+const ictDayStart = (day: string) => new Date(`${day}T00:00:00+07:00`).toISOString();
+const ictDayEnd = (day: string) => new Date(`${day}T23:59:59.999+07:00`).toISOString();
+
 // Map a Mongo ledger record → table row.
 function mapLedger(o: Record<string, unknown>): Txn {
   const g = (k: string) => o[k];
@@ -507,7 +524,7 @@ function mapLedger(o: Record<string, unknown>): Txn {
     amount: g("amount") as number,
     currency: g("currency") as string,
     status: g("status") as string,
-    date: String(g("created_at") ?? "").replace("T", " ").slice(0, 19),
+    date: toIct(g("created_at") as string),
     payType: (g("payment_option") === "cards" ? "Card" : g("payment_option") === "abapay_khqr" ? "ABA KHQR" : (g("payment_option") as string)) || "—",
     refunded: g("refunded_amount") as number,
     company: g("company") as string,
@@ -515,7 +532,7 @@ function mapLedger(o: Record<string, unknown>): Txn {
     source: g("source") as string,
     contact_name: g("contact_name") as string,
     email: g("email") as string,
-    paid_at: String(g("paid_at") ?? "").replace("T", " ").slice(0, 19) || undefined,
+    paid_at: toIct(g("paid_at") as string) || undefined,
     raw: o,
   };
 }
