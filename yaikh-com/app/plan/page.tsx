@@ -11,6 +11,7 @@ import { readAboutStore } from "@/lib/about-store";
 export const dynamic = "force-dynamic";
 import { Sidebar, type NavItem } from "@/components/plan/Sidebar";
 import { Section } from "@/components/plan/Section";
+import { AccordionProvider } from "@/components/plan/Accordion";
 import { Thesis } from "@/components/plan/Thesis";
 import { StatCallout } from "@/components/plan/StatCallout";
 import { Card, Badge } from "@/components/plan/Card";
@@ -161,6 +162,7 @@ export default async function PlanPage() {
         <BodyTranslator />
         <PlanHero />
 
+        <AccordionProvider>
         {/* 01 — Executive Summary */}
         <Section id="executive-summary" kicker={kicker(1, "Executive Summary")} title="Executive Summary" collapsible>
           <Thesis>
@@ -893,6 +895,7 @@ export default async function PlanPage() {
             </p>
           </Card>
         </Section>
+        </AccordionProvider>
 
         {/* Footer (screen only) */}
         <footer className="mt-20 pt-10 border-t border-yai-border text-center text-sm text-gray-500 no-print">
