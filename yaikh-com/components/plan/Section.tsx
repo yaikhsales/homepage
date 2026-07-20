@@ -42,22 +42,29 @@ export function Section({
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
-          className="w-full flex items-center gap-3 text-left group mb-6"
+          className={`w-full flex items-center justify-between gap-3 text-left group mb-6 rounded-xl border border-yai-border bg-white px-5 sm:px-6 py-4 shadow-sm hover:border-yai-blue/40 hover:shadow-md transition-all ${open ? "border-yai-blue/40" : ""}`}
         >
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-yai-navy tracking-tight group-hover:text-yai-blue transition-colors">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-yai-navy tracking-tight group-hover:text-yai-blue transition-colors">
             {title}
           </h2>
-          <svg
-            viewBox="0 0 24 24"
-            className={`w-7 h-7 text-yai-blue shrink-0 transition-transform duration-300 ${open ? "rotate-180" : ""}`}
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+          {/* dropdown button */}
+          <span
+            className={`shrink-0 w-9 h-9 rounded-full flex items-center justify-center transition-colors ${
+              open ? "bg-yai-blue text-white" : "bg-slate-100 text-yai-blue group-hover:bg-yai-blue/10"
+            }`}
           >
-            <path d="m6 9 6 6 6-6" />
-          </svg>
+            <svg
+              viewBox="0 0 24 24"
+              className={`w-5 h-5 transition-transform duration-300 ${open ? "rotate-180" : ""}`}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </span>
         </button>
       ) : (
         <h2 className="text-3xl sm:text-4xl font-extrabold text-yai-navy mb-6 tracking-tight">
