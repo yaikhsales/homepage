@@ -59,8 +59,8 @@ const TEAMS: Team[] = [
     lead: { name: "Pich Daly", role: "Project Management & Training" },
     members: [
       { name: "Koem Phanny", role: "HR, Pay, Legal & HR Training" },
-      { name: "Sin Khun" },
-      { name: "Chhang Mengchhay", support: true },
+      { name: "Sin Khun", role: "Hardware Integration · Ai Vision · CE Trainer" },
+      { name: "Chhang Mengchhay", role: "App Dev · E-commerce · Banking · E-payment", support: true },
       { name: "Dot Sreynoch", support: true },
     ],
   },
@@ -80,7 +80,10 @@ const TEAMS: Team[] = [
     name: "Mobile Apps",
     accent: "#2D9D9A",
     lead: { name: "Samnang Keo" },
-    members: [{ name: "Chhang Mengchhay" }, { name: "Yeom Chetra" }],
+    members: [
+      { name: "Chhang Mengchhay", role: "App Dev · E-commerce · Banking · E-payment" },
+      { name: "Yeom Chetra" },
+    ],
   },
   {
     name: "Operations Systems",
