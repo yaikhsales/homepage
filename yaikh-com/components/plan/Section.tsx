@@ -31,7 +31,7 @@ export function Section({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.15 }}
       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      className={`${collapsible ? "mb-4" : "mb-24"} scroll-mt-8 ${className}`}
+      className={`${collapsible ? "mb-2" : "mb-24"} scroll-mt-8 ${className}`}
     >
       <p className="text-xs uppercase tracking-[0.18em] text-gray-400 font-bold mb-2">
         {kicker}
@@ -42,7 +42,7 @@ export function Section({
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
-          className={`w-full flex items-center justify-between gap-3 text-left group mb-6 rounded-xl border border-yai-border bg-white px-5 sm:px-6 py-4 shadow-sm hover:border-yai-blue/40 hover:shadow-md transition-all ${open ? "border-yai-blue/40" : ""}`}
+          className={`w-full flex items-center justify-between gap-3 text-left group ${open ? "mb-5" : "mb-0"} rounded-xl border border-yai-border bg-white px-5 sm:px-6 py-4 shadow-sm hover:border-yai-blue/40 hover:shadow-md transition-all ${open ? "border-yai-blue/40" : ""}`}
         >
           <h2 className="text-2xl sm:text-3xl font-extrabold text-yai-navy tracking-tight group-hover:text-yai-blue transition-colors">
             {title}
