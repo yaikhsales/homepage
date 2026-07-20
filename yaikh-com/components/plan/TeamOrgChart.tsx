@@ -61,20 +61,20 @@ const TEAMS: Team[] = [
       { name: "Koem Phanny", role: "HR, Pay, Legal & HR Training" },
       { name: "Sin Khun", role: "Hardware Integration · Ai Vision · CE Trainer" },
       { name: "Chhang Mengchhay", role: "App Dev · E-commerce · Banking · E-payment", support: true },
-      { name: "Dot Sreynoch", support: true },
+      { name: "Dot Sreynoch", role: "Digital Audit", support: true },
     ],
   },
   {
     name: "Architecture",
     accent: "#F37021",
-    lead: { name: "Peang Sereysothirich" },
+    lead: { name: "Peang Sereysothirich", role: "Chief Architecture · Server Master" },
     members: [{ name: "Voun Thida" }, { name: "Van Phanith" }, { name: "Ton Noeun" }],
   },
   {
     name: "Neural Net + Finance",
     accent: "#1A5742",
     lead: { name: "Van Virot" },
-    members: [{ name: "Sobon Menghorng" }, { name: "Chhim Seangleng" }, { name: "Dot Sreynoch" }],
+    members: [{ name: "Sobon Menghorng" }, { name: "Chhim Seangleng" }, { name: "Dot Sreynoch", role: "Digital Audit" }],
   },
   {
     name: "Mobile Apps",
