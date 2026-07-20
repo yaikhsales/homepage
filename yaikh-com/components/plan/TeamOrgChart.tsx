@@ -76,10 +76,9 @@ const TEAMS: Team[] = [
   {
     name: "Neural Net + Finance",
     accent: "#1A5742",
-    lead: { name: "Van Virot" },
+    lead: { name: "Van Virot", role: "API · Ai Agent Integration" },
     members: [
-      { name: "Sobon Menghorng" },
-      { name: "Chhim Seangleng" },
+      { name: "Chhim Seangleng", role: "Purchase Request · Shop · Accounting & Financial" },
       { name: "Ton Noeun", role: "TPM · MRP · FC" },
     ],
   },
