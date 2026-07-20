@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useAccordion } from "./Accordion";
 
 export function Section({
   id,
@@ -22,7 +23,15 @@ export function Section({
   collapsible?: boolean;
   defaultOpen?: boolean;
 }) {
-  const [open, setOpen] = useState(collapsible ? defaultOpen : true);
+  const [localOpen, setLocalOpen] = useState(collapsible ? defaultOpen : true);
+  const acc = useAccordion();
+
+  // When an AccordionProvider is present, sections coordinate so only one is
+  // open at a time; otherwise each keeps its own local state.
+  const controlled = collapsible && acc !== null;
+  const open = !collapsible ? true : controlled ? acc!.openId === id : localOpen;
+  const toggle = () =>
+    controlled ? acc!.setOpenId(open ? null : id) : setLocalOpen((v) => !v);
 
   return (
     <motion.section
@@ -40,7 +49,7 @@ export function Section({
       {collapsible ? (
         <button
           type="button"
-          onClick={() => setOpen((v) => !v)}
+          onClick={toggle}
           aria-expanded={open}
           className={`w-full flex items-center justify-between gap-3 text-left group ${open ? "mb-5" : "mb-0"} rounded-xl border border-yai-border bg-white px-5 sm:px-6 py-4 shadow-sm hover:border-yai-blue/40 hover:shadow-md transition-all ${open ? "border-yai-blue/40" : ""}`}
         >
