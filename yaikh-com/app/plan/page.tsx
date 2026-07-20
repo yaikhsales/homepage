@@ -24,6 +24,7 @@ import { PricingStaircase } from "@/components/plan/PricingStaircase";
 import { TargetCustomersChart } from "@/components/plan/TargetCustomersChart";
 import { TechStackLayers } from "@/components/plan/TechStackLayers";
 import { TeamClusters } from "@/components/plan/TeamClusters";
+import { TeamOrgChart } from "@/components/plan/TeamOrgChart";
 import { RoadmapTimeline } from "@/components/plan/RoadmapTimeline";
 import { MilestoneRoadmap } from "@/components/plan/MilestoneRoadmap";
 import { BigTechSegment } from "@/components/plan/BigTechSegment";
@@ -740,6 +741,13 @@ export default async function PlanPage() {
           <Thesis>
             20 engineers across 5 specialised clusters — owner-led, factory-embedded. Adding sales and customer success next.
           </Thesis>
+
+          {/* Organisation chart — real faces, Founder/Director down to each team */}
+          <h3 className="font-bold text-yai-navy text-xl mb-1">Organisation chart</h3>
+          <p className="text-sm text-gray-600 mb-4">Owner-led leadership, five teams — every face is a real Cambodia-based engineer.</p>
+          <div className="mb-12 overflow-x-auto">
+            <TeamOrgChart />
+          </div>
 
           {/* 5 cluster circles (interactive — tap to see each group's experience mix) */}
           <h3 className="font-bold text-yai-navy text-xl mb-1">Engineering — 5 clusters · 20 engineers</h3>
