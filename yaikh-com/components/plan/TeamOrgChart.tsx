@@ -56,9 +56,9 @@ const TEAMS: Team[] = [
   {
     name: "Sales & Admin",
     accent: "#1E4DAA",
-    lead: { name: "Pich Daly" },
+    lead: { name: "Pich Daly", role: "Project Management & Training" },
     members: [
-      { name: "Koem Phanny" },
+      { name: "Koem Phanny", role: "HR, Pay, Legal & HR Training" },
       { name: "Sin Khun" },
       { name: "Chhang Mengchhay", support: true },
       { name: "Dot Sreynoch", support: true },
@@ -156,7 +156,7 @@ export function TeamOrgChart() {
             >
               {t.name}
             </div>
-            <Portrait p={{ ...t.lead, role: "Lead" }} size={72} ring={t.accent} />
+            <Portrait p={{ ...t.lead, role: t.lead.role || "Lead" }} size={72} ring={t.accent} />
             <div className="w-px h-4 bg-slate-200 my-1" />
             <div className="flex flex-col gap-3">
               {t.members.map((m, i) => (
