@@ -21,6 +21,9 @@ interface Props {
   bg: string;            // bar background tint
   badge?: string;        // right-side stat / label (like REACHABLE)
   badgeLabel?: string;   // small uppercase label above badge (default: "STATUS")
+  badge2?: string;       // optional second stat under the first (e.g. Actual $)
+  badge2Label?: string;
+  badge2Color?: string;
   children?: ReactNode;  // body content shown when expanded
 }
 
@@ -34,6 +37,9 @@ export function GtmEnablerBar({
   bg,
   badge,
   badgeLabel = "Status",
+  badge2,
+  badge2Label = "Actual",
+  badge2Color = "#F37021",
   children,
 }: Props) {
   const [isOpen, setIsOpen] = useState(false);
@@ -71,6 +77,14 @@ export function GtmEnablerBar({
               <div className="text-[10px] uppercase tracking-wider text-gray-500">{badgeLabel}</div>
               <div className="text-lg font-extrabold tabular-nums text-right" style={{ color }}>
                 {badge}
+              </div>
+            </div>
+          )}
+          {badge2 && (
+            <div>
+              <div className="text-[10px] uppercase tracking-wider text-gray-500 text-right">{badge2Label}</div>
+              <div className="text-lg font-extrabold tabular-nums text-right" style={{ color: badge2Color }}>
+                {badge2}
               </div>
             </div>
           )}

@@ -27,13 +27,20 @@ export async function LiveBudgetSummary() {
 
   // Aggregate — e-com streams store user counts, not dollars, so SKIP them
   // from the revenue $ total (their numbers belong in a separate user-count chart).
-  const revenueByMonth: Record<string, number> = {};
+  // Planned and Actual tracked as separate series (green forecast bar + orange
+  // booked bar in the chart, two badges on the card).
+  const plannedByMonth: Record<string, number> = {};
+  const actualByMonth: Record<string, number> = {};
+  const revenueByMonth: Record<string, number> = {}; // actual ?? planned — feeds Net
   const revenueByStream = sales.streams.map((st) => {
     let total = 0;
     const isMoney = st.category !== "ecom";
     if (isMoney) {
       for (const [m, cell] of Object.entries(st.monthly)) {
-        // Prefer actual booked $; fall back to planned forecast where no actual is recorded
+        const p = cell.planned ?? 0;
+        const a = cell.actual ?? 0;
+        if (p > 0) plannedByMonth[m] = (plannedByMonth[m] ?? 0) + p;
+        if (a > 0) actualByMonth[m] = (actualByMonth[m] ?? 0) + a;
         const v = cell.actual ?? cell.planned ?? 0;
         total += v;
         revenueByMonth[m] = (revenueByMonth[m] ?? 0) + v;
@@ -42,6 +49,8 @@ export async function LiveBudgetSummary() {
     return { ...st, total };
   });
   const totalRevenue = revenueByStream.reduce<number>((s, st) => s + st.total, 0);
+  const totalPlanned = Object.values(plannedByMonth).reduce((s, v) => s + v, 0);
+  const totalActual = Object.values(actualByMonth).reduce((s, v) => s + v, 0);
 
   const salaryByMonth: Record<string, number> = {};
   let totalSalary = 0;
@@ -88,10 +97,31 @@ export async function LiveBudgetSummary() {
         desc="11 streams — 8 planned packages (Cloud × 3 · Ai Server · Admin Tools · Ops Tools · Agentic · Big Ai Brain) + 3 variable-reach e-com streams. Tracking starts Jun 2026."
         color="#10B981"
         bg="#ECFDF5"
-        badge={fmt(totalRevenue)}
-        badgeLabel="Booked"
+        badge={fmt(totalPlanned)}
+        badgeLabel="Planned"
+        badge2={fmt(totalActual)}
+        badge2Label="Actual"
+        badge2Color="#F37021"
       >
-        <MonthlySparkline label="Income · quarterly" months={allMonths} values={revenueByMonth} color="#10B981" />
+        <MonthlySparkline
+          label="Income · quarterly"
+          months={allMonths}
+          values={plannedByMonth}
+          color="#10B981"
+          values2={actualByMonth}
+          color2="#F37021"
+          legend={["Planned", "Actual"]}
+        />
+        <div className="mt-2 text-right">
+          <a
+            href="/plan/sales-sheet"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-yai-blue hover:text-yai-orange transition-colors"
+          >
+            Detailed Sheet <span aria-hidden>↗</span>
+          </a>
+        </div>
       </GtmEnablerBar>
 
       {/* 02 · SALARIES — one chart */}
@@ -233,17 +263,24 @@ function bucketToQuarters(months: string[], values: Record<string, number>) {
   return Array.from(out.values());
 }
 
-/** Fat quarterly bar chart — bars with $ labels on top + axis. Matches Section 10 visual. */
-function MonthlySparkline({ label, months, values, color }: {
+/** Fat quarterly bar chart — bars with $ labels on top + axis. Matches Section 10 visual.
+ *  Pass values2/color2 for a grouped second series (e.g. Planned vs Actual). */
+function MonthlySparkline({ label, months, values, color, values2, color2, legend }: {
   label: string;
   months: string[];
   values: Record<string, number>;
   color: string;
+  values2?: Record<string, number>;
+  color2?: string;
+  legend?: [string, string];
 }) {
   const quarters = bucketToQuarters(months, values);
+  const quarters2 = values2 ? bucketToQuarters(months, values2) : null;
   const data = quarters.map((q) => q.total);
-  const max = Math.max(0.0001, ...data);
-  const hasAny = data.some((v) => v > 0);
+  const data2 = quarters2 ? quarters2.map((q) => q.total) : [];
+  const max = Math.max(0.0001, ...data, ...data2);
+  const hasAny = data.some((v) => v > 0) || data2.some((v) => v > 0);
+  const grouped = !!quarters2;
 
   // Chart geometry — fatter bars, room for $ labels above + quarter labels below
   const W = 1000;
@@ -256,17 +293,31 @@ function MonthlySparkline({ label, months, values, color }: {
   const PLOT_H = H - PAD_T - PAD_B;
   const N = Math.max(1, quarters.length);
   const SLOT_W = PLOT_W / N;
-  const BAR_W = SLOT_W * 0.65;
+  const BAR_W = grouped ? SLOT_W * 0.32 : SLOT_W * 0.65;
 
   return (
     <div className="mt-3 rounded-lg bg-white border border-yai-border p-3">
-      <div className="flex items-baseline justify-between gap-2 mb-2">
+      <div className="flex items-baseline justify-between gap-2 mb-2 flex-wrap">
         <span className="text-[10px] uppercase tracking-wider font-extrabold text-gray-500">{label}</span>
-        {months.length > 0 && (
-          <span className="text-[10px] text-gray-500">
-            {fmtMonth(months[0])} → {fmtMonth(months[months.length - 1])}
-          </span>
-        )}
+        <div className="flex items-center gap-3">
+          {grouped && legend && (
+            <span className="flex items-center gap-3 text-[10px]">
+              <span className="flex items-center gap-1">
+                <span className="inline-block w-2.5 h-2.5 rounded-sm" style={{ background: color }} />
+                <span className="text-gray-700">{legend[0]}</span>
+              </span>
+              <span className="flex items-center gap-1">
+                <span className="inline-block w-2.5 h-2.5 rounded-sm" style={{ background: color2 }} />
+                <span className="text-gray-700">{legend[1]}</span>
+              </span>
+            </span>
+          )}
+          {months.length > 0 && (
+            <span className="text-[10px] text-gray-500">
+              {fmtMonth(months[0])} → {fmtMonth(months[months.length - 1])}
+            </span>
+          )}
+        </div>
       </div>
       {!hasAny ? (
         <div className="text-[12px] text-gray-400 italic text-center py-6">No data yet — admin posts will appear here.</div>
@@ -276,17 +327,32 @@ function MonthlySparkline({ label, months, values, color }: {
           <line x1={PAD_L} x2={W - PAD_R} y1={H - PAD_B} y2={H - PAD_B} stroke="#9CA3AF" strokeWidth="0.6" />
 
           {quarters.map((q, i) => {
-            const barH = (q.total / max) * PLOT_H;
             const cx = PAD_L + SLOT_W * (i + 0.5);
-            const x  = cx - BAR_W / 2;
-            const y  = H - PAD_B - barH;
+            const barH = (q.total / max) * PLOT_H;
+            const v2 = quarters2 ? (quarters2[i]?.total ?? 0) : 0;
+            const barH2 = (v2 / max) * PLOT_H;
+            // Grouped: series-1 bar sits left of centre, series-2 right.
+            const x1 = grouped ? cx - BAR_W - 1.5 : cx - BAR_W / 2;
+            const x2 = cx + 1.5;
+            const y1 = H - PAD_B - barH;
+            const y2 = H - PAD_B - barH2;
             return (
               <g key={q.label}>
-                <rect x={x} y={y} width={BAR_W} height={Math.max(0.5, barH)} fill={color} opacity={q.total > 0 ? 0.85 : 0.15} rx={2} />
+                <rect x={x1} y={y1} width={BAR_W} height={Math.max(0.5, barH)} fill={color} opacity={q.total > 0 ? 0.85 : 0.15} rx={2} />
                 {q.total > 0 && (
-                  <text x={cx} y={y - 5} fontSize="12" textAnchor="middle" fill="#1E3A8A" fontWeight="800">
+                  <text x={x1 + BAR_W / 2} y={y1 - 5} fontSize={grouped ? "10" : "12"} textAnchor="middle" fill="#1E3A8A" fontWeight="800">
                     {fmt(q.total)}
                   </text>
+                )}
+                {grouped && (
+                  <>
+                    <rect x={x2} y={y2} width={BAR_W} height={Math.max(0.5, barH2)} fill={color2} opacity={v2 > 0 ? 0.9 : 0.12} rx={2} />
+                    {v2 > 0 && (
+                      <text x={x2 + BAR_W / 2} y={y2 - 5} fontSize="10" textAnchor="middle" fill="#9A3412" fontWeight="800">
+                        {fmt(v2)}
+                      </text>
+                    )}
+                  </>
                 )}
                 <text x={cx} y={H - PAD_B + 16} fontSize="12" textAnchor="middle" fill="#475569" fontWeight="700">
                   {q.label}
