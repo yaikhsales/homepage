@@ -22,17 +22,12 @@ export function AccordionProvider({
 }) {
   const [openId, setOpenId] = useState<string | null>(defaultOpenId);
 
-  // Open whichever section the URL hash points at — so clicking a sidebar
-  // nav link (which sets #section-id) also expands that section, and a
-  // shared/bookmarked link lands with the right one open.
+  // On first load, open whichever section a bookmarked/shared URL hash
+  // points at. Sidebar clicks open sections directly (see Sidebar.onJump),
+  // so we don't listen to hashchange — that would fight the scroll-spy.
   useEffect(() => {
-    const syncFromHash = () => {
-      const id = window.location.hash.replace(/^#/, "");
-      if (id) setOpenId(id);
-    };
-    syncFromHash();
-    window.addEventListener("hashchange", syncFromHash);
-    return () => window.removeEventListener("hashchange", syncFromHash);
+    const id = window.location.hash.replace(/^#/, "");
+    if (id) setOpenId(id);
   }, []);
 
   return <Ctx.Provider value={{ openId, setOpenId }}>{children}</Ctx.Provider>;
