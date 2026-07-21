@@ -297,13 +297,9 @@ export function SalesEditor({ initial }: { initial: Store }) {
                       const cell = stream.monthly[m];
                       return (
                         <td key={m} className="px-1 py-0.5 pb-1.5 align-top">
-                          <input
-                            type="text"
+                          <NoteCell
                             value={cell?.note ?? ""}
-                            onChange={(e) => setCell(i, m, "note", e.target.value)}
-                            placeholder="names"
-                            title="Short client names for this month (e.g. YW, GGMT)"
-                            className="w-full text-left text-[9px] px-1 py-0.5 rounded border border-transparent bg-gray-50/50 text-gray-600 placeholder:text-gray-300 focus:outline-none focus:border-yai-orange focus:bg-white"
+                            onChange={(v) => setCell(i, m, "note", v)}
                           />
                         </td>
                       );
@@ -374,6 +370,69 @@ export function SalesEditor({ initial }: { initial: Store }) {
         </div>
       </div>
     </div>
+  );
+}
+
+/**
+ * Client-names cell: renders comma-separated short names as tag chips
+ * (e.g. "3SGS, BICNZ" → two pills). Click to edit as free text — up to
+ * 100 chars / ~10 names. Tall enough for two chip rows.
+ */
+function NoteCell({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const [editing, setEditing] = useState(false);
+  const names = value
+    .split(/[,;]+/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  if (editing) {
+    return (
+      <textarea
+        autoFocus
+        rows={3}
+        maxLength={100}
+        defaultValue={value}
+        placeholder="3SGS, BICNZ, …"
+        title="Short client names, comma-separated (max 100 chars)"
+        onBlur={(e) => {
+          onChange(e.target.value);
+          setEditing(false);
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            (e.target as HTMLTextAreaElement).blur();
+          }
+        }}
+        className="w-full min-h-[58px] text-left text-[9px] leading-snug px-1 py-1 rounded border border-yai-orange bg-white text-gray-700 focus:outline-none resize-none"
+      />
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={() => setEditing(true)}
+      title={value ? `${value} — click to edit` : "Click to add client names"}
+      className={`w-full min-h-[58px] text-left px-1 py-1 rounded border border-transparent hover:border-yai-orange/40 transition ${
+        names.length ? "bg-white" : "bg-gray-50/50"
+      }`}
+    >
+      {names.length ? (
+        <span className="flex flex-wrap gap-[3px]">
+          {names.slice(0, 10).map((n, idx) => (
+            <span
+              key={n + idx}
+              className="inline-flex items-center px-1.5 py-[2px] rounded-full bg-yai-blue/10 text-yai-blue text-[8px] font-bold leading-none whitespace-nowrap"
+            >
+              {n}
+            </span>
+          ))}
+        </span>
+      ) : (
+        <span className="text-[9px] text-gray-300">names</span>
+      )}
+    </button>
   );
 }
 
