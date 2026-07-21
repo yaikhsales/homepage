@@ -153,6 +153,7 @@ export default async function PlanPage() {
       {/* Print-only cover — outside <main> so it can fill its own page
        *  without inheriting main's max-width + flex constraints. */}
       <PrintCover />
+    <AccordionProvider>
     <div className="flex bg-yai-bg min-h-screen">
       <Sidebar items={NAV} viewer={viewer} />
 
@@ -162,7 +163,6 @@ export default async function PlanPage() {
         <BodyTranslator />
         <PlanHero />
 
-        <AccordionProvider>
         {/* 01 — Executive Summary */}
         <Section id="executive-summary" kicker={kicker(1, "Executive Summary")} title="Executive Summary" collapsible>
           <Thesis>
@@ -895,7 +895,6 @@ export default async function PlanPage() {
             </p>
           </Card>
         </Section>
-        </AccordionProvider>
 
         {/* Footer (screen only) */}
         <footer className="mt-20 pt-10 border-t border-yai-border text-center text-sm text-gray-500 no-print">
@@ -905,6 +904,7 @@ export default async function PlanPage() {
 
       </main>
     </div>
+    </AccordionProvider>
       {/* Print-only end page — outside main, owns the last sheet. */}
       <PrintEndPage about={about} />
     </>

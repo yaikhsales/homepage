@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { AdminPanel } from "./AdminPanel";
 import { LanguageToggle, useLang } from "./LanguageToggle";
 import { translate } from "@/lib/i18n";
+import { useAccordion } from "./Accordion";
 
 export type NavItem = { id: string; label: string; labelKey?: string };
 
@@ -18,6 +19,7 @@ export function Sidebar({
 }) {
   const [active, setActive] = useState(items[0]?.id ?? "");
   const [open, setOpen] = useState(false);
+  const acc = useAccordion();
   // Default true so SSR + first client render agree (sidebar visible, x:0) — avoids hydration mismatch.
   // Updated after mount via matchMedia; also reacts to resize.
   const [isDesktop, setIsDesktop] = useState(true);
@@ -83,11 +85,17 @@ export function Sidebar({
 
   const onJump = (id: string) => (e: React.MouseEvent) => {
     e.preventDefault();
-    const target = document.getElementById(id);
-    if (target) {
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
-      history.replaceState(null, "", `#${id}`);
-    }
+    // Open the section in the accordion, then scroll to it.
+    acc?.setOpenId(id);
+    setActive(id);
+    // Let the section expand before scrolling so we land on the right spot.
+    requestAnimationFrame(() => {
+      const target = document.getElementById(id);
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+        history.replaceState(null, "", `#${id}`);
+      }
+    });
     setOpen(false);
   };
 
