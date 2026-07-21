@@ -74,7 +74,7 @@ const TEAMS: Team[] = [
     ],
   },
   {
-    name: "Neural Net + Finance",
+    name: "Neural Net & Financial",
     accent: "#1A5742",
     lead: { name: "Van Virot", role: "API · Ai Agent Integration" },
     members: [
@@ -108,15 +108,21 @@ function Portrait({
   p,
   size = 64,
   ring,
+  blockH,
 }: {
   p: Person;
   size?: number;
   ring?: string;
+  /** Fixed block height so photos align in straight rows across columns. */
+  blockH?: number;
 }) {
   const src = photoFor(p.name);
   const initial = p.name.replace(/—.*/, "").trim().charAt(0).toUpperCase();
   return (
-    <div className="flex flex-col items-center text-center w-[92px] shrink-0">
+    <div
+      className="flex flex-col items-center justify-start text-center w-[104px] shrink-0"
+      style={blockH ? { height: blockH } : undefined}
+    >
       <div
         className="rounded-full overflow-hidden bg-slate-100 shadow-md"
         style={{ width: size, height: size, boxShadow: ring ? `0 0 0 3px ${ring}` : undefined }}
@@ -160,16 +166,16 @@ export function TeamOrgChart() {
         {TEAMS.map((t) => (
           <div key={t.name} className="flex flex-col items-center">
             <div
-              className="mb-3 px-3 py-1 rounded-full text-[11px] font-bold text-white uppercase tracking-wide"
+              className="mb-3 h-7 px-3 rounded-full text-[10px] font-bold text-white uppercase tracking-wide flex items-center whitespace-nowrap"
               style={{ background: t.accent }}
             >
               {t.name}
             </div>
-            <Portrait p={{ ...t.lead, role: t.lead.role || "Lead" }} size={72} ring={t.accent} />
-            <div className="w-px h-4 bg-slate-200 my-1" />
-            <div className="flex flex-col gap-3">
+            <Portrait p={{ ...t.lead, role: t.lead.role || "Lead" }} size={72} ring={t.accent} blockH={190} />
+            <div className="w-px h-4 bg-slate-200 mb-2" />
+            <div className="flex flex-col">
               {t.members.map((m, i) => (
-                <Portrait key={m.name + i} p={m} size={54} />
+                <Portrait key={m.name + i} p={m} size={54} blockH={168} />
               ))}
             </div>
           </div>
