@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 
 type Category = "cloud" | "hardware" | "addon" | "ecom";
 type Certainty = "planned" | "uncertain";
@@ -47,6 +47,11 @@ export function SalesEditor({ initial }: { initial: Store }) {
   const [store, setStore] = useState<Store>(initial);
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState("");
+  // Auto-save: any edit marks the store dirty; a debounced effect persists
+  // it ~1.5s after the last change. The manual Save button remains as a
+  // "save right now" fallback.
+  const dirtyRef = useRef(false);
+  const [editVersion, setEditVersion] = useState(0);
 
   // Per-month $ totals for both views — exclude e-com (their cells are user counts)
   const totals = useMemo(() => {
@@ -103,16 +108,20 @@ export function SalesEditor({ initial }: { initial: Store }) {
     }
     next.streams[streamIdx] = stream;
     setStore(next);
+    dirtyRef.current = true;
+    setEditVersion((v) => v + 1);
   };
 
   const addMonth = () => {
     const last = store.months[store.months.length - 1] ?? "2026-05";
     setStore({ ...store, months: [...store.months, nextMonth(last)] });
+    dirtyRef.current = true;
+    setEditVersion((v) => v + 1);
   };
 
-  const save = async () => {
+  const save = async (opts?: { auto?: boolean }) => {
     setLoading(true);
-    setMsg("");
+    if (!opts?.auto) setMsg("");
     try {
       const r = await fetch("/api/admin/sales", {
         method: "POST",
@@ -121,8 +130,10 @@ export function SalesEditor({ initial }: { initial: Store }) {
       });
       const j = await r.json();
       if (j.ok) {
-        setStore(j.store);
-        setMsg(`✓ Saved at ${new Date().toLocaleTimeString()}`);
+        dirtyRef.current = false;
+        // Don't replace local state on auto-save — the user may be mid-typing.
+        if (!opts?.auto) setStore(j.store);
+        setMsg(`✓ ${opts?.auto ? "Auto-saved" : "Saved"} at ${new Date().toLocaleTimeString()}`);
         setTimeout(() => setMsg(""), 5000);
       } else {
         setMsg(`Failed: ${j.error || "unknown"}`);
@@ -133,6 +144,25 @@ export function SalesEditor({ initial }: { initial: Store }) {
       setLoading(false);
     }
   };
+
+  // Debounced auto-save — fires 1.5s after the most recent edit.
+  useEffect(() => {
+    if (!dirtyRef.current) return;
+    const t = setTimeout(() => {
+      if (dirtyRef.current) save({ auto: true });
+    }, 1500);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editVersion]);
+
+  // Warn before leaving with unsaved edits (the auto-save may not have fired yet).
+  useEffect(() => {
+    const onBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (dirtyRef.current) e.preventDefault();
+    };
+    window.addEventListener("beforeunload", onBeforeUnload);
+    return () => window.removeEventListener("beforeunload", onBeforeUnload);
+  }, []);
 
   return (
     <div className="space-y-4">
@@ -344,7 +374,8 @@ export function SalesEditor({ initial }: { initial: Store }) {
         <div className="px-3 py-2 text-[10px] text-gray-500 bg-gray-50 border-t border-yai-border">
           Each stream has three rows: <strong className="text-yai-blue">Planned</strong> = forecast / target ·{" "}
           <strong className="text-emerald-700">Actual</strong> = booked / closed ·{" "}
-          <strong>Clients</strong> = short client names for that month (free text, e.g. &ldquo;YW, GGMT&rdquo;).
+          <strong>Clients</strong> = short client names for that month (free text, e.g. &ldquo;YW, GGMT&rdquo;).{" "}
+          Edits <strong>auto-save</strong> ~1.5s after you stop typing.
         </div>
       </div>
 
@@ -361,7 +392,7 @@ export function SalesEditor({ initial }: { initial: Store }) {
           )}
           <button
             type="button"
-            onClick={save}
+            onClick={() => save()}
             disabled={loading}
             className="bg-yai-orange hover:bg-yai-orange-dark text-white font-extrabold px-6 py-2.5 rounded-lg transition disabled:opacity-50 text-sm"
           >
