@@ -19,10 +19,11 @@ export default async function AdminSalesPage() {
           packages + 3 variable-rev e-commerce streams), months across the columns.
         </p>
         <p className="text-xs text-gray-500 mt-2 leading-snug">
-          <strong>Each arrow-click = +1 client.</strong> The cell shows the $ revenue
-          (clients × unit price) and a small grey count below — that count flows into the SDTV
-          dashboard later. Toggle <strong>Planned</strong> / <strong>Actual</strong> to switch
-          between forecast and booked figures (each cell stores both).
+          <strong>Each arrow-click = +1 client.</strong> Every stream has three rows:
+          {" "}<strong className="text-yai-blue">Planned</strong> (forecast),
+          {" "}<strong className="text-emerald-700">Actual</strong> (booked / closed), and
+          {" "}<strong>Clients</strong> — free-text short client names per month (e.g.
+          &ldquo;YW, GGMT&rdquo;). Actuals flow into the SDTV budget roll-up automatically.
         </p>
       </div>
 
