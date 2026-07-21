@@ -54,8 +54,8 @@ const NAV: NavItem[] = [
   { id: "customers",         label: "Target Customers",       labelKey: "nav.customers" },
   { id: "gtm",               label: "Go-to-Market Milestones", labelKey: "nav.gtm" },
   { id: "team",              label: "Team",                   labelKey: "nav.team" },
-  { id: "capital",           label: "Capital Efficiency",     labelKey: "nav.capital" },
   { id: "oc-budget",         label: "OC & Live Budget Update", labelKey: "nav.oc_budget" },
+  { id: "capital",           label: "Capital Efficiency",     labelKey: "nav.capital" },
   { id: "traction",          label: "Traction & Pilots",      labelKey: "nav.traction" },
   { id: "competition",       label: "Competitive Landscape",  labelKey: "nav.competition" },
   { id: "risks",             label: "Risks & Mitigations",    labelKey: "nav.risks" },
@@ -757,23 +757,8 @@ export default async function PlanPage() {
           <TeamClusters />
         </Section>
 
-        {/* 11 — Capital Efficiency */}
-        <Section id="capital" kicker={kicker(11, "Capital Efficiency")} title="The Capital Efficiency Story" collapsible>
-          <Thesis>
-            Built for ~$205K to date and ~$370K through 2027 — what would cost $5M–$10M anywhere else. And the same small dollar in compounds upward — at every Ai layer, the value multiplies.
-          </Thesis>
-
-          {/* Roadmap timeline — past spend curve + every module climbing the 3 Ai layers */}
-          <h3 id="capital-investment" className="font-bold text-yai-navy text-xl mb-1 scroll-mt-8">How ~$205K built 17 module families</h3>
-          <p className="text-sm text-gray-600 mb-4 max-w-3xl">
-            One chart, every module. The spend curve at the top is what we&rsquo;ve <strong>actually paid</strong> in Cambodia engineering salaries — team grew from 3 engineers in May 2024 (Rich, Virot, Dilan) to <strong>22 by May 2026</strong>, with monthly burn now ~$14K and bonuses on top. Each row below is a real module: orange = Digitalization built, blue = Agentic layer on top, dark green = Full Ai. Every step right of <strong>TODAY</strong> is value added on the same engineering base.
-          </p>
-          <RoadmapTimeline mode="spend" quarterlySpendK={roadmap.quarterlySpendK} headcount={roadmap.headcount} />
-
-        </Section>
-
-        {/* 12 — OC & Live Budget Update */}
-        <Section id="oc-budget" kicker={kicker(12, "OC & Budget")} title="OC & Live Budget Update" collapsible>
+        {/* 11 — OC & Live Budget Update */}
+        <Section id="oc-budget" kicker={kicker(11, "OC & Budget")} title="OC & Live Budget Update" collapsible>
           <Thesis>
             Quarterly Operating Committee update + half-year budget refresh + capex / purchase
             applications — delivered on the cadence the parent expects.
@@ -794,6 +779,21 @@ export default async function PlanPage() {
             </div>
             <LiveBudgetSummary />
           </div>
+        </Section>
+
+        {/* 12 — Capital Efficiency */}
+        <Section id="capital" kicker={kicker(12, "Capital Efficiency")} title="The Capital Efficiency Story" collapsible>
+          <Thesis>
+            Built for ~$205K to date and ~$370K through 2027 — what would cost $5M–$10M anywhere else. And the same small dollar in compounds upward — at every Ai layer, the value multiplies.
+          </Thesis>
+
+          {/* Roadmap timeline — past spend curve + every module climbing the 3 Ai layers */}
+          <h3 id="capital-investment" className="font-bold text-yai-navy text-xl mb-1 scroll-mt-8">How ~$205K built 17 module families</h3>
+          <p className="text-sm text-gray-600 mb-4 max-w-3xl">
+            One chart, every module. The spend curve at the top is what we&rsquo;ve <strong>actually paid</strong> in Cambodia engineering salaries — team grew from 3 engineers in May 2024 (Rich, Virot, Dilan) to <strong>22 by May 2026</strong>, with monthly burn now ~$14K and bonuses on top. Each row below is a real module: orange = Digitalization built, blue = Agentic layer on top, dark green = Full Ai. Every step right of <strong>TODAY</strong> is value added on the same engineering base.
+          </p>
+          <RoadmapTimeline mode="spend" quarterlySpendK={roadmap.quarterlySpendK} headcount={roadmap.headcount} />
+
         </Section>
 
         {/* 13 — Traction */}
