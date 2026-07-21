@@ -105,12 +105,13 @@ export async function LiveBudgetSummary() {
       >
         <MonthlySparkline
           label="Income · quarterly"
-          months={allMonths}
+          months={sales.months}
           values={plannedByMonth}
           color="#10B981"
           values2={actualByMonth}
           color2="#F37021"
           legend={["Planned", "Actual"]}
+          trim
         />
         <div className="mt-2 text-right">
           <a
@@ -265,7 +266,7 @@ function bucketToQuarters(months: string[], values: Record<string, number>) {
 
 /** Fat quarterly bar chart — bars with $ labels on top + axis. Matches Section 10 visual.
  *  Pass values2/color2 for a grouped second series (e.g. Planned vs Actual). */
-function MonthlySparkline({ label, months, values, color, values2, color2, legend }: {
+function MonthlySparkline({ label, months, values, color, values2, color2, legend, trim }: {
   label: string;
   months: string[];
   values: Record<string, number>;
@@ -273,9 +274,22 @@ function MonthlySparkline({ label, months, values, color, values2, color2, legen
   values2?: Record<string, number>;
   color2?: string;
   legend?: [string, string];
+  /** Drop leading + trailing quarters with no data in either series, so the
+   *  bars get the full width (labels stop colliding). */
+  trim?: boolean;
 }) {
-  const quarters = bucketToQuarters(months, values);
-  const quarters2 = values2 ? bucketToQuarters(months, values2) : null;
+  let quarters = bucketToQuarters(months, values);
+  let quarters2 = values2 ? bucketToQuarters(months, values2) : null;
+  if (trim) {
+    const hasData = (i: number) =>
+      (quarters[i]?.total ?? 0) > 0 || ((quarters2?.[i]?.total ?? 0) > 0);
+    let first = quarters.findIndex((_, i) => hasData(i));
+    if (first < 0) first = 0;
+    let last = quarters.length - 1;
+    while (last > first && !hasData(last)) last--;
+    quarters = quarters.slice(first, last + 1);
+    if (quarters2) quarters2 = quarters2.slice(first, last + 1);
+  }
   const data = quarters.map((q) => q.total);
   const data2 = quarters2 ? quarters2.map((q) => q.total) : [];
   const max = Math.max(0.0001, ...data, ...data2);
