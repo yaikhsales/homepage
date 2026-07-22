@@ -759,11 +759,6 @@ export default async function PlanPage() {
 
         {/* 11 — OC & Live Budget Update */}
         <Section id="oc-budget" kicker={kicker(11, "OC & Budget")} title="OC & Live Budget Update" collapsible>
-          <Thesis>
-            Quarterly Operating Committee update + half-year budget refresh + capex / purchase
-            applications — delivered on the cadence the parent expects.
-          </Thesis>
-
           {/* The three OC cards (Quarterly / Half-year / Purchase apps) used to
               sit here. Removed — both topics are now Q&A items linking back to
               this section, and the cadence detail lives in the conversation. */}
