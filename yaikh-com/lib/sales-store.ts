@@ -235,17 +235,53 @@ const SECTION = "sales-income";
 function mergeWithSeed(parsed: SalesStore): SalesStore {
   const saved = parsed.streams ?? [];
   const savedById = new Map(saved.map((s) => [s.id, s]));
+
+  const normName = (s: string) => s.trim().toLowerCase().replace(/\s+/g, " ");
+  const seedNames = new Map(SEED_SALES_STORE.streams.map((s) => [normName(s.name), s.id]));
+  const seedIds = new Set(SEED_SALES_STORE.streams.map((s) => s.id));
+
+  // Extras = saved streams whose id isn't in the seed. If an extra shares a
+  // name with a seed stream, it's a duplicate created under a different id
+  // (older seed round, "add stream" click, etc.) — fold its cells into the
+  // seed entry rather than appending it. Only genuinely new streams remain.
+  const extras: IncomeStream[] = [];
+  const nameMergesInto = new Map<string, IncomeStream[]>(); // seedId → extras to merge
+  for (const s of saved) {
+    if (seedIds.has(s.id)) continue;
+    const collideId = seedNames.get(normName(s.name));
+    if (collideId) {
+      const arr = nameMergesInto.get(collideId) ?? [];
+      arr.push(s);
+      nameMergesInto.set(collideId, arr);
+    } else {
+      extras.push(s);
+    }
+  }
+
   const merged = SEED_SALES_STORE.streams.map((seed) => {
     const prev = savedById.get(seed.id);
-    return { ...seed, monthly: prev?.monthly ?? seed.monthly };
+    let monthly: IncomeStream["monthly"] = { ...(prev?.monthly ?? seed.monthly) };
+    for (const dup of nameMergesInto.get(seed.id) ?? []) {
+      // Primary (id-matched) values win; extras only fill empty slots.
+      for (const [ym, cell] of Object.entries(dup.monthly ?? {})) {
+        const existing = monthly[ym];
+        if (!existing) { monthly[ym] = cell; continue; }
+        monthly[ym] = {
+          planned:   existing.planned   ?? cell.planned,
+          actual:    existing.actual    ?? cell.actual,
+          customers: existing.customers ?? cell.customers,
+          note:      existing.note      ?? cell.note,
+        };
+      }
+    }
+    return { ...seed, monthly };
   });
-  const seedIds = new Set(SEED_SALES_STORE.streams.map((s) => s.id));
-  const extra = saved.filter((s) => !seedIds.has(s.id));
+
   return {
     updatedAt: parsed.updatedAt ?? null,
     updatedBy: parsed.updatedBy ?? null,
     months: buildMonths(parsed.months),
-    streams: [...merged, ...extra],
+    streams: [...merged, ...extras],
   };
 }
 
