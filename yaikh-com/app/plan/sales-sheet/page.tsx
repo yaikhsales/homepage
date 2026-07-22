@@ -8,6 +8,8 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { verifySession } from "@/lib/auth";
 import { readSalesStore } from "@/lib/sales-store";
+import { BodyTranslator } from "@/components/plan/BodyTranslator";
+import { LanguageToggle } from "@/components/plan/LanguageToggle";
 
 export const dynamic = "force-dynamic";
 
@@ -49,6 +51,7 @@ export default async function SalesSheetPage() {
 
   return (
     <main className="min-h-screen bg-yai-bg p-6 lg:p-10">
+      <BodyTranslator />
       <div className="mb-5 flex items-baseline justify-between gap-3 flex-wrap">
         <div>
           <div className="text-[10px] uppercase tracking-[0.2em] text-yai-orange font-bold">
@@ -62,6 +65,7 @@ export default async function SalesSheetPage() {
           </p>
         </div>
         <div className="flex items-center gap-5 text-right">
+          <LanguageToggle />
           <div>
             <div className="text-[10px] uppercase tracking-wider text-gray-500">Planned total</div>
             <div className="text-xl font-extrabold tabular-nums text-yai-blue">{money(grandPlanned)}</div>
