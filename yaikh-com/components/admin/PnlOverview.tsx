@@ -149,13 +149,15 @@ export async function PnlOverview() {
   function SectionRow({ label, color }: { label: string; color: string }) {
     return (
       <tr>
+        {/* Label lives in the sticky first cell so it stays visible while
+            the sheet scrolls horizontally. */}
         <td
-          colSpan={allMonths.length + 2}
-          className="px-2 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.15em] text-white"
+          className="sticky left-0 z-[1] px-2 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.15em] text-white whitespace-nowrap"
           style={{ background: color }}
         >
           {label}
         </td>
+        <td colSpan={allMonths.length + 1} style={{ background: color }} />
       </tr>
     );
   }
@@ -210,9 +212,9 @@ export async function PnlOverview() {
               total={totalPnl}
             />
 
-            {/* ── 2 · SALES / INCOME — every stream cloned ── */}
+            {/* ── 2 · SALES / INCOME — every stream cloned, Plan + Actual paired ── */}
             <SectionRow label="Sales / Income · per stream" color={C.income} />
-            {sales.streams.map((st) => {
+            {sales.streams.flatMap((st) => {
               const isEcom = st.category === "ecom";
               const planned: Record<string, number> = {};
               const actual: Record<string, number> = {};
@@ -220,20 +222,11 @@ export async function PnlOverview() {
                 if ((cell.planned ?? 0) > 0) planned[m] = cell.planned!;
                 if ((cell.actual ?? 0) > 0) actual[m] = cell.actual!;
               }
-              return (
-                <NumberRow key={st.id + "-p"} label={`${st.name} · Plan${isEcom ? " (users)" : ""}`} byMonth={planned} color="#64748B" money$={!isEcom} indent />
-              );
-            })}
-            {sales.streams.map((st) => {
-              const isEcom = st.category === "ecom";
-              const actual: Record<string, number> = {};
-              for (const [m, cell] of Object.entries(st.monthly)) {
-                if ((cell.actual ?? 0) > 0) actual[m] = cell.actual!;
-              }
-              if (Object.keys(actual).length === 0) return null;
-              return (
-                <NumberRow key={st.id + "-a"} label={`${st.name} · Actual${isEcom ? " (users)" : ""}`} byMonth={actual} color={C.income} money$={!isEcom} indent />
-              );
+              const unit = isEcom ? " (users)" : "";
+              return [
+                <NumberRow key={st.id + "-p"} label={`${st.name} · Plan${unit}`} byMonth={planned} color="#64748B" money$={!isEcom} indent />,
+                <NumberRow key={st.id + "-a"} label={`${st.name} · Actual${unit}`} byMonth={actual} color={C.income} money$={!isEcom} indent />,
+              ];
             })}
 
             {/* ── 3 · SALARIES — every active member ── */}
