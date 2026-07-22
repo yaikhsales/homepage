@@ -532,9 +532,120 @@ export const BODY_TRANSLATIONS: Record<string, string> = {
   "Director": "总监",
   "Texlink Technologies": "德领科技",
   "Strategic DTV": "战略数字工业",
+
+  // ─────────────── §11 · SALES EXPENSES AND BUDGET (LiveBudgetSummary) ───────────────
+  "Sales Expenses and Budget": "销售支出与预算",
+  "Sales / Income": "销售 / 收入",
+  "11 streams — 8 planned packages (Cloud × 3 · Ai Server · Admin Tools · Ops Tools · Agentic · Big Ai Brain) + 3 variable-reach e-com streams. Tracking starts Jun 2026.":
+    "11 条业务流 — 8 个计划套餐(云 × 3 · Ai 服务器 · 行政工具 · 运营工具 · 智能体 · 大 Ai 脑)+ 3 条可变触达电商流。2026 年 6 月起跟踪。",
+  "Salaries · compensation paid": "薪资 · 已付报酬",
+  "#1 members tracked from May #2 onward. Includes bonuses.":
+    "自 #2 年 5 月起跟踪 #1 名成员。含奖金。",
+  "Capex + running costs": "资本支出 + 运营成本",
+  "#1 categories — Computers, Furniture, Dev gear, Admin Shop, Ai Fees, Villa Rent, Petty Cash + Promotion.":
+    "#1 个类别 — 电脑、家具、开发设备、行政采购、Ai 费用、别墅租金、零用金 + 推广。",
+  "Net position · investment build": "净头寸 · 投资构建",
+  "Income − (Salaries + Capex). Negative is expected during the platform-build phase — see Section 10 for the asset-value offset.":
+    "收入 −(薪资 + 资本支出)。平台建设阶段出现负值属预期 — 资产价值抵消见第 10 节。",
+  "Actual": "实际",
+  "Paid": "已付",
+  "Spent": "已支出",
+  "Today": "今日",
+  "Status": "状态",
+  "Hide detail": "收起详情",
+  "Detail": "详情",
+  "Income · quarterly": "收入 · 季度",
+  "Salaries · quarterly": "薪资 · 季度",
+  "Capex · quarterly": "资本支出 · 季度",
+  "Quarterly · revenue vs cost": "季度 · 收入对比成本",
+  "Revenue (up)": "收入(上)",
+  "Cost (down)": "成本(下)",
+  "No data yet — admin posts will appear here.": "暂无数据 — 后台发布后将显示于此。",
+  "Detailed Sheet": "详细表格",
+  "Sourced live from admin · Sales · Salaries · Expenses.": "数据实时来源于后台 · 销售 · 薪资 · 支出。",
+  "Last update": "最后更新",
+
+  // ─────────────── /plan/sales-sheet (read-only detailed grid) ───────────────
+  "Yai · Strategic DTV": "Yai · 战略数字工业",
+  "Sales / Income — Detailed Sheet": "销售 / 收入 — 详细表格",
+  "Read-only view.": "只读视图。",
+  "= forecast ·": "= 预测 ·",
+  "= booked / closed ·": "= 已成交 / 已结 ·",
+  "= who signed that month.": "= 当月签约客户。",
+  "Planned total": "计划总额",
+  "Actual total": "实际总额",
+  "Stream": "业务流",
+  "Unit price": "单价",
+  "Row": "行",
+  "Total": "总计",
+  "Clients": "客户",
+  "Monthly total · Planned": "月度总计 · 计划",
+  "Monthly total · Actual": "月度总计 · 实际",
+  "Confidential — Yai / Texlink Technologies Co., Ltd. Sourced live from admin · Sales.":
+    "机密 — Yai / 德领科技有限公司。数据实时来源于后台 · 销售。",
+
+  // Stream names + tier/unit labels (defaults of the admin Sales store)
+  "Cloud Starter": "云入门版",
+  "Cloud Growth": "云成长版",
+  "Cloud Enterprise": "云企业版",
+  "Ai Server": "Ai 服务器",
+  "Administrative Tools": "行政工具",
+  "Operation Tools": "运营工具",
+  "Agentic": "智能体",
+  "Big Ai Brain": "大 Ai 脑",
+  "Worker P2P Marketplace": "工人 P2P 市场",
+  "Service Provider Marketplace": "服务商市场",
+  "Factory Supply Marketplace": "工厂供给市场",
+  "5 key members": "5 名关键成员",
+  "5 → 300 users · whole department": "5 → 300 用户 · 整个部门",
+  "300 → 1,000 users · whole factory": "300 → 1,000 用户 · 整个工厂",
+  "1,000+ users · dedicated server": "1,000+ 用户 · 独立服务器",
+  "Activated after Ai Server · admin module stack": "Ai 服务器之后启用 · 行政模块栈",
+  "Activated after Ai Server · ops module stack": "Ai 服务器之后启用 · 运营模块栈",
+  "After ~6 months · 10 agents + 35 mini": "约 6 个月后 · 10 个智能体 + 35 个迷你",
+  "Boss · after ~1 year · 5 factories 1 chat": "老板 · 约 1 年后 · 5 厂 1 聊天",
+  "Planned reach: 100,000 garment workers": "计划触达:100,000 名制衣工人",
+  "Planned reach: ~1,000 service providers": "计划触达:约 1,000 家服务商",
+  "Planned reach: 100 curated SKUs · target $100K GMV / month":
+    "计划触达:100 个精选 SKU · 目标月 GMV $100K",
+  "Take-rate · variable / user": "抽成 · 浮动 / 用户",
+  "Take-rate + listing · variable / provider": "抽成 + 上架 · 浮动 / 服务商",
+  "Wholesale margin · variable / SKU": "批发差价 · 浮动 / SKU",
+  "#1 / yr": "#1 / 年",
+  "#1 (one-off)": "#1(一次性)",
+  "#1 users": "#1 用户",
 };
 
 /** Lookup helper. Returns the Chinese translation or undefined if not in dict. */
 export function translateBody(en: string): string | undefined {
   return BODY_TRANSLATIONS[en];
+}
+
+/** Number token — digits with optional $, thousands separators, decimals, %/+ suffix. */
+const NUM_RE = /\$?\d[\d,]*(?:\.\d+)?[%+]?/g;
+
+/**
+ * Smarter lookup for the DOM translator:
+ * 1. exact match (after collapsing inner whitespace — JSX line wraps insert
+ *    newlines mid-sentence, which used to break lookups);
+ * 2. number-pattern match — digits/amounts are swapped for #1, #2… and looked
+ *    up against pattern keys (e.g. "#1 members tracked from May #2 onward."),
+ *    then the real numbers are substituted back into the translation. This is
+ *    how dynamic strings like "21 members tracked…" translate without a dict
+ *    entry per possible number.
+ */
+export function translateBodyAuto(en: string): string | undefined {
+  const key = en.replace(/\s+/g, " ").trim();
+  const exact = BODY_TRANSLATIONS[key];
+  if (exact) return exact;
+
+  if (!/\d/.test(key)) return undefined;
+  const nums: string[] = [];
+  const patternKey = key.replace(NUM_RE, (m) => {
+    nums.push(m);
+    return `#${nums.length}`;
+  });
+  const pattern = BODY_TRANSLATIONS[patternKey];
+  if (!pattern) return undefined;
+  return pattern.replace(/#(\d+)/g, (_, i) => nums[Number(i) - 1] ?? "");
 }

@@ -112,17 +112,9 @@ export async function LiveBudgetSummary() {
           color2="#F37021"
           legend={["Planned", "Actual"]}
           trim
+          linkHref="/plan/sales-sheet"
+          linkLabel="Detailed Sheet"
         />
-        <div className="mt-2 text-right">
-          <a
-            href="/plan/sales-sheet"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-yai-blue hover:text-yai-orange transition-colors"
-          >
-            Detailed Sheet <span aria-hidden>↗</span>
-          </a>
-        </div>
       </GtmEnablerBar>
 
       {/* 02 · SALARIES — one chart */}
@@ -266,7 +258,7 @@ function bucketToQuarters(months: string[], values: Record<string, number>) {
 
 /** Fat quarterly bar chart — bars with $ labels on top + axis. Matches Section 10 visual.
  *  Pass values2/color2 for a grouped second series (e.g. Planned vs Actual). */
-function MonthlySparkline({ label, months, values, color, values2, color2, legend, trim }: {
+function MonthlySparkline({ label, months, values, color, values2, color2, legend, trim, linkHref, linkLabel }: {
   label: string;
   months: string[];
   values: Record<string, number>;
@@ -277,6 +269,9 @@ function MonthlySparkline({ label, months, values, color, values2, color2, legen
   /** Drop leading + trailing quarters with no data in either series, so the
    *  bars get the full width (labels stop colliding). */
   trim?: boolean;
+  /** Optional link rendered in the header, under the date-range label. */
+  linkHref?: string;
+  linkLabel?: string;
 }) {
   let quarters = bucketToQuarters(months, values);
   let quarters2 = values2 ? bucketToQuarters(months, values2) : null;
@@ -313,23 +308,35 @@ function MonthlySparkline({ label, months, values, color, values2, color2, legen
     <div className="mt-3 rounded-lg bg-white border border-yai-border p-3">
       <div className="flex items-baseline justify-between gap-2 mb-2 flex-wrap">
         <span className="text-[10px] uppercase tracking-wider font-extrabold text-gray-500">{label}</span>
-        <div className="flex items-center gap-3">
-          {grouped && legend && (
-            <span className="flex items-center gap-3 text-[10px]">
-              <span className="flex items-center gap-1">
-                <span className="inline-block w-2.5 h-2.5 rounded-sm" style={{ background: color }} />
-                <span className="text-gray-700">{legend[0]}</span>
+        <div className="flex flex-col items-end gap-0.5">
+          <div className="flex items-center gap-3">
+            {grouped && legend && (
+              <span className="flex items-center gap-3 text-[10px]">
+                <span className="flex items-center gap-1">
+                  <span className="inline-block w-2.5 h-2.5 rounded-sm" style={{ background: color }} />
+                  <span className="text-gray-700">{legend[0]}</span>
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="inline-block w-2.5 h-2.5 rounded-sm" style={{ background: color2 }} />
+                  <span className="text-gray-700">{legend[1]}</span>
+                </span>
               </span>
-              <span className="flex items-center gap-1">
-                <span className="inline-block w-2.5 h-2.5 rounded-sm" style={{ background: color2 }} />
-                <span className="text-gray-700">{legend[1]}</span>
+            )}
+            {months.length > 0 && (
+              <span className="text-[10px] text-gray-500">
+                {fmtMonth(months[0])} → {fmtMonth(months[months.length - 1])}
               </span>
-            </span>
-          )}
-          {months.length > 0 && (
-            <span className="text-[10px] text-gray-500">
-              {fmtMonth(months[0])} → {fmtMonth(months[months.length - 1])}
-            </span>
+            )}
+          </div>
+          {linkHref && (
+            <a
+              href={linkHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-yai-blue hover:text-yai-orange transition-colors"
+            >
+              {linkLabel ?? "Detailed Sheet"} <span aria-hidden>↗</span>
+            </a>
           )}
         </div>
       </div>

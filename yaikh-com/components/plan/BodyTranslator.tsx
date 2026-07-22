@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useLang } from "./LanguageToggle";
-import { BODY_TRANSLATIONS } from "@/lib/i18n-body";
+import { translateBodyAuto } from "@/lib/i18n-body";
 
 /**
  * Walks the <main> element's text nodes and substitutes English with Chinese
@@ -51,34 +51,60 @@ export function BodyTranslator() {
       return nodes;
     };
 
-    const nodes = collect(main);
+    const zhOf = (en: string): string | null => {
+      const trimmed = en.trim();
+      if (!trimmed) return null;
+      const zh = translateBodyAuto(trimmed);
+      if (!zh) return null;
+      const lead = en.match(/^\s*/)?.[0] ?? "";
+      const trail = en.match(/\s*$/)?.[0] ?? "";
+      return lead + zh + trail;
+    };
+
+    const translateNode = (node: Text) => {
+      const current = node.textContent ?? "";
+      let entry = cache.get(node);
+      if (!entry) {
+        entry = { en: current };
+        cache.set(node, entry);
+      } else {
+        // React may rewrite a node we already translated (e.g. "Detail" →
+        // "Hide detail" on toggle). If the current text is neither our own
+        // translation of the cached original nor the original itself, the
+        // node has new English content — re-cache it.
+        const expected = zhOf(entry.en) ?? entry.en;
+        if (current !== expected && current !== entry.en) entry.en = current;
+      }
+      const next = zhOf(entry.en);
+      // Write only on change so re-runs are idempotent (keeps the
+      // MutationObserver from feeding on its own writes).
+      if (next && node.textContent !== next) node.textContent = next;
+    };
 
     const applyZh = () => {
-      for (const node of nodes) {
-        const current = node.textContent ?? "";
-        // First-touch: cache the original English
-        if (!cache.has(node)) cache.set(node, { en: current });
-        const original = cache.get(node)!.en;
-        const trimmed = original.trim();
-        if (!trimmed) continue;
-        const lead = original.match(/^\s*/)?.[0] ?? "";
-        const trail = original.match(/\s*$/)?.[0] ?? "";
-        const zh = BODY_TRANSLATIONS[trimmed];
-        if (zh) {
-          node.textContent = lead + zh + trail;
-        }
-      }
+      for (const node of collect(main)) translateNode(node);
     };
 
     const restoreEn = () => {
-      for (const node of nodes) {
+      for (const node of collect(main)) {
         const cached = cache.get(node);
-        if (cached) node.textContent = cached.en;
+        if (cached && node.textContent !== cached.en) node.textContent = cached.en;
       }
     };
 
-    if (lang === "zh") applyZh();
-    else restoreEn();
+    if (lang === "zh") {
+      applyZh();
+      // Content mounted AFTER the language switch (accordion details, admin-fed
+      // tables, React re-renders) must be translated too — watch the tree.
+      const mo = new MutationObserver(() => {
+        mo.disconnect(); // don't observe our own writes
+        applyZh();
+        mo.observe(main, { childList: true, characterData: true, subtree: true });
+      });
+      mo.observe(main, { childList: true, characterData: true, subtree: true });
+      return () => mo.disconnect();
+    }
+    restoreEn();
   }, [lang]);
 
   return null;
