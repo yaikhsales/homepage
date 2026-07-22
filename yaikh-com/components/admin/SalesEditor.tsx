@@ -379,25 +379,21 @@ export function SalesEditor({ initial }: { initial: Store }) {
         </div>
       </div>
 
-      {/* Actions */}
+      {/* Auto-save status — the only save path. */}
       <div className="flex items-center justify-between gap-3">
         <div className="text-[11px] text-gray-500">
           {store.updatedAt && (
             <>Last saved <strong className="text-yai-navy">{new Date(store.updatedAt).toLocaleString()}</strong> by <strong>{store.updatedBy}</strong></>
           )}
         </div>
-        <div className="flex items-center gap-3">
-          {msg && (
-            <span className={`text-xs font-semibold ${msg.startsWith("✓") ? "text-emerald-600" : "text-red-600"}`}>{msg}</span>
+        <div className="text-xs font-semibold">
+          {loading ? (
+            <span className="text-yai-orange">Saving…</span>
+          ) : msg ? (
+            <span className={msg.startsWith("✓") ? "text-emerald-600" : "text-red-600"}>{msg}</span>
+          ) : (
+            <span className="text-gray-400">Auto-save on · edits persist ~1.5s after you stop typing</span>
           )}
-          <button
-            type="button"
-            onClick={() => save()}
-            disabled={loading}
-            className="bg-yai-orange hover:bg-yai-orange-dark text-white font-extrabold px-6 py-2.5 rounded-lg transition disabled:opacity-50 text-sm"
-          >
-            {loading ? "Saving…" : "Save"}
-          </button>
         </div>
       </div>
     </div>
