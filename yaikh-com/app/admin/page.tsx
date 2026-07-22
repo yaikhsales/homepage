@@ -3,6 +3,7 @@ import { readStore } from "@/lib/budget-store";
 import { readSalaryStore } from "@/lib/salary-store";
 import { readSalesStore } from "@/lib/sales-store";
 import { readExpensesStore } from "@/lib/expenses-store";
+import { PnlOverview } from "@/components/admin/PnlOverview";
 
 // Always re-read the store on each request so admin saves show immediately.
 export const dynamic = "force-dynamic";
@@ -46,6 +47,9 @@ export default async function AdminDashboard() {
           reads on every page load.
         </p>
       </div>
+
+      {/* All-in-one P&L: 3-layer chart + combined monthly sheet */}
+      <PnlOverview />
 
       {/* P&L streams — 4 individual feeders */}
       <div className="mb-2 text-[10px] uppercase tracking-[0.18em] text-gray-500 font-bold">
