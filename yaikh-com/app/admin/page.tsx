@@ -36,7 +36,7 @@ export default async function AdminDashboard() {
   );
 
   return (
-    <div className="p-8 max-w-5xl">
+    <div className="p-8">
       <div className="mb-6">
         <div className="text-[10px] uppercase tracking-[0.2em] text-yai-orange font-bold">
           Yai · Back-end
@@ -55,7 +55,7 @@ export default async function AdminDashboard() {
       <div className="mb-2 text-[10px] uppercase tracking-[0.18em] text-gray-500 font-bold">
         P&amp;L streams
       </div>
-      <div className="grid sm:grid-cols-2 gap-4 mb-8">
+      <div className="grid sm:grid-cols-2 gap-4 mb-8 max-w-5xl">
         <Link
           href="/admin/sales"
           className="group block rounded-xl border-2 border-yai-border bg-white p-5 hover:border-yai-blue hover:shadow-lg transition-all"
@@ -145,7 +145,7 @@ export default async function AdminDashboard() {
       <div className="mb-2 text-[10px] uppercase tracking-[0.18em] text-gray-500 font-bold">
         Aggregate &amp; reporting
       </div>
-      <div className="grid sm:grid-cols-2 gap-4 mb-8">
+      <div className="grid sm:grid-cols-2 gap-4 mb-8 max-w-5xl">
         <Link
           href="/admin/budget"
           className="group block rounded-xl border-2 border-yai-border bg-white p-5 hover:border-yai-blue hover:shadow-lg transition-all"
@@ -182,7 +182,7 @@ export default async function AdminDashboard() {
       <div className="mb-2 text-[10px] uppercase tracking-[0.18em] text-gray-500 font-bold">
         Plan content
       </div>
-      <div className="grid sm:grid-cols-2 gap-4">
+      <div className="grid sm:grid-cols-2 gap-4 max-w-5xl">
         <FeederPlaceholder
           icon="▦"
           title="Factory Module Adoption"
@@ -209,7 +209,7 @@ export default async function AdminDashboard() {
       <div className="mt-10 mb-2 text-[10px] uppercase tracking-[0.18em] text-gray-500 font-bold">
         Strategic DTV · downloads
       </div>
-      <div className="grid sm:grid-cols-2 gap-4 mb-8">
+      <div className="grid sm:grid-cols-2 gap-4 mb-8 max-w-5xl">
         <a
           href="/downloads/yai-plan-deck.pptx"
           download="yai-strategic-dtv.pptx"
