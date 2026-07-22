@@ -208,7 +208,6 @@ export async function PnlOverview() {
               )}
               color={totalPnl >= 0 ? C.netPos : C.netNeg}
               bold
-              bg="bg-red-50/40"
               total={totalPnl}
             />
 
