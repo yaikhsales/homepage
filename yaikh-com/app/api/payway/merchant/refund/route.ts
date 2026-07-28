@@ -14,7 +14,14 @@ export async function POST(req: Request) {
   const amount = Number(b.refund_amount);
   if (!b.tran_id) return NextResponse.json({ error: "Missing tran_id" }, { status: 400 });
   if (!Number.isFinite(amount) || amount <= 0) return NextResponse.json({ error: "Invalid refund amount" }, { status: 400 });
-  const res = await refund(b.tran_id, amount);
+  let res;
+  try {
+    res = await refund(b.tran_id, amount);
+  } catch (e) {
+    // Almost always a bad PAYWAY_RSA_PUBLIC_KEY (mangled PEM / wrong merchant) —
+    // surface it as JSON so the client shows the reason, not an opaque 500.
+    return NextResponse.json({ error: `Refund failed: ${(e as Error).message}` }, { status: 502 });
+  }
   const code = res?.status?.code ?? res?.status;
   if (code === "00" || code === 0 || res?.transaction_status === "REFUNDED") {
     await markPayment(b.tran_id, { status: "REFUNDED", refunded_amount: Number(res?.total_refunded ?? amount) });

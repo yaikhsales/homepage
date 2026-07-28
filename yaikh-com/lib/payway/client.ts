@@ -101,7 +101,9 @@ export async function checkTransaction(tran_id: string) {
   });
 }
 
-const RSA_PUB = process.env.PAYWAY_RSA_PUBLIC_KEY || "";
+// Railway/host env editors often store multiline PEMs with literal "\n" — restore
+// real newlines so crypto.publicEncrypt can parse the key (else refund 500s).
+const RSA_PUB = (process.env.PAYWAY_RSA_PUBLIC_KEY || "").replace(/\\n/g, "\n");
 export function refundConfigured(): boolean {
   return Boolean(RSA_PUB);
 }
