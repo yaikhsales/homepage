@@ -95,10 +95,11 @@ export function PaymentStrip() {
   const brands = [
     { src: "/brand/aba.svg", alt: "ABA" },
     { src: "/brand/khqr.svg", alt: "KHQR" },
-    { src: "/brand/visa.svg", alt: "Visa" },
-    { src: "/brand/mastercard.svg", alt: "Mastercard" },
-    { src: "/brand/unionpay.svg", alt: "UnionPay" },
-    { src: "/brand/jcb.svg", alt: "JCB" },
+    // ponytail: card brands hidden until card payment is live — re-add when accepted.
+    // { src: "/brand/visa.svg", alt: "Visa" },
+    // { src: "/brand/mastercard.svg", alt: "Mastercard" },
+    // { src: "/brand/unionpay.svg", alt: "UnionPay" },
+    // { src: "/brand/jcb.svg", alt: "JCB" },
   ];
   return (
     <div className="flex flex-wrap items-center gap-2">
