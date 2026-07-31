@@ -292,13 +292,14 @@ export default function SubscribeClient({ initialPaidTran }: { initialPaidTran?:
               subtitle="Scan to pay with any banking app"
               icon={<KhqrMark />}
             />
+            {/* ponytail: card payment hidden until it's live — re-enable when accepted.
             <PayMethodRow
               onClick={() => payWithAba("cards")}
               disabled={busy}
               title="Credit / Debit Card"
               subtitle={<CardBrands />}
               icon={<CardMark />}
-            />
+            /> */}
           </div>
 
           {payMsg && (
