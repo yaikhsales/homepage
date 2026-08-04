@@ -438,6 +438,17 @@
     break-before: auto !important;
   }
 
+  /* Scroll-reveal (framer-motion whileInView) leaves content the user never
+   * scrolled past stuck at opacity 0 / translated — blank boxes on paper.
+   * Print is a single static snapshot: force everything visible, in place. */
+  main section,
+  main section * {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+
   h2 { margin-bottom: 0.4cm !important; font-size: 22pt !important; }
   h3 { font-size: 13pt !important; margin-top: 0.3cm; margin-bottom: 0.2cm; }
   h4 { font-size: 11pt !important; }
