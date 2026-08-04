@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useAccordion } from "./Accordion";
+import { usePrintMode } from "@/lib/usePrintMode";
 
 export function Section({
   id,
@@ -25,13 +26,15 @@ export function Section({
 }) {
   const [localOpen, setLocalOpen] = useState(collapsible ? defaultOpen : true);
   const acc = useAccordion();
+  const printing = usePrintMode();
 
   // When an AccordionProvider is present, sections coordinate so only one is
   // open at a time; otherwise each keeps its own local state.
   const controlled = collapsible && acc !== null;
   const pinned = controlled && acc!.pinnedIds.has(id);
   // Open if the accordion selected it OR the user pinned it open.
-  const open = !collapsible ? true : controlled ? acc!.openId === id || pinned : localOpen;
+  // Print/PDF renders every section expanded — nothing to click on paper.
+  const open = !collapsible || printing ? true : controlled ? acc!.openId === id || pinned : localOpen;
   const toggle = () =>
     controlled ? acc!.setOpenId(acc!.openId === id ? null : id) : setLocalOpen((v) => !v);
 

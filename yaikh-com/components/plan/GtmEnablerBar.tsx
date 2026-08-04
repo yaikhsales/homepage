@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import { usePrintMode } from "@/lib/usePrintMode";
 
 /**
  * Collapsible "enabler" bar — same visual pattern as the segment bars below.
@@ -42,7 +43,10 @@ export function GtmEnablerBar({
   badge2Color = "#F37021",
   children,
 }: Props) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenState, setIsOpen] = useState(false);
+  const printing = usePrintMode();
+  // Print/PDF renders the body expanded — the toggle is unreachable on paper.
+  const isOpen = isOpenState || printing;
 
   return (
     <div id={id} className={`rounded-xl border border-yai-border bg-white scroll-mt-8 ${isOpen ? "" : "shadow-sm"}`}>
