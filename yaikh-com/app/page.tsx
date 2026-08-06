@@ -2583,19 +2583,27 @@ function Impact() {
           </AnimatePresence>
         </div>
 
-        {/* Progress dots — click to jump to a frame */}
-        <div className="flex justify-center gap-2.5 mt-6">
+        {/* Progress dots — click to jump manually.
+         * Each dot is wrapped in a taller/wider button so the click target is
+         * comfortable on desktop and mobile, while the visible pill stays
+         * proportional to the design. */}
+        <div className="flex justify-center gap-1 mt-6">
           {CINEMA_FRAMES.map((frame, i) => (
             <button
               key={frame.k}
               onClick={() => setIdx(i)}
               aria-label={t(`dream.${frame.k}.tag`)}
-              className="h-2 rounded-full transition-all duration-500"
-              style={{
-                width: i === idx ? 34 : 8,
-                background: i === idx ? f.accent : "rgba(255,255,255,0.3)",
-              }}
-            />
+              aria-current={i === idx}
+              className="group inline-flex items-center justify-center h-10 px-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-yai-amber rounded-md"
+            >
+              <span
+                className="block h-3.5 rounded-full transition-all duration-500 group-hover:bg-white/60"
+                style={{
+                  width: i === idx ? 68 : 16,
+                  background: i === idx ? f.accent : "rgba(255,255,255,0.35)",
+                }}
+              />
+            </button>
           ))}
         </div>
       </div>
