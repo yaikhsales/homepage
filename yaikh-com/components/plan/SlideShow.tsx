@@ -14,7 +14,7 @@
  *   dot pagination           (bottom; click a dot to jump)
  */
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { exportPdf, exportPptx } from "@/lib/slideshow-export";
 
 export type Slide = {
@@ -24,6 +24,10 @@ export type Slide = {
   caption?: string;
   /** Optional accent color for the slide background gradient. */
   accent?: string;
+  /** Custom slide body — when set, replaces the label + caption layout.
+   *  The gradient background, top-left title, arrows, dots, and counter
+   *  still render around it. */
+  content?: ReactNode;
 };
 
 const DEFAULT_ACCENTS = ["#1E4DAA", "#F37021", "#0A3327", "#6D4FB6", "#10B981", "#B91C1C"];
@@ -183,16 +187,22 @@ export function SlideShow({
           key={idx}
           className="absolute inset-0 flex flex-col items-center justify-center gap-4 slideshow-slide-fade"
         >
-          <div
-            className="font-extrabold leading-none tabular-nums"
-            style={{ color: accent, fontSize: isFull ? "min(45vh, 30vw)" : "min(28vh, 20vw)" }}
-          >
-            {s.label}
-          </div>
-          {s.caption && (
-            <div className="text-white/85 text-lg md:text-xl font-semibold text-center px-6 max-w-3xl">
-              {s.caption}
-            </div>
+          {s.content ? (
+            s.content
+          ) : (
+            <>
+              <div
+                className="font-extrabold leading-none tabular-nums"
+                style={{ color: accent, fontSize: isFull ? "min(45vh, 30vw)" : "min(28vh, 20vw)" }}
+              >
+                {s.label}
+              </div>
+              {s.caption && (
+                <div className="text-white/85 text-lg md:text-xl font-semibold text-center px-6 max-w-3xl">
+                  {s.caption}
+                </div>
+              )}
+            </>
           )}
         </div>
       </button>

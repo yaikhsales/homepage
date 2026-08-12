@@ -43,6 +43,7 @@ import { BodyTranslator } from "@/components/plan/BodyTranslator";
 import { PrintCover } from "@/components/plan/PrintCover";
 import { PrintEndPage } from "@/components/plan/PrintEndPage";
 import { SlideShow } from "@/components/plan/SlideShow";
+import { YQMS_SLIDES } from "@/components/plan/yqms-slides";
 
 // Placeholder deck used by every §08 sub-cluster until real content lands.
 // Four numbered slides so we can test paging / swipe / fullscreen behaviour.
@@ -415,7 +416,7 @@ export default async function PlanPage() {
           <SlideShow title="Digital Audit" slides={TEST_SLIDES} />
         </Section>
         <Section id="customer-yqms"            kicker={kicker(8, "Target Customers · 08.2")} title="YQMS">
-          <SlideShow title="YQMS" slides={TEST_SLIDES} />
+          <SlideShow title="YQMS" slides={YQMS_SLIDES} />
         </Section>
         <Section id="customer-cost-efficiency" kicker={kicker(8, "Target Customers · 08.3")} title="Cost and Efficiency">
           <SlideShow title="Cost and Efficiency" slides={TEST_SLIDES} />
