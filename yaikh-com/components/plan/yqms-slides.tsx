@@ -61,81 +61,190 @@ const OPERATIONS: Tile[] = [
   { file: "ytm-shop.png",   label: "YTM Shop" },
 ];
 
-function TileIcon({ file, label, highlight }: Tile) {
+/* ─────────────────────────────────────────────────────────────────
+ * SLIDE 1 — YQMS positioning slide.
+ *
+ * Presentation-first layout:
+ *   LEFT (60%): eyebrow, big two-line headline (with "quality." accented in
+ *   orange), one-line supporting sentence, three quick-read stat pills.
+ *   RIGHT (40%): a small "solar system" — YQMS at centre, huge and glowing,
+ *   with its Operations neighbours orbiting at half-size. A tiny 39-dot
+ *   "you-are-here" mini-map in the top-right corner acknowledges the full
+ *   constellation without dumping every icon on the audience.
+ *
+ * Everything sizes in vh/vw so the layout scales cleanly from card-size
+ * to fullscreen without labels getting lost.
+ * ───────────────────────────────────────────────────────────────── */
+
+/** Small colored dot used in the corner "you are here" mini-map. */
+function MiniDot({ color, ring }: { color: string; ring?: boolean }) {
   return (
-    <div className={`flex flex-col items-center gap-1 ${highlight ? "scale-110" : ""}`}>
+    <span
+      className="inline-block rounded-full"
+      style={{
+        width: "0.9vh",
+        height: "0.9vh",
+        background: color,
+        outline: ring ? "0.25vh solid #F37021" : "none",
+        outlineOffset: "0.15vh",
+        boxShadow: ring ? "0 0 0.8vh rgba(243,112,33,0.7)" : "none",
+      }}
+    />
+  );
+}
+
+function MiniMap() {
+  // Reproduce the three-cluster layout as coloured dots. YQMS = the ringed one.
+  const admin = new Array(ADMINISTRATION.length).fill(null);
+  const mgmt = new Array(MANAGEMENT.length).fill(null);
+  return (
+    <div className="flex items-start gap-[1.4vh] p-[1.2vh] rounded-md bg-white/[0.04] ring-1 ring-white/10">
+      <div className="flex flex-col items-center gap-[0.6vh]">
+        <span className="text-[1.05vh] font-bold uppercase tracking-wider text-[#7EA0E0]">Admin</span>
+        <div className="grid grid-cols-4 gap-[0.5vh]">
+          {admin.map((_, i) => <MiniDot key={i} color="#1E4DAA" />)}
+        </div>
+      </div>
+      <div className="flex flex-col items-center gap-[0.6vh]">
+        <span className="text-[1.05vh] font-bold uppercase tracking-wider text-[#5FB89A]">Mgmt</span>
+        <div className="grid grid-cols-1 gap-[0.5vh]">
+          {mgmt.map((_, i) => <MiniDot key={i} color="#0A3327" />)}
+        </div>
+      </div>
+      <div className="flex flex-col items-center gap-[0.6vh]">
+        <span className="text-[1.05vh] font-bold uppercase tracking-wider text-yai-orange">Ops</span>
+        <div className="grid grid-cols-2 gap-[0.5vh]">
+          {OPERATIONS.map((t) => (
+            <MiniDot key={t.file} color={t.highlight ? "#F37021" : "#0A3327"} ring={t.highlight} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** One satellite icon in the YQMS solar system. */
+function Satellite({ file, label }: Tile) {
+  return (
+    <div className="flex flex-col items-center gap-[0.6vh]">
       <div
-        className={`w-10 h-10 md:w-11 md:h-11 rounded-md bg-white/[0.04] flex items-center justify-center overflow-hidden ${
-          highlight
-            ? "ring-2 ring-yai-orange shadow-[0_0_18px_rgba(243,112,33,0.55)]"
-            : "ring-1 ring-white/10"
-        }`}
+        className="rounded-lg bg-white/[0.05] ring-1 ring-white/10 flex items-center justify-center overflow-hidden"
+        style={{ width: "6vh", height: "6vh" }}
       >
         <Image
           src={`/experience/IMG/icons/${file}`}
           alt={label}
-          width={40}
-          height={40}
-          className="object-contain w-8 h-8"
+          width={64}
+          height={64}
+          className="object-contain"
+          style={{ width: "4.8vh", height: "4.8vh" }}
           unoptimized
         />
       </div>
-      <span
-        className={`text-[8px] md:text-[9px] uppercase tracking-wide font-bold text-center leading-tight max-w-[54px] ${
-          highlight ? "text-yai-orange" : "text-white/55"
-        }`}
-      >
-        {label}
-      </span>
+      <span className="text-[1.05vh] uppercase tracking-wide font-bold text-white/55">{label}</span>
     </div>
   );
 }
 
-function ClusterCol({
-  title,
-  color,
-  tiles,
-  cols,
-}: {
-  title: string;
-  color: string;
-  tiles: Tile[];
-  cols: number;
-}) {
-  return (
-    <div className="flex flex-col items-center gap-2 min-w-0">
-      <div
-        className="text-[9px] md:text-[10px] uppercase tracking-[0.2em] font-extrabold px-3 py-1 rounded text-white whitespace-nowrap"
-        style={{ background: color }}
-      >
-        {title}
-      </div>
-      <div
-        className="grid gap-1.5 md:gap-2"
-        style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
-      >
-        {tiles.map((t) => (
-          <TileIcon key={t.file} {...t} />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/** Slide 1 — full module constellation. */
+/** Slide 1 — YQMS positioning (rebuilt from a data-dump into a real slide). */
 function ConstellationSlide() {
+  const satellites = OPERATIONS.filter((t) => !t.highlight).slice(0, 5); // FC, 4DP, YPI, MRP, Call Out
+  const remainingOps = OPERATIONS.filter((t) => !t.highlight).length - satellites.length;
+
   return (
-    <div className="flex flex-col items-center justify-center w-full h-full px-4 md:px-8 py-4">
-      <div className="text-white/85 text-[10px] md:text-xs uppercase tracking-[0.22em] font-extrabold mb-3 md:mb-4 text-center">
-        My <span className="text-yai-orange">Yai</span> Task Agent — YQMS lives in the QA constellation
+    <div className="w-full h-full flex flex-col md:flex-row items-stretch">
+      {/* Left — headline column */}
+      <div className="flex-[1.15] flex flex-col justify-center px-[4vh] py-[3vh] gap-[2vh]">
+        <div className="text-[1.4vh] uppercase tracking-[0.28em] font-extrabold text-yai-orange">
+          YQMS · Positioning
+        </div>
+        <div>
+          <div className="font-extrabold text-white leading-[1.02]" style={{ fontSize: "6.5vh" }}>
+            1 of 39 agents.
+          </div>
+          <div className="font-extrabold leading-[1.02]" style={{ fontSize: "6.5vh" }}>
+            <span className="text-white">The one that owns </span>
+            <span className="text-yai-orange">quality.</span>
+          </div>
+        </div>
+        <div className="text-white/70 max-w-[36ch]" style={{ fontSize: "2.1vh", lineHeight: 1.45 }}>
+          Yai Quality Management System sits inside the Operations cluster —
+          the QA specialist among 10 operational agents that keep the factory
+          floor honest.
+        </div>
+        {/* Stat pills */}
+        <div className="flex flex-wrap gap-[1.2vh] pt-[1vh]">
+          {[
+            { n: "39", l: "modules",  c: "#1E4DAA" },
+            { n: "3",  l: "clusters", c: "#0A3327" },
+            { n: "1",  l: "owner",    c: "#F37021" },
+          ].map((p) => (
+            <div
+              key={p.l}
+              className="flex items-baseline gap-[0.6vh] rounded-md px-[1.6vh] py-[0.8vh] bg-white/[0.04] ring-1 ring-white/10"
+            >
+              <span className="font-extrabold text-white" style={{ fontSize: "2.4vh" }}>{p.n}</span>
+              <span className="uppercase tracking-wider font-bold" style={{ fontSize: "1.2vh", color: p.c === "#F37021" ? "#F37021" : "rgba(255,255,255,0.6)" }}>
+                {p.l}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
-      <div className="flex items-start gap-4 md:gap-8 lg:gap-10 justify-center flex-wrap">
-        <ClusterCol title="Administration" color="#1E4DAA" tiles={ADMINISTRATION} cols={4} />
-        <ClusterCol title="Management"     color="#0A3327" tiles={MANAGEMENT}     cols={1} />
-        <ClusterCol title="Operations"     color="#F37021" tiles={OPERATIONS}     cols={2} />
-      </div>
-      <div className="mt-3 md:mt-4 text-white/45 text-[9px] md:text-[10px] tracking-wider">
-        {ADMINISTRATION.length + MANAGEMENT.length + OPERATIONS.length} modules · 3 clusters · 1 owner
+
+      {/* Right — solar system + mini-map */}
+      <div className="flex-1 relative flex flex-col items-center justify-center pr-[3vh] pl-[2vh] py-[3vh]">
+        {/* Mini-map top-right */}
+        <div className="absolute top-[2vh] right-[2vh]">
+          <div className="text-[1.05vh] uppercase tracking-[0.22em] font-extrabold text-white/50 mb-[0.6vh] text-right">
+            You are here
+          </div>
+          <MiniMap />
+        </div>
+
+        {/* Cluster label */}
+        <div className="text-[1.4vh] uppercase tracking-[0.24em] font-extrabold text-yai-orange mb-[2vh]">
+          Operations · QA
+        </div>
+
+        {/* Big YQMS at centre */}
+        <div
+          className="relative rounded-full overflow-hidden ring-4 ring-yai-orange bg-white/[0.06] flex items-center justify-center"
+          style={{
+            width: "22vh",
+            height: "22vh",
+            boxShadow: "0 0 6vh rgba(243,112,33,0.45), inset 0 0 2vh rgba(243,112,33,0.15)",
+          }}
+        >
+          <Image
+            src="/experience/IMG/icons/yqms.png"
+            alt="YQMS"
+            width={220}
+            height={220}
+            className="object-contain"
+            style={{ width: "16vh", height: "16vh" }}
+            unoptimized
+            priority
+          />
+        </div>
+        <div className="mt-[1.4vh] text-white font-extrabold tracking-tight" style={{ fontSize: "2.6vh" }}>
+          YQMS
+        </div>
+        <div className="text-white/55" style={{ fontSize: "1.4vh" }}>
+          Yai Quality Management System
+        </div>
+
+        {/* Satellites — semicircle below */}
+        <div className="mt-[2.5vh] flex items-start justify-center gap-[1.6vh] flex-wrap max-w-full">
+          {satellites.map((s) => (
+            <Satellite key={s.file} {...s} />
+          ))}
+        </div>
+        {remainingOps > 0 && (
+          <div className="mt-[1.4vh] text-white/40 tracking-wider" style={{ fontSize: "1.15vh" }}>
+            + {remainingOps} more Operations agents
+          </div>
+        )}
       </div>
     </div>
   );
