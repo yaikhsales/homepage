@@ -33,7 +33,6 @@ const CLUSTERS: Cluster[] = [
       { alias: "phanny", name: "Koem Phanny" },
       { alias: "khun",   name: "Sin Khun" },
       // Technical support — primary cluster is elsewhere, they assist Admin/HR
-      { alias: "chhay",  name: "Chhang Mengchhay", support: true },
       { alias: "noch",   name: "Dot Sreynach",     support: true },
     ],
   },
@@ -66,7 +65,6 @@ const CLUSTERS: Cluster[] = [
     ],
     members: [
       { alias: "virot",     name: "Van Virot", lead: true },
-      { alias: "menghorng", name: "Sobon Menghorng" },
       { alias: "seangleng", name: "Chhim Seangleng" },
       { alias: "noch",      name: "Dot Sreynoch" },
     ],
@@ -84,7 +82,6 @@ const CLUSTERS: Cluster[] = [
     ],
     members: [
       { alias: "samnang", name: "Samnang Keo", lead: true },
-      { alias: "chhay",   name: "Chhang Mengchhay" },
       { alias: "chetra",  name: "Yoem Chetra" },
     ],
   },

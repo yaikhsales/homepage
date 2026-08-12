@@ -19,11 +19,9 @@ const PHOTO: Record<string, string> = {
   "Dilan Lakmal": "/assets/about-us/teams/dilan.jpg",
   "Samipath Yasomi": "/assets/about-us/teams/yasomi.png",
   "Pich Daly": "/assets/about-us/teams/daly.png",
-  "Chhang Mengchhay": "/assets/about-us/teams/chhay.png",
   "Chhim Seangleng": "/assets/about-us/teams/seangleng.jpg",
   "Koem Chichhong": "/assets/about-us/teams/chhorng.jpg",
   "Yeom Chetra": "/assets/about-us/teams/Yeom-Chetra.jpeg",
-  "Sobon Menghorng": "/assets/about-us/teams/Sobon-Menghorng.jpg",
   "Sin Khun": "/assets/about-us/teams/Sin-Khun.jpeg",
   "Proeurng Sokhim": "/assets/about-us/teams/Proeurng-Sokhim.png",
   "Voun Thida": "/assets/about-us/teams/Voun-Thida.png",
@@ -60,7 +58,6 @@ const TEAMS: Team[] = [
     members: [
       { name: "Koem Phanny", role: "HR, Pay, Legal & HR Training" },
       { name: "Sin Khun", role: "Hardware Integration · Ai Vision · CE Trainer" },
-      { name: "Chhang Mengchhay", role: "App Dev · E-commerce · Banking · E-payment", support: true },
       { name: "Dot Sreynoch", role: "Digital Audit", support: true },
     ],
   },
@@ -87,7 +84,6 @@ const TEAMS: Team[] = [
     accent: "#2D9D9A",
     lead: { name: "Samnang Keo", role: "Lead App Dev · Ai Server Master" },
     members: [
-      { name: "Chhang Mengchhay", role: "App Dev · E-commerce · Banking · E-payment" },
       { name: "Yeom Chetra", role: "AIoT Hardware · Production App · Sensors" },
     ],
   },
