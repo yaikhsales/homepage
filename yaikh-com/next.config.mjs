@@ -9,6 +9,33 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ["@sparticuz/chromium", "puppeteer-core"],
   },
+  // pptxgenjs is used client-side by the SlideShow export helper. Its
+  // ES bundle contains `import 'node:fs'` / `import 'node:https'` from
+  // its Node code path. Webpack 5's `resolve.fallback` doesn't apply to
+  // the `node:` URI scheme — those requests need an IgnorePlugin (or the
+  // static `import` never runs at runtime anyway because pptxgenjs's
+  // browser code path never reaches it). We do BOTH: the IgnorePlugin
+  // strips the request at bundle time, and the bare-specifier fallbacks
+  // cover the non-schemed variants.
+  webpack: (config, { isServer, webpack }) => {
+    if (!isServer) {
+      config.resolve = config.resolve || {};
+      config.resolve.fallback = {
+        ...(config.resolve.fallback || {}),
+        fs: false,
+        https: false,
+        os: false,
+        path: false,
+      };
+      config.plugins = config.plugins || [];
+      config.plugins.push(
+        new webpack.IgnorePlugin({
+          resourceRegExp: /^node:(fs|https|os|path|http|url|zlib|stream|util|crypto|buffer|child_process|events|assert)$/,
+        }),
+      );
+    }
+    return config;
+  },
   async headers() {
     // Portal pages (/plan, /admin) are confidential — strip them from
     // public crawlers and add baseline hardening. The marketing pages at

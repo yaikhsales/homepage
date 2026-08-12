@@ -15,6 +15,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { exportPdf, exportPptx } from "@/lib/slideshow-export";
 
 export type Slide = {
   /** Big label (e.g. "1", "2" for placeholder decks). */
@@ -137,13 +138,28 @@ export function SlideShow({
   const s = slides[idx];
   const accent = s.accent ?? DEFAULT_ACCENTS[idx % DEFAULT_ACCENTS.length];
 
+  const [dl, setDl] = useState<null | "pdf" | "pptx">(null);
+  const download = async (kind: "pdf" | "pptx") => {
+    if (dl) return;
+    setDl(kind);
+    try {
+      if (kind === "pdf") await exportPdf(slides, title);
+      else await exportPptx(slides, title);
+    } catch (err) {
+      console.warn(`[SlideShow] ${kind} export failed:`, err);
+    } finally {
+      setDl(null);
+    }
+  };
+
   return (
+    <div className={className}>
     <div
       ref={containerRef}
       tabIndex={0}
       className={`relative rounded-xl overflow-hidden border border-yai-border bg-yai-navy select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-yai-orange ${
         isFull ? "w-screen h-screen rounded-none border-0" : ""
-      } ${className}`}
+      }`}
       style={isFull ? undefined : { aspectRatio: "16 / 9" }}
       onPointerDown={onPointerDown}
       onPointerUp={onPointerUp}
@@ -254,6 +270,44 @@ export function SlideShow({
           {idx + 1} / {total}
         </div>
       </div>
+    </div>
+
+    {/* Download row — landscape PDF + landscape PPTX. Hidden in fullscreen
+     *  because there's nothing to click when the browser has taken over the
+     *  viewport. Also hidden on paper since printing a slideshow already
+     *  captures the content. */}
+    {!isFull && (
+      <div className="mt-3 flex justify-end gap-2 no-print">
+        <button
+          type="button"
+          onClick={() => download("pdf")}
+          disabled={dl !== null}
+          className="inline-flex items-center gap-1.5 rounded-md border border-yai-border bg-white px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-wider text-yai-navy hover:border-yai-blue hover:text-yai-blue transition-colors disabled:opacity-50"
+          aria-label={`Download ${title} as landscape PDF`}
+        >
+          <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <path d="M7 10l5 5 5-5" />
+            <path d="M12 15V3" />
+          </svg>
+          {dl === "pdf" ? "Preparing…" : "PDF"}
+        </button>
+        <button
+          type="button"
+          onClick={() => download("pptx")}
+          disabled={dl !== null}
+          className="inline-flex items-center gap-1.5 rounded-md border border-yai-border bg-white px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-wider text-yai-navy hover:border-yai-orange hover:text-yai-orange transition-colors disabled:opacity-50"
+          aria-label={`Download ${title} as landscape PowerPoint`}
+        >
+          <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <path d="M7 10l5 5 5-5" />
+            <path d="M12 15V3" />
+          </svg>
+          {dl === "pptx" ? "Preparing…" : "PPTX"}
+        </button>
+      </div>
+    )}
     </div>
   );
 }
