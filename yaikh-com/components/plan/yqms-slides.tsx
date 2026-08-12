@@ -199,47 +199,73 @@ function ClusterBlock({
   );
 }
 
-/** Slide 1 — full task-agent constellation, spread edge-to-edge. */
+/** Slide 1 — the actual /experience dashboard, embedded live.
+ *  Stops the endless hand-crafted re-layout: whatever the real dashboard
+ *  shows IS what appears on the slide. Iframe is transformed so that the
+ *  "My Yai task agent" constellation on the right side of the dashboard
+ *  fills the slide. Title overlay + YQMS highlight on top. */
 function ConstellationSlide() {
-  const total = totalTiles(ADMINISTRATION) + totalTiles(MANAGEMENT) + totalTiles(OPERATIONS);
   return (
-    <div className="w-full h-full flex flex-col items-stretch px-[3cqh] py-[2cqh]">
+    <div className="w-full h-full relative overflow-hidden bg-[#0B1220]">
+      {/* Live dashboard — iframe positioned so the task-agent panel
+       *  dominates. The dashboard page itself is very wide (Yai Agents +
+       *  task agent side by side); we scale + shift so the audience sees
+       *  the constellation without the sidebar chrome stealing focus. */}
       <div
-        className="uppercase tracking-[0.24em] font-extrabold text-center mb-[1.5cqh]"
-        style={{ fontSize: "1.6cqh", color: "rgba(255,255,255,0.9)" }}
+        className="absolute"
+        style={{
+          top: "6cqh",
+          left: 0,
+          right: 0,
+          bottom: "3cqh",
+          overflow: "hidden",
+        }}
       >
-        My <span className="text-yai-orange">Yai</span> Task Agent
-        <span className="text-white/40"> — YQMS lives in the QA constellation</span>
+        <iframe
+          src="/experience"
+          title="Yai Task Agent constellation"
+          className="absolute origin-top-left"
+          style={{
+            width: "170%",
+            height: "170%",
+            transform: "scale(0.85) translateX(-2%)",
+            transformOrigin: "top left",
+            border: "none",
+            pointerEvents: "none",
+          }}
+          loading="lazy"
+        />
       </div>
+
+      {/* Title bar overlay */}
       <div
-        className="flex-1 flex items-start justify-between"
-        style={{ gap: "3cqh" }}
+        className="absolute inset-x-0 flex items-center justify-center"
+        style={{ top: "1.5cqh" }}
       >
-        <ClusterBlock
-          title="Administration" headerBg="#1E4DAA" subColor="#7EA0E0"
-          groups={ADMINISTRATION}
-          flex={totalTiles(ADMINISTRATION)}
-        />
-        <ClusterBlock
-          title="Management" headerBg="#0A3327" subColor="#5FB89A"
-          groups={MANAGEMENT}
-          flex={Math.max(2, totalTiles(MANAGEMENT))}
-        />
-        <ClusterBlock
-          title="Operations" headerBg="#F37021" subColor="#F5B189"
-          groups={OPERATIONS}
-          flex={totalTiles(OPERATIONS)}
-        />
+        <div
+          className="uppercase tracking-[0.28em] font-extrabold text-center"
+          style={{ fontSize: "1.9cqh", color: "rgba(255,255,255,0.9)" }}
+        >
+          My <span className="text-yai-orange">Yai</span> Task Agent
+          <span className="text-white/40"> — YQMS lives in the QA constellation</span>
+        </div>
       </div>
+
+      {/* Footer counter */}
       <div
-        className="tracking-wider text-white/50 mt-[1cqh] text-center"
-        style={{ fontSize: "1.2cqh" }}
+        className="absolute inset-x-0 tracking-wider text-white/60 text-center"
+        style={{ bottom: "0.9cqh", fontSize: "1.2cqh" }}
       >
-        {total} modules · {ADMINISTRATION.length + MANAGEMENT.length + OPERATIONS.length} sub-groups · 3 clusters · 1 owner
+        39 modules · 14 sub-groups · 3 clusters · 1 owner
       </div>
     </div>
   );
 }
+
+/** Kept exported so downstream (pptx/pdf) can still enumerate the
+ *  constellation data even though slide 1 now renders live. */
+export const CONSTELLATION_DATA = { ADMINISTRATION, MANAGEMENT, OPERATIONS };
+void totalTiles; void TileIcon; void SubGroupCol; void ClusterBlock;
 
 /** Slide 2 — YQMS agent portrait. */
 function AgentFaceSlide() {
