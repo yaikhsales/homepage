@@ -59,7 +59,7 @@ const NAV: NavItem[] = [
       { id: "customer-digital-audit",   label: "Digital Audit" },
       { id: "customer-yqms",            label: "YQMS" },
       { id: "customer-cost-efficiency", label: "Cost and Efficiency" },
-      { id: "customer-yahr",            label: "YAHR" },
+      { id: "customer-yhr",            label: "YHR" },
     ],
   },
   { id: "gtm",               label: "Go-to-Market Milestones", labelKey: "nav.gtm" },
@@ -408,7 +408,7 @@ export default async function PlanPage() {
         <Section id="customer-cost-efficiency" kicker={kicker(8, "Target Customers · 08.3")} title="Cost and Efficiency" collapsible>
           <p className="text-sm text-gray-500 italic">Content coming.</p>
         </Section>
-        <Section id="customer-yahr"            kicker={kicker(8, "Target Customers · 08.4")} title="YAHR" collapsible>
+        <Section id="customer-yhr"            kicker={kicker(8, "Target Customers · 08.4")} title="YHR" collapsible>
           <p className="text-sm text-gray-500 italic">Content coming.</p>
         </Section>
 
