@@ -17,21 +17,25 @@ type SubGroup = { name: string; tiles: Tile[] };
 
 /* Sub-groups mirror the live dashboard exactly. */
 
+/* Labels are FULL names, matching the live dashboard exactly (no
+ * abbreviations — user flagged 'Ticket' vs 'Support Ticket' etc. as
+ * missing / mixed-up). */
+
 const ADMINISTRATION: SubGroup[] = [
   { name: "Accountant", tiles: [
     { file: "accountant.png",     label: "Accountant" },
     { file: "iews.png",           label: "IEWS" },
     { file: "salary-bill.png",    label: "Salary Bill" },
-    { file: "shipping-bill.png",  label: "Ship Bill" },
+    { file: "shipping-bill.png",  label: "Shipping Bill" },
     { file: "speak-up.png",       label: "Speak Up" },
     { file: "fire-alarm.png",     label: "Fire Alarm" },
     { file: "cctv.png",           label: "CCTV" },
   ]},
   { name: "Billing", tiles: [
-    { file: "purchase-request.png", label: "Purchase" },
+    { file: "purchase-request.png", label: "Purchase Request" },
     { file: "bill-claim.png",       label: "Bill Claim" },
     { file: "training.png",         label: "Training" },
-    { file: "temp-worker.png",      label: "Temp Worker" },
+    { file: "temp-worker.png",      label: "Temporary Worker" },
     { file: "car-booking.png",      label: "Car Booking" },
     { file: "chemical.png",         label: "Chemical" },
   ]},
@@ -39,34 +43,34 @@ const ADMINISTRATION: SubGroup[] = [
     { file: "yhr.png",          label: "YHR" },
     { file: "org-chart.png",    label: "Org Chart" },
     { file: "gate-pass.png",    label: "Gate Pass" },
-    { file: "meeting-room.png", label: "Meeting" },
+    { file: "meeting-room.png", label: "Meeting Room" },
   ]},
-  { name: "Admin", tiles: [
-    { file: "support-ticket.png", label: "Ticket" },
+  { name: "ADMIN", tiles: [
+    { file: "support-ticket.png", label: "Support Ticket" },
     { file: "y-shop.png",         label: "Y Shop" },
     { file: "air.png",            label: "Air" },
     { file: "water.png",          label: "Water" },
     { file: "waste.png",          label: "Waste" },
   ]},
   { name: "CSR", tiles: [
-    { file: "digital-audit.png", label: "Audit" },
+    { file: "digital-audit.png", label: "Digital Audit" },
     { file: "energy.png",        label: "Energy" },
   ]},
   { name: "Shipping", tiles: [
     { file: "shipping.png", label: "Shipping" },
   ]},
   { name: "E-GOV", tiles: [
-    { file: "e-government.png", label: "E-GOV" },
+    { file: "e-government.png", label: "E-Government" },
   ]},
 ];
 
 const MANAGEMENT: SubGroup[] = [
   { name: "Dashboard", tiles: [
-    { file: "management-dashboard.png", label: "Dashboard" },
+    { file: "management-dashboard.png", label: "Management Dashboard" },
     { file: "sop.png",                  label: "SOP" },
   ]},
   { name: "Data Scientist", tiles: [
-    { file: "system-analysis.png", label: "Sys Analysis" },
+    { file: "system-analysis.png", label: "System Analysis" },
   ]},
 ];
 
@@ -76,10 +80,10 @@ const OPERATIONS: SubGroup[] = [
     { file: "call-out.png", label: "Call Out" },
   ]},
   { name: "Production", tiles: [
-    { file: "fc.png",   label: "FC" },
-    { file: "ywip.png", label: "YWIP" },
-    { file: "ce.png",   label: "CE" },
-    { file: "ytm.png",  label: "YTM" },
+    { file: "fc.png",       label: "FC" },
+    { file: "ywip.png",     label: "YWIP" },
+    { file: "ce.png",       label: "CE" },
+    { file: "ytm.png",      label: "YTM" },
     { file: "ytm-shop.png", label: "YTM Shop" },
   ]},
   { name: "4DP", tiles: [{ file: "4dp.png", label: "4DP" }] },
@@ -117,11 +121,12 @@ function TileIcon({ file, label, highlight }: Tile) {
         />
       </div>
       <span
-        className="uppercase tracking-wide font-bold text-center leading-tight"
+        className="uppercase tracking-wide font-bold text-center leading-[1.1]"
         style={{
-          fontSize: "1.3cqh",
-          color: highlight ? "#F37021" : "rgba(255,255,255,0.72)",
+          fontSize: "1.15cqh",
+          color: highlight ? "#F37021" : "rgba(255,255,255,0.75)",
           maxWidth: "9cqh",
+          wordBreak: "keep-all",
         }}
       >
         {label}
