@@ -5,7 +5,7 @@
  * exactly like the live dashboard. YQMS in the QA column is ringed in
  * orange with a glow so it "lives" visibly in the constellation.
  * Tiles size in vh so they scale up to a readable presentation size in
- * fullscreen (icon ≈ 7vh, label ≈ 1.4vh).
+ * fullscreen (icon ≈ 7cqh, label ≈ 1.4cqh).
  *
  * Slide 2 — the YQMS agent portrait, big and centred. */
 
@@ -65,15 +65,15 @@ const OPERATIONS: Tile[] = [
 
 function TileIcon({ file, label, highlight }: Tile) {
   return (
-    <div className="flex flex-col items-center gap-[0.6vh]">
+    <div className="flex flex-col items-center gap-[0.6cqh]">
       <div
         className="rounded-lg bg-white/[0.05] flex items-center justify-center overflow-hidden"
         style={{
-          width: "7vh",
-          height: "7vh",
-          outline: highlight ? "0.3vh solid #F37021" : "0.12vh solid rgba(255,255,255,0.12)",
-          outlineOffset: highlight ? "0.2vh" : 0,
-          boxShadow: highlight ? "0 0 2.5vh rgba(243,112,33,0.6), inset 0 0 1.2vh rgba(243,112,33,0.15)" : undefined,
+          width: "7cqh",
+          height: "7cqh",
+          outline: highlight ? "0.3cqh solid #F37021" : "0.12cqh solid rgba(255,255,255,0.12)",
+          outlineOffset: highlight ? "0.2cqh" : 0,
+          boxShadow: highlight ? "0 0 2.5cqh rgba(243,112,33,0.6), inset 0 0 1.2cqh rgba(243,112,33,0.15)" : undefined,
         }}
       >
         <Image
@@ -82,16 +82,16 @@ function TileIcon({ file, label, highlight }: Tile) {
           width={80}
           height={80}
           className="object-contain"
-          style={{ width: "5.5vh", height: "5.5vh" }}
+          style={{ width: "5.5cqh", height: "5.5cqh" }}
           unoptimized
         />
       </div>
       <span
         className="uppercase tracking-wide font-bold text-center leading-tight"
         style={{
-          fontSize: "1.35vh",
+          fontSize: "1.35cqh",
           color: highlight ? "#F37021" : "rgba(255,255,255,0.72)",
-          maxWidth: "8vh",
+          maxWidth: "8cqh",
         }}
       >
         {label}
@@ -112,12 +112,12 @@ function ClusterCol({
   cols: number;
 }) {
   return (
-    <div className="flex flex-col items-center gap-[1.5vh]">
+    <div className="flex flex-col items-center gap-[1.5cqh]">
       <div
         className="uppercase tracking-[0.22em] font-extrabold text-white whitespace-nowrap rounded"
         style={{
-          fontSize: "1.5vh",
-          padding: "0.6vh 1.8vh",
+          fontSize: "1.5cqh",
+          padding: "0.6cqh 1.8cqh",
           background: color,
         }}
       >
@@ -127,7 +127,7 @@ function ClusterCol({
         className="grid"
         style={{
           gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
-          gap: "1.4vh 1.6vh",
+          gap: "1.4cqh 1.6cqh",
         }}
       >
         {tiles.map((t) => (
@@ -141,22 +141,22 @@ function ClusterCol({
 /** Slide 1 — full module constellation, sized for presentation. */
 function ConstellationSlide() {
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center px-[3vh] py-[2vh]">
+    <div className="w-full h-full flex flex-col items-center justify-center px-[3cqh] py-[2cqh]">
       <div
-        className="uppercase tracking-[0.24em] font-extrabold text-center mb-[2vh]"
-        style={{ fontSize: "1.6vh", color: "rgba(255,255,255,0.85)" }}
+        className="uppercase tracking-[0.24em] font-extrabold text-center mb-[2cqh]"
+        style={{ fontSize: "1.6cqh", color: "rgba(255,255,255,0.85)" }}
       >
         My <span className="text-yai-orange">Yai</span> Task Agent
         <span className="text-white/40"> — YQMS lives in the QA constellation</span>
       </div>
-      <div className="flex items-start justify-center" style={{ gap: "4vh" }}>
+      <div className="flex items-start justify-center" style={{ gap: "4cqh" }}>
         <ClusterCol title="Administration" color="#1E4DAA" tiles={ADMINISTRATION} cols={4} />
         <ClusterCol title="Management"     color="#0A3327" tiles={MANAGEMENT}     cols={1} />
         <ClusterCol title="Operations"     color="#F37021" tiles={OPERATIONS}     cols={2} />
       </div>
       <div
-        className="tracking-wider text-white/45 mt-[1.8vh]"
-        style={{ fontSize: "1.25vh" }}
+        className="tracking-wider text-white/45 mt-[1.8cqh]"
+        style={{ fontSize: "1.25cqh" }}
       >
         {ADMINISTRATION.length + MANAGEMENT.length + OPERATIONS.length} modules · 3 clusters · 1 owner
       </div>
@@ -169,19 +169,19 @@ function AgentFaceSlide() {
   return (
     <div className="flex flex-col items-center justify-center w-full h-full">
       <div
-        className="uppercase tracking-[0.24em] font-extrabold text-white/70 mb-[2vh]"
-        style={{ fontSize: "1.6vh" }}
+        className="uppercase tracking-[0.24em] font-extrabold text-white/70 mb-[2cqh]"
+        style={{ fontSize: "1.6cqh" }}
       >
         Meet the YQMS agent
       </div>
       <div
         className="relative rounded-full overflow-hidden ring-4 ring-yai-orange/70"
         style={{
-          width: "56vh",
-          height: "56vh",
+          width: "56cqh",
+          height: "56cqh",
           maxWidth: "520px",
           maxHeight: "520px",
-          boxShadow: "0 0 6vh rgba(243,112,33,0.45)",
+          boxShadow: "0 0 6cqh rgba(243,112,33,0.45)",
         }}
       >
         <Image
@@ -195,12 +195,12 @@ function AgentFaceSlide() {
         />
       </div>
       <div
-        className="mt-[2vh] font-extrabold tracking-tight text-white"
-        style={{ fontSize: "3vh" }}
+        className="mt-[2cqh] font-extrabold tracking-tight text-white"
+        style={{ fontSize: "3cqh" }}
       >
         YQMS
       </div>
-      <div className="text-white/60" style={{ fontSize: "1.6vh" }}>
+      <div className="text-white/60" style={{ fontSize: "1.6cqh" }}>
         Yai Quality Management System
       </div>
     </div>
