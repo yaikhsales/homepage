@@ -207,10 +207,11 @@ function ClusterBlock({
 function ConstellationSlide() {
   return (
     <div className="w-full h-full relative overflow-hidden bg-[#0B1220]">
-      {/* Live dashboard — iframe positioned so the task-agent panel
-       *  dominates. The dashboard page itself is very wide (Yai Agents +
-       *  task agent side by side); we scale + shift so the audience sees
-       *  the constellation without the sidebar chrome stealing focus. */}
+      {/* Live dashboard — iframe zoomed in on the "My Yai task agent"
+       *  constellation so it CENTRES and FILLS the slide instead of
+       *  showing the Yai Agents sidebar + empty right margin at reduced
+       *  size. The zoom is anchored to the constellation's centre point
+       *  on the /experience layout (~60% from left, ~50% from top). */}
       <div
         className="absolute"
         style={{
@@ -224,14 +225,12 @@ function ConstellationSlide() {
         <iframe
           src="/experience"
           title="Yai Task Agent constellation"
-          className="absolute origin-top-left"
+          className="absolute inset-0 w-full h-full"
           style={{
-            width: "170%",
-            height: "170%",
-            transform: "scale(0.85) translateX(-2%)",
-            transformOrigin: "top left",
             border: "none",
             pointerEvents: "none",
+            transform: "scale(1.55)",
+            transformOrigin: "62% 48%",
           }}
           loading="lazy"
         />
