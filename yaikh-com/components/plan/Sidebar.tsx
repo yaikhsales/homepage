@@ -8,7 +8,13 @@ import { LanguageToggle, useLang } from "./LanguageToggle";
 import { translate } from "@/lib/i18n";
 import { useAccordion } from "./Accordion";
 
-export type NavItem = { id: string; label: string; labelKey?: string };
+export type NavItem = {
+  id: string;
+  label: string;
+  labelKey?: string;
+  /** Optional sub-items, rendered indented under the parent (e.g. 08.1, 08.2). */
+  children?: Array<{ id: string; label: string; labelKey?: string }>;
+};
 
 export function Sidebar({
   items,
@@ -56,10 +62,11 @@ export function Sidebar({
     return () => mq.removeEventListener("change", update);
   }, []);
 
-  // Scroll-spy
+  // Scroll-spy — includes children so 08.1/08.2 highlight when in view.
   useEffect(() => {
-    const sections = items
-      .map((it) => document.getElementById(it.id))
+    const ids = items.flatMap((it) => [it.id, ...(it.children?.map((c) => c.id) ?? [])]);
+    const sections = ids
+      .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => !!el);
     if (!sections.length) return;
 
@@ -196,29 +203,55 @@ export function Sidebar({
         <nav className="py-3 px-3 space-y-0.5 text-sm">
           {items.map((it, i) => {
             const isActive = it.id === active;
+            const num = String(i + 1).padStart(2, "0");
+            const childActive = !!it.children?.some((c) => c.id === active);
+            const showChildren = !!it.children && (isActive || childActive);
             return (
-              <a
-                key={it.id}
-                href={`#${it.id}`}
-                onClick={onJump(it.id)}
-                className={`relative block py-2 pl-4 pr-2 rounded transition-all duration-200 ${
-                  isActive
-                    ? "text-white font-semibold bg-yai-blue/10"
-                    : "text-white/60 hover:text-white"
-                }`}
-              >
-                {isActive && (
-                  <motion.span
-                    layoutId="nav-marker"
-                    className="absolute left-0 top-1 bottom-1 w-[3px] bg-yai-orange rounded-full"
-                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                  />
+              <div key={it.id}>
+                <a
+                  href={`#${it.id}`}
+                  onClick={onJump(it.id)}
+                  className={`relative block py-2 pl-4 pr-2 rounded transition-all duration-200 ${
+                    isActive
+                      ? "text-white font-semibold bg-yai-blue/10"
+                      : "text-white/60 hover:text-white"
+                  }`}
+                >
+                  {isActive && (
+                    <motion.span
+                      layoutId="nav-marker"
+                      className="absolute left-0 top-1 bottom-1 w-[3px] bg-yai-orange rounded-full"
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                  <span className="text-yai-blue font-bold mr-2">{num}</span>
+                  {it.labelKey ? t(it.labelKey, it.label) : it.label}
+                </a>
+                {showChildren && (
+                  <div className="mt-0.5 mb-1.5 space-y-0.5">
+                    {it.children!.map((c, ci) => {
+                      const cActive = c.id === active;
+                      return (
+                        <a
+                          key={c.id}
+                          href={`#${c.id}`}
+                          onClick={onJump(c.id)}
+                          className={`block py-1.5 pl-10 pr-2 rounded text-[13px] transition-all duration-200 ${
+                            cActive
+                              ? "text-white font-semibold bg-yai-blue/15"
+                              : "text-white/50 hover:text-white/90"
+                          }`}
+                        >
+                          <span className="text-yai-orange/80 font-bold mr-2">
+                            {num}.{ci + 1}
+                          </span>
+                          {c.labelKey ? t(c.labelKey, c.label) : c.label}
+                        </a>
+                      );
+                    })}
+                  </div>
                 )}
-                <span className="text-yai-blue font-bold mr-2">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                {it.labelKey ? t(it.labelKey, it.label) : it.label}
-              </a>
+              </div>
             );
           })}
         </nav>
