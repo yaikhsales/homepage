@@ -15,7 +15,6 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 
 export type Slide = {
   /** Big label (e.g. "1", "2" for placeholder decks). */
@@ -107,13 +106,6 @@ export function SlideShow({
   const s = slides[idx];
   const accent = s.accent ?? DEFAULT_ACCENTS[idx % DEFAULT_ACCENTS.length];
 
-  // Framer-motion slide transition — slides in from the side of travel.
-  const variants = {
-    enter: (d: number) => ({ x: d > 0 ? 80 : -80, opacity: 0 }),
-    center: { x: 0, opacity: 1 },
-    exit: (d: number) => ({ x: d > 0 ? -80 : 80, opacity: 0 }),
-  };
-
   return (
     <div
       ref={containerRef}
@@ -135,30 +127,27 @@ export function SlideShow({
           background: `radial-gradient(circle at 30% 20%, ${accent}55 0%, transparent 60%), linear-gradient(135deg, #0A1F47 0%, #1E4DAA 100%)`,
         }}
       >
-        <AnimatePresence mode="wait" custom={dir} initial={false}>
-          <motion.div
-            key={idx}
-            custom={dir}
-            variants={variants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute inset-0 flex flex-col items-center justify-center gap-4"
+        {/* Slide body — `key={idx}` gives every slide its own DOM node, so the
+         *  fade-in CSS animation restarts on each change and stale content
+         *  can't linger. No framer-motion / AnimatePresence involvement here
+         *  because those caused the label to stop updating under rapid clicks.
+         */}
+        <div
+          key={idx}
+          className="absolute inset-0 flex flex-col items-center justify-center gap-4 slideshow-slide-fade"
+        >
+          <div
+            className="font-extrabold leading-none tabular-nums"
+            style={{ color: accent, fontSize: isFull ? "min(45vh, 30vw)" : "min(28vh, 20vw)" }}
           >
-            <div
-              className="font-extrabold leading-none tabular-nums"
-              style={{ color: accent, fontSize: isFull ? "min(45vh, 30vw)" : "min(28vh, 20vw)" }}
-            >
-              {s.label}
+            {s.label}
+          </div>
+          {s.caption && (
+            <div className="text-white/85 text-lg md:text-xl font-semibold text-center px-6 max-w-3xl">
+              {s.caption}
             </div>
-            {s.caption && (
-              <div className="text-white/85 text-lg md:text-xl font-semibold text-center px-6 max-w-3xl">
-                {s.caption}
-              </div>
-            )}
-          </motion.div>
-        </AnimatePresence>
+          )}
+        </div>
       </button>
 
       {/* Top-left: section title (for fullscreen context) */}
