@@ -68,21 +68,52 @@ export function SlideShow({
     return () => window.removeEventListener("keydown", onKey);
   }, [prev, next, isFull]);
 
-  // Sync internal `isFull` with the browser's fullscreen state so ESC/dev-tools
-  // exit doesn't leave the UI stuck in fullscreen mode.
+  // Sync internal `isFull` with the browser's fullscreen state so ESC (or an
+  // out-of-band exit) doesn't leave the UI stuck in fullscreen mode.
+  // Listen for both the standard event and the -webkit variant Safari fires.
   useEffect(() => {
-    const sync = () => setIsFull(!!document.fullscreenElement);
+    // Handle both standard + webkit-prefixed Safari APIs.
+    const doc = document as Document & {
+      webkitFullscreenElement?: Element | null;
+    };
+    const sync = () => setIsFull(!!(doc.fullscreenElement ?? doc.webkitFullscreenElement));
     document.addEventListener("fullscreenchange", sync);
-    return () => document.removeEventListener("fullscreenchange", sync);
+    document.addEventListener("webkitfullscreenchange", sync);
+    return () => {
+      document.removeEventListener("fullscreenchange", sync);
+      document.removeEventListener("webkitfullscreenchange", sync);
+    };
   }, []);
 
   const toggleFull = () => {
-    const el = containerRef.current;
+    const el = containerRef.current as (HTMLDivElement & {
+      webkitRequestFullscreen?: () => Promise<void> | void;
+    }) | null;
     if (!el) return;
-    if (document.fullscreenElement) {
-      document.exitFullscreen().catch(() => {});
-    } else {
-      el.requestFullscreen?.().catch(() => {});
+    const doc = document as Document & {
+      webkitFullscreenElement?: Element | null;
+      webkitExitFullscreen?: () => Promise<void> | void;
+    };
+    const alreadyFull = !!(doc.fullscreenElement ?? doc.webkitFullscreenElement);
+    try {
+      if (alreadyFull) {
+        const p = doc.exitFullscreen ? doc.exitFullscreen() : doc.webkitExitFullscreen?.();
+        (p as Promise<void> | undefined)?.catch?.((err) => {
+          console.warn("[SlideShow] exitFullscreen failed:", err);
+        });
+      } else {
+        const req = el.requestFullscreen ?? el.webkitRequestFullscreen;
+        if (!req) {
+          console.warn("[SlideShow] Fullscreen API not supported");
+          return;
+        }
+        const p = req.call(el);
+        (p as Promise<void> | undefined)?.catch?.((err) => {
+          console.warn("[SlideShow] requestFullscreen failed:", err);
+        });
+      }
+    } catch (err) {
+      console.warn("[SlideShow] fullscreen toggle threw:", err);
     }
   };
 
