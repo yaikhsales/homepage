@@ -168,7 +168,11 @@ export function SlideShow({
       onPointerDown={onPointerDown}
       onPointerUp={onPointerUp}
     >
-      {/* Slide surface — click centre to advance (does not overlap buttons). */}
+      {/* Slide surface — click centre to advance (does not overlap buttons).
+       *  `container-type: size` here lets child slides size themselves with
+       *  `cqh` / `cqw` units, which track the slide's dimensions instead of
+       *  the viewport — critical because the slide is 16:9 both in card
+       *  mode (~640px tall) and fullscreen (~1080px tall). */}
       <button
         type="button"
         onClick={next}
@@ -176,6 +180,7 @@ export function SlideShow({
         className="absolute inset-0 w-full h-full text-white focus:outline-none"
         style={{
           background: `radial-gradient(circle at 30% 20%, ${accent}55 0%, transparent 60%), linear-gradient(135deg, #0A1F47 0%, #1E4DAA 100%)`,
+          containerType: "size",
         }}
       >
         {/* Slide body — `key={idx}` gives every slide its own DOM node, so the
