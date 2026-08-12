@@ -42,6 +42,16 @@ import { FloatingGlass } from "@/components/plan/FloatingGlass";
 import { BodyTranslator } from "@/components/plan/BodyTranslator";
 import { PrintCover } from "@/components/plan/PrintCover";
 import { PrintEndPage } from "@/components/plan/PrintEndPage";
+import { SlideShow } from "@/components/plan/SlideShow";
+
+// Placeholder deck used by every §08 sub-cluster until real content lands.
+// Four numbered slides so we can test paging / swipe / fullscreen behaviour.
+const TEST_SLIDES = [
+  { label: "1", caption: "Slide 1 — placeholder" },
+  { label: "2", caption: "Slide 2 — placeholder" },
+  { label: "3", caption: "Slide 3 — placeholder" },
+  { label: "4", caption: "Slide 4 — placeholder" },
+];
 
 const NAV: NavItem[] = [
   { id: "executive-summary", label: "Executive Summary",     labelKey: "nav.executive" },
@@ -402,16 +412,16 @@ export default async function PlanPage() {
          *  on its own — not part of the accordion — so clicking a sub-menu
          *  reveals a clearly-empty page instead of a collapsed stub. */}
         <Section id="customer-digital-audit"   kicker={kicker(8, "Target Customers · 08.1")} title="Digital Audit">
-          <EmptyStub title="Digital Audit" />
+          <SlideShow title="Digital Audit" slides={TEST_SLIDES} />
         </Section>
         <Section id="customer-yqms"            kicker={kicker(8, "Target Customers · 08.2")} title="YQMS">
-          <EmptyStub title="YQMS" />
+          <SlideShow title="YQMS" slides={TEST_SLIDES} />
         </Section>
         <Section id="customer-cost-efficiency" kicker={kicker(8, "Target Customers · 08.3")} title="Cost and Efficiency">
-          <EmptyStub title="Cost and Efficiency" />
+          <SlideShow title="Cost and Efficiency" slides={TEST_SLIDES} />
         </Section>
         <Section id="customer-yhr"            kicker={kicker(8, "Target Customers · 08.4")} title="YHR">
-          <EmptyStub title="YHR" />
+          <SlideShow title="YHR" slides={TEST_SLIDES} />
         </Section>
 
         {/* 09 — Go-to-Market Milestones (merged: was 11 Financials + 12 GTM) */}
@@ -929,23 +939,6 @@ export default async function PlanPage() {
       {/* Print-only end page — outside main, owns the last sheet. */}
       <PrintEndPage about={about} />
     </>
-  );
-}
-
-/** Empty-page placeholder for §08.1–08.4 sub-clusters. Gives the section
- *  a full-page footprint so the sidebar click lands on something obvious
- *  instead of a 20-pixel tall stub. */
-function EmptyStub({ title }: { title: string }) {
-  return (
-    <div className="rounded-xl border-2 border-dashed border-yai-border bg-white min-h-[420px] flex flex-col items-center justify-center text-center px-6 py-16">
-      <div className="text-[10px] uppercase tracking-[0.22em] text-yai-orange font-bold mb-3">
-        Coming soon
-      </div>
-      <div className="text-2xl font-extrabold text-yai-navy mb-2">{title}</div>
-      <p className="text-sm text-gray-500 max-w-md leading-relaxed">
-        This section is reserved. Content will land here as the {title} pilot progresses.
-      </p>
-    </div>
   );
 }
 
