@@ -51,7 +51,17 @@ const NAV: NavItem[] = [
   { id: "tech",              label: "Technology Stack",       labelKey: "nav.tech" },
   { id: "modules",           label: "Agents & Skills",        labelKey: "nav.modules" },
   { id: "pricing",           label: "Pricing & Packaging",    labelKey: "nav.pricing" },
-  { id: "customers",         label: "Target Customers",       labelKey: "nav.customers" },
+  {
+    id: "customers",
+    label: "Target Customers",
+    labelKey: "nav.customers",
+    children: [
+      { id: "customer-digital-audit",   label: "Digital Audit" },
+      { id: "customer-yqms",            label: "YQMS" },
+      { id: "customer-cost-efficiency", label: "Cost and Efficiency" },
+      { id: "customer-yahr",            label: "YAHR" },
+    ],
+  },
   { id: "gtm",               label: "Go-to-Market Milestones", labelKey: "nav.gtm" },
   { id: "team",              label: "Team",                   labelKey: "nav.team" },
   { id: "oc-budget",         label: "OC & Live Budget Update", labelKey: "nav.oc_budget" },
@@ -386,6 +396,20 @@ export default async function PlanPage() {
             Five customer clusters across Cambodia — each climbs a different segment of the Yai ladder, from $120 admin modules to multi-factory Ai.
           </Thesis>
           <TargetCustomersChart />
+        </Section>
+
+        {/* 08.1 — 08.4 · Per-cluster deep dives, empty for now. */}
+        <Section id="customer-digital-audit"   kicker={kicker(8, "Target Customers · 08.1")} title="Digital Audit" collapsible>
+          <p className="text-sm text-gray-500 italic">Content coming.</p>
+        </Section>
+        <Section id="customer-yqms"            kicker={kicker(8, "Target Customers · 08.2")} title="YQMS" collapsible>
+          <p className="text-sm text-gray-500 italic">Content coming.</p>
+        </Section>
+        <Section id="customer-cost-efficiency" kicker={kicker(8, "Target Customers · 08.3")} title="Cost and Efficiency" collapsible>
+          <p className="text-sm text-gray-500 italic">Content coming.</p>
+        </Section>
+        <Section id="customer-yahr"            kicker={kicker(8, "Target Customers · 08.4")} title="YAHR" collapsible>
+          <p className="text-sm text-gray-500 italic">Content coming.</p>
         </Section>
 
         {/* 09 — Go-to-Market Milestones (merged: was 11 Financials + 12 GTM) */}
