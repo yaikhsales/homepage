@@ -888,3 +888,11 @@ body { top: 0 !important; }
   0%   { height: 4px; }
   100% { height: 18px; }
 }
+
+/* SlideShow slide entrance — restarts each time the slide's DOM node is
+ * remounted (via key={idx} on the wrapper). Small fade + slight rise. */
+@keyframes slideshow-slide-fade {
+  0%   { opacity: 0; transform: translateY(6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.slideshow-slide-fade { animation: slideshow-slide-fade 0.28s cubic-bezier(0.22, 1, 0.36, 1); }
