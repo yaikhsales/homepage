@@ -18,16 +18,22 @@ export function paymentsEnabled(): boolean {
 }
 
 export type PaymentStatus = "PENDING" | "APPROVED" | "DECLINED" | "REFUNDED" | "CANCELLED";
+export type ReceiptStatus = "PENDING" | "POSTING" | "POSTED" | "MOCK" | "FAILED" | "DISABLED";
 
 export interface PaymentRecord {
   tran_id: string;
   amount: number;
   currency: string;
+  subtotal_amount?: number;
+  vat_amount?: number;
+  is_fixed_rate?: boolean;
+  fixed_rate?: number;
   payment_option?: string;      // abapay_khqr | cards | ""
   status: PaymentStatus;
   refunded_amount?: number;
   plan?: string;
   company?: string;
+  country?: string;
   contact_name?: string;
   email?: string;
   source: "subscribe" | "merchant-qr";
@@ -35,6 +41,11 @@ export interface PaymentRecord {
   paid_at?: string;
   updated_at: string;
   aba_trace_id?: string;
+  receipt_status?: ReceiptStatus;
+  receipt_id?: string;
+  receipt_number?: string;
+  receipt_url?: string;
+  receipt_error?: string;
 }
 
 async function col() {
@@ -115,4 +126,44 @@ export async function getPayment(tran_id: string): Promise<PaymentRecord | null>
     const c = await col();
     return await c.findOne({ tran_id });
   } catch { return null; }
+}
+
+/** Atomically reserve a paid subscription for receipt delivery. */
+export async function claimReceiptDelivery(tran_id: string): Promise<PaymentRecord | null> {
+  if (!paymentsEnabled()) return null;
+  try {
+    const result = await (await col()).findOneAndUpdate(
+      {
+        tran_id,
+        status: "APPROVED",
+        $or: [
+          { receipt_status: { $exists: false } },
+          { receipt_status: "PENDING" },
+          { receipt_status: "MOCK" },
+          { receipt_status: "FAILED" },
+        ],
+      },
+      { $set: { receipt_status: "POSTING", receipt_error: undefined, updated_at: new Date().toISOString() } },
+      { returnDocument: "after" },
+    );
+    return result ?? null;
+  } catch (e) {
+    console.warn("[payments-store] claimReceiptDelivery failed:", (e as Error).message);
+    return null;
+  }
+}
+
+export async function markReceiptDelivery(
+  tran_id: string,
+  patch: Pick<PaymentRecord, "receipt_status"> & Partial<Pick<PaymentRecord, "receipt_id" | "receipt_number" | "receipt_url" | "receipt_error">>,
+): Promise<void> {
+  if (!paymentsEnabled()) return;
+  try {
+    await (await col()).updateOne(
+      { tran_id },
+      { $set: { ...patch, updated_at: new Date().toISOString() } },
+    );
+  } catch (e) {
+    console.warn("[payments-store] markReceiptDelivery failed:", (e as Error).message);
+  }
 }

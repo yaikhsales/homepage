@@ -4,6 +4,7 @@
 
 import { NextResponse } from "next/server";
 import { signForPopup, paywayConfigured, type PurchaseInput, recordPayment } from "@/lib/payway";
+import { getCloudPlanPaymentBreakdown } from "@/lib/subscription-pricing";
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
@@ -11,10 +12,11 @@ export async function POST(req: Request) {
   if (!paywayConfigured()) {
     return NextResponse.json({ error: "PayWay not configured" }, { status: 503 });
   }
-  const body = (await req.json().catch(() => ({}))) as Partial<PurchaseInput>;
-  const amount = Number(body.amount);
-  if (!Number.isFinite(amount) || amount <= 0) {
-    return NextResponse.json({ error: "Invalid amount" }, { status: 400 });
+  const body = (await req.json().catch(() => ({}))) as Partial<PurchaseInput> & Record<string, unknown>;
+  const plan = typeof body.plan === "string" ? body.plan : "";
+  const pricing = getCloudPlanPaymentBreakdown(plan);
+  if (pricing === null) {
+    return NextResponse.json({ error: "Choose a subscription plan to pay by ABA." }, { status: 400 });
   }
   // "" = ABA popup shows its method chooser; "abapay_khqr" / "cards" pre-select one.
   const opt = body.payment_option;
@@ -27,24 +29,29 @@ export async function POST(req: Request) {
   const origin = req.headers.get("origin") || new URL(req.url).origin;
   const continue_success_url = `${origin}/subscribe?paid=${tran_id}`;
 
-  const currency = body.currency === "KHR" ? "KHR" : "USD";
+  const currency = "KHR";
   const signed = signForPopup({
     tran_id,
-    amount: amount.toFixed(2),
+    amount: pricing.totalAmount.toFixed(2),
     currency,
-    firstname: body.firstname,
+    firstname: typeof body.contact_name === "string" ? body.contact_name : body.firstname,
     email: body.email,
     payment_option,
     continue_success_url,
   });
 
   // Durable record so we can find/refund this beyond ABA's 3-day list window.
-  const b = body as Record<string, unknown>;
   await recordPayment({
-    tran_id, amount, currency, payment_option, source: "subscribe",
-    plan: typeof b.plan === "string" ? b.plan : undefined,
-    company: typeof b.company === "string" ? b.company : undefined,
-    contact_name: typeof b.contact_name === "string" ? b.contact_name : undefined,
+    tran_id, amount: pricing.totalAmount, currency, payment_option, source: "subscribe",
+    subtotal_amount: pricing.subtotalAmount,
+    vat_amount: pricing.vatAmount,
+    is_fixed_rate: true,
+    fixed_rate: pricing.fixedRate,
+    receipt_status: "PENDING",
+    plan: plan || undefined,
+    company: typeof body.company === "string" ? body.company : undefined,
+    country: typeof body.country === "string" ? body.country : undefined,
+    contact_name: typeof body.contact_name === "string" ? body.contact_name : undefined,
     email: typeof body.email === "string" ? body.email : undefined,
   });
 

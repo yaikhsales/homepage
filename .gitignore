@@ -1,0 +1,65 @@
+# Dependencies and package-manager state.
+# Reproducible from lockfiles; never commit local installs or caches.
+**/node_modules/
+**/.pnp/
+**/.pnp.*
+
+# Framework, build, test, and tool caches.
+**/.next/
+**/.turbo/
+**/.cache/
+**/.eslintcache
+**/*.tsbuildinfo
+**/next-env.d.ts
+**/out/
+**/build/
+**/dist/
+**/coverage/
+**/playwright-report/
+**/test-results/
+**/.nyc_output/
+
+# Local logs and temporary files.
+*.log
+*.log.*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.pid
+*.seed
+*.tmp
+*.temp
+.tmp/
+
+# Local secrets. Keep safe templates versioned.
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+
+# Editor and OS metadata.
+.DS_Store
+Thumbs.db
+**/.vscode/
+**/.idea/
+*.swp
+*.swo
+*~
+
+# Local deployment, agent state, and generated dashboard artifacts.
+**/.vercel/
+# Runtime progress, heartbeats, handoffs, and logs are local working state.
+# Keep durable agent instructions and reusable automation source files trackable.
+**/dashboard/state/
+**/.agents/state/
+**/.agents/runs/
+**/.agents/logs/
+**/.claude/state/
+**/.claude/sessions/
+yaikh-com/public/dashboard/**/*.map

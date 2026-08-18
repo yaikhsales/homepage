@@ -2,6 +2,7 @@
 
 import { AnimatePresence, LayoutGroup, motion, useInView } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { LangProvider, useLang, type Lang } from "./i18n";
 import Footer from "@/components/site-footer";
@@ -2373,8 +2374,10 @@ const SC_ClusterBrain = (
 type StaticStep = {
   step: string;
   stage: string;
+  plan: string;
   sub: string;
   price: string;
+  usdAmount: number;
   per: string;
   h: number;
   bg: string;
@@ -2382,20 +2385,28 @@ type StaticStep = {
   icon: React.ReactNode;
 };
 
+const HOMEPAGE_KHR_PER_USD = Number(process.env.NEXT_PUBLIC_SUBSCRIPTION_KHR_PER_USD) || 4100;
+const formatHomepageKhr = (amount: number) => `៛${Math.round(amount).toLocaleString("en-US")}`;
+
 const SC_BEFORE: StaticStep[] = [
-  { step: "Step 1", stage: "Cloud · Starter",    sub: "5 key members",     price: "$120",   per: "/ year", h: 250, bg: "from-sky-100 to-white",    accent: "text-yai-blue", icon: SC_ClusterTeam },
-  { step: "Step 2", stage: "Cloud · Growth",     sub: "5 – 300 users",     price: "$750",   per: "/ year", h: 290, bg: "from-sky-200 to-sky-50",   accent: "text-yai-blue", icon: SC_ClusterMidTeam },
-  { step: "Step 3", stage: "Cloud · Enterprise", sub: "300 – 1,000 users", price: "$1,200", per: "/ year", h: 325, bg: "from-blue-200 to-blue-50", accent: "text-yai-blue", icon: SC_ClusterBigTeam },
+  { step: "Step 1", stage: "Cloud · Starter",    plan: "Cloud · Starter",    sub: "5 key members",     price: "$120",   usdAmount: 120,  per: "/ year", h: 250, bg: "from-sky-100 to-white",    accent: "text-yai-blue", icon: SC_ClusterTeam },
+  { step: "Step 2", stage: "Cloud · Growth",     plan: "Cloud · Growth",     sub: "5 – 300 users",     price: "$750",   usdAmount: 750,  per: "/ year", h: 290, bg: "from-sky-200 to-sky-50",   accent: "text-yai-blue", icon: SC_ClusterMidTeam },
+  { step: "Step 3", stage: "Cloud · Enterprise", plan: "Cloud · Enterprise", sub: "300 – 1,000 users", price: "$1,200", usdAmount: 1200, per: "/ year", h: 325, bg: "from-blue-200 to-blue-50", accent: "text-yai-blue", icon: SC_ClusterBigTeam },
 ];
 
 const SC_AFTER: StaticStep[] = [
-  { step: "Step 5", stage: "Agentic",      sub: "After ~6 months",      price: "+ $5,000", per: "/ year · 10 agents + 35 mini",       h: 410, bg: "from-violet-200 to-violet-50", accent: "text-yai-blue",   icon: SC_ClusterAgentic },
-  { step: "Step 6", stage: "Big Ai Brain", sub: "Boss · after ~1 year", price: "+ $5,000", per: "/ year · talks across 5+ factories", h: 460, bg: "from-orange-200 to-orange-50", accent: "text-yai-orange", icon: SC_ClusterBrain },
+  { step: "Step 5", stage: "Agentic",      plan: "Agentic",      sub: "After ~6 months",      price: "+ $5,000", usdAmount: 5000, per: "/ year · 10 agents + 35 mini",       h: 410, bg: "from-violet-200 to-violet-50", accent: "text-yai-blue",   icon: SC_ClusterAgentic },
+  { step: "Step 6", stage: "Big Ai Brain", plan: "Big Ai Brain", sub: "Boss · after ~1 year", price: "+ $5,000", usdAmount: 5000, per: "/ year · talks across 5+ factories", h: 460, bg: "from-orange-200 to-orange-50", accent: "text-yai-orange", icon: SC_ClusterBrain },
 ];
 
 function SC_StepCard({ s }: { s: StaticStep }) {
   return (
-    <div className="relative flex flex-col shrink-0 w-[124px]" style={{ height: s.h }}>
+    <Link
+      href={`/subscribe?plan=${encodeURIComponent(s.plan)}`}
+      aria-label={`Subscribe to ${s.plan}`}
+      className="relative flex flex-col shrink-0 w-[124px] rounded-xl transition duration-200 hover:-translate-y-1 hover:drop-shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yai-orange"
+      style={{ height: s.h }}
+    >
       <div className={`flex-1 rounded-t-2xl border border-b-0 border-yai-border bg-gradient-to-b ${s.bg} flex flex-col items-center p-2 text-center`}>
         <div className="text-[10px] font-bold uppercase tracking-widest text-gray-500">{s.step}</div>
         <div className="text-[13px] font-bold text-yai-navy leading-tight mt-1.5 px-0.5">{s.stage}</div>
@@ -2403,59 +2414,28 @@ function SC_StepCard({ s }: { s: StaticStep }) {
         <div className={`${s.accent} flex-1 flex items-center justify-center`}>{s.icon}</div>
       </div>
       <div className="rounded-b-xl border border-yai-border bg-white text-center py-2.5 px-1.5">
-        <div className={`font-extrabold text-xl leading-none ${s.accent}`}>{s.price}</div>
-        <div className="text-[10px] text-gray-500 mt-1 leading-tight">{s.per}</div>
+        <div className={`font-extrabold text-[15px] leading-none tracking-[-0.06em] whitespace-nowrap ${s.accent}`}>{s.price.startsWith("+") ? "+" : ""}{formatHomepageKhr(s.usdAmount * HOMEPAGE_KHR_PER_USD)}</div>
+        <div className="text-[10px] text-gray-500 mt-1 leading-tight">{s.price} USD {s.per}</div>
       </div>
-    </div>
+    </Link>
   );
 }
 
-function SC_ServerPillar({ on, onToggle }: { on: boolean; onToggle: () => void }) {
+function SC_ServerPillar() {
   return (
-    <div className="relative flex flex-col shrink-0 w-[124px]" style={{ height: 360 }}>
-      <div className={`flex-1 rounded-t-2xl border border-b-0 border-yai-border bg-gradient-to-b ${on ? "from-orange-200 to-orange-50" : "from-indigo-100 to-white"} flex flex-col items-center p-2 text-center transition-colors`}>
+    <Link href="/subscribe?plan=Ai%20Server" aria-label="Subscribe to Ai Server" className="relative flex flex-col shrink-0 w-[124px] rounded-xl transition duration-200 hover:-translate-y-1 hover:drop-shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yai-orange" style={{ height: 360 }}>
+      <div className="flex-1 rounded-t-2xl border border-b-0 border-yai-border bg-gradient-to-b from-indigo-100 to-white flex flex-col items-center p-2 text-center transition-colors">
         <div className="text-[8px] font-bold uppercase tracking-widest text-gray-500">Step 4</div>
         <div className="text-[11px] font-bold text-yai-navy leading-tight mt-1 px-0.5">Ai Server</div>
         <div className="text-[9px] text-gray-500 mt-0.5 leading-tight">Hardware · 1,000+ users</div>
-        <div className={`${on ? "text-yai-orange" : "text-gray-400"} flex-1 flex items-center justify-center transition-colors`}>{SC_IconServer}</div>
-        <button
-          onClick={onToggle}
-          className={`w-full text-[10px] font-bold uppercase tracking-wider rounded px-1.5 py-1.5 border transition-colors ${
-            on
-              ? "bg-yai-orange text-white border-yai-orange"
-              : "bg-white text-gray-500 border-yai-border hover:text-yai-orange hover:border-yai-orange"
-          }`}
-        >
-          {on ? "✓ Bought" : "Buy $2,500"}
-        </button>
+        <div className="text-gray-400 flex-1 flex items-center justify-center transition-colors">{SC_IconServer}</div>
+        <div className="w-full text-[8px] font-bold uppercase tracking-normal whitespace-nowrap rounded px-1 py-1.5 border bg-white text-gray-500 border-yai-border">Buy {formatHomepageKhr(2500 * HOMEPAGE_KHR_PER_USD)}</div>
       </div>
       <div className="rounded-b-xl border border-yai-border bg-white text-center py-2.5 px-1.5 min-h-[52px]">
-        <AnimatePresence mode="wait">
-          {on ? (
-            <motion.div
-              key="on"
-              initial={{ opacity: 0, y: 4 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -4 }}
-              transition={{ duration: 0.2 }}
-            >
-              <div className="font-extrabold text-xl leading-none text-yai-orange">$2,500</div>
-              <div className="text-[10px] text-gray-500 mt-1 leading-tight">once · hardware + setup</div>
-            </motion.div>
-          ) : (
-            <motion.div
-              key="off"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="text-[10px] text-gray-400 leading-tight pt-1"
-            >
-              tap to see what&apos;s next
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <div className="font-extrabold text-[15px] leading-none tracking-[-0.06em] whitespace-nowrap text-yai-orange">{formatHomepageKhr(2500 * HOMEPAGE_KHR_PER_USD)}</div>
+        <div className="text-[10px] text-gray-500 mt-1 leading-tight">$2,500 USD · once · hardware + setup</div>
       </div>
-    </div>
+    </Link>
   );
 }
 
@@ -2463,86 +2443,28 @@ function SC_TwinPillar({
   title,
   sub,
   icon,
-  price,
-  on,
-  onToggle,
-  disabled,
 }: {
   title: string;
   sub: string;
   icon: React.ReactNode;
-  price: string;
-  on: boolean;
-  onToggle: () => void;
-  disabled: boolean;
 }) {
   return (
-    <div className={`relative flex flex-col shrink-0 w-[124px] transition-opacity ${disabled ? "opacity-55" : ""}`} style={{ height: 360 }}>
-      <div className={`flex-1 rounded-t-2xl border border-b-0 border-yai-border bg-gradient-to-b ${on && !disabled ? "from-indigo-300 to-indigo-50" : "from-indigo-100 to-white"} flex flex-col items-center p-2 text-center transition-colors`}>
+    <Link href="/subscribe" aria-label={`Choose a subscription for ${title}`} className="relative flex flex-col shrink-0 w-[124px] rounded-xl transition duration-200 hover:-translate-y-1 hover:drop-shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yai-orange" style={{ height: 360 }}>
+      <div className="flex-1 rounded-t-2xl border border-b-0 border-yai-border bg-gradient-to-b from-indigo-100 to-white flex flex-col items-center p-2 text-center transition-colors">
         <div className="text-[8px] font-bold uppercase tracking-widest text-gray-500">Step 4</div>
         <div className="text-[11px] font-bold text-yai-navy leading-tight mt-1 px-0.5">{title}</div>
         <div className="text-[9px] text-gray-500 mt-0.5 leading-tight">{sub}</div>
-        <div className={`${on && !disabled ? "text-yai-blue" : "text-gray-400"} flex-1 flex items-center justify-center transition-colors`}>{icon}</div>
-        <button
-          onClick={onToggle}
-          disabled={disabled}
-          title={disabled ? "Buy the Ai server first" : ""}
-          className={`w-full text-[10px] font-bold uppercase tracking-wider rounded px-1.5 py-1.5 border transition-colors ${
-            disabled
-              ? "bg-gray-100 text-gray-400 border-yai-border cursor-not-allowed"
-              : on
-                ? "bg-yai-blue text-white border-yai-blue"
-                : "bg-white text-gray-500 border-yai-border hover:text-yai-blue hover:border-yai-blue"
-          }`}
-        >
-          {disabled ? "🔒 Locked" : on ? "✓ Activated" : "Activate"}
-        </button>
+        <div className="text-gray-400 flex-1 flex items-center justify-center transition-colors">{icon}</div>
+        <div className="w-full text-[10px] font-bold uppercase tracking-wider rounded px-1.5 py-1.5 border bg-white text-gray-500 border-yai-border">Choose plan</div>
       </div>
       <div className="rounded-b-xl border border-yai-border bg-white text-center py-2.5 px-1.5 min-h-[52px]">
-        <AnimatePresence mode="wait">
-          {on && !disabled ? (
-            <motion.div
-              key="on"
-              initial={{ opacity: 0, y: 4 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -4 }}
-              transition={{ duration: 0.2 }}
-            >
-              <div className="font-extrabold text-xl leading-none text-yai-blue">+ {price}</div>
-              <div className="text-[10px] text-gray-500 mt-1 leading-tight">/ year</div>
-            </motion.div>
-          ) : (
-            <motion.div
-              key="off"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="text-[10px] text-gray-400 leading-tight pt-1"
-            >
-              {disabled ? "buy server first" : "tap to activate"}
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <div className="text-[10px] text-gray-400 leading-tight pt-1">configure at checkout</div>
       </div>
-    </div>
+    </Link>
   );
 }
 
 function PricingStaircase() {
-  const [server, setServer] = useState(false);
-  const [admin, setAdmin] = useState(false);
-  const [prod, setProd] = useState(false);
-  const yearly = (admin ? 5000 : 0) + (prod ? 10000 : 0);
-  const fmt = (n: number) => "$" + n.toLocaleString();
-
-  const toggleServer = () => {
-    setServer((v) => {
-      const next = !v;
-      if (!next) { setAdmin(false); setProd(false); }
-      return next;
-    });
-  };
-
   return (
     <>
       <div className="overflow-x-auto pb-4 -mx-1 px-1">
@@ -2550,24 +2472,16 @@ function PricingStaircase() {
           <div className="min-w-max">
             <div className="flex items-end gap-4">
               {SC_BEFORE.map((s) => <SC_StepCard key={s.step} s={s} />)}
-              <SC_ServerPillar on={server} onToggle={toggleServer} />
+              <SC_ServerPillar />
               <SC_TwinPillar
                 title="Administrative"
                 sub="tools"
                 icon={SC_IconBriefcase}
-                price="$5,000"
-                on={admin}
-                onToggle={() => setAdmin((v) => !v)}
-                disabled={!server}
               />
               <SC_TwinPillar
                 title="Operation"
                 sub="tools"
                 icon={SC_IconFactory}
-                price="$10,000"
-                on={prod}
-                onToggle={() => setProd((v) => !v)}
-                disabled={!server}
               />
               {SC_AFTER.map((s) => <SC_StepCard key={s.step} s={s} />)}
             </div>
@@ -2581,44 +2495,12 @@ function PricingStaircase() {
               </div>
             </div>
 
-            {/* Step 4 total summary — under the Server + Admin + Operation block */}
-            <div className="flex gap-4 mt-3">
-              <div style={{ width: 3 * 124 + 2 * 16 }} className="shrink-0" aria-hidden />
-              <div style={{ width: 3 * 124 + 2 * 16 }} className="shrink-0 rounded-xl border-2 border-dashed border-yai-blue/40 bg-yai-blue/5 p-3">
-                <div className="text-[10px] uppercase tracking-widest font-extrabold text-yai-blue text-center mb-2">Step 4 · Total</div>
-                <div className="flex items-baseline justify-between gap-2 text-xs">
-                  <span className="text-[10px] uppercase tracking-wider font-bold text-yai-orange">Server</span>
-                  <motion.span
-                    key={server ? "bought" : "no"}
-                    initial={{ scale: 0.9, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ duration: 0.18 }}
-                    className={`font-extrabold ${server ? "text-yai-navy" : "text-gray-400"}`}
-                  >
-                    {server ? "$2,500 paid" : "not yet"}
-                  </motion.span>
-                </div>
-                <div className="flex items-baseline justify-between gap-2 mt-2 pt-2 border-t border-yai-blue/15">
-                  <span className="text-[10px] uppercase tracking-wider font-bold text-yai-blue">Yearly · active</span>
-                  <motion.span
-                    key={yearly}
-                    initial={{ scale: 0.85, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ type: "spring", stiffness: 280, damping: 22 }}
-                    className={`font-extrabold text-lg leading-none ${yearly ? "text-yai-blue" : "text-gray-400"}`}
-                  >
-                    {fmt(yearly)}<span className="text-[10px] text-gray-500 font-normal">/yr</span>
-                  </motion.span>
-                </div>
-              </div>
-              <div style={{ width: 2 * 124 + 1 * 16 }} className="shrink-0" aria-hidden />
-            </div>
           </div>
         </LayoutGroup>
       </div>
 
       <p className="text-xs text-gray-500 italic mt-3">
-        Each step builds on the one before. <span className="text-yai-blue font-semibold">Buy the Ai server first ($2,500)</span>, then tap to activate Administrative ($5K/yr) and/or Operation ($10K/yr).
+        Select any step to continue to the subscription form. <span className="text-yai-blue font-semibold">Ai Server, Administrative, and Operation</span> requirements are confirmed during checkout.
       </p>
     </>
   );
