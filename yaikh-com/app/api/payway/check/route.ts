@@ -4,9 +4,50 @@
  * { paid, code, status } where code 0 = APPROVED. */
 
 import { NextResponse } from "next/server";
-import { checkTransaction, paywayConfigured, markPayment } from "@/lib/payway";
+import {
+  checkTransaction, paywayConfigured, markPayment, getPayment,
+  claimReceiptDelivery, markReceiptDelivery,
+} from "@/lib/payway";
+import { createSubscriptionReceipt, receiptServiceLiveConfigured } from "@/lib/subscription-receipt";
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
+const RECEIPT_DELIVERY_ENABLED = process.env.SUBSCRIPTION_RECEIPTS_ENABLED === "true";
+
+async function deliverReceipt(tranId: string) {
+  const existing = await getPayment(tranId);
+  if (!existing || existing.source !== "subscribe") return null;
+
+  if (receiptServiceLiveConfigured() && existing.receipt_status === "POSTED") {
+    return { status: "posted" as const, number: existing.receipt_number, url: existing.receipt_url };
+  }
+
+  const claimed = await claimReceiptDelivery(tranId);
+  if (!claimed) {
+    const latest = await getPayment(tranId);
+    return latest?.receipt_status === "POSTED"
+      ? { status: "posted" as const, number: latest.receipt_number, url: latest.receipt_url }
+      : { status: "processing" as const };
+  }
+
+  try {
+    const receipt = await createSubscriptionReceipt(claimed);
+    await markReceiptDelivery(tranId, {
+      receipt_status: receipt.mock ? "MOCK" : "POSTED",
+      receipt_id: receipt.receiptId,
+      receipt_number: receipt.receiptNumber,
+      receipt_url: receipt.receiptUrl,
+    });
+    return receipt.mock
+      ? { status: "mock" as const, number: receipt.receiptNumber }
+      : { status: "posted" as const, number: receipt.receiptNumber, url: receipt.receiptUrl };
+  } catch (error) {
+    await markReceiptDelivery(tranId, {
+      receipt_status: "FAILED",
+      receipt_error: error instanceof Error ? error.message.slice(0, 160) : "Receipt delivery failed.",
+    });
+    return { status: "pending" as const };
+  }
+}
 
 export async function POST(req: Request) {
   if (!paywayConfigured()) {
@@ -22,8 +63,13 @@ export async function POST(req: Request) {
   const paid = code === 0;
 
   // Keep our ledger in sync with the live ABA status.
-  if (paid) await markPayment(tran_id, { paid: true });
-  else if (typeof data.payment_status === "string" && /DECLIN|CANCEL|REFUND/i.test(data.payment_status)) {
+  let receipt: Awaited<ReturnType<typeof deliverReceipt>> = null;
+  if (paid) {
+    await markPayment(tran_id, { paid: true });
+    receipt = RECEIPT_DELIVERY_ENABLED
+      ? await deliverReceipt(tran_id)
+      : null;
+  } else if (typeof data.payment_status === "string" && /DECLIN|CANCEL|REFUND/i.test(data.payment_status)) {
     const s = data.payment_status.toUpperCase();
     await markPayment(tran_id, { status: s.includes("REFUND") ? "REFUNDED" : s.includes("CANCEL") ? "CANCELLED" : "DECLINED" });
   }
@@ -33,5 +79,6 @@ export async function POST(req: Request) {
     code: code ?? null,
     status: data.payment_status ?? null,
     raw_status: res?.status ?? null,
+    receipt,
   });
 }
