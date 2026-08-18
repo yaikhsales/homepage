@@ -348,7 +348,7 @@ export default function SubscribeClient({
                       <span className="text-2xl font-bold text-yai-navy">
                         {formatKhr(baseKhrAmount)}
                       </span>
-                      <span className="text-[11px] text-yai-navy/60">KHR {p.period}</span>
+                      <span className="text-[11px] text-yai-navy/60">{p.period}</span>
                     </div>
                     <p className="mt-0.5 text-[11px] text-yai-navy/55">{p.price} USD {p.period}</p>
                   </>
@@ -392,7 +392,6 @@ export default function SubscribeClient({
             {plan ? (
               <>
                 <span>{plan.name} · {formatKhr(totalKhrAmount)}</span>
-                <span className="ml-1 text-[11px] font-medium text-yai-navy/60">KHR</span>
                 <span className="mt-0.5 block text-[11px] font-normal text-yai-navy/55">
                   {`${formatKhr(khrAmount)} + 10% VAT · fixed at ៛${khrPerUsd.toLocaleString()} / USD`}
                 </span>
@@ -425,9 +424,9 @@ export default function SubscribeClient({
                 <div className="font-semibold uppercase tracking-[0.12em] text-[10px] text-yai-navy/60">VAT receipt preview</div>
                 <div className="mt-2 flex justify-between"><span>Subscription subtotal</span><span>{formatKhr(khrAmount)}</span></div>
                 <div className="mt-1 flex justify-between"><span>VAT (10%)</span><span>{formatKhr(vatKhrAmount)}</span></div>
-                <div className="mt-2 flex justify-between border-t border-yai-navy/10 pt-2 font-bold"><span>Total due</span><span>{formatKhr(totalKhrAmount)} KHR</span></div>
+                <div className="mt-2 flex justify-between border-t border-yai-navy/10 pt-2 font-bold"><span>Total due</span><span>{formatKhr(totalKhrAmount)}</span></div>
               </div>
-              <PayMethodRow onClick={() => payWithAba("abapay_khqr")} disabled={busy} title="ABA KHQR" subtitle="Scan to pay in KHR with any banking app" icon={<KhqrMark />} />
+              <PayMethodRow onClick={() => payWithAba("abapay_khqr")} disabled={busy} title="ABA KHQR" subtitle="Scan to pay with any banking app" icon={<KhqrMark />} />
             </div>
           )}
 
@@ -488,7 +487,7 @@ export default function SubscribeClient({
         Selected: <span className="font-semibold text-yai-navy">{selectedPlan || "(none)"}</span>
           {plan && (
             <span className="ml-2 text-yai-navy">
-              · {formatKhr(totalKhrAmount)} KHR
+              · {formatKhr(totalKhrAmount)}
               <span className="ml-1 text-xs text-yai-navy/55">(includes 10% VAT)</span>
               <span className="ml-1 text-xs text-yai-navy/55">(${amount.toLocaleString()} USD)</span>
             </span>
@@ -603,9 +602,9 @@ function PaymentSuccess({
           {/* summary */}
           <div className="mt-6 rounded-xl border border-gray-100 bg-gray-50 p-4 text-left text-sm divide-y divide-gray-100">
             {plan && <Row label="Plan" value={plan} />}
-          <Row label="Subscription subtotal" value={`${formatKhr(khrAmount)} KHR`} />
-          <Row label="VAT (10%)" value={`${formatKhr(vatKhrAmount)} KHR`} />
-          <Row label="Amount paid" value={`${formatKhr(totalKhrAmount)} KHR`} />
+          <Row label="Subscription subtotal" value={`${formatKhr(khrAmount)}`} />
+          <Row label="VAT (10%)" value={`${formatKhr(vatKhrAmount)}`} />
+          <Row label="Amount paid" value={`${formatKhr(totalKhrAmount)}`} />
           <Row label="USD reference" value={`$${amount.toLocaleString()} USD`} />
             {tranId && <Row label="Reference" value={tranId} mono />}
           </div>
