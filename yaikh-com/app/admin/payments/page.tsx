@@ -47,7 +47,7 @@ export default function PaymentsPage() {
 /* ─── Collect payment via QR API ─────────────────────────────────────── */
 function Collect() {
   const [amount, setAmount] = useState("");
-  const [currency, setCurrency] = useState<"USD" | "KHR">("USD");
+  const [currency, setCurrency] = useState<"USD" | "KHR">("KHR");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [qr, setQr] = useState<{ img: string; tran: string } | null>(null);
@@ -133,7 +133,7 @@ function Collect() {
               className="input" style={{ flex: 1 }} placeholder="120.00" />
             <select value={currency} onChange={(e) => setCurrency(e.target.value as "USD" | "KHR")}
               className="input" style={{ width: "5.5rem", flex: "none" }}>
-              <option>USD</option><option>KHR</option>
+              <option>KHR</option><option>USD</option>
             </select>
           </div>
         </label>
@@ -314,7 +314,7 @@ function Transactions() {
       {rows && rows.length > 0 && (
         <div className="flex flex-wrap gap-3 mb-4">
           <Stat label="Transactions" value={String(rows.length)} />
-          <Stat label="Collected" value={`$${collected.toLocaleString()}`} accent />
+          <Stat label="Collected" value={`៛${collected.toLocaleString()} KHR`} accent />
           <Stat label="Approved" value={String(approved.length)} />
           <Stat label="Pending" value={String(pending)} />
         </div>
@@ -486,7 +486,6 @@ function TxnDetail({ txn, onClose, onRefunded }: { txn: Txn; onClose: () => void
                 {busy ? "Refunding…" : "Refund"}
               </button>
             </div>
-            <p className="text-[11px] text-gray-400 mt-1.5">Full or partial. Allowed within 30 days of the charge.</p>
             {msg && <div className={`mt-3 text-[13px] rounded-lg p-2.5 ${msg.ok ? "bg-green-50 border border-green-200 text-green-800" : "bg-red-50 border border-red-200 text-red-700"}`}>{msg.text}</div>}
           </div>
         ) : (
