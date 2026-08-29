@@ -152,13 +152,21 @@ export default function SubscribeClient({
   // Poll server-side check-transaction just to nudge the payer — we do NOT flip
   // to the success screen here. That only happens when they click "Continue" in
   // ABA's own window, which redirects to /subscribe?paid=<tran> (handled on mount).
-  const startPolling = (tranId: string) => {
+  const startPolling = (tranId: string, lifetimeMinutes = 5) => {
     if (pollRef.current) clearInterval(pollRef.current);
     const started = Date.now();
+    const pollCeilingMs = lifetimeMinutes * 60_000;
+    let checkInFlight = false;
     pollRef.current = setInterval(async () => {
-      if (Date.now() - started > 5 * 60_000) { // 5 min ceiling
-        clearInterval(pollRef.current!); return;
+      if (Date.now() - started > pollCeilingMs) {
+        clearInterval(pollRef.current!);
+        pollRef.current = null;
+        setPayState("failed");
+        setPayMsg(`This payment session expired after ${lifetimeMinutes} minutes. Please start again.`);
+        return;
       }
+      if (checkInFlight) return;
+      checkInFlight = true;
       try {
         const r = await fetch("/api/payway/check", {
           method: "POST",
@@ -174,6 +182,7 @@ export default function SubscribeClient({
           setPayMsg("Payment received — tap Continue to finish.");
         }
       } catch { /* transient — keep polling */ }
+      finally { checkInFlight = false; }
     }, 3000);
   };
 
@@ -251,7 +260,11 @@ export default function SubscribeClient({
       if (typeof AbaPayway === "undefined") throw new Error("ABA checkout script not loaded — retry in a moment");
       AbaPayway.checkout();
       setPayState("waiting");
-      startPolling(signed.params.tran_id);
+      const lifetimeMinutes = Number.parseInt(signed.params.lifetime || "5", 10);
+      startPolling(
+        signed.params.tran_id,
+        Number.isFinite(lifetimeMinutes) && lifetimeMinutes > 0 ? lifetimeMinutes : 5,
+      );
     } catch (e) {
       setPayState("failed");
       setPayMsg(e instanceof Error ? e.message : "Payment could not be started");

@@ -5,7 +5,7 @@
  * ec476637. API key never leaves the server. */
 
 import crypto from "crypto";
-import { PAYWAY_ENDPOINTS } from "./config";
+import { PAYWAY_ENDPOINTS, PAYWAY_TRANSACTION_LIFETIME_MINUTES } from "./config";
 
 // Secrets stay in env; non-secret host/paths live in ./config.
 const MERCHANT_ID = process.env.PAYWAY_MERCHANT_ID || "";
@@ -30,6 +30,8 @@ export interface PurchaseInput {
   phone?: string;
   payment_option?: string; // "" = popup shows all methods (cards + KHQR)
   type?: "purchase" | "pre-auth";
+  lifetime?: number; // transaction lifetime in minutes
+  view_type?: "popup";
   continue_success_url?: string; // ABA redirects here when the payer clicks "Continue"
 }
 
@@ -56,11 +58,12 @@ export function buildPurchaseParams(input: PurchaseInput): Record<string, string
     custom_fields: "",
     return_params: "",
     payout: "",
-    lifetime: "",
+    lifetime: String(input.lifetime ?? PAYWAY_TRANSACTION_LIFETIME_MINUTES),
     additional_params: "",
     google_pay_token: "",
     skip_success_page: "",
   };
+  p.view_type = input.view_type ?? "popup";
   const b4 =
     p.req_time + p.merchant_id + p.tran_id + p.amount + p.items + p.shipping +
     p.firstname + p.lastname + p.email + p.phone + p.type + p.payment_option +

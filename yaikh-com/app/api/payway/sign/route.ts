@@ -3,7 +3,13 @@
  * The API key stays server-side. */
 
 import { NextResponse } from "next/server";
-import { signForPopup, paywayConfigured, type PurchaseInput, recordPayment } from "@/lib/payway";
+import {
+  PAYWAY_TRANSACTION_LIFETIME_MINUTES,
+  signForPopup,
+  paywayConfigured,
+  type PurchaseInput,
+  recordPayment,
+} from "@/lib/payway";
 import { getCloudPlanPaymentBreakdown } from "@/lib/subscription-pricing";
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -28,7 +34,6 @@ export async function POST(req: Request) {
   const tran_id = "T" + Date.now();
   const origin = req.headers.get("origin") || new URL(req.url).origin;
   const continue_success_url = `${origin}/subscribe?paid=${tran_id}`;
-
   const currency = "KHR";
   const signed = signForPopup({
     tran_id,
@@ -37,6 +42,8 @@ export async function POST(req: Request) {
     firstname: typeof body.contact_name === "string" ? body.contact_name : body.firstname,
     email: body.email,
     payment_option,
+    lifetime: PAYWAY_TRANSACTION_LIFETIME_MINUTES,
+    view_type: "popup",
     continue_success_url,
   });
 

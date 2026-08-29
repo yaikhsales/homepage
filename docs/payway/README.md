@@ -1,7 +1,7 @@
 # ABA PayWay Integration
 
 Payments on the Yai marketing site (`yaikh-com`, Next.js 14 App Router). Customers
-subscribe and pay via **ABA PayWay** (KHQR + Credit/Debit Card); admins manage
+subscribe and pay in KHR via **ABA PayWay KHQR**; admins manage
 transactions and refunds from a back-office console. All payment context is mirrored
 into a **MongoDB ledger** so nothing is lost past ABA's 3-day transaction window.
 
@@ -42,11 +42,12 @@ Documented in `.env.example`. Secrets live **only** here.
 PAYWAY_MERCHANT_ID=        # ABA merchant id
 PAYWAY_API_KEY=            # HMAC signing key (server-side only)
 PAYWAY_BASE_URL=https://checkout-sandbox.payway.com.kh   # prod: https://checkout.payway.com.kh
+PAYWAY_TRANSACTION_LIFETIME_MINUTES=5  # ABA transaction + status-check ceiling
 #PAYWAY_RSA_PUBLIC_KEY=    # required for refund (ABA-issued, per merchant)
 MONGO_URL=                 # Atlas connection string → activates the ledger
 ```
 
-Sandbox creds mirror `ABA/payway-tester/.env`. Test card: `5156839937706777`, any future expiry, any CVV.
+Sandbox credentials mirror `ABA/payway-tester/.env`.
 
 ---
 
@@ -70,7 +71,7 @@ Sandbox creds mirror `ABA/payway-tester/.env`. Test card: `5156839937706777`, an
 "Confirming…" screen renders on the **first paint** (no form flash, no hydration error).
 
 1. Pick plan → fill company/contact/email (validated) → agree all terms.
-2. Choose **ABA KHQR** or **Credit/Debit Card** → `/sign` → ABA hosted popup (`checkout2-0.js`, `AbaPayway.checkout()`).
+2. Choose **ABA KHQR** → `/sign` → ABA hosted popup (`checkout2-0.js`, `AbaPayway.checkout()`).
 3. Pay inside popup → ABA shows its **Success** screen → payer taps **Continues**.
 4. ABA redirects to `?paid=<tran>` → **Confirming** spinner → `/check` verifies → **Thank-you** page.
 
@@ -78,6 +79,19 @@ Sandbox creds mirror `ABA/payway-tester/.env`. Test card: `5156839937706777`, an
 - Success screen shows **only** after the Continue redirect (`?paid`). Poll is a nudge only — it does **not** auto-flip (that caused early "thank-you under ABA's sheet"). The manual "I've paid — verify now" button and the `visibilitychange` refocus check were both removed for the same reason.
 - Money + ledger are captured server-side regardless of whether the user returns; only the visual thank-you needs the tap.
 - Support email: `gamini@yaikh.com`.
+
+### ABA onboarding requirement map
+
+| ABA requirement | Implementation location |
+|-----------------|-------------------------|
+| Configurable 5-minute transaction lifetime | `.env.example` → `PAYWAY_TRANSACTION_LIFETIME_MINUTES`; parsed with a 5-minute fallback in `lib/payway/config.ts`; signed into each purchase by `app/api/payway/sign/route.ts`. |
+| Wait about 3 seconds, then check every 3 seconds | `startPolling()` in `app/subscribe/subscribe-client.tsx`; the first `setInterval` call runs after 3 seconds. |
+| Stop checks on `APPROVED` or lifetime expiry | `startPolling()` clears its interval when `/api/payway/check` returns `paid`, or when the signed lifetime ceiling is reached. An in-flight guard prevents overlapping status requests. |
+| Verify through Check Transaction API | Endpoint in `lib/payway/config.ts`; HMAC request in `lib/payway/client.ts`; server verification in `app/api/payway/check/route.ts`. |
+| Popup checkout | `view_type="popup"` is signed by `app/api/payway/sign/route.ts`; the hidden form uses `target="aba_webservice"`, loads `checkout2-0.js`, and calls `AbaPayway.checkout()` in `app/subscribe/subscribe-client.tsx`. |
+| ABA owns popup retry behavior | The site does not replace or intercept PayWay's popup. ABA may retry while the transaction is active; after the lifetime expires, the customer starts a fresh signed transaction from the ABA KHQR button. |
+
+Primary references: [eCommerce Checkout](https://developer.payway.com.kh/ecommerce-checkout-3158159f0) and [Check Transaction](https://developer.payway.com.kh/check-transaction-14530826e0).
 
 ---
 
@@ -104,15 +118,14 @@ contact, email). **ABA stays authoritative for money**; the ledger is for search
 ## 7. Brand assets — `yaikh-com/public/brand/`
 
 `aba.svg` `khqr.svg` `visa.svg` `mastercard.svg` `unionpay.svg` `jcb.svg` `aba-card.svg` `aba-khqr.svg`.
-Footer **"We accept"** strip (`PaymentStrip` in `app/page.tsx`, bottom-right) + the `/subscribe`
-card-brand row both consume these. SVGs carry their own tiles → sit on any background, no wrapper.
+The footer **"We accept"** strip (`PaymentStrip` in `app/page.tsx`, bottom-right)
+uses the ABA and KHQR assets. SVGs carry their own tiles → sit on any background, no wrapper.
 
 ---
 
 ## 8. Known gaps / TODO
 
 - **Refund blocked** for live merchant until ABA issues that merchant's **RSA public key** (`PAYWAY_RSA_PUBLIC_KEY`). Code is correct — proven on a working sandbox merchant (got PTL58 provider-limit = auth succeeded). Cannot self-generate; ABA must provide.
-- ABA sandbox flags **automated** card fills (`TXPG-SB-01`); real/manual card payments succeed. Not a code bug.
 - Plans in `/subscribe` are a visual stub mirroring the homepage pricing ladder — real picker is a follow-up.
 - Terms text is a working draft; final MSA/Privacy links pending.
 
