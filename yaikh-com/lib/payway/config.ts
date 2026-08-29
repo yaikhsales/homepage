@@ -20,11 +20,21 @@ export const PAYWAY_ENDPOINTS = {
   refund:            `${PAYWAY_BASE}/api/merchant-portal/merchant-access/online-transaction/refund`,
 } as const;
 
+const configuredLifetime = Number.parseInt(
+  process.env.PAYWAY_TRANSACTION_LIFETIME_MINUTES || "",
+  10,
+);
+export const PAYWAY_TRANSACTION_LIFETIME_MINUTES =
+  Number.isFinite(configuredLifetime) && configuredLifetime > 0
+    ? configuredLifetime
+    : 5;
+
 // Misc tunables (non-secret).
 export const PAYWAY_CONFIG = {
-  defaultCurrency: "USD" as "USD" | "KHR",
+  defaultCurrency: "KHR" as "USD" | "KHR",
   supportEmail: "gamini@yaikh.com",
   // /subscribe payment polling
   pollIntervalMs: 3000,
-  pollCeilingMs: 5 * 60_000,
+  transactionLifetimeMinutes: PAYWAY_TRANSACTION_LIFETIME_MINUTES,
+  pollCeilingMs: PAYWAY_TRANSACTION_LIFETIME_MINUTES * 60_000,
 } as const;

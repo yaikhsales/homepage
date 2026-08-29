@@ -6,7 +6,8 @@
 import { NextResponse } from "next/server";
 import {
   checkTransaction, paywayConfigured, markPayment, getPayment,
-  claimReceiptDelivery, markReceiptDelivery,
+  claimReceiptDelivery, markReceiptDelivery, expirePendingPayment,
+  PAYWAY_TRANSACTION_LIFETIME_MINUTES,
 } from "@/lib/payway";
 import { createSubscriptionReceipt, receiptServiceLiveConfigured } from "@/lib/subscription-receipt";
 export const dynamic = "force-dynamic";
@@ -61,6 +62,7 @@ export async function POST(req: Request) {
   const data = (res && typeof res === "object" && res.data) || {};
   const code = data.payment_status_code;
   const paid = code === 0;
+  let status = typeof data.payment_status === "string" ? data.payment_status : null;
 
   // Keep our ledger in sync with the live ABA status.
   let receipt: Awaited<ReturnType<typeof deliverReceipt>> = null;
@@ -72,12 +74,27 @@ export async function POST(req: Request) {
   } else if (typeof data.payment_status === "string" && /DECLIN|CANCEL|REFUND/i.test(data.payment_status)) {
     const s = data.payment_status.toUpperCase();
     await markPayment(tran_id, { status: s.includes("REFUND") ? "REFUNDED" : s.includes("CANCEL") ? "CANCELLED" : "DECLINED" });
+  } else if (Number(code) === 2 && (res?.status?.code === "00" || res?.status?.code === 0)) {
+    // ABA still says PENDING. Only expire after the signed lifetime has elapsed;
+    // the atomic PENDING filter prevents overwriting a concurrent approval.
+    const existing = await getPayment(tran_id);
+    const createdAt = existing ? Date.parse(existing.created_at) : Number.NaN;
+    const expiresAt = existing?.expires_at
+      ? Date.parse(existing.expires_at)
+      : createdAt + PAYWAY_TRANSACTION_LIFETIME_MINUTES * 60_000;
+    if (existing?.status === "EXPIRED") {
+      // ABA keeps an unpaid transaction as PENDING after its checkout lifetime.
+      // Preserve our terminal ledger state on repeat admin checks.
+      status = "EXPIRED";
+    } else if (existing?.status === "PENDING" && Number.isFinite(expiresAt) && expiresAt <= Date.now()) {
+      if (await expirePendingPayment(tran_id)) status = "EXPIRED";
+    }
   }
 
   return NextResponse.json({
     paid,
     code: code ?? null,
-    status: data.payment_status ?? null,
+    status,
     raw_status: res?.status ?? null,
     receipt,
   });

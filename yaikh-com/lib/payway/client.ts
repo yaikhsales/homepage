@@ -5,7 +5,7 @@
  * ec476637. API key never leaves the server. */
 
 import crypto from "crypto";
-import { PAYWAY_ENDPOINTS } from "./config";
+import { PAYWAY_ENDPOINTS, PAYWAY_TRANSACTION_LIFETIME_MINUTES } from "./config";
 
 // Secrets stay in env; non-secret host/paths live in ./config.
 const MERCHANT_ID = process.env.PAYWAY_MERCHANT_ID || "";
@@ -30,6 +30,8 @@ export interface PurchaseInput {
   phone?: string;
   payment_option?: string; // "" = popup shows all methods (cards + KHQR)
   type?: "purchase" | "pre-auth";
+  lifetime?: number; // transaction lifetime in minutes
+  view_type?: "popup";
   continue_success_url?: string; // ABA redirects here when the payer clicks "Continue"
 }
 
@@ -56,11 +58,12 @@ export function buildPurchaseParams(input: PurchaseInput): Record<string, string
     custom_fields: "",
     return_params: "",
     payout: "",
-    lifetime: "",
+    lifetime: String(input.lifetime ?? PAYWAY_TRANSACTION_LIFETIME_MINUTES),
     additional_params: "",
     google_pay_token: "",
     skip_success_page: "",
   };
+  p.view_type = input.view_type ?? "popup";
   const b4 =
     p.req_time + p.merchant_id + p.tran_id + p.amount + p.items + p.shipping +
     p.firstname + p.lastname + p.email + p.phone + p.type + p.payment_option +
@@ -105,7 +108,13 @@ export async function checkTransaction(tran_id: string) {
 // real newlines so crypto.publicEncrypt can parse the key (else refund 500s).
 const RSA_PUB = (process.env.PAYWAY_RSA_PUBLIC_KEY || "").replace(/\\n/g, "\n");
 export function refundConfigured(): boolean {
-  return Boolean(RSA_PUB);
+  if (!RSA_PUB) return false;
+  try {
+    crypto.createPublicKey(RSA_PUB);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 // RSA-encrypt JSON in PKCS1 117-byte chunks (1024-bit key), base64 the whole.

@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Script from "next/script";
+import MobileNav from "@/components/mobile-nav";
 
 /* AbaPayway is a top-level const inside checkout.prod.js (NOT on window) —
  * referenced as a bare global identifier. */
@@ -152,13 +153,15 @@ export default function SubscribeClient({
   // Poll server-side check-transaction just to nudge the payer — we do NOT flip
   // to the success screen here. That only happens when they click "Continue" in
   // ABA's own window, which redirects to /subscribe?paid=<tran> (handled on mount).
-  const startPolling = (tranId: string) => {
+  const startPolling = (tranId: string, lifetimeMinutes = 5) => {
     if (pollRef.current) clearInterval(pollRef.current);
     const started = Date.now();
+    const pollCeilingMs = lifetimeMinutes * 60_000;
+    let checkInFlight = false;
     pollRef.current = setInterval(async () => {
-      if (Date.now() - started > 5 * 60_000) { // 5 min ceiling
-        clearInterval(pollRef.current!); return;
-      }
+      if (checkInFlight) return;
+      const lifetimeExpired = Date.now() - started >= pollCeilingMs;
+      checkInFlight = true;
       try {
         const r = await fetch("/api/payway/check", {
           method: "POST",
@@ -172,8 +175,21 @@ export default function SubscribeClient({
           // advance on: (a) the Continue redirect ?paid=<tran>, or (b) the refocus
           // check, which fires only when the payer left to the ABA app and returned.
           setPayMsg("Payment received — tap Continue to finish.");
+        } else if (lifetimeExpired) {
+          clearInterval(pollRef.current!);
+          pollRef.current = null;
+          setPayState("failed");
+          setPayMsg(`This payment session expired after ${lifetimeMinutes} minutes. Please start again.`);
         }
-      } catch { /* transient — keep polling */ }
+      } catch {
+        if (lifetimeExpired) {
+          clearInterval(pollRef.current!);
+          pollRef.current = null;
+          setPayState("failed");
+          setPayMsg("The payment session ended, but its final status could not be verified. Please check the merchant portal.");
+        }
+      }
+      finally { checkInFlight = false; }
     }, 3000);
   };
 
@@ -251,7 +267,11 @@ export default function SubscribeClient({
       if (typeof AbaPayway === "undefined") throw new Error("ABA checkout script not loaded — retry in a moment");
       AbaPayway.checkout();
       setPayState("waiting");
-      startPolling(signed.params.tran_id);
+      const lifetimeMinutes = Number.parseInt(signed.params.lifetime || "5", 10);
+      startPolling(
+        signed.params.tran_id,
+        Number.isFinite(lifetimeMinutes) && lifetimeMinutes > 0 ? lifetimeMinutes : 5,
+      );
     } catch (e) {
       setPayState("failed");
       setPayMsg(e instanceof Error ? e.message : "Payment could not be started");
@@ -301,17 +321,24 @@ export default function SubscribeClient({
           <p className="flex-1 leading-5">{payMsg}</p>
         </button>
       )}
-      {/* Header bar */}
-      <div className="bg-yai-navy text-white">
-        <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
+      {/* Mobile nav */}
+      <MobileNav hideLogin={false} />
+
+      {/* Desktop header bar */}
+      <div className="hidden lg:block bg-yai-navy text-white fixed top-0 inset-x-0 z-40 border-b border-white/10">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="font-serif text-2xl font-semibold hover:text-yai-orange transition">
             Yai
           </Link>
-          <Link href="/" className="text-sm text-white/70 hover:text-yai-orange transition">
-            ← Back to home
-          </Link>
+          <div className="flex items-center gap-8 text-sm">
+            <Link href="/" className="text-white/70 hover:text-yai-orange transition">← Back to home</Link>
+            <a href="https://main.yaikh.com/login" className="px-4 py-2 rounded-full bg-yai-orange text-white hover:bg-yai-orange/90 transition text-xs font-bold">LOGIN</a>
+          </div>
         </div>
       </div>
+
+      {/* Spacer for desktop nav */}
+      <div className="hidden lg:block h-16" />
 
       {/* Hero */}
       <div className="max-w-6xl mx-auto px-6 pt-10">
@@ -435,8 +462,6 @@ export default function SubscribeClient({
           )}
         </div>
       </div>
-
-      {/* Hidden form the ABA popup submits into its own iframe. */}
       {!isInvoicePlan && <>
         <form ref={formRef} method="POST" target="aba_webservice" id="aba_merchant_request" style={{ display: "none" }} />
         <Script src="https://code.jquery.com/jquery-3.7.1.min.js" strategy="afterInteractive" />
@@ -520,11 +545,13 @@ export default function SubscribeClient({
 function VerifyingPayment() {
   return (
     <main className="min-h-screen bg-yai-bg text-yai-navy flex flex-col">
-      <div className="bg-yai-navy text-white">
-        <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
+      <MobileNav hideLogin={true} />
+      <div className="hidden lg:block bg-yai-navy text-white fixed top-0 inset-x-0 z-40 border-b border-white/10">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <span className="font-serif text-2xl font-semibold">Yai</span>
         </div>
       </div>
+      <div className="hidden lg:block h-16" />
       <div className="flex-1 flex items-center justify-center px-6 py-16">
         <div className="text-center">
           <div className="mx-auto w-12 h-12 rounded-full border-[3px] border-yai-navy/15 border-t-yai-orange animate-spin" />
@@ -543,12 +570,14 @@ function InvoiceRequestSuccess({
 }) {
   return (
     <main className="min-h-screen bg-yai-bg text-yai-navy flex flex-col">
-      <div className="bg-yai-navy text-white">
-        <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
+      <MobileNav hideLogin={false} />
+      <div className="hidden lg:block bg-yai-navy text-white fixed top-0 inset-x-0 z-40 border-b border-white/10">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="font-serif text-2xl font-semibold hover:text-yai-orange transition">Yai</Link>
           <Link href="/" className="text-sm text-white/70 hover:text-yai-orange transition">← Back to home</Link>
         </div>
       </div>
+      <div className="hidden lg:block h-16" />
       <div className="flex-1 flex items-center justify-center px-6 py-16">
         <div className="w-full max-w-lg bg-white rounded-2xl border border-gray-200 shadow-sm p-8 sm:p-10 text-center">
           <div className="mx-auto w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mb-6">
@@ -577,12 +606,14 @@ function PaymentSuccess({
 }) {
   return (
     <main className="min-h-screen bg-yai-bg text-yai-navy flex flex-col">
-      <div className="bg-yai-navy text-white">
-        <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
+      <MobileNav hideLogin={false} />
+      <div className="hidden lg:block bg-yai-navy text-white fixed top-0 inset-x-0 z-40 border-b border-white/10">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="font-serif text-2xl font-semibold hover:text-yai-orange transition">Yai</Link>
           <Link href="/" className="text-sm text-white/70 hover:text-yai-orange transition">← Back to home</Link>
         </div>
       </div>
+      <div className="hidden lg:block h-16" />
 
       <div className="flex-1 flex items-center justify-center px-6 py-16">
         <div className="w-full max-w-lg bg-white rounded-2xl border border-gray-200 shadow-sm p-8 sm:p-10 text-center">
@@ -605,8 +636,7 @@ function PaymentSuccess({
           <Row label="Subscription subtotal" value={`${formatKhr(khrAmount)}`} />
           <Row label="VAT (10%)" value={`${formatKhr(vatKhrAmount)}`} />
           <Row label="Amount paid" value={`${formatKhr(totalKhrAmount)}`} />
-          <Row label="USD reference" value={`$${amount.toLocaleString()} USD`} />
-            {tranId && <Row label="Reference" value={tranId} mono />}
+          {tranId && <Row label="Reference" value={tranId} mono />}
           </div>
 
           <p className="text-[12px] text-gray-400 mt-5">

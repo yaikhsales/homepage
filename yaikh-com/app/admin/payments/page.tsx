@@ -576,7 +576,7 @@ function StatusPill({ status }: { status: string }) {
   const s = status.toUpperCase();
   const cls = s.includes("APPROVE") || s === "00" ? "bg-green-50 text-green-700 border-green-200"
     : s.includes("REFUND") ? "bg-blue-50 text-blue-700 border-blue-200"
-    : s.includes("DECLINE") || s.includes("CANCEL") ? "bg-red-50 text-red-700 border-red-200"
+    : s.includes("DECLINE") || s.includes("CANCEL") || s.includes("EXPIRE") ? "bg-red-50 text-red-700 border-red-200"
     : "bg-amber-50 text-amber-700 border-amber-200";
   return <span className={`inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${cls}`}>{status || "—"}</span>;
 }

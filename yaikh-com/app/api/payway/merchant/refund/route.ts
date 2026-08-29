@@ -9,7 +9,11 @@ export const runtime = "nodejs";
 export async function POST(req: Request) {
   if (!isAdmin(req)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   if (!paywayConfigured()) return NextResponse.json({ error: "PayWay not configured" }, { status: 503 });
-  if (!refundConfigured()) return NextResponse.json({ error: "Refund not configured (missing RSA key)" }, { status: 503 });
+  if (!refundConfigured()) {
+    return NextResponse.json({
+      error: "Refund not configured: PAYWAY_RSA_PUBLIC_KEY is missing or invalid. Store the PEM as one quoted value with \\n separators, then restart the server.",
+    }, { status: 503 });
+  }
   const b = await req.json().catch(() => ({}));
   const amount = Number(b.refund_amount);
   if (!b.tran_id) return NextResponse.json({ error: "Missing tran_id" }, { status: 400 });
