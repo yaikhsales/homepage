@@ -158,14 +158,8 @@ export default function SubscribeClient({
     const pollCeilingMs = lifetimeMinutes * 60_000;
     let checkInFlight = false;
     pollRef.current = setInterval(async () => {
-      if (Date.now() - started > pollCeilingMs) {
-        clearInterval(pollRef.current!);
-        pollRef.current = null;
-        setPayState("failed");
-        setPayMsg(`This payment session expired after ${lifetimeMinutes} minutes. Please start again.`);
-        return;
-      }
       if (checkInFlight) return;
+      const lifetimeExpired = Date.now() - started >= pollCeilingMs;
       checkInFlight = true;
       try {
         const r = await fetch("/api/payway/check", {
@@ -180,8 +174,20 @@ export default function SubscribeClient({
           // advance on: (a) the Continue redirect ?paid=<tran>, or (b) the refocus
           // check, which fires only when the payer left to the ABA app and returned.
           setPayMsg("Payment received — tap Continue to finish.");
+        } else if (lifetimeExpired) {
+          clearInterval(pollRef.current!);
+          pollRef.current = null;
+          setPayState("failed");
+          setPayMsg(`This payment session expired after ${lifetimeMinutes} minutes. Please start again.`);
         }
-      } catch { /* transient — keep polling */ }
+      } catch {
+        if (lifetimeExpired) {
+          clearInterval(pollRef.current!);
+          pollRef.current = null;
+          setPayState("failed");
+          setPayMsg("The payment session ended, but its final status could not be verified. Please check the merchant portal.");
+        }
+      }
       finally { checkInFlight = false; }
     }, 3000);
   };

@@ -54,6 +54,7 @@ export async function POST(req: Request) {
     vat_amount: pricing.vatAmount,
     is_fixed_rate: true,
     fixed_rate: pricing.fixedRate,
+    expires_at: new Date(Date.now() + PAYWAY_TRANSACTION_LIFETIME_MINUTES * 60_000).toISOString(),
     receipt_status: "PENDING",
     plan: plan || undefined,
     company: typeof body.company === "string" ? body.company : undefined,

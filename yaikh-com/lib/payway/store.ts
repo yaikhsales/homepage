@@ -17,7 +17,7 @@ export function paymentsEnabled(): boolean {
   return Boolean(process.env.MONGO_URL);
 }
 
-export type PaymentStatus = "PENDING" | "APPROVED" | "DECLINED" | "REFUNDED" | "CANCELLED";
+export type PaymentStatus = "PENDING" | "APPROVED" | "DECLINED" | "REFUNDED" | "CANCELLED" | "EXPIRED";
 export type ReceiptStatus = "PENDING" | "POSTING" | "POSTED" | "MOCK" | "FAILED" | "DISABLED";
 
 export interface PaymentRecord {
@@ -38,6 +38,8 @@ export interface PaymentRecord {
   email?: string;
   source: "subscribe" | "merchant-qr";
   created_at: string;           // ISO
+  expires_at?: string;
+  expired_at?: string;
   paid_at?: string;
   updated_at: string;
   aba_trace_id?: string;
@@ -91,6 +93,22 @@ export async function markPayment(
     await c.updateOne({ tran_id }, { $set: set });
   } catch (e) {
     console.warn("[payments-store] markPayment failed:", (e as Error).message);
+  }
+}
+
+/** Mark an ABA-confirmed unpaid transaction expired without overwriting a concurrent approval. */
+export async function expirePendingPayment(tran_id: string): Promise<boolean> {
+  if (!paymentsEnabled()) return false;
+  const now = new Date().toISOString();
+  try {
+    const result = await (await col()).updateOne(
+      { tran_id, status: "PENDING" },
+      { $set: { status: "EXPIRED", expired_at: now, updated_at: now } },
+    );
+    return result.modifiedCount === 1;
+  } catch (e) {
+    console.warn("[payments-store] expirePendingPayment failed:", (e as Error).message);
+    return false;
   }
 }
 
