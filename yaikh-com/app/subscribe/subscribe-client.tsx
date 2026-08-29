@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Script from "next/script";
+import MobileNav from "@/components/mobile-nav";
 
 /* AbaPayway is a top-level const inside checkout.prod.js (NOT on window) —
  * referenced as a bare global identifier. */
@@ -320,17 +321,24 @@ export default function SubscribeClient({
           <p className="flex-1 leading-5">{payMsg}</p>
         </button>
       )}
-      {/* Header bar */}
-      <div className="bg-yai-navy text-white">
-        <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
+      {/* Mobile nav */}
+      <MobileNav hideLogin={false} />
+
+      {/* Desktop header bar */}
+      <div className="hidden lg:block bg-yai-navy text-white fixed top-0 inset-x-0 z-40 border-b border-white/10">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="font-serif text-2xl font-semibold hover:text-yai-orange transition">
             Yai
           </Link>
-          <Link href="/" className="text-sm text-white/70 hover:text-yai-orange transition">
-            ← Back to home
-          </Link>
+          <div className="flex items-center gap-8 text-sm">
+            <Link href="/" className="text-white/70 hover:text-yai-orange transition">← Back to home</Link>
+            <a href="https://main.yaikh.com/login" className="px-4 py-2 rounded-full bg-yai-orange text-white hover:bg-yai-orange/90 transition text-xs font-bold">LOGIN</a>
+          </div>
         </div>
       </div>
+
+      {/* Spacer for desktop nav */}
+      <div className="hidden lg:block h-16" />
 
       {/* Hero */}
       <div className="max-w-6xl mx-auto px-6 pt-10">
@@ -454,8 +462,6 @@ export default function SubscribeClient({
           )}
         </div>
       </div>
-
-      {/* Hidden form the ABA popup submits into its own iframe. */}
       {!isInvoicePlan && <>
         <form ref={formRef} method="POST" target="aba_webservice" id="aba_merchant_request" style={{ display: "none" }} />
         <Script src="https://code.jquery.com/jquery-3.7.1.min.js" strategy="afterInteractive" />
@@ -539,11 +545,13 @@ export default function SubscribeClient({
 function VerifyingPayment() {
   return (
     <main className="min-h-screen bg-yai-bg text-yai-navy flex flex-col">
-      <div className="bg-yai-navy text-white">
-        <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
+      <MobileNav hideLogin={true} />
+      <div className="hidden lg:block bg-yai-navy text-white fixed top-0 inset-x-0 z-40 border-b border-white/10">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <span className="font-serif text-2xl font-semibold">Yai</span>
         </div>
       </div>
+      <div className="hidden lg:block h-16" />
       <div className="flex-1 flex items-center justify-center px-6 py-16">
         <div className="text-center">
           <div className="mx-auto w-12 h-12 rounded-full border-[3px] border-yai-navy/15 border-t-yai-orange animate-spin" />
@@ -562,12 +570,14 @@ function InvoiceRequestSuccess({
 }) {
   return (
     <main className="min-h-screen bg-yai-bg text-yai-navy flex flex-col">
-      <div className="bg-yai-navy text-white">
-        <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
+      <MobileNav hideLogin={false} />
+      <div className="hidden lg:block bg-yai-navy text-white fixed top-0 inset-x-0 z-40 border-b border-white/10">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="font-serif text-2xl font-semibold hover:text-yai-orange transition">Yai</Link>
           <Link href="/" className="text-sm text-white/70 hover:text-yai-orange transition">← Back to home</Link>
         </div>
       </div>
+      <div className="hidden lg:block h-16" />
       <div className="flex-1 flex items-center justify-center px-6 py-16">
         <div className="w-full max-w-lg bg-white rounded-2xl border border-gray-200 shadow-sm p-8 sm:p-10 text-center">
           <div className="mx-auto w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mb-6">
@@ -596,12 +606,14 @@ function PaymentSuccess({
 }) {
   return (
     <main className="min-h-screen bg-yai-bg text-yai-navy flex flex-col">
-      <div className="bg-yai-navy text-white">
-        <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
+      <MobileNav hideLogin={false} />
+      <div className="hidden lg:block bg-yai-navy text-white fixed top-0 inset-x-0 z-40 border-b border-white/10">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="font-serif text-2xl font-semibold hover:text-yai-orange transition">Yai</Link>
           <Link href="/" className="text-sm text-white/70 hover:text-yai-orange transition">← Back to home</Link>
         </div>
       </div>
+      <div className="hidden lg:block h-16" />
 
       <div className="flex-1 flex items-center justify-center px-6 py-16">
         <div className="w-full max-w-lg bg-white rounded-2xl border border-gray-200 shadow-sm p-8 sm:p-10 text-center">
@@ -624,8 +636,7 @@ function PaymentSuccess({
           <Row label="Subscription subtotal" value={`${formatKhr(khrAmount)}`} />
           <Row label="VAT (10%)" value={`${formatKhr(vatKhrAmount)}`} />
           <Row label="Amount paid" value={`${formatKhr(totalKhrAmount)}`} />
-          <Row label="USD reference" value={`$${amount.toLocaleString()} USD`} />
-            {tranId && <Row label="Reference" value={tranId} mono />}
+          {tranId && <Row label="Reference" value={tranId} mono />}
           </div>
 
           <p className="text-[12px] text-gray-400 mt-5">

@@ -62,4 +62,5 @@ Thumbs.db
 **/.agents/logs/
 **/.claude/state/
 **/.claude/sessions/
+**/*.inspect.ndjson
 yaikh-com/public/dashboard/**/*.map

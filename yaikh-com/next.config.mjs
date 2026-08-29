@@ -1,7 +1,19 @@
 /** @type {import('next').NextConfig} */
+import { createRequire } from "node:module";
+
+const require = createRequire(import.meta.url);
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  // object-hash advertises a browser UMD build which Next's webpack loader
+  // treats as a non-callable default export. Tailwind needs its Node entry.
+  webpack(config) {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "object-hash$": require.resolve("object-hash/index.js"),
+    };
+    return config;
+  },
   // @sparticuz/chromium ships a native Linux binary that must NOT be
   // bundled by Next.js — it has to be loaded from node_modules at runtime
   // (used by /api/pdf for server-side PDF generation in the absorbed

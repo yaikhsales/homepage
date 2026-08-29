@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { LangProvider, useLang, type Lang } from "./i18n";
 import Footer from "@/components/site-footer";
+import MobileNav from "@/components/mobile-nav";
 
 /* yaikh.com home — modern, partner-review optimised single-page scroll.
  * Sections: Nav · Hero · Audience router · 3-layer story · Customers ·
@@ -19,7 +20,14 @@ export default function Home() {
   return (
     <LangProvider>
       <main className="overflow-x-hidden">
-        <Nav />
+        {/* Mobile nav */}
+        <MobileNav hideLogin={false} />
+
+        {/* Desktop nav */}
+        <div className="hidden lg:block">
+          <Nav />
+        </div>
+
         <Hero />
         <LayerStory />
         <CustomersStrip />

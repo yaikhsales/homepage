@@ -1,4 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { ArrowLeft, MessageCircle, Video } from "lucide-react";
+import { IconRenderer } from "../components/IconRenderer";
+import { useTranslation } from "../translate/TranslationContext";
+import GeneralAIAgent from "../general-ag";
+import BotModules from "../chatbot/bot-modules";
+import VideoViewer from "../components/VideoViewer";
 
 // Sub-menu titles that belong to the Accounting PA. When the user
 // lands on one of these the floating bot bubble wears the PA's
@@ -69,14 +76,6 @@ MODULE_ID_TO_CARDS["iews"] = [
   { title: "Withholding", icon: "FileBadge",       color: "bg-amber-500 text-black",   isIews: true },
   { title: "Salaries",    icon: "BadgeDollarSign", color: "bg-indigo-500 text-white",  isIews: true },
 ];
-import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { ArrowLeft, MessageCircle, Video } from "lucide-react";
-import { IconRenderer } from "../components/IconRenderer";
-import { useTranslation } from "../translate/TranslationContext";
-import GeneralAIAgent from "../general-ag";
-import BotModules from "../chatbot/bot-modules";
-import VideoViewer from "../components/VideoViewer";
-
 // Mapping function to match card titles to sub-icon image filenames
 const getSubIconImage = (title) => {
   // Normalize title for matching (lowercase, remove special chars)

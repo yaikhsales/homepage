@@ -108,7 +108,13 @@ export async function checkTransaction(tran_id: string) {
 // real newlines so crypto.publicEncrypt can parse the key (else refund 500s).
 const RSA_PUB = (process.env.PAYWAY_RSA_PUBLIC_KEY || "").replace(/\\n/g, "\n");
 export function refundConfigured(): boolean {
-  return Boolean(RSA_PUB);
+  if (!RSA_PUB) return false;
+  try {
+    crypto.createPublicKey(RSA_PUB);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 // RSA-encrypt JSON in PKCS1 117-byte chunks (1024-bit key), base64 the whole.

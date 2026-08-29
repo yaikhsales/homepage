@@ -82,7 +82,11 @@ export async function POST(req: Request) {
     const expiresAt = existing?.expires_at
       ? Date.parse(existing.expires_at)
       : createdAt + PAYWAY_TRANSACTION_LIFETIME_MINUTES * 60_000;
-    if (existing?.status === "PENDING" && Number.isFinite(expiresAt) && expiresAt <= Date.now()) {
+    if (existing?.status === "EXPIRED") {
+      // ABA keeps an unpaid transaction as PENDING after its checkout lifetime.
+      // Preserve our terminal ledger state on repeat admin checks.
+      status = "EXPIRED";
+    } else if (existing?.status === "PENDING" && Number.isFinite(expiresAt) && expiresAt <= Date.now()) {
       if (await expirePendingPayment(tran_id)) status = "EXPIRED";
     }
   }
