@@ -10,6 +10,7 @@
  * and swallow errors so a Mongo hiccup never breaks the ABA payment flow. */
 
 import { getDb } from "@/lib/mongo";
+import { PAYWAY_TRANSACTION_LIFETIME_MINUTES } from "./config";
 
 const COLLECTION = "payments";
 
@@ -28,7 +29,7 @@ export interface PaymentRecord {
   vat_amount?: number;
   is_fixed_rate?: boolean;
   fixed_rate?: number;
-  payment_option?: string;      // abapay_khqr | cards | ""
+  payment_option?: string;      // abapay_khqr for website subscriptions
   status: PaymentStatus;
   refunded_amount?: number;
   plan?: string;
@@ -109,6 +110,32 @@ export async function expirePendingPayment(tran_id: string): Promise<boolean> {
   } catch (e) {
     console.warn("[payments-store] expirePendingPayment failed:", (e as Error).message);
     return false;
+  }
+}
+
+/** Expire ledger rows whose signed ABA checkout lifetime has elapsed. */
+export async function expireStalePendingPayments(): Promise<number> {
+  if (!paymentsEnabled()) return 0;
+  const now = new Date().toISOString();
+  const legacyCutoff = new Date(
+    Date.now() - PAYWAY_TRANSACTION_LIFETIME_MINUTES * 60_000,
+  ).toISOString();
+  try {
+    const result = await (await col()).updateMany(
+      {
+        status: "PENDING",
+        source: "subscribe",
+        $or: [
+          { expires_at: { $lte: now } },
+          { expires_at: { $exists: false }, created_at: { $lte: legacyCutoff } },
+        ],
+      },
+      { $set: { status: "EXPIRED", expired_at: now, updated_at: now } },
+    );
+    return result.modifiedCount;
+  } catch (e) {
+    console.warn("[payments-store] expireStalePendingPayments failed:", (e as Error).message);
+    return 0;
   }
 }
 
