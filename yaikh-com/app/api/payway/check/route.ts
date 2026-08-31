@@ -91,11 +91,22 @@ export async function POST(req: Request) {
     }
   }
 
+  // Return only the non-sensitive fields needed to rebuild the confirmation
+  // page after a refresh. Contact details remain server-side in the ledger.
+  const payment = paid ? await getPayment(tran_id) : null;
+
   return NextResponse.json({
     paid,
     code: code ?? null,
     status,
     raw_status: res?.status ?? null,
     receipt,
+    payment: payment ? {
+      plan: payment.plan ?? null,
+      currency: payment.currency,
+      subtotal_amount: payment.subtotal_amount ?? null,
+      vat_amount: payment.vat_amount ?? null,
+      total_amount: payment.amount,
+    } : null,
   });
 }

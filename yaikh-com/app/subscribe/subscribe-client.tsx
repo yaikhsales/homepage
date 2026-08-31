@@ -37,6 +37,13 @@ const formatKhr = (amount: number) => `៛${Math.round(amount).toLocaleString("e
 type PayState = "idle" | "opening" | "waiting" | "paid" | "failed" | "verifying";
 type InvoiceState = "idle" | "requesting" | "code" | "verifying" | "requested";
 type ReceiptState = { status: "posted" | "mock" | "processing" | "pending" | "disabled"; number?: string; url?: string } | null;
+type ConfirmedPayment = {
+  plan: string | null;
+  currency: string;
+  subtotal_amount: number | null;
+  vat_amount: number | null;
+  total_amount: number;
+} | null;
 
 const DRAFT_KEY = "yai-subscribe-draft";
 const COUNTRIES = ["Cambodia (TexLink / GK SMART)", "Singapore (GGMT PTE LTD)", "Other"];
@@ -44,9 +51,11 @@ const COUNTRIES = ["Cambodia (TexLink / GK SMART)", "Singapore (GGMT PTE LTD)", 
 export default function SubscribeClient({
   initialPaidTran,
   khrPerUsd,
+  resultOnly = false,
 }: {
   initialPaidTran?: string;
   khrPerUsd: number;
+  resultOnly?: boolean;
 }) {
   const [selectedPlan, setSelectedPlan] = useState<string | null>(PLANS[0].name);
   const [companyName, setCompanyName] = useState("");
@@ -54,15 +63,16 @@ export default function SubscribeClient({
   const [contactName, setContactName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [agreed, setAgreed] = useState<boolean[]>(TERMS.map(() => false));
-  // Server passes ?paid=<tran> in, so SSR and client agree on the first paint —
+  // Server passes the transaction reference in, so SSR and client agree on the first paint —
   // the "Confirming…" screen shows immediately, no form flash, no hydration error.
-  const [payState, setPayState] = useState<PayState>(initialPaidTran ? "verifying" : "idle");
-  const [payMsg, setPayMsg] = useState("");
+  const [payState, setPayState] = useState<PayState>(initialPaidTran ? "verifying" : resultOnly ? "failed" : "idle");
+  const [payMsg, setPayMsg] = useState(resultOnly && !initialPaidTran ? "Missing payment reference." : "");
   const [invoiceState, setInvoiceState] = useState<InvoiceState>("idle");
   const [otpRequestId, setOtpRequestId] = useState("");
   const [otpCode, setOtpCode] = useState("");
   const [invoiceNumber, setInvoiceNumber] = useState("");
   const [receipt, setReceipt] = useState<ReceiptState>(null);
+  const [confirmedPayment, setConfirmedPayment] = useState<ConfirmedPayment>(null);
   const [toastDismissing, setToastDismissing] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -82,14 +92,14 @@ export default function SubscribeClient({
   }, []);
 
   useEffect(() => {
-    if (payState !== "failed" || !payMsg) return;
+    if (resultOnly || payState !== "failed" || !payMsg) return;
     setToastDismissing(false);
     const dismissTimer = window.setTimeout(dismissToast, 2500);
     return () => {
       window.clearTimeout(dismissTimer);
       if (toastDismissTimerRef.current) window.clearTimeout(toastDismissTimerRef.current);
     };
-  }, [dismissToast, payState, payMsg]);
+  }, [dismissToast, payState, payMsg, resultOnly]);
 
   // Persist the form (company + T&C) so cancelling the ABA popup — which can
   // reload the page — never wipes what the user entered. sessionStorage:
@@ -128,11 +138,11 @@ export default function SubscribeClient({
   const totalKhrAmount = khrAmount + vatKhrAmount;
   const busy = payState === "opening" || payState === "waiting" || invoiceState === "requesting" || invoiceState === "verifying";
 
-  // ABA "Continue" click redirects here with ?paid=<tran>. Verify it server-side
-  // (browser redirect is not proof) before showing the success screen.
+  // Verify the reference server-side (the redirect/query value is not proof).
+  // Keeping the reference in a dedicated result URL makes refresh and reopen safe.
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const tran = params.get("paid");
+    const tran = initialPaidTran || params.get("paid");
     if (!tran) return;
     tranIdRef.current = tran;
     (async () => {
@@ -141,18 +151,20 @@ export default function SubscribeClient({
           method: "POST", headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ tran_id: tran }),
         }).then((x) => x.json());
-        if (r.paid) { setReceipt(r.receipt || null); setPayState("paid"); }
+        if (r.paid) {
+          setReceipt(r.receipt || null);
+          setConfirmedPayment(r.payment || null);
+          setPayState("paid");
+        }
         else { setPayState("failed"); setPayMsg(`Payment not confirmed (status: ${r.status ?? "pending"}).`); }
       } catch { setPayState("failed"); setPayMsg("Could not verify payment."); }
-      // strip the query param so a refresh doesn't re-trigger
-      window.history.replaceState({}, "", "/subscribe");
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Poll server-side check-transaction just to nudge the payer — we do NOT flip
   // to the success screen here. That only happens when they click "Continue" in
-  // ABA's own window, which redirects to /subscribe?paid=<tran> (handled on mount).
+  // ABA's own window, which redirects to the payment-result route (handled on mount).
   const startPolling = (tranId: string, lifetimeMinutes = 5) => {
     if (pollRef.current) clearInterval(pollRef.current);
     const started = Date.now();
@@ -239,7 +251,7 @@ export default function SubscribeClient({
     }
   };
 
-  const payWithAba = async (payment_option: "" | "abapay_khqr" | "cards" = "") => {
+  const payWithAba = async () => {
     if (!plan || !validateSubscription()) return;
     setPayState("opening"); setPayMsg("");
     try {
@@ -247,7 +259,7 @@ export default function SubscribeClient({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          email: contactEmail, payment_option,
+          email: contactEmail,
           plan: plan.name, company: companyName, country, contact_name: contactName,
         }),
       }).then((r) => r.json());
@@ -284,18 +296,25 @@ export default function SubscribeClient({
 
   // Full-screen confirmation once the payment is verified paid.
   if (payState === "paid") {
+    const confirmedSubtotal = confirmedPayment?.subtotal_amount ?? khrAmount;
+    const confirmedVat = confirmedPayment?.vat_amount ?? vatKhrAmount;
+    const confirmedTotal = confirmedPayment?.total_amount ?? totalKhrAmount;
     return (
       <PaymentSuccess
-        plan={plan?.name ?? null}
+        plan={confirmedPayment?.plan ?? plan?.name ?? null}
         amount={amount}
-        khrAmount={khrAmount}
-        vatKhrAmount={vatKhrAmount}
-        totalKhrAmount={totalKhrAmount}
+        khrAmount={confirmedSubtotal}
+        vatKhrAmount={confirmedVat}
+        totalKhrAmount={confirmedTotal}
         company={companyName}
         tranId={tranIdRef.current}
         receipt={receipt}
       />
     );
+  }
+
+  if (resultOnly && payState === "failed") {
+    return <PaymentResultFailure message={payMsg} tranId={initialPaidTran || ""} />;
   }
 
   if (invoiceState === "requested") {
@@ -453,7 +472,7 @@ export default function SubscribeClient({
                 <div className="mt-1 flex justify-between"><span>VAT (10%)</span><span>{formatKhr(vatKhrAmount)}</span></div>
                 <div className="mt-2 flex justify-between border-t border-yai-navy/10 pt-2 font-bold"><span>Total due</span><span>{formatKhr(totalKhrAmount)}</span></div>
               </div>
-              <PayMethodRow onClick={() => payWithAba("abapay_khqr")} disabled={busy} title="ABA KHQR" subtitle="Scan to pay with any banking app" icon={<KhqrMark />} />
+              <PayMethodRow onClick={payWithAba} disabled={busy} title="ABA KHQR" subtitle="Scan to pay with any banking app" icon={<KhqrMark />} />
             </div>
           )}
 
@@ -557,6 +576,27 @@ function VerifyingPayment() {
           <div className="mx-auto w-12 h-12 rounded-full border-[3px] border-yai-navy/15 border-t-yai-orange animate-spin" />
           <p className="mt-6 text-xs font-extrabold uppercase tracking-[0.18em] text-yai-orange">Confirming payment</p>
           <p className="mt-2 text-gray-600">Hold on a moment — we&apos;re verifying your transaction.</p>
+        </div>
+      </div>
+    </main>
+  );
+}
+
+function PaymentResultFailure({ message, tranId }: { message: string; tranId: string }) {
+  return (
+    <main className="min-h-screen bg-yai-bg text-yai-navy flex flex-col">
+      <MobileNav hideLogin={true} />
+      <div className="hidden lg:block h-16 bg-yai-navy" />
+      <div className="flex-1 flex items-center justify-center px-6 py-16">
+        <div className="w-full max-w-lg rounded-2xl border border-gray-200 bg-white p-8 text-center shadow-sm sm:p-10">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-amber-100 text-2xl font-bold text-amber-700">!</div>
+          <p className="mt-6 text-xs font-extrabold uppercase tracking-[0.18em] text-yai-orange">Payment status</p>
+          <h1 className="mt-2 font-serif text-3xl font-semibold">We could not confirm this payment.</h1>
+          <p className="mt-3 text-gray-600">{message || "Please check the payment status again."}</p>
+          {tranId && <p className="mt-4 font-mono text-xs text-gray-400">Reference: {tranId}</p>}
+          <Link href="/subscribe" className="mt-6 inline-block rounded-lg bg-yai-navy px-6 py-3 text-sm font-semibold text-white">
+            Return to checkout
+          </Link>
         </div>
       </div>
     </main>
@@ -702,21 +742,4 @@ function PayMethodRow({
 /* ABA KHQR mark — official SVG exported from ABA's Merchant Integration Guideline Figma. */
 function KhqrMark() {
   return <img src="/brand/aba-khqr.svg" alt="ABA KHQR" className="w-12 h-12 rounded-lg" />;
-}
-
-/* Teal card icon — official SVG from ABA's Figma, sized to match KHQR square. */
-function CardMark() {
-  return <img src="/brand/aba-card.svg" alt="Card" className="w-12 h-12 rounded-lg" />;
-}
-
-/* Accepted card networks — official brand SVGs from ABA's Figma. */
-function CardBrands() {
-  return (
-    <span className="inline-flex items-center gap-1.5 align-middle">
-      <img src="/brand/visa.svg" alt="Visa" className="h-[14px] w-auto rounded-[2px]" />
-      <img src="/brand/mastercard.svg" alt="Mastercard" className="h-[14px] w-auto rounded-[2px]" />
-      <img src="/brand/unionpay.svg" alt="UnionPay" className="h-[14px] w-auto rounded-[2px] border border-gray-100" />
-      <img src="/brand/jcb.svg" alt="JCB" className="h-[14px] w-auto rounded-[2px] border border-gray-100" />
-    </span>
-  );
 }

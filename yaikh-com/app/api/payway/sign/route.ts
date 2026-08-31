@@ -24,16 +24,16 @@ export async function POST(req: Request) {
   if (pricing === null) {
     return NextResponse.json({ error: "Choose a subscription plan to pay by ABA." }, { status: 400 });
   }
-  // "" = ABA popup shows its method chooser; "abapay_khqr" / "cards" pre-select one.
-  const opt = body.payment_option;
-  const payment_option = opt === "abapay_khqr" || opt === "cards" ? opt : "";
+  // Website checkout is KHQR-only. Do not trust a browser-supplied payment
+  // option, otherwise a crafted request could re-enable card checkout.
+  const payment_option = "abapay_khqr";
 
   // Pre-generate the tran_id so we can point ABA's "Continue" button back to us.
   // ABA redirects the top window to continue_success_url ONLY when the payer
   // clicks Continue on its own success screen — so our success page never shows early.
   const tran_id = "T" + Date.now();
   const origin = req.headers.get("origin") || new URL(req.url).origin;
-  const continue_success_url = `${origin}/subscribe?paid=${tran_id}`;
+  const continue_success_url = `${origin}/subscribe/payment-result?reference=${encodeURIComponent(tran_id)}`;
   const currency = "KHR";
   const signed = signForPopup({
     tran_id,
