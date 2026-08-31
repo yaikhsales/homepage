@@ -247,9 +247,14 @@ function Transactions() {
     } finally { setChecking(null); }
   };
 
-  const approved = rows?.filter((t) => String(t.status).toUpperCase().includes("APPROVE")) ?? [];
+  const expiredCount = rows?.filter((t) => String(t.status).toUpperCase() === "EXPIRED").length ?? 0;
+  const [showExpired, setShowExpired] = useState(false);
+  const displayedRows = (rows ?? []).filter(
+    (t) => showExpired || String(t.status).toUpperCase() !== "EXPIRED",
+  );
+  const approved = displayedRows.filter((t) => String(t.status).toUpperCase().includes("APPROVE"));
   const collected = approved.reduce((s, t) => s + (Number(t.amount) || 0), 0);
-  const pending = rows?.filter((t) => String(t.status).toUpperCase().includes("PEND")).length ?? 0;
+  const pending = displayedRows.filter((t) => String(t.status).toUpperCase().includes("PEND")).length;
 
   // Client-side filter + sort — the range is ≤3 days so the set is small.
   const [statusFilter, setStatusFilter] = useState("ALL");
@@ -259,9 +264,9 @@ function Transactions() {
     setSort((s) => (s.key === key ? { key, dir: s.dir === 1 ? -1 : 1 } : { key, dir: -1 }));
   const sortArrow = (key: "amount" | "date") => (sort.key === key ? (sort.dir === 1 ? " ↑" : " ↓") : "");
 
-  const statuses = Array.from(new Set((rows ?? []).map((t) => String(t.status ?? "").toUpperCase()).filter(Boolean)));
+  const statuses = Array.from(new Set(displayedRows.map((t) => String(t.status ?? "").toUpperCase()).filter(Boolean)));
   const ql = q.trim().toLowerCase();
-  const visible = (rows ?? [])
+  const visible = displayedRows
     .filter((t) => statusFilter === "ALL" || String(t.status).toUpperCase() === statusFilter)
     .filter((t) => !ql || [t.tran_id, t.company, t.contact_name, t.email, t.plan]
       .some((f) => String(f ?? "").toLowerCase().includes(ql)))
@@ -279,7 +284,7 @@ function Transactions() {
   const pageSafe = Math.min(page, totalPages);
   const paged = visible.slice((pageSafe - 1) * PAGE_SIZE, pageSafe * PAGE_SIZE);
   // Jump back to page 1 whenever the filtered/sorted set changes underneath us.
-  useEffect(() => { setPage(1); }, [statusFilter, sort, rows, q]);
+  useEffect(() => { setPage(1); }, [statusFilter, sort, rows, q, showExpired]);
 
   return (
     <div className="bg-white border border-gray-200 rounded-xl p-5">
@@ -313,7 +318,7 @@ function Transactions() {
 
       {rows && rows.length > 0 && (
         <div className="flex flex-wrap gap-3 mb-4">
-          <Stat label="Transactions" value={String(rows.length)} />
+          <Stat label="Transactions" value={String(displayedRows.length)} />
           <Stat label="Collected" value={`៛${collected.toLocaleString()} KHR`} accent />
           <Stat label="Approved" value={String(approved.length)} />
           <Stat label="Pending" value={String(pending)} />
@@ -324,15 +329,28 @@ function Transactions() {
       {loading && !rows && <p className="text-sm text-gray-400 py-8 text-center">Loading transactions…</p>}
 
       {rows && rows.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 mb-3">
+        <div className="flex flex-wrap items-center gap-1.5 mb-3">
           {["ALL", ...statuses].map((s) => (
             <button key={s} onClick={() => setStatusFilter(s)}
               className={`px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider border transition ${
                 statusFilter === s ? "bg-yai-navy text-white border-yai-navy" : "bg-white text-gray-500 border-gray-200 hover:border-yai-navy/40"
               }`}>
-              {s === "ALL" ? `All (${rows.length})` : `${s} (${rows.filter((t) => String(t.status).toUpperCase() === s).length})`}
+              {s === "ALL" ? `All (${displayedRows.length})` : `${s} (${displayedRows.filter((t) => String(t.status).toUpperCase() === s).length})`}
             </button>
           ))}
+          {expiredCount > 0 && (
+            <label className="ml-auto flex items-center gap-1.5 text-[11px] font-semibold text-gray-500 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={showExpired}
+                onChange={(e) => {
+                  setShowExpired(e.target.checked);
+                  if (!e.target.checked && statusFilter === "EXPIRED") setStatusFilter("ALL");
+                }}
+              />
+              Show expired ({expiredCount})
+            </label>
+          )}
         </div>
       )}
 
