@@ -1,8 +1,6 @@
-/* ABA PayWay — server-side signing. Ported verbatim from the verified
- * sandbox tester (ABA/payway-tester/server.js). The hash field ORDER,
- * shipping="0.00", and payment_gate-not-in-hash are the things everyone
- * breaks — do not re-derive them, they are live-verified against merchant
- * ec476637. API key never leaves the server. */
+/* ABA PayWay — server-side signing. The documented hash field order and
+ * payment_gate-not-in-hash behavior must remain exact. API credentials never
+ * leave the server. */
 
 import crypto from "crypto";
 import { PAYWAY_ENDPOINTS, PAYWAY_TRANSACTION_LIFETIME_MINUTES } from "./config";
@@ -28,14 +26,15 @@ export interface PurchaseInput {
   lastname?: string;
   email?: string;
   phone?: string;
-  payment_option?: string; // "" = popup shows all methods (cards + KHQR)
+  payment_option?: string;
   type?: "purchase" | "pre-auth";
   lifetime?: number; // transaction lifetime in minutes
   view_type?: "popup";
-  continue_success_url?: string; // ABA redirects here when the payer clicks "Continue"
+  continue_success_url?: string; // Redirect target after a successful ABA payment
 }
 
-// Purchase params + hash (24-field order, exact — from server.js buildPurchaseParams).
+// Purchase params + hash (documented field order, exact). Empty optional values
+// contribute nothing to the hash and are removed before the form is submitted.
 export function buildPurchaseParams(input: PurchaseInput): Record<string, string> {
   const p: Record<string, string> = {
     req_time: reqTime(),
@@ -43,7 +42,7 @@ export function buildPurchaseParams(input: PurchaseInput): Record<string, string
     tran_id: input.tran_id || "T" + Date.now(),
     amount: String(input.amount ?? "1.00"),
     items: "",
-    shipping: "0.00", // empty → error "10: Wrong shipping price"
+    shipping: "", // optional; removed from the submitted form below
     firstname: input.firstname || "",
     lastname: input.lastname || "",
     email: input.email || "",
@@ -61,7 +60,9 @@ export function buildPurchaseParams(input: PurchaseInput): Record<string, string
     lifetime: String(input.lifetime ?? PAYWAY_TRANSACTION_LIFETIME_MINUTES),
     additional_params: "",
     google_pay_token: "",
-    skip_success_page: "",
+    // ABA onboarding requires merchants with their own confirmation page to
+    // skip PayWay's success screen and continue to our verified result route.
+    skip_success_page: "1",
   };
   p.view_type = input.view_type ?? "popup";
   const b4 =
@@ -71,7 +72,9 @@ export function buildPurchaseParams(input: PurchaseInput): Record<string, string
     p.currency + p.custom_fields + p.return_params + p.payout + p.lifetime +
     p.additional_params + p.google_pay_token + p.skip_success_page;
   p.hash = hmac(b4);
-  return p;
+  return Object.fromEntries(
+    Object.entries(p).filter(([, value]) => value !== ""),
+  );
 }
 
 // Sign for the hosted-checkout popup: payment_gate=0 (NOT hashed) makes PayWay

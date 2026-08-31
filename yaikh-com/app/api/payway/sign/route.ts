@@ -28,18 +28,30 @@ export async function POST(req: Request) {
   // option, otherwise a crafted request could re-enable card checkout.
   const payment_option = "abapay_khqr";
 
-  // Pre-generate the tran_id so we can point ABA's "Continue" button back to us.
-  // ABA redirects the top window to continue_success_url ONLY when the payer
-  // clicks Continue on its own success screen — so our success page never shows early.
+  // Pre-generate the tran_id so ABA can return to our verified result route
+  // after payment while its own success screen is skipped.
   const tran_id = "T" + Date.now();
   const origin = req.headers.get("origin") || new URL(req.url).origin;
   const continue_success_url = `${origin}/subscribe/payment-result?reference=${encodeURIComponent(tran_id)}`;
   const currency = "KHR";
+  const contactName = typeof body.contact_name === "string"
+    ? body.contact_name.trim().replace(/\s+/g, " ")
+    : "";
+  const [parsedFirstName = "", ...parsedLastName] = contactName
+    ? contactName.split(" ")
+    : [];
+  const firstname = parsedFirstName || (
+    typeof body.firstname === "string" ? body.firstname.trim() : ""
+  );
+  const lastname = contactName
+    ? parsedLastName.join(" ")
+    : typeof body.lastname === "string" ? body.lastname.trim() : "";
   const signed = signForPopup({
     tran_id,
     amount: pricing.totalAmount.toFixed(2),
     currency,
-    firstname: typeof body.contact_name === "string" ? body.contact_name : body.firstname,
+    firstname,
+    lastname,
     email: body.email,
     payment_option,
     lifetime: PAYWAY_TRANSACTION_LIFETIME_MINUTES,

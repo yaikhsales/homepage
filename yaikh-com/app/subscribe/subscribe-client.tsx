@@ -162,9 +162,8 @@ export default function SubscribeClient({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Poll server-side check-transaction just to nudge the payer — we do NOT flip
-  // to the success screen here. That only happens when they click "Continue" in
-  // ABA's own window, which redirects to the payment-result route (handled on mount).
+  // Poll server-side check-transaction until ABA confirms payment. PayWay's own
+  // success screen is skipped, so move to our verified result route immediately.
   const startPolling = (tranId: string, lifetimeMinutes = 5) => {
     if (pollRef.current) clearInterval(pollRef.current);
     const started = Date.now();
@@ -182,11 +181,10 @@ export default function SubscribeClient({
         }).then((x) => x.json());
         if (r.paid) {
           clearInterval(pollRef.current!);
-          // Confirmed paid, but do NOT flip to our success screen here — ABA's own
-          // success sheet ("Continues" button) may still be open in-page. We only
-          // advance on: (a) the Continue redirect ?paid=<tran>, or (b) the refocus
-          // check, which fires only when the payer left to the ABA app and returned.
-          setPayMsg("Payment received — tap Continue to finish.");
+          pollRef.current = null;
+          window.location.assign(
+            `/subscribe/payment-result?reference=${encodeURIComponent(tranId)}`,
+          );
         } else if (lifetimeExpired) {
           clearInterval(pollRef.current!);
           pollRef.current = null;
@@ -559,8 +557,7 @@ export default function SubscribeClient({
   );
 }
 
-/* Shown after ABA's "Continues" redirect while we confirm the payment
- * server-side — prevents the subscription form from flashing back first. */
+/* Shown on the result route while we confirm the payment server-side. */
 function VerifyingPayment() {
   return (
     <main className="min-h-screen bg-yai-bg text-yai-navy flex flex-col">
