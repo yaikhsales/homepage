@@ -806,11 +806,6 @@ function addRoundLogo(s, x, y, size) {
           path.join(IMG_DIR, p.file),
         ).toString("base64");
         s.addImage({ data, x: lx, y: ly, w: lw, h: lh });
-        s.addText(p.label, {
-          x: x + 0.25, y: cursorY + p.maxH + 0.05, w: cw - 0.5, h: 0.28,
-          fontFace: F, fontSize: 10, bold: true, color: GRAY,
-          align: "center", margin: 0,
-        });
         cursorY += p.slotH;
       });
       // Footnote — what these partnerships deliver
