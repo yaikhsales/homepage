@@ -16,11 +16,15 @@ export async function POST(req: Request) {
   }
   const b = await req.json().catch(() => ({}));
   const amount = Number(b.refund_amount);
-  if (!b.tran_id) return NextResponse.json({ error: "Missing tran_id" }, { status: 400 });
+  const tranId = typeof b.tran_id === "string" ? b.tran_id.trim() : "";
+  const remark = typeof b.remark === "string" ? b.remark.trim() : "";
+  if (!tranId) return NextResponse.json({ error: "Missing tran_id" }, { status: 400 });
   if (!Number.isFinite(amount) || amount <= 0) return NextResponse.json({ error: "Invalid refund amount" }, { status: 400 });
+  if (remark.length > 500) return NextResponse.json({ error: "Refund remark is too long" }, { status: 400 });
   let res;
   try {
-    res = await refund(b.tran_id, amount);
+    // ABA's refund schema has no remark field; keep it in our ledger only.
+    res = await refund(tranId, amount);
   } catch (e) {
     // Almost always a bad PAYWAY_RSA_PUBLIC_KEY (mangled PEM / wrong merchant) —
     // surface it as JSON so the client shows the reason, not an opaque 500.
@@ -28,7 +32,11 @@ export async function POST(req: Request) {
   }
   const code = res?.status?.code ?? res?.status;
   if (code === "00" || code === 0 || res?.transaction_status === "REFUNDED") {
-    await markPayment(b.tran_id, { status: "REFUNDED", refunded_amount: Number(res?.total_refunded ?? amount) });
+    await markPayment(tranId, {
+      status: "REFUNDED",
+      refunded_amount: Number(res?.total_refunded ?? amount),
+      refund_remark: remark || undefined,
+    });
   }
   return NextResponse.json(res);
 }

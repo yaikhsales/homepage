@@ -9,6 +9,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 
 type Tab = "transactions" | "collect";
+const SHOW_GENERATE_QR = false;
 
 export default function PaymentsPage() {
   const [tab, setTab] = useState<Tab>("transactions");
@@ -21,10 +22,10 @@ export default function PaymentsPage() {
 
       <div className="flex flex-wrap gap-2 mb-6">
         <TabBtn active={tab === "transactions"} onClick={() => setTab("transactions")}>Transactions &amp; refund</TabBtn>
-        <TabBtn active={tab === "collect"} onClick={() => setTab("collect")}>Generate QR</TabBtn>
+        {SHOW_GENERATE_QR && <TabBtn active={tab === "collect"} onClick={() => setTab("collect")}>Generate QR</TabBtn>}
       </div>
 
-      {tab === "transactions" ? <Transactions /> : <Collect />}
+      {SHOW_GENERATE_QR && tab === "collect" ? <Collect /> : <Transactions />}
 
       <style jsx global>{`
         .input {
@@ -179,6 +180,7 @@ function Collect() {
 interface Txn {
   tran_id: string; amount?: string | number; currency?: string; status?: string;
   date?: string; payType?: string; refunded?: string | number;
+  refund_remark?: string;
   company?: string; plan?: string; source?: string;
   contact_name?: string; email?: string; paid_at?: string;
   raw: Record<string, unknown>;
@@ -426,28 +428,52 @@ function Transactions() {
         </div>
       ))}
 
-      {detail && <TxnDetail txn={detail} onClose={() => setDetail(null)} onRefunded={load} />}
+      {detail && (
+        <TxnDetail
+          txn={detail}
+          onClose={() => setDetail(null)}
+          onRefunded={(refunded, remark) => {
+            setDetail((current) => current ? {
+              ...current,
+              status: "REFUNDED",
+              refunded,
+              refund_remark: remark ?? current.refund_remark,
+            } : current);
+            void load();
+          }}
+        />
+      )}
     </div>
   );
 }
 
-function TxnDetail({ txn, onClose, onRefunded }: { txn: Txn; onClose: () => void; onRefunded: () => void }) {
+function TxnDetail({ txn, onClose, onRefunded }: {
+  txn: Txn;
+  onClose: () => void;
+  onRefunded: (refunded: number, remark?: string) => void;
+}) {
   const [refundAmt, setRefundAmt] = useState(String(txn.amount ?? ""));
+  const [refundRemark, setRefundRemark] = useState("");
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
 
   const doRefund = async () => {
-    if (!confirm(`Refund ${refundAmt} on ${txn.tran_id}? This cannot be undone.`)) return;
+    const remark = refundRemark.trim();
+    if (!confirm(`Refund ${refundAmt} on ${txn.tran_id}?${remark ? `\nRemark: ${remark}` : ""}\nThis cannot be undone.`)) return;
     setBusy(true); setMsg(null);
     try {
       const r = await fetch("/api/payway/merchant/refund", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tran_id: txn.tran_id, refund_amount: Number(refundAmt) }),
+        body: JSON.stringify({
+          tran_id: txn.tran_id,
+          refund_amount: Number(refundAmt),
+          ...(remark ? { remark } : {}),
+        }),
       }).then((x) => x.json());
       const code = r?.status?.code ?? r?.status;
       const ok = code === "00" || code === 0 || r?.transaction_status === "REFUNDED";
       setMsg({ ok, text: ok ? "Refund processed." : (r?.status?.message || r?.error || "Refund failed.") });
-      if (ok) onRefunded();
+      if (ok) onRefunded(Number(r?.total_refunded ?? refundAmt), remark || undefined);
     } catch (e) {
       setMsg({ ok: false, text: e instanceof Error ? e.message : "Request failed." });
     } finally { setBusy(false); }
@@ -474,6 +500,7 @@ function TxnDetail({ txn, onClose, onRefunded }: { txn: Txn; onClose: () => void
           <Info label="Refunded" value={Number(txn.refunded) > 0 ? `${txn.refunded} ${txn.currency ?? ""}` : "—"} />
           <Info label="Date" value={txn.date ?? "—"} />
           {txn.paid_at && <Info label="Paid at" value={txn.paid_at} />}
+          {txn.refund_remark && <Info label="Refund remark" value={txn.refund_remark} />}
         </div>
 
         {/* Customer & order context from our ledger — so a paid-out transaction
@@ -496,15 +523,23 @@ function TxnDetail({ txn, onClose, onRefunded }: { txn: Txn; onClose: () => void
         {String(txn.status ?? "").toUpperCase().includes("APPROVE") ? (
           <div className="border-t border-gray-100 pt-4">
             <div className="text-xs font-bold text-yai-navy mb-2">Refund</div>
-            <div className="flex gap-2">
-              <input value={refundAmt} onChange={(e) => setRefundAmt(e.target.value)} inputMode="decimal"
-                className="input flex-1" placeholder="Amount to refund" />
-              <button onClick={doRefund} disabled={busy}
-                className={`px-4 py-2 rounded-lg text-sm font-semibold ${busy ? "bg-gray-300 text-gray-500" : "bg-red-600 text-white hover:bg-red-700"}`}>
-                {busy ? "Refunding…" : "Refund"}
-              </button>
+            <div className="space-y-2">
+              <div className="flex gap-2">
+                <input value={refundAmt} onChange={(e) => setRefundAmt(e.target.value)} inputMode="decimal"
+                  className="input flex-1" placeholder="Amount to refund" />
+                <button onClick={doRefund} disabled={busy}
+                  className={`px-4 py-2 rounded-lg text-sm font-semibold ${busy ? "bg-gray-300 text-gray-500" : "bg-red-600 text-white hover:bg-red-700"}`}>
+                  {busy ? "Refunding…" : "Refund"}
+                </button>
+              </div>
+              <input value={refundRemark} onChange={(e) => setRefundRemark(e.target.value)}
+                maxLength={500} className="input" placeholder="Why is this being refunded? (optional)" />
             </div>
             {msg && <div className={`mt-3 text-[13px] rounded-lg p-2.5 ${msg.ok ? "bg-green-50 border border-green-200 text-green-800" : "bg-red-50 border border-red-200 text-red-700"}`}>{msg.text}</div>}
+          </div>
+        ) : String(txn.status ?? "").toUpperCase().includes("REFUND") ? (
+          <div className="border-t border-gray-100 pt-4 text-[13px] text-green-800">
+            Refund processed successfully.
           </div>
         ) : (
           <div className="border-t border-gray-100 pt-4 text-[12px] text-gray-400">
@@ -544,6 +579,7 @@ function mapLedger(o: Record<string, unknown>): Txn {
     date: toIct(g("created_at") as string),
     payType: (g("payment_option") === "cards" ? "Card" : g("payment_option") === "abapay_khqr" ? "ABA KHQR" : (g("payment_option") as string)) || "—",
     refunded: g("refunded_amount") as number,
+    refund_remark: g("refund_remark") as string,
     company: g("company") as string,
     plan: g("plan") as string,
     source: g("source") as string,
