@@ -32,6 +32,7 @@ export interface PaymentRecord {
   payment_option?: string;      // abapay_khqr for website subscriptions
   status: PaymentStatus;
   refunded_amount?: number;
+  refund_remark?: string;
   plan?: string;
   company?: string;
   country?: string;
@@ -80,13 +81,14 @@ export async function recordPayment(
 /** Patch status / paid_at / refunded_amount for a transaction. Best-effort. */
 export async function markPayment(
   tran_id: string,
-  patch: Partial<Pick<PaymentRecord, "status" | "refunded_amount" | "aba_trace_id">> & { paid?: boolean },
+  patch: Partial<Pick<PaymentRecord, "status" | "refunded_amount" | "refund_remark" | "aba_trace_id">> & { paid?: boolean },
 ): Promise<void> {
   if (!paymentsEnabled()) return;
   const now = new Date().toISOString();
   const set: Record<string, unknown> = { updated_at: now };
   if (patch.status) set.status = patch.status;
   if (patch.refunded_amount != null) set.refunded_amount = patch.refunded_amount;
+  if (patch.refund_remark) set.refund_remark = patch.refund_remark;
   if (patch.aba_trace_id) set.aba_trace_id = patch.aba_trace_id;
   if (patch.paid) { set.status = "APPROVED"; set.paid_at = now; }
   try {
