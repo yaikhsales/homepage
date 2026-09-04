@@ -75,6 +75,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <AdminNavLink href="/admin/oc"        label="OC Update Content" icon="✎" disabled />
           <AdminNavLink href="/admin/about"     label="About · Section 17" icon="ℹ" />
           <div className="pt-3 pb-1 px-3 text-[9px] uppercase tracking-[0.18em] text-white/40 font-bold">
+            Customer requests
+          </div>
+          <AdminNavLink href="/admin/plan-inquiries" label="Plan inquiries" icon="✉" />
+          <div className="pt-3 pb-1 px-3 text-[9px] uppercase tracking-[0.18em] text-white/40 font-bold">
             Payments
           </div>
           <AdminNavLink href="/admin/payments"  label="ABA PayWay"         icon="⊞" />
