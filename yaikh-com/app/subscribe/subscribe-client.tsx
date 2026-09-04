@@ -35,6 +35,7 @@ const parsePrice = (s: string) => Number(s.replace(/[^0-9.]/g, "")) || 0;
 const formatKhr = (amount: number) => `៛${Math.round(amount).toLocaleString("en-US")}`;
 
 type PayState = "idle" | "opening" | "waiting" | "paid" | "failed" | "verifying";
+type ContactRequestState = "idle" | "sending" | "sent";
 type InvoiceState = "idle" | "requesting" | "code" | "verifying" | "requested";
 type ReceiptState = { status: "posted" | "mock" | "processing" | "pending" | "disabled"; number?: string; url?: string } | null;
 type ConfirmedPayment = {
@@ -73,6 +74,7 @@ export default function SubscribeClient({
   const [invoiceNumber, setInvoiceNumber] = useState("");
   const [receipt, setReceipt] = useState<ReceiptState>(null);
   const [confirmedPayment, setConfirmedPayment] = useState<ConfirmedPayment>(null);
+  const [contactRequestState, setContactRequestState] = useState<ContactRequestState>("idle");
   const [toastDismissing, setToastDismissing] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -129,10 +131,10 @@ export default function SubscribeClient({
   }, [hydrated, selectedPlan, companyName, country, contactName, contactEmail, agreed, payState, invoiceState]);
 
   const plan = PLANS.find((p) => p.name === selectedPlan) || null;
+  const isContactPlan = plan ? ["Ai Server", "Agentic", "Big Ai Brain"].includes(plan.name) : false;
   const amount = plan ? parsePrice(plan.price) : 0;
   const khrAmount = amount * khrPerUsd;
   // The invoice/OTP flow remains in source for the later EcoBoard release.
-  // This production release routes every plan through ABA checkout.
   const isInvoicePlan = false;
   const vatKhrAmount = Math.round(khrAmount * 0.1);
   const totalKhrAmount = khrAmount + vatKhrAmount;
@@ -288,6 +290,32 @@ export default function SubscribeClient({
     }
   };
 
+  const submitPlanInquiry = async () => {
+    if (!plan || !isContactPlan) return;
+    if (!companyName.trim()) return fail("Enter your company name.", "company");
+    if (!contactName.trim()) return fail("Enter a primary contact name.", "company");
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(contactEmail.trim())) {
+      return fail("Enter a valid official company email.", "company");
+    }
+    if (!allAgreed) return fail("Please agree to all terms below before continuing.", "terms");
+
+    setContactRequestState("sending");
+    setPayMsg("");
+    try {
+      const response = await fetch("/api/plan-interest", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: contactEmail, plan: plan.name, options: [] }),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.error || "Unable to save your request.");
+      setContactRequestState("sent");
+    } catch (error) {
+      setContactRequestState("idle");
+      fail(error instanceof Error ? error.message : "Unable to save your request.", "contact");
+    }
+  };
+
   // ABA just redirected back with ?paid — show a confirming screen while the
   // server-side check runs, so the subscription form never flashes.
   if (payState === "verifying") return <VerifyingPayment />;
@@ -378,7 +406,7 @@ export default function SubscribeClient({
             return (
               <button
                 key={p.name}
-                onClick={() => { setSelectedPlan(p.name); setInvoiceState("idle"); setOtpRequestId(""); setOtpCode(""); }}
+                onClick={() => { setSelectedPlan(p.name); setInvoiceState("idle"); setOtpRequestId(""); setOtpCode(""); setContactRequestState("idle"); }}
                 className={`text-left p-4 rounded-xl border-2 transition bg-gradient-to-br ${p.accent} ${
                   active ? "border-yai-navy shadow-lg scale-[1.02]" : "border-transparent hover:border-yai-navy/30 hover:shadow"
                 }`}
@@ -387,15 +415,12 @@ export default function SubscribeClient({
                 <div className="font-bold text-yai-navy mt-1">{p.name}</div>
                 <div className="text-[12px] text-yai-navy/70 mt-0.5">{p.users}</div>
                 <div className="mt-3">
-                  <>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-2xl font-bold text-yai-navy">
-                        {formatKhr(baseKhrAmount)}
-                      </span>
-                      <span className="text-[11px] text-yai-navy/60">{p.period}</span>
-                    </div>
-                    <p className="mt-0.5 text-[11px] text-yai-navy/55">{p.price} USD {p.period}</p>
-                  </>
+                  <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1 leading-tight text-yai-navy">
+                    <span className="text-2xl font-bold">{formatKhr(baseKhrAmount)}</span>
+                    <span aria-hidden="true" className="text-sm font-medium text-yai-navy/35">/</span>
+                    <span className="text-base font-semibold text-yai-navy/65">{p.price} USD</span>
+                  </div>
+                  <div className="mt-1 text-[11px] text-yai-navy/60">{p.period}</div>
                 </div>
               </button>
             );
@@ -424,10 +449,28 @@ export default function SubscribeClient({
         </div>
       </div>
 
-      {/* Payment — ABA PayWay hosted checkout (card · KHQR · ABA Mobile) */}
-      <div id="payment" className="max-w-6xl mx-auto px-6 mt-10 scroll-mt-6">
-        <h2 className="font-serif text-2xl font-semibold text-yai-navy mb-4">2. Payment</h2>
+      {/* Steps 1–3 use ABA checkout; Steps 4–6 create a sales inquiry. */}
+      <div id={isContactPlan ? "contact" : "payment"} className="max-w-6xl mx-auto px-6 mt-10 scroll-mt-6">
+        <h2 className="font-serif text-2xl font-semibold text-yai-navy mb-4">2. {isContactPlan ? "Contact us" : "Payment"}</h2>
 
+        {isContactPlan ? (
+          <div className="bg-white border border-gray-200 rounded-2xl p-5 sm:p-6 max-w-md shadow-sm">
+            <div className="text-[11px] uppercase tracking-[0.14em] font-bold text-yai-orange">Talk to our team</div>
+            <div className="mt-1 text-lg font-semibold text-yai-navy">{plan?.name}</div>
+            <p className="mt-2 text-sm leading-6 text-gray-600">
+              This plan is configured with our team. Submit your company details above and we will contact you at your official email.
+            </p>
+            {contactRequestState === "sent" ? (
+              <div className="mt-5 rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-800">
+                Request saved. Our team will contact you at <strong>{contactEmail}</strong>.
+              </div>
+            ) : (
+              <button type="button" onClick={submitPlanInquiry} disabled={contactRequestState === "sending"} className="mt-5 w-full rounded-xl bg-yai-orange px-4 py-3 text-sm font-extrabold uppercase tracking-wider text-white transition hover:brightness-95 disabled:cursor-wait disabled:opacity-60">
+                {contactRequestState === "sending" ? "Sending…" : "Contact us"}
+              </button>
+            )}
+          </div>
+        ) : (
         <div className="bg-white border border-gray-200 rounded-2xl p-5 sm:p-6 max-w-md shadow-sm">
           {/* header */}
           <div className="pb-4 border-b border-gray-100">
@@ -478,14 +521,15 @@ export default function SubscribeClient({
             <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 p-3 text-[13px] text-amber-800">{payMsg}</div>
           )}
         </div>
+        )}
       </div>
-      {!isInvoicePlan && <>
+      {!isContactPlan && !isInvoicePlan && <>
         <form ref={formRef} method="POST" target="aba_webservice" id="aba_merchant_request" style={{ display: "none" }} />
         <Script src="https://code.jquery.com/jquery-3.7.1.min.js" strategy="afterInteractive" />
         <Script src="https://checkout.payway.com.kh/plugins/checkout2-0.js" strategy="afterInteractive" />
       </>}
 
-      {/* Terms */}
+      {/* Terms apply to both online checkout and contact-only plans. */}
       <div id="terms" className="max-w-6xl mx-auto px-6 mt-10 scroll-mt-6">
         <h2 className="font-serif text-2xl font-semibold text-yai-navy mb-4">3. Terms &amp; conditions</h2>
         <div className="bg-white border border-gray-200 rounded-xl p-5 max-w-3xl">
@@ -527,14 +571,15 @@ export default function SubscribeClient({
       {/* Summary */}
       <div className="max-w-6xl mx-auto px-6 mt-8 mb-16 text-sm text-gray-600">
         Selected: <span className="font-semibold text-yai-navy">{selectedPlan || "(none)"}</span>
-          {plan && (
+          {plan && !isContactPlan && (
             <span className="ml-2 text-yai-navy">
               · {formatKhr(totalKhrAmount)}
               <span className="ml-1 text-xs text-yai-navy/55">(includes 10% VAT)</span>
               <span className="ml-1 text-xs text-yai-navy/55">(${amount.toLocaleString()} USD)</span>
             </span>
           )}
-        {!allAgreed && <span className="ml-3 text-amber-600">· agree to all terms, then pay above</span>}
+        {!allAgreed && <span className="ml-3 text-amber-600">· agree to all terms before continuing</span>}
+        {isContactPlan && <span className="ml-3 text-yai-orange">· contact our team to configure this plan</span>}
       </div>
 
       <style jsx>{`

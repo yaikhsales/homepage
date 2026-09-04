@@ -2323,10 +2323,10 @@ const SC_IconFactory = (
 /* ── Avatar-cluster blocks — 5 sizes from core team through factory ── */
 const SC_ClusterTeam = (
   <div className="flex flex-col items-center gap-1.5">
-    <div className="flex items-center -space-x-1.5">
+    <div className="flex max-w-full items-center justify-center -space-x-2">
       {[1, 2, 3, 4, 6].map((n) => (
         // eslint-disable-next-line @next/next/no-img-element
-        <img key={n} src={`/images/agent-${n}.png`} alt="" className="w-7 h-7 rounded-full ring-2 ring-white shadow-sm object-cover" />
+        <img key={n} src={`/images/agent-${n}.png`} alt="" className="h-6 w-6 rounded-full object-cover ring-2 ring-white shadow-sm" />
       ))}
     </div>
     <div className="flex items-end gap-0.5 text-yai-blue h-2.5">
