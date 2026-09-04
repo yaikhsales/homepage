@@ -16,6 +16,7 @@ export default function MobileNav({
   const { t } = useLang();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [experienceOpen, setExperienceOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 32);
@@ -42,7 +43,13 @@ export default function MobileNav({
     { label: t("nav.partners"), href: "/SDTV" },
     { label: t("nav.pricing"), href: "#pricing" },
     { label: "Subscription", href: "/subscribe" },
-    { label: "Experience", href: "/experience" },
+    {
+      label: "Experience",
+      children: [
+        { label: "Experience dashboard", href: "/experience" },
+        { label: "Main platform", href: "https://main.yaikh.com/" },
+      ],
+    },
     { label: "Ai feed", href: "/ai-feed" },
     { label: "Chat with us", href: "#contact" },
   ];
@@ -112,7 +119,28 @@ export default function MobileNav({
         }`}
       >
         <nav className="flex flex-col p-4 space-y-1">
-          {navLinks.map((link) => (
+          {navLinks.map((link) => link.children ? (
+            <div key={link.label}>
+              <button
+                type="button"
+                onClick={() => setExperienceOpen((value) => !value)}
+                aria-expanded={experienceOpen}
+                className="flex w-full items-center justify-between px-4 py-3 rounded-lg text-white/90 hover:text-yai-orange hover:bg-white/5 transition font-medium text-sm"
+              >
+                {link.label}
+                <span className={`text-xs transition-transform ${experienceOpen ? "rotate-180" : ""}`}>▼</span>
+              </button>
+              {experienceOpen && (
+                <div className="ml-4 border-l border-white/15 pl-2">
+                  {link.children.map((child) => (
+                    <Link key={child.href} href={child.href} onClick={() => { setOpen(false); setExperienceOpen(false); }} className="block px-4 py-2.5 rounded-lg text-white/75 hover:text-yai-orange hover:bg-white/5 transition text-sm">
+                      {child.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
             <Link
               key={link.href}
               href={link.href}

@@ -46,6 +46,7 @@ function Nav() {
   const { t } = useLang();
   const [scrolled, setScrolled] = useState(false);
   const [partnersOpen, setPartnersOpen] = useState(false);
+  const [experienceOpen, setExperienceOpen] = useState(false);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 32);
     window.addEventListener("scroll", onScroll);
@@ -93,7 +94,10 @@ function Nav() {
             <div className="relative" onMouseLeave={() => setPartnersOpen(false)}>
               <button
                 type="button"
-                onClick={() => setPartnersOpen((v) => !v)}
+                onClick={() => {
+                  setPartnersOpen((v) => !v);
+                  setExperienceOpen(false);
+                }}
                 className="hover:text-yai-orange transition inline-flex items-center gap-1"
                 aria-expanded={partnersOpen}
                 aria-haspopup="menu"
@@ -121,9 +125,33 @@ function Nav() {
             </div>
             <a href="#pricing"   className="hover:text-yai-orange transition">{t("nav.pricing")}</a>
             <a href="/subscribe" className="hover:text-yai-orange transition">{t("nav.subscription")}</a>
-            <a href="/experience" className="hover:text-yai-orange transition">
-              {t("nav.experience")}
-            </a>
+            <div className="relative" onMouseLeave={() => setExperienceOpen(false)}>
+              <button
+                type="button"
+                onClick={() => {
+                  setExperienceOpen((v) => !v);
+                  setPartnersOpen(false);
+                }}
+                className="hover:text-yai-orange transition inline-flex items-center gap-1"
+                aria-expanded={experienceOpen}
+                aria-haspopup="menu"
+              >
+                {t("nav.experience")}
+                <svg viewBox="0 0 12 12" className={`w-2.5 h-2.5 transition-transform ${experienceOpen ? "rotate-180" : ""}`} fill="currentColor">
+                  <path d="M2 4l4 4 4-4z" />
+                </svg>
+              </button>
+              {experienceOpen && (
+                <div role="menu" className="absolute left-0 top-full pt-3 min-w-[175px]">
+                  <a href="/experience" role="menuitem" onClick={() => setExperienceOpen(false)} className="block text-[13px] font-semibold hover:text-yai-orange transition whitespace-nowrap">
+                    Experience dashboard
+                  </a>
+                  <a href="https://main.yaikh.com/" role="menuitem" onClick={() => setExperienceOpen(false)} className="mt-2 block text-[13px] font-semibold hover:text-yai-orange transition whitespace-nowrap">
+                    Main platform
+                  </a>
+                </div>
+              )}
+            </div>
             <a href="/ai-feed"   className="hover:text-yai-orange transition whitespace-nowrap">Ai feed</a>
             <a href="#contact"   className="hover:text-yai-orange transition whitespace-nowrap">{t("nav.chat")}</a>
             <a href="#join"      className="hover:text-yai-orange transition font-semibold whitespace-nowrap">{t("nav.join")}</a>
@@ -2407,43 +2435,69 @@ const SC_AFTER: StaticStep[] = [
   { step: "Step 6", stage: "Big Ai Brain", plan: "Big Ai Brain", sub: "Boss · after ~1 year", price: "+ $5,000", usdAmount: 5000, per: "/ year · talks across 5+ factories", h: 460, bg: "from-orange-200 to-orange-50", accent: "text-yai-orange", icon: SC_ClusterBrain },
 ];
 
-function SC_StepCard({ s }: { s: StaticStep }) {
+function SC_Price({ s }: { s: StaticStep }) {
+  const prefix = s.price.startsWith("+") ? "+" : "";
   return (
-    <Link
-      href={`/subscribe?plan=${encodeURIComponent(s.plan)}`}
-      aria-label={`Subscribe to ${s.plan}`}
-      className="relative flex flex-col shrink-0 w-[124px] rounded-xl transition duration-200 hover:-translate-y-1 hover:drop-shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yai-orange"
-      style={{ height: s.h }}
-    >
+    <div className="rounded-b-xl border border-yai-border bg-white text-center py-2.5 px-1.5">
+      <div className={`font-extrabold text-[12px] leading-tight tracking-[-0.03em] whitespace-nowrap ${s.accent}`}>
+        {prefix}{formatHomepageKhr(s.usdAmount * HOMEPAGE_KHR_PER_USD)}
+      </div>
+      <div className={`font-extrabold text-[12px] leading-tight tracking-[-0.03em] whitespace-nowrap ${s.accent}`}>
+        {s.price} USD
+      </div>
+      <div className="text-[9px] text-gray-500 mt-0.5 leading-tight">{s.per}</div>
+    </div>
+  );
+}
+
+function SC_StepCard({ s, mode, onContact }: { s: StaticStep; mode: "buy" | "contact"; onContact?: () => void }) {
+  const content = (
+    <>
       <div className={`flex-1 rounded-t-2xl border border-b-0 border-yai-border bg-gradient-to-b ${s.bg} flex flex-col items-center p-2 text-center`}>
         <div className="text-[10px] font-bold uppercase tracking-widest text-gray-500">{s.step}</div>
         <div className="text-[13px] font-bold text-yai-navy leading-tight mt-1.5 px-0.5">{s.stage}</div>
         <div className="text-[10px] text-gray-500 mt-0.5 leading-tight">{s.sub}</div>
         <div className={`${s.accent} flex-1 flex items-center justify-center`}>{s.icon}</div>
       </div>
-      <div className="rounded-b-xl border border-yai-border bg-white text-center py-2.5 px-1.5">
-        <div className={`font-extrabold text-[15px] leading-none tracking-[-0.06em] whitespace-nowrap ${s.accent}`}>{s.price.startsWith("+") ? "+" : ""}{formatHomepageKhr(s.usdAmount * HOMEPAGE_KHR_PER_USD)}</div>
-        <div className="text-[10px] text-gray-500 mt-1 leading-tight">{s.price} USD {s.per}</div>
+      <SC_Price s={s} />
+      <div className={`mt-2 w-full rounded-md px-1.5 py-2 text-center text-[9px] font-extrabold uppercase tracking-wider text-white shadow-sm ${mode === "buy" ? "bg-yai-blue" : "bg-yai-orange"}`}>
+        {mode === "buy" ? "Buy" : "Contact us"}
       </div>
-    </Link>
+    </>
   );
+
+  const className = "relative flex flex-col shrink-0 w-[124px] rounded-xl transition duration-200 hover:-translate-y-1 hover:drop-shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yai-orange";
+  if (mode === "buy") {
+    return <Link href={`/subscribe?plan=${encodeURIComponent(s.plan)}`} aria-label={`Buy ${s.plan}`} className={className} style={{ height: s.h + 34 }}>{content}</Link>;
+  }
+  return <button type="button" onClick={onContact} aria-label={`Contact us about ${s.plan}`} className={className} style={{ height: s.h + 34 }}>{content}</button>;
 }
 
-function SC_ServerPillar() {
+type StepFourSelection = {
+  active: boolean;
+  administrative: boolean;
+  operation: boolean;
+};
+
+function SC_ServerPillar({ selected, onSelect, onContact }: { selected: boolean; onSelect: () => void; onContact: () => void }) {
   return (
-    <Link href="/subscribe?plan=Ai%20Server" aria-label="Subscribe to Ai Server" className="relative flex flex-col shrink-0 w-[124px] rounded-xl transition duration-200 hover:-translate-y-1 hover:drop-shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yai-orange" style={{ height: 360 }}>
-      <div className="flex-1 rounded-t-2xl border border-b-0 border-yai-border bg-gradient-to-b from-indigo-100 to-white flex flex-col items-center p-2 text-center transition-colors">
-        <div className="text-[8px] font-bold uppercase tracking-widest text-gray-500">Step 4</div>
+    <div className="relative flex flex-col shrink-0 w-[124px]" style={{ height: 394 }}>
+      <button type="button" onClick={onSelect} aria-pressed={selected} className={`flex-1 rounded-t-2xl border border-b-0 border-yai-border bg-gradient-to-b from-indigo-100 to-white flex flex-col items-center p-2 text-center transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-yai-orange ${selected ? "ring-2 ring-inset ring-yai-orange" : "hover:brightness-95"}`}>
+        <div className="text-[8px] font-bold uppercase tracking-widest text-gray-500">Step 4 · required</div>
         <div className="text-[11px] font-bold text-yai-navy leading-tight mt-1 px-0.5">Ai Server</div>
         <div className="text-[9px] text-gray-500 mt-0.5 leading-tight">Hardware · 1,000+ users</div>
         <div className="text-gray-400 flex-1 flex items-center justify-center transition-colors">{SC_IconServer}</div>
-        <div className="w-full text-[8px] font-bold uppercase tracking-normal whitespace-nowrap rounded px-1 py-1.5 border bg-white text-gray-500 border-yai-border">Buy {formatHomepageKhr(2500 * HOMEPAGE_KHR_PER_USD)}</div>
+      </button>
+      <div className={`rounded-b-xl border border-yai-border bg-white text-center py-2 px-1.5 min-h-[52px] ${selected ? "ring-2 ring-inset ring-yai-orange" : ""}`}>
+        <div className="font-extrabold text-[12px] leading-tight text-yai-orange whitespace-nowrap">{formatHomepageKhr(2500 * HOMEPAGE_KHR_PER_USD)}</div>
+        <div className="font-extrabold text-[12px] leading-tight text-yai-orange whitespace-nowrap">$2,500 USD</div>
       </div>
-      <div className="rounded-b-xl border border-yai-border bg-white text-center py-2.5 px-1.5 min-h-[52px]">
-        <div className="font-extrabold text-[15px] leading-none tracking-[-0.06em] whitespace-nowrap text-yai-orange">{formatHomepageKhr(2500 * HOMEPAGE_KHR_PER_USD)}</div>
-        <div className="text-[10px] text-gray-500 mt-1 leading-tight">$2,500 USD · once · hardware + setup</div>
+      <div className="mt-2">
+        <button type="button" onClick={selected ? onContact : onSelect} className={`w-full rounded-md px-1 py-2 text-[8px] font-extrabold uppercase tracking-wider text-white shadow-sm ${selected ? "bg-yai-orange" : "bg-yai-blue"}`}>
+          {selected ? "Contact us" : "Select first"}
+        </button>
       </div>
-    </Link>
+    </div>
   );
 }
 
@@ -2451,47 +2505,75 @@ function SC_TwinPillar({
   title,
   sub,
   icon,
+  enabled,
+  selected,
+  onToggle,
 }: {
   title: string;
   sub: string;
   icon: React.ReactNode;
+  enabled: boolean;
+  selected: boolean;
+  onToggle: () => void;
 }) {
   return (
-    <Link href="/subscribe" aria-label={`Choose a subscription for ${title}`} className="relative flex flex-col shrink-0 w-[124px] rounded-xl transition duration-200 hover:-translate-y-1 hover:drop-shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yai-orange" style={{ height: 360 }}>
-      <div className="flex-1 rounded-t-2xl border border-b-0 border-yai-border bg-gradient-to-b from-indigo-100 to-white flex flex-col items-center p-2 text-center transition-colors">
-        <div className="text-[8px] font-bold uppercase tracking-widest text-gray-500">Step 4</div>
+    <div className={`relative flex flex-col shrink-0 w-[124px] transition duration-200 ${!enabled ? "opacity-55" : ""}`} style={{ height: 394 }}>
+      <div className={`flex-1 rounded-t-2xl border border-b-0 border-yai-border bg-gradient-to-b from-indigo-100 to-white flex flex-col items-center p-2 text-center transition-colors ${selected ? "ring-2 ring-inset ring-yai-orange" : ""}`}>
+        <div className="text-[8px] font-bold uppercase tracking-widest text-gray-500">Step 4 · optional</div>
         <div className="text-[11px] font-bold text-yai-navy leading-tight mt-1 px-0.5">{title}</div>
         <div className="text-[9px] text-gray-500 mt-0.5 leading-tight">{sub}</div>
         <div className="text-gray-400 flex-1 flex items-center justify-center transition-colors">{icon}</div>
-        <div className="w-full text-[10px] font-bold uppercase tracking-wider rounded px-1.5 py-1.5 border bg-white text-gray-500 border-yai-border">Choose plan</div>
       </div>
-      <div className="rounded-b-xl border border-yai-border bg-white text-center py-2.5 px-1.5 min-h-[52px]">
-        <div className="text-[10px] text-gray-400 leading-tight pt-1">configure at checkout</div>
+      <div className={`rounded-b-xl border border-yai-border bg-white text-center py-2.5 px-1.5 min-h-[52px] ${selected ? "ring-2 ring-inset ring-yai-orange" : ""}`}>
+        <div className="text-[10px] text-gray-400 leading-tight pt-1">Contact for pricing</div>
       </div>
-    </Link>
+      <div className="mt-2">
+        <button type="button" disabled={!enabled} onClick={onToggle} aria-pressed={selected} aria-label={`${selected ? "Remove" : "Add"} ${title}`} className={`w-full rounded-md border px-1 py-2 text-[8px] font-bold uppercase tracking-wide shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yai-orange ${selected ? "border-yai-blue bg-yai-blue text-white" : "border-yai-border bg-white text-gray-500"} ${enabled ? "hover:border-yai-blue" : "cursor-not-allowed"}`}>
+          {!enabled ? "Select Ai Server" : selected ? "Selected" : "Add option"}
+        </button>
+      </div>
+    </div>
   );
 }
 
 function PricingStaircase() {
+  const [stepFour, setStepFour] = useState<StepFourSelection>({ active: false, administrative: false, operation: false });
+  const [contactInterest, setContactInterest] = useState<{ plan: string; options: string[] } | null>(null);
+
+  const selectStepFour = () => {
+    setStepFour((current) => current.active ? current : { ...current, active: true });
+  };
+
+  const contactStepFour = () => {
+    const options = [stepFour.administrative && "Administrative", stepFour.operation && "Operation"].filter(Boolean) as string[];
+    setContactInterest({ plan: "Ai Server", options });
+  };
+
   return (
     <>
       <div className="overflow-x-auto pb-4 -mx-1 px-1">
         <LayoutGroup>
           <div className="min-w-max">
             <div className="flex items-end gap-4">
-              {SC_BEFORE.map((s) => <SC_StepCard key={s.step} s={s} />)}
-              <SC_ServerPillar />
+              {SC_BEFORE.map((s) => <SC_StepCard key={s.step} s={s} mode="buy" />)}
+              <SC_ServerPillar selected={stepFour.active} onSelect={selectStepFour} onContact={contactStepFour} />
               <SC_TwinPillar
                 title="Administrative"
                 sub="tools"
                 icon={SC_IconBriefcase}
+                enabled={stepFour.active}
+                selected={stepFour.administrative}
+                onToggle={() => setStepFour((current) => ({ ...current, administrative: !current.administrative }))}
               />
               <SC_TwinPillar
                 title="Operation"
                 sub="tools"
                 icon={SC_IconFactory}
+                enabled={stepFour.active}
+                selected={stepFour.operation}
+                onToggle={() => setStepFour((current) => ({ ...current, operation: !current.operation }))}
               />
-              {SC_AFTER.map((s) => <SC_StepCard key={s.step} s={s} />)}
+              {SC_AFTER.map((s) => <SC_StepCard key={s.step} s={s} mode="contact" onContact={() => setContactInterest({ plan: s.plan, options: [] })} />)}
             </div>
             {/* Phase labels spanning their pillars (towers 124w + 16px gaps · matches Journey ladder) */}
             <div className="flex gap-4 mt-3">
@@ -2508,9 +2590,83 @@ function PricingStaircase() {
       </div>
 
       <p className="text-xs text-gray-500 italic mt-3">
-        Select any step to continue to the subscription form. <span className="text-yai-blue font-semibold">Ai Server, Administrative, and Operation</span> requirements are confirmed during checkout.
+        Steps 1–3 can be purchased online. For Step 4, select <span className="text-yai-blue font-semibold">Ai Server first</span>, then add Administrative or Operation if needed. Steps 4–6 are handled by our team.
       </p>
+
+      <ContactInterestModal interest={contactInterest} onClose={() => setContactInterest(null)} />
     </>
+  );
+}
+
+function ContactInterestModal({ interest, onClose }: { interest: { plan: string; options: string[] } | null; onClose: () => void }) {
+  const [email, setEmail] = useState("");
+  const [website, setWebsite] = useState("");
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!interest) return;
+    setEmail("");
+    setWebsite("");
+    setStatus("idle");
+    setError("");
+  }, [interest]);
+
+  if (!interest) return null;
+
+  const submit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setStatus("sending");
+    setError("");
+    try {
+      const response = await fetch("/api/plan-interest", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, plan: interest.plan, options: interest.options, website }),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.error || "Unable to save your request.");
+      setStatus("sent");
+    } catch (err) {
+      setStatus("error");
+      setError(err instanceof Error ? err.message : "Unable to save your request.");
+    }
+  };
+
+  return (
+    <div role="dialog" aria-modal="true" aria-labelledby="plan-interest-title" className="fixed inset-0 z-[100] flex items-center justify-center bg-yai-navy/65 p-4" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
+      <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <div className="text-xs font-extrabold uppercase tracking-[0.18em] text-yai-orange">Contact us</div>
+            <h3 id="plan-interest-title" className="mt-1 font-serif text-2xl font-semibold text-yai-navy">Talk to us about {interest.plan}</h3>
+          </div>
+          <button type="button" onClick={onClose} aria-label="Close" className="text-2xl leading-none text-gray-400 hover:text-yai-navy">×</button>
+        </div>
+        {interest.options.length > 0 && <p className="mt-3 text-sm text-gray-600">Selected options: {interest.options.join(", ")}</p>}
+
+        {status === "sent" ? (
+          <div className="mt-6 rounded-xl bg-green-50 p-4 text-sm text-green-800">
+            Thank you. We saved your request and our team will contact you at <strong>{email}</strong>.
+          </div>
+        ) : (
+          <form onSubmit={submit} className="mt-6 space-y-4">
+            <div>
+              <label htmlFor="plan-interest-email" className="block text-sm font-semibold text-yai-navy">Official company email</label>
+              <input id="plan-interest-email" type="email" required autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="name@company.com" className="mt-1 w-full rounded-lg border border-yai-border px-3 py-2.5 text-sm text-yai-navy outline-none focus:border-yai-blue focus:ring-2 focus:ring-yai-blue/20" />
+            </div>
+            <div className="hidden" aria-hidden="true">
+              <label htmlFor="plan-interest-website">Website</label>
+              <input id="plan-interest-website" tabIndex={-1} autoComplete="off" value={website} onChange={(event) => setWebsite(event.target.value)} />
+            </div>
+            {status === "error" && <p className="text-sm text-red-600">{error}</p>}
+            <button type="submit" disabled={status === "sending"} className="w-full rounded-lg bg-yai-orange px-4 py-3 text-sm font-extrabold uppercase tracking-wider text-white transition hover:brightness-95 disabled:cursor-wait disabled:opacity-60">
+              {status === "sending" ? "Sending…" : "Request contact"}
+            </button>
+          </form>
+        )}
+      </div>
+    </div>
   );
 }
 
