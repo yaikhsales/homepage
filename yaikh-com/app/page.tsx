@@ -91,7 +91,7 @@ function Nav() {
             <a href="/#product"  className="hover:text-yai-orange transition">{t("nav.product")}</a>
             <a href="#customers" className="hover:text-yai-orange transition">{t("nav.customers")}</a>
             {/* Partners — click opens a small submenu with Portal */}
-            <div className="relative" onMouseLeave={() => setPartnersOpen(false)}>
+            <div className="relative">
               <button
                 type="button"
                 onClick={() => {
@@ -125,7 +125,7 @@ function Nav() {
             </div>
             <a href="#pricing"   className="hover:text-yai-orange transition">{t("nav.pricing")}</a>
             <a href="/subscribe" className="hover:text-yai-orange transition">{t("nav.subscription")}</a>
-            <div className="relative" onMouseLeave={() => setExperienceOpen(false)}>
+            <div className="relative">
               <button
                 type="button"
                 onClick={() => {
@@ -144,10 +144,10 @@ function Nav() {
               {experienceOpen && (
                 <div role="menu" className="absolute left-0 top-full pt-3 min-w-[175px]">
                   <a href="/experience" role="menuitem" onClick={() => setExperienceOpen(false)} className="block text-[13px] font-semibold hover:text-yai-orange transition whitespace-nowrap">
-                    Experience dashboard
+                    Meet Yai Agents
                   </a>
                   <a href="https://main.yaikh.com/" role="menuitem" onClick={() => setExperienceOpen(false)} className="mt-2 block text-[13px] font-semibold hover:text-yai-orange transition whitespace-nowrap">
-                    Main platform
+                    Media &amp; Publications
                   </a>
                 </div>
               )}
