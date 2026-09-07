@@ -1283,8 +1283,9 @@ const AppLayout = () => {
         !location.pathname.includes("money-claim") &&
         !location.pathname.includes("ce") && <Header />}
 
-      {/* Yai Data panel — horizontal row: Yai Agents · Agent Collective · Big Brain */}
-      {isHome && (
+      {/* Yai Data panel — horizontal row: Yai Agents · Agent Collective · Big Brain
+          (shown on every page, not just home) */}
+      {(
         <div
           className="fixed z-[60] text-white animate-in fade-in slide-in-from-left duration-1000"
           style={{ left: yaiPanelPos.x, top: yaiPanelPos.y, userSelect: 'none' }}
