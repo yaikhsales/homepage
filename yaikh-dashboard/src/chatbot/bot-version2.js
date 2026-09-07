@@ -17,7 +17,7 @@ import {
   Search,
   ChevronRight,
 } from "lucide-react";
-import { generateGeminiResponse, generateChatResponse, shouldUseGemini } from "./gemini-api";
+import { generateGeminiResponse, generateChatResponse, generateBossOrChat, shouldUseGemini } from "./gemini-api";
 import { KHMER_NEW_YEAR } from "../thems";
 import { useKhmerTTS } from "./useKhmerTTS";
 import { Volume2, VolumeX } from "lucide-react";
@@ -670,7 +670,7 @@ const BotVersion2 = ({
         ) {
           try {
             // Generate response using Gemini API
-            const geminiResponse = await generateChatResponse(
+            const geminiResponse = await generateBossOrChat(
               input.trim(),
               "Big Brain",
               `You are the Big Brain agent for the Yaikh platform — the boss of thirteen specialist PA agents. You are talking to ${visitorName || "a visitor"}. Address them by name when it feels natural. When users ask about a specific domain, tell them which PA can help.
@@ -691,7 +691,8 @@ Your PA reports (Agent Collective):
 - Social PA — TikTok, Facebook, YouTube, Instagram, LinkedIn comments
 
 Answer general/strategy questions yourself. For domain-specific asks, name the PA the user should visit in the Agent Collective. Keep replies SHORT (2-4 sentences). Never invent PAs that aren't in this list.`,
-              newMessages.slice(0, -1), // Exclude the current user message
+              newMessages.slice(0, -1), // history
+              visitorName,
             );
 
             botResponse = geminiResponse;
@@ -840,7 +841,7 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
         ) {
           try {
             // Generate response using Gemini API
-            const geminiResponse = await generateChatResponse(
+            const geminiResponse = await generateBossOrChat(
               actionText,
               "Big Brain",
               `You are the Big Brain agent for the Yaikh platform — the boss of thirteen specialist PA agents. You are talking to ${visitorName || "a visitor"}. Address them by name when it feels natural. When users ask about a specific domain, tell them which PA can help.
@@ -861,7 +862,8 @@ Your PA reports (Agent Collective):
 - Social PA — TikTok, Facebook, YouTube, Instagram, LinkedIn comments
 
 Answer general/strategy questions yourself. For domain-specific asks, name the PA the user should visit in the Agent Collective. Keep replies SHORT (2-4 sentences). Never invent PAs that aren't in this list.`,
-              newMessages.slice(0, -1), // Exclude the current user message
+              newMessages.slice(0, -1), // history
+              visitorName,
             );
 
             botResponse = geminiResponse;

@@ -106,6 +106,112 @@ export const generateChatResponse = async (
   return generateDirectGeminiResponse(userMessage, botName, botContext, chatHistory);
 };
 
+/* ─── /pa/query — grounded PA answer over Mongo pa_docs ────────────── */
+export const generatePAResponse = async (pa, userMessage, chatHistory = [], visitor = "") => {
+  if (!M1_LLM_URL || !M1_LLM_TOKEN) return null;
+  if (Date.now() < m1SkipUntil) return null;
+  try {
+    const ctl = new AbortController();
+    const timer = setTimeout(() => ctl.abort(), M1_LLM_TIMEOUT_MS);
+    const r = await fetch(`${M1_LLM_URL.replace(/\/$/, "")}/pa/query`, {
+      method: "POST",
+      signal: ctl.signal,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${M1_LLM_TOKEN}`,
+      },
+      body: JSON.stringify({
+        pa: String(pa || "").toLowerCase(),
+        question: String(userMessage ?? ""),
+        history: (chatHistory || []).slice(-6).map((m) => ({
+          from: m.from === "user" ? "user" : "bot",
+          text: typeof m.text === "string" ? m.text : String(m.text ?? ""),
+        })),
+        visitor: visitor || undefined,
+      }),
+    });
+    clearTimeout(timer);
+    if (!r.ok) { m1SkipUntil = Date.now() + M1_COOLDOWN_MS; return null; }
+    const data = await r.json();
+    return typeof data?.answer === "string" ? data.answer.trim() : null;
+  } catch (err) {
+    console.warn("PA query error, falling back:", err?.message || err);
+    m1SkipUntil = Date.now() + M1_COOLDOWN_MS;
+    return null;
+  }
+};
+
+/**
+ * Convenience wrapper for the 13 PA bots. Tries /pa/query first (Mongo-grounded
+ * answer), falls back to generic /v1/chat/completions on M1, then Gemini.
+ * `paIdOrSlug` accepts either the botId ("accounting-bot") or the raw slug
+ * ("accounting"). Returns a string reply.
+ */
+export const generatePAOrChat = async (
+  paIdOrSlug,
+  userMessage,
+  botName = "PA",
+  botContext = "",
+  chatHistory = [],
+  visitor = "",
+) => {
+  const slug = String(paIdOrSlug || "").toLowerCase().replace(/-bot$/, "");
+  const grounded = await generatePAResponse(slug, userMessage, chatHistory, visitor);
+  if (grounded != null) return grounded;
+  return generateChatResponse(userMessage, botName, botContext, chatHistory);
+};
+
+/**
+ * Convenience wrapper for Big Brain. Tries /boss/query first (routes to the
+ * right PA(s) with Mongo grounding and merges), falls back to plain chat, then
+ * Gemini.
+ */
+export const generateBossOrChat = async (
+  userMessage,
+  botName = "Big Brain",
+  botContext = "",
+  chatHistory = [],
+  visitor = "",
+) => {
+  const routed = await generateBossResponse(userMessage, chatHistory, visitor);
+  if (routed != null) return routed;
+  return generateChatResponse(userMessage, botName, botContext, chatHistory);
+};
+
+/* ─── /boss/query — Big Brain routes to PAs and merges ──────────────── */
+export const generateBossResponse = async (userMessage, chatHistory = [], visitor = "") => {
+  if (!M1_LLM_URL || !M1_LLM_TOKEN) return null;
+  if (Date.now() < m1SkipUntil) return null;
+  try {
+    const ctl = new AbortController();
+    const timer = setTimeout(() => ctl.abort(), 20000);  // boss can take longer (routes + merges)
+    const r = await fetch(`${M1_LLM_URL.replace(/\/$/, "")}/boss/query`, {
+      method: "POST",
+      signal: ctl.signal,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${M1_LLM_TOKEN}`,
+      },
+      body: JSON.stringify({
+        question: String(userMessage ?? ""),
+        history: (chatHistory || []).slice(-6).map((m) => ({
+          from: m.from === "user" ? "user" : "bot",
+          text: typeof m.text === "string" ? m.text : String(m.text ?? ""),
+        })),
+        visitor: visitor || undefined,
+      }),
+    });
+    clearTimeout(timer);
+    if (!r.ok) { m1SkipUntil = Date.now() + M1_COOLDOWN_MS; return null; }
+    const data = await r.json();
+    return typeof data?.answer === "string" ? data.answer.trim() : null;
+  } catch (err) {
+    console.warn("Boss query error, falling back:", err?.message || err);
+    m1SkipUntil = Date.now() + M1_COOLDOWN_MS;
+    return null;
+  }
+};
+
 /**
  * Generate response using Gemini API via REST API
  * This function is used by Yai 1, Yai 2, and My AI Agent bots
