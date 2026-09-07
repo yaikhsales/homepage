@@ -17,7 +17,7 @@ import {
   Search,
   ChevronRight,
 } from "lucide-react";
-import { generateGeminiResponse, shouldUseGemini } from "./gemini-api";
+import { generateGeminiResponse, generateChatResponse, shouldUseGemini } from "./gemini-api";
 import { KHMER_NEW_YEAR } from "../thems";
 import { useKhmerTTS } from "./useKhmerTTS";
 import { Volume2, VolumeX } from "lucide-react";
@@ -637,7 +637,7 @@ const BotVersion2 = ({
         ) {
           try {
             // Generate response using Gemini API
-            const geminiResponse = await generateGeminiResponse(
+            const geminiResponse = await generateChatResponse(
               input.trim(),
               "Yai 2",
               "Website Assistant for Yaikh Dashboard platform",
@@ -784,7 +784,7 @@ const BotVersion2 = ({
         ) {
           try {
             // Generate response using Gemini API
-            const geminiResponse = await generateGeminiResponse(
+            const geminiResponse = await generateChatResponse(
               actionText,
               "Yai 2",
               "Website Assistant for Yaikh Dashboard platform",
