@@ -1447,14 +1447,21 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
               >
                 <Plus size={18} className="text-white/70" />
               </button>
-              <input
+              <textarea
                 ref={inputRef}
-                type="text"
+                rows={6}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Ask about the website..."
-                className="flex-1 bg-transparent border-0 outline-none text-white placeholder:text-white/50 text-base"
+                onKeyDown={(e) => {
+                  // Enter sends, Shift+Enter inserts a newline
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSend(e);
+                  }
+                }}
+                placeholder="Ask about the website... (Shift+Enter for new line)"
+                className="flex-1 bg-transparent border-0 outline-none text-white placeholder:text-white/50 text-base resize-none leading-6 py-2"
+                style={{ minHeight: "8.4rem", maxHeight: "14rem" }}
               />
               {!input.trim() && (
                 <>
