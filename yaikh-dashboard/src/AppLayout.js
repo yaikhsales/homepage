@@ -1283,14 +1283,14 @@ const AppLayout = () => {
         !location.pathname.includes("money-claim") &&
         !location.pathname.includes("ce") && <Header />}
 
-      {/* Yai Data panel — draggable, no rectangular container, ~40%
-          bigger text. Items float independently with their own glow. */}
+      {/* Yai Data panel — horizontal row: Yai Agents · Agent Collective · Big Brain */}
       {isHome && (
         <div
           className="fixed z-[60] text-white animate-in fade-in slide-in-from-left duration-1000"
           style={{ left: yaiPanelPos.x, top: yaiPanelPos.y, userSelect: 'none' }}
         >
           <div className="flex items-center gap-5">
+            {/* Yai Agents — logo + title (left) */}
             <div className="relative">
               <button
                 ref={yaiDataButtonRef}
@@ -1308,68 +1308,51 @@ const AppLayout = () => {
                 )}
               </button>
             </div>
-            {/* Drag handle — "Yai Data" header */}
             <div
               onMouseDown={handleYaiPanelMouseDown}
               title="Drag to move"
-              className={`text-white font-bold text-3xl tracking-wide cursor-move drop-shadow-[0_0_10px_rgba(59,130,246,0.8)] bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent ${isDropdownOpen ? "" : "animate-pulse"}`}
+              className="text-white font-bold text-3xl tracking-wide cursor-move drop-shadow-[0_0_10px_rgba(59,130,246,0.8)] bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent whitespace-nowrap"
             >
               Yai Agents
             </div>
-          </div>
 
-          {/* Floating items — no enclosing box, each row has its own glow */}
-          {isDropdownOpen && (
-            <ul className="mt-4 flex flex-col gap-3 animate-in fade-in slide-in-from-top-2 duration-200">
-              <li
-                onClick={() => {
-                  setYaiVersion("yai1");
-                  setBotModuleContext(null);
-                  setYaiDataBotOpen(true);
-                  setDropdownOpen(false);
-                }}
-                className="relative flex items-center justify-between gap-4 pr-4 py-2 pl-2 rounded-2xl bg-slate-900/30 backdrop-blur-sm hover:bg-yai-blue/20 cursor-pointer group transition-all shadow-[0_0_20px_-4px_rgba(30,77,170,0.4)]"
-              >
-                <div className="flex items-center gap-5">
-                  <img
-                    src="assets/modules-image/yai1.png"
-                    alt="Yai 1"
-                    className="w-16 h-16 rounded-2xl object-contain p-1 bg-slate-950/60 border-2 border-yai-blue/60 shadow-[0_0_14px_rgba(30,77,170,0.6)] flex-shrink-0"
-                  />
-                  <span className="bg-gradient-to-r from-yai-blue via-blue-400 to-yai-blue bg-clip-text text-transparent font-bold text-3xl leading-tight drop-shadow-[0_0_6px_rgba(30,77,170,0.5)]">
-                    Agent<br />Collective
-                  </span>
-                </div>
-                <ChevronRight
-                  size={28}
-                  className="text-yai-blue/80 group-hover:text-blue-300 transition-colors flex-shrink-0"
-                />
-              </li>
-              <li
-                onClick={() => {
-                  setYaiVersion("yai2");
-                  setYaiDataBotOpen(true);
-                  setDropdownOpen(false);
-                }}
-                className="relative flex items-center justify-between gap-4 pr-4 py-2 pl-2 rounded-2xl bg-slate-900/30 backdrop-blur-sm hover:bg-emerald-500/20 cursor-pointer group transition-all shadow-[0_0_20px_-4px_rgba(16,185,129,0.4)]"
-              >
-                <div className="flex items-center gap-5">
-                  <img
-                    src="assets/modules-image/yai2.png"
-                    alt="Yai 2"
-                    className="w-16 h-16 rounded-2xl object-contain p-1 bg-slate-950/60 border-2 border-emerald-400/60 shadow-[0_0_14px_rgba(16,185,129,0.6)] flex-shrink-0"
-                  />
-                  <span className="bg-gradient-to-r from-emerald-400 via-green-400 to-emerald-500 bg-clip-text text-transparent font-bold text-3xl leading-tight drop-shadow-[0_0_6px_rgba(16,185,129,0.5)]">
-                    Big<br />Brain
-                  </span>
-                </div>
-                <ChevronRight
-                  size={28}
-                  className="text-emerald-400/80 group-hover:text-emerald-300 transition-colors flex-shrink-0"
-                />
-              </li>
-            </ul>
-          )}
+            {/* Agent Collective — right of Yai Agents */}
+            <div
+              onClick={() => {
+                setYaiVersion("yai1");
+                setBotModuleContext(null);
+                setYaiDataBotOpen(true);
+              }}
+              className="relative flex items-center gap-3 pr-3 py-2 pl-2 rounded-2xl bg-slate-900/30 backdrop-blur-sm hover:bg-yai-blue/20 cursor-pointer group transition-all shadow-[0_0_20px_-4px_rgba(30,77,170,0.4)]"
+            >
+              <img
+                src="assets/modules-image/yai1.png"
+                alt="Yai 1"
+                className="w-16 h-16 rounded-2xl object-contain p-1 bg-slate-950/60 border-2 border-yai-blue/60 shadow-[0_0_14px_rgba(30,77,170,0.6)] flex-shrink-0"
+              />
+              <span className="bg-gradient-to-r from-yai-blue via-blue-400 to-yai-blue bg-clip-text text-transparent font-bold text-3xl leading-tight drop-shadow-[0_0_6px_rgba(30,77,170,0.5)] whitespace-nowrap">
+                Agent<br />Collective
+              </span>
+            </div>
+
+            {/* Big Brain — right of Agent Collective */}
+            <div
+              onClick={() => {
+                setYaiVersion("yai2");
+                setYaiDataBotOpen(true);
+              }}
+              className="relative flex items-center gap-3 pr-3 py-2 pl-2 rounded-2xl bg-slate-900/30 backdrop-blur-sm hover:bg-emerald-500/20 cursor-pointer group transition-all shadow-[0_0_20px_-4px_rgba(16,185,129,0.4)]"
+            >
+              <img
+                src="assets/modules-image/yai2.png"
+                alt="Yai 2"
+                className="w-16 h-16 rounded-2xl object-contain p-1 bg-slate-950/60 border-2 border-emerald-400/60 shadow-[0_0_14px_rgba(16,185,129,0.6)] flex-shrink-0"
+              />
+              <span className="bg-gradient-to-r from-emerald-400 via-green-400 to-emerald-500 bg-clip-text text-transparent font-bold text-3xl leading-tight drop-shadow-[0_0_6px_rgba(16,185,129,0.5)] whitespace-nowrap">
+                Big<br />Brain
+              </span>
+            </div>
+          </div>
         </div>
       )}
 
