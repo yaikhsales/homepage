@@ -640,7 +640,24 @@ const BotVersion2 = ({
             const geminiResponse = await generateChatResponse(
               input.trim(),
               "Yai 2",
-              "Website Assistant for Yaikh Dashboard platform",
+              `You are the Big Brain agent for the Yaikh platform — the boss of thirteen specialist PA agents. When users ask about a specific domain, tell them which PA can help them.
+
+Your PA reports (Agent Collective):
+- Accounting PA — Purchase, Claims, Salary, Shipping, IEWS, Account
+- HR PA — Attend, Leave, Training, Org, Temp, Speak Up
+- Admin PA — Tickets, Rooms, Gates, Y Shop, Visitors
+- CSR PA — Air, Water, Energy, Audits, Alerts
+- Shipping PA — Container plan, Customs clearance, Delivery schedule, Inventory levels, Material plan
+- MRP PA — Material plan, BOM review, Stock alerts, Supplier orders, Reorder points
+- QA PA — Recent defect inspections, Customer complaints, Open call-outs, Third-party audits, Quality reports
+- Production PA — Today's production plan, WIP by line, Cutting/Finishing throughput, Production status
+- CE PA — Standard time updates, Productivity by line, Machine allocation, Skill inventory, Cost centre summary
+- YTM PA — Machine downtime, Repair queue, Maintenance schedule, Late maintenance alerts, Spare parts stock
+- 4DP PA — Sample approvals, Pattern review queue, Spec sheets, Trim approvals, Design roadmap
+- YPI PA — Open Kaizen projects, SOP review queue, Efficiency audits, Process optimisation, Improvement KPIs
+- Social PA — TikTok, Facebook, YouTube, Instagram, LinkedIn comments
+
+Answer general/strategy questions yourself. For domain-specific asks, name the PA the user should visit in the Agent Collective. Keep replies SHORT (2-4 sentences). Never invent PAs that aren't in this list.`,
               newMessages.slice(0, -1), // Exclude the current user message
             );
 
@@ -787,7 +804,24 @@ const BotVersion2 = ({
             const geminiResponse = await generateChatResponse(
               actionText,
               "Yai 2",
-              "Website Assistant for Yaikh Dashboard platform",
+              `You are the Big Brain agent for the Yaikh platform — the boss of thirteen specialist PA agents. When users ask about a specific domain, tell them which PA can help them.
+
+Your PA reports (Agent Collective):
+- Accounting PA — Purchase, Claims, Salary, Shipping, IEWS, Account
+- HR PA — Attend, Leave, Training, Org, Temp, Speak Up
+- Admin PA — Tickets, Rooms, Gates, Y Shop, Visitors
+- CSR PA — Air, Water, Energy, Audits, Alerts
+- Shipping PA — Container plan, Customs clearance, Delivery schedule, Inventory levels, Material plan
+- MRP PA — Material plan, BOM review, Stock alerts, Supplier orders, Reorder points
+- QA PA — Recent defect inspections, Customer complaints, Open call-outs, Third-party audits, Quality reports
+- Production PA — Today's production plan, WIP by line, Cutting/Finishing throughput, Production status
+- CE PA — Standard time updates, Productivity by line, Machine allocation, Skill inventory, Cost centre summary
+- YTM PA — Machine downtime, Repair queue, Maintenance schedule, Late maintenance alerts, Spare parts stock
+- 4DP PA — Sample approvals, Pattern review queue, Spec sheets, Trim approvals, Design roadmap
+- YPI PA — Open Kaizen projects, SOP review queue, Efficiency audits, Process optimisation, Improvement KPIs
+- Social PA — TikTok, Facebook, YouTube, Instagram, LinkedIn comments
+
+Answer general/strategy questions yourself. For domain-specific asks, name the PA the user should visit in the Agent Collective. Keep replies SHORT (2-4 sentences). Never invent PAs that aren't in this list.`,
               newMessages.slice(0, -1), // Exclude the current user message
             );
 
@@ -907,163 +941,7 @@ const BotVersion2 = ({
         }
       `}</style>
 
-      {/* Solar System Animation - Beautiful & Professional */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden w-full h-full z-10">
-        <style>{`
-                    @keyframes orbitMercury {
-                        from { transform: rotate(0deg) translateX(80px) rotate(0deg); }
-                        to { transform: rotate(360deg) translateX(80px) rotate(-360deg); }
-                    }
-                    @keyframes orbitVenus {
-                        from { transform: rotate(0deg) translateX(120px) rotate(0deg); }
-                        to { transform: rotate(360deg) translateX(120px) rotate(-360deg); }
-                    }
-                    @keyframes orbitEarth {
-                        from { transform: rotate(0deg) translateX(160px) rotate(0deg); }
-                        to { transform: rotate(360deg) translateX(160px) rotate(-360deg); }
-                    }
-                    @keyframes orbitMars {
-                        from { transform: rotate(0deg) translateX(200px) rotate(0deg); }
-                        to { transform: rotate(360deg) translateX(200px) rotate(-360deg); }
-                    }
-                    @keyframes orbitJupiter {
-                        from { transform: rotate(0deg) translateX(260px) rotate(0deg); }
-                        to { transform: rotate(360deg) translateX(260px) rotate(-360deg); }
-                    }
-                    @keyframes orbitSaturn {
-                        from { transform: rotate(0deg) translateX(320px) rotate(0deg); }
-                        to { transform: rotate(360deg) translateX(320px) rotate(-360deg); }
-                    }
-                    @keyframes orbitMoon {
-                        from { transform: rotate(0deg) translateX(12px) rotate(0deg); }
-                        to { transform: rotate(360deg) translateX(12px) rotate(-360deg); }
-                    }
-                    @keyframes sunPulse {
-                        0%, 100% { opacity: 0.6; transform: scale(1); }
-                        50% { opacity: 0.9; transform: scale(1.05); }
-                    }
-                    @keyframes starTwinkle {
-                        0%, 100% { opacity: 0.6; transform: scale(1); }
-                        50% { opacity: 1; transform: scale(1.3); }
-                    }
-                    @keyframes planetRotate {
-                        from { transform: rotate(0deg); }
-                        to { transform: rotate(360deg); }
-                    }
-                    .orbit-mercury { animation: orbitMercury 8s linear infinite; }
-                    .orbit-venus { animation: orbitVenus 12s linear infinite; }
-                    .orbit-earth { animation: orbitEarth 16s linear infinite; }
-                    .orbit-mars { animation: orbitMars 20s linear infinite; }
-                    .orbit-jupiter { animation: orbitJupiter 30s linear infinite; }
-                    .orbit-saturn { animation: orbitSaturn 40s linear infinite; }
-                    .orbit-moon { animation: orbitMoon 2s linear infinite; }
-                    .sun-pulse { animation: sunPulse 4s ease-in-out infinite; }
-                    .star-twinkle { animation: starTwinkle 3s ease-in-out infinite; }
-                    .planet-rotate { animation: planetRotate 10s linear infinite; }
-                `}</style>
-
-        {/* Background Stars */}
-        <div className="absolute inset-0 w-full h-full">
-          {[...Array(40)].map((_, i) => (
-            <div
-              key={`star-${i}`}
-              className="absolute w-1.5 h-1.5 bg-white rounded-full star-twinkle"
-              style={{
-                top: `${Math.random() * 100}%`,
-                left: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                animationDuration: `${2 + Math.random() * 2}s`,
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Solar System Container */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full flex items-center justify-center">
-          {/* Central Sun */}
-          <div className="relative z-10">
-            {/* Sun Glow Layers */}
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-yellow-400/70 via-orange-400/60 to-red-400/50 blur-3xl sun-pulse"></div>
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-yellow-300/60 via-orange-300/50 to-red-300/40 blur-2xl"></div>
-            {/* Sun Core */}
-            <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-yellow-300 via-orange-300 to-yellow-400 shadow-[0_0_40px_rgba(251,191,36,1)] border-2 border-yellow-200/80">
-              {/* Sun Surface Texture */}
-              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-yellow-300/50 to-orange-400/30"></div>
-              <div className="absolute top-2 left-3 w-1 h-1 bg-yellow-200 rounded-full"></div>
-              <div className="absolute bottom-3 right-2 w-1 h-1 bg-orange-300 rounded-full"></div>
-              <div className="absolute top-1/2 left-1 w-0.5 h-0.5 bg-yellow-100 rounded-full"></div>
-            </div>
-          </div>
-
-          {/* Mercury - Closest Planet */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 orbit-mercury">
-            <div className="w-4 h-4 rounded-full bg-gradient-to-br from-gray-300 to-gray-500 shadow-[0_0_15px_rgba(156,163,175,0.9)] border border-gray-400/70"></div>
-          </div>
-
-          {/* Venus */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 orbit-venus">
-            <div className="w-5 h-5 rounded-full bg-gradient-to-br from-yellow-100 to-orange-200 shadow-[0_0_18px_rgba(251,191,36,0.8)] border border-yellow-200/70"></div>
-          </div>
-
-          {/* Earth with Moon */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 orbit-earth">
-            <div className="relative">
-              {/* Earth */}
-              <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-300 via-green-300 to-blue-400 shadow-[0_0_20px_rgba(59,130,246,0.9)] border border-blue-200/70 relative overflow-hidden">
-                {/* Earth Continents */}
-                <div className="absolute top-1 left-1 w-2 h-1.5 bg-green-400 rounded-full"></div>
-                <div className="absolute bottom-1 right-1 w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-              </div>
-              {/* Moon Orbiting Earth */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 orbit-moon">
-                <div className="w-2 h-2 rounded-full bg-gray-200 shadow-[0_0_8px_rgba(209,213,219,1)]"></div>
-              </div>
-            </div>
-          </div>
-
-          {/* Mars */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 orbit-mars">
-            <div className="w-5 h-5 rounded-full bg-gradient-to-br from-red-300 to-orange-400 shadow-[0_0_18px_rgba(239,68,68,0.9)] border border-red-200/70"></div>
-          </div>
-
-          {/* Jupiter - Gas Giant */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 orbit-jupiter">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-200 via-yellow-200 to-orange-300 shadow-[0_0_25px_rgba(251,191,36,0.8)] border-2 border-orange-100/60 relative overflow-hidden">
-              {/* Jupiter Bands */}
-              <div className="absolute top-1 left-0 right-0 h-0.5 bg-orange-300/80"></div>
-              <div className="absolute top-3 left-0 right-0 h-0.5 bg-yellow-200/80"></div>
-              <div className="absolute bottom-3 left-0 right-0 h-0.5 bg-orange-300/80"></div>
-              {/* Great Red Spot */}
-              <div className="absolute top-2 right-1 w-2 h-1.5 rounded-full bg-red-400/90"></div>
-            </div>
-          </div>
-
-          {/* Saturn with Rings */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 orbit-saturn">
-            <div className="relative">
-              {/* Saturn Planet */}
-              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-yellow-100 via-orange-100 to-yellow-200 shadow-[0_0_20px_rgba(251,191,36,0.8)] border border-yellow-100/70 relative z-10">
-                {/* Saturn Bands */}
-                <div className="absolute top-1 left-0 right-0 h-0.5 bg-yellow-200/80"></div>
-                <div className="absolute bottom-1 left-0 right-0 h-0.5 bg-orange-200/80"></div>
-              </div>
-              {/* Saturn Rings */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-2 rounded-full bg-gradient-to-r from-transparent via-yellow-100/60 to-transparent border border-yellow-200/50 shadow-[0_0_12px_rgba(251,191,36,0.5)]"></div>
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-1 rounded-full bg-gradient-to-r from-transparent via-yellow-200/50 to-transparent"></div>
-            </div>
-          </div>
-
-          {/* Orbital Paths - More Visible */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[160px] h-[160px] border border-white/15 rounded-full"></div>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] h-[240px] border border-white/15 rounded-full"></div>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] h-[320px] border border-white/15 rounded-full"></div>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] border border-white/15 rounded-full"></div>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[520px] h-[520px] border border-white/15 rounded-full"></div>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[640px] h-[640px] border border-white/15 rounded-full"></div>
-          </div>
-        </div>
-      </div>
+      {/* Solar System Animation removed 2026-09-07 */}
 
       {/* Sidebar - Chat History */}
       <div
