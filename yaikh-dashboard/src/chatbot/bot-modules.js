@@ -7,7 +7,7 @@ import {
     Copy, Edit2, RefreshCw, MoreVertical,
     Menu, Trash2, ChevronRight, ChevronDown, Volume2
 } from 'lucide-react';
-import { generateGeminiResponse, generateDirectGeminiResponse, shouldUseGemini } from './gemini-api';
+import { generateGeminiResponse, generateDirectGeminiResponse, generateChatResponse, shouldUseGemini } from './gemini-api';
 import { KHMER_NEW_YEAR } from '../thems';
 import { useKhmerTTS } from "./useKhmerTTS";
 import { VolumeX } from "lucide-react";
@@ -4398,7 +4398,7 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                         const botContext = `You are ${botName}, an AI assistant for the ${moduleToUse || 'general'} module. The user is running a demo and clicking on suggested prompts. Generate a realistic, helpful, and naturally phrased mock/demo response based on their query. Include some realistic fake statistics or data if appropriate for the query.`;
                         
                         // We need chatHistoryForGemini which was populated right before the API call
-                        generateDirectGeminiResponse(message, botName, botContext, chatHistoryForGemini || [])
+                        generateChatResponse(message, botName, botContext, chatHistoryForGemini || [])
                             .then(geminiResp => streamBotResponse(botId, geminiResp))
                             .catch(err => {
                                 console.error('Gemini fallback failed:', err);
@@ -4472,7 +4472,7 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                         const botContext = `You are ${botName}, an AI assistant for the ${moduleToUse || 'general'} module. The user is running a demo and clicking on suggested prompts. Generate a realistic, helpful, and naturally phrased mock/demo response based on their query. Include some realistic fake statistics or data if appropriate for the query.`;
                         
                         // We need chatHistoryForGemini which was populated right before the API call
-                        generateDirectGeminiResponse(message, botName, botContext, chatHistoryForGemini || [])
+                        generateChatResponse(message, botName, botContext, chatHistoryForGemini || [])
                             .then(geminiResp => streamBotResponse(botId, geminiResp))
                             .catch(err => {
                                 console.error('Gemini fallback failed:', err);
@@ -4546,7 +4546,7 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                         const botContext = `You are ${botName}, an AI assistant for the ${moduleToUse || 'general'} module. The user is running a demo and clicking on suggested prompts. Generate a realistic, helpful, and naturally phrased mock/demo response based on their query. Include some realistic fake statistics or data if appropriate for the query.`;
                         
                         // We need chatHistoryForGemini which was populated right before the API call
-                        generateDirectGeminiResponse(message, botName, botContext, chatHistoryForGemini || [])
+                        generateChatResponse(message, botName, botContext, chatHistoryForGemini || [])
                             .then(geminiResp => streamBotResponse(botId, geminiResp))
                             .catch(err => {
                                 console.error('Gemini fallback failed:', err);
@@ -4620,7 +4620,7 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                         const botContext = `You are ${botName}, an AI assistant for the ${moduleToUse || 'general'} module. The user is running a demo and clicking on suggested prompts. Generate a realistic, helpful, and naturally phrased mock/demo response based on their query. Include some realistic fake statistics or data if appropriate for the query.`;
                         
                         // We need chatHistoryForGemini which was populated right before the API call
-                        generateDirectGeminiResponse(message, botName, botContext, chatHistoryForGemini || [])
+                        generateChatResponse(message, botName, botContext, chatHistoryForGemini || [])
                             .then(geminiResp => streamBotResponse(botId, geminiResp))
                             .catch(err => {
                                 console.error('Gemini fallback failed:', err);

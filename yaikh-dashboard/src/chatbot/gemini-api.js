@@ -18,6 +18,94 @@ const DEFAULT_AGENT_URL =
 
 const getAgentUrl = () => process.env.REACT_APP_AI_AGENT_URL || DEFAULT_AGENT_URL;
 
+/* ─── M1 local LLM (LM Studio via cloudflared tunnel + FastAPI guard) ─── */
+const M1_LLM_URL   = process.env.REACT_APP_M1_LLM_URL   || "";
+const M1_LLM_TOKEN = process.env.REACT_APP_M1_LLM_TOKEN || "";
+const M1_LLM_MODEL = process.env.REACT_APP_M1_LLM_MODEL || "qwen2.5-3b-instruct";
+const M1_LLM_TIMEOUT_MS = 12000;   // fall through to Gemini after this
+const M1_COOLDOWN_MS    = 60000;   // if M1 fails, skip it for 60s
+
+let m1SkipUntil = 0;
+
+/**
+ * Call the M1 Mac mini's LM Studio via the FastAPI guard on cloudflared.
+ * Returns null on any failure (network, non-200, bad payload) so the caller
+ * can transparently fall through to Gemini.
+ */
+export const generateM1LocalResponse = async (
+  userMessage,
+  botName = "Yai",
+  botContext = "",
+  chatHistory = [],
+) => {
+  if (!M1_LLM_URL || !M1_LLM_TOKEN) return null;
+  if (Date.now() < m1SkipUntil) return null;
+  try {
+    const systemMsg = botContext && botContext.length > 500
+      ? botContext
+      : `You are ${botName}, an AI assistant for the Yaikh platform.${botContext ? " Your specific role: " + botContext : ""} Keep responses SHORT and CONCISE (2-4 sentences unless asked). Be direct.`;
+    const messages = [{ role: "system", content: systemMsg }];
+    // OpenAI-format history conversion
+    chatHistory.slice(-10).forEach((msg) => {
+      messages.push({
+        role: msg.from === "user" ? "user" : "assistant",
+        content: typeof msg.text === "string" ? msg.text : String(msg.text ?? ""),
+      });
+    });
+    messages.push({ role: "user", content: String(userMessage ?? "") });
+
+    const ctl = new AbortController();
+    const timer = setTimeout(() => ctl.abort(), M1_LLM_TIMEOUT_MS);
+    const response = await fetch(`${M1_LLM_URL.replace(/\/$/, "")}/v1/chat/completions`, {
+      method: "POST",
+      signal: ctl.signal,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${M1_LLM_TOKEN}`,
+      },
+      body: JSON.stringify({
+        model: M1_LLM_MODEL,
+        messages,
+        temperature: 0.7,
+        max_tokens: 512,
+      }),
+    });
+    clearTimeout(timer);
+    if (!response.ok) {
+      console.warn("M1 LLM non-200:", response.status);
+      m1SkipUntil = Date.now() + M1_COOLDOWN_MS;
+      return null;
+    }
+    const data = await response.json();
+    const text = data?.choices?.[0]?.message?.content;
+    if (!text) {
+      console.warn("M1 LLM empty payload");
+      m1SkipUntil = Date.now() + M1_COOLDOWN_MS;
+      return null;
+    }
+    return text.trim();
+  } catch (err) {
+    console.warn("M1 LLM error, falling back to Gemini:", err?.message || err);
+    m1SkipUntil = Date.now() + M1_COOLDOWN_MS;
+    return null;
+  }
+};
+
+/**
+ * Preferred router — tries the M1 local model first, falls back to Gemini
+ * on any failure. Callers get the same signature as generateDirectGeminiResponse.
+ */
+export const generateChatResponse = async (
+  userMessage,
+  botName = "Yai 2",
+  botContext = "",
+  chatHistory = [],
+) => {
+  const local = await generateM1LocalResponse(userMessage, botName, botContext, chatHistory);
+  if (local != null) return local;
+  return generateDirectGeminiResponse(userMessage, botName, botContext, chatHistory);
+};
+
 /**
  * Generate response using Gemini API via REST API
  * This function is used by Yai 1, Yai 2, and My AI Agent bots
