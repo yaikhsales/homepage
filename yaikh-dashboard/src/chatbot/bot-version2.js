@@ -650,7 +650,7 @@ const BotVersion2 = ({
             // Generate response using Gemini API
             const geminiResponse = await generateChatResponse(
               input.trim(),
-              "Yai 2",
+              "Big Brain",
               `You are the Big Brain agent for the Yaikh platform — the boss of thirteen specialist PA agents. When users ask about a specific domain, tell them which PA can help them.
 
 Your PA reports (Agent Collective):
@@ -820,7 +820,7 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
             // Generate response using Gemini API
             const geminiResponse = await generateChatResponse(
               actionText,
-              "Yai 2",
+              "Big Brain",
               `You are the Big Brain agent for the Yaikh platform — the boss of thirteen specialist PA agents. When users ask about a specific domain, tell them which PA can help them.
 
 Your PA reports (Agent Collective):
@@ -1250,17 +1250,21 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
             {/* Bot Avatar and Name - Centered */}
             <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-2">
               <div className="relative">
-                <div className={`w-8 h-8 rounded-full ${KHMER_NEW_YEAR.isActive ? 'bg-gradient-to-br from-red-600 via-orange-500 to-yellow-500' : 'bg-gradient-to-br from-purple-500 to-sky-500'} flex items-center justify-center border-2 border-white/20 shadow-md`}>
-                  <Database size={18} className="text-white" />
+                <div className={`w-8 h-8 rounded-full ${KHMER_NEW_YEAR.isActive ? 'bg-gradient-to-br from-red-600 via-orange-500 to-yellow-500' : 'bg-gradient-to-br from-emerald-500 to-green-600'} flex items-center justify-center border-2 border-emerald-400/60 shadow-md`}>
+                  <img
+                    src="assets/modules-image/yai2.png"
+                    alt="Big Brain"
+                    className="w-full h-full rounded-full object-cover"
+                  />
                 </div>
                 {KHMER_NEW_YEAR.isActive && (
                   <div className="absolute -top-1 -right-1 z-10 text-xs drop-shadow-md">🌸</div>
                 )}
               </div>
               <div className="flex flex-col">
-                <span className="text-sm font-medium text-white/90">Yai 2</span>
+                <span className="text-sm font-medium text-white/90">Big Brain</span>
                 <span className="text-xs text-white/60 hidden sm:block">
-                  Website Assistant
+                  Boss of 13 PA agents
                 </span>
               </div>
             </div>
