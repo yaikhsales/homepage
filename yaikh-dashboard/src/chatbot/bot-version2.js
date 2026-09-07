@@ -35,6 +35,16 @@ const BotVersion2 = ({
   const inputRef = useRef(null);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [isHistoryPinned, setIsHistoryPinned] = useState(false);
+  // Font-size preference for the chat bubbles (12–24px). Persists in localStorage.
+  const [chatFontSize, setChatFontSize] = useState(() => {
+    try {
+      const v = parseInt(localStorage.getItem("yai_chat_font_size") || "", 10);
+      return Number.isFinite(v) && v >= 12 && v <= 24 ? v : 15;
+    } catch { return 15; }
+  });
+  useEffect(() => {
+    try { localStorage.setItem("yai_chat_font_size", String(chatFontSize)); } catch { /* private mode */ }
+  }, [chatFontSize]);
 
   // Chat history state
   const [chatHistory, setChatHistory] = useState(() => {
@@ -996,6 +1006,26 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
             </button>
           </div>
 
+          {/* Text size — A slider A */}
+          <div className="px-4 py-3 border-b border-white/10">
+            <div className="text-center text-xs text-white/60 mb-2">
+              {chatFontSize === 15 ? "Default" : `${chatFontSize}px`}
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="text-white/70" style={{ fontSize: 12 }}>A</span>
+              <input
+                type="range"
+                min={12}
+                max={24}
+                step={1}
+                value={chatFontSize}
+                onChange={(e) => setChatFontSize(parseInt(e.target.value, 10))}
+                className="flex-1 accent-yai-blue cursor-pointer"
+              />
+              <span className="text-white" style={{ fontSize: 22, fontWeight: 700 }}>A</span>
+            </div>
+          </div>
+
           {/* Chat List */}
           <div className="flex-1 overflow-y-auto">
             {chatHistory.length === 0 ? (
@@ -1288,9 +1318,10 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
                   )}
                   <div className="flex flex-col gap-1 max-w-[85%]">
                     <div
-                      className={`rounded-2xl px-4 py-2.5 text-sm ${
+                      style={{ fontSize: `${chatFontSize}px`, lineHeight: 1.45 }}
+                      className={`rounded-2xl px-4 py-2.5 ${
                         msg.from === "user"
-                          ? KHMER_NEW_YEAR.isActive 
+                          ? KHMER_NEW_YEAR.isActive
                               ? "bg-gradient-to-r from-yellow-100 to-yellow-200 text-yellow-900 border border-yellow-300 rounded-br-none shadow-[0_0_10px_rgba(250,204,21,0.2)]"
                               : "bg-blue-500 text-white rounded-br-none"
                           : KHMER_NEW_YEAR.isActive
