@@ -22,7 +22,7 @@ import { KHMER_NEW_YEAR } from "../thems";
 import { useKhmerTTS } from "./useKhmerTTS";
 import { Volume2, VolumeX } from "lucide-react";
 
-const GREETING_NAME = "Mr. Khun";
+// Visitor name is captured on first open and persisted; no default value.
 
 const BotVersion2 = ({
   onClose,
@@ -45,6 +45,28 @@ const BotVersion2 = ({
   useEffect(() => {
     try { localStorage.setItem("yai_chat_font_size", String(chatFontSize)); } catch { /* private mode */ }
   }, [chatFontSize]);
+
+  // Visitor name — captured once, persisted, drives the Big Brain greeting
+  const [visitorName, setVisitorName] = useState(() => {
+    try { return localStorage.getItem("yai_visitor_name") || ""; } catch { return ""; }
+  });
+  const [nameDraft, setNameDraft] = useState("");
+  const submitVisitorName = (e) => {
+    e && e.preventDefault && e.preventDefault();
+    const clean = nameDraft.trim().slice(0, 60);
+    if (!clean) return;
+    try { localStorage.setItem("yai_visitor_name", clean); } catch { /* private mode */ }
+    setVisitorName(clean);
+    // Seed the conversation with a Big Brain greeting so the visitor lands
+    // in a co-working conversation, not a menu.
+    setMessages([{
+      from: "bot",
+      text:
+        `Hi ${clean} — I'm Big Brain, boss of 13 PA agents at Yaikh.\n\n` +
+        `Ask me anything, or tell me the department you need and I'll route you: ` +
+        `Accounting, HR, Admin, CSR, Shipping, MRP, QA, Production, CE, YTM, 4DP, YPI, Social.`,
+    }]);
+  };
 
   // Chat history state
   const [chatHistory, setChatHistory] = useState(() => {
@@ -651,7 +673,7 @@ const BotVersion2 = ({
             const geminiResponse = await generateChatResponse(
               input.trim(),
               "Big Brain",
-              `You are the Big Brain agent for the Yaikh platform — the boss of thirteen specialist PA agents. When users ask about a specific domain, tell them which PA can help them.
+              `You are the Big Brain agent for the Yaikh platform — the boss of thirteen specialist PA agents. You are talking to ${visitorName || "a visitor"}. Address them by name when it feels natural. When users ask about a specific domain, tell them which PA can help.
 
 Your PA reports (Agent Collective):
 - Accounting PA — Purchase, Claims, Salary, Shipping, IEWS, Account
@@ -821,7 +843,7 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
             const geminiResponse = await generateChatResponse(
               actionText,
               "Big Brain",
-              `You are the Big Brain agent for the Yaikh platform — the boss of thirteen specialist PA agents. When users ask about a specific domain, tell them which PA can help them.
+              `You are the Big Brain agent for the Yaikh platform — the boss of thirteen specialist PA agents. You are talking to ${visitorName || "a visitor"}. Address them by name when it feels natural. When users ask about a specific domain, tell them which PA can help.
 
 Your PA reports (Agent Collective):
 - Accounting PA — Purchase, Claims, Salary, Shipping, IEWS, Account
@@ -1273,37 +1295,39 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
 
         {/* Content Area */}
         <div className="flex-1 overflow-y-auto overflow-x-hidden px-4 sm:px-6 py-8 bg-[#050505]/60 backdrop-blur-sm relative z-20 min-h-0 w-full flex-shrink">
-          {!hasMessages ? (
-            // Welcome Screen
-            <div className="space-y-6 pt-8 max-w-3xl mx-auto relative z-20">
-              <div>
-                <p className="text-sm text-white/70 mb-2">Hi {GREETING_NAME}</p>
-                {KHMER_NEW_YEAR.isActive ? (
-                  <h2 className="text-3xl font-light leading-tight text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 font-khmer">
-                    សួស្តីឆ្នាំថ្មី I am Yai.
-                    <br />
-                    <span className="text-2xl text-white/90">How can I assist your enterprise today?</span>
-                  </h2>
-                ) : (
-                  <h2 className="text-3xl font-light leading-tight text-white">
-                    Where should we start?
-                  </h2>
-                )}
-              </div>
-              <div className="flex flex-col gap-2 mt-8">
-                {suggestedActions.map((action, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => handleSuggestionClick(action.text)}
-                    className="text-left px-5 py-3 rounded-full bg-white/10 border border-white/15 text-sm text-white hover:bg-white/15 transition flex items-center gap-2"
-                  >
-                    {action.highlight && (
-                      <Sparkles size={16} className="text-yellow-400" />
-                    )}
-                    {action.text}
-                  </button>
-                ))}
-              </div>
+          {!visitorName ? (
+            // First-time — ask the visitor their name so Big Brain can greet them by name.
+            <div className="pt-16 max-w-md mx-auto relative z-20 text-center">
+              <h2 className="text-2xl font-light text-white mb-3">
+                Welcome to Yaikh.
+              </h2>
+              <p className="text-sm text-white/70 mb-6">
+                Big Brain is the boss of 13 PA agents — Accounting, HR, Admin,
+                CSR, Shipping, MRP, QA, Production, CE, YTM, 4DP, YPI, Social.
+                What's your name, so we can start?
+              </p>
+              <form onSubmit={submitVisitorName} className="flex flex-col gap-3 items-stretch">
+                <input
+                  autoFocus
+                  type="text"
+                  value={nameDraft}
+                  onChange={(e) => setNameDraft(e.target.value)}
+                  placeholder="Your name…"
+                  className="px-4 py-3 rounded-full bg-white/10 border border-white/20 text-white placeholder:text-white/50 text-center outline-none focus:border-emerald-400/60"
+                />
+                <button
+                  type="submit"
+                  disabled={!nameDraft.trim()}
+                  className="px-5 py-3 rounded-full bg-gradient-to-r from-emerald-500 to-green-600 text-white font-semibold disabled:opacity-40"
+                >
+                  Start
+                </button>
+              </form>
+            </div>
+          ) : !hasMessages ? (
+            // Visitor has a name but no messages yet — just a soft prompt.
+            <div className="pt-16 max-w-md mx-auto text-center text-white/60 text-sm">
+              Say hi to Big Brain to begin.
             </div>
           ) : (
             // Messages Display
