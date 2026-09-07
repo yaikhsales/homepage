@@ -5958,82 +5958,36 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                             )}
                         </button>
                     </div>
-                    <span className={`text-yai-blue font-bold text-lg tracking-wide drop-shadow-sm pointer-events-auto ${isDropdownOpen ? '' : 'animate-pulse'}`}>
+                    <span className="text-yai-blue font-bold text-lg tracking-wide drop-shadow-sm pointer-events-auto whitespace-nowrap">
                         Yai Agents
                     </span>
 
-                    {/* Dropdown Menu */}
-                    {isDropdownOpen && onVersionChange && (
-                        <div
-                            className="absolute top-full mt-2 left-0 w-72 bg-white/90 backdrop-blur-lg border border-white/20 rounded-lg shadow-2xl z-[60] pointer-events-auto"
-                            style={{
-                                animation: 'yaiDropdownReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) both',
-                                transformOrigin: 'top left',
-                            }}
-                        >
-                            <style>{`
-                                @keyframes yaiDropdownReveal {
-                                    0%   { opacity: 0; transform: translateY(-8px) scale(0.96); }
-                                    100% { opacity: 1; transform: translateY(0)    scale(1);    }
-                                }
-                                @keyframes yaiItemSlideIn {
-                                    0%   { opacity: 0; transform: translateX(-14px); }
-                                    100% { opacity: 1; transform: translateX(0);     }
-                                }
-                                .yai-menu-item { animation: yaiItemSlideIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) both; }
-                                @keyframes yaiPulseHint {
-                                    0%, 100% { box-shadow: 0 0 0 0 rgba(30, 77, 170, 0); }
-                                    50%      { box-shadow: 0 0 0 6px rgba(30, 77, 170, 0.15); }
-                                }
-                                @keyframes yaiPulseHintGreen {
-                                    0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-                                    50%      { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.15); }
-                                }
-                            `}</style>
-                            <ul className="p-2">
-                                <li
-                                    onClick={() => {
-                                        onVersionChange('yai1');
-                                        setDropdownOpen(false);
-                                    }}
-                                    style={{
-                                        animationDelay: '0.35s',
-                                        animation: 'yaiItemSlideIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both, yaiPulseHint 2.2s ease-in-out 1.4s 3',
-                                    }}
-                                    className="yai-menu-item relative flex items-center justify-between gap-4 px-4 py-3 rounded-md hover:bg-yai-blue/15 cursor-pointer group transition-all border border-transparent hover:border-yai-blue/40"
-                                >
-                                    <div className="flex items-center gap-4">
-                                        <img
-                                            src="assets/modules-image/yai1.png"
-                                            alt="Yai 1"
-                                            className="w-14 h-14 rounded-full object-cover border-2 border-yai-blue/60 drop-shadow-[0_0_8px_rgba(30,77,170,0.7)] flex-shrink-0"
-                                        />
-                                        <span className="bg-gradient-to-r from-yai-blue via-blue-400 to-yai-blue bg-clip-text text-transparent font-bold text-lg drop-shadow-[0_0_4px_rgba(30,77,170,0.5)] whitespace-nowrap">Agent Collective</span>
-                                    </div>
-                                    <ChevronRight size={20} className="text-yai-blue/80 group-hover:text-blue-300 transition-colors flex-shrink-0" />
-                                </li>
-                                <li
-                                    onClick={() => {
-                                        onVersionChange('yai2');
-                                        setDropdownOpen(false);
-                                    }}
-                                    style={{
-                                        animation: 'yaiItemSlideIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.85s both, yaiPulseHintGreen 2.2s ease-in-out 1.9s 3',
-                                    }}
-                                    className="yai-menu-item relative flex items-center justify-between gap-4 px-4 py-3 rounded-md hover:bg-gray-500/10 cursor-pointer group transition-all border border-transparent hover:border-gray-500/30"
-                                >
-                                    <div className="flex items-center gap-4">
-                                        <img
-                                            src="assets/modules-image/yai2.png"
-                                            alt="Big Brain"
-                                            className="w-14 h-14 rounded-full object-contain bg-slate-950/60 border-2 border-emerald-400/60 shadow-[0_0_10px_rgba(16,185,129,0.6)] flex-shrink-0"
-                                        />
-                                        <span className="bg-gradient-to-r from-emerald-400 via-green-400 to-emerald-500 bg-clip-text text-transparent font-bold text-lg drop-shadow-[0_0_4px_rgba(16,185,129,0.5)] whitespace-nowrap">Big Brain</span>
-                                    </div>
-                                    <ChevronRight size={20} className="text-gray-400/70 group-hover:text-gray-300 transition-colors flex-shrink-0" />
-                                </li>
-                            </ul>
-                        </div>
+                    {/* Inline row — Agent Collective + Big Brain always visible */}
+                    {onVersionChange && (
+                        <>
+                            <div
+                                onClick={() => onVersionChange('yai1')}
+                                className="flex items-center gap-3 px-3 py-2 rounded-md bg-white/80 backdrop-blur-sm hover:bg-yai-blue/15 cursor-pointer transition-all border border-yai-blue/30 pointer-events-auto"
+                            >
+                                <img
+                                    src="assets/modules-image/yai1.png"
+                                    alt="Yai 1"
+                                    className="w-12 h-12 rounded-full object-cover border-2 border-yai-blue/60 flex-shrink-0"
+                                />
+                                <span className="bg-gradient-to-r from-yai-blue via-blue-400 to-yai-blue bg-clip-text text-transparent font-bold text-lg whitespace-nowrap">Agent Collective</span>
+                            </div>
+                            <div
+                                onClick={() => onVersionChange('yai2')}
+                                className="flex items-center gap-3 px-3 py-2 rounded-md bg-white/80 backdrop-blur-sm hover:bg-emerald-500/15 cursor-pointer transition-all border border-emerald-400/30 pointer-events-auto"
+                            >
+                                <img
+                                    src="assets/modules-image/yai2.png"
+                                    alt="Big Brain"
+                                    className="w-12 h-12 rounded-full object-contain bg-slate-950/60 border-2 border-emerald-400/60 flex-shrink-0"
+                                />
+                                <span className="bg-gradient-to-r from-emerald-400 via-green-400 to-emerald-500 bg-clip-text text-transparent font-bold text-lg whitespace-nowrap">Big Brain</span>
+                            </div>
+                        </>
                     )}
                 </div>
             </div>
