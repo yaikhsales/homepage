@@ -1263,71 +1263,39 @@ const BotVersion2 = ({
               </button>
             </div>
             <span
-              className={`text-white font-bold text-lg tracking-wide drop-shadow-[0_0_10px_rgba(16,185,129,0.8)] bg-gradient-to-r from-emerald-400 via-green-400 to-emerald-500 bg-clip-text text-transparent pointer-events-auto ${isDropdownOpen ? "" : "animate-pulse"}`}
+              className="text-white font-bold text-lg tracking-wide drop-shadow-[0_0_10px_rgba(16,185,129,0.8)] bg-gradient-to-r from-emerald-400 via-green-400 to-emerald-500 bg-clip-text text-transparent pointer-events-auto whitespace-nowrap"
             >
               Yai Agents
             </span>
 
-            {/* Dropdown Menu */}
-            {isDropdownOpen && onVersionChange && (
-              <div className="absolute top-full mt-2 left-0 w-72 bg-slate-800/90 backdrop-blur-lg border border-white/10 rounded-lg shadow-2xl animate-in fade-in zoom-in-95 duration-200 z-[60] pointer-events-auto">
-                <ul className="p-2">
-                  <li
-                    onClick={() => {
-                      onVersionChange("yai1");
-                      setDropdownOpen(false);
-                    }}
-                    className="relative flex items-center justify-between gap-4 px-4 py-3 rounded-md hover:bg-yai-blue/15 cursor-pointer group transition-all border border-transparent hover:border-yai-blue/40"
-                  >
-                    <div className="flex items-center gap-4">
-                      <img
-                        src="assets/modules-image/yai1.png"
-                        alt="Yai 1"
-                        className="w-14 h-14 rounded-full object-cover border-2 border-yai-blue/60 drop-shadow-[0_0_8px_rgba(30,77,170,0.7)] flex-shrink-0"
-                      />
-                      <span className="bg-gradient-to-r from-yai-blue via-blue-400 to-yai-blue bg-clip-text text-transparent font-bold text-lg drop-shadow-[0_0_4px_rgba(30,77,170,0.5)] whitespace-nowrap">
-                        Yai 1
-                      </span>
-                    </div>
-                    <ChevronRight
-                      size={20}
-                      className="text-yai-blue/80 group-hover:text-blue-300 transition-colors flex-shrink-0"
-                    />
-                  </li>
-                  <li
-                    onClick={() => {
-                      onVersionChange("yai2");
-                      setDropdownOpen(false);
-                    }}
-                    className="relative flex items-center justify-between gap-4 px-4 py-3 rounded-md hover:bg-gray-500/10 cursor-pointer group transition-all border border-transparent hover:border-gray-500/30"
-                  >
-                    <div className="flex items-center gap-4">
-                      <img
-                        src="assets/modules-image/yai2.png"
-                        alt="Yai 2"
-                        className="w-14 h-14 rounded-full object-cover border-2 border-gray-400/50 drop-shadow-[0_0_8px_rgba(156,163,175,0.6)] flex-shrink-0"
-                      />
-                      <span className="bg-gradient-to-r from-gray-400 via-slate-400 to-gray-500 bg-clip-text text-transparent font-bold text-lg drop-shadow-[0_0_4px_rgba(156,163,175,0.4)] whitespace-nowrap">
-                        Yai 2
-                      </span>
-                    </div>
-                    <ChevronRight
-                      size={20}
-                      className="text-gray-400/70 group-hover:text-gray-300 transition-colors flex-shrink-0"
-                    />
-                  </li>
-                </ul>
-              </div>
+            {/* Inline row — Agent Collective + Big Brain always visible */}
+            {onVersionChange && (
+              <>
+                <div
+                  onClick={() => onVersionChange("yai1")}
+                  className="flex items-center gap-3 px-3 py-2 rounded-md bg-slate-800/80 backdrop-blur-sm hover:bg-yai-blue/20 cursor-pointer transition-all border border-yai-blue/40 pointer-events-auto"
+                >
+                  <img
+                    src="assets/modules-image/yai1.png"
+                    alt="Yai 1"
+                    className="w-12 h-12 rounded-full object-cover border-2 border-yai-blue/60 flex-shrink-0"
+                  />
+                  <span className="bg-gradient-to-r from-yai-blue via-blue-400 to-yai-blue bg-clip-text text-transparent font-bold text-lg whitespace-nowrap">Agent Collective</span>
+                </div>
+                <div
+                  onClick={() => onVersionChange("yai2")}
+                  className="flex items-center gap-3 px-3 py-2 rounded-md bg-slate-800/80 backdrop-blur-sm hover:bg-emerald-500/20 cursor-pointer transition-all border border-emerald-400/40 pointer-events-auto"
+                >
+                  <img
+                    src="assets/modules-image/yai2.png"
+                    alt="Big Brain"
+                    className="w-12 h-12 rounded-full object-cover border-2 border-emerald-400/60 flex-shrink-0"
+                  />
+                  <span className="bg-gradient-to-r from-emerald-400 via-green-400 to-emerald-500 bg-clip-text text-transparent font-bold text-lg whitespace-nowrap">Big Brain</span>
+                </div>
+              </>
             )}
           </div>
-
-          {/* Overlay to close dropdown when clicking outside */}
-          {isDropdownOpen && (
-            <div
-              className="fixed inset-0 z-40"
-              onClick={() => setDropdownOpen(false)}
-            />
-          )}
 
           {/* Second Row: Menu buttons and Bot Info */}
           <div className="flex items-center justify-between relative">
