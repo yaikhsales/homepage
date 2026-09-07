@@ -34,6 +34,7 @@ const BotVersion2 = ({
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const [isHistoryPinned, setIsHistoryPinned] = useState(false);
 
   // Chat history state
   const [chatHistory, setChatHistory] = useState(() => {
@@ -675,8 +676,14 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
     );
   };
 
-  const generateWebsiteResponse = (userInput) => {
-    const lowerInput = userInput.toLowerCase().trim();
+  const generateWebsiteResponse = (_userInput) => {
+    // All canned "bot" responses removed 2026-09-07.
+    // Every user message now flows through the M1 → Gemini router so the
+    // Big Brain agent (with its 13-PA roster prompt) answers accurately
+    // and never mentions the removed "specialized bots" wording.
+    return null;
+    // eslint-disable-next-line no-unreachable
+    const lowerInput = _userInput.toLowerCase().trim();
 
     // 1. Planning Status
     if (
@@ -943,23 +950,39 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
 
       {/* Solar System Animation removed 2026-09-07 */}
 
-      {/* Sidebar - Chat History */}
+      {/* Sidebar - Chat History (pushed further down so it clears the
+          Yai Agents / Agent Collective / Big Brain header row) */}
       <div
         className={`fixed left-0 z-50 w-80 bg-[#050505] border-r border-white/10 transform transition-transform duration-300 ease-in-out ${
           isHistoryOpen ? "translate-x-0" : "-translate-x-full"
         }`}
-        style={{ top: "120px", bottom: "0", height: "calc(100vh - 120px)" }}
+        style={{ top: "220px", bottom: "0", height: "calc(100vh - 220px)" }}
       >
         <div className="flex flex-col h-full w-full">
           {/* Sidebar Header */}
           <div className="flex items-center justify-between p-4 border-b border-white/10">
             <h2 className="text-lg font-semibold">Chat History</h2>
-            <button
-              onClick={() => setIsHistoryOpen(false)}
-              className="p-2 rounded-full hover:bg-white/10 transition"
-            >
-              <X size={20} className="text-white/70" />
-            </button>
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => setIsHistoryPinned((p) => !p)}
+                title={isHistoryPinned ? "Unpin (auto-close on click outside)" : "Pin (keep open)"}
+                className={`p-2 rounded-full transition ${
+                  isHistoryPinned
+                    ? "bg-yai-blue/30 text-yai-blue"
+                    : "hover:bg-white/10 text-white/70"
+                }`}
+              >
+                <span style={{ fontSize: "16px", lineHeight: 1 }}>
+                  {isHistoryPinned ? "📌" : "📍"}
+                </span>
+              </button>
+              <button
+                onClick={() => setIsHistoryOpen(false)}
+                className="p-2 rounded-full hover:bg-white/10 transition"
+              >
+                <X size={20} className="text-white/70" />
+              </button>
+            </div>
           </div>
 
           {/* New Chat Button */}
@@ -1011,8 +1034,9 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
         </div>
       </div>
 
-      {/* Overlay when sidebar is open */}
-      {isHistoryOpen && (
+      {/* Overlay when sidebar is open — suppressed when pinned so the
+          user can keep interacting with the chat behind it. */}
+      {isHistoryOpen && !isHistoryPinned && (
         <div
           className="fixed inset-0 bg-black/50 z-40"
           onClick={() => setIsHistoryOpen(false)}
