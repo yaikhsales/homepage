@@ -1563,28 +1563,9 @@ const PhoneFrame = ({
                         {/* Content Area */}
                         <div className="flex-1 overflow-y-auto overflow-x-hidden px-6 py-8 min-h-0">
                             {!hasMessages ? (
-                                // Welcome Screen
+                                // Welcome Screen — greeting removed, land straight on topic pills.
                                 <div className="space-y-6 pt-8">
-                                    <div>
-                                        {(() => {
-                                            const g = getDynamicGreeting(GREETING_NAME);
-                                            const festiveGradient = g.festive === 'khmer-ny'
-                                                ? 'text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 to-red-500'
-                                                : g.festive === 'new-year' || g.festive === 'holidays'
-                                                    ? 'text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-rose-500'
-                                                    : g.festive === 'mid-autumn'
-                                                        ? 'text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-600'
-                                                        : null;
-                                            return (
-                                                <>
-                                                    <p className={`text-sm ${bot.textColor || 'text-gray-600'} mb-2`}>{g.line1}</p>
-                                                    <h2 className={`text-2xl sm:text-3xl font-light leading-tight ${festiveGradient || bot.textColor || 'text-gray-800'}`}>
-                                                        {g.line2}
-                                                    </h2>
-                                                </>
-                                            );
-                                        })()}
-                                    </div>
+                                    <div />
                                     {/* Legacy module-box flow disabled for the new 13-agent set —
                                         all bots now render their own `suggestedActions` uniformly. */}
                                     {false ? (
