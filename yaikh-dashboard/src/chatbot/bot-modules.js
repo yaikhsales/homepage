@@ -498,6 +498,15 @@ const PhoneFrame = ({
         'hr-bot':         'hr',
         'admin-bot':      'admin',
         'csr-bot':        'csr',
+        'shipping-bot':   'shipping',
+        'mrp-bot':        'mrp',
+        'qa-bot':         'qa',
+        'production-bot': 'production',
+        'ce-bot':         'ce',
+        'ytm-bot':        'ytm',
+        '4dp-bot':        '4dp',
+        'ypi-bot':        'ypi',
+        'social-bot':     'social',
     };
     const notifSlug = NOTIF_SLUG[botId];
 
