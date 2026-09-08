@@ -48,15 +48,18 @@ export async function GET(
     return NextResponse.json({
       ok: true,
       topic,
+      // Shape matches the existing pending_items renderer in bot-modules.js
+      // (looks for item.no / item.title / item.requester.name / item.description).
       items: items.map((t) => ({
-        id: String(t._id),
-        item_id: t.item_id,
-        origin_pa: t.origin_pa,
-        requester: t.requester,
+        _id: String(t._id),
+        no: t.item_id,                              // headline (short ref)
+        title: t.item_id,
+        description: t.summary || topic,            // subline body
+        dept: (t.origin_pa || "").toUpperCase(),    // origin PA tag
+        requester: { name: t.requester || "—" },
         status: t.status,
         created_at: t.created_at,
         deadline: t.deadline,
-        summary: t.summary || null,
       })),
     });
   } catch (err) {
