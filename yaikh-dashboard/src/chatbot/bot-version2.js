@@ -161,13 +161,34 @@ const BotVersion2 = ({
         ? ` No certifications yet — is that a "next year" thing, or are your buyers happy without them?`
         : ``;
 
-      const closer = `\n\nSo — what's keeping you awake this week? Or if you'd rather, I can suggest a few matters I think you may want to attend to first.`;
+      // Proactively pull the top 3 matters so Yai brings them up unprompted.
+      let mattersBlock = "";
+      let mattersList = [];
+      try {
+        const attRes = await fetch("/api/factory/attention?limit=3");
+        const attJson = await attRes.json();
+        if (attJson?.ok && Array.isArray(attJson.matters) && attJson.matters.length) {
+          mattersList = attJson.matters;
+          const rendered = attJson.matters.map((m, i) =>
+            `${i + 1}. **${m.pa_label} · ${m.pill}** — ${m.summary} _(${m.age_days}d old)_`
+          ).join("\n\n");
+          mattersBlock =
+            `\n\nWhile I was walking the floor I spotted ${attJson.matters.length} matters worth your attention right away:\n\n${rendered}`;
+        }
+      } catch {
+        // silent — welcome message just skips the matters section
+      }
+
+      const closer = mattersList.length
+        ? `\n\nWant to start with one of those (say the number)? Or tell me what's actually keeping you awake this week.`
+        : `\n\nWhat's keeping you awake this week?`;
 
       setMessages(prev => [...prev, { from: "bot", text:
         `Alright ${bossName} — your ${payload.workers.toLocaleString()}-worker ${productLower} factory is loaded ` +
         `(${payload.lines} line${payload.lines === 1 ? "" : "s"}, ${data.tasksSeeded} live tasks across the team).\n\n` +
         `Quick thoughts before we dig in: ${observation}${certLine}\n\n` +
         buyerLine +
+        mattersBlock +
         closer,
       }]);
     } catch (err) {
