@@ -72,7 +72,7 @@ const BotVersion2 = ({
   // Ask the next onboarding question — driven from handleSend after each reply.
   const askNextOnboarding = (step, draft, boss) => {
     const q = ({
-      0: `Hi Boss${boss ? ` — ${boss}` : ""} 👋 Before I introduce the 13 PA team, quick set-up so we materialise the right size demo. First up: how many workers on your factory floor?`,
+      0: `Nice to meet you${boss ? `, ${boss}` : ""}. Quick set-up so I get your factory right — how many workers on your floor?`,
       1: `Got it. How many production lines are running right now?`,
       2: `And what's the main product — polos, jackets, trousers, or a mix?`,
       3: `Any certifications the factory holds? (WRAP, BSCI, HIGG, SEDEX, GRS — or type "none")`,
@@ -107,16 +107,15 @@ const BotVersion2 = ({
       setOnboardingStep(-1);
       setMessages(prev => [...prev, { from: "bot", text:
         `Done, Boss. Your factory is live:\n` +
-        `• ${payload.workers.toLocaleString()} workers · ${payload.lines} production lines · ${payload.product}\n` +
+        `• ${payload.workers.toLocaleString()} workers · ${payload.lines} lines · ${payload.product}\n` +
         `• Certifications: ${payload.certifications.join(", ") || "—"}\n` +
         `• Buyers: ${payload.buyers.join(", ") || "—"}\n` +
-        `• ${data.tasksSeeded} live tasks now open across the 13 PAs\n\n` +
-        `Try one of these to see the team in action:\n` +
+        `• ${data.tasksSeeded} live tasks materialised\n\n` +
+        `Ask me anything. Try:\n` +
         `• "What's on fire?"\n` +
         `• "Today's headline"\n` +
         `• "Any Speak Up complaint I should know about?"\n` +
-        `• "PSA holds by PO"\n\n` +
-        `Or name a department (Accounting, HR, Admin, CSR, Shipping, MRP, QA, Production, CE, YTM, 4DP, YPI, Social) and I'll route you.`,
+        `• "PSA holds by PO"`,
       }]);
     } catch (err) {
       setOnboardingStep(4); // back to the last question so they can retry
@@ -1414,11 +1413,10 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
             // Step 1 — ask visitor's name.
             <div className="pt-16 max-w-md mx-auto relative z-20 text-center">
               <h2 className="text-2xl font-light text-white mb-3">
-                Welcome to Yaikh.
+                Hello Boss — I am Yai.
               </h2>
               <p className="text-sm text-white/70 mb-6">
-                Big Brain is the boss of 13 PA agents. Before we introduce
-                the team, what's your name?
+                What should I call you?
               </p>
               <form onSubmit={submitVisitorName} className="flex flex-col gap-3 items-stretch">
                 <input
