@@ -46,29 +46,22 @@ const BotVersion2 = ({
     try { localStorage.setItem("yai_chat_font_size", String(chatFontSize)); } catch { /* private mode */ }
   }, [chatFontSize]);
 
-  // Visitor name — captured once, persisted, drives the Big Brain greeting
-  const [visitorName, setVisitorName] = useState(() => {
-    try { return localStorage.getItem("yai_visitor_name") || ""; } catch { return ""; }
-  });
+  // Visitor name — NEVER read from localStorage on mount. Every fresh open
+  // of Big Brain must start with "Hello Boss — I am Yai. And you?" so a demo
+  // to a new client isn't polluted by a previous session's name.
+  const [visitorName, setVisitorName] = useState("");
   const [nameDraft, setNameDraft] = useState("");
 
-  // Factory config persisted across sessions.
-  const [factoryConfig, setFactoryConfig] = useState(() => {
-    try { const s = localStorage.getItem("yai_factory_config"); return s ? JSON.parse(s) : null; }
-    catch { return null; }
-  });
+  // Factory config — start fresh every open, same reason as visitorName.
+  // The demo has to feel like a clean slate for every walk-up.
+  const [factoryConfig, setFactoryConfig] = useState(null);
 
-  // Conversational onboarding — chat-based, not a form.
+  // Conversational onboarding — always starts at -2 (ask name) on fresh open
+  // so every demo begins with "Hello Boss — I am Yai. And you?".
   //   -2 = ask visitor's name, -1 = done,
   //    0 = ask workers, 1 = ask lines, 2 = ask product,
   //    3 = ask certifications, 4 = ask buyers, 5 = materialising
-  const [onboardingStep, setOnboardingStep] = useState(() => {
-    try {
-      if (localStorage.getItem("yai_factory_config")) return -1;
-      if (localStorage.getItem("yai_visitor_name")) return 0;
-      return -2;
-    } catch { return -2; }
-  });
+  const [onboardingStep, setOnboardingStep] = useState(-2);
   const [onboardingDraft, setOnboardingDraft] = useState({
     workers: null, lines: null, product: null, certifications: null, buyers: null,
   });
@@ -206,23 +199,19 @@ const BotVersion2 = ({
     }
   };
 
-  // Seed the very first bot message when the chat opens fresh — Yai
-  // ALWAYS introduces itself as the opening line ("Hello Boss — I am Yai"),
-  // then the follow-up depends on where the boss is in the journey.
+  // Wipe any leftover demo state on mount + seed the "Hello Boss — I am Yai"
+  // opener. Every fresh open is a clean slate so a new client isn't greeted
+  // as "Alan" or "Joel" from a previous session.
   useEffect(() => {
-    if (messages.length > 0) return; // don't stomp an existing conversation
-    const intro = { from: "bot", text: `Hello Boss — I am Yai.` };
-    if (onboardingStep === -2) {
-      // Brand-new visitor — ask their name in a second bot bubble.
-      setMessages([intro, { from: "bot", text: `And you?` }]);
-    } else if (onboardingStep === -1 && visitorName && factoryConfig) {
-      // Returning visitor — greet by name, factory ready.
-      setMessages([intro, { from: "bot", text: `Welcome back, ${visitorName} — your factory is loaded. Ask me anything.` }]);
-    } else if (onboardingStep >= 0 && onboardingStep <= 4 && visitorName) {
-      // Half-done onboarding (name saved but factory not materialised).
-      setMessages([intro]);
-      setTimeout(() => askNextOnboarding(onboardingStep, onboardingDraft, visitorName), 400);
-    }
+    try {
+      localStorage.removeItem("yai_visitor_name");
+      localStorage.removeItem("yai_factory_config");
+    } catch { /* private mode */ }
+    if (messages.length > 0) return;
+    setMessages([
+      { from: "bot", text: `Hello Boss — I am Yai.` },
+      { from: "bot", text: `And you?` },
+    ]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
