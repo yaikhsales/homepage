@@ -5839,21 +5839,24 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                 <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 transition-colors duration-300"></div>
             )}
 
-            {/* Back Button + Yai Agents header — only meaningful in the
-                full-screen Agent Collective view; hide in the sub-menu
-                compact mount where the page already has Back / Home. */}
+            {/* Back Button — 3D bubbly blue ball (blue = Agent Collective context) */}
             {!isCompactMount && (
                 <button
                     onClick={onClose}
-                    className="absolute top-4 left-4 z-50 flex items-center gap-2 px-4 py-2 bg-yai-blue/80 hover:bg-yai-blue text-white rounded-lg backdrop-blur-sm transition-colors font-medium shadow-lg pointer-events-auto"
+                    aria-label="Back"
+                    className="absolute top-4 left-4 z-50 w-14 h-14 rounded-full text-white font-bold text-2xl leading-none flex items-center justify-center transition-transform hover:scale-105 active:scale-95 pointer-events-auto"
+                    style={{
+                        background: "radial-gradient(circle at 30% 25%, #93c5fd 0%, #3b82f6 45%, #1d4ed8 100%)",
+                        boxShadow: "inset -6px -6px 12px rgba(0,0,0,0.35), inset 4px 4px 10px rgba(255,255,255,0.35), 0 6px 14px rgba(59,130,246,0.35)",
+                    }}
                 >
-                    <ChevronRight size={18} className="rotate-180" /> Back
+                    ←
                 </button>
             )}
 
-            {/* Yai Data Header with Dropdown - Top Left */}
+            {/* Yai Data Header — Orange Yai brand + Blue Agent Collective + Green Big Brain */}
             {!isCompactMount && (
-            <div className="absolute top-4 left-32 z-50 pointer-events-none">
+            <div className="absolute top-4 left-24 z-50 pointer-events-none">
                 <style>{`
                     @keyframes float {
                         0%, 100% { transform: translateY(0px) rotate(0deg); }
@@ -5917,67 +5920,72 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                     .sparkle-3-modules { bottom: 15%; left: 25%; animation-delay: 1s; }
                     .sparkle-4-modules { bottom: 10%; right: 20%; animation-delay: 1.5s; }
                 `}</style>
-                <div className="flex items-center gap-4 pointer-events-auto">
-                    <div className={`relative ${isDropdownOpen ? '' : 'bot-icon-container-modules'}`}>
-                        {/* Rotating Rings - Only show when dropdown is closed */}
-                        {!isDropdownOpen && (
-                            <>
-                                <div className="rotating-ring-modules"></div>
+                <div className="flex items-center gap-8 pointer-events-auto">
+                    {/* Orange Yai — brand mark (opens the dropdown / at-a-glance identity) */}
+                    <button
+                        onClick={() => setDropdownOpen(prev => !prev)}
+                        aria-label="Yai"
+                        className="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0 transition-transform hover:scale-105"
+                        style={{
+                            background: "radial-gradient(circle at 30% 25%, #fed7aa 0%, #f97316 55%, #c2410c 100%)",
+                            boxShadow: "inset -4px -4px 8px rgba(0,0,0,0.30), inset 3px 3px 6px rgba(255,255,255,0.35), 0 4px 12px rgba(249,115,22,0.4)",
+                        }}
+                    >
+                        <img
+                            src="/assets/icons/sub-icons/yai.png"
+                            alt="Yai"
+                            className="w-full h-full rounded-full object-cover"
+                        />
+                    </button>
 
-                                {/* Sparkles - Only show when dropdown is closed */}
-                                <div className="sparkle-modules sparkle-1-modules"></div>
-                                <div className="sparkle-modules sparkle-2-modules"></div>
-                                <div className="sparkle-modules sparkle-3-modules"></div>
-                                <div className="sparkle-modules sparkle-4-modules"></div>
-                            </>
-                        )}
-
-                        <button
-                            onClick={() => setDropdownOpen(prev => !prev)}
-                            className={`relative rounded-full hover:scale-110 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-900 z-10 pointer-events-auto ${isDropdownOpen ? '' : 'bot-icon-glow-modules'}`}
-                            aria-label="Yai Agents"
-                        >
-                            <img
-                                src="/assets/modules-image/yai1.png"
-                                alt="Yai Agents"
-                                className="w-16 h-16 rounded-full object-cover border-2 border-yai-blue/60 relative z-10"
-                            />
-                            {/* Gradient Overlay - Yai Blue (Agent Collective context) */}
-                            {!isDropdownOpen && (
-                                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-yai-blue/30 via-blue-400/20 to-yai-blue/30 mix-blend-screen pointer-events-none"></div>
-                            )}
-                        </button>
-                    </div>
-                    <span className="text-yai-blue font-bold text-lg tracking-wide drop-shadow-sm pointer-events-auto whitespace-nowrap">
-                        Yai Agents
-                    </span>
-
-                    {/* Inline row — Agent Collective + Big Brain always visible */}
+                    {/* Blue Agent Collective — current mode (bubbly, transparent, no box) */}
                     {onVersionChange && (
-                        <>
+                        <button
+                            onClick={() => onVersionChange('yai1')}
+                            className="flex items-center gap-3 cursor-pointer hover:scale-105 transition-transform"
+                        >
                             <div
-                                onClick={() => onVersionChange('yai1')}
-                                className="flex items-center gap-3 px-3 py-2 rounded-md bg-white/80 backdrop-blur-sm hover:bg-yai-blue/15 cursor-pointer transition-all border border-yai-blue/30 pointer-events-auto"
+                                className="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0"
+                                style={{
+                                    background: "radial-gradient(circle at 30% 25%, #93c5fd 0%, #3b82f6 55%, #1d4ed8 100%)",
+                                    boxShadow: "inset -4px -4px 8px rgba(0,0,0,0.30), inset 3px 3px 6px rgba(255,255,255,0.35), 0 4px 12px rgba(59,130,246,0.4)",
+                                }}
                             >
                                 <img
                                     src="assets/modules-image/yai1.png"
-                                    alt="Yai 1"
-                                    className="w-12 h-12 rounded-full object-cover border-2 border-yai-blue/60 flex-shrink-0"
+                                    alt="Yai"
+                                    className="w-full h-full rounded-full object-cover"
                                 />
-                                <span className="bg-gradient-to-r from-yai-blue via-blue-400 to-yai-blue bg-clip-text text-transparent font-bold text-lg whitespace-nowrap">Agent Collective</span>
                             </div>
+                            <span className="text-blue-400 font-bold text-xl whitespace-nowrap">
+                                Agent Collective
+                            </span>
+                        </button>
+                    )}
+
+                    {/* Green Big Brain — switch to Big Brain */}
+                    {onVersionChange && (
+                        <button
+                            onClick={() => onVersionChange('yai2')}
+                            className="flex items-center gap-3 cursor-pointer hover:scale-105 transition-transform"
+                        >
                             <div
-                                onClick={() => onVersionChange('yai2')}
-                                className="flex items-center gap-3 px-3 py-2 rounded-md bg-white/80 backdrop-blur-sm hover:bg-emerald-500/15 cursor-pointer transition-all border border-emerald-400/30 pointer-events-auto"
+                                className="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0"
+                                style={{
+                                    background: "radial-gradient(circle at 30% 25%, #a7f3d0 0%, #10b981 55%, #047857 100%)",
+                                    boxShadow: "inset -4px -4px 8px rgba(0,0,0,0.30), inset 3px 3px 6px rgba(255,255,255,0.35), 0 4px 12px rgba(16,185,129,0.4)",
+                                }}
                             >
                                 <img
                                     src="assets/modules-image/yai2.png"
-                                    alt="Big Brain"
-                                    className="w-12 h-12 rounded-full object-contain bg-slate-950/60 border-2 border-emerald-400/60 flex-shrink-0"
+                                    alt="Yai"
+                                    className="w-full h-full rounded-full object-cover"
                                 />
-                                <span className="bg-gradient-to-r from-emerald-400 via-green-400 to-emerald-500 bg-clip-text text-transparent font-bold text-lg whitespace-nowrap">Big Brain</span>
                             </div>
-                        </>
+                            <span className="text-emerald-400 font-bold text-xl whitespace-nowrap">
+                                Big Brain
+                            </span>
+                        </button>
                     )}
                 </div>
             </div>

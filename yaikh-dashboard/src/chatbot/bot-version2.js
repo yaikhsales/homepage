@@ -1433,10 +1433,10 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
                         .sparkle-4-v2 { bottom: 10%; right: 20%; animation-delay: 1.5s; }
                     `}</style>
 
-          {/* Clean single-row header — hamburger · Yai brand · optional Agent Collective switch */}
-          <div className="flex items-center justify-between relative">
-            {/* Left — menu + new chat */}
-            <div className="flex items-center gap-2">
+          {/* Clean single-row header — matches the Agent Collective view */}
+          <div className="flex items-center justify-between relative gap-4">
+            {/* Left — hamburger + new chat (small utility) */}
+            <div className="flex items-center gap-2 flex-shrink-0">
               <button
                 onClick={() => setIsHistoryOpen(true)}
                 className="p-2 rounded-full hover:bg-white/10 transition"
@@ -1453,46 +1453,76 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
               </button>
             </div>
 
-            {/* Center — big Yai brand (this IS the app) */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-3">
-              <div className={`w-11 h-11 rounded-full ${KHMER_NEW_YEAR.isActive ? 'bg-gradient-to-br from-red-600 via-orange-500 to-yellow-500' : 'bg-gradient-to-br from-emerald-500 to-green-600'} flex items-center justify-center border-2 border-emerald-400/70 shadow-[0_0_18px_rgba(16,185,129,0.5)]`}>
+            {/* Center — orange Yai brand + blue Agent Collective + green Big Brain */}
+            <div className="flex items-center gap-6 justify-center flex-1">
+              {/* Orange Yai — brand mark */}
+              <div
+                className="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0"
+                style={{
+                  background: "radial-gradient(circle at 30% 25%, #fed7aa 0%, #f97316 55%, #c2410c 100%)",
+                  boxShadow: "inset -4px -4px 8px rgba(0,0,0,0.30), inset 3px 3px 6px rgba(255,255,255,0.35), 0 4px 12px rgba(249,115,22,0.4)",
+                }}
+                aria-label="Yai"
+              >
                 <img
-                  src="assets/modules-image/yai2.png"
+                  src="/assets/icons/sub-icons/yai.png"
                   alt="Yai"
                   className="w-full h-full rounded-full object-cover"
                 />
               </div>
-              <span className="bg-gradient-to-r from-emerald-400 via-green-400 to-emerald-500 bg-clip-text text-transparent font-bold text-2xl tracking-wide whitespace-nowrap">
-                Yai
-              </span>
-            </div>
 
-            {/* Right — switch to Agent Collective. Mirror the outer nav design
-                so the affordance is obvious (blue bubbly Yai + label). */}
-            {onVersionChange && (
-              <button
-                onClick={() => onVersionChange("yai1")}
-                className="flex items-center gap-2 cursor-pointer hover:scale-105 transition-transform"
-                title="Switch to Agent Collective — talk to any of the 13 PAs directly"
+              {/* Blue Agent Collective — switch */}
+              {onVersionChange && (
+                <button
+                  onClick={() => onVersionChange("yai1")}
+                  className="flex items-center gap-3 cursor-pointer hover:scale-105 transition-transform"
+                  title="Switch to Agent Collective"
+                >
+                  <div
+                    className="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0"
+                    style={{
+                      background: "radial-gradient(circle at 30% 25%, #93c5fd 0%, #3b82f6 55%, #1d4ed8 100%)",
+                      boxShadow: "inset -4px -4px 8px rgba(0,0,0,0.30), inset 3px 3px 6px rgba(255,255,255,0.35), 0 4px 12px rgba(59,130,246,0.4)",
+                    }}
+                  >
+                    <img
+                      src="assets/modules-image/yai1.png"
+                      alt="Yai"
+                      className="w-full h-full rounded-full object-cover"
+                    />
+                  </div>
+                  <span className="text-blue-400 font-bold text-xl whitespace-nowrap hidden sm:inline">
+                    Agent Collective
+                  </span>
+                </button>
+              )}
+
+              {/* Green Big Brain — current mode */}
+              <div
+                className="flex items-center gap-3 flex-shrink-0"
+                title="Big Brain — where you are now"
               >
                 <div
-                  className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0"
+                  className="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0"
                   style={{
-                    background: "radial-gradient(circle at 30% 25%, #93c5fd 0%, #3b82f6 55%, #1d4ed8 100%)",
-                    boxShadow: "inset -3px -3px 6px rgba(0,0,0,0.30), inset 2px 2px 4px rgba(255,255,255,0.35), 0 3px 8px rgba(59,130,246,0.4)",
+                    background: "radial-gradient(circle at 30% 25%, #a7f3d0 0%, #10b981 55%, #047857 100%)",
+                    boxShadow: "inset -4px -4px 8px rgba(0,0,0,0.30), inset 3px 3px 6px rgba(255,255,255,0.35), 0 4px 12px rgba(16,185,129,0.4)",
                   }}
                 >
                   <img
-                    src="assets/modules-image/yai1.png"
+                    src="assets/modules-image/yai2.png"
                     alt="Yai"
                     className="w-full h-full rounded-full object-cover"
                   />
                 </div>
-                <span className="text-blue-400 font-semibold text-sm whitespace-nowrap hidden sm:inline">
-                  Agent Collective
+                <span className="text-emerald-400 font-bold text-xl whitespace-nowrap hidden sm:inline">
+                  Big Brain
                 </span>
-              </button>
-            )}
+              </div>
+            </div>
+
+            {/* Right — placeholder to balance the flex row */}
+            <div className="w-14 flex-shrink-0" />
           </div>
         </div>
 
