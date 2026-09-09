@@ -1445,41 +1445,23 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
                         .sparkle-4-v2 { bottom: 10%; right: 20%; animation-delay: 1.5s; }
                     `}</style>
 
-          {/* Clean single row — hamburger + new-chat left, "My [Yai] task agent" right.
-              No 3-orb switcher inside the modal — orange "← Home" pill above
-              does the job. */}
-          <div className="flex items-center justify-between relative gap-4 pl-24 sm:pl-28">
-            <div className="flex items-center gap-2 flex-shrink-0">
-              <button
-                onClick={() => setIsHistoryOpen(true)}
-                className="p-2 rounded-full hover:bg-white/10 transition"
-                title="Chat history"
-              >
-                <Menu size={20} className="text-white/70" />
-              </button>
-              <button
-                onClick={handleNewChat}
-                className="p-2 rounded-full hover:bg-white/10 transition"
-                title="New chat"
-              >
-                <Plus size={20} className="text-white/70" />
-              </button>
-            </div>
-
-            {/* Right — "My [orange Yai] task agent" */}
-            <div className="flex items-center gap-2 flex-shrink-0">
-              <span className="text-white font-bold text-lg whitespace-nowrap">My</span>
-              <div
-                className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0"
-                style={{
-                  background: "radial-gradient(circle at 30% 25%, #fed7aa 0%, #f97316 55%, #c2410c 100%)",
-                  boxShadow: "inset -3px -3px 6px rgba(0,0,0,0.30), inset 2px 2px 4px rgba(255,255,255,0.35), 0 3px 8px rgba(249,115,22,0.4)",
-                }}
-              >
-                <img src="/assets/modules-image/top-bot.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
-              </div>
-              <span className="text-white font-bold text-lg whitespace-nowrap">task agent</span>
-            </div>
+          {/* Minimal chrome — just hamburger + new-chat, top-left offset for
+              the "← Home" pill above. No redundant right-side branding. */}
+          <div className="flex items-center gap-2 pl-24 sm:pl-28">
+            <button
+              onClick={() => setIsHistoryOpen(true)}
+              className="p-2 rounded-full hover:bg-white/10 transition"
+              title="Chat history"
+            >
+              <Menu size={20} className="text-white/70" />
+            </button>
+            <button
+              onClick={handleNewChat}
+              className="p-2 rounded-full hover:bg-white/10 transition"
+              title="New chat"
+            >
+              <Plus size={20} className="text-white/70" />
+            </button>
           </div>
         </div>
 
