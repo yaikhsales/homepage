@@ -205,11 +205,35 @@ export async function POST(req: Request) {
     const now = Date.now();
 
     for (const [pa, pills] of Object.entries(ALL_PILLS)) {
+      // Every PA gets 2 GUARANTEED burning items — high age, in_progress
+      // status, so Yai always has something meaty to bring to the boss
+      // for every department. Distributed across the PA's pills.
+      for (let b = 0; b < 2; b++) {
+        const pill = pills[b % pills.length];
+        const ageDays = rand(6, 14); // burning = old enough to hurt
+        const created_at = new Date(now - ageDays * 86400_000);
+        const deadline = new Date(created_at.getTime() + rand(3, 7) * 86400_000);
+        docs.push({
+          pa,
+          pill,
+          item_id: `${pa.toUpperCase()}-${pill.slice(0, 3).replace(/\s/g, "").toUpperCase()}-BURN${b + 1}`,
+          origin_pa: pick(ORIGIN_MAP[pa] || ["hr"]),
+          requester: pick(SAMPLE_REQUESTERS),
+          status: "in_progress",
+          priority: "burning",
+          summary: summaryFor(pa, pill, workers, lines, product),
+          created_at,
+          deadline,
+          meta: { source: "materialize_v1", visitor, workers, burning: true },
+        });
+      }
+
+      // Then the regular scale-based volume on top.
       for (const pill of pills) {
-        const baseCount = rand(2, 8);
+        const baseCount = rand(2, 6);
         const scaled = Math.max(1, Math.round(baseCount * Math.max(0.4, scale)));
         for (let i = 0; i < scaled; i++) {
-          const ageDays = rand(0, 12);
+          const ageDays = rand(0, 8);
           const created_at = new Date(now - ageDays * 86400_000);
           const deadline = new Date(created_at.getTime() + rand(3, 14) * 86400_000);
           docs.push({
@@ -219,6 +243,7 @@ export async function POST(req: Request) {
             origin_pa: pick(ORIGIN_MAP[pa] || ["hr"]),
             requester: pick(SAMPLE_REQUESTERS),
             status: Math.random() < 0.15 ? "in_progress" : "pending",
+            priority: "normal",
             summary: summaryFor(pa, pill, workers, lines, product),
             created_at,
             deadline,

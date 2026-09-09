@@ -73,6 +73,10 @@ const BotVersion2 = ({
     workers: null, lines: null, product: null, certifications: null, buyers: null,
   });
 
+  // Track which "matter" item_ids Yai has already shown the boss, so the
+  // next/more request pulls a fresh batch.
+  const [shownMatterIds, setShownMatterIds] = useState([]);
+
   // Ask the next onboarding question — warm + reactive, references the last answer.
   const askNextOnboarding = (step, draft, boss) => {
     let q = null;
@@ -164,23 +168,26 @@ const BotVersion2 = ({
       // Proactively pull the top 3 matters so Yai brings them up unprompted.
       let mattersBlock = "";
       let mattersList = [];
+      let totalOpen = 0;
       try {
         const attRes = await fetch("/api/factory/attention?limit=3");
         const attJson = await attRes.json();
         if (attJson?.ok && Array.isArray(attJson.matters) && attJson.matters.length) {
           mattersList = attJson.matters;
+          totalOpen = attJson.totalOpen || 0;
+          setShownMatterIds(mattersList.map((m) => m.item_id));
           const rendered = attJson.matters.map((m, i) =>
-            `${i + 1}. **${m.pa_label} · ${m.pill}** — ${m.summary} _(${m.age_days}d old)_`
+            `${i + 1}. **${m.pa_label} · ${m.pill}**${m.burning ? " 🔥" : ""} — ${m.summary} _(${m.age_days}d old)_`
           ).join("\n\n");
           mattersBlock =
-            `\n\nWhile I was walking the floor I spotted ${attJson.matters.length} matters worth your attention right away:\n\n${rendered}`;
+            `\n\nWhile I was walking the floor I spotted 3 matters worth your attention first (${totalOpen} open across all 13 PAs):\n\n${rendered}`;
         }
       } catch {
         // silent — welcome message just skips the matters section
       }
 
       const closer = mattersList.length
-        ? `\n\nWant to start with one of those (say the number)? Or tell me what's actually keeping you awake this week.`
+        ? `\n\nWant to start with one of those (say the number)? Say "next" to see the next 3, or tell me what's actually keeping you awake this week.`
         : `\n\nWhat's keeping you awake this week?`;
 
       setMessages(prev => [...prev, { from: "bot", text:
@@ -822,29 +829,37 @@ const BotVersion2 = ({
     if (onboardingStep === 5) return; // materialising — block extra input
 
     // ── "Matters for attention" quick intercept ───────────────────────
-    // If the boss's last message asks for suggestions/attention/matters/
-    // things to look at, fetch the cross-PA top items and post them
-    // as Yai directly (no LLM round-trip needed for this quick surface).
+    // Boss asks for suggestions / next batch / more matters — fetch fresh
+    // items, excluding what's already been shown.
     const askText = input.trim().toLowerCase();
-    const attentionIntent = /\b(suggest|matter|attend|attention|what should i|show me|pull.*red|red flag|priorit|urgent|on fire)\b/.test(askText)
+    const nextBatchIntent = /^(next|more|show me more|what else|another|continue|keep going)\b/.test(askText);
+    const attentionIntent = nextBatchIntent
+      || /\b(suggest|matter|attend|attention|what should i|show me|pull.*red|red flag|priorit|urgent|on fire|burning)\b/.test(askText)
       || /^(yes|yeah|yep|sure|go ahead|ok(ay)?|please do)\b/.test(askText);
     if (attentionIntent && factoryConfig) {
       const userMsg = { from: "user", text: input.trim() };
       setMessages(prev => [...prev, userMsg]);
       setInput("");
       setIsTyping(true);
-      fetch("/api/factory/attention?limit=5")
+      const excludeParam = shownMatterIds.length ? `&exclude=${encodeURIComponent(shownMatterIds.join(","))}` : "";
+      fetch(`/api/factory/attention?limit=3${excludeParam}`)
         .then(r => r.json())
         .then(d => {
           setIsTyping(false);
           if (!d?.ok) throw new Error(d?.error || "attention lookup failed");
-          const list = (d.matters || []).map((m, i) =>
-            `${i + 1}. **${m.pa_label} · ${m.pill}** — ${m.summary} _(${m.age_days} day${m.age_days === 1 ? "" : "s"} old, from ${m.origin_pa || "unknown"}, ref ${m.item_id})_`,
+          const matters = d.matters || [];
+          if (matters.length === 0) {
+            setMessages(prev => [...prev, { from: "bot", text: `That's every open matter across the 13 PAs cleared out of my head, ${visitorName || "Boss"}. Ask me anything, or name a PA to dig in.` }]);
+            return;
+          }
+          setShownMatterIds(prev => [...prev, ...matters.map((m) => m.item_id)]);
+          const list = matters.map((m, i) =>
+            `${i + 1}. **${m.pa_label} · ${m.pill}**${m.burning ? " 🔥" : ""} — ${m.summary} _(${m.age_days}d old, from ${m.origin_pa || "unknown"}, ref ${m.item_id})_`,
           ).join("\n\n");
-          const opener = (d.matters || []).length
-            ? `Here are ${d.matters.length} matters I'd bring to your attention first, ${visitorName || "Boss"}:\n\n${list}\n\n` +
-              `Say the number (e.g. "1") and I'll pull the full item + who to loop in. Or ask about a specific PA.`
-            : `Nothing urgent on the board right now — clean plate. Ask me anything, or name a PA to dig in.`;
+          const remaining = Math.max(0, (d.totalOpen || 0) - shownMatterIds.length - matters.length);
+          const opener = nextBatchIntent
+            ? `Next 3 matters, ${visitorName || "Boss"}${remaining ? ` (${remaining} still on the board after these)` : ""}:\n\n${list}\n\nSay "next" for the next 3, a number to drill in, or name a PA.`
+            : `Here are ${matters.length} matters I'd bring to your attention first, ${visitorName || "Boss"}:\n\n${list}\n\nSay the number to drill in, "next" for more, or name a PA.`;
           setMessages(prev => [...prev, { from: "bot", text: opener }]);
         })
         .catch(err => {
