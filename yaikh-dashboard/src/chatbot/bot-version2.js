@@ -800,6 +800,39 @@ const BotVersion2 = ({
     }
     if (onboardingStep === 5) return; // materialising — block extra input
 
+    // ── "Matters for attention" quick intercept ───────────────────────
+    // If the boss's last message asks for suggestions/attention/matters/
+    // things to look at, fetch the cross-PA top items and post them
+    // as Yai directly (no LLM round-trip needed for this quick surface).
+    const askText = input.trim().toLowerCase();
+    const attentionIntent = /\b(suggest|matter|attend|attention|what should i|show me|pull.*red|red flag|priorit|urgent|on fire)\b/.test(askText)
+      || /^(yes|yeah|yep|sure|go ahead|ok(ay)?|please do)\b/.test(askText);
+    if (attentionIntent && factoryConfig) {
+      const userMsg = { from: "user", text: input.trim() };
+      setMessages(prev => [...prev, userMsg]);
+      setInput("");
+      setIsTyping(true);
+      fetch("/api/factory/attention?limit=5")
+        .then(r => r.json())
+        .then(d => {
+          setIsTyping(false);
+          if (!d?.ok) throw new Error(d?.error || "attention lookup failed");
+          const list = (d.matters || []).map((m, i) =>
+            `${i + 1}. **${m.pa_label} · ${m.pill}** — ${m.summary} _(${m.age_days} day${m.age_days === 1 ? "" : "s"} old, from ${m.origin_pa || "unknown"}, ref ${m.item_id})_`,
+          ).join("\n\n");
+          const opener = (d.matters || []).length
+            ? `Here are ${d.matters.length} matters I'd bring to your attention first, ${visitorName || "Boss"}:\n\n${list}\n\n` +
+              `Say the number (e.g. "1") and I'll pull the full item + who to loop in. Or ask about a specific PA.`
+            : `Nothing urgent on the board right now — clean plate. Ask me anything, or name a PA to dig in.`;
+          setMessages(prev => [...prev, { from: "bot", text: opener }]);
+        })
+        .catch(err => {
+          setIsTyping(false);
+          setMessages(prev => [...prev, { from: "bot", text: `Couldn't pull the attention list: ${err.message}` }]);
+        });
+      return;
+    }
+
     // Create new chat if none exists
     if (!currentChatId) {
       createNewChat();
