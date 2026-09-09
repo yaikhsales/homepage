@@ -1284,73 +1284,73 @@ const AppLayout = () => {
         !location.pathname.includes("ce") && <Header />}
 
       {/* Yai Data panel — horizontal row: Yai Agents · Agent Collective · Big Brain
-          (shown on every page, not just home) */}
-      {(
+          (shown on every page, not just home). Hidden while a chat modal
+          is open so the modal's own header can own the top of the screen. */}
+      {!isYaiDataBotOpen && (
         <div
           className="fixed z-[60] text-white animate-in fade-in slide-in-from-left duration-1000"
           style={{ left: yaiPanelPos.x, top: yaiPanelPos.y, userSelect: 'none' }}
         >
-          <div className="flex items-center gap-5">
-            {/* Yai Agents — logo + title (left) */}
-            <div className="relative">
-              <button
-                ref={yaiDataButtonRef}
-                onClick={() => setDropdownOpen((prev) => !prev)}
-                className="relative rounded-full hover:scale-110 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-900 z-10 shadow-lg"
-                aria-label="Open AI Assistant"
-              >
-                <img
-                  src="assets/modules-image/chatbot.png"
-                  alt="AI Assistant"
-                  className="w-20 h-20 rounded-full object-contain bg-slate-950/60 border-2 border-cyan-400/50 shadow-[0_0_14px_rgba(34,211,238,0.55)] relative z-10"
-                />
-                {!isDropdownOpen && (
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-cyan-400/20 via-blue-500/20 to-purple-500/20 mix-blend-screen pointer-events-none"></div>
-                )}
-              </button>
-            </div>
+          {/* Clean row — no "Yai Agents" heading, no boxes. Two transparent
+              pills side by side, same size, same shape. Drag handle is the
+              whole row. */}
+          <div
+            className="flex items-center gap-8"
+            onMouseDown={handleYaiPanelMouseDown}
+            title="Drag to move"
+            style={{ cursor: "move" }}
+          >
+            {/* Agent Collective — blue bubbly Yai + text */}
             <div
-              onMouseDown={handleYaiPanelMouseDown}
-              title="Drag to move"
-              className="text-white font-bold text-3xl tracking-wide cursor-move drop-shadow-[0_0_10px_rgba(59,130,246,0.8)] bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent whitespace-nowrap"
-            >
-              Yai Agents
-            </div>
-
-            {/* Agent Collective — right of Yai Agents */}
-            <div
+              ref={yaiDataButtonRef}
               onClick={() => {
                 setYaiVersion("yai1");
                 setBotModuleContext(null);
                 setYaiDataBotOpen(true);
               }}
-              className="relative flex items-center gap-3 pr-3 py-2 pl-2 rounded-2xl bg-slate-900/30 backdrop-blur-sm hover:bg-yai-blue/20 cursor-pointer group transition-all shadow-[0_0_20px_-4px_rgba(30,77,170,0.4)]"
+              className="flex items-center gap-3 cursor-pointer group hover:scale-105 transition-transform"
             >
-              <img
-                src="assets/modules-image/yai1.png"
-                alt="Yai 1"
-                className="w-16 h-16 rounded-2xl object-contain p-1 bg-slate-950/60 border-2 border-yai-blue/60 shadow-[0_0_14px_rgba(30,77,170,0.6)] flex-shrink-0"
-              />
-              <span className="bg-gradient-to-r from-yai-blue via-blue-400 to-yai-blue bg-clip-text text-transparent font-bold text-3xl leading-tight drop-shadow-[0_0_6px_rgba(30,77,170,0.5)] whitespace-nowrap">
-                Agent<br />Collective
+              <div
+                className="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0"
+                style={{
+                  background: "radial-gradient(circle at 30% 25%, #93c5fd 0%, #3b82f6 55%, #1d4ed8 100%)",
+                  boxShadow: "inset -4px -4px 8px rgba(0,0,0,0.30), inset 3px 3px 6px rgba(255,255,255,0.35), 0 4px 12px rgba(59,130,246,0.4)",
+                }}
+              >
+                <img
+                  src="assets/modules-image/yai1.png"
+                  alt="Yai"
+                  className="w-full h-full rounded-full object-cover"
+                />
+              </div>
+              <span className="text-blue-400 font-bold text-xl whitespace-nowrap">
+                Agent Collective
               </span>
             </div>
 
-            {/* Big Brain — right of Agent Collective */}
+            {/* Big Brain — green bubbly Yai + text */}
             <div
               onClick={() => {
                 setYaiVersion("yai2");
                 setYaiDataBotOpen(true);
               }}
-              className="relative flex items-center gap-3 pr-3 py-2 pl-2 rounded-2xl bg-slate-900/30 backdrop-blur-sm hover:bg-emerald-500/20 cursor-pointer group transition-all shadow-[0_0_20px_-4px_rgba(16,185,129,0.4)]"
+              className="flex items-center gap-3 cursor-pointer group hover:scale-105 transition-transform"
             >
-              <img
-                src="assets/modules-image/yai2.png"
-                alt="Yai 2"
-                className="w-16 h-16 rounded-2xl object-contain p-1 bg-slate-950/60 border-2 border-emerald-400/60 shadow-[0_0_14px_rgba(16,185,129,0.6)] flex-shrink-0"
-              />
-              <span className="bg-gradient-to-r from-emerald-400 via-green-400 to-emerald-500 bg-clip-text text-transparent font-bold text-3xl leading-tight drop-shadow-[0_0_6px_rgba(16,185,129,0.5)] whitespace-nowrap">
-                Big<br />Brain
+              <div
+                className="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0"
+                style={{
+                  background: "radial-gradient(circle at 30% 25%, #a7f3d0 0%, #10b981 55%, #047857 100%)",
+                  boxShadow: "inset -4px -4px 8px rgba(0,0,0,0.30), inset 3px 3px 6px rgba(255,255,255,0.35), 0 4px 12px rgba(16,185,129,0.4)",
+                }}
+              >
+                <img
+                  src="assets/modules-image/yai2.png"
+                  alt="Yai"
+                  className="w-full h-full rounded-full object-cover"
+                />
+              </div>
+              <span className="text-emerald-400 font-bold text-xl whitespace-nowrap">
+                Big Brain
               </span>
             </div>
           </div>

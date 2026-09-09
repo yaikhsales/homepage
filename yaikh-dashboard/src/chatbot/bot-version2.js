@@ -1342,12 +1342,17 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
         />
       )}
 
-      {/* Back Button - Top Left (Fixed Position) */}
+      {/* Back Button — 3D bubbly emerald ball, top-left */}
       <button
         onClick={onClose}
-        className="absolute top-4 left-4 z-[250] flex items-center gap-2 px-4 py-2 bg-emerald-500/80 hover:bg-emerald-500 text-white rounded-lg backdrop-blur-sm transition-colors font-medium shadow-lg"
+        aria-label="Back"
+        className="absolute top-4 left-4 z-[250] w-14 h-14 rounded-full text-white font-bold text-2xl leading-none flex items-center justify-center transition-transform hover:scale-105 active:scale-95"
+        style={{
+          background: "radial-gradient(circle at 30% 25%, #a7f3d0 0%, #10b981 45%, #047857 100%)",
+          boxShadow: "inset -6px -6px 12px rgba(0,0,0,0.35), inset 4px 4px 10px rgba(255,255,255,0.35), 0 6px 14px rgba(16,185,129,0.35)",
+        }}
       >
-        <ChevronRight size={18} className="rotate-180" /> Back
+        ←
       </button>
 
       {/* Main Content */}
@@ -1428,79 +1433,10 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
                         .sparkle-4-v2 { bottom: 10%; right: 20%; animation-delay: 1.5s; }
                     `}</style>
 
-          {/* Yai Data with Dropdown - First Row */}
-          <div className="flex items-center gap-4 mb-3 pointer-events-none relative">
-            <div
-              className={`relative ${isDropdownOpen ? "" : "bot-icon-container-v2"} pointer-events-auto`}
-            >
-              {/* Rotating Rings - Only show when dropdown is closed */}
-              {!isDropdownOpen && (
-                <>
-                  <div className="rotating-ring-v2"></div>
-                  <div className="rotating-ring-2-v2"></div>
-
-                  {/* Sparkles - Only show when dropdown is closed */}
-                  <div className="sparkle-v2 sparkle-1-v2"></div>
-                  <div className="sparkle-v2 sparkle-2-v2"></div>
-                  <div className="sparkle-v2 sparkle-3-v2"></div>
-                  <div className="sparkle-v2 sparkle-4-v2"></div>
-                </>
-              )}
-
-              <button
-                onClick={() => setDropdownOpen((prev) => !prev)}
-                className={`relative rounded-full hover:scale-110 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-900 z-10 pointer-events-auto ${isDropdownOpen ? "" : "bot-icon-glow-v2"}`}
-                aria-label="Yai Agents"
-              >
-                <img
-                  src="/assets/modules-image/yai2.png"
-                  alt="Yai Agents"
-                  className="w-16 h-16 rounded-full object-cover border-2 border-emerald-400/60 relative z-10"
-                />
-                {/* Gradient Overlay - Emerald (Big Brain context) */}
-                {!isDropdownOpen && (
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-emerald-400/30 via-green-400/20 to-emerald-500/30 mix-blend-screen pointer-events-none"></div>
-                )}
-              </button>
-            </div>
-            <span
-              className="text-white font-bold text-lg tracking-wide drop-shadow-[0_0_10px_rgba(16,185,129,0.8)] bg-gradient-to-r from-emerald-400 via-green-400 to-emerald-500 bg-clip-text text-transparent pointer-events-auto whitespace-nowrap"
-            >
-              Yai Agents
-            </span>
-
-            {/* Inline row — Agent Collective + Big Brain always visible */}
-            {onVersionChange && (
-              <>
-                <div
-                  onClick={() => onVersionChange("yai1")}
-                  className="flex items-center gap-3 px-3 py-2 rounded-md bg-slate-800/80 backdrop-blur-sm hover:bg-yai-blue/20 cursor-pointer transition-all border border-yai-blue/40 pointer-events-auto"
-                >
-                  <img
-                    src="assets/modules-image/yai1.png"
-                    alt="Yai 1"
-                    className="w-12 h-12 rounded-full object-cover border-2 border-yai-blue/60 flex-shrink-0"
-                  />
-                  <span className="bg-gradient-to-r from-yai-blue via-blue-400 to-yai-blue bg-clip-text text-transparent font-bold text-lg whitespace-nowrap">Agent Collective</span>
-                </div>
-                <div
-                  onClick={() => onVersionChange("yai2")}
-                  className="flex items-center gap-3 px-3 py-2 rounded-md bg-slate-800/80 backdrop-blur-sm hover:bg-emerald-500/20 cursor-pointer transition-all border border-emerald-400/40 pointer-events-auto"
-                >
-                  <img
-                    src="assets/modules-image/yai2.png"
-                    alt="Big Brain"
-                    className="w-12 h-12 rounded-full object-cover border-2 border-emerald-400/60 flex-shrink-0"
-                  />
-                  <span className="bg-gradient-to-r from-emerald-400 via-green-400 to-emerald-500 bg-clip-text text-transparent font-bold text-lg whitespace-nowrap">Big Brain</span>
-                </div>
-              </>
-            )}
-          </div>
-
-          {/* Second Row: Menu buttons and Bot Info */}
+          {/* Clean single-row header — hamburger · Yai brand · optional Agent Collective switch */}
           <div className="flex items-center justify-between relative">
-            <div className="flex items-center gap-3">
+            {/* Left — menu + new chat */}
+            <div className="flex items-center gap-2">
               <button
                 onClick={() => setIsHistoryOpen(true)}
                 className="p-2 rounded-full hover:bg-white/10 transition"
@@ -1510,33 +1446,37 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
               </button>
               <button
                 onClick={handleNewChat}
-                className="px-3 py-1.5 rounded-full hover:bg-white/10 transition text-xs font-medium text-white/70"
-                title="Menu"
+                className="p-2 rounded-full hover:bg-white/10 transition"
+                title="New chat"
               >
-                Menu
+                <Plus size={20} className="text-white/70" />
               </button>
             </div>
-            {/* Bot Avatar and Name - Centered */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-2">
-              <div className="relative">
-                <div className={`w-8 h-8 rounded-full ${KHMER_NEW_YEAR.isActive ? 'bg-gradient-to-br from-red-600 via-orange-500 to-yellow-500' : 'bg-gradient-to-br from-emerald-500 to-green-600'} flex items-center justify-center border-2 border-emerald-400/60 shadow-md`}>
-                  <img
-                    src="assets/modules-image/yai2.png"
-                    alt="Big Brain"
-                    className="w-full h-full rounded-full object-cover"
-                  />
-                </div>
-                {KHMER_NEW_YEAR.isActive && (
-                  <div className="absolute -top-1 -right-1 z-10 text-xs drop-shadow-md">🌸</div>
-                )}
+
+            {/* Center — big Yai brand (this IS the app) */}
+            <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-3">
+              <div className={`w-11 h-11 rounded-full ${KHMER_NEW_YEAR.isActive ? 'bg-gradient-to-br from-red-600 via-orange-500 to-yellow-500' : 'bg-gradient-to-br from-emerald-500 to-green-600'} flex items-center justify-center border-2 border-emerald-400/70 shadow-[0_0_18px_rgba(16,185,129,0.5)]`}>
+                <img
+                  src="assets/modules-image/yai2.png"
+                  alt="Yai"
+                  className="w-full h-full rounded-full object-cover"
+                />
               </div>
-              <div className="flex flex-col">
-                <span className="text-sm font-medium text-white/90">Big Brain</span>
-                <span className="text-xs text-white/60 hidden sm:block">
-                  Boss of 13 PA agents
-                </span>
-              </div>
+              <span className="bg-gradient-to-r from-emerald-400 via-green-400 to-emerald-500 bg-clip-text text-transparent font-bold text-2xl tracking-wide whitespace-nowrap">
+                Yai
+              </span>
             </div>
+
+            {/* Right — small text button to jump into Agent Collective (only if switching enabled) */}
+            {onVersionChange && (
+              <button
+                onClick={() => onVersionChange("yai1")}
+                className="text-xs text-white/60 hover:text-white/90 hover:bg-white/10 px-3 py-1.5 rounded-full transition whitespace-nowrap"
+                title="Switch to Agent Collective (the 13 PAs directly)"
+              >
+                13 PAs →
+              </button>
+            )}
           </div>
         </div>
 
