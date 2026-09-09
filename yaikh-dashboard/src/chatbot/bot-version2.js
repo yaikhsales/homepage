@@ -59,25 +59,43 @@ const BotVersion2 = ({
   });
 
   // Conversational onboarding — chat-based, not a form.
-  //   0 = ask workers, 1 = ask lines, 2 = ask product,
-  //   3 = ask certifications, 4 = ask buyers, 5 = materialising, -1 = done
+  //   -2 = ask visitor's name, -1 = done,
+  //    0 = ask workers, 1 = ask lines, 2 = ask product,
+  //    3 = ask certifications, 4 = ask buyers, 5 = materialising
   const [onboardingStep, setOnboardingStep] = useState(() => {
-    try { return localStorage.getItem("yai_factory_config") ? -1 : 0; }
-    catch { return 0; }
+    try {
+      if (localStorage.getItem("yai_factory_config")) return -1;
+      if (localStorage.getItem("yai_visitor_name")) return 0;
+      return -2;
+    } catch { return -2; }
   });
   const [onboardingDraft, setOnboardingDraft] = useState({
     workers: null, lines: null, product: null, certifications: null, buyers: null,
   });
 
-  // Ask the next onboarding question — driven from handleSend after each reply.
+  // Ask the next onboarding question — warm + reactive, references the last answer.
   const askNextOnboarding = (step, draft, boss) => {
-    const q = ({
-      0: `Nice to meet you${boss ? `, ${boss}` : ""}. Quick set-up so I get your factory right — how many workers on your floor?`,
-      1: `Got it. How many production lines are running right now?`,
-      2: `And what's the main product — polos, jackets, trousers, or a mix?`,
-      3: `Any certifications the factory holds? (WRAP, BSCI, HIGG, SEDEX, GRS — or type "none")`,
-      4: `Last one: which buyers do you work with? (comma-separated names, or type "skip")`,
-    })[step];
+    let q = null;
+    if (step === -2) {
+      q = `Hello Boss — I am Yai. And you?`;
+    } else if (step === 0) {
+      q = `Nice to meet you, ${boss || "Boss"}. Tell me a little about your factory — how many people on the floor?`;
+    } else if (step === 1) {
+      const w = draft.workers || 0;
+      const flavour = w >= 2000 ? `That's a proper operation` : w >= 800 ? `Solid size` : w >= 300 ? `A tidy crew` : `A small, sharp team`;
+      q = `${flavour} — ${w.toLocaleString()} workers. How many production lines are running today?`;
+    } else if (step === 2) {
+      const l = draft.lines || 0;
+      const perLine = draft.workers && l ? Math.round(draft.workers / l) : 0;
+      const flavour = perLine ? ` (about ${perLine} per line)` : "";
+      q = `${l} line${l === 1 ? "" : "s"}${flavour}. What are you making — polos, jackets, trousers, or a mix?`;
+    } else if (step === 3) {
+      q = `${draft.product ? `${draft.product.charAt(0).toUpperCase() + draft.product.slice(1)} — good to know.` : "Got it."} Any certifications your buyers care about? WRAP, BSCI, HIGG, SEDEX, GRS — list what you have, or say "none".`;
+    } else if (step === 4) {
+      const certs = draft.certifications || [];
+      const flavour = certs.length ? `${certs.join(", ")} — nice, that opens a lot of buyer doors.` : `No worries, most factories add those over time.`;
+      q = `${flavour} Last thing — who are your main buyers? Comma-separated names, or say "skip" if you'd rather not.`;
+    }
     if (q) setMessages(prev => [...prev, { from: "bot", text: q }]);
   };
 
@@ -125,22 +143,22 @@ const BotVersion2 = ({
     }
   };
 
-  // Name capture — after name, drop into conversational onboarding.
-  const submitVisitorName = (e) => {
-    e && e.preventDefault && e.preventDefault();
-    const clean = nameDraft.trim().slice(0, 60);
-    if (!clean) return;
-    try { localStorage.setItem("yai_visitor_name", clean); } catch { /* private mode */ }
-    setVisitorName(clean);
-    // If they've already done onboarding in a past session, don't re-ask.
-    if (factoryConfig) {
-      setMessages([{ from: "bot", text: `Welcome back, Boss (${clean}). Your factory is loaded — ask me anything.` }]);
-      setOnboardingStep(-1);
-    } else {
-      setOnboardingStep(0);
-      askNextOnboarding(0, onboardingDraft, clean);
+  // Seed the very first bot message when the chat opens fresh — no static
+  // welcome screen, Yai speaks first in the chat itself.
+  useEffect(() => {
+    if (messages.length > 0) return; // don't stomp an existing conversation
+    if (onboardingStep === -2) {
+      // Brand-new visitor — Yai introduces itself and asks their name.
+      setMessages([{ from: "bot", text: `Hello Boss — I am Yai. And you?` }]);
+    } else if (onboardingStep === -1 && visitorName && factoryConfig) {
+      // Returning visitor — warm come-back line, no re-onboarding.
+      setMessages([{ from: "bot", text: `Welcome back, ${visitorName} — your factory is loaded. Ask me anything.` }]);
+    } else if (onboardingStep >= 0 && onboardingStep <= 4 && visitorName) {
+      // Half-done onboarding (name was saved but factory wasn't materialised).
+      askNextOnboarding(onboardingStep, onboardingDraft, visitorName);
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Chat history state
   const [chatHistory, setChatHistory] = useState(() => {
@@ -699,13 +717,24 @@ const BotVersion2 = ({
     if (!input.trim()) return;
 
     // ── Conversational onboarding intercept ───────────────────────────
-    // Steps 0..4 = capture factory answers via chat, then materialise.
+    // Steps -2..4 = capture answers via chat, then materialise.
     // Step 5 = in-flight materialise, block input. Step -1 = done.
-    if (onboardingStep >= 0 && onboardingStep <= 4) {
+    if (onboardingStep >= -2 && onboardingStep <= 4) {
       const raw = input.trim();
       const userMsg = { from: "user", text: raw };
       setMessages(prev => [...prev, userMsg]);
       setInput("");
+
+      // Step -2: capture visitor name
+      if (onboardingStep === -2) {
+        const clean = raw.slice(0, 60);
+        try { localStorage.setItem("yai_visitor_name", clean); } catch { /* private mode */ }
+        setVisitorName(clean);
+        setOnboardingStep(0);
+        setTimeout(() => askNextOnboarding(0, onboardingDraft, clean), 500);
+        return;
+      }
+
       const draft = { ...onboardingDraft };
       let nextStep = onboardingStep + 1;
 
@@ -728,7 +757,7 @@ const BotVersion2 = ({
       setOnboardingDraft(draft);
       if (nextStep <= 4) {
         setOnboardingStep(nextStep);
-        setTimeout(() => askNextOnboarding(nextStep, draft, visitorName), 400);
+        setTimeout(() => askNextOnboarding(nextStep, draft, visitorName), 500);
       } else {
         materialiseFactory(draft, visitorName);
       }
@@ -1409,37 +1438,10 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
 
         {/* Content Area */}
         <div className="flex-1 overflow-y-auto overflow-x-hidden px-4 sm:px-6 py-8 bg-[#050505]/60 backdrop-blur-sm relative z-20 min-h-0 w-full flex-shrink">
-          {!visitorName ? (
-            // Step 1 — ask visitor's name.
-            <div className="pt-16 max-w-md mx-auto relative z-20 text-center">
-              <h2 className="text-2xl font-light text-white mb-3">
-                Hello Boss — I am Yai.
-              </h2>
-              <p className="text-sm text-white/70 mb-6">
-                And you?
-              </p>
-              <form onSubmit={submitVisitorName} className="flex flex-col gap-3 items-stretch">
-                <input
-                  autoFocus
-                  type="text"
-                  value={nameDraft}
-                  onChange={(e) => setNameDraft(e.target.value)}
-                  placeholder="Your name…"
-                  className="px-4 py-3 rounded-full bg-white/10 border border-white/20 text-white placeholder:text-white/50 text-center outline-none focus:border-emerald-400/60"
-                />
-                <button
-                  type="submit"
-                  disabled={!nameDraft.trim()}
-                  className="px-5 py-3 rounded-full bg-gradient-to-r from-emerald-500 to-green-600 text-white font-semibold disabled:opacity-40"
-                >
-                  Continue
-                </button>
-              </form>
-            </div>
-          ) : !hasMessages ? (
-            // Visitor has a name but no messages yet — just a soft prompt.
+          {!hasMessages ? (
+            // Rare — messages have't been seeded yet. Should self-correct on next tick.
             <div className="pt-16 max-w-md mx-auto text-center text-white/60 text-sm">
-              Say hi to Big Brain to begin.
+              …
             </div>
           ) : (
             // Messages Display
