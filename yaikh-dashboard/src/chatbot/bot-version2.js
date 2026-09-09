@@ -10,7 +10,6 @@ import {
   Edit2,
   RefreshCw,
   MoreVertical,
-  Database,
   Menu,
   Clock,
   Trash2,
@@ -1558,8 +1557,14 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
                   }`}
                 >
                   {msg.from === "bot" && (
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-sky-500 flex items-center justify-center flex-shrink-0">
-                      <Database size={16} className="text-white" />
+                    <div
+                      className="w-9 h-9 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0"
+                      style={{
+                        background: "radial-gradient(circle at 30% 25%, #a7f3d0 0%, #10b981 55%, #047857 100%)",
+                        boxShadow: "inset -2px -2px 4px rgba(0,0,0,0.30), inset 2px 2px 3px rgba(255,255,255,0.35), 0 2px 6px rgba(16,185,129,0.4)",
+                      }}
+                    >
+                      <img src="assets/modules-image/yai2.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
                     </div>
                   )}
                   <div className="flex flex-col gap-1 max-w-[85%]">
@@ -1648,8 +1653,14 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
               ))}
               {isTyping && (
                 <div className="flex items-start gap-3 justify-start">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-sky-500 flex items-center justify-center flex-shrink-0">
-                    <Database size={16} className="text-white" />
+                  <div
+                    className="w-9 h-9 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0"
+                    style={{
+                      background: "radial-gradient(circle at 30% 25%, #a7f3d0 0%, #10b981 55%, #047857 100%)",
+                      boxShadow: "inset -2px -2px 4px rgba(0,0,0,0.30), inset 2px 2px 3px rgba(255,255,255,0.35), 0 2px 6px rgba(16,185,129,0.4)",
+                    }}
+                  >
+                    <img src="assets/modules-image/yai2.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
                   </div>
                   <div className="bg-white/5 border border-white/10 rounded-2xl rounded-bl-none px-4 py-2">
                     <div className="flex gap-1.5">
