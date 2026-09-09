@@ -1387,24 +1387,67 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
         />
       )}
 
-      {/* Top-left nav — "← Home" + one-click jump to Agent Collective */}
-      <div className="absolute top-4 left-4 z-[250] flex items-center gap-2">
+      {/* Top nav — matches the home page: ← Home · My Task Agent · Agent Collective · Big Brain */}
+      <div className="absolute top-4 left-4 z-[250] flex items-center gap-5">
         <button
           onClick={onClose}
           className="px-4 py-1.5 rounded-full bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm flex items-center gap-1.5 shadow-md transition-colors"
-          aria-label="Back to My Task Agent"
+          aria-label="Back to Home"
         >
           ← Home
         </button>
+
+        {/* Orange My Task Agent */}
+        <button
+          onClick={onClose}
+          className="flex items-center gap-2 cursor-pointer hover:scale-105 transition-transform"
+          title="My Task Agent (home)"
+        >
+          <div
+            className="w-11 h-11 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0"
+            style={{
+              background: "radial-gradient(circle at 30% 25%, #fed7aa 0%, #f97316 55%, #c2410c 100%)",
+              boxShadow: "inset -3px -3px 6px rgba(0,0,0,0.30), inset 2px 2px 4px rgba(255,255,255,0.35), 0 3px 8px rgba(249,115,22,0.4)",
+            }}
+          >
+            <img src="/assets/modules-image/top-bot.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
+          </div>
+          <span className="text-orange-400 font-bold text-base whitespace-nowrap">My Task Agent</span>
+        </button>
+
+        {/* Blue Agent Collective */}
         {onVersionChange && (
           <button
             onClick={() => onVersionChange("yai1")}
-            className="px-4 py-1.5 rounded-full bg-blue-500 hover:bg-blue-600 text-white font-semibold text-sm flex items-center gap-1.5 shadow-md transition-colors"
-            title="Jump to Agent Collective (talk to any of the 13 PAs directly)"
+            className="flex items-center gap-2 cursor-pointer hover:scale-105 transition-transform"
+            title="Switch to Agent Collective"
           >
-            Agent Collective →
+            <div
+              className="w-11 h-11 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0"
+              style={{
+                background: "radial-gradient(circle at 30% 25%, #93c5fd 0%, #3b82f6 55%, #1d4ed8 100%)",
+                boxShadow: "inset -3px -3px 6px rgba(0,0,0,0.30), inset 2px 2px 4px rgba(255,255,255,0.35), 0 3px 8px rgba(59,130,246,0.4)",
+              }}
+            >
+              <img src="assets/modules-image/yai1.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
+            </div>
+            <span className="text-blue-400 font-bold text-base whitespace-nowrap">Agent Collective</span>
           </button>
         )}
+
+        {/* Green Big Brain — current mode, ringed */}
+        <div className="flex items-center gap-2 flex-shrink-0" title="Big Brain — you are here">
+          <div
+            className="w-11 h-11 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0 ring-2 ring-emerald-400/60 ring-offset-2 ring-offset-[#050505]"
+            style={{
+              background: "radial-gradient(circle at 30% 25%, #a7f3d0 0%, #10b981 55%, #047857 100%)",
+              boxShadow: "inset -3px -3px 6px rgba(0,0,0,0.30), inset 2px 2px 4px rgba(255,255,255,0.35), 0 3px 12px rgba(16,185,129,0.55)",
+            }}
+          >
+            <img src="assets/modules-image/yai2.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
+          </div>
+          <span className="text-emerald-400 font-bold text-base whitespace-nowrap">Big Brain</span>
+        </div>
       </div>
 
       {/* Main Content */}

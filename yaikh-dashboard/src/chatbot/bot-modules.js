@@ -5839,23 +5839,66 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                 <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 transition-colors duration-300"></div>
             )}
 
-            {/* Top-left nav — "← Home" + one-click jump to Big Brain */}
+            {/* Top nav — matches the home page: ← Home · My Task Agent · Agent Collective · Big Brain */}
             {!isCompactMount && (
-                <div className="absolute top-4 left-4 z-50 flex items-center gap-2">
+                <div className="absolute top-4 left-4 z-50 flex items-center gap-5 pointer-events-auto">
                     <button
                         onClick={onClose}
-                        className="px-4 py-1.5 rounded-full bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm flex items-center gap-1.5 shadow-md transition-colors pointer-events-auto"
-                        aria-label="Back to My Task Agent"
+                        className="px-4 py-1.5 rounded-full bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm flex items-center gap-1.5 shadow-md transition-colors"
+                        aria-label="Back to Home"
                     >
                         ← Home
                     </button>
+
+                    {/* Orange My Task Agent */}
+                    <button
+                        onClick={onClose}
+                        className="flex items-center gap-2 cursor-pointer hover:scale-105 transition-transform"
+                        title="My Task Agent (home)"
+                    >
+                        <div
+                            className="w-11 h-11 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0"
+                            style={{
+                                background: "radial-gradient(circle at 30% 25%, #fed7aa 0%, #f97316 55%, #c2410c 100%)",
+                                boxShadow: "inset -3px -3px 6px rgba(0,0,0,0.30), inset 2px 2px 4px rgba(255,255,255,0.35), 0 3px 8px rgba(249,115,22,0.4)",
+                            }}
+                        >
+                            <img src="/assets/modules-image/top-bot.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
+                        </div>
+                        <span className="text-orange-500 font-bold text-base whitespace-nowrap">My Task Agent</span>
+                    </button>
+
+                    {/* Blue Agent Collective — current, ringed */}
+                    <div className="flex items-center gap-2 flex-shrink-0" title="Agent Collective — you are here">
+                        <div
+                            className="w-11 h-11 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0 ring-2 ring-blue-400/60 ring-offset-2 ring-offset-white/10"
+                            style={{
+                                background: "radial-gradient(circle at 30% 25%, #93c5fd 0%, #3b82f6 55%, #1d4ed8 100%)",
+                                boxShadow: "inset -3px -3px 6px rgba(0,0,0,0.30), inset 2px 2px 4px rgba(255,255,255,0.35), 0 3px 12px rgba(59,130,246,0.55)",
+                            }}
+                        >
+                            <img src="assets/modules-image/yai1.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
+                        </div>
+                        <span className="text-blue-500 font-bold text-base whitespace-nowrap">Agent Collective</span>
+                    </div>
+
+                    {/* Green Big Brain */}
                     {onVersionChange && (
                         <button
                             onClick={() => onVersionChange('yai2')}
-                            className="px-4 py-1.5 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold text-sm flex items-center gap-1.5 shadow-md transition-colors pointer-events-auto"
-                            title="Jump to Big Brain (the boss of the 13 PAs)"
+                            className="flex items-center gap-2 cursor-pointer hover:scale-105 transition-transform"
+                            title="Switch to Big Brain"
                         >
-                            Big Brain →
+                            <div
+                                className="w-11 h-11 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0"
+                                style={{
+                                    background: "radial-gradient(circle at 30% 25%, #a7f3d0 0%, #10b981 55%, #047857 100%)",
+                                    boxShadow: "inset -3px -3px 6px rgba(0,0,0,0.30), inset 2px 2px 4px rgba(255,255,255,0.35), 0 3px 8px rgba(16,185,129,0.4)",
+                                }}
+                            >
+                                <img src="assets/modules-image/yai2.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
+                            </div>
+                            <span className="text-emerald-500 font-bold text-base whitespace-nowrap">Big Brain</span>
                         </button>
                     )}
                 </div>
