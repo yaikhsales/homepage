@@ -1130,6 +1130,19 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
 
   const handleNewChat = () => {
     createNewChat();
+    // Reseed the "Hello Boss — I am Yai" opener so the chat never feels empty.
+    setTimeout(() => {
+      const intro = { from: "bot", text: `Hello Boss — I am Yai.` };
+      if (visitorName && factoryConfig) {
+        setMessages([intro, { from: "bot", text: `New chat, ${visitorName}. What's on your mind?` }]);
+      } else if (visitorName) {
+        setMessages([intro, { from: "bot", text: `Nice to see you, ${visitorName}. Let's finish setting up your factory — how many workers?` }]);
+        setOnboardingStep(0);
+      } else {
+        setMessages([intro, { from: "bot", text: `And you?` }]);
+        setOnboardingStep(-2);
+      }
+    }, 50);
   };
 
   const hasMessages = messages.length > 0;
