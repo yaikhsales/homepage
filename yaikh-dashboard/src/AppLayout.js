@@ -1291,17 +1291,31 @@ const AppLayout = () => {
           className="fixed z-[60] text-white animate-in fade-in slide-in-from-left duration-1000"
           style={{ left: yaiPanelPos.x, top: yaiPanelPos.y, userSelect: 'none' }}
         >
-          {/* Clean row — no "Yai Agents" heading, no boxes. Two transparent
-              pills side by side, same size, same shape. Drag handle is the
-              whole row. */}
+          {/* 3-mode nav: My Task Agent (current, orange) · Agent Collective (blue) · Big Brain (green) */}
           <div
-            className="flex items-center gap-8"
+            className="flex items-center gap-6"
             onMouseDown={handleYaiPanelMouseDown}
             title="Drag to move"
             style={{ cursor: "move" }}
           >
-            {/* Agent Collective — blue bubbly Yai + text */}
-            <div
+            {/* Orange My Task Agent — current mode (highlighted with ring) */}
+            <div className="flex items-center gap-3" title="My Task Agent — where you are now">
+              <div
+                className="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0 ring-4 ring-orange-400/60 ring-offset-2 ring-offset-slate-900"
+                style={{
+                  background: "radial-gradient(circle at 30% 25%, #fed7aa 0%, #f97316 55%, #c2410c 100%)",
+                  boxShadow: "inset -4px -4px 8px rgba(0,0,0,0.30), inset 3px 3px 6px rgba(255,255,255,0.35), 0 4px 16px rgba(249,115,22,0.55)",
+                }}
+              >
+                <img src="/assets/icons/sub-icons/yai.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
+              </div>
+              <span className="text-orange-400 font-bold text-xl whitespace-nowrap">
+                My Task Agent
+              </span>
+            </div>
+
+            {/* Blue Agent Collective — switch */}
+            <button
               ref={yaiDataButtonRef}
               onClick={() => {
                 setYaiVersion("yai1");
@@ -1317,19 +1331,15 @@ const AppLayout = () => {
                   boxShadow: "inset -4px -4px 8px rgba(0,0,0,0.30), inset 3px 3px 6px rgba(255,255,255,0.35), 0 4px 12px rgba(59,130,246,0.4)",
                 }}
               >
-                <img
-                  src="assets/modules-image/yai1.png"
-                  alt="Yai"
-                  className="w-full h-full rounded-full object-cover"
-                />
+                <img src="assets/modules-image/yai1.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
               </div>
               <span className="text-blue-400 font-bold text-xl whitespace-nowrap">
                 Agent Collective
               </span>
-            </div>
+            </button>
 
-            {/* Big Brain — green bubbly Yai + text */}
-            <div
+            {/* Green Big Brain — switch */}
+            <button
               onClick={() => {
                 setYaiVersion("yai2");
                 setYaiDataBotOpen(true);
@@ -1343,16 +1353,12 @@ const AppLayout = () => {
                   boxShadow: "inset -4px -4px 8px rgba(0,0,0,0.30), inset 3px 3px 6px rgba(255,255,255,0.35), 0 4px 12px rgba(16,185,129,0.4)",
                 }}
               >
-                <img
-                  src="assets/modules-image/yai2.png"
-                  alt="Yai"
-                  className="w-full h-full rounded-full object-cover"
-                />
+                <img src="assets/modules-image/yai2.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
               </div>
               <span className="text-emerald-400 font-bold text-xl whitespace-nowrap">
                 Big Brain
               </span>
-            </div>
+            </button>
           </div>
         </div>
       )}

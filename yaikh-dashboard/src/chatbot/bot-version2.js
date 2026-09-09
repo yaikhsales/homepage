@@ -1342,18 +1342,9 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
         />
       )}
 
-      {/* Back Button — 3D bubbly emerald ball, top-left */}
-      <button
-        onClick={onClose}
-        aria-label="Back"
-        className="absolute top-4 left-4 z-[250] w-14 h-14 rounded-full text-white font-bold text-2xl leading-none flex items-center justify-center transition-transform hover:scale-105 active:scale-95"
-        style={{
-          background: "radial-gradient(circle at 30% 25%, #a7f3d0 0%, #10b981 45%, #047857 100%)",
-          boxShadow: "inset -6px -6px 12px rgba(0,0,0,0.35), inset 4px 4px 10px rgba(255,255,255,0.35), 0 6px 14px rgba(16,185,129,0.35)",
-        }}
-      >
-        ←
-      </button>
+      {/* Back removed — the orange "My Task Agent" ball in the header row IS
+          the way home. Green "Big Brain" ball has the active ring, so the boss
+          always knows where they are. */}
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden w-full h-full min-h-0 flex-shrink relative z-20 pt-4">
@@ -1453,23 +1444,28 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
               </button>
             </div>
 
-            {/* Center — orange Yai brand + blue Agent Collective + green Big Brain */}
+            {/* Center — 3-mode nav: Orange My Task Agent · Blue Agent Collective · Green Big Brain.
+                Current mode has a ring so the boss always knows where they are. */}
             <div className="flex items-center gap-6 justify-center flex-1">
-              {/* Orange Yai — brand mark */}
-              <div
-                className="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0"
-                style={{
-                  background: "radial-gradient(circle at 30% 25%, #fed7aa 0%, #f97316 55%, #c2410c 100%)",
-                  boxShadow: "inset -4px -4px 8px rgba(0,0,0,0.30), inset 3px 3px 6px rgba(255,255,255,0.35), 0 4px 12px rgba(249,115,22,0.4)",
-                }}
-                aria-label="Yai"
+              {/* Orange My Task Agent — click to return home */}
+              <button
+                onClick={onClose}
+                className="flex items-center gap-3 cursor-pointer hover:scale-105 transition-transform"
+                title="Back to My Task Agent (home)"
               >
-                <img
-                  src="/assets/icons/sub-icons/yai.png"
-                  alt="Yai"
-                  className="w-full h-full rounded-full object-cover"
-                />
-              </div>
+                <div
+                  className="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0"
+                  style={{
+                    background: "radial-gradient(circle at 30% 25%, #fed7aa 0%, #f97316 55%, #c2410c 100%)",
+                    boxShadow: "inset -4px -4px 8px rgba(0,0,0,0.30), inset 3px 3px 6px rgba(255,255,255,0.35), 0 4px 12px rgba(249,115,22,0.4)",
+                  }}
+                >
+                  <img src="/assets/icons/sub-icons/yai.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
+                </div>
+                <span className="text-orange-400 font-bold text-xl whitespace-nowrap hidden sm:inline">
+                  My Task Agent
+                </span>
+              </button>
 
               {/* Blue Agent Collective — switch */}
               {onVersionChange && (
@@ -1485,11 +1481,7 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
                       boxShadow: "inset -4px -4px 8px rgba(0,0,0,0.30), inset 3px 3px 6px rgba(255,255,255,0.35), 0 4px 12px rgba(59,130,246,0.4)",
                     }}
                   >
-                    <img
-                      src="assets/modules-image/yai1.png"
-                      alt="Yai"
-                      className="w-full h-full rounded-full object-cover"
-                    />
+                    <img src="assets/modules-image/yai1.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
                   </div>
                   <span className="text-blue-400 font-bold text-xl whitespace-nowrap hidden sm:inline">
                     Agent Collective
@@ -1497,23 +1489,16 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
                 </button>
               )}
 
-              {/* Green Big Brain — current mode */}
-              <div
-                className="flex items-center gap-3 flex-shrink-0"
-                title="Big Brain — where you are now"
-              >
+              {/* Green Big Brain — current mode, highlighted with a ring */}
+              <div className="flex items-center gap-3 flex-shrink-0" title="Big Brain — where you are now">
                 <div
-                  className="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0"
+                  className="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0 ring-4 ring-emerald-400/50 ring-offset-2 ring-offset-[#050505]"
                   style={{
                     background: "radial-gradient(circle at 30% 25%, #a7f3d0 0%, #10b981 55%, #047857 100%)",
-                    boxShadow: "inset -4px -4px 8px rgba(0,0,0,0.30), inset 3px 3px 6px rgba(255,255,255,0.35), 0 4px 12px rgba(16,185,129,0.4)",
+                    boxShadow: "inset -4px -4px 8px rgba(0,0,0,0.30), inset 3px 3px 6px rgba(255,255,255,0.35), 0 4px 16px rgba(16,185,129,0.55)",
                   }}
                 >
-                  <img
-                    src="assets/modules-image/yai2.png"
-                    alt="Yai"
-                    className="w-full h-full rounded-full object-cover"
-                  />
+                  <img src="assets/modules-image/yai2.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
                 </div>
                 <span className="text-emerald-400 font-bold text-xl whitespace-nowrap hidden sm:inline">
                   Big Brain
