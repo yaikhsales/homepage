@@ -1457,9 +1457,9 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
                         .sparkle-4-v2 { bottom: 10%; right: 20%; animation-delay: 1.5s; }
                     `}</style>
 
-          {/* Minimal chrome — just hamburger + new-chat, top-left offset for
-              the "← Home" pill above. No redundant right-side branding. */}
-          <div className="flex items-center gap-2 pl-24 sm:pl-28">
+          {/* Minimal chrome — hamburger + labelled green "+ New Chat", top-left
+              offset for the "← Home" pill above. */}
+          <div className="flex items-center gap-3 pl-24 sm:pl-28">
             <button
               onClick={() => setIsHistoryOpen(true)}
               className="p-2 rounded-full hover:bg-white/10 transition"
@@ -1469,10 +1469,11 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
             </button>
             <button
               onClick={handleNewChat}
-              className="p-2 rounded-full hover:bg-white/10 transition"
-              title="New chat"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 font-semibold text-sm transition"
+              title="Start a new chat with Yai"
             >
-              <Plus size={20} className="text-white/70" />
+              <Plus size={16} />
+              New Chat
             </button>
           </div>
         </div>
