@@ -1416,7 +1416,7 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
                 Hello Boss — I am Yai.
               </h2>
               <p className="text-sm text-white/70 mb-6">
-                What should I call you?
+                And you?
               </p>
               <form onSubmit={submitVisitorName} className="flex flex-col gap-3 items-stretch">
                 <input
