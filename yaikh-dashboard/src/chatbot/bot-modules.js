@@ -5839,8 +5839,16 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                 <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 transition-colors duration-300"></div>
             )}
 
-            {/* Back removed — the orange "My Task Agent" ball in the header row IS
-                the way home. Blue "Agent Collective" ball has the active ring. */}
+            {/* Simple orange "← Home" pill top-left (matches the home-page reference). */}
+            {!isCompactMount && (
+                <button
+                    onClick={onClose}
+                    className="absolute top-4 left-4 z-50 px-4 py-1.5 rounded-full bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm flex items-center gap-1.5 shadow-md transition-colors pointer-events-auto"
+                    aria-label="Back to My Task Agent"
+                >
+                    ← Home
+                </button>
+            )}
 
             {/* Yai Data Header — Orange Yai brand + Blue Agent Collective + Green Big Brain */}
             {!isCompactMount && (
@@ -5908,65 +5916,9 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                     .sparkle-3-modules { bottom: 15%; left: 25%; animation-delay: 1s; }
                     .sparkle-4-modules { bottom: 10%; right: 20%; animation-delay: 1.5s; }
                 `}</style>
-                <div className="flex items-center gap-6 pointer-events-auto">
-                    {/* Orange My Task Agent — click to return home */}
-                    <button
-                        onClick={onClose}
-                        className="flex items-center gap-3 cursor-pointer hover:scale-105 transition-transform"
-                        title="Back to My Task Agent (home)"
-                    >
-                        <div
-                            className="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0"
-                            style={{
-                                background: "radial-gradient(circle at 30% 25%, #fed7aa 0%, #f97316 55%, #c2410c 100%)",
-                                boxShadow: "inset -4px -4px 8px rgba(0,0,0,0.30), inset 3px 3px 6px rgba(255,255,255,0.35), 0 4px 12px rgba(249,115,22,0.4)",
-                            }}
-                        >
-                            <img src="/assets/modules-image/top-bot.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
-                        </div>
-                        <span className="text-orange-500 font-bold text-xl whitespace-nowrap">
-                            My Task Agent
-                        </span>
-                    </button>
-
-                    {/* Blue Agent Collective — current mode, highlighted with a ring */}
-                    <div className="flex items-center gap-3 flex-shrink-0" title="Agent Collective — where you are now">
-                        <div
-                            className="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0 ring-4 ring-blue-400/60 ring-offset-2 ring-offset-white/10"
-                            style={{
-                                background: "radial-gradient(circle at 30% 25%, #93c5fd 0%, #3b82f6 55%, #1d4ed8 100%)",
-                                boxShadow: "inset -4px -4px 8px rgba(0,0,0,0.30), inset 3px 3px 6px rgba(255,255,255,0.35), 0 4px 16px rgba(59,130,246,0.55)",
-                            }}
-                        >
-                            <img src="assets/modules-image/yai1.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
-                        </div>
-                        <span className="text-blue-500 font-bold text-xl whitespace-nowrap">
-                            Agent Collective
-                        </span>
-                    </div>
-
-                    {/* Green Big Brain — switch */}
-                    {onVersionChange && (
-                        <button
-                            onClick={() => onVersionChange('yai2')}
-                            className="flex items-center gap-3 cursor-pointer hover:scale-105 transition-transform"
-                            title="Switch to Big Brain"
-                        >
-                            <div
-                                className="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0"
-                                style={{
-                                    background: "radial-gradient(circle at 30% 25%, #a7f3d0 0%, #10b981 55%, #047857 100%)",
-                                    boxShadow: "inset -4px -4px 8px rgba(0,0,0,0.30), inset 3px 3px 6px rgba(255,255,255,0.35), 0 4px 12px rgba(16,185,129,0.4)",
-                                }}
-                            >
-                                <img src="assets/modules-image/yai2.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
-                            </div>
-                            <span className="text-emerald-500 font-bold text-xl whitespace-nowrap">
-                                Big Brain
-                            </span>
-                        </button>
-                    )}
-                </div>
+                {/* Header cleared — orange "← Home" pill above is the only chrome.
+                    Empty div keeps the anchor point stable for animations. */}
+                <div className="pointer-events-auto" />
             </div>
             )}
 
