@@ -123,17 +123,52 @@ const BotVersion2 = ({
       try { localStorage.setItem("yai_factory_config", JSON.stringify(payload)); } catch { /* private mode */ }
       setFactoryConfig(payload);
       setOnboardingStep(-1);
+      // Compose a warm, curious opening — Yai has thoughts about YOUR factory,
+      // not a dashboard dump. Pulls context from the boss's own answers.
+      const perLine = payload.workers && payload.lines ? Math.round(payload.workers / payload.lines) : 0;
+      const bossName = boss || "Boss";
+      const productLower = (payload.product || "polos").toLowerCase();
+      const certs = payload.certifications || [];
+      const buyers = payload.buyers || [];
+      const bigCerts = ["WRAP", "BSCI", "HIGG", "SEDEX", "GRS"];
+      const missingCerts = bigCerts.filter(c => !certs.some(x => x.toUpperCase().includes(c)));
+      const observations = [];
+      if (perLine >= 400) {
+        observations.push(`${perLine} people per line is on the heavier side — bottlenecks show up fast when someone calls in sick`);
+      } else if (perLine && perLine < 200) {
+        observations.push(`only ${perLine} per line — lean, quick to re-balance but you'll feel any absentee hard`);
+      } else if (perLine) {
+        observations.push(`about ${perLine} per line — that's a healthy balance`);
+      }
+      if (productLower.includes("polo")) {
+        observations.push(`polo runs love long unbroken flows — style changeovers are usually the biggest hidden cost`);
+      } else if (productLower.includes("jacket")) {
+        observations.push(`jackets are trim-heavy — most of your headaches will come from MRP + 4DP coordination`);
+      } else if (productLower.includes("trouser")) {
+        observations.push(`trousers live and die on cutting accuracy — your CE + MRP loop is the one to watch`);
+      }
+      const observation = observations.length
+        ? observations.join(", and ") + "."
+        : "";
+
+      const buyerLine = buyers.length
+        ? `${buyers.join(" and ")} — do they pull from the same styles or is each one its own book?`
+        : `You haven't mentioned buyers yet — is that because you're still hunting, or you prefer to keep them off the record?`;
+
+      const certLine = missingCerts.length && certs.length
+        ? ` I noticed you have ${certs.join(", ")} but not ${missingCerts.slice(0, 2).join(" or ")} — buyers not asking, or is that on the roadmap?`
+        : missingCerts.length === bigCerts.length
+        ? ` No certifications yet — is that a "next year" thing, or are your buyers happy without them?`
+        : ``;
+
+      const closer = `\n\nSo — what's keeping you awake this week? Or if you'd rather, I can suggest a few matters I think you may want to attend to first.`;
+
       setMessages(prev => [...prev, { from: "bot", text:
-        `Done, Boss. Your factory is live:\n` +
-        `• ${payload.workers.toLocaleString()} workers · ${payload.lines} lines · ${payload.product}\n` +
-        `• Certifications: ${payload.certifications.join(", ") || "—"}\n` +
-        `• Buyers: ${payload.buyers.join(", ") || "—"}\n` +
-        `• ${data.tasksSeeded} live tasks materialised\n\n` +
-        `Ask me anything. Try:\n` +
-        `• "What's on fire?"\n` +
-        `• "Today's headline"\n` +
-        `• "Any Speak Up complaint I should know about?"\n` +
-        `• "PSA holds by PO"`,
+        `Alright ${bossName} — your ${payload.workers.toLocaleString()}-worker ${productLower} factory is loaded ` +
+        `(${payload.lines} line${payload.lines === 1 ? "" : "s"}, ${data.tasksSeeded} live tasks across the team).\n\n` +
+        `Quick thoughts before we dig in: ${observation}${certLine}\n\n` +
+        buyerLine +
+        closer,
       }]);
     } catch (err) {
       setOnboardingStep(4); // back to the last question so they can retry
