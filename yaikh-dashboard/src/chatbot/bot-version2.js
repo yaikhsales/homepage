@@ -1292,14 +1292,31 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
             </div>
           </div>
 
-          {/* New Chat Button */}
-          <div className="p-4 border-b border-white/10">
+          {/* New Chat + Restart Demo buttons */}
+          <div className="p-4 border-b border-white/10 space-y-2">
             <button
               onClick={handleNewChat}
-              className="w-full flex items-center gap-3 px-4 py-3 rounded-full bg-white/10 border border-white/15 hover:bg-white/15 transition"
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-full bg-emerald-500/15 border border-emerald-400/30 hover:bg-emerald-500/25 transition"
             >
-              <Plus size={18} className="text-white/70" />
-              <span className="text-sm text-white">New Chat</span>
+              <Plus size={18} className="text-emerald-400" />
+              <span className="text-sm text-emerald-300 font-semibold">New Chat</span>
+            </button>
+            <button
+              onClick={() => {
+                if (window.confirm("Reset the conversation? This clears your name, factory setup, and chat history — Yai will greet you again from scratch.")) {
+                  try {
+                    localStorage.removeItem("yai_visitor_name");
+                    localStorage.removeItem("yai_factory_config");
+                    localStorage.removeItem("yai2-chat-history");
+                  } catch { /* private mode */ }
+                  window.location.reload();
+                }
+              }}
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-full bg-orange-500/15 border border-orange-400/30 hover:bg-orange-500/25 transition"
+              title="Wipe your name + factory setup + chat history so Yai greets you as a fresh visitor"
+            >
+              <RefreshCw size={18} className="text-orange-400" />
+              <span className="text-sm text-orange-300 font-semibold">Reset conversation</span>
             </button>
           </div>
 
