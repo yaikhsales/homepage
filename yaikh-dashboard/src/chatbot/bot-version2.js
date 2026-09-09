@@ -1460,7 +1460,7 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
                     boxShadow: "inset -4px -4px 8px rgba(0,0,0,0.30), inset 3px 3px 6px rgba(255,255,255,0.35), 0 4px 12px rgba(249,115,22,0.4)",
                   }}
                 >
-                  <img src="/assets/icons/sub-icons/yai.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
+                  <img src="/assets/modules-image/top-bot.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
                 </div>
                 <span className="text-orange-400 font-bold text-xl whitespace-nowrap hidden sm:inline">
                   My Task Agent
