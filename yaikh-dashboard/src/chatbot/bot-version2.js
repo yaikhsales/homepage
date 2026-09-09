@@ -57,15 +57,70 @@ const BotVersion2 = ({
     if (!clean) return;
     try { localStorage.setItem("yai_visitor_name", clean); } catch { /* private mode */ }
     setVisitorName(clean);
-    // Seed the conversation with a Big Brain greeting so the visitor lands
-    // in a co-working conversation, not a menu.
-    setMessages([{
-      from: "bot",
-      text:
-        `Hi ${clean} — I'm Big Brain, boss of 13 PA agents at Yaikh.\n\n` +
-        `Ask me anything, or tell me the department you need and I'll route you: ` +
-        `Accounting, HR, Admin, CSR, Shipping, MRP, QA, Production, CE, YTM, 4DP, YPI, Social.`,
-    }]);
+    // Factory-config step handles the greeting once materialise completes.
+  };
+
+  // Factory config — 2nd step of onboarding, materialises a demo factory
+  // scaled to the owner's answers (workers, lines, product, certifications).
+  const [factoryConfig, setFactoryConfig] = useState(() => {
+    try { const s = localStorage.getItem("yai_factory_config"); return s ? JSON.parse(s) : null; }
+    catch { return null; }
+  });
+  const [factoryDraft, setFactoryDraft] = useState({
+    workers: "1000",
+    lines: "3",
+    product: "polos",
+    certifications: "WRAP, BSCI, HIGG",
+    buyers: "BuyerCo, TargetCo",
+  });
+  const [factoryMaterialising, setFactoryMaterialising] = useState(false);
+  const submitFactoryConfig = async (e) => {
+    e && e.preventDefault && e.preventDefault();
+    if (factoryMaterialising) return;
+    setFactoryMaterialising(true);
+    try {
+      const payload = {
+        visitor: visitorName || "Visitor",
+        workers: parseInt(factoryDraft.workers, 10) || 1000,
+        lines: parseInt(factoryDraft.lines, 10) || 3,
+        product: factoryDraft.product.trim() || "polos",
+        certifications: factoryDraft.certifications.split(",").map(s => s.trim()).filter(Boolean),
+        buyers: factoryDraft.buyers.split(",").map(s => s.trim()).filter(Boolean),
+        hasWarehouse: true,
+      };
+      const res = await fetch("/api/factory/materialize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (!data?.ok) throw new Error(data?.error || "materialise failed");
+      try { localStorage.setItem("yai_factory_config", JSON.stringify(payload)); } catch { /* private mode */ }
+      setFactoryConfig(payload);
+      setMessages([{
+        from: "bot",
+        text:
+          `Welcome ${visitorName}. Your simulated factory is live:\n` +
+          `• ${payload.workers} workers · ${payload.lines} production lines · ${payload.product}\n` +
+          `• Certifications: ${payload.certifications.join(", ") || "—"}\n` +
+          `• Buyers: ${payload.buyers.join(", ") || "—"}\n` +
+          `• ${data.tasksSeeded} live tasks materialised across 13 PAs\n\n` +
+          `I'm Big Brain — boss of the 13. Ask me anything, try one of these:\n` +
+          `• "What's on fire?"\n` +
+          `• "Today's headline"\n` +
+          `• "How many workers are on the floor?"\n` +
+          `• "Any Speak Up complaint I should know about?"\n` +
+          `• "PSA holds by PO"\n\n` +
+          `Or name a department (Accounting, HR, Admin, CSR, Shipping, MRP, QA, Production, CE, YTM, 4DP, YPI, Social) and I'll route you.`,
+      }]);
+    } catch (err) {
+      setMessages([{
+        from: "bot",
+        text: `Couldn't set up the factory: ${err.message}. Please try again or ask an admin.`,
+      }]);
+    } finally {
+      setFactoryMaterialising(false);
+    }
   };
 
   // Chat history state
@@ -1298,15 +1353,14 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
         {/* Content Area */}
         <div className="flex-1 overflow-y-auto overflow-x-hidden px-4 sm:px-6 py-8 bg-[#050505]/60 backdrop-blur-sm relative z-20 min-h-0 w-full flex-shrink">
           {!visitorName ? (
-            // First-time — ask the visitor their name so Big Brain can greet them by name.
+            // Step 1 — ask visitor's name.
             <div className="pt-16 max-w-md mx-auto relative z-20 text-center">
               <h2 className="text-2xl font-light text-white mb-3">
                 Welcome to Yaikh.
               </h2>
               <p className="text-sm text-white/70 mb-6">
-                Big Brain is the boss of 13 PA agents — Accounting, HR, Admin,
-                CSR, Shipping, MRP, QA, Production, CE, YTM, 4DP, YPI, Social.
-                What's your name, so we can start?
+                Big Brain is the boss of 13 PA agents. Before we introduce
+                the team, what's your name?
               </p>
               <form onSubmit={submitVisitorName} className="flex flex-col gap-3 items-stretch">
                 <input
@@ -1322,7 +1376,62 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
                   disabled={!nameDraft.trim()}
                   className="px-5 py-3 rounded-full bg-gradient-to-r from-emerald-500 to-green-600 text-white font-semibold disabled:opacity-40"
                 >
-                  Start
+                  Continue
+                </button>
+              </form>
+            </div>
+          ) : !factoryConfig ? (
+            // Step 2 — capture factory shape so the demo materialises to scale.
+            <div className="pt-10 max-w-md mx-auto relative z-20 text-center">
+              <h2 className="text-2xl font-light text-white mb-2">
+                Hi {visitorName}.
+              </h2>
+              <p className="text-sm text-white/70 mb-6">
+                Tell me about your factory so my 13 PAs materialise the right size demo.
+                Change any answer if it doesn't fit.
+              </p>
+              <form onSubmit={submitFactoryConfig} className="flex flex-col gap-3 items-stretch text-left">
+                <label className="text-xs text-white/60">How many workers?</label>
+                <input
+                  type="number" min="50" max="10000"
+                  value={factoryDraft.workers}
+                  onChange={(e) => setFactoryDraft({ ...factoryDraft, workers: e.target.value })}
+                  className="px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white outline-none focus:border-emerald-400/60"
+                />
+                <label className="text-xs text-white/60">How many production lines?</label>
+                <input
+                  type="number" min="1" max="20"
+                  value={factoryDraft.lines}
+                  onChange={(e) => setFactoryDraft({ ...factoryDraft, lines: e.target.value })}
+                  className="px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white outline-none focus:border-emerald-400/60"
+                />
+                <label className="text-xs text-white/60">Main product (polos, jackets, trousers…)</label>
+                <input
+                  type="text"
+                  value={factoryDraft.product}
+                  onChange={(e) => setFactoryDraft({ ...factoryDraft, product: e.target.value })}
+                  className="px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white outline-none focus:border-emerald-400/60"
+                />
+                <label className="text-xs text-white/60">Certifications (comma-separated)</label>
+                <input
+                  type="text"
+                  value={factoryDraft.certifications}
+                  onChange={(e) => setFactoryDraft({ ...factoryDraft, certifications: e.target.value })}
+                  className="px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white outline-none focus:border-emerald-400/60"
+                />
+                <label className="text-xs text-white/60">Buyers (comma-separated)</label>
+                <input
+                  type="text"
+                  value={factoryDraft.buyers}
+                  onChange={(e) => setFactoryDraft({ ...factoryDraft, buyers: e.target.value })}
+                  className="px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white outline-none focus:border-emerald-400/60"
+                />
+                <button
+                  type="submit"
+                  disabled={factoryMaterialising}
+                  className="mt-2 px-5 py-3 rounded-full bg-gradient-to-r from-emerald-500 to-green-600 text-white font-semibold disabled:opacity-40"
+                >
+                  {factoryMaterialising ? "Materialising your factory…" : "Materialise my factory"}
                 </button>
               </form>
             </div>
