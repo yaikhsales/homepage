@@ -5839,15 +5839,26 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                 <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 transition-colors duration-300"></div>
             )}
 
-            {/* Simple orange "← Home" pill top-left (matches the home-page reference). */}
+            {/* Top-left nav — "← Home" + one-click jump to Big Brain */}
             {!isCompactMount && (
-                <button
-                    onClick={onClose}
-                    className="absolute top-4 left-4 z-50 px-4 py-1.5 rounded-full bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm flex items-center gap-1.5 shadow-md transition-colors pointer-events-auto"
-                    aria-label="Back to My Task Agent"
-                >
-                    ← Home
-                </button>
+                <div className="absolute top-4 left-4 z-50 flex items-center gap-2">
+                    <button
+                        onClick={onClose}
+                        className="px-4 py-1.5 rounded-full bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm flex items-center gap-1.5 shadow-md transition-colors pointer-events-auto"
+                        aria-label="Back to My Task Agent"
+                    >
+                        ← Home
+                    </button>
+                    {onVersionChange && (
+                        <button
+                            onClick={() => onVersionChange('yai2')}
+                            className="px-4 py-1.5 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold text-sm flex items-center gap-1.5 shadow-md transition-colors pointer-events-auto"
+                            title="Jump to Big Brain (the boss of the 13 PAs)"
+                        >
+                            Big Brain →
+                        </button>
+                    )}
+                </div>
             )}
 
             {/* Yai Data Header — Orange Yai brand + Blue Agent Collective + Green Big Brain */}

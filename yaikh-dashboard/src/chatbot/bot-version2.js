@@ -1387,14 +1387,25 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
         />
       )}
 
-      {/* Simple orange "← Home" pill top-left (matches the home-page reference). */}
-      <button
-        onClick={onClose}
-        className="absolute top-4 left-4 z-[250] px-4 py-1.5 rounded-full bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm flex items-center gap-1.5 shadow-md transition-colors"
-        aria-label="Back to My Task Agent"
-      >
-        ← Home
-      </button>
+      {/* Top-left nav — "← Home" + one-click jump to Agent Collective */}
+      <div className="absolute top-4 left-4 z-[250] flex items-center gap-2">
+        <button
+          onClick={onClose}
+          className="px-4 py-1.5 rounded-full bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm flex items-center gap-1.5 shadow-md transition-colors"
+          aria-label="Back to My Task Agent"
+        >
+          ← Home
+        </button>
+        {onVersionChange && (
+          <button
+            onClick={() => onVersionChange("yai1")}
+            className="px-4 py-1.5 rounded-full bg-blue-500 hover:bg-blue-600 text-white font-semibold text-sm flex items-center gap-1.5 shadow-md transition-colors"
+            title="Jump to Agent Collective (talk to any of the 13 PAs directly)"
+          >
+            Agent Collective →
+          </button>
+        )}
+      </div>
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden w-full h-full min-h-0 flex-shrink relative z-20 pt-4">
