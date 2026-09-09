@@ -1467,14 +1467,30 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
               </span>
             </div>
 
-            {/* Right — small text button to jump into Agent Collective (only if switching enabled) */}
+            {/* Right — switch to Agent Collective. Mirror the outer nav design
+                so the affordance is obvious (blue bubbly Yai + label). */}
             {onVersionChange && (
               <button
                 onClick={() => onVersionChange("yai1")}
-                className="text-xs text-white/60 hover:text-white/90 hover:bg-white/10 px-3 py-1.5 rounded-full transition whitespace-nowrap"
-                title="Switch to Agent Collective (the 13 PAs directly)"
+                className="flex items-center gap-2 cursor-pointer hover:scale-105 transition-transform"
+                title="Switch to Agent Collective — talk to any of the 13 PAs directly"
               >
-                13 PAs →
+                <div
+                  className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0"
+                  style={{
+                    background: "radial-gradient(circle at 30% 25%, #93c5fd 0%, #3b82f6 55%, #1d4ed8 100%)",
+                    boxShadow: "inset -3px -3px 6px rgba(0,0,0,0.30), inset 2px 2px 4px rgba(255,255,255,0.35), 0 3px 8px rgba(59,130,246,0.4)",
+                  }}
+                >
+                  <img
+                    src="assets/modules-image/yai1.png"
+                    alt="Yai"
+                    className="w-full h-full rounded-full object-cover"
+                  />
+                </div>
+                <span className="text-blue-400 font-semibold text-sm whitespace-nowrap hidden sm:inline">
+                  Agent Collective
+                </span>
               </button>
             )}
           </div>
