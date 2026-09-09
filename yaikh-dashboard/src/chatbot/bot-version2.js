@@ -51,41 +51,48 @@ const BotVersion2 = ({
     try { return localStorage.getItem("yai_visitor_name") || ""; } catch { return ""; }
   });
   const [nameDraft, setNameDraft] = useState("");
-  const submitVisitorName = (e) => {
-    e && e.preventDefault && e.preventDefault();
-    const clean = nameDraft.trim().slice(0, 60);
-    if (!clean) return;
-    try { localStorage.setItem("yai_visitor_name", clean); } catch { /* private mode */ }
-    setVisitorName(clean);
-    // Factory-config step handles the greeting once materialise completes.
-  };
 
-  // Factory config — 2nd step of onboarding, materialises a demo factory
-  // scaled to the owner's answers (workers, lines, product, certifications).
+  // Factory config persisted across sessions.
   const [factoryConfig, setFactoryConfig] = useState(() => {
     try { const s = localStorage.getItem("yai_factory_config"); return s ? JSON.parse(s) : null; }
     catch { return null; }
   });
-  const [factoryDraft, setFactoryDraft] = useState({
-    workers: "1000",
-    lines: "3",
-    product: "polos",
-    certifications: "WRAP, BSCI, HIGG",
-    buyers: "BuyerCo, TargetCo",
+
+  // Conversational onboarding — chat-based, not a form.
+  //   0 = ask workers, 1 = ask lines, 2 = ask product,
+  //   3 = ask certifications, 4 = ask buyers, 5 = materialising, -1 = done
+  const [onboardingStep, setOnboardingStep] = useState(() => {
+    try { return localStorage.getItem("yai_factory_config") ? -1 : 0; }
+    catch { return 0; }
   });
-  const [factoryMaterialising, setFactoryMaterialising] = useState(false);
-  const submitFactoryConfig = async (e) => {
-    e && e.preventDefault && e.preventDefault();
-    if (factoryMaterialising) return;
-    setFactoryMaterialising(true);
+  const [onboardingDraft, setOnboardingDraft] = useState({
+    workers: null, lines: null, product: null, certifications: null, buyers: null,
+  });
+
+  // Ask the next onboarding question — driven from handleSend after each reply.
+  const askNextOnboarding = (step, draft, boss) => {
+    const q = ({
+      0: `Hi Boss${boss ? ` — ${boss}` : ""} 👋 Before I introduce the 13 PA team, quick set-up so we materialise the right size demo. First up: how many workers on your factory floor?`,
+      1: `Got it. How many production lines are running right now?`,
+      2: `And what's the main product — polos, jackets, trousers, or a mix?`,
+      3: `Any certifications the factory holds? (WRAP, BSCI, HIGG, SEDEX, GRS — or type "none")`,
+      4: `Last one: which buyers do you work with? (comma-separated names, or type "skip")`,
+    })[step];
+    if (q) setMessages(prev => [...prev, { from: "bot", text: q }]);
+  };
+
+  // After all 5 answers, POST to materialize + confirm.
+  const materialiseFactory = async (draft, boss) => {
+    setOnboardingStep(5);
+    setMessages(prev => [...prev, { from: "bot", text: "Materialising your factory across all 13 PAs…" }]);
     try {
       const payload = {
-        visitor: visitorName || "Visitor",
-        workers: parseInt(factoryDraft.workers, 10) || 1000,
-        lines: parseInt(factoryDraft.lines, 10) || 3,
-        product: factoryDraft.product.trim() || "polos",
-        certifications: factoryDraft.certifications.split(",").map(s => s.trim()).filter(Boolean),
-        buyers: factoryDraft.buyers.split(",").map(s => s.trim()).filter(Boolean),
+        visitor: boss || "Boss",
+        workers: draft.workers || 1000,
+        lines: draft.lines || 3,
+        product: draft.product || "polos",
+        certifications: draft.certifications || [],
+        buyers: draft.buyers || [],
         hasWarehouse: true,
       };
       const res = await fetch("/api/factory/materialize", {
@@ -97,29 +104,42 @@ const BotVersion2 = ({
       if (!data?.ok) throw new Error(data?.error || "materialise failed");
       try { localStorage.setItem("yai_factory_config", JSON.stringify(payload)); } catch { /* private mode */ }
       setFactoryConfig(payload);
-      setMessages([{
-        from: "bot",
-        text:
-          `Welcome ${visitorName}. Your simulated factory is live:\n` +
-          `• ${payload.workers} workers · ${payload.lines} production lines · ${payload.product}\n` +
-          `• Certifications: ${payload.certifications.join(", ") || "—"}\n` +
-          `• Buyers: ${payload.buyers.join(", ") || "—"}\n` +
-          `• ${data.tasksSeeded} live tasks materialised across 13 PAs\n\n` +
-          `I'm Big Brain — boss of the 13. Ask me anything, try one of these:\n` +
-          `• "What's on fire?"\n` +
-          `• "Today's headline"\n` +
-          `• "How many workers are on the floor?"\n` +
-          `• "Any Speak Up complaint I should know about?"\n` +
-          `• "PSA holds by PO"\n\n` +
-          `Or name a department (Accounting, HR, Admin, CSR, Shipping, MRP, QA, Production, CE, YTM, 4DP, YPI, Social) and I'll route you.`,
+      setOnboardingStep(-1);
+      setMessages(prev => [...prev, { from: "bot", text:
+        `Done, Boss. Your factory is live:\n` +
+        `• ${payload.workers.toLocaleString()} workers · ${payload.lines} production lines · ${payload.product}\n` +
+        `• Certifications: ${payload.certifications.join(", ") || "—"}\n` +
+        `• Buyers: ${payload.buyers.join(", ") || "—"}\n` +
+        `• ${data.tasksSeeded} live tasks now open across the 13 PAs\n\n` +
+        `Try one of these to see the team in action:\n` +
+        `• "What's on fire?"\n` +
+        `• "Today's headline"\n` +
+        `• "Any Speak Up complaint I should know about?"\n` +
+        `• "PSA holds by PO"\n\n` +
+        `Or name a department (Accounting, HR, Admin, CSR, Shipping, MRP, QA, Production, CE, YTM, 4DP, YPI, Social) and I'll route you.`,
       }]);
     } catch (err) {
-      setMessages([{
-        from: "bot",
-        text: `Couldn't set up the factory: ${err.message}. Please try again or ask an admin.`,
+      setOnboardingStep(4); // back to the last question so they can retry
+      setMessages(prev => [...prev, { from: "bot", text:
+        `I couldn't set the factory up: ${err.message}. Try answering the last question again, or refresh.`,
       }]);
-    } finally {
-      setFactoryMaterialising(false);
+    }
+  };
+
+  // Name capture — after name, drop into conversational onboarding.
+  const submitVisitorName = (e) => {
+    e && e.preventDefault && e.preventDefault();
+    const clean = nameDraft.trim().slice(0, 60);
+    if (!clean) return;
+    try { localStorage.setItem("yai_visitor_name", clean); } catch { /* private mode */ }
+    setVisitorName(clean);
+    // If they've already done onboarding in a past session, don't re-ask.
+    if (factoryConfig) {
+      setMessages([{ from: "bot", text: `Welcome back, Boss (${clean}). Your factory is loaded — ask me anything.` }]);
+      setOnboardingStep(-1);
+    } else {
+      setOnboardingStep(0);
+      askNextOnboarding(0, onboardingDraft, clean);
     }
   };
 
@@ -678,6 +698,44 @@ const BotVersion2 = ({
   const handleSend = (e) => {
     e.preventDefault();
     if (!input.trim()) return;
+
+    // ── Conversational onboarding intercept ───────────────────────────
+    // Steps 0..4 = capture factory answers via chat, then materialise.
+    // Step 5 = in-flight materialise, block input. Step -1 = done.
+    if (onboardingStep >= 0 && onboardingStep <= 4) {
+      const raw = input.trim();
+      const userMsg = { from: "user", text: raw };
+      setMessages(prev => [...prev, userMsg]);
+      setInput("");
+      const draft = { ...onboardingDraft };
+      let nextStep = onboardingStep + 1;
+
+      if (onboardingStep === 0) {
+        const n = parseInt(raw.replace(/[^\d]/g, ""), 10);
+        draft.workers = Number.isFinite(n) && n > 0 ? Math.min(10000, Math.max(50, n)) : 1000;
+      } else if (onboardingStep === 1) {
+        const n = parseInt(raw.replace(/[^\d]/g, ""), 10);
+        draft.lines = Number.isFinite(n) && n > 0 ? Math.min(20, Math.max(1, n)) : Math.max(1, Math.round((draft.workers || 1000) / 300));
+      } else if (onboardingStep === 2) {
+        draft.product = raw.slice(0, 60) || "polos";
+      } else if (onboardingStep === 3) {
+        const list = /^none$/i.test(raw) ? [] : raw.split(/[,;]/).map(s => s.trim()).filter(Boolean).slice(0, 20);
+        draft.certifications = list;
+      } else if (onboardingStep === 4) {
+        const list = /^skip$/i.test(raw) ? [] : raw.split(/[,;]/).map(s => s.trim()).filter(Boolean).slice(0, 20);
+        draft.buyers = list;
+      }
+
+      setOnboardingDraft(draft);
+      if (nextStep <= 4) {
+        setOnboardingStep(nextStep);
+        setTimeout(() => askNextOnboarding(nextStep, draft, visitorName), 400);
+      } else {
+        materialiseFactory(draft, visitorName);
+      }
+      return;
+    }
+    if (onboardingStep === 5) return; // materialising — block extra input
 
     // Create new chat if none exists
     if (!currentChatId) {
@@ -1377,61 +1435,6 @@ Answer general/strategy questions yourself. For domain-specific asks, name the P
                   className="px-5 py-3 rounded-full bg-gradient-to-r from-emerald-500 to-green-600 text-white font-semibold disabled:opacity-40"
                 >
                   Continue
-                </button>
-              </form>
-            </div>
-          ) : !factoryConfig ? (
-            // Step 2 — capture factory shape so the demo materialises to scale.
-            <div className="pt-10 max-w-md mx-auto relative z-20 text-center">
-              <h2 className="text-2xl font-light text-white mb-2">
-                Hi {visitorName}.
-              </h2>
-              <p className="text-sm text-white/70 mb-6">
-                Tell me about your factory so my 13 PAs materialise the right size demo.
-                Change any answer if it doesn't fit.
-              </p>
-              <form onSubmit={submitFactoryConfig} className="flex flex-col gap-3 items-stretch text-left">
-                <label className="text-xs text-white/60">How many workers?</label>
-                <input
-                  type="number" min="50" max="10000"
-                  value={factoryDraft.workers}
-                  onChange={(e) => setFactoryDraft({ ...factoryDraft, workers: e.target.value })}
-                  className="px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white outline-none focus:border-emerald-400/60"
-                />
-                <label className="text-xs text-white/60">How many production lines?</label>
-                <input
-                  type="number" min="1" max="20"
-                  value={factoryDraft.lines}
-                  onChange={(e) => setFactoryDraft({ ...factoryDraft, lines: e.target.value })}
-                  className="px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white outline-none focus:border-emerald-400/60"
-                />
-                <label className="text-xs text-white/60">Main product (polos, jackets, trousers…)</label>
-                <input
-                  type="text"
-                  value={factoryDraft.product}
-                  onChange={(e) => setFactoryDraft({ ...factoryDraft, product: e.target.value })}
-                  className="px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white outline-none focus:border-emerald-400/60"
-                />
-                <label className="text-xs text-white/60">Certifications (comma-separated)</label>
-                <input
-                  type="text"
-                  value={factoryDraft.certifications}
-                  onChange={(e) => setFactoryDraft({ ...factoryDraft, certifications: e.target.value })}
-                  className="px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white outline-none focus:border-emerald-400/60"
-                />
-                <label className="text-xs text-white/60">Buyers (comma-separated)</label>
-                <input
-                  type="text"
-                  value={factoryDraft.buyers}
-                  onChange={(e) => setFactoryDraft({ ...factoryDraft, buyers: e.target.value })}
-                  className="px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white outline-none focus:border-emerald-400/60"
-                />
-                <button
-                  type="submit"
-                  disabled={factoryMaterialising}
-                  className="mt-2 px-5 py-3 rounded-full bg-gradient-to-r from-emerald-500 to-green-600 text-white font-semibold disabled:opacity-40"
-                >
-                  {factoryMaterialising ? "Materialising your factory…" : "Materialise my factory"}
                 </button>
               </form>
             </div>
