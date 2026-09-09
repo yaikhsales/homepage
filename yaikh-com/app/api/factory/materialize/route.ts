@@ -78,8 +78,16 @@ function summaryFor(pa: string, pill: string, workers: number, lines: number, pr
     "Supplier orders":        () => `PO to ${pick(["China Silk Mill","VN Trim House","Long An Dye Co"])} — quote US$${rand(2,25)*1000}, awaiting 3-quote comparison.`,
     "Reorder points":         () => `${rand(3,7)} SKUs breached reorder point this week — auto-PRs generated, awaiting Accounting approval.`,
     "Recent defect inspections": () => `Inline round on Sewing-${line} — ${rand(4,18)} defects flagged, top cause: ${pick(["skipped stitches","broken needles","label misalign"])}.`,
-    "Customer complaints":       () => `Complaint YAI-2026-${rand(80,120)} from ${pick(["BuyerCo","TargetCo","EU-Direct"])} — ${pick(["colour bleeding","measurement off","seam burst"])}, 4M analysis due in ${rand(1,4)} days.`,
-    "Open call-outs":            () => `Call Out from Line ${line} supervisor — ${pick(["fabric shade mismatch","machine oil stain","trim wrong colour"])}, needs QA + ${pick(["MRP","YTM","4DP"])} response.`,
+    "Customer complaints":       () => pick([
+      `Complaint YAI-2026-${rand(80,120)} from ${pick(["BuyerCo","TargetCo","EU-Direct"])} on Line ${line} — ${pick(["colour bleeding","measurement off","seam burst"])}. 4M analysis submitted ${rand(6,14)} days ago but line hasn't improved. Boss opinion needed.`,
+      `${pick(["BuyerCo","TargetCo","EU-Direct"])} raised ${rand(2,4)} complaints in 2 weeks — same operator on Line ${line} involved. HR looped but no action yet. Escalate?`,
+      `Third-party inspection at buyer's DC found ${rand(3,9)} defects per carton on last shipment — buyer requesting root-cause report + rework plan by ${dayName(rand(2,5))}.`,
+    ]),
+    "Open call-outs":            () => pick([
+      `Line ${line} supervisor called out on trim colour mismatch — QA + MRP looped, waiting on your authorisation to return the lot to supplier.`,
+      `Call Out on Sewing-${line}: broken needle not recovered on style YTM-P-${rand(100,199)}, ${rand(40,120)} pcs quarantined. Need decision to rework or scrap.`,
+      `Cutting called out: fabric shade band outside buyer tolerance on 3 rolls — buyer approval or lot rejection needs your call.`,
+    ]),
     "Third-party audits":        () => `${pick(["SGS","Intertek","TUV"])} audit scheduled ${dayName(rand(3,20))} — checklist ${rand(60,95)}% complete.`,
     "Quality reports":           () => `${pick(["Weekly defect summary","PSA holds report","4M closure log"])} due to management by ${dayName(rand(1,3))}.`,
     "Today's production plan":   () => `Line ${line} plan today: ${rand(200, Math.max(300, Math.floor(workers/lines/1.5)))} pcs of PO-${rand(30,80)} — currently at ${rand(30,90)}% by mid-shift.`,
@@ -92,7 +100,11 @@ function summaryFor(pa: string, pill: string, workers: number, lines: number, pr
     "Machine allocation":        () => `Next week plan needs ${rand(2,6)} more ${pick(["button-hole","bar-tack","overlock"])} machines on Line ${line}.`,
     "Skill inventory":           () => `${rand(3,9)} operators promoted to Level ${rand(3,5)} this month — skill matrix update pending.`,
     "Cost center summary":       () => `CC-${pick(["1001","1002","1003","2000","3000"])} cost per garment variance ${rand(2,9)}% vs standard.`,
-    "Machine downtime":          () => `Machine M-${pick(["A","B","C"])}${rand(1,90).toString().padStart(3,"0")} down ${rand(15,180)} min today — cause: ${pick(["needle-bar","motor overheat","timing belt","PLC error"])}.`,
+    "Machine downtime":          () => pick([
+      `Compressor down ${rand(3,8)} hrs — spare part quote US$${rand(3,6)}k needs your sign-off (over 3-quote threshold, whole air line is affected).`,
+      `Machine M-${pick(["A","B","C"])}${rand(1,90).toString().padStart(3,"0")} down ${rand(15,180)} min today — cause: ${pick(["needle-bar","motor overheat","timing belt","PLC error"])}, YTM working on it.`,
+      `Boiler tripped this morning — ${rand(1,3)} hrs to steam back up; buyer's ETD not affected but 2nd incident this month, YTM asking for capex review.`,
+    ]),
     "Repair queue":              () => `${rand(3,9)} machines in repair queue — oldest ticket ${rand(1,4)} days open.`,
     "Maintenance schedule":      () => `PM due ${dayName(rand(1,7))} on ${rand(4,12)} machines.`,
     "Late maintenance alerts":   () => `Machine M-${pick(["A","B","C"])}${rand(1,90).toString().padStart(3,"0")} PM overdue by ${rand(3,10)} days.`,
@@ -112,7 +124,13 @@ function summaryFor(pa: string, pill: string, workers: number, lines: number, pr
     "YouTube comments":          () => `${rand(2,12)} comments on latest sample-room-tour video.`,
     "Instagram comments":        () => `${rand(4,18)} unreplied comments on visual posts.`,
     "LinkedIn comments":         () => `${rand(2,8)} unreplied comments on latest ${pick(["WRAP certification","GRS milestone","factory-expansion"])} post.`,
-    "Purchase Request":       () => `PR for ${pick(["fabric","trim","spare parts","office supplies"])} US$${rand(200,4800)} — awaiting ${pick(["Junior","Senior","GM"])} approval.`,
+    "Purchase Request":       () => pick([
+      `New boiler quote US$${rand(15,28)*1000} from ${pick(["SteamTech Cambodia","VN Boilers","Long An Industrial"])} — CE + YTM validated the spec, need your call on brand vs price.`,
+      `Fabric PR US$${rand(40,80)}k for ${pick(["BuyerCo","TargetCo"])} Nov delivery — MRP flagged a supplier change, your opinion needed.`,
+      `Compressor spare-part quote US$${rand(3,8)}k — over the 3-quote threshold, need boss sign-off (${pick(["Line B","Line A"])} down until it's replaced).`,
+      `Capex PR: ${rand(6,18)} new sewing machines US$${rand(20,60)}k — CE says needed for Q1 capacity, awaiting your decision.`,
+      `Office supplies PR for ${pick(["Q4","month-end"])} US$${rand(200,900)} — routine, ready to sign.`,
+    ]),
     "Bill Claim":             () => `Bill claim US$${rand(20,400)} for ${pick(["taxi","staff meal","training","printing"])} — awaiting reimbursement.`,
     "Salary Bill":            () => `Payroll run ${dayName(rand(2,15))} — ${workers} employees, total US$${(workers*rand(180,260)).toLocaleString()}.`,
     "Shipping Bill":          () => `Freight invoice from ${pick(["MSC","OOCL","YM","CMA"])} US$${rand(600,3800)} — customs cleared, awaiting payment.`,
@@ -123,7 +141,11 @@ function summaryFor(pa: string, pill: string, workers: number, lines: number, pr
     "Training schedule":      () => `WRAP refresher for ${rand(20,80)} operators scheduled ${dayName(rand(3,10))}.`,
     "Org chart updates":      () => `${rand(1,4)} promotions + ${rand(1,3)} transfers pending Org Chart sync.`,
     "Temp worker requests":   () => `Production Head requests ${rand(10,40)} temp workers for peak week ${dayName(rand(5,15))}.`,
-    "Speak Up":               () => `${rand(1,5)} anonymous grievances open — oldest ${rand(2,12)} days.`,
+    "Speak Up":               () => pick([
+      `${rand(3,5)} workers filed an anonymised grievance about Line ${line} supervisor last week — HR investigation report ready for your review.`,
+      `Complaint about canteen food quality — ${rand(6,15)} workers signed a joint Speak Up. HR proposes ${pick(["change caterer","subsidy review","tasting panel"])} — needs your call.`,
+      `Anonymous wage-dispute Speak Up — HR + Compliance believe it's a valid Art-104 claim; response due in ${rand(3,10)} days.`,
+    ]),
     "Open support tickets":   () => `${rand(3,15)} tickets open — top categories: ${pick(["AC","water","gate","lighting"])}.`,
     "Meeting room bookings":  () => `${rand(1,4)} booking clashes today for ${pick(["Room 1","Room 2","Board Room"])}.`,
     "Gate passes today":      () => `${rand(4,18)} pending gate passes — ${pick(["contractor visit","supplier delivery","staff outing"])}.`,
@@ -133,7 +155,11 @@ function summaryFor(pa: string, pill: string, workers: number, lines: number, pr
     "Water usage log":        () => `Today ${rand(80, 200)*Math.max(1,Math.floor(workers/100))} m³ — ${pick(["on trend","above trend","below trend"])}.`,
     "Energy consumption":     () => `Today ${rand(400, 900)*Math.max(1,Math.floor(workers/100))} kWh — grid ${rand(70,95)}%, solar ${rand(5,30)}%.`,
     "Compliance audits":      () => `${pick(["WRAP","BSCI","HIGG","SEDEX","GRS"])} audit prep ${rand(50,95)}% — ${rand(2,8)} items outstanding.`,
-    "Environmental alerts":   () => `${rand(1,4)} threshold breaches — ${pick(["chemical spill drill","effluent pH out","boiler emissions"])}.`,
+    "Environmental alerts":   () => pick([
+      `Effluent pH out of range at discharge point — retest scheduled ${dayName(rand(1,3))}. If second fail, MoE reporting kicks in; CSR asks for your call.`,
+      `Chemical spill drill missed for ${rand(2,4)} months — WRAP finding likely if buyer walks in. CSR + Admin ready to run, needs your green-light.`,
+      `Boiler emissions above limit ${rand(2,4)} times this month — CSR flagging for capex conversation with YTM.`,
+    ]),
   };
   return (map[pill] || (() => `${pill} — item raised ${rand(1,8)} days ago, awaiting ${pa} action.`))();
 }
