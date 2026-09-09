@@ -33,8 +33,10 @@ const BotVersion2 = ({
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
-  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
-  const [isHistoryPinned, setIsHistoryPinned] = useState(false);
+  // Sidebar starts OPEN + PINNED — never hides. + New Chat, Reset conversation
+  // and the font-size slider are always in reach.
+  const [isHistoryOpen, setIsHistoryOpen] = useState(true);
+  const [isHistoryPinned, setIsHistoryPinned] = useState(true);
   // Font-size preference for the chat bubbles (12–24px). Persists in localStorage.
   const [chatFontSize, setChatFontSize] = useState(() => {
     try {
