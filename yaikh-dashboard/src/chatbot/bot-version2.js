@@ -206,19 +206,22 @@ const BotVersion2 = ({
     }
   };
 
-  // Seed the very first bot message when the chat opens fresh — no static
-  // welcome screen, Yai speaks first in the chat itself.
+  // Seed the very first bot message when the chat opens fresh — Yai
+  // ALWAYS introduces itself as the opening line ("Hello Boss — I am Yai"),
+  // then the follow-up depends on where the boss is in the journey.
   useEffect(() => {
     if (messages.length > 0) return; // don't stomp an existing conversation
+    const intro = { from: "bot", text: `Hello Boss — I am Yai.` };
     if (onboardingStep === -2) {
-      // Brand-new visitor — Yai introduces itself and asks their name.
-      setMessages([{ from: "bot", text: `Hello Boss — I am Yai. And you?` }]);
+      // Brand-new visitor — ask their name in a second bot bubble.
+      setMessages([intro, { from: "bot", text: `And you?` }]);
     } else if (onboardingStep === -1 && visitorName && factoryConfig) {
-      // Returning visitor — warm come-back line, no re-onboarding.
-      setMessages([{ from: "bot", text: `Welcome back, ${visitorName} — your factory is loaded. Ask me anything.` }]);
+      // Returning visitor — greet by name, factory ready.
+      setMessages([intro, { from: "bot", text: `Welcome back, ${visitorName} — your factory is loaded. Ask me anything.` }]);
     } else if (onboardingStep >= 0 && onboardingStep <= 4 && visitorName) {
-      // Half-done onboarding (name was saved but factory wasn't materialised).
-      askNextOnboarding(onboardingStep, onboardingDraft, visitorName);
+      // Half-done onboarding (name saved but factory not materialised).
+      setMessages([intro]);
+      setTimeout(() => askNextOnboarding(onboardingStep, onboardingDraft, visitorName), 400);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
