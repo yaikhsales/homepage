@@ -855,12 +855,26 @@ const BotVersion2 = ({
       // of answering, don't force the onboarding forward — pitch capabilities
       // naturally, then re-ask the current step's question.
       const rawLower = raw.toLowerCase();
-      const capabilityAsk = /\b(what.*(can|do).*you|what.*you.*(got|can|do|offer)|capabilit|abilit|features?|show.*(me|us)|impress|explain|how.*(work|help)|what.*else|what.*for)\b/.test(rawLower);
+      const capabilityAsk = /\b(what.*(can|do).*you|what.*you.*(got|can|do|offer)|capabilit|abilit|features?|show.*(me|us)|impress|explain|how.*(work|help)|what.*else|what.*for|tell me about|who are you|what are you|about yai|about yourself|introduce)\b/.test(rawLower);
       const tellMeMore = /\b(tell me more|fuller version|full version|full pitch|go deeper|long version)\b/i.test(rawLower);
+      // At mission check (-1), a plain "yes / sure / please / go ahead" IS a
+      // request to hear the pitch — that's literally what Yai just asked.
+      const missionYes = onboardingStep === -1 &&
+        /^(y|yes|yeah|yep|yup|sure|correct|right|of course|please|go ahead|okay|ok|fine)\b/i.test(raw.trim());
+      const missionNo = onboardingStep === -1 &&
+        /^(n|no|nope|not really|not exactly)\b/i.test(raw.trim());
 
       // Default pitch: 5 short bubbles, Bernie style. The 12-paragraph wall
       // lives behind an explicit "tell me more" only.
-      if (capabilityAsk && !tellMeMore) {
+      if (missionNo) {
+        setTimeout(() => setMessages(prev => [...prev, { from: "bot", text:
+          `Fair — what would be more useful then? Something specific on your mind, or should I just skip to real questions?`,
+        }]), 400);
+        setOnboardingStep(0); // move past mission check either way
+        return;
+      }
+
+      if ((capabilityAsk || missionYes) && !tellMeMore) {
         const bubbles = [
           `Simple. I run your factory from your phone. 13 department agents inside — quality, cost, production, accounting, HR, all of them. I sit on top and route.`,
           `Made in Cambodia, by Texlink. On Claude. On Google Cloud. Built by people who spent 40 years on the factory floor.`,
