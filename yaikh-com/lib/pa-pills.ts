@@ -9,7 +9,7 @@
 export const PILLS_BY_PA: Record<string, string[]> = {
   shipping:   ["Container plan", "Customs clearance", "Delivery schedule", "Inventory levels", "Material plan"],
   mrp:        ["Material plan", "BOM review", "Stock alerts", "Supplier orders", "Reorder points"],
-  qa:         ["Recent defect inspections", "Customer complaints", "Open call-outs", "Third-party audits", "Quality reports"],
+  qa:         ["Material quality reports", "Fabric relaxation status", "Marker consumption preview", "On-site tests (4-pt / AQL)", "Customer complaints", "Third-party audits", "Call Out — silence"],
   production: ["Today's production plan", "WIP by line", "Cutting throughput", "Finishing throughput", "Production status"],
   ce:         ["Standard time updates", "Productivity by line", "Machine allocation", "Skill inventory", "Cost center summary"],
   ytm:        ["Machine downtime", "Repair queue", "Maintenance schedule", "Late maintenance alerts", "Spare parts stock"],

@@ -114,7 +114,7 @@ const PREDEFINED_BOTS = [
     {
         id: 'mrp-bot',
         name: 'MRP PA',
-        description: 'Material requirements planning, BOM, inventory, supplier orders',
+        description: 'Material requirements planning, BOM, inventory, supplier orders · owns the material-to-production hand-off: fabric rolls, accessories, sewing & packaging material to each production section, relaxation start-time handed to QA · customs/GDT verification',
         icon: Package,
         bgGradient: 'from-red-500 to-orange-500',
         lightBg: 'bg-gradient-to-br from-red-50 via-orange-50 to-amber-50',
@@ -132,7 +132,7 @@ const PREDEFINED_BOTS = [
     {
         id: 'qa-bot',
         name: 'QA PA',
-        description: 'Quality assurance, defect inspection, third-party audits',
+        description: 'End-to-end quality: supplier material reports (fabric, accessories, packaging) · fabric relaxation via QR/RFID/CCTV Ai-vision · marker consumption preview before cutting · 4-point / AQL 2.5 on-site tests · roll inventory linked to MRP · defects, complaints, audits, Call Out',
         icon: ClipboardCheck,
         bgGradient: 'from-violet-500 to-purple-500',
         lightBg: 'bg-gradient-to-br from-violet-50 via-purple-50 to-indigo-50',
@@ -140,11 +140,13 @@ const PREDEFINED_BOTS = [
         textColor: 'text-violet-800',
         borderColor: 'border-violet-200',
         suggestedActions: [
-            { text: 'Recent defect inspections', highlight: true },
+            { text: 'Material quality reports', highlight: true },
+            { text: 'Fabric relaxation status' },
+            { text: 'Marker consumption preview' },
+            { text: 'On-site tests (4-pt / AQL)' },
             { text: 'Customer complaints' },
-            { text: 'Open call-outs' },
             { text: 'Third-party audits' },
-            { text: 'Quality reports' },
+            { text: 'Call Out — silence' },
         ],
     },
     {
@@ -222,7 +224,7 @@ const PREDEFINED_BOTS = [
     {
         id: 'ypi-bot',
         name: 'YPI PA',
-        description: 'Yai Production Instructions — trilingual tech-detail platform (Khmer/English/Chinese). Tech-packs, measurement, construction, trim cards, packing method, sample & production-meeting notes, all in one place, on shop-floor iPads and TVs.',
+        description: 'Yai Production Instructions — trilingual tech-detail platform (Khmer/English/Chinese). Tech-packs, measurement, construction, trim cards, packing method, sample & production-meeting notes, on shop-floor iPads and TVs. Cutting teams brief from it before every new style — 2–3 months of sample/pilot history guides relaxation, spread and marker rules.',
         icon: TrendingUp,
         bgGradient: 'from-lime-500 to-green-500',
         lightBg: 'bg-gradient-to-br from-lime-50 via-green-50 to-emerald-50',
