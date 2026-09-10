@@ -124,14 +124,20 @@ const BotVersion2 = ({
       else if (p.includes("trouser") || p.includes("pant")) opener = `Trousers — cutting accuracy and fabric consumption are where the money's won or lost. A well-run trouser line is a beautiful thing.`;
       else if (p.includes("mix"))     opener = `A mix — that's the harder game. Every changeover eats time, but you never have all your eggs in one buyer's basket. Smart.`;
       else                            opener = `${p ? `${p.charAt(0).toUpperCase() + p.slice(1)}` : "Got it"} — noted.`;
-      q = `${opener} Do your buyers ask for any of the usual certifications? WRAP, BSCI, HIGG, SEDEX, GRS — I'll take whatever you've got, or just say "none" if you're not there yet.`;
+      q = `${opener} On the floor — where does your team lose the most sleep? Quality drift, machine downtime, cost and efficiency (IE / standard time), tech-pack chaos, inventory surprises, or merchandising bottleneck? Any one is fine — or say "all of them" if it's the whole set.`;
     } else if (step === 4) {
-      const certs = draft.certifications || [];
-      let opener;
-      if (certs.length >= 3)       opener = `${certs.join(", ")} — you've done the work. That's a real buyer magnet, especially with any brand doing an audit trail these days.`;
-      else if (certs.length === 2) opener = `${certs.join(" and ")} — good foundation. Most Tier-1 buyers will already talk to you with those two.`;
-      else if (certs.length === 1) opener = `${certs[0]} in your pocket already — that's the one most buyers ask about first.`;
-      else                          opener = `No formal certs yet — that's honestly fine. Most factories add them as buyers push, not before. Something to think about, not stress about.`;
+      const pains = draft.painPoints || [];
+      const PAIN_OPENER = {
+        "quality":         `Quality drift — that's the one buyers see first. My QA PA watches upstream material, fabric relaxation, marker consumption, 4-point and AQL, complaints and Call-Out silence. Nothing sits.`,
+        "maintenance":     `Machine downtime — quietest killer on the floor. My YTM PA tracks every machine, repair queue, spare-parts stock, and predicts failures from vibration + heat trends before the line stops.`,
+        "cost-efficiency": `Cost and efficiency — the IE side. My CE PA owns standard time, productivity by line, machine allocation, skill inventory and cost-center rollup. Line-by-line, hour-by-hour.`,
+        "tech-details":    `Tech-pack chaos — the Cambodia special. My YPI PA is trilingual (Khmer / English / Chinese), one record per style, feeding shop-floor iPads and TVs so no one guesses.`,
+        "inventory":       `Inventory surprises — my MRP PA owns BOM, stock, reorder points, supplier orders, and the customs/GDT side for imports. No surprise short at cutting.`,
+        "merchandising":   `Merchandising bottleneck — my YPI PA runs the full pre-production spine: buyer sample approvals, sourcing, purchase orders, invoices, and handoff to 4DP planning when material lands.`,
+        "all":             `All of it — that's why I exist. Every one of my 13 PAs watches its own patch and escalates only what needs your call.`,
+        "mixed":           `Noted — mixed picture. I'll shape the demo across a couple of PAs so you can see the pattern.`,
+      };
+      const opener = PAIN_OPENER[pains[0]] || PAIN_OPENER["mixed"];
       q = `${opener} Last thing — and I won't ask your buyer names, order numbers, or volumes; that's your business, not mine to pull. Instead let me pick a public brand as an example: **GAP** — US mass-market, WRAP + Higg required, tight 6-week lead. **Is that close to your world, or would sports (Adidas / Nike), luxury (Armani / Gucci), or workwear (Carhartt / Patagonia) be a closer fit?** Yes/no or one word is fine.`;
     }
 
@@ -978,7 +984,7 @@ const BotVersion2 = ({
           "0":  `Back to shaping the demo — roughly how many people on your floor?`,
           "1":  `And how many lines running most days?`,
           "2":  `What do you mostly cut — polos, jackets, denim, something else?`,
-          "3":  `Any certifications you carry — WRAP, BSCI, Higg, GRS? "none" is fine.`,
+          "3":  `Back to it — where does your team lose the most sleep? Quality, machine downtime, cost / efficiency, tech-packs, inventory, or merchandising?`,
           "4":  `Main buyers, if you don't mind sharing? "skip" is fine.`,
         };
         const reAsk = reAskByStep[String(onboardingStep)];
@@ -1062,8 +1068,17 @@ const BotVersion2 = ({
       } else if (onboardingStep === 2) {
         draft.product = raw.slice(0, 60) || "polos";
       } else if (onboardingStep === 3) {
-        const list = /^none$/i.test(raw) ? [] : raw.split(/[,;]/).map(s => s.trim()).filter(Boolean).slice(0, 20);
-        draft.certifications = list;
+        // Production pain-point classification — map free-text to a PA lane.
+        const p = raw.toLowerCase();
+        const pain = [];
+        if (/\b(quality|defect|drift|complaint|reject|aql|4[- ]?pt|inspection)\b/.test(p)) pain.push("quality");
+        if (/\b(machine|maintenance|breakdown|downtime|repair|compressor|needle|motor)\b/.test(p)) pain.push("maintenance");
+        if (/\b(cost|efficien|productiv|ie\b|standard.?time|balanc|smv|allowance)\b/.test(p)) pain.push("cost-efficiency");
+        if (/\b(tech.?pack|spec|technical|measurement|trim|sample|khmer|chinese|translation)\b/.test(p)) pain.push("tech-details");
+        if (/\b(inventory|stock|material|warehouse|bom|shortage|surplus|reorder)\b/.test(p)) pain.push("inventory");
+        if (/\b(merchand|order|buyer.?comm|approval|handover|prepod|pre.?production)\b/.test(p)) pain.push("merchandising");
+        if (/\b(all|everything|whole|entire)\b/.test(p) && !pain.length) pain.push("all");
+        draft.painPoints = pain.length ? pain : ["mixed"];
       } else if (onboardingStep === 4) {
         // Public-brand knowledge base — if boss names a real brand, prove
         // Yai knows it before we materialise. Keeps the demo credible.
