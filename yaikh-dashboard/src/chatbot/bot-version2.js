@@ -225,9 +225,9 @@ const BotVersion2 = ({
     }
   };
 
-  // Wipe any leftover demo state on mount + seed the "Hello Boss — I am Yai"
-  // opener. Every fresh open is a clean slate so a new client isn't greeted
-  // as "Alan" or "Joel" from a previous session.
+  // Wipe any leftover demo state on mount + seed an opener that isn't
+  // robotic. Two bubbles: (1) who Yai is with real credibility markers,
+  // (2) the industry moment the boss is walking into + ask for their name.
   useEffect(() => {
     try {
       localStorage.removeItem("yai_visitor_name");
@@ -235,8 +235,12 @@ const BotVersion2 = ({
     } catch { /* private mode */ }
     if (messages.length > 0) return;
     setMessages([
-      { from: "bot", text: `Hello Boss — I am Yai.` },
-      { from: "bot", text: `And you?` },
+      { from: "bot", text:
+        `Hello Boss — I am Yai. The world's first Ai-Native Manufacturing Intelligence Platform for garments, footwear, bags and softgoods. Built in Cambodia by Texlink Technologies, running on Claude and Google Cloud, with 40 years of factory-floor experience behind the code.`
+      },
+      { from: "bot", text:
+        `Honestly, you've walked in at a tipping point. EU Digital Product Passport lands 2027 — textile traceability becomes mandatory. Brands like Adidas, H&M, Uniqlo are consolidating orders to fewer, smarter suppliers. Cambodia's minimum wage keeps climbing, Vietnam and Bangladesh are close on your heels, and post-COVID container ETAs slip weekly. Factories that wire AI in now have two years of trained data when it becomes the industry baseline. Factories that wait start from zero.\n\nDon't be Nokia — don't be the last factory on paper. Anyway, before we go further: what should I call you?`
+      },
     ]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -1351,16 +1355,22 @@ ANSWER RULES
   };
 
   const handleNewChat = () => {
-    // Build the intro pair up-front so the new chat is never blank.
-    const intro = { from: "bot", text: `Hello Boss — I am Yai.` };
+    // Build the intro pair up-front — never blank, never bot-shaped.
+    const intro = { from: "bot", text:
+      `Hello Boss — I am Yai. The world's first Ai-Native Manufacturing Intelligence Platform for garments, footwear, bags and softgoods. Built in Cambodia by Texlink Technologies on Claude and Google Cloud, with 40 years of factory-floor experience behind the code.`
+    };
     let followUp;
     if (visitorName && factoryConfig) {
-      followUp = { from: "bot", text: `New chat, ${visitorName}. What's on your mind?` };
+      followUp = { from: "bot", text: `Fresh chat, ${visitorName}. Same factory loaded. What's on your mind — a specific PA, the day's fires, or a strategy question?` };
     } else if (visitorName) {
-      followUp = { from: "bot", text: `Nice to see you, ${visitorName}. Let's finish setting up your factory — how many workers?` };
+      followUp = { from: "bot", text:
+        `You've walked in at a tipping point, ${visitorName} — EU DPP arrives 2027, brands are consolidating orders to smarter suppliers, wages climb, container ETAs slip weekly. Factories that install AI now have two years of trained data when the industry hits baseline. Let's finish setting up your factory — how many workers on your floor?`
+      };
       setOnboardingStep(0);
     } else {
-      followUp = { from: "bot", text: `And you?` };
+      followUp = { from: "bot", text:
+        `Honestly, you've walked in at a tipping point. EU Digital Product Passport lands 2027 — textile traceability becomes mandatory. Brands like Adidas, H&M, Uniqlo are consolidating orders to fewer, smarter suppliers. Cambodia's minimum wage keeps climbing. Factories that wire AI in now have two years of trained data when it becomes the industry baseline; the ones that wait start from zero.\n\nDon't be Nokia. Anyway — what should I call you?`
+      };
       setOnboardingStep(-2);
     }
     const seeded = [intro, followUp];
