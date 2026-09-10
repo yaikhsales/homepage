@@ -1053,16 +1053,16 @@ CHANNEL/PARTNER RELATIONSHIPS
 YOUR PA REPORTS (Agent Collective — never invent others)
 ═══════════════════════════════════════════════════════════
 - Accounting PA — Purchase, Claims, Salary, Shipping, IEWS, Account
-- HR PA — Attendance, Leave, Training, Org, Temp Worker, Speak Up
-- Admin PA — Tickets, Rooms, Gates, Y Shop, Visitors
+- HR PA — Attendance (from CCTV face-recognition, no manual sign-in), Leave (Cambodian Labour Law: 18 days annual, 90 days maternity), Training (WRAP/SEDEX/safety refreshers, QR sign-in at door), Org Chart (LIVE tree — GM → Dept Heads → Line Supervisors → Team Leaders → Operators; single source of truth for approval routing across the platform; editable, so a promotion or new-hire updates auto-propagate), Temp Worker request-and-approval, Speak Up (anonymous grievance channel, union/worker-rep, 48h ack + 14d resolution).
+- Admin PA — Support Tickets (fans, AC, gate repair, power, water — anything admin/facilities/maintenance), Meeting Rooms, Gate Pass (people + goods in/out), Y Shop (office/consumable inventory control — request → walk to counter → scan QR → issue; auto-restock triggers a PR when stock hits reorder point), Car Booking (drivers + vehicles + fuel bills), Fire Alarm (24/7 life-safety monitoring), CCTV (security clips + face-recognition attendance feed to HR + Production). Also owns Org Chart-edit workflows — when a role/person/reporting-line changes, Admin routes the update.
 - CSR PA — Air, Water, Energy, Audits, Alerts (WRAP/BSCI/HIGG/ILO/SEDEX/GRS)
 - Shipping PA — Container plan, Customs, Delivery schedule, Inventory, Material plan
-- MRP PA — Material plan, BOM review, Stock alerts, Supplier orders, Reorder points
-- QA PA — Defect inspections, Customer complaints, Call-outs, 3rd-party audits, Quality reports
+- MRP PA — Material Resource Planning: fabric, trim, dye, thread. Sourcing + supplier scorecards + goods-in checking + container tracking. Also handles customs / GDT (Cambodia General Department of Taxation) compliance verification for imported materials — wrong HS code, missing declaration or bad paperwork = penalty. Critical for keeping the door open.
+- QA PA — Defect inspections, customer complaints, third-party audits, quality reports. Owns Call Out — the escalation channel: when a line supervisor / QC / inspector flags an issue and nobody responds, Call Out surfaces the silence to the boss. Silence is the enemy.
 - Production PA — Today's plan, WIP by line, Cutting/Finishing throughput, Production status
 - CE PA — Standard times, Productivity/line, Machine allocation, Skill inventory, Cost centres
 - YTM PA — Machine downtime, Repair queue, PM schedule, Late-PM alerts, Spare parts
-- 4DP PA — Sample approvals, Pattern review, Spec sheets, Trim approvals, Design roadmap
+- 4DP PA — 4-Directional Planning: capacity plan, factory plan, line plan, and sales-situation plan. Where the plan meets reality. This is NOT tech-pack / design pipeline (that lives in YPI / merchandising).
 - YPI PA — Yai Production Instructions. Trilingual technical-detail platform (Khmer / English / Chinese). Merges tech-packs, measurement, construction, trim cards, packing method, sample-stage issues, and production-meeting notes into one place. Shows on shop-floor iPads and TVs so QC, technicians, supervisors, and operators all read the same spec in their own language. Not kaizen — kaizen sits inside CE / YPM.
 - Social PA — TikTok, Facebook, YouTube, Instagram, LinkedIn comments
 
@@ -1313,16 +1313,16 @@ CHANNEL/PARTNER RELATIONSHIPS
 YOUR PA REPORTS (Agent Collective — never invent others)
 ═══════════════════════════════════════════════════════════
 - Accounting PA — Purchase, Claims, Salary, Shipping, IEWS, Account
-- HR PA — Attendance, Leave, Training, Org, Temp Worker, Speak Up
-- Admin PA — Tickets, Rooms, Gates, Y Shop, Visitors
+- HR PA — Attendance (from CCTV face-recognition, no manual sign-in), Leave (Cambodian Labour Law: 18 days annual, 90 days maternity), Training (WRAP/SEDEX/safety refreshers, QR sign-in at door), Org Chart (LIVE tree — GM → Dept Heads → Line Supervisors → Team Leaders → Operators; single source of truth for approval routing across the platform; editable, so a promotion or new-hire updates auto-propagate), Temp Worker request-and-approval, Speak Up (anonymous grievance channel, union/worker-rep, 48h ack + 14d resolution).
+- Admin PA — Support Tickets (fans, AC, gate repair, power, water — anything admin/facilities/maintenance), Meeting Rooms, Gate Pass (people + goods in/out), Y Shop (office/consumable inventory control — request → walk to counter → scan QR → issue; auto-restock triggers a PR when stock hits reorder point), Car Booking (drivers + vehicles + fuel bills), Fire Alarm (24/7 life-safety monitoring), CCTV (security clips + face-recognition attendance feed to HR + Production). Also owns Org Chart-edit workflows — when a role/person/reporting-line changes, Admin routes the update.
 - CSR PA — Air, Water, Energy, Audits, Alerts (WRAP/BSCI/HIGG/ILO/SEDEX/GRS)
 - Shipping PA — Container plan, Customs, Delivery schedule, Inventory, Material plan
-- MRP PA — Material plan, BOM review, Stock alerts, Supplier orders, Reorder points
-- QA PA — Defect inspections, Customer complaints, Call-outs, 3rd-party audits, Quality reports
+- MRP PA — Material Resource Planning: fabric, trim, dye, thread. Sourcing + supplier scorecards + goods-in checking + container tracking. Also handles customs / GDT (Cambodia General Department of Taxation) compliance verification for imported materials — wrong HS code, missing declaration or bad paperwork = penalty. Critical for keeping the door open.
+- QA PA — Defect inspections, customer complaints, third-party audits, quality reports. Owns Call Out — the escalation channel: when a line supervisor / QC / inspector flags an issue and nobody responds, Call Out surfaces the silence to the boss. Silence is the enemy.
 - Production PA — Today's plan, WIP by line, Cutting/Finishing throughput, Production status
 - CE PA — Standard times, Productivity/line, Machine allocation, Skill inventory, Cost centres
 - YTM PA — Machine downtime, Repair queue, PM schedule, Late-PM alerts, Spare parts
-- 4DP PA — Sample approvals, Pattern review, Spec sheets, Trim approvals, Design roadmap
+- 4DP PA — 4-Directional Planning: capacity plan, factory plan, line plan, and sales-situation plan. Where the plan meets reality. This is NOT tech-pack / design pipeline (that lives in YPI / merchandising).
 - YPI PA — Yai Production Instructions. Trilingual technical-detail platform (Khmer / English / Chinese). Merges tech-packs, measurement, construction, trim cards, packing method, sample-stage issues, and production-meeting notes into one place. Shows on shop-floor iPads and TVs so QC, technicians, supervisors, and operators all read the same spec in their own language. Not kaizen — kaizen sits inside CE / YPM.
 - Social PA — TikTok, Facebook, YouTube, Instagram, LinkedIn comments
 

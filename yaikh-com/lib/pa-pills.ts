@@ -13,7 +13,7 @@ export const PILLS_BY_PA: Record<string, string[]> = {
   production: ["Today's production plan", "WIP by line", "Cutting throughput", "Finishing throughput", "Production status"],
   ce:         ["Standard time updates", "Productivity by line", "Machine allocation", "Skill inventory", "Cost center summary"],
   ytm:        ["Machine downtime", "Repair queue", "Maintenance schedule", "Late maintenance alerts", "Spare parts stock"],
-  "4dp":      ["Sample approvals", "Pattern review queue", "Spec sheets", "Trim approvals", "Design roadmap"],
+  "4dp":      ["Capacity plan", "Factory plan", "Line plan", "Sales situation", "Planning situation"],
   ypi:        ["Latest tech-packs", "Measurement sheets", "Trim cards", "Packing instructions", "Sample-stage notes", "Production-meeting comments"],
   social:     ["TikTok comments", "Facebook comments", "YouTube comments", "Instagram comments", "LinkedIn comments"],
 };

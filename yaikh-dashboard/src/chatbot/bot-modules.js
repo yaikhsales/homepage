@@ -204,7 +204,7 @@ const PREDEFINED_BOTS = [
     {
         id: '4dp-bot',
         name: '4DP PA',
-        description: 'Design / pattern / sample / spec — the 4DP design pipeline',
+        description: '4-Directional Planning: capacity plan, factory plan, line plan, sales-situation plan. Where the plan meets reality — not design/tech-pack.',
         icon: Lightbulb,
         bgGradient: 'from-amber-500 to-yellow-500',
         lightBg: 'bg-gradient-to-br from-amber-50 via-yellow-50 to-lime-50',
@@ -212,11 +212,11 @@ const PREDEFINED_BOTS = [
         textColor: 'text-amber-800',
         borderColor: 'border-amber-200',
         suggestedActions: [
-            { text: 'Sample approvals', highlight: true },
-            { text: 'Pattern review queue' },
-            { text: 'Spec sheets' },
-            { text: 'Trim approvals' },
-            { text: 'Design roadmap' },
+            { text: 'Capacity plan', highlight: true },
+            { text: 'Factory plan' },
+            { text: 'Line plan' },
+            { text: 'Sales situation' },
+            { text: 'Planning situation' },
         ],
     },
     {
