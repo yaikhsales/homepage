@@ -224,7 +224,7 @@ const PREDEFINED_BOTS = [
     {
         id: 'ypi-bot',
         name: 'YPI PA',
-        description: 'Yai Production Instructions — trilingual tech-detail platform (Khmer/English/Chinese). Tech-packs, measurement, construction, trim cards, packing method, sample & production-meeting notes, on shop-floor iPads and TVs. Cutting teams brief from it before every new style — 2–3 months of sample/pilot history guides relaxation, spread and marker rules.',
+        description: 'The pre-production spine — merchandising & buyer sample approvals, sourcing (mills, trims, labels), commercial POs/invoices/ship-out docs, inbound material logistics with Shipping, trilingual tech-packs (KH/EN/CN) on floor iPads/TVs, cutting-team briefing · hands to 4DP when material arrives · feeds QMS inspection specs',
         icon: TrendingUp,
         bgGradient: 'from-lime-500 to-green-500',
         lightBg: 'bg-gradient-to-br from-lime-50 via-green-50 to-emerald-50',
@@ -232,12 +232,12 @@ const PREDEFINED_BOTS = [
         textColor: 'text-lime-800',
         borderColor: 'border-lime-200',
         suggestedActions: [
-            { text: 'Latest tech-packs', highlight: true },
-            { text: 'Measurement sheets' },
-            { text: 'Trim cards' },
-            { text: 'Packing instructions' },
-            { text: 'Sample-stage notes' },
-            { text: 'Production-meeting comments' },
+            { text: 'Sample & buyer approval status', highlight: true },
+            { text: 'Material sourcing coordination' },
+            { text: 'Purchase orders & invoices' },
+            { text: 'Latest tech-packs (3-lang)' },
+            { text: 'Cutting-team briefing' },
+            { text: 'Handoff to 4DP planning' },
         ],
     },
     {
