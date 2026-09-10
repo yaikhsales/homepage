@@ -17,6 +17,25 @@ import GMChat from "./chatbot/GMChat";
 import GeneralAIAgent from "./general-ag";
 import KhmerNewYearSplash from "./components/KhmerNewYearSplash";
 
+// Claude attribution badge — Anthropic brand orange sparkle + "Claude" label.
+// Shown next to every Yai mode name in the nav to make the runtime visible.
+const ClaudeBadge = ({ size = "sm" }) => (
+  <span
+    className={`flex items-center gap-1 ${size === "sm" ? "ml-1" : "ml-2"} px-2 py-0.5 rounded-full bg-white/5 border border-white/10`}
+    title="Powered by Claude · Anthropic"
+  >
+    <svg viewBox="0 0 24 24" className={size === "sm" ? "w-3.5 h-3.5" : "w-4 h-4"} xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path
+        fill="#D97757"
+        d="M12 1.5c.3 2.7.9 4.7 2 6s2.9 2.2 5.5 2.5c-2.6.3-4.4 1.2-5.5 2.5s-1.7 3.3-2 6c-.3-2.7-.9-4.7-2-6s-2.9-2.2-5.5-2.5c2.6-.3 4.4-1.2 5.5-2.5s1.7-3.3 2-6z"
+      />
+    </svg>
+    <span className={`text-white/70 font-medium ${size === "sm" ? "text-[10px]" : "text-xs"} whitespace-nowrap`}>
+      Claude
+    </span>
+  </span>
+);
+
 // A new layout component to hold the shared UI (Header, Background)
 const AppLayout = () => {
   const location = useLocation();
@@ -1312,6 +1331,7 @@ const AppLayout = () => {
               <span className="text-orange-400 font-bold text-xl whitespace-nowrap">
                 My Task Agent
               </span>
+              <ClaudeBadge />
             </div>
 
             {/* Blue Agent Collective — switch */}
@@ -1336,6 +1356,7 @@ const AppLayout = () => {
               <span className="text-blue-400 font-bold text-xl whitespace-nowrap">
                 Agent Collective
               </span>
+              <ClaudeBadge />
             </button>
 
             {/* Green Big Brain — switch */}
@@ -1358,6 +1379,7 @@ const AppLayout = () => {
               <span className="text-emerald-400 font-bold text-xl whitespace-nowrap">
                 Big Brain
               </span>
+              <ClaudeBadge />
             </button>
           </div>
         </div>

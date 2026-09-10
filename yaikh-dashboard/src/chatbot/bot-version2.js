@@ -23,6 +23,22 @@ import { Volume2, VolumeX } from "lucide-react";
 
 // Visitor name is captured on first open and persisted; no default value.
 
+// Claude attribution badge — shown next to each Yai mode name in the nav.
+const ClaudeBadge = () => (
+  <span
+    className="flex items-center gap-1 ml-1 px-1.5 py-0.5 rounded-full bg-white/5 border border-white/10"
+    title="Powered by Claude · Anthropic"
+  >
+    <svg viewBox="0 0 24 24" className="w-3 h-3" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path
+        fill="#D97757"
+        d="M12 1.5c.3 2.7.9 4.7 2 6s2.9 2.2 5.5 2.5c-2.6.3-4.4 1.2-5.5 2.5s-1.7 3.3-2 6c-.3-2.7-.9-4.7-2-6s-2.9-2.2-5.5-2.5c2.6-.3 4.4-1.2 5.5-2.5s1.7-3.3 2-6z"
+      />
+    </svg>
+    <span className="text-white/70 font-medium text-[10px] whitespace-nowrap">Claude</span>
+  </span>
+);
+
 const BotVersion2 = ({
   onClose,
   moduleContext,
@@ -2043,6 +2059,7 @@ ANSWER RULES
             <img src="/assets/modules-image/top-bot.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
           </div>
           <span className="text-orange-400 font-bold text-base whitespace-nowrap">My Task Agent</span>
+          <ClaudeBadge />
         </button>
 
         {/* Blue Agent Collective */}
@@ -2062,6 +2079,7 @@ ANSWER RULES
               <img src="assets/modules-image/yai1.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
             </div>
             <span className="text-blue-400 font-bold text-base whitespace-nowrap">Agent Collective</span>
+            <ClaudeBadge />
           </button>
         )}
 
@@ -2077,6 +2095,7 @@ ANSWER RULES
             <img src="assets/modules-image/yai2.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
           </div>
           <span className="text-emerald-400 font-bold text-base whitespace-nowrap">Big Brain</span>
+          <ClaudeBadge />
         </div>
       </div>
 
