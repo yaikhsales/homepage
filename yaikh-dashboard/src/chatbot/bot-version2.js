@@ -71,29 +71,54 @@ const BotVersion2 = ({
   // next/more request pulls a fresh batch.
   const [shownMatterIds, setShownMatterIds] = useState([]);
 
-  // Ask the next onboarding question — warm + reactive, references the last answer.
+  // Ask the next onboarding question — Claude-flavour: warm, curious, reacts
+  // to what the boss said, and asks in a way that invites conversation.
   const askNextOnboarding = (step, draft, boss) => {
     let q = null;
+    const name = boss || "Boss";
+
     if (step === -2) {
       q = `Hello Boss — I am Yai. And you?`;
     } else if (step === 0) {
-      q = `Nice to meet you, ${boss || "Boss"}. Tell me a little about your factory — how many people on the floor?`;
+      // React to name + state the mission (why we're both here) + then the first factory question.
+      q = `Ah, ${name} — good to actually put a name to the boss. I take it you're here to explore what Yai can do for your business — feel out the 13 PAs, see how they'd sit in your day, decide if there's real value in it for you. Am I right?\n\nEither way, quickest way for me to give you something meaningful is to shape the demo to YOUR world — so tell me first, roughly how many people show up on your floor on a normal day?`;
     } else if (step === 1) {
       const w = draft.workers || 0;
-      const flavour = w >= 2000 ? `That's a proper operation` : w >= 800 ? `Solid size` : w >= 300 ? `A tidy crew` : `A small, sharp team`;
-      q = `${flavour} — ${w.toLocaleString()} workers. How many production lines are running today?`;
+      let opener;
+      if (w >= 2500)      opener = `${w.toLocaleString()} — that's a proper machine, ${name}. Steering that many people is a job in itself.`;
+      else if (w >= 1200) opener = `${w.toLocaleString()} — a real operation. Big enough that a good week and a bad week look very different in the numbers.`;
+      else if (w >= 600)  opener = `${w.toLocaleString()} — solid middle-weight factory. That's the sweet spot for actually knowing your people.`;
+      else if (w >= 200)  opener = `${w.toLocaleString()} — small enough to run tight, big enough to feel it when someone's off. Nice size to work with.`;
+      else                opener = `${w.toLocaleString()} — a lean crew. Every hand matters at that size.`;
+      q = `${opener} Out of curiosity, how many production lines are moving all of that? Two, three, more?`;
     } else if (step === 2) {
       const l = draft.lines || 0;
       const perLine = draft.workers && l ? Math.round(draft.workers / l) : 0;
-      const flavour = perLine ? ` (about ${perLine} per line)` : "";
-      q = `${l} line${l === 1 ? "" : "s"}${flavour}. What are you making — polos, jackets, trousers, or a mix?`;
+      let opener;
+      if (l >= 5)          opener = `${l} lines — that's a lot of parallel motion to keep balanced.`;
+      else if (l >= 3)     opener = `${l} lines running${perLine ? `, roughly ${perLine} per line` : ""} — that's a healthy shape.`;
+      else if (l === 2)    opener = `Two lines${perLine ? ` at ${perLine} each` : ""} — tight setup, easier to move people between them when a bottleneck shows up.`;
+      else                 opener = `One line${perLine ? ` with ${perLine} people` : ""} — everyone in the same rhythm, that's a whole different world.`;
+      q = `${opener} So what's the bread-and-butter product coming off those lines? Polos, jackets, trousers, or more of a mix?`;
     } else if (step === 3) {
-      q = `${draft.product ? `${draft.product.charAt(0).toUpperCase() + draft.product.slice(1)} — good to know.` : "Got it."} Any certifications your buyers care about? WRAP, BSCI, HIGG, SEDEX, GRS — list what you have, or say "none".`;
+      const p = (draft.product || "").toLowerCase();
+      let opener;
+      if (p.includes("polo"))         opener = `Polos — the classic. Long unbroken flows, small margins per piece, but volume forgives a lot. Buyers love the consistency.`;
+      else if (p.includes("jacket"))  opener = `Jackets — trim-heavy, high-value, and unforgiving on the details. Your MRP and 4DP have to be married for that to work.`;
+      else if (p.includes("trouser") || p.includes("pant")) opener = `Trousers — cutting accuracy and fabric consumption are where the money's won or lost. A well-run trouser line is a beautiful thing.`;
+      else if (p.includes("mix"))     opener = `A mix — that's the harder game. Every changeover eats time, but you never have all your eggs in one buyer's basket. Smart.`;
+      else                            opener = `${p ? `${p.charAt(0).toUpperCase() + p.slice(1)}` : "Got it"} — noted.`;
+      q = `${opener} Do your buyers ask for any of the usual certifications? WRAP, BSCI, HIGG, SEDEX, GRS — I'll take whatever you've got, or just say "none" if you're not there yet.`;
     } else if (step === 4) {
       const certs = draft.certifications || [];
-      const flavour = certs.length ? `${certs.join(", ")} — nice, that opens a lot of buyer doors.` : `No worries, most factories add those over time.`;
-      q = `${flavour} Last thing — who are your main buyers? Comma-separated names, or say "skip" if you'd rather not.`;
+      let opener;
+      if (certs.length >= 3)       opener = `${certs.join(", ")} — you've done the work. That's a real buyer magnet, especially with any brand doing an audit trail these days.`;
+      else if (certs.length === 2) opener = `${certs.join(" and ")} — good foundation. Most Tier-1 buyers will already talk to you with those two.`;
+      else if (certs.length === 1) opener = `${certs[0]} in your pocket already — that's the one most buyers ask about first.`;
+      else                          opener = `No formal certs yet — that's honestly fine. Most factories add them as buyers push, not before. Something to think about, not stress about.`;
+      q = `${opener} Last thing before I introduce the team — who are you shipping to? Give me the names of your main buyers if you're happy to share, or just say "skip" and I'll leave that part alone.`;
     }
+
     if (q) setMessages(prev => [...prev, { from: "bot", text: q }]);
   };
 
