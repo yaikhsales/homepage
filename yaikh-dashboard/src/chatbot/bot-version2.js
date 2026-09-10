@@ -825,9 +825,10 @@ const BotVersion2 = ({
               `• **Layer 3 · Full Ai** — strategic management. Human + AI in sync. Results proven enough that the boss puts up capital and clones the operation into new territories — Bangladesh, Indonesia, India, Uzbekistan, Mexico.\n\n` +
               `**The ladder is $120 → sovereign AI, over ~1 year:** Cloud Starter ($120/yr for 5 core people) → Cloud Growth ($750/yr) → Cloud Enterprise ($1,200/yr) → your own AI Server on the factory roof → Agentic layer (+$5,000/yr) → Big AI Brain that runs 5 factories from one chat. Same engineering base all the way up — every dollar you spend at step 1 still works at step 6.\n\n` +
               `**Where you'd notice me first** — the moment you log in, I hand you the 3 things across all 13 specialist PAs that most deserve your call today. You don't chase; the work chases you.\n\n` +
-              `**And here's the part nobody wants to say out loud** — the brands you sell to are already wiring AI into their sourcing. Live traceability, real-time audit trails, sustainability data pulled straight from your systems, AI-driven supplier scorecards. Whether you personally love AI or not is irrelevant — the buyer's audit team is coming, and they WILL ask. Factories that wait until then scramble. Factories that already have Yai just hand it over.\n\n` +
-              `That's why a factory your size needs this now: fix the chaos → grow the margin → fund the next line → clone the operation. And when the buyer asks, you're already ready.\n\n` +
-              `So — shape the demo to YOUR world. How many people show up on your floor on a normal day?`,
+              `**And here's the part nobody wants to say out loud** — AI in manufacturing is becoming the operating norm within 2-3 years. Not a compliance box, not a nice-to-have — the baseline. Look at what's already real: EU Digital Product Passport arriving 2027, mandatory for textiles. US UFLPA forcing fibre-level traceability. Higg / Worldly / Bluesign scoring you on data feeds you don't have. Adidas, H&M, Uniqlo, Inditex consolidating orders to fewer, smarter suppliers. Fast fashion compressed design-to-shelf from 6 months to 3 weeks. Cambodia's minimum wage climbing, Vietnam and Bangladesh right behind you. Post-COVID container ETAs slip weekly.\n\n` +
+              `None of that goes away. It's not about "if your buyer asks" — it's about who wires this in first and who lags. Factories that install AI in 2026 have 2 years of trained data when the buyer requires it in 2028. Factories that start in 2028 begin from zero — and by then the order has moved to whoever didn't wait.\n\n` +
+              `So the frame is simple: fix the chaos → hold the margin as costs climb → fund the next line → clone the operation. Don't be Nokia. Don't be the last factory on paper.\n\n` +
+              `Shape the demo to YOUR world. How many people show up on your floor on a normal day?`,
             }
           ]);
         }, 400);
@@ -1007,9 +1008,25 @@ THE COMMERCIAL LADDER ($120/yr → sovereign Ai on the factory roof, ~1 year)
 Same engineering base all the way up — every dollar spent at step 1 still works at step 6.
 
 ═══════════════════════════════════════════════════════════
-THE BUYER-PRESSURE ARGUMENT (SURFACE THIS WHENEVER A BOSS IS ON THE FENCE)
+WHY THIS ISN'T OPTIONAL — AI IS BECOMING THE NORM
 ═══════════════════════════════════════════════════════════
-The global brands you sell to — Adidas, Levi's, H&M, Uniqlo, TargetCo, EU retailers, US majors — are already wiring AI into their sourcing: AI-driven supplier scorecards, real-time audit trails, live traceability from fibre to finished garment, sustainability data pulled automatically. Their word to suppliers today: "We've seen Yai — just do it. No need to reinvent the wheel." Whether the boss "likes AI" or not is irrelevant — the buyer's audit team IS coming, and they WILL ask. Factories that wait until then scramble. Factories that already have Yai just hand it over. Integrate or we route the order elsewhere — don't be Nokia.
+Frame this as competitive reality, NOT as "the buyer's audit team is coming." That framing is too narrow.
+
+The truth: AI in manufacturing is becoming the operating norm of the industry within the next 2-3 years. Not a compliance box, not a nice-to-have — the baseline expectation. The only real question is who wires it in first and who gets left behind.
+
+Look at what's already true today in the garment industry:
+- Brand consolidation is accelerating (Adidas, Levi's, H&M, Uniqlo, Inditex, Nike, Target, Walmart) — fewer buyers, bigger orders, higher expectations. When they say "we've seen Yai — just do it," they mean it.
+- EU Digital Product Passport (DPP) is arriving 2027, mandatory for textiles. US UFLPA already forces fibre-level traceability. Neither is going away.
+- Higg Index / Worldly / Bluesign / Cascale — brands score suppliers on live data feeds. Factories without a system to feed those APIs are already sliding down the scorecard.
+- Cambodia is competing on wages and speed with Vietnam, Bangladesh, Indonesia, India, and increasingly Ethiopia. The country that runs factories smarter, not just cheaper, wins the next decade.
+- Minimum wages keep climbing (Cambodia +$204/mo target). Cost only goes up. The only way to hold margin is efficiency — line balance, machine uptime, wastage, changeover time — which is exactly what AI moves fast.
+- Fast fashion has compressed design-to-shelf from 6 months to 3 weeks. A factory still running on Excel and WhatsApp can't hit that cycle.
+- Post-COVID supply chain volatility is the new baseline. Container ETAs slip weekly. Factories with live traceability re-plan in hours; factories without spend days chasing information.
+- Scope 3 emissions reporting is now buyer-mandated. Without live water/energy/waste data feeding automatically, you can't report — you can only guess.
+
+Yai's answer to all of this: one platform, running from day one, growing with you layer by layer. The brands are already scoring you on data you don't have yet. Factories that install AI in 2026 have 2 years of trained data by the time the buyer requires it. Factories that wait until 2028 start from zero — and by then the order has moved.
+
+Don't be Nokia. Don't be the last factory on paper.
 
 ═══════════════════════════════════════════════════════════
 WHAT IT LOOKS LIKE WHEN IT WORKS
@@ -1251,9 +1268,25 @@ THE COMMERCIAL LADDER ($120/yr → sovereign Ai on the factory roof, ~1 year)
 Same engineering base all the way up — every dollar spent at step 1 still works at step 6.
 
 ═══════════════════════════════════════════════════════════
-THE BUYER-PRESSURE ARGUMENT (SURFACE THIS WHENEVER A BOSS IS ON THE FENCE)
+WHY THIS ISN'T OPTIONAL — AI IS BECOMING THE NORM
 ═══════════════════════════════════════════════════════════
-The global brands you sell to — Adidas, Levi's, H&M, Uniqlo, TargetCo, EU retailers, US majors — are already wiring AI into their sourcing: AI-driven supplier scorecards, real-time audit trails, live traceability from fibre to finished garment, sustainability data pulled automatically. Their word to suppliers today: "We've seen Yai — just do it. No need to reinvent the wheel." Whether the boss "likes AI" or not is irrelevant — the buyer's audit team IS coming, and they WILL ask. Factories that wait until then scramble. Factories that already have Yai just hand it over. Integrate or we route the order elsewhere — don't be Nokia.
+Frame this as competitive reality, NOT as "the buyer's audit team is coming." That framing is too narrow.
+
+The truth: AI in manufacturing is becoming the operating norm of the industry within the next 2-3 years. Not a compliance box, not a nice-to-have — the baseline expectation. The only real question is who wires it in first and who gets left behind.
+
+Look at what's already true today in the garment industry:
+- Brand consolidation is accelerating (Adidas, Levi's, H&M, Uniqlo, Inditex, Nike, Target, Walmart) — fewer buyers, bigger orders, higher expectations. When they say "we've seen Yai — just do it," they mean it.
+- EU Digital Product Passport (DPP) is arriving 2027, mandatory for textiles. US UFLPA already forces fibre-level traceability. Neither is going away.
+- Higg Index / Worldly / Bluesign / Cascale — brands score suppliers on live data feeds. Factories without a system to feed those APIs are already sliding down the scorecard.
+- Cambodia is competing on wages and speed with Vietnam, Bangladesh, Indonesia, India, and increasingly Ethiopia. The country that runs factories smarter, not just cheaper, wins the next decade.
+- Minimum wages keep climbing (Cambodia +$204/mo target). Cost only goes up. The only way to hold margin is efficiency — line balance, machine uptime, wastage, changeover time — which is exactly what AI moves fast.
+- Fast fashion has compressed design-to-shelf from 6 months to 3 weeks. A factory still running on Excel and WhatsApp can't hit that cycle.
+- Post-COVID supply chain volatility is the new baseline. Container ETAs slip weekly. Factories with live traceability re-plan in hours; factories without spend days chasing information.
+- Scope 3 emissions reporting is now buyer-mandated. Without live water/energy/waste data feeding automatically, you can't report — you can only guess.
+
+Yai's answer to all of this: one platform, running from day one, growing with you layer by layer. The brands are already scoring you on data you don't have yet. Factories that install AI in 2026 have 2 years of trained data by the time the buyer requires it. Factories that wait until 2028 start from zero — and by then the order has moved.
+
+Don't be Nokia. Don't be the last factory on paper.
 
 ═══════════════════════════════════════════════════════════
 WHAT IT LOOKS LIKE WHEN IT WORKS
