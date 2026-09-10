@@ -678,8 +678,52 @@ const BotVersion2 = ({
   };
 
   // Helper function to stream text like ChatGPT (token/word-based chunks with natural pacing)
+  // Split any LLM output into 1-3 short bubbles (≤2 sentences each) so
+  // Qwen 3B's wall-of-text tendency never reaches the boss. If the response
+  // is longer, trailing content becomes queued "more" chunks.
+  const shatterToBubbles = (text) => {
+    if (!text) return [""];
+    // Strip markdown headers/heavy formatting that reads like a report
+    const cleaned = text.replace(/^#{1,6}\s+/gm, "").trim();
+    const sentences = cleaned.match(/[^.!?\n]+[.!?]+(?:\s|$)|[^.!?\n]+$/g) || [cleaned];
+    const bubbles = [];
+    let cur = "";
+    for (const s of sentences) {
+      const tentative = (cur + " " + s.trim()).trim();
+      if (tentative.length > 260 && cur) {
+        bubbles.push(cur);
+        cur = s.trim();
+      } else {
+        cur = tentative;
+      }
+      // Cap 2 sentences per bubble regardless
+      const sentCount = (cur.match(/[.!?]+/g) || []).length;
+      if (sentCount >= 2) {
+        bubbles.push(cur);
+        cur = "";
+      }
+    }
+    if (cur) bubbles.push(cur);
+    return bubbles.slice(0, 6); // hard ceiling
+  };
+
   const streamBotResponse = (fullText) => {
-    // Create initial bot message with empty text
+    // Shatter into short bubbles — cap 3 visible, queue rest for "more".
+    const chunks = shatterToBubbles(fullText);
+    const first = chunks.slice(0, 3);
+    const rest = chunks.slice(3);
+    if (rest.length > 0) {
+      // Queue leftovers as one more "chapter" the boss can pop with `more`
+      setPitchQueue(prev => [...prev, rest]);
+      first[first.length - 1] = (first[first.length - 1] || "") + `\n\n_(say "more" for the rest)_`;
+    }
+    setIsTyping(false);
+    first.forEach((text, i) =>
+      setTimeout(() => setMessages(prev => [...prev, { from: "bot", text }]), 300 + i * 1400),
+    );
+    return;
+    // eslint-disable-next-line no-unreachable
+    // Legacy streaming path below — kept for reference, unreachable.
     const initialMessage = {
       from: "bot",
       text: "",
