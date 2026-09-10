@@ -32,7 +32,7 @@ const TERMS = [
 
 /* "$1,200" / "+$5,000" → 1200 / 5000. */
 const parsePrice = (s: string) => Number(s.replace(/[^0-9.]/g, "")) || 0;
-const formatKhr = (amount: number) => `៛${Math.round(amount).toLocaleString("en-US")}`;
+const formatKhr = (amount: number) => `${Math.round(amount).toLocaleString("en-US")} KHR`;
 
 type PayState = "idle" | "opening" | "waiting" | "paid" | "failed" | "verifying";
 type ContactRequestState = "idle" | "sending" | "sent";
@@ -416,9 +416,9 @@ export default function SubscribeClient({
                 <div className="text-[12px] text-yai-navy/70 mt-0.5">{p.users}</div>
                 <div className="mt-3">
                   <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1 leading-tight text-yai-navy">
-                    <span className="text-2xl font-bold">{formatKhr(baseKhrAmount)}</span>
+                    <span className="text-2xl font-bold"><span aria-hidden="true" className="mr-1 text-base">🇰🇭</span>{formatKhr(baseKhrAmount)}</span>
                     <span aria-hidden="true" className="text-sm font-medium text-yai-navy/35">/</span>
-                    <span className="text-base font-semibold text-yai-navy/65">{p.price} USD</span>
+                    <span className="text-base font-semibold text-yai-navy/65"><span aria-hidden="true" className="mr-1 text-sm">🇺🇸</span>{p.price} USD</span>
                   </div>
                   <div className="mt-1 text-[11px] text-yai-navy/60">{p.period}</div>
                 </div>
@@ -480,7 +480,7 @@ export default function SubscribeClient({
               <>
                 <span>{plan.name} · {formatKhr(totalKhrAmount)}</span>
                 <span className="mt-0.5 block text-[11px] font-normal text-yai-navy/55">
-                  {`${formatKhr(khrAmount)} + 10% VAT · fixed at ៛${khrPerUsd.toLocaleString()} / USD`}
+                  {`${formatKhr(khrAmount)} + 10% VAT · fixed at ${khrPerUsd.toLocaleString()} KHR / USD`}
                 </span>
               </>
             ) : "Select a plan above"}
