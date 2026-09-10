@@ -903,6 +903,79 @@ const BotVersion2 = ({
         return; // otherwise stay on the same onboarding step
       }
 
+      // ── Topical question intercept ──────────────────────────────────
+      // Boss is not answering the onboarding question — they're asking
+      // ABOUT something (production apps, quality, HR, planning, etc.).
+      // Answer briefly with the relevant PAs + suggest neighbours,
+      // then softly re-ask the current onboarding question.
+      // No number in the message + at least one topic keyword = topical ask.
+      const looksLikeQuestion = /\?|^(what|which|how|tell|show|list|give|any|are|do|does|can|is)\b/i.test(raw);
+      const noNumberYet = !(raw.replace(/,/g, "").match(/\d{1,5}/g) || []).length;
+      const topicHits = {
+        production: /\b(production|floor|line|sewing|assembl|output|wip|throughput)\b/i.test(raw),
+        quality:    /\b(quality|qa|qms|defect|inspection|aql|4[- ]?pt|call.?out)\b/i.test(raw),
+        planning:   /\b(4dp|planning|capacity|schedule|sales.?situation)\b/i.test(raw),
+        techpack:   /\b(ypi|tech.?pack|measurement|trim|packing|sample.?stage|merchandis|sourc|bom.?fabric)\b/i.test(raw),
+        material:   /\b(mrp|material|warehouse|inventory|stock|reorder|purchase|supplier)\b/i.test(raw),
+        shipping:   /\b(shipping|container|customs|port|freight|delivery|inbound|outbound)\b/i.test(raw),
+        machine:    /\b(ytm|machine|maintenance|downtime|repair|spare|compressor)\b/i.test(raw),
+        cost:       /\b(ce|kaizen|standard.?time|productivity|cost.?center|efficien|ie)\b/i.test(raw),
+        hr:         /\b(hr|yhr|worker|people|staff|attendance|payroll|union|speak.?up)\b/i.test(raw),
+        admin:      /\b(admin|gate|canteen|fan|ac|dorm|y.?shop|org.?chart)\b/i.test(raw),
+        finance:    /\b(accounting|finance|invoice|payment|bank|book|ledger|payable|receivable)\b/i.test(raw),
+        social:     /\b(social|tiktok|facebook|instagram|youtube|linkedin|comment)\b/i.test(raw),
+        csr:        /\b(csr|esg|wrap|bsci|ilo|higg|grs|compliance|audit.*(brand|buyer))\b/i.test(raw),
+        modulesAsk: /\b(module|app|pa\b|agent|department|dept|tool|feature)s?\b/i.test(raw),
+      };
+      const hitCount = Object.values(topicHits).filter(Boolean).length;
+      if (looksLikeQuestion && noNumberYet && hitCount > 0) {
+        const bubbles = [];
+        // Answer the direct topic first
+        if (topicHits.production) {
+          bubbles.push(
+            `Production side — 5 agents work together: Production PA (today's plan, WIP by line), 4DP (capacity/factory/line/sales-situation planning), YPI (tech-packs, trims, cutting brief), YTM (machine downtime, repair queue), CE (standard time, productivity, kaizen).`,
+            `Neighbours you may want too: QA/QMS (fabric relaxation, marker consumption, 4-pt & AQL, Call Out), MRP (material handoff to cutting), and HR (line staffing).`,
+          );
+        } else if (topicHits.modulesAsk) {
+          bubbles.push(
+            `13 department PAs in total. Split roughly: pre-production (YPI, MRP, 4DP), production floor (Production, YTM, CE, QA), back-office (Accounting, HR, Admin, CSR), outward (Shipping, Social).`,
+            `Tell me your angle — production floor? quality? material? — and I'll go deeper on that slice.`,
+          );
+        } else {
+          const list = [];
+          if (topicHits.quality)  list.push("QA/QMS — upstream material quality → relaxation → marker preview → cut panel inspection → 4-pt/AQL → complaints → Call Out silence channel");
+          if (topicHits.planning) list.push("4DP — 4-Directional Planning: capacity, factory, line, sales-situation");
+          if (topicHits.techpack) list.push("YPI — trilingual pre-production spine: merchandising, sourcing, tech-packs, cutting brief, handoff to 4DP");
+          if (topicHits.material) list.push("MRP — material sourcing, BOM, stock, GDT/customs for imports, handoff to QA at production start");
+          if (topicHits.shipping) list.push("Shipping — container plan, customs clearance, inbound material ETA + outbound delivery");
+          if (topicHits.machine)  list.push("YTM — machine downtime, repair queue, maintenance schedule, spare parts stock");
+          if (topicHits.cost)     list.push("CE — standard time, productivity by line, cost center, kaizen improvement");
+          if (topicHits.hr)       list.push("HR — CCTV attendance feed, Cambodian Labour Law, Speak Up union channel, payroll");
+          if (topicHits.admin)    list.push("Admin — gate, fans/AC, canteen, Y Shop QR flow, org chart");
+          if (topicHits.finance)  list.push("Accounting — books, invoices, payments, bank, tax");
+          if (topicHits.social)   list.push("Social — TikTok / Facebook / IG / YouTube / LinkedIn comments");
+          if (topicHits.csr)      list.push("CSR — ESG, WRAP, BSCI, ILO, Higg, GRS, brand audits");
+          bubbles.push(list.length === 1 ? list[0] + "." : list.map(s => `• ${s}`).join("\n"));
+        }
+        // Soft re-ask so onboarding still finishes
+        const reAskByStep = {
+          "-2": `And — you didn't tell me your name yet. What should I call you?`,
+          "-1": `Am I right you're here to see what Yai can actually do for a factory like yours?`,
+          "0":  `Back to shaping the demo — roughly how many people on your floor?`,
+          "1":  `And how many lines running most days?`,
+          "2":  `What do you mostly cut — polos, jackets, denim, something else?`,
+          "3":  `Any certifications you carry — WRAP, BSCI, Higg, GRS? "none" is fine.`,
+          "4":  `Main buyers, if you don't mind sharing? "skip" is fine.`,
+        };
+        const reAsk = reAskByStep[String(onboardingStep)];
+        if (reAsk) bubbles.push(reAsk);
+        const toPost = bossPacePreference === "short" ? bubbles.slice(0, 2) : bubbles;
+        toPost.forEach((text, i) =>
+          setTimeout(() => setMessages(prev => [...prev, { from: "bot", text }]), 400 + i * 700),
+        );
+        return; // stay on the same onboarding step
+      }
+
       // Step -2: capture visitor name — strip "hi, I'm / my name is" prefixes
       // so "hi i am Mark" becomes "Mark", not the whole sentence.
       if (onboardingStep === -2) {
