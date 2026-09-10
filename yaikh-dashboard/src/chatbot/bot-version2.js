@@ -88,11 +88,11 @@ const BotVersion2 = ({
     } else if (step === 1) {
       const w = draft.workers || 0;
       let opener;
-      if (w >= 2500)      opener = `${w.toLocaleString()} — that's a proper machine, ${name}. Steering that many people is a job in itself.`;
-      else if (w >= 1200) opener = `${w.toLocaleString()} — a real operation. Big enough that a good week and a bad week look very different in the numbers.`;
-      else if (w >= 600)  opener = `${w.toLocaleString()} — solid middle-weight factory. That's the sweet spot for actually knowing your people.`;
-      else if (w >= 200)  opener = `${w.toLocaleString()} — small enough to run tight, big enough to feel it when someone's off. Nice size to work with.`;
-      else                opener = `${w.toLocaleString()} — a lean crew. Every hand matters at that size.`;
+      if (w >= 2500)      opener = `${w.toLocaleString()} — that's a proper machine, ${name}.`;
+      else if (w >= 1200) opener = `${w.toLocaleString()} — a real operation.`;
+      else if (w >= 600)  opener = `${w.toLocaleString()} — solid middle-weight factory.`;
+      else if (w >= 200)  opener = `${w.toLocaleString()} — nice size to work with.`;
+      else                opener = `${w.toLocaleString()} — a lean crew.`;
       q = `${opener} Out of curiosity, how many production lines are moving all of that? Two, three, more?`;
     } else if (step === 2) {
       const l = draft.lines || 0;
@@ -244,10 +244,10 @@ const BotVersion2 = ({
   }, []);
 
   // Chat history state
-  const [chatHistory, setChatHistory] = useState(() => {
-    const saved = localStorage.getItem("yai2-chat-history");
-    return saved ? JSON.parse(saved) : [];
-  });
+  // Chat history is intentionally MEMORY-ONLY: it lives in the sidebar while
+  // the page stays open and is gone on refresh or tab close. Privacy choice —
+  // nothing a visitor says is persisted in their browser.
+  const [chatHistory, setChatHistory] = useState([]);
   const [currentChatId, setCurrentChatId] = useState(null);
 
   // Website-related suggested actions
@@ -267,33 +267,11 @@ const BotVersion2 = ({
   const [uploadedImage, setUploadedImage] = useState(null);
   const fileInputRef = useRef(null);
 
-  // Load chat history from localStorage on mount
+  // One-time cleanup: older builds persisted chats to localStorage. History
+  // is memory-only now, so wipe anything a previous visit left behind.
   useEffect(() => {
-    const saved = localStorage.getItem("yai2-chat-history");
-    if (saved) {
-      setChatHistory(JSON.parse(saved));
-    }
+    try { localStorage.removeItem("yai2-chat-history"); } catch { /* private mode */ }
   }, []);
-
-  // Save chat history to localStorage whenever it changes
-  useEffect(() => {
-    if (chatHistory.length > 0) {
-      // Sanitize out Base64 payload blobs to prevent LocalStorage QuotaExceededError
-      const sanitizedHistory = chatHistory.map(chat => ({
-        ...chat,
-        messages: chat.messages.map(msg => {
-          if (msg.from === 'user' && typeof msg.text === 'string' && msg.text.includes('[IMAGE_DATA:')) {
-            return {
-              ...msg,
-              text: msg.text.replace(/\[IMAGE_DATA:.*?\]/g, '[Image Attached]').trim()
-            };
-          }
-          return msg;
-        })
-      }));
-      localStorage.setItem("yai2-chat-history", JSON.stringify(sanitizedHistory));
-    }
-  }, [chatHistory]);
 
   // Save current chat when messages change
   useEffect(() => {
@@ -307,35 +285,48 @@ const BotVersion2 = ({
   }, [messages]);
 
   const createNewChat = () => {
-    const newChatId = Date.now().toString();
-    const newChat = {
-      id: newChatId,
-      title: "New Chat",
-      messages: [],
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-    setChatHistory((prev) => [newChat, ...prev]);
-    setCurrentChatId(newChatId);
+    // History entry is created lazily by updateChatInHistory on the first
+    // user message — an untouched new chat leaves no trace in the sidebar.
+    setCurrentChatId(Date.now().toString());
     setMessages([]);
     setInput("");
   };
 
+  const chatTitleFrom = (msgs) => {
+    const firstUser = msgs.find((m) => m.from === "user");
+    if (!firstUser?.text) return "New Chat";
+    const t = firstUser.text.trim();
+    return t.length > 40 ? t.substring(0, 40).trimEnd() + "…" : t;
+  };
+
   const updateChatInHistory = (chatId, newMessages) => {
-    setChatHistory((prev) =>
-      prev.map((chat) => {
-        if (chat.id === chatId) {
-          const firstUserMessage = newMessages.find((m) => m.from === "user");
-          return {
-            ...chat,
+    // A chat only earns a sidebar entry once it has a real user message —
+    // seed-only chats never touch history, so no "New Chat" clutter.
+    if (!newMessages.some((m) => m.from === "user")) return;
+    setChatHistory((prev) => {
+      if (!prev.some((c) => c.id === chatId)) {
+        return [
+          {
+            id: chatId,
+            title: chatTitleFrom(newMessages),
             messages: newMessages,
-            title: firstUserMessage?.text?.substring(0, 50) || "New Chat",
+            createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
-          };
-        }
-        return chat;
-      }),
-    );
+          },
+          ...prev,
+        ];
+      }
+      return prev.map((chat) =>
+        chat.id === chatId
+          ? {
+              ...chat,
+              messages: newMessages,
+              title: chatTitleFrom(newMessages),
+              updatedAt: new Date().toISOString(),
+            }
+          : chat,
+      );
+    });
   };
 
   const loadChat = (chatId) => {
@@ -834,27 +825,66 @@ const BotVersion2 = ({
             }
           ]);
         }, 400);
-        return; // stay on the same onboarding step
+        // The pitch closes by asking the workers question, so a boss who asked
+        // "what can you do" during the mission check is now effectively at step 0.
+        if (onboardingStep === -1) setOnboardingStep(0);
+        return; // otherwise stay on the same onboarding step
       }
 
-      // Step -2: capture visitor name
+      // Step -2: capture visitor name — strip "hi, I'm / my name is" prefixes
+      // so "hi i am Mark" becomes "Mark", not the whole sentence.
       if (onboardingStep === -2) {
-        const clean = raw.slice(0, 60);
+        const stripped = raw
+          .replace(/^(hi|hello|hey|howdy|greetings|yo)[,.!\s]+/i, "")
+          .replace(/^(i am|i'm|my name is|it's|this is|call me|the name is|name is|i'm called)\s+/i, "")
+          .replace(/^[,.!\s]+/, "");
+        const clean = (stripped || raw).slice(0, 60).trim();
         try { localStorage.setItem("yai_visitor_name", clean); } catch { /* private mode */ }
         setVisitorName(clean);
+        setOnboardingStep(-1);
+        setTimeout(() => askNextOnboarding(-1, onboardingDraft, clean), 500);
+        return;
+      }
+
+      // Step -1: mission check. Whatever the boss answers, they engaged —
+      // move on to the factory questions. (A capability ask was already
+      // intercepted above; step 0's question opens with "Good." so no
+      // extra bridge bubble is needed.)
+      if (onboardingStep === -1) {
         setOnboardingStep(0);
-        setTimeout(() => askNextOnboarding(0, onboardingDraft, clean), 500);
+        setTimeout(() => askNextOnboarding(0, onboardingDraft, visitorName), 500);
         return;
       }
 
       const draft = { ...onboardingDraft };
       let nextStep = onboardingStep + 1;
 
+      // Number parsing: take the FIRST number token, never concatenate digits
+      // ("200 workers 1500" must not become 2001500). If the boss gives TWO
+      // different numbers, don't silently pick one — ask which, stay on step.
+      const numTokens = (raw.replace(/,/g, "").match(/\d{1,5}/g) || []).map((s) => parseInt(s, 10));
+      const distinctNums = [...new Set(numTokens)];
+
       if (onboardingStep === 0) {
-        const n = parseInt(raw.replace(/[^\d]/g, ""), 10);
+        if (distinctNums.length > 1) {
+          const [a, b] = distinctNums;
+          const total = distinctNums.reduce((s, x) => s + x, 0);
+          setTimeout(() => setMessages(prev => [...prev, { from: "bot", text:
+            `You mentioned ${a.toLocaleString()} and ${b.toLocaleString()} — is ${a.toLocaleString()} your office staff and ${b.toLocaleString()} your floor? Or should I take the total as ~${total.toLocaleString()}? One number is all I need.`,
+          }]), 400);
+          return; // wait for a clean number, don't advance
+        }
+        const n = distinctNums[0];
         draft.workers = Number.isFinite(n) && n > 0 ? Math.min(10000, Math.max(50, n)) : 1000;
       } else if (onboardingStep === 1) {
-        const n = parseInt(raw.replace(/[^\d]/g, ""), 10);
+        if (distinctNums.length > 1) {
+          const [a, b] = distinctNums;
+          setTimeout(() => setMessages(prev => [...prev, { from: "bot", text:
+            `You said ${a} and ${b} — how many lines are actually moving most days? One number is all I need.`,
+          }]), 400);
+          return; // wait for a clean number, don't advance
+        }
+        const n = distinctNums[0];
         draft.lines = Number.isFinite(n) && n > 0 ? Math.min(20, Math.max(1, n)) : Math.max(1, Math.round((draft.workers || 1000) / 300));
       } else if (onboardingStep === 2) {
         draft.product = raw.slice(0, 60) || "polos";
@@ -1070,6 +1100,21 @@ Every one of the 13 PAs proactively watches its own patch for anomalies, excepti
 This is not QA-only. Every PA — Accounting, HR, Admin, CSR, Shipping, MRP, QA, Production, CE, YTM, 4DP, YPI, Social — does this on their own domain.
 
 ═══════════════════════════════════════════════════════════
+PREDICTIVE MODE — LEARN FROM HISTORY
+═══════════════════════════════════════════════════════════
+Every PA looks BACKWARDS before a new task starts. Before a run / a payroll / an audit / a shipment, the responsible PA pulls the history for that style / that line / that operator / that supplier / that buyer and hands the department head the top 3 things most likely to hurt based on the last similar occurrence. Include the "shipped-anyway-but-not-fixed" cases — those come back. Never let a new run begin without checking what killed the previous one.
+
+═══════════════════════════════════════════════════════════
+END-OF-CHAT SERVICE — OFFER TO EMAIL THE TRANSCRIPT
+═══════════════════════════════════════════════════════════
+At natural end-of-chat moments (boss says "thanks" / "we're done" / "let's wrap" / "goodbye", OR clicks Reset conversation, OR after a materialise + brief), Yai offers:
+"Want this chat emailed to you for your records? Transcript email from ecom@yaikh.com is rolling out now — I can put you on the list."
+If yes → ask for the email → confirm "Noted — [their email] is on the list; your transcript goes out as soon as the service is live."
+Never claim an email has already been sent — the sending feature is not live yet, and Yai never confirms actions that have not happened.
+The chat history is intentionally SESSION-ONLY — visible in the sidebar while the page stays open, cleared on refresh or tab close. This is a PRIVACY choice, not a bug. If the boss asks "will I lose this?" or "can I keep this?", explain that plainly and offer the email option. Never say "your chat is saved" without qualifying that it clears on refresh.
+Never nag. Offer once per chat, don't ask again if declined.
+
+═══════════════════════════════════════════════════════════
 YOUR PA REPORTS (Agent Collective — never invent others)
 ═══════════════════════════════════════════════════════════
 - Accounting PA — Purchase, Claims, Salary, Shipping, IEWS, Account
@@ -1078,7 +1123,7 @@ YOUR PA REPORTS (Agent Collective — never invent others)
 - CSR PA — Air, Water, Energy, Audits, Alerts (WRAP/BSCI/HIGG/ILO/SEDEX/GRS)
 - Shipping PA — Container plan, Customs, Delivery schedule, Inventory, Material plan
 - MRP PA — Material Resource Planning: fabric, trim, dye, thread. Sourcing + supplier scorecards + goods-in checking + container tracking. Also handles customs / GDT (Cambodia General Department of Taxation) compliance verification for imported materials — wrong HS code, missing declaration or bad paperwork = penalty. Critical for keeping the door open. Also owns the material-to-production hand-off — transfers fabric rolls, accessories, sewing/packaging material to the respective production sections; hands the relaxation start-time to QA for tracking.
-- QA PA — end-to-end quality function. UPSTREAM: material quality from the manufacturing side — fabric, accessories, buttons, labels, cartons, packaging. Supplier reports OR Yai-run inspection. Real-time visibility for merchandising + QC manager. ON-SITE INSPECTION: fabric 4-point, accessories AQL 2.5 (or buyer-tighter), functionality, durability, trinket, colour, pH, wash-fastness — all on iPad, auditor-ready. INVENTORY LINK: every roll's location, count, wastage — linked to MRP so quality + quantity move together. PRODUCTION HAND-OFF: monitors fabric relaxation (start / end / ready-to-cut) via QR code, RFID, or CCTV AI-vision. Sees marker generation + consumption management from the cut-plan / QMS module BEFORE a single cut is made (marker management is a separate cross-department module inside cut-plan; QA has read access). Plus defect logs, customer complaints, third-party audits (SGS/WRAP/SEDEX), and Call Out (silence-escalation).
+- QA PA — end-to-end quality function. UPSTREAM: material quality from the manufacturing side — fabric, accessories, buttons, labels, cartons, packaging. Supplier reports OR Yai-run inspection. Real-time visibility for merchandising + QC manager. ON-SITE INSPECTION: fabric 4-point, accessories AQL 2.5 (or buyer-tighter), functionality, durability, trinket, colour, pH, wash-fastness — all on iPad, auditor-ready. INVENTORY LINK: every roll's location, count, wastage — linked to MRP so quality + quantity move together. PRODUCTION HAND-OFF: monitors fabric relaxation (start / end / ready-to-cut) via QR code, RFID, or CCTV AI-vision. Sees marker generation + consumption management from the cut-plan / QMS module BEFORE a single cut is made (marker management is a separate cross-department module inside cut-plan; QA has read access). Plus defect logs, customer complaints, third-party audits (SGS/WRAP/SEDEX), and Call Out (silence-escalation). CUTTING STAGE: tracks consumption for every consumable in YARDS (fabric, elastic, lace, tapes) — not just piece count — so quality manager sees waste live. Monitors layering (before / during / after cut) whether CAD, manual, or manual-cutting-machine, via mobile data + CCTV AI-vision. POST-CUT: cut-panel inspection first, then tracks work going to outside factories (printing, embroidery, heat-seal labels, hand-cutting for denim / preparation work) round-trip, so nothing goes into a black hole. Every issue routed to the right quality supervisor / leader / production supervisor / manager with the exact location — which line, which team, which worker, which point on the floor — and lists the problems still open from the last few days. PREDICTIVE QA: before a new order starts, Yai analyses the history for that style + line + operator pool + machine set and hands the pre-production meeting the top 3 issues most likely to hurt this run (including issues that shipped-even-though-not-fixed on the last similar run). Pre-production meeting begins with that list, not from scratch.
 - Production PA — Today's plan, WIP by line, Cutting/Finishing throughput, Production status
 - CE PA — Standard times, Productivity/line, Machine allocation, Skill inventory, Cost centres
 - YTM PA — Machine downtime, Repair queue, PM schedule, Late-PM alerts, Spare parts
@@ -1350,6 +1395,21 @@ Every one of the 13 PAs proactively watches its own patch for anomalies, excepti
 This is not QA-only. Every PA — Accounting, HR, Admin, CSR, Shipping, MRP, QA, Production, CE, YTM, 4DP, YPI, Social — does this on their own domain.
 
 ═══════════════════════════════════════════════════════════
+PREDICTIVE MODE — LEARN FROM HISTORY
+═══════════════════════════════════════════════════════════
+Every PA looks BACKWARDS before a new task starts. Before a run / a payroll / an audit / a shipment, the responsible PA pulls the history for that style / that line / that operator / that supplier / that buyer and hands the department head the top 3 things most likely to hurt based on the last similar occurrence. Include the "shipped-anyway-but-not-fixed" cases — those come back. Never let a new run begin without checking what killed the previous one.
+
+═══════════════════════════════════════════════════════════
+END-OF-CHAT SERVICE — OFFER TO EMAIL THE TRANSCRIPT
+═══════════════════════════════════════════════════════════
+At natural end-of-chat moments (boss says "thanks" / "we're done" / "let's wrap" / "goodbye", OR clicks Reset conversation, OR after a materialise + brief), Yai offers:
+"Want this chat emailed to you for your records? Transcript email from ecom@yaikh.com is rolling out now — I can put you on the list."
+If yes → ask for the email → confirm "Noted — [their email] is on the list; your transcript goes out as soon as the service is live."
+Never claim an email has already been sent — the sending feature is not live yet, and Yai never confirms actions that have not happened.
+The chat history is intentionally SESSION-ONLY — visible in the sidebar while the page stays open, cleared on refresh or tab close. This is a PRIVACY choice, not a bug. If the boss asks "will I lose this?" or "can I keep this?", explain that plainly and offer the email option. Never say "your chat is saved" without qualifying that it clears on refresh.
+Never nag. Offer once per chat, don't ask again if declined.
+
+═══════════════════════════════════════════════════════════
 YOUR PA REPORTS (Agent Collective — never invent others)
 ═══════════════════════════════════════════════════════════
 - Accounting PA — Purchase, Claims, Salary, Shipping, IEWS, Account
@@ -1358,7 +1418,7 @@ YOUR PA REPORTS (Agent Collective — never invent others)
 - CSR PA — Air, Water, Energy, Audits, Alerts (WRAP/BSCI/HIGG/ILO/SEDEX/GRS)
 - Shipping PA — Container plan, Customs, Delivery schedule, Inventory, Material plan
 - MRP PA — Material Resource Planning: fabric, trim, dye, thread. Sourcing + supplier scorecards + goods-in checking + container tracking. Also handles customs / GDT (Cambodia General Department of Taxation) compliance verification for imported materials — wrong HS code, missing declaration or bad paperwork = penalty. Critical for keeping the door open. Also owns the material-to-production hand-off — transfers fabric rolls, accessories, sewing/packaging material to the respective production sections; hands the relaxation start-time to QA for tracking.
-- QA PA — end-to-end quality function. UPSTREAM: material quality from the manufacturing side — fabric, accessories, buttons, labels, cartons, packaging. Supplier reports OR Yai-run inspection. Real-time visibility for merchandising + QC manager. ON-SITE INSPECTION: fabric 4-point, accessories AQL 2.5 (or buyer-tighter), functionality, durability, trinket, colour, pH, wash-fastness — all on iPad, auditor-ready. INVENTORY LINK: every roll's location, count, wastage — linked to MRP so quality + quantity move together. PRODUCTION HAND-OFF: monitors fabric relaxation (start / end / ready-to-cut) via QR code, RFID, or CCTV AI-vision. Sees marker generation + consumption management from the cut-plan / QMS module BEFORE a single cut is made (marker management is a separate cross-department module inside cut-plan; QA has read access). Plus defect logs, customer complaints, third-party audits (SGS/WRAP/SEDEX), and Call Out (silence-escalation).
+- QA PA — end-to-end quality function. UPSTREAM: material quality from the manufacturing side — fabric, accessories, buttons, labels, cartons, packaging. Supplier reports OR Yai-run inspection. Real-time visibility for merchandising + QC manager. ON-SITE INSPECTION: fabric 4-point, accessories AQL 2.5 (or buyer-tighter), functionality, durability, trinket, colour, pH, wash-fastness — all on iPad, auditor-ready. INVENTORY LINK: every roll's location, count, wastage — linked to MRP so quality + quantity move together. PRODUCTION HAND-OFF: monitors fabric relaxation (start / end / ready-to-cut) via QR code, RFID, or CCTV AI-vision. Sees marker generation + consumption management from the cut-plan / QMS module BEFORE a single cut is made (marker management is a separate cross-department module inside cut-plan; QA has read access). Plus defect logs, customer complaints, third-party audits (SGS/WRAP/SEDEX), and Call Out (silence-escalation). CUTTING STAGE: tracks consumption for every consumable in YARDS (fabric, elastic, lace, tapes) — not just piece count — so quality manager sees waste live. Monitors layering (before / during / after cut) whether CAD, manual, or manual-cutting-machine, via mobile data + CCTV AI-vision. POST-CUT: cut-panel inspection first, then tracks work going to outside factories (printing, embroidery, heat-seal labels, hand-cutting for denim / preparation work) round-trip, so nothing goes into a black hole. Every issue routed to the right quality supervisor / leader / production supervisor / manager with the exact location — which line, which team, which worker, which point on the floor — and lists the problems still open from the last few days. PREDICTIVE QA: before a new order starts, Yai analyses the history for that style + line + operator pool + machine set and hands the pre-production meeting the top 3 issues most likely to hurt this run (including issues that shipped-even-though-not-fixed on the last similar run). Pre-production meeting begins with that list, not from scratch.
 - Production PA — Today's plan, WIP by line, Cutting/Finishing throughput, Production status
 - CE PA — Standard times, Productivity/line, Machine allocation, Skill inventory, Cost centres
 - YTM PA — Machine downtime, Repair queue, PM schedule, Late-PM alerts, Spare parts
@@ -1413,16 +1473,9 @@ ANSWER RULES
     }
     const seeded = [intro, followUp];
 
-    // Same bookkeeping as createNewChat, but seed messages atomically.
-    const newChatId = Date.now().toString();
-    setChatHistory((prev) => [{
-      id: newChatId,
-      title: "New Chat",
-      messages: seeded,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    }, ...prev]);
-    setCurrentChatId(newChatId);
+    // Same bookkeeping as createNewChat — history entry appears lazily on
+    // the first user message, so seed-only chats never clutter the sidebar.
+    setCurrentChatId(Date.now().toString());
     setMessages(seeded);
     setInput("");
   };
@@ -1608,6 +1661,12 @@ ANSWER RULES
               />
               <span className="text-white" style={{ fontSize: 22, fontWeight: 700 }}>A</span>
             </div>
+          </div>
+
+          {/* Privacy note — history is memory-only, gone on refresh */}
+          <div className="px-4 py-3 border-t border-white/10 text-xs text-white/60">
+            🔒 Chats clear on refresh — for your privacy. Want to keep one? Ask
+            Yai about emailing you the transcript (from ecom@yaikh.com).
           </div>
 
           {/* Chat List */}
