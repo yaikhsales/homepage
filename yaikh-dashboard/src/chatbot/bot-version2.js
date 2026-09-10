@@ -2066,7 +2066,7 @@ ANSWER RULES
             </div>
           ) : (
             // Messages Display
-            <div className="space-y-4 max-w-3xl mx-auto relative z-20">
+            <div className="space-y-4 max-w-6xl mx-auto relative z-20">
               {messages.map((msg, idx) => (
                 <div
                   key={idx}
@@ -2205,7 +2205,7 @@ ANSWER RULES
 
         {/* Input Field with Thinking Status */}
         <div className="flex-shrink-0 px-4 sm:px-6 py-4 border-t border-white/10 bg-[#050505] w-full">
-          <form onSubmit={handleSend} className="relative max-w-3xl mx-auto">
+          <form onSubmit={handleSend} className="relative max-w-6xl mx-auto">
         {uploadedImage && (
           <div className="absolute bottom-full mb-3 left-0 p-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/20 flex items-start gap-2 shadow-xl">
               <img src={uploadedImage} alt="Upload preview" className="h-24 w-auto object-contain rounded-lg" />
