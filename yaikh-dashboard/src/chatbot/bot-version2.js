@@ -897,30 +897,30 @@ const BotVersion2 = ({
       }
 
       if (tellMeMore) {
-        setTimeout(() => {
-          setMessages(prev => [...prev,
-            { from: "bot", text:
-              `Good question${visitorName ? `, ${visitorName}` : ""} — you shouldn't shape a factory for me before you see the bigger picture. Here it is straight.\n\n` +
-              `**What Yai actually is** — the world's first Ai-Native Manufacturing Intelligence Platform, built for garments, footwear, bags and softgoods. Made in Cambodia by Texlink Technologies since 2024, backed by 40 years of real factory-floor experience — not a Silicon Valley experiment. One system. Simple enough to run your factory from your phone.\n\n` +
-              `**The AI moment we're in** — frontier models can now genuinely read your books, watch your floor, answer a buyer's audit, and draft the reply. Not "chatbot" — actual work. Yai stands on the shoulders of giants: Claude (Anthropic · Claude Partner Network) for the reasoning, Google Cloud for the infrastructure, aligned with JICA's Cambodia digitalisation. Not built alone.\n\n` +
-              `**The chaos your factory lives in today** — paper reports, ledger books, WhatsApp groups, manual signing, Excel sheets, endless meetings, chasing approvals. Every serious factory is stuck here. That's the tax you pay in slippage — a container leaves late, a complaint sits 8 days, a compressor down 6 hours nobody escalates.\n\n` +
-              `**Yai fixes it one layer at a time — nothing gets ripped out.**\n\n` +
-              `• **Layer 1 · Digitalisation** — Smart UIs and chat agents replace the email + Excel culture. Mobile apps put information in the right hands. AIoT sensors monitor everything. LLMs for language support.\n` +
-              `• **Layer 2 · Agentic** — that digital data comes to life. LLM-powered agents auto-queue repetitive tasks, escalate the random ones to a human, police every SOP and every process. 10 Master Agents managing 100+ apps.\n` +
-              `• **Layer 3 · Full Ai** — strategic management. Human + AI in sync. Results proven enough that the boss puts up capital and clones the operation into new territories — Bangladesh, Indonesia, India, Uzbekistan, Mexico.\n\n` +
-              `**The ladder is $120 → sovereign AI, over ~1 year:** Cloud Starter ($120/yr for 5 core people) → Cloud Growth ($750/yr) → Cloud Enterprise ($1,200/yr) → your own AI Server on the factory roof → Agentic layer (+$5,000/yr) → Big AI Brain that runs 5 factories from one chat. Same engineering base all the way up — every dollar you spend at step 1 still works at step 6.\n\n` +
-              `**Where you'd notice me first** — the moment you log in, I hand you the 3 things across all 13 specialist PAs that most deserve your call today. You don't chase; the work chases you.\n\n` +
-              `**And here's the part nobody wants to say out loud** — AI in manufacturing is becoming the operating norm within 2-3 years. Not a compliance box, not a nice-to-have — the baseline. Look at what's already real: EU Digital Product Passport arriving 2027, mandatory for textiles. US UFLPA forcing fibre-level traceability. Higg / Worldly / Bluesign scoring you on data feeds you don't have. Adidas, H&M, Uniqlo, Inditex consolidating orders to fewer, smarter suppliers. Fast fashion compressed design-to-shelf from 6 months to 3 weeks. Cambodia's minimum wage climbing, Vietnam and Bangladesh right behind you. Post-COVID container ETAs slip weekly.\n\n` +
-              `None of that goes away. It's not about "if your buyer asks" — it's about who wires this in first and who lags. Factories that install AI in 2026 have 2 years of trained data when the buyer requires it in 2028. Factories that start in 2028 begin from zero — and by then the order has moved to whoever didn't wait.\n\n` +
-              `So the frame is simple: fix the chaos → hold the margin as costs climb → fund the next line → clone the operation. Don't be Nokia. Don't be the last factory on paper.\n\n` +
-              `Shape the demo to YOUR world. How many people show up on your floor on a normal day?`,
-            }
-          ]);
-        }, 400);
-        // The pitch closes by asking the workers question, so a boss who asked
-        // "what can you do" during the mission check is now effectively at step 0.
+        // Same content, but drip as short bubbles — never a wall.
+        const deep = [
+          `Straight, ${visitorName || "Boss"} — no wall.`,
+          `**What I am** — the world's first Ai-Native Manufacturing Intelligence Platform. Garments, footwear, bags, softgoods.`,
+          `Made in Cambodia by Texlink Technologies. 40 years of real factory-floor experience behind it. Not a Silicon Valley experiment.`,
+          `**The moment we're in** — AI can now read your books, watch your floor, answer a buyer's audit. Real work, not chatbot.`,
+          `I stand on giants — Claude for reasoning, Google Cloud for infrastructure, aligned with JICA's Cambodia push.`,
+          `**Today's chaos** — paper, WhatsApp, Excel, endless meetings, chasing approvals. Every factory is stuck here.`,
+          `That's your slippage tax — a container late, a complaint sitting 8 days, a compressor down 6 hours nobody escalates.`,
+          `**I fix it in 3 layers, nothing ripped out.** Layer 1 digitalise. Layer 2 agentic (auto-queue, escalate). Layer 3 full AI.`,
+          `**The ladder** — $120/yr Cloud Starter → $750 Growth → $1,200 Enterprise → your own AI server on the roof → Big AI Brain running 5 factories from one chat. Same engineering all the way up.`,
+          `**What you'd notice first** — the moment you log in, I hand you the 3 things across all 13 PAs that most deserve your call today. Work chases you.`,
+          `**The part nobody says out loud** — AI in manufacturing becomes the operating norm within 2-3 years. Baseline, not nice-to-have.`,
+          `EU Digital Product Passport 2027. US UFLPA fibre traceability. Higg / Worldly / Bluesign already scoring you. Adidas, H&M, Inditex consolidating to smarter suppliers.`,
+          `Factories that install AI in 2026 have 2 years of trained data by 2028. Factories starting in 2028 start from zero. Order moves.`,
+          `Frame — fix the chaos → hold margin as costs climb → fund the next line → clone the operation. Don't be Nokia.`,
+          `So — shape the demo to YOUR world. How many people show up on your floor on a normal day?`,
+        ];
+        const toPost = bossPacePreference === "short" ? [deep[0], deep[1], deep[7], deep[14]] : deep;
+        toPost.forEach((text, i) =>
+          setTimeout(() => setMessages(prev => [...prev, { from: "bot", text }]), 400 + i * 700),
+        );
         if (onboardingStep === -1) setOnboardingStep(0);
-        return; // otherwise stay on the same onboarding step
+        return;
       }
 
       // ── Topical question intercept ──────────────────────────────────
