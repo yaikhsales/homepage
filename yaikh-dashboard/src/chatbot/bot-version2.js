@@ -815,13 +815,13 @@ const BotVersion2 = ({
         setTimeout(() => {
           setMessages(prev => [...prev,
             { from: "bot", text:
-              `Fair — you shouldn't set up a factory for me before you know what I actually bring. Short version:\n\n` +
-              `• **I'm Big Brain** — you talk to me, I route the question to the right specialist and merge the answers if it takes more than one department to figure out.\n` +
-              `• **13 PA agents underneath** — Accounting, HR, Admin, CSR, Shipping, MRP, QA, Production, CE, YTM, 4DP, YPI, Social. Each one is trained on its own patch of your business and answers only from live data — never invented numbers.\n` +
-              `• **Everything runs inside Yai** — no email, no Excel, no WeChat. Purchase requests, bill claims, salary runs, gate passes, complaints, audits — all move through the platform, and I can see all of it live.\n` +
-              `• **I surface what needs your attention** — the moment you're logged in, I can tell you the 3 things across your factory that most deserve your call today, ranked and sorted by department.\n` +
-              `• **I can act on your behalf** — approve a PR, draft a corrective action, book a car, raise a temp-worker request — but I always confirm the exact target before I do it. Never behind your back.\n\n` +
-              `That's the gist${visitorName ? `, ${visitorName}` : ""}. If you want to see any of it in action, quickest is to shape the demo to your world — so back to my question: roughly how many people show up on your floor on a normal day?`,
+              `Fair question${visitorName ? `, ${visitorName}` : ""} — you shouldn't shape a factory for me before you know what I actually bring. Let me give you the bigger picture, not just the feature list.\n\n` +
+              `**Where AI is right now** — we've crossed the line where a large model can genuinely read your books, watch your floor, answer a buyer's audit question, and draft the reply. Not "chatbot" — actual work. Every serious factory in the world is trying to figure out how to wire that in without losing control of their data or their people. That's the moment we're in.\n\n` +
+              `**What Yaikh does about it** — instead of one giant AI that does everything badly, Yaikh runs 13 specialist PA agents, one per department, and me on top routing between them. Each PA lives INSIDE your business — same database, same records, same rules — so when I answer, it's from your own numbers, never a guess. That's the difference between an AI that impresses you for a week and one you actually run the factory with.\n\n` +
+              `**Why a factory your size needs this now** — a 1,000-worker plant has roughly 200 things happening every hour: PRs raised, quality holds flagged, machines going down, complaints landing from buyers, invoices needing sign-off. Today those flow through 10 WhatsApp groups, 3 Excels, a WeChat, and whoever the boss trusts most. That's the tax you pay in slippage — a container leaves late, a complaint sits 8 days, a compressor down 6 hours nobody escalates. Yai closes that gap because everything lives in one platform and I watch all of it.\n\n` +
+              `**What that turns into in numbers** — the factories doing this properly see 3-6% OTIF gain, 15-25% faster PR-to-payment cycle, and audit prep drops from weeks to a click. That's real money — enough to fund another line inside 12 months, which is how you grow the business without doubling your admin headcount.\n\n` +
+              `**Where you'd notice me first** — the moment you log in, I hand you the 3 things across all 13 PAs that most deserve your call today. You don't chase; the work chases you. That alone is worth a demo.\n\n` +
+              `So — quickest way to show you this actually works is to shape it to YOUR world. How many people show up on your floor on a normal day?`,
             }
           ]);
         }, 400);
