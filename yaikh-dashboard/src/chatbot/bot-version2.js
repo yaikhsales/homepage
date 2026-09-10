@@ -71,17 +71,20 @@ const BotVersion2 = ({
   // next/more request pulls a fresh batch.
   const [shownMatterIds, setShownMatterIds] = useState([]);
 
-  // Ask the next onboarding question — Claude-flavour: warm, curious, reacts
-  // to what the boss said, and asks in a way that invites conversation.
+  // Ask the next onboarding question — Bernie Sanders style: short,
+  // plain, direct, one small idea per bubble. Never a wall of text.
   const askNextOnboarding = (step, draft, boss) => {
     let q = null;
     const name = boss || "Boss";
 
     if (step === -2) {
       q = `Hello Boss — I am Yai. And you?`;
+    } else if (step === -1) {
+      // After name capture — short mission check. WAIT for boss to say yes.
+      q = `Good to meet you, ${name}. I take it you're here to see what Yai can do for you. Am I right?`;
     } else if (step === 0) {
-      // React to name + state the mission (why we're both here) + then the first factory question.
-      q = `Ah, ${name} — good to actually put a name to the boss. I take it you're here to explore what Yai can do for your business — feel out the 13 PAs, see how they'd sit in your day, decide if there's real value in it for you. Am I right?\n\nEither way, quickest way for me to give you something meaningful is to shape the demo to YOUR world — so tell me first, roughly how many people show up on your floor on a normal day?`;
+      // After mission confirmed — short lead-in + first factory question.
+      q = `Good. So — how many people show up on your floor on a normal day?`;
     } else if (step === 1) {
       const w = draft.workers || 0;
       let opener;
@@ -225,9 +228,8 @@ const BotVersion2 = ({
     }
   };
 
-  // Wipe any leftover demo state on mount + seed an opener that isn't
-  // robotic. Two bubbles: (1) who Yai is with real credibility markers,
-  // (2) the industry moment the boss is walking into + ask for their name.
+  // Wipe leftover state + open with ONE short line. Bernie Sanders style:
+  // plain, direct, one idea per bubble, wait for the boss to reply.
   useEffect(() => {
     try {
       localStorage.removeItem("yai_visitor_name");
@@ -235,12 +237,8 @@ const BotVersion2 = ({
     } catch { /* private mode */ }
     if (messages.length > 0) return;
     setMessages([
-      { from: "bot", text:
-        `Hello Boss — I am Yai. The world's first Ai-Native Manufacturing Intelligence Platform for garments, footwear, bags and softgoods. Built in Cambodia by Texlink Technologies, running on Claude and Google Cloud, with 40 years of factory-floor experience behind the code.`
-      },
-      { from: "bot", text:
-        `Honestly, you've walked in at a tipping point. EU Digital Product Passport lands 2027 — textile traceability becomes mandatory. Brands like Adidas, H&M, Uniqlo are consolidating orders to fewer, smarter suppliers. Cambodia's minimum wage keeps climbing, Vietnam and Bangladesh are close on your heels, and post-COVID container ETAs slip weekly. Factories that wire AI in now have two years of trained data when it becomes the industry baseline. Factories that wait start from zero.\n\nDon't be Nokia — don't be the last factory on paper. Anyway, before we go further: what should I call you?`
-      },
+      { from: "bot", text: `Hello Boss — I am Yai.` },
+      { from: "bot", text: `And you?` },
     ]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -1065,7 +1063,7 @@ YOUR PA REPORTS (Agent Collective — never invent others)
 - CE PA — Standard times, Productivity/line, Machine allocation, Skill inventory, Cost centres
 - YTM PA — Machine downtime, Repair queue, PM schedule, Late-PM alerts, Spare parts
 - 4DP PA — Sample approvals, Pattern review, Spec sheets, Trim approvals, Design roadmap
-- YPI PA — Kaizen projects, SOP review, Efficiency audits, Process optimisation, KPIs
+- YPI PA — Yai Production Instructions. Trilingual technical-detail platform (Khmer / English / Chinese). Merges tech-packs, measurement, construction, trim cards, packing method, sample-stage issues, and production-meeting notes into one place. Shows on shop-floor iPads and TVs so QC, technicians, supervisors, and operators all read the same spec in their own language. Not kaizen — kaizen sits inside CE / YPM.
 - Social PA — TikTok, Facebook, YouTube, Instagram, LinkedIn comments
 
 ═══════════════════════════════════════════════════════════
@@ -1325,7 +1323,7 @@ YOUR PA REPORTS (Agent Collective — never invent others)
 - CE PA — Standard times, Productivity/line, Machine allocation, Skill inventory, Cost centres
 - YTM PA — Machine downtime, Repair queue, PM schedule, Late-PM alerts, Spare parts
 - 4DP PA — Sample approvals, Pattern review, Spec sheets, Trim approvals, Design roadmap
-- YPI PA — Kaizen projects, SOP review, Efficiency audits, Process optimisation, KPIs
+- YPI PA — Yai Production Instructions. Trilingual technical-detail platform (Khmer / English / Chinese). Merges tech-packs, measurement, construction, trim cards, packing method, sample-stage issues, and production-meeting notes into one place. Shows on shop-floor iPads and TVs so QC, technicians, supervisors, and operators all read the same spec in their own language. Not kaizen — kaizen sits inside CE / YPM.
 - Social PA — TikTok, Facebook, YouTube, Instagram, LinkedIn comments
 
 ═══════════════════════════════════════════════════════════
