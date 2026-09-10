@@ -936,7 +936,13 @@ const BotVersion2 = ({
       // of answering, don't force the onboarding forward — pitch capabilities
       // naturally, then re-ask the current step's question.
       const rawLower = raw.toLowerCase();
-      const capabilityAsk = /\b(what.*(can|do).*you|what.*you.*(got|can|do|offer)|capabilit|abilit|features?|show.*(me|us)|impress|explain|how.*(work|help)|what.*else|what.*for|tell me about|who are you|what are you|about yai|about yourself|introduce)\b/.test(rawLower);
+      // Topic-first detection — if the boss names a specific area (quality,
+      // production, HR, planning, etc.), we route to the topical intercept
+      // BEFORE the capability pitch, so "tell me about quality" gets a
+      // quality answer, not a re-pitch of the whole platform.
+      const _topicRegex = /\b(production|floor|line|sewing|assembl|output|wip|throughput|quality|qa|qms|defect|inspection|aql|4[- ]?pt|call.?out|4dp|planning|capacity|schedule|sales.?situation|ypi|tech.?pack|measurement|trim|packing|sample.?stage|merchandis|sourc|bom.?fabric|mrp|material|warehouse|inventory|stock|reorder|purchase|supplier|shipping|container|customs|port|freight|delivery|inbound|outbound|ytm|machine|maintenance|downtime|repair|spare|compressor|ce|kaizen|standard.?time|productivity|cost.?center|efficien|ie|hr|yhr|worker|people|staff|attendance|payroll|union|speak.?up|admin|gate|canteen|fan|ac|dorm|y.?shop|org.?chart|accounting|finance|invoice|payment|bank|book|ledger|payable|receivable|social|tiktok|facebook|instagram|youtube|linkedin|comment|csr|esg|wrap|bsci|ilo|higg|grs|compliance|module|app|pa\b|agent|department|dept|tool|feature)s?\b/i;
+      const hasTopic = _topicRegex.test(raw);
+      const capabilityAsk = !hasTopic && /\b(what.*(can|do).*you|what.*you.*(got|can|do|offer)|capabilit|abilit|features?|show.*(me|us)|impress|explain|how.*(work|help)|what.*else|what.*for|tell me about|who are you|what are you|about yai|about yourself|introduce)\b/.test(rawLower);
       const tellMeMore = /\b(tell me more|fuller version|full version|full pitch|go deeper|long version)\b/i.test(rawLower);
       // At mission check (-1), a plain "yes / sure / please / go ahead" IS a
       // request to hear the pitch — that's literally what Yai just asked.
