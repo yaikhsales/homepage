@@ -74,6 +74,7 @@ const BotVersion2 = ({
   // bot bubble was the "what would be more useful?" repair question.
   const [bossPacePreference, setBossPacePreference] = useState(null);
   const [repairMode, setRepairMode] = useState(false);
+  const [pitchQueue, setPitchQueue] = useState([]); // remaining chunks to release on "more"
   const capShort = (text) => {
     if (bossPacePreference !== "short") return text;
     const sentences = text.replace(/\n+/g, " ").match(/[^.!?]+[.!?]+["')\]]?/g);
@@ -835,6 +836,20 @@ const BotVersion2 = ({
       return;
     }
 
+    // ── Pitch continuation: boss said "more / next / go on / deeper / keep going"
+    // — pop the next chapter from the queue instead of re-parsing.
+    const continueAsk = /^(more|next|continue|keep going|go on|deeper|yes.*more|y$|yes$|please$)\b/i.test(input.trim());
+    if (continueAsk && pitchQueue.length > 0) {
+      setMessages(prev => [...prev, { from: "user", text: input.trim() }]);
+      setInput("");
+      const [nextChapter, ...rest] = pitchQueue;
+      setPitchQueue(rest);
+      nextChapter.forEach((text, i) =>
+        setTimeout(() => setMessages(prev => [...prev, { from: "bot", text }]), 400 + i * 1500),
+      );
+      return;
+    }
+
     // ── Frustration detection: never advance a step, never proceed with the
     // planned reply, never parrot their words back. One short repair bubble.
     const frustratedCheck = /\b(not a conversation|too long|boring|lectur\w*|scolded|not what i want|disappoint\w*|dissapoint\w*|shorter|simpler|not helpful|not helping|wall of text|too much|slow down)\b/i.test(input.trim().toLowerCase());
@@ -881,44 +896,60 @@ const BotVersion2 = ({
       }
 
       if ((capabilityAsk || missionYes) && !tellMeMore) {
-        const bubbles = [
-          `Simple. I run your factory from your phone. 13 department agents inside — quality, cost, production, accounting, HR, all of them. I sit on top and route.`,
-          `Made in Cambodia, by Texlink. On Claude. On Google Cloud. Built by people who spent 40 years on the factory floor.`,
-          `One system. No more paper, WhatsApp chains, or Excel. Everything moves through Yai. I watch it live.`,
-          `In 2 to 3 years, this will be the norm — brands are already scoring you on live data. Whoever wires it in first wins.`,
-          `So — best way to show you is to shape a demo to your world. How many people on your floor? (Fuller version anytime — just say "tell me more".)`,
+        // Short pitch — 2 bubbles, spaced. Then ask permission to continue.
+        const chapter1 = [
+          `Simple, ${visitorName || "Boss"}. I run your factory from your phone. 13 department agents inside — quality, cost, production, accounting, HR, all of them. I sit on top and route.`,
+          `Made in Cambodia, by Texlink. On Claude. On Google Cloud. Built by people with 40 years on the floor. Want me to go deeper, or shall we shape a demo to your world?`,
         ];
-        const toPost = bossPacePreference === "short" ? [bubbles[0], bubbles[4]] : bubbles;
-        toPost.forEach((text, i) =>
-          setTimeout(() => setMessages(prev => [...prev, { from: "bot", text }]), 400 + i * 700),
+        chapter1.forEach((text, i) =>
+          setTimeout(() => setMessages(prev => [...prev, { from: "bot", text }]), 400 + i * 1500),
         );
+        // Queue the rest for "more/deeper/yes" continuation
+        setPitchQueue([
+          [
+            `One system. No more paper, WhatsApp chains, or Excel. Everything moves through Yai. I watch it live.`,
+            `In 2-3 years this becomes the operating norm — brands already scoring you on live data. Whoever wires it in first wins. Keep going, or shall we shape the demo?`,
+          ],
+          [
+            `The moment you log in — I hand you 3 things across 13 PAs that most deserve your call today. Work chases you, not the other way around.`,
+            `Ladder is $120/yr Cloud Starter → your own AI server on the roof → Big AI Brain running 5 factories from one chat. Same engineering the whole way up. More, or shape the demo?`,
+          ],
+          [
+            `The part nobody says out loud — EU Digital Product Passport 2027, US UFLPA fibre traceability, Higg / Worldly scoring you on data you don't have. Adidas / H&M / Inditex consolidating to smarter suppliers.`,
+            `So — shape the demo to YOUR world. How many people on your floor on a normal day?`,
+          ],
+        ]);
         if (onboardingStep === -1) setOnboardingStep(0);
-        return; // otherwise stay on the same onboarding step
+        return;
       }
 
       if (tellMeMore) {
-        // Same content, but drip as short bubbles — never a wall.
-        const deep = [
+        // Same content, chapter mode — 2 bubbles per chapter, boss opts in for more.
+        const chapter1 = [
           `Straight, ${visitorName || "Boss"} — no wall.`,
-          `**What I am** — the world's first Ai-Native Manufacturing Intelligence Platform. Garments, footwear, bags, softgoods.`,
-          `Made in Cambodia by Texlink Technologies. 40 years of real factory-floor experience behind it. Not a Silicon Valley experiment.`,
-          `**The moment we're in** — AI can now read your books, watch your floor, answer a buyer's audit. Real work, not chatbot.`,
-          `I stand on giants — Claude for reasoning, Google Cloud for infrastructure, aligned with JICA's Cambodia push.`,
-          `**Today's chaos** — paper, WhatsApp, Excel, endless meetings, chasing approvals. Every factory is stuck here.`,
-          `That's your slippage tax — a container late, a complaint sitting 8 days, a compressor down 6 hours nobody escalates.`,
-          `**I fix it in 3 layers, nothing ripped out.** Layer 1 digitalise. Layer 2 agentic (auto-queue, escalate). Layer 3 full AI.`,
-          `**The ladder** — $120/yr Cloud Starter → $750 Growth → $1,200 Enterprise → your own AI server on the roof → Big AI Brain running 5 factories from one chat. Same engineering all the way up.`,
-          `**What you'd notice first** — the moment you log in, I hand you the 3 things across all 13 PAs that most deserve your call today. Work chases you.`,
-          `**The part nobody says out loud** — AI in manufacturing becomes the operating norm within 2-3 years. Baseline, not nice-to-have.`,
-          `EU Digital Product Passport 2027. US UFLPA fibre traceability. Higg / Worldly / Bluesign already scoring you. Adidas, H&M, Inditex consolidating to smarter suppliers.`,
-          `Factories that install AI in 2026 have 2 years of trained data by 2028. Factories starting in 2028 start from zero. Order moves.`,
-          `Frame — fix the chaos → hold margin as costs climb → fund the next line → clone the operation. Don't be Nokia.`,
-          `So — shape the demo to YOUR world. How many people show up on your floor on a normal day?`,
+          `**What I am** — world's first Ai-Native Manufacturing Intelligence Platform. Garments, footwear, bags, softgoods. Made in Cambodia by Texlink. 40 years floor experience behind it.`,
+          `Want the next chapter (the AI moment we're in + chaos I fix), or shape the demo now?`,
         ];
-        const toPost = bossPacePreference === "short" ? [deep[0], deep[1], deep[7], deep[14]] : deep;
-        toPost.forEach((text, i) =>
-          setTimeout(() => setMessages(prev => [...prev, { from: "bot", text }]), 400 + i * 700),
+        chapter1.forEach((text, i) =>
+          setTimeout(() => setMessages(prev => [...prev, { from: "bot", text }]), 400 + i * 1400),
         );
+        setPitchQueue([
+          [
+            `**The moment we're in** — AI can now read your books, watch your floor, answer a buyer's audit, draft the reply. Real work, not chatbot. I stand on Claude + Google Cloud + JICA alignment.`,
+            `**Today's chaos** — paper, WhatsApp, Excel, endless meetings, chasing approvals. Every factory stuck here. That's your slippage tax — container late, complaint sits 8 days, compressor down 6 hours nobody escalates.`,
+            `Next chapter is how I fix it (3 layers, nothing ripped out) + the $120 ladder. More?`,
+          ],
+          [
+            `**3 layers, nothing ripped out.** Layer 1 digitalise (mobile apps + AIoT). Layer 2 agentic (auto-queue, escalate, police every SOP). Layer 3 full AI (human + AI in sync, clone the operation).`,
+            `**Ladder** — $120/yr Cloud Starter → $750 Growth → $1,200 Enterprise → your own AI server on the roof → Big AI Brain running 5 factories from one chat.`,
+            `Last chapter is the industry pressure + the frame. More?`,
+          ],
+          [
+            `**Industry pressure** — EU Digital Product Passport 2027 mandatory for textiles. US UFLPA fibre traceability. Cambodia minimum wage climbing, Vietnam / Bangladesh right behind.`,
+            `**Frame** — fix the chaos → hold margin as costs climb → fund the next line → clone the operation. Don't be Nokia. Don't be the last factory on paper.`,
+            `So — shape the demo to YOUR world. How many people on your floor on a normal day?`,
+          ],
+        ]);
         if (onboardingStep === -1) setOnboardingStep(0);
         return;
       }
@@ -989,9 +1020,9 @@ const BotVersion2 = ({
         };
         const reAsk = reAskByStep[String(onboardingStep)];
         if (reAsk) bubbles.push(reAsk);
-        const toPost = bossPacePreference === "short" ? bubbles.slice(0, 2) : bubbles;
+        const toPost = bubbles.slice(0, 2); // conversation, not report — cap at 2
         toPost.forEach((text, i) =>
-          setTimeout(() => setMessages(prev => [...prev, { from: "bot", text }]), 400 + i * 700),
+          setTimeout(() => setMessages(prev => [...prev, { from: "bot", text }]), 400 + i * 1400),
         );
         return; // stay on the same onboarding step
       }
