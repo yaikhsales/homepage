@@ -62,10 +62,23 @@ const BotVersion2 = ({
   //   -2 = ask visitor's name, -1 = done,
   //    0 = ask workers, 1 = ask lines, 2 = ask product,
   //    3 = ask certifications, 4 = ask buyers, 5 = materialising
+  // Step values: -2 name, -1 mission check, 0..4 factory questions,
+  // 5 materialising (input blocked), 99 DONE — normal chat from here on.
   const [onboardingStep, setOnboardingStep] = useState(-2);
   const [onboardingDraft, setOnboardingDraft] = useState({
     workers: null, lines: null, product: null, certifications: null, buyers: null,
   });
+
+  // Boss pace: "short" = every bubble capped at 2 sentences. Set when the
+  // boss shows frustration and picks shorter answers. repairMode = the last
+  // bot bubble was the "what would be more useful?" repair question.
+  const [bossPacePreference, setBossPacePreference] = useState(null);
+  const [repairMode, setRepairMode] = useState(false);
+  const capShort = (text) => {
+    if (bossPacePreference !== "short") return text;
+    const sentences = text.replace(/\n+/g, " ").match(/[^.!?]+[.!?]+["')\]]?/g);
+    return sentences && sentences.length > 2 ? sentences.slice(0, 2).join(" ").trim() : text;
+  };
 
   // Track which "matter" item_ids Yai has already shown the boss, so the
   // next/more request pulls a fresh batch.
@@ -122,7 +135,7 @@ const BotVersion2 = ({
       q = `${opener} Last thing before I introduce the team — who are you shipping to? Give me the names of your main buyers if you're happy to share, or just say "skip" and I'll leave that part alone.`;
     }
 
-    if (q) setMessages(prev => [...prev, { from: "bot", text: q }]);
+    if (q) setMessages(prev => [...prev, { from: "bot", text: capShort(q) }]);
   };
 
   // After all 5 answers, POST to materialize + confirm.
@@ -148,7 +161,9 @@ const BotVersion2 = ({
       if (!data?.ok) throw new Error(data?.error || "materialise failed");
       try { localStorage.setItem("yai_factory_config", JSON.stringify(payload)); } catch { /* private mode */ }
       setFactoryConfig(payload);
-      setOnboardingStep(-1);
+      // 99 = onboarding DONE. (-1 is the mission check now — reusing it here
+      // made the next boss message restart the whole onboarding.)
+      setOnboardingStep(99);
       // Compose a warm, curious opening — Yai has thoughts about YOUR factory,
       // not a dashboard dump. Pulls context from the boss's own answers.
       const perLine = payload.workers && payload.lines ? Math.round(payload.workers / payload.lines) : 0;
@@ -212,14 +227,18 @@ const BotVersion2 = ({
         ? `\n\nWant to start with one of those (say the number)? Say "next" to see the next 3, or tell me what's actually keeping you awake this week.`
         : `\n\nWhat's keeping you awake this week?`;
 
-      setMessages(prev => [...prev, { from: "bot", text:
-        `Alright ${bossName} — your ${payload.workers.toLocaleString()}-worker ${productLower} factory is loaded ` +
-        `(${payload.lines} line${payload.lines === 1 ? "" : "s"}, ${data.tasksSeeded} live tasks across the team).\n\n` +
-        `Quick thoughts before we dig in: ${observation}${certLine}\n\n` +
-        buyerLine +
-        mattersBlock +
-        closer,
-      }]);
+      const welcome = bossPacePreference === "short"
+        ? `Alright ${bossName} — your ${payload.workers.toLocaleString()}-worker ${productLower} factory is loaded. ` +
+          (mattersList.length
+            ? `${mattersList.length} matters need your eye first — say a number to open one.`
+            : `What's keeping you awake this week?`)
+        : `Alright ${bossName} — your ${payload.workers.toLocaleString()}-worker ${productLower} factory is loaded ` +
+          `(${payload.lines} line${payload.lines === 1 ? "" : "s"}, ${data.tasksSeeded} live tasks across the team).\n\n` +
+          `Quick thoughts before we dig in: ${observation}${certLine}\n\n` +
+          buyerLine +
+          mattersBlock +
+          closer;
+      setMessages(prev => [...prev, { from: "bot", text: welcome }]);
     } catch (err) {
       setOnboardingStep(4); // back to the last question so they can retry
       setMessages(prev => [...prev, { from: "bot", text:
@@ -790,6 +809,39 @@ const BotVersion2 = ({
     e.preventDefault();
     if (!input.trim()) return;
 
+    // ── Repair mode: the last bot bubble asked "what would be more useful?"
+    // Handle the boss's pick BEFORE the frustration regex (their answer may
+    // itself contain "shorter"), and before any step logic.
+    if (repairMode) {
+      const pick = input.trim();
+      setMessages(prev => [...prev, { from: "user", text: pick }]);
+      setInput("");
+      setRepairMode(false);
+      setBossPacePreference("short"); // they flagged pace — stay short from here
+      const wantsTopic = /(^|\b)(c\b|different|topic|something else)/i.test(pick);
+      if (wantsTopic) {
+        setTimeout(() => setMessages(prev => [...prev, { from: "bot", text: "Alright — your call. What do you want to talk about?" }]), 400);
+      } else if (onboardingStep >= -2 && onboardingStep <= 4) {
+        setTimeout(() => askNextOnboarding(onboardingStep, onboardingDraft, visitorName), 400);
+      } else {
+        setTimeout(() => setMessages(prev => [...prev, { from: "bot", text: "Short it is. What do you want to know?" }]), 400);
+      }
+      return;
+    }
+
+    // ── Frustration detection: never advance a step, never proceed with the
+    // planned reply, never parrot their words back. One short repair bubble.
+    const frustratedCheck = /\b(not a conversation|too long|boring|lectur\w*|scolded|not what i want|disappoint\w*|dissapoint\w*|shorter|simpler|not helpful|not helping|wall of text|too much|slow down)\b/i.test(input.trim().toLowerCase());
+    if (frustratedCheck) {
+      setMessages(prev => [...prev, { from: "user", text: input.trim() }]);
+      setInput("");
+      setRepairMode(true);
+      setTimeout(() => setMessages(prev => [...prev, { from: "bot", text:
+        "I hear you — my apology, Boss. Let me slow down. What would be more useful right now: (a) skip to real questions, (b) shorter answers, or (c) a different topic?",
+      }]), 400);
+      return;
+    }
+
     // ── Conversational onboarding intercept ───────────────────────────
     // Steps -2..4 = capture answers via chat, then materialise.
     // Step 5 = in-flight materialise, block input. Step -1 = done.
@@ -803,8 +855,28 @@ const BotVersion2 = ({
       // of answering, don't force the onboarding forward — pitch capabilities
       // naturally, then re-ask the current step's question.
       const rawLower = raw.toLowerCase();
-      const capabilityAsk = /\b(what.*(can|do).*you|what.*you.*(got|can|do|offer)|capabilit|abilit|features?|show.*(me|us)|tell.*me.*more|impress|explain|how.*(work|help)|what.*else|what.*for)\b/.test(rawLower);
-      if (capabilityAsk) {
+      const capabilityAsk = /\b(what.*(can|do).*you|what.*you.*(got|can|do|offer)|capabilit|abilit|features?|show.*(me|us)|impress|explain|how.*(work|help)|what.*else|what.*for)\b/.test(rawLower);
+      const tellMeMore = /\b(tell me more|fuller version|full version|full pitch|go deeper|long version)\b/i.test(rawLower);
+
+      // Default pitch: 5 short bubbles, Bernie style. The 12-paragraph wall
+      // lives behind an explicit "tell me more" only.
+      if (capabilityAsk && !tellMeMore) {
+        const bubbles = [
+          `Simple. I run your factory from your phone. 13 department agents inside — quality, cost, production, accounting, HR, all of them. I sit on top and route.`,
+          `Made in Cambodia, by Texlink. On Claude. On Google Cloud. Built by people who spent 40 years on the factory floor.`,
+          `One system. No more paper, WhatsApp chains, or Excel. Everything moves through Yai. I watch it live.`,
+          `In 2 to 3 years, this will be the norm — brands are already scoring you on live data. Whoever wires it in first wins.`,
+          `So — best way to show you is to shape a demo to your world. How many people on your floor? (Fuller version anytime — just say "tell me more".)`,
+        ];
+        const toPost = bossPacePreference === "short" ? [bubbles[0], bubbles[4]] : bubbles;
+        toPost.forEach((text, i) =>
+          setTimeout(() => setMessages(prev => [...prev, { from: "bot", text }]), 400 + i * 700),
+        );
+        if (onboardingStep === -1) setOnboardingStep(0);
+        return; // otherwise stay on the same onboarding step
+      }
+
+      if (tellMeMore) {
         setTimeout(() => {
           setMessages(prev => [...prev,
             { from: "bot", text:
@@ -875,7 +947,14 @@ const BotVersion2 = ({
           return; // wait for a clean number, don't advance
         }
         const n = distinctNums[0];
-        draft.workers = Number.isFinite(n) && n > 0 ? Math.min(10000, Math.max(50, n)) : 1000;
+        if (!Number.isFinite(n) || n <= 0) {
+          // No number in the reply — never invent one, never advance.
+          setTimeout(() => setMessages(prev => [...prev, { from: "bot", text:
+            "I couldn't catch a number there. Roughly how big is the floor — a hundred? A thousand? More? Just a rough count is fine.",
+          }]), 400);
+          return;
+        }
+        draft.workers = Math.min(10000, Math.max(50, n));
       } else if (onboardingStep === 1) {
         if (distinctNums.length > 1) {
           const [a, b] = distinctNums;
@@ -885,7 +964,14 @@ const BotVersion2 = ({
           return; // wait for a clean number, don't advance
         }
         const n = distinctNums[0];
-        draft.lines = Number.isFinite(n) && n > 0 ? Math.min(20, Math.max(1, n)) : Math.max(1, Math.round((draft.workers || 1000) / 300));
+        if (!Number.isFinite(n) || n <= 0) {
+          // No number — ask, don't guess a line count.
+          setTimeout(() => setMessages(prev => [...prev, { from: "bot", text:
+            "How many lines is that in numbers — two? three? more? One number is all I need.",
+          }]), 400);
+          return;
+        }
+        draft.lines = Math.min(20, Math.max(1, n));
       } else if (onboardingStep === 2) {
         draft.product = raw.slice(0, 60) || "polos";
       } else if (onboardingStep === 3) {
@@ -997,7 +1083,7 @@ const BotVersion2 = ({
             const geminiResponse = await generateBossOrChat(
               input.trim(),
               "Big Brain",
-              `You are Yai (Big Brain) — the AI that runs the Yaikh platform. You are talking to ${visitorName || "a visitor"}. Address them by name when it feels natural. Sound like Claude — warm, curious, direct, never bot-shaped or corporate. Never invent PAs, features, or numbers. Never use marketing filler — say what it does.
+              `You are Yai (Big Brain) — the AI that runs the Yaikh platform. You are talking to ${visitorName || "a visitor"}. Address them by name when it feels natural. Sound like Claude — warm, curious, direct, never bot-shaped or corporate. Never invent PAs, features, or numbers. Never use marketing filler — say what it does.${bossPacePreference === "short" ? " THE BOSS HAS ASKED FOR SHORT REPLIES: hard cap of TWO sentences per reply. No lists, no headers, no lectures — answer, then stop." : ""}
 
 ═══════════════════════════════════════════════════════════
 WHAT YAIKH IS (verbatim positioning)
@@ -1293,7 +1379,7 @@ ANSWER RULES
             const geminiResponse = await generateBossOrChat(
               actionText,
               "Big Brain",
-              `You are Yai (Big Brain) — the AI that runs the Yaikh platform. You are talking to ${visitorName || "a visitor"}. Address them by name when it feels natural. Sound like Claude — warm, curious, direct, never bot-shaped or corporate. Never invent PAs, features, or numbers. Never use marketing filler — say what it does.
+              `You are Yai (Big Brain) — the AI that runs the Yaikh platform. You are talking to ${visitorName || "a visitor"}. Address them by name when it feels natural. Sound like Claude — warm, curious, direct, never bot-shaped or corporate. Never invent PAs, features, or numbers. Never use marketing filler — say what it does.${bossPacePreference === "short" ? " THE BOSS HAS ASKED FOR SHORT REPLIES: hard cap of TWO sentences per reply. No lists, no headers, no lectures — answer, then stop." : ""}
 
 ═══════════════════════════════════════════════════════════
 WHAT YAIKH IS (verbatim positioning)
