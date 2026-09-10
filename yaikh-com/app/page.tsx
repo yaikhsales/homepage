@@ -2319,6 +2319,21 @@ const SC_IconFactory = (
     <line x1="16" y1="17" x2="16" y2="19" strokeLinecap="round" />
   </svg>
 );
+const SC_IconCloudArrow = (
+  <svg viewBox="0 0 40 28" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-8 w-10" aria-hidden="true">
+    <path d="M10 22h19a6 6 0 000-12h-.7A9 9 0 0011 8.5 6.8 6.8 0 0010 22z" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M16 17l4-4 4 4M20 13v10" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+const SC_IconAiMachine = (
+  <svg viewBox="0 0 40 30" fill="none" stroke="currentColor" strokeWidth="1.7" className="h-8 w-10" aria-hidden="true">
+    <rect x="4" y="3" width="32" height="20" rx="3" />
+    <path d="M15 27h10M20 23v4" strokeLinecap="round" />
+    <rect x="12" y="8" width="16" height="10" rx="2" />
+    <circle cx="16" cy="13" r="1.2" fill="currentColor" stroke="none" />
+    <path d="M20 10v6M24 10v6" strokeLinecap="round" />
+  </svg>
+);
 
 /* ── Avatar-cluster blocks — 5 sizes from core team through factory ── */
 const SC_ClusterTeam = (
@@ -2422,7 +2437,7 @@ type StaticStep = {
 };
 
 const HOMEPAGE_KHR_PER_USD = Number(process.env.NEXT_PUBLIC_SUBSCRIPTION_KHR_PER_USD) || 4100;
-const formatHomepageKhr = (amount: number) => `៛${Math.round(amount).toLocaleString("en-US")}`;
+const formatHomepageKhr = (amount: number) => `${Math.round(amount).toLocaleString("en-US")} KHR`;
 
 const SC_BEFORE: StaticStep[] = [
   { step: "Step 1", stage: "Cloud · Starter",    plan: "Cloud · Starter",    sub: "5 key members",     price: "$120",   usdAmount: 120,  per: "/ year", h: 250, bg: "from-sky-100 to-white",    accent: "text-yai-blue", icon: SC_ClusterTeam },
@@ -2439,11 +2454,11 @@ function SC_Price({ s }: { s: StaticStep }) {
   const prefix = s.price.startsWith("+") ? "+" : "";
   return (
     <div className="rounded-b-xl border border-yai-border bg-white text-center py-2.5 px-1.5">
-      <div className={`font-extrabold text-[12px] leading-tight tracking-[-0.03em] whitespace-nowrap ${s.accent}`}>
-        {prefix}{formatHomepageKhr(s.usdAmount * HOMEPAGE_KHR_PER_USD)}
+      <div className={`max-w-full whitespace-nowrap text-[10px] font-extrabold leading-tight tracking-[-0.04em] ${s.accent}`}>
+        <span aria-hidden="true">🇰🇭</span> {prefix}{formatHomepageKhr(s.usdAmount * HOMEPAGE_KHR_PER_USD)}
       </div>
-      <div className={`font-extrabold text-[12px] leading-tight tracking-[-0.03em] whitespace-nowrap ${s.accent}`}>
-        {s.price} USD
+      <div className={`max-w-full whitespace-nowrap text-[11px] font-extrabold leading-tight tracking-[-0.04em] ${s.accent}`}>
+        <span aria-hidden="true">🇺🇸</span> {s.price} USD
       </div>
       <div className="text-[9px] text-gray-500 mt-0.5 leading-tight">{s.per}</div>
     </div>
@@ -2489,8 +2504,8 @@ function SC_ServerPillar({ selected, onSelect, onContact }: { selected: boolean;
         <div className="text-gray-400 flex-1 flex items-center justify-center transition-colors">{SC_IconServer}</div>
       </button>
       <div className={`rounded-b-xl border border-yai-border bg-white text-center py-2 px-1.5 min-h-[52px] ${selected ? "ring-2 ring-inset ring-yai-orange" : ""}`}>
-        <div className="font-extrabold text-[12px] leading-tight text-yai-orange whitespace-nowrap">{formatHomepageKhr(2500 * HOMEPAGE_KHR_PER_USD)}</div>
-        <div className="font-extrabold text-[12px] leading-tight text-yai-orange whitespace-nowrap">$2,500 USD</div>
+        <div className="max-w-full whitespace-nowrap text-[10px] font-extrabold leading-tight tracking-[-0.04em] text-yai-orange"><span aria-hidden="true">🇰🇭</span> {formatHomepageKhr(2500 * HOMEPAGE_KHR_PER_USD)}</div>
+        <div className="max-w-full whitespace-nowrap text-[11px] font-extrabold leading-tight tracking-[-0.04em] text-yai-orange"><span aria-hidden="true">🇺🇸</span> $2,500 USD</div>
       </div>
       <div className="mt-2">
         <button type="button" onClick={selected ? onContact : onSelect} className={`w-full rounded-md px-1 py-2 text-[8px] font-extrabold uppercase tracking-wider text-white shadow-sm ${selected ? "bg-yai-orange" : "bg-yai-blue"}`}>
@@ -2505,6 +2520,9 @@ function SC_TwinPillar({
   title,
   sub,
   icon,
+  usdAmount,
+  bg,
+  accent,
   enabled,
   selected,
   onToggle,
@@ -2512,24 +2530,38 @@ function SC_TwinPillar({
   title: string;
   sub: string;
   icon: React.ReactNode;
+  usdAmount: number;
+  bg: string;
+  accent: string;
   enabled: boolean;
   selected: boolean;
   onToggle: () => void;
 }) {
   return (
     <div className={`relative flex flex-col shrink-0 w-[124px] transition duration-200 ${!enabled ? "opacity-55" : ""}`} style={{ height: 394 }}>
-      <div className={`flex-1 rounded-t-2xl border border-b-0 border-yai-border bg-gradient-to-b from-indigo-100 to-white flex flex-col items-center p-2 text-center transition-colors ${selected ? "ring-2 ring-inset ring-yai-orange" : ""}`}>
-        <div className="text-[8px] font-bold uppercase tracking-widest text-gray-500">Step 4 · optional</div>
-        <div className="text-[11px] font-bold text-yai-navy leading-tight mt-1 px-0.5">{title}</div>
-        <div className="text-[9px] text-gray-500 mt-0.5 leading-tight">{sub}</div>
-        <div className="text-gray-400 flex-1 flex items-center justify-center transition-colors">{icon}</div>
-      </div>
-      <div className={`rounded-b-xl border border-yai-border bg-white text-center py-2.5 px-1.5 min-h-[52px] ${selected ? "ring-2 ring-inset ring-yai-orange" : ""}`}>
-        <div className="text-[10px] text-gray-400 leading-tight pt-1">Contact for pricing</div>
-      </div>
+      <button
+        type="button"
+        disabled={!enabled}
+        onClick={onToggle}
+        aria-pressed={selected}
+        aria-label={`${selected ? "Remove" : "Add"} ${title}`}
+        className={`flex min-h-0 flex-1 flex-col rounded-xl text-center transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yai-orange ${enabled ? "hover:-translate-y-1 hover:drop-shadow-md" : "cursor-not-allowed"}`}
+      >
+        <div className={`flex flex-1 flex-col items-center rounded-t-2xl border border-b-0 border-yai-border bg-gradient-to-b ${bg} p-2 transition-colors ${selected ? "ring-2 ring-inset ring-yai-orange" : ""}`}>
+          <div className="text-[8px] font-bold uppercase tracking-widest text-gray-500">Step 4 · optional</div>
+          <div className="mt-1 px-0.5 text-[11px] font-bold leading-tight text-yai-navy">{title}</div>
+          <div className="mt-0.5 text-[9px] leading-tight text-gray-500">{sub}</div>
+          <div className={`flex flex-1 items-center justify-center transition-colors ${accent}`}>{icon}</div>
+        </div>
+        <div className={`min-h-[52px] rounded-b-xl border border-yai-border bg-white px-1.5 py-2 text-center ${selected ? "ring-2 ring-inset ring-yai-orange" : ""}`}>
+          <div className={`max-w-full whitespace-nowrap text-[10px] font-extrabold leading-tight tracking-[-0.04em] ${accent}`}><span aria-hidden="true">🇰🇭</span> +{formatHomepageKhr(usdAmount * HOMEPAGE_KHR_PER_USD)}</div>
+          <div className={`max-w-full whitespace-nowrap text-[11px] font-extrabold leading-tight tracking-[-0.04em] ${accent}`}><span aria-hidden="true">🇺🇸</span> +${usdAmount.toLocaleString("en-US")} USD</div>
+          <div className="mt-0.5 text-[9px] leading-tight text-gray-500">add-on</div>
+        </div>
+      </button>
       <div className="mt-2">
         <button type="button" disabled={!enabled} onClick={onToggle} aria-pressed={selected} aria-label={`${selected ? "Remove" : "Add"} ${title}`} className={`w-full rounded-md border px-1 py-2 text-[8px] font-bold uppercase tracking-wide shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yai-orange ${selected ? "border-yai-blue bg-yai-blue text-white" : "border-yai-border bg-white text-gray-500"} ${enabled ? "hover:border-yai-blue" : "cursor-not-allowed"}`}>
-          {!enabled ? "Select Ai Server" : selected ? "Selected" : "Add option"}
+          {!enabled ? "Select Ai Server" : selected ? `${title} added` : `Add ${title}`}
         </button>
       </div>
     </div>
@@ -2545,7 +2577,7 @@ function PricingStaircase() {
   };
 
   const contactStepFour = () => {
-    const options = [stepFour.administrative && "Administrative", stepFour.operation && "Operation"].filter(Boolean) as string[];
+    const options = [stepFour.administrative && "AI Administrative", stepFour.operation && "AI Operation"].filter(Boolean) as string[];
     setContactInterest({ plan: "Ai Server", options });
   };
 
@@ -2555,20 +2587,38 @@ function PricingStaircase() {
         <LayoutGroup>
           <div className="min-w-max">
             <div className="flex items-end gap-4">
-              {SC_BEFORE.map((s) => <SC_StepCard key={s.step} s={s} mode="buy" />)}
-              <SC_ServerPillar selected={stepFour.active} onSelect={selectStepFour} onContact={contactStepFour} />
+              {SC_BEFORE.map((s) => (
+                <div key={s.step} className="flex w-[124px] shrink-0 flex-col gap-1">
+                  <div className="flex h-8 items-center justify-center text-yai-blue" aria-hidden="true">
+                    {SC_IconCloudArrow}
+                  </div>
+                  <SC_StepCard s={s} mode="buy" />
+                </div>
+              ))}
+              <div className="flex w-[124px] shrink-0 flex-col gap-1">
+                <div className="flex h-8 items-center justify-center text-yai-blue" aria-hidden="true">
+                  {SC_IconAiMachine}
+                </div>
+                <SC_ServerPillar selected={stepFour.active} onSelect={selectStepFour} onContact={contactStepFour} />
+              </div>
               <SC_TwinPillar
-                title="Administrative"
+                title="AI Administrative"
                 sub="tools"
                 icon={SC_IconBriefcase}
+                usdAmount={5000}
+                bg="from-sky-200 to-sky-50"
+                accent="text-yai-blue"
                 enabled={stepFour.active}
                 selected={stepFour.administrative}
                 onToggle={() => setStepFour((current) => ({ ...current, administrative: !current.administrative }))}
               />
               <SC_TwinPillar
-                title="Operation"
+                title="AI Operation"
                 sub="tools"
                 icon={SC_IconFactory}
+                usdAmount={10000}
+                bg="from-emerald-200 to-emerald-50"
+                accent="text-emerald-700"
                 enabled={stepFour.active}
                 selected={stepFour.operation}
                 onToggle={() => setStepFour((current) => ({ ...current, operation: !current.operation }))}
@@ -2590,7 +2640,7 @@ function PricingStaircase() {
       </div>
 
       <p className="text-xs text-gray-500 italic mt-3">
-        Steps 1–3 can be purchased online. For Step 4, select <span className="text-yai-blue font-semibold">Ai Server first</span>, then add Administrative or Operation if needed. Steps 4–6 are handled by our team.
+        Steps 1–3 can be purchased online. For Step 4, select <span className="text-yai-blue font-semibold">Ai Server first</span>, then add AI Administrative or AI Operation if needed. Steps 4–6 are handled by our team.
       </p>
 
       <ContactInterestModal interest={contactInterest} onClose={() => setContactInterest(null)} />
