@@ -74,7 +74,7 @@ export default function SiteFooter() {
               </svg>
             </a>
             <a
-              href="https://t.me/TEXLINLdotLTD"
+              href="https://t.me/yaikh1"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Yai on Telegram"
