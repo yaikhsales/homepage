@@ -132,7 +132,7 @@ const BotVersion2 = ({
       else if (certs.length === 2) opener = `${certs.join(" and ")} — good foundation. Most Tier-1 buyers will already talk to you with those two.`;
       else if (certs.length === 1) opener = `${certs[0]} in your pocket already — that's the one most buyers ask about first.`;
       else                          opener = `No formal certs yet — that's honestly fine. Most factories add them as buyers push, not before. Something to think about, not stress about.`;
-      q = `${opener} Last thing before I introduce the team — who are you shipping to? Give me the names of your main buyers if you're happy to share, or just say "skip" and I'll leave that part alone.`;
+      q = `${opener} Last thing — and I won't ask your buyer names, order numbers, or volumes; that's your business, not mine to pull. Instead let me pick a public brand as an example: **GAP** — US mass-market, WRAP + Higg required, tight 6-week lead. **Is that close to your world, or would sports (Adidas / Nike), luxury (Armani / Gucci), or workwear (Carhartt / Patagonia) be a closer fit?** Yes/no or one word is fine.`;
     }
 
     if (q) setMessages(prev => [...prev, { from: "bot", text: capShort(q) }]);
@@ -1065,8 +1065,74 @@ const BotVersion2 = ({
         const list = /^none$/i.test(raw) ? [] : raw.split(/[,;]/).map(s => s.trim()).filter(Boolean).slice(0, 20);
         draft.certifications = list;
       } else if (onboardingStep === 4) {
-        const list = /^skip$/i.test(raw) ? [] : raw.split(/[,;]/).map(s => s.trim()).filter(Boolean).slice(0, 20);
-        draft.buyers = list;
+        // Public-brand knowledge base — if boss names a real brand, prove
+        // Yai knows it before we materialise. Keeps the demo credible.
+        const BRAND_KB = {
+          gap:       { seg: "mass",   note: "US, Old Navy + Banana under same group, WRAP + Higg required, tight AQL, 6-week lead-time push." },
+          "old navy":{ seg: "mass",   note: "Gap Inc value tier, huge volume, tight cost per piece, same compliance stack as GAP." },
+          uniqlo:    { seg: "mass",   note: "Japan, Fast Retailing group, obsessed with fabric quality, LifeWear philosophy, needs FR-controlled QMS." },
+          "h&m":     { seg: "mass",   note: "Sweden, H&M Conscious/Higg leader, fast turn, tough on chemical management (RSL/MRSL)." },
+          hm:        { seg: "mass",   note: "H&M — Higg leader, tough on chemical management." },
+          zara:      { seg: "mass",   note: "Inditex Spain, fastest turn in industry (3 weeks design-to-shelf), rewards nearshore + agility." },
+          inditex:   { seg: "mass",   note: "Zara parent, 8 brands, fastest turn in industry." },
+          costco:    { seg: "mass",   note: "US/Canada wholesale club, Kirkland private label, huge order sizes, GRS + WRAP + SEDEX standard." },
+          walmart:   { seg: "mass",   note: "US, largest retail buyer globally, tough on cost + on-time delivery, Higg FEM required." },
+          target:    { seg: "mass",   note: "US mass, own-brand focus, Higg + WRAP standard." },
+          primark:   { seg: "mass",   note: "UK value fast-fashion, ABF group, huge volume at low cost, ETI standards." },
+          adidas:    { seg: "sports", note: "Germany, sportswear #2, HIGG + BSCI + PFC-free chemistry, Parley recycled-ocean-plastic program." },
+          nike:      { seg: "sports", note: "US sportswear #1, tightest compliance (Nike Code of Conduct + Higg + own audits), performance fabrics." },
+          puma:      { seg: "sports", note: "Germany sportswear, Kering-owned, Forever Better sustainability push." },
+          decathlon: { seg: "sports", note: "France, in-house design + factory partnership model, huge SKU range, price-driven." },
+          "under armour":{ seg: "sports", note: "US performance, tight fabric spec." },
+          lululemon: { seg: "sports", note: "Canada athleisure, premium price, fabric IP protected, small-batch high-margin." },
+          armani:    { seg: "luxury", note: "Italy, small runs, hand-finish tolerance, Made-in-Italy branding often required — Cambodia usually does the base." },
+          gucci:     { seg: "luxury", note: "Italy, Kering group, tight IP + counterfeit control, premium fabric only." },
+          "louis vuitton":{ seg: "luxury", note: "France, LVMH, exclusive Italian/French finishing, very rare Asian softgoods." },
+          lv:        { seg: "luxury", note: "Louis Vuitton — LVMH, Italian/French finishing, rare in Cambodia." },
+          prada:     { seg: "luxury", note: "Italy, small runs, technical fabric, tight buyer QA presence." },
+          hermes:    { seg: "luxury", note: "France, ultra-premium, hand-finish, almost no Asian production." },
+          burberry:  { seg: "luxury", note: "UK, mid-luxury, Italian finishing, digital-first supply chain." },
+          carhartt:  { seg: "workwear", note: "US workwear, heavy denim + duck canvas, WRAP standard, buyer values durability over trend." },
+          dickies:   { seg: "workwear", note: "US workwear, VF Corp, high volume utility, ISO 9001 helpful." },
+          patagonia: { seg: "workwear", note: "US outdoor, Fair Trade Certified + bluesign + 1% for planet, toughest ethical bar." },
+          "the north face":{ seg: "workwear", note: "VF Corp outdoor, technical shell fabrics, Higg + bluesign." },
+          columbia:  { seg: "workwear", note: "US outdoor mid-price, technical fabrics, Higg required." },
+          arcteryx:  { seg: "workwear", note: "Canada premium technical, Gore-Tex specialist, very tight QA." },
+        };
+        const skipMatch = /^skip$/i.test(raw);
+        const yesToGap  = /^(y|yes|yeah|yep|yup|sure|correct|right|close|ok|okay|fine|match)\b/i.test(raw.trim());
+        const noToGap   = /^(n|no|nope|not really|different|other)\b/i.test(raw.trim());
+        const segMatch = /\b(mass|sport|luxury|work.?wear|premium|technical)\b/i.test(raw);
+        const rawLower2 = raw.toLowerCase();
+        const brandMatches = Object.keys(BRAND_KB).filter(b => rawLower2.includes(b));
+        if (skipMatch) {
+          draft.buyers = [];
+        } else if (yesToGap && !brandMatches.length && !segMatch) {
+          draft.buyers = ["Mass-market (GAP profile)"];
+        } else if (noToGap && !brandMatches.length && !segMatch) {
+          setTimeout(() => setMessages(prev => [...prev, { from: "bot", text:
+            `No problem — which lane fits better, sports / luxury / workwear? One word is fine.`,
+          }]), 400);
+          return; // stay on step 4
+        } else if (brandMatches.length > 0) {
+          // Boss named public brands — prove knowledge, then materialise
+          const knownLines = brandMatches.slice(0, 3).map(b => {
+            const info = BRAND_KB[b];
+            return `**${b.charAt(0).toUpperCase() + b.slice(1)}** — ${info.note}`;
+          });
+          setTimeout(() => setMessages(prev => [...prev,
+            { from: "bot", text: knownLines.join("\n\n") },
+          ]), 400);
+          draft.buyers = brandMatches.map(b => b.charAt(0).toUpperCase() + b.slice(1));
+        } else if (segMatch) {
+          // Boss picked a segment — use it as anonymised buyer profile
+          const seg = raw.toLowerCase().match(/mass|sport|luxury|work.?wear|premium|technical/)[0];
+          draft.buyers = [`${seg.charAt(0).toUpperCase() + seg.slice(1)} segment`];
+        } else {
+          // Free-form input that's neither skip nor a known brand nor a segment
+          // — treat as a segment note, don't record real names
+          draft.buyers = ["Undisclosed"];
+        }
       }
 
       setOnboardingDraft(draft);
@@ -1263,6 +1329,11 @@ BOSS-COMMUNICATION RULES (Bernie Sanders style)
 - Respect the boss's time. If a fuller pitch is wanted, offer it as an opt-in ("Want me to go deeper?"), don't force it.
 - When you are out of context, don't fake it. Say plainly: "That's something I need to learn as an AI — your industry has a lot of mysterious pieces. Let me learn and come back to you." Then move the conversation on.
 - Same rule for every PA: if a PA is asked something outside its trained scope, it acknowledges the gap in one line and asks Big Brain to route or come back later. Never invent an answer.
+
+═══════════════════════════════════════════════════════════
+BUYER + ORDER PRIVACY — NEVER ASK
+═══════════════════════════════════════════════════════════
+Never ask a visiting boss for their real buyer names, purchase-order numbers, order quantities, unit prices, or shipment values. That is THEIR business data, not something Yai pulls from a stranger's mouth. When you need to shape a demo or an example, VOLUNTEER a public brand as illustration ("Let me use GAP as an example — US mass-market, WRAP + Higg required, tight 6-week lead") and ask a simple yes/no or lane question ("Is that close to your world? Or is sports / luxury / workwear a better fit?"). If the boss VOLUNTEERS a public brand name, prove you know it in one line, then move on. Never solicit specifics.
 
 ═══════════════════════════════════════════════════════════
 UNIVERSAL PA CAPABILITY — ANOMALY MONITORING
@@ -1561,6 +1632,11 @@ BOSS-COMMUNICATION RULES (Bernie Sanders style)
 - Respect the boss's time. If a fuller pitch is wanted, offer it as an opt-in ("Want me to go deeper?"), don't force it.
 - When you are out of context, don't fake it. Say plainly: "That's something I need to learn as an AI — your industry has a lot of mysterious pieces. Let me learn and come back to you." Then move the conversation on.
 - Same rule for every PA: if a PA is asked something outside its trained scope, it acknowledges the gap in one line and asks Big Brain to route or come back later. Never invent an answer.
+
+═══════════════════════════════════════════════════════════
+BUYER + ORDER PRIVACY — NEVER ASK
+═══════════════════════════════════════════════════════════
+Never ask a visiting boss for their real buyer names, purchase-order numbers, order quantities, unit prices, or shipment values. That is THEIR business data, not something Yai pulls from a stranger's mouth. When you need to shape a demo or an example, VOLUNTEER a public brand as illustration ("Let me use GAP as an example — US mass-market, WRAP + Higg required, tight 6-week lead") and ask a simple yes/no or lane question ("Is that close to your world? Or is sports / luxury / workwear a better fit?"). If the boss VOLUNTEERS a public brand name, prove you know it in one line, then move on. Never solicit specifics.
 
 ═══════════════════════════════════════════════════════════
 UNIVERSAL PA CAPABILITY — ANOMALY MONITORING
