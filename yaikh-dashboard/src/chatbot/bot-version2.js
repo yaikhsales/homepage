@@ -806,6 +806,28 @@ const BotVersion2 = ({
       setMessages(prev => [...prev, userMsg]);
       setInput("");
 
+      // If the boss is asking "what can you do / tell me more / show me" instead
+      // of answering, don't force the onboarding forward — pitch capabilities
+      // naturally, then re-ask the current step's question.
+      const rawLower = raw.toLowerCase();
+      const capabilityAsk = /\b(what.*(can|do).*you|what.*you.*(got|can|do|offer)|capabilit|abilit|features?|show.*(me|us)|tell.*me.*more|impress|explain|how.*(work|help)|what.*else|what.*for)\b/.test(rawLower);
+      if (capabilityAsk) {
+        setTimeout(() => {
+          setMessages(prev => [...prev,
+            { from: "bot", text:
+              `Fair — you shouldn't set up a factory for me before you know what I actually bring. Short version:\n\n` +
+              `• **I'm Big Brain** — you talk to me, I route the question to the right specialist and merge the answers if it takes more than one department to figure out.\n` +
+              `• **13 PA agents underneath** — Accounting, HR, Admin, CSR, Shipping, MRP, QA, Production, CE, YTM, 4DP, YPI, Social. Each one is trained on its own patch of your business and answers only from live data — never invented numbers.\n` +
+              `• **Everything runs inside Yai** — no email, no Excel, no WeChat. Purchase requests, bill claims, salary runs, gate passes, complaints, audits — all move through the platform, and I can see all of it live.\n` +
+              `• **I surface what needs your attention** — the moment you're logged in, I can tell you the 3 things across your factory that most deserve your call today, ranked and sorted by department.\n` +
+              `• **I can act on your behalf** — approve a PR, draft a corrective action, book a car, raise a temp-worker request — but I always confirm the exact target before I do it. Never behind your back.\n\n` +
+              `That's the gist${visitorName ? `, ${visitorName}` : ""}. If you want to see any of it in action, quickest is to shape the demo to your world — so back to my question: roughly how many people show up on your floor on a normal day?`,
+            }
+          ]);
+        }, 400);
+        return; // stay on the same onboarding step
+      }
+
       // Step -2: capture visitor name
       if (onboardingStep === -2) {
         const clean = raw.slice(0, 60);
