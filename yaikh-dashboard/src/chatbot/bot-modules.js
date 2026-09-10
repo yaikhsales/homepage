@@ -222,7 +222,7 @@ const PREDEFINED_BOTS = [
     {
         id: 'ypi-bot',
         name: 'YPI PA',
-        description: 'Yai Process Improvement: kaizen, SOP, efficiency',
+        description: 'Yai Production Instructions — trilingual tech-detail platform (Khmer/English/Chinese). Tech-packs, measurement, construction, trim cards, packing method, sample & production-meeting notes, all in one place, on shop-floor iPads and TVs.',
         icon: TrendingUp,
         bgGradient: 'from-lime-500 to-green-500',
         lightBg: 'bg-gradient-to-br from-lime-50 via-green-50 to-emerald-50',
@@ -230,11 +230,12 @@ const PREDEFINED_BOTS = [
         textColor: 'text-lime-800',
         borderColor: 'border-lime-200',
         suggestedActions: [
-            { text: 'Open Kaizen projects', highlight: true },
-            { text: 'SOP review queue' },
-            { text: 'Efficiency audits' },
-            { text: 'Process optimization' },
-            { text: 'Improvement KPIs' },
+            { text: 'Latest tech-packs', highlight: true },
+            { text: 'Measurement sheets' },
+            { text: 'Trim cards' },
+            { text: 'Packing instructions' },
+            { text: 'Sample-stage notes' },
+            { text: 'Production-meeting comments' },
         ],
     },
     {
