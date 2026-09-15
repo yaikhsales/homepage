@@ -281,9 +281,7 @@ const BotVersion2 = ({
       localStorage.removeItem("yai_factory_config");
     } catch { /* private mode */ }
     if (messages.length > 0) return;
-    const persona = Math.random() < 0.5
-      ? { title: "Mr", name: "Sam" }
-      : { title: "Mrs", name: "Leela" };
+    const persona = { title: "Mr", name: "Sam" };
     const script = [
       [600,   { from: "bot",  text: `Hello Boss — I am Yai.` }],
       [1700,  { from: "bot",  text: `And you?` }],
