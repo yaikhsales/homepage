@@ -292,15 +292,19 @@ const BotVersion2 = ({
       [6600,  { from: "user", text: `Yes — show me what you've got.` }],
       [7900,  { from: "bot",  text: `Very well. We are experts in Ai-Native applications for garments and other goods manufacturing.` }],
       [9400,  { from: "bot",  text: `40+ applications for administration. 30 for operations. Would you like to explore administration, operations — or a special subject, like Quality Management?` }],
+      [11600, { from: "user", text: `QMS — good topic to discuss. Tell me about QMS.` }],
+      [13100, { from: "bot",  text: `QMS runs from material-sourcing quality all the way to export quality management — fabric 4-point, AQL 2.5, relaxation tracking, cut-panel inspection, complaints, Call Out.` }],
+      [15100, { from: "bot",  text: `And like that, I can walk you through all our 15 Ai agents. Are you ready for a conversation?` }],
     ];
     const timers = script.map(([t, msg]) =>
       setTimeout(() => setMessages(prev => [...prev, msg]), t),
     );
-    // Hand over to the REAL visitor exactly at the explore question.
+    // Release the UI to the REAL visitor at "are you ready?" — their answer
+    // lands on the ready-check step (-1), which asks their name next.
     timers.push(setTimeout(() => {
-      setOnboardingStep(-3);
+      setOnboardingStep(-1);
       setDemoPlaying(false);
-    }, 10000));
+    }, 15700));
     return () => timers.forEach(clearTimeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -994,24 +998,21 @@ const BotVersion2 = ({
       const hasTopic = _topicRegex.test(raw);
       const capabilityAsk = !hasTopic && /\b(what.*(can|do).*you|what.*you.*(got|can|do|offer)|capabilit|abilit|features?|show.*(me|us)|impress|explain|how.*(work|help)|what.*else|what.*for|tell me about|who are you|what are you|about yai|about yourself|introduce)\b/.test(rawLower);
       const tellMeMore = /\b(tell me more|fuller version|full version|full pitch|go deeper|long version)\b/i.test(rawLower);
-      // At mission check (-1), a plain "yes / sure / please / go ahead" IS a
-      // request to hear the pitch — that's literally what Yai just asked.
-      const missionYes = onboardingStep === -1 &&
-        /^(y|yes|yeah|yep|yup|sure|correct|right|of course|please|go ahead|okay|ok|fine)\b/i.test(raw.trim());
+      // At the ready check (-1) — the script just asked "are you ready for a
+      // conversation?" — a "no" gets patience, anything else moves to the name.
       const missionNo = onboardingStep === -1 &&
-        /^(n|no|nope|not really|not exactly)\b/i.test(raw.trim());
+        /^(n|no|nope|not really|not exactly|not yet|later)\b/i.test(raw.trim());
 
       // Default pitch: 5 short bubbles, Bernie style. The 12-paragraph wall
       // lives behind an explicit "tell me more" only.
       if (missionNo) {
         setTimeout(() => setMessages(prev => [...prev, { from: "bot", text:
-          `Fair — what would be more useful then? Something specific on your mind, or should I just skip to real questions?`,
+          `No rush. Look around, or ask me anything — I'm right here when you're ready.`,
         }]), 400);
-        setOnboardingStep(0); // move past mission check either way
-        return;
+        return; // stay on the ready check
       }
 
-      if ((capabilityAsk || missionYes) && !tellMeMore) {
+      if (capabilityAsk && !tellMeMore) {
         // Short pitch — 2 bubbles, spaced. Then ask permission to continue.
         const chapter1 = [
           `Simple, ${visitorName || "Boss"}. I run your factory from your phone. 13 department agents inside — quality, cost, production, accounting, HR, all of them. I sit on top and route.`,
@@ -1132,7 +1133,7 @@ const BotVersion2 = ({
         const reAskByStep = {
           "-3": `Happy to go deeper on that. First — I am Yai, and you? What should I call you?`,
           "-2": `And — you didn't tell me your name yet. What should I call you?`,
-          "-1": `Am I right you're here to see what Yai can actually do for a factory like yours?`,
+          "-1": `And when you're ready — I am Yai, and you? What should I call you?`,
           "0":  `Back to shaping the demo — roughly how many people on your floor?`,
           "1":  `And how many lines running most days?`,
           "2":  `What do you mostly cut — polos, jackets, denim, something else?`,
@@ -1141,16 +1142,17 @@ const BotVersion2 = ({
         };
         const reAsk = reAskByStep[String(onboardingStep)];
         if (reAsk) bubbles.push(reAsk);
-        // Cap at 2 bubbles — but at the explore step the handover ask must
-        // survive the cap, or the next message gets mistaken for a name.
-        const toPost = onboardingStep === -3
+        // Cap at 2 bubbles — but at the explore/ready steps the handover ask
+        // must survive the cap, or the next message gets mistaken for a name.
+        const toPost = (onboardingStep === -3 || onboardingStep === -1)
           ? [bubbles[0], reAsk].filter(Boolean)
           : bubbles.slice(0, 2);
         toPost.forEach((text, i) =>
           setTimeout(() => setMessages(prev => [...prev, { from: "bot", text }]), 400 + i * 1400),
         );
-        // A topical answer at the explore step hands over to name capture.
-        if (onboardingStep === -3) setOnboardingStep(-2);
+        // A topical answer at the explore or ready step hands over to name
+        // capture — otherwise the name-ask would repeat.
+        if (onboardingStep === -3 || onboardingStep === -1) setOnboardingStep(-2);
         return; // otherwise stay on the same onboarding step
       }
 
@@ -1172,13 +1174,13 @@ const BotVersion2 = ({
         return;
       }
 
-      // Step -1: mission check. Whatever the boss answers, they engaged —
-      // move on to the factory questions. (A capability ask was already
-      // intercepted above; step 0's question opens with "Good." so no
-      // extra bridge bubble is needed.)
+      // Step -1: ready check. They engaged ("yes" / "ready" / anything but
+      // no) — get their name, then shape the demo.
       if (onboardingStep === -1) {
-        setOnboardingStep(0);
-        setTimeout(() => askNextOnboarding(0, onboardingDraft, visitorName), 500);
+        setOnboardingStep(-2);
+        setTimeout(() => setMessages(prev => [...prev, { from: "bot", text:
+          `Good. I am Yai — and you? What should I call you?`,
+        }]), 500);
         return;
       }
 
