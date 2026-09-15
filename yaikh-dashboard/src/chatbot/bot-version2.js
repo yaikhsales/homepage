@@ -971,6 +971,15 @@ const BotVersion2 = ({
           setOnboardingStep(-2);
           return;
         }
+        // No admin/ops pick and no recognisable subject → offer the lanes
+        // again, stay on the explore step. (A named subject like "QMS"
+        // continues below into the topical intercept.)
+        if (!/\b(qms|quality|qa|production|machine|maintenance|downtime|hr|payroll|attendance|account|invoice|finance|admin|material|mrp|inventory|shipping|container|tech.?pack|ypi|planning|4dp|csr|compliance|social|ce|efficien|kaizen)\b/i.test(raw)) {
+          setTimeout(() => setMessages(prev => [...prev, { from: "bot", text:
+            `Pick a lane and I'll show you — administration, operations, or name a subject: quality, machines, payroll, tech-packs…`,
+          }]), 400);
+          return;
+        }
       }
 
       // If the boss is asking "what can you do / tell me more / show me" instead
@@ -1067,7 +1076,11 @@ const BotVersion2 = ({
       // Answer briefly with the relevant PAs + suggest neighbours,
       // then softly re-ask the current onboarding question.
       // No number in the message + at least one topic keyword = topical ask.
-      const looksLikeQuestion = /\?|^(what|which|how|tell|show|list|give|any|are|do|does|can|is)\b/i.test(raw);
+      // At the explore step (-3) the visitor was literally ASKED to name a
+      // subject — any topic mention counts, question-shaped or not
+      // ("QMS good topic to discuss tell me about QMS").
+      const looksLikeQuestion = onboardingStep === -3 ||
+        /\?|^(what|which|how|tell|show|list|give|any|are|do|does|can|is)\b/i.test(raw);
       const noNumberYet = !(raw.replace(/,/g, "").match(/\d{1,5}/g) || []).length;
       const topicHits = {
         production: /\b(production|floor|line|sewing|assembl|output|wip|throughput)\b/i.test(raw),
