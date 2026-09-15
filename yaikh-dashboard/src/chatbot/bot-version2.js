@@ -282,28 +282,51 @@ const BotVersion2 = ({
     } catch { /* private mode */ }
     if (messages.length > 0) return;
     const persona = { title: "Mr", name: "Sam" };
+    // Each line: pause before the bubble starts (reading/typing gap), then
+    // the words FLOW in one by one — human chat rhythm, not drop-drop-drop.
     const script = [
-      [600,   { from: "bot",  text: `Hello Boss — I am Yai.` }],
-      [1700,  { from: "bot",  text: `And you?` }],
-      [3300,  { from: "user", text: `I am ${persona.name}` }],
-      [4600,  { from: "bot",  text: `Welcome, ${persona.title} ${persona.name} — I'm sure you're here to experience the Yai Big Brain skills, isn't it?` }],
-      [6600,  { from: "user", text: `Yes — show me what you've got.` }],
-      [7900,  { from: "bot",  text: `Very well. We are experts in Ai-Native applications for garments and other goods manufacturing.` }],
-      [9400,  { from: "bot",  text: `40+ applications for administration. 30 for operations. Would you like to explore administration, operations — or a special subject, like Quality Management?` }],
-      [11600, { from: "user", text: `QMS — good topic to discuss. Tell me about QMS.` }],
-      [13100, { from: "bot",  text: `QMS runs from material-sourcing quality all the way to export quality management — fabric 4-point, AQL 2.5, relaxation tracking, cut-panel inspection, complaints, Call Out.` }],
-      [15100, { from: "bot",  text: `And like that, I can walk you through all our 15 Ai agents. Are you ready for a conversation?` }],
+      { pre: 700,  from: "bot",  text: `Hello Boss — I am Yai.` },
+      { pre: 700,  from: "bot",  text: `And you?` },
+      { pre: 1400, from: "user", text: `I am ${persona.name}` },
+      { pre: 900,  from: "bot",  text: `Welcome, ${persona.title} ${persona.name} — I'm sure you're here to experience the Yai Big Brain skills, isn't it?` },
+      { pre: 1400, from: "user", text: `Yes — show me what you've got.` },
+      { pre: 900,  from: "bot",  text: `Very well. We are experts in Ai-Native applications for garments and other goods manufacturing.` },
+      { pre: 800,  from: "bot",  text: `40+ applications for administration. 30 for operations. Would you like to explore administration, operations — or a special subject, like Quality Management?` },
+      { pre: 1600, from: "user", text: `QMS — good topic to discuss. Tell me about QMS.` },
+      { pre: 1000, from: "bot",  text: `QMS runs from material-sourcing quality all the way to export quality management — fabric 4-point, AQL 2.5, relaxation tracking, cut-panel inspection, complaints, Call Out.` },
+      { pre: 900,  from: "bot",  text: `And like that, I can walk you through all our 15 Ai agents. Are you ready for a conversation?` },
     ];
-    const timers = script.map(([t, msg]) =>
-      setTimeout(() => setMessages(prev => [...prev, msg]), t),
-    );
-    // Release the UI to the REAL visitor at "are you ready?" — their answer
-    // lands on the ready-check step (-1), which asks their name next.
-    timers.push(setTimeout(() => {
+    let cancelled = false;
+    const timers = [];
+    const wait = (ms) => new Promise((res) => timers.push(setTimeout(res, ms)));
+    (async () => {
+      for (const line of script) {
+        if (cancelled) return;
+        await wait(line.pre);
+        // open an empty bubble, then flow the words into it
+        setMessages(prev => [...prev, { from: line.from, text: "" }]);
+        const words = line.text.split(" ");
+        let acc = "";
+        for (const w of words) {
+          if (cancelled) return;
+          acc = acc ? `${acc} ${w}` : w;
+          const snapshot = acc;
+          setMessages(prev => {
+            const next = [...prev];
+            next[next.length - 1] = { from: line.from, text: snapshot };
+            return next;
+          });
+          // user "types" a touch slower than Yai "speaks"
+          await wait(line.from === "user" ? 110 : 75);
+        }
+      }
+      if (cancelled) return;
+      // Release the UI to the REAL visitor at "are you ready?" — their
+      // answer lands on the ready-check step (-1), which asks their name.
       setOnboardingStep(-1);
       setDemoPlaying(false);
-    }, 15700));
-    return () => timers.forEach(clearTimeout);
+    })();
+    return () => { cancelled = true; timers.forEach(clearTimeout); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
