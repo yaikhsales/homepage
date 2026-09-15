@@ -270,18 +270,38 @@ const BotVersion2 = ({
     }
   };
 
-  // Wipe leftover state + open with ONE short line. Bernie Sanders style:
-  // plain, direct, one idea per bubble, wait for the boss to reply.
+  // Auto-playing intro script. On every fresh open a short scripted exchange
+  // plays itself — a demo visitor's answers appear on their own — so a
+  // walk-up SEES how talking to Yai feels before they type a word.
+  // Input stays locked until the script hands over to the real visitor.
+  const [demoPlaying, setDemoPlaying] = useState(true);
   useEffect(() => {
     try {
       localStorage.removeItem("yai_visitor_name");
       localStorage.removeItem("yai_factory_config");
     } catch { /* private mode */ }
     if (messages.length > 0) return;
-    setMessages([
-      { from: "bot", text: `Hello Boss — I am Yai.` },
-      { from: "bot", text: `And you?` },
-    ]);
+    const persona = Math.random() < 0.5
+      ? { title: "Mr", name: "Sam" }
+      : { title: "Mrs", name: "Leela" };
+    const script = [
+      [600,   { from: "bot",  text: `Hello Boss — I am Yai.` }],
+      [1700,  { from: "bot",  text: `And you?` }],
+      [3300,  { from: "user", text: `I am ${persona.name}` }],
+      [4600,  { from: "bot",  text: `Welcome, ${persona.title} ${persona.name} — I'm sure you're here to experience the Yai Big Brain skills, isn't it?` }],
+      [6600,  { from: "user", text: `Yes — show me what you've got.` }],
+      [7900,  { from: "bot",  text: `Very well. We are experts in Ai-Native applications for garments and other goods manufacturing.` }],
+      [9400,  { from: "bot",  text: `40+ applications for administration. 30 for operations. Would you like to explore administration, operations — or a special subject, like Quality Management?` }],
+    ];
+    const timers = script.map(([t, msg]) =>
+      setTimeout(() => setMessages(prev => [...prev, msg]), t),
+    );
+    // Hand over to the REAL visitor exactly at the explore question.
+    timers.push(setTimeout(() => {
+      setOnboardingStep(-3);
+      setDemoPlaying(false);
+    }, 10000));
+    return () => timers.forEach(clearTimeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -874,6 +894,7 @@ const BotVersion2 = ({
 
   const handleSend = (e) => {
     e.preventDefault();
+    if (demoPlaying) return; // intro script is still handing over
     if (!input.trim()) return;
 
     // ── Repair mode: the last bot bubble asked "what would be more useful?"
@@ -924,13 +945,33 @@ const BotVersion2 = ({
     }
 
     // ── Conversational onboarding intercept ───────────────────────────
+    // Step -3 = the scripted opener's "administration, operations, or a
+    // special subject?" — the real visitor's first words land here.
     // Steps -2..4 = capture answers via chat, then materialise.
-    // Step 5 = in-flight materialise, block input. Step -1 = done.
-    if (onboardingStep >= -2 && onboardingStep <= 4) {
+    // Step 5 = in-flight materialise, block input. Step 99 = done.
+    if (onboardingStep >= -3 && onboardingStep <= 4) {
       const raw = input.trim();
       const userMsg = { from: "user", text: raw };
       setMessages(prev => [...prev, userMsg]);
       setInput("");
+
+      // Step -3: a plain "administration" / "operations" pick gets its
+      // highlight reel + handover to name capture. A specific subject
+      // ("quality management") falls through to the topical intercept
+      // below, which answers it and hands over the same way.
+      if (onboardingStep === -3) {
+        const wantsAdmin = /\badministra|back.?office\b/i.test(raw);
+        const wantsOps = /\boperation|production side|factory side\b/i.test(raw);
+        if (wantsAdmin || wantsOps) {
+          const highlight = wantsAdmin
+            ? `Administration side — 40+ apps. Accounting (invoices, claims, salary), HR (face-recognition attendance, leave, live org chart), Admin services (tickets, gate pass, fire alarm, CCTV), CSR compliance (WRAP, BSCI, HIGG, SEDEX).`
+            : `Operations side — 30 apps. Production (today's plan, WIP by line), Quality (4-point, AQL 2.5, Call Out), YTM (downtime, repair queue), YPI (tech-packs on the floor in 3 languages), MRP + 4DP (material and planning).`;
+          setTimeout(() => setMessages(prev => [...prev, { from: "bot", text: highlight }]), 400);
+          setTimeout(() => setMessages(prev => [...prev, { from: "bot", text: `Happy to go deeper on any of it. First — I am Yai, and you? What should I call you?` }]), 1900);
+          setOnboardingStep(-2);
+          return;
+        }
+      }
 
       // If the boss is asking "what can you do / tell me more / show me" instead
       // of answering, don't force the onboarding forward — pitch capabilities
@@ -1076,6 +1117,7 @@ const BotVersion2 = ({
         }
         // Soft re-ask so onboarding still finishes
         const reAskByStep = {
+          "-3": `Happy to go deeper on that. First — I am Yai, and you? What should I call you?`,
           "-2": `And — you didn't tell me your name yet. What should I call you?`,
           "-1": `Am I right you're here to see what Yai can actually do for a factory like yours?`,
           "0":  `Back to shaping the demo — roughly how many people on your floor?`,
@@ -1086,11 +1128,17 @@ const BotVersion2 = ({
         };
         const reAsk = reAskByStep[String(onboardingStep)];
         if (reAsk) bubbles.push(reAsk);
-        const toPost = bubbles.slice(0, 2); // conversation, not report — cap at 2
+        // Cap at 2 bubbles — but at the explore step the handover ask must
+        // survive the cap, or the next message gets mistaken for a name.
+        const toPost = onboardingStep === -3
+          ? [bubbles[0], reAsk].filter(Boolean)
+          : bubbles.slice(0, 2);
         toPost.forEach((text, i) =>
           setTimeout(() => setMessages(prev => [...prev, { from: "bot", text }]), 400 + i * 1400),
         );
-        return; // stay on the same onboarding step
+        // A topical answer at the explore step hands over to name capture.
+        if (onboardingStep === -3) setOnboardingStep(-2);
+        return; // otherwise stay on the same onboarding step
       }
 
       // Step -2: capture visitor name — strip "hi, I'm / my name is" prefixes
@@ -1103,8 +1151,11 @@ const BotVersion2 = ({
         const clean = (stripped || raw).slice(0, 60).trim();
         try { localStorage.setItem("yai_visitor_name", clean); } catch { /* private mode */ }
         setVisitorName(clean);
-        setOnboardingStep(-1);
-        setTimeout(() => askNextOnboarding(-1, onboardingDraft, clean), 500);
+        // The scripted opener already asked-and-answered the mission check,
+        // so after the name go straight to shaping the demo.
+        setOnboardingStep(0);
+        setTimeout(() => setMessages(prev => [...prev, { from: "bot", text: `Good to meet you, ${clean}.` }]), 500);
+        setTimeout(() => askNextOnboarding(0, onboardingDraft, clean), 1400);
         return;
       }
 
@@ -2425,7 +2476,8 @@ ANSWER RULES
                     handleSend(e);
                   }
                 }}
-                placeholder="Ask about the website... (Shift+Enter for new line)"
+                disabled={demoPlaying}
+                placeholder={demoPlaying ? "Watch — Yai will hand over to you in a moment…" : "Ask about the website... (Shift+Enter for new line)"}
                 className="flex-1 bg-transparent border-0 outline-none text-white placeholder:text-white/50 text-base resize-none leading-6 py-2"
                 style={{ minHeight: "8.4rem", maxHeight: "14rem" }}
               />
