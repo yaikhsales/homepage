@@ -1587,6 +1587,7 @@ ANSWER RULES
 - Anchor to real names, real prices, real story beats above.`,
               newMessages.slice(0, -1), // history
               visitorName,
+              factoryConfig, // <-- passed to Claude middle-man for grounding
             );
 
             botResponse = geminiResponse;
@@ -1890,6 +1891,7 @@ ANSWER RULES
 - Anchor to real names, real prices, real story beats above.`,
               newMessages.slice(0, -1), // history
               visitorName,
+              factoryConfig, // <-- passed to Claude middle-man for grounding
             );
 
             botResponse = geminiResponse;

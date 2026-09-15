@@ -172,10 +172,68 @@ export const generateBossOrChat = async (
   botContext = "",
   chatHistory = [],
   visitor = "",
+  factory = null,
 ) => {
+  // 1st preference: Claude Haiku middle-man via /v1/chat/claude — returns
+  //    short bubbles already, join with "\n\n" so the client's shatterToBubbles
+  //    (see bot-version2.js) re-splits them into separate messages.
+  const bubbles = await generateBossBubbles(userMessage, chatHistory, visitor, factory);
+  if (bubbles && bubbles.length) return bubbles.join("\n\n");
+  // 2nd: legacy /boss/query (Qwen composer) — returns single string.
   const routed = await generateBossResponse(userMessage, chatHistory, visitor);
   if (routed != null) return routed;
+  // 3rd: generic Gemini chat.
   return generateChatResponse(userMessage, botName, botContext, chatHistory);
+};
+
+/* ─── /v1/chat/claude — Big Brain via M1 Claude Haiku middle-man ─────
+ * Returns an array of short bubbles (Bernie-shaped) directly from the worker.
+ * Guard shims to Qwen on 5xx/>15s and tags source; we still return an array.
+ * REACT_APP_YAI_BACKEND=qwen disables this path (falls straight through to
+ * legacy /boss/query). Any failure returns null so caller falls through.
+ */
+const YAI_BACKEND = (process.env.REACT_APP_YAI_BACKEND || "claude").toLowerCase();
+
+export const generateBossBubbles = async (
+  userMessage,
+  chatHistory = [],
+  visitor = "",
+  factory = null,
+) => {
+  if (YAI_BACKEND === "qwen") return null;
+  if (!M1_LLM_URL || !M1_LLM_TOKEN) return null;
+  if (Date.now() < m1SkipUntil) return null;
+  try {
+    const ctl = new AbortController();
+    const timer = setTimeout(() => ctl.abort(), 20000);
+    const r = await fetch(`${M1_LLM_URL.replace(/\/$/, "")}/v1/chat/claude`, {
+      method: "POST",
+      signal: ctl.signal,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${M1_LLM_TOKEN}`,
+      },
+      body: JSON.stringify({
+        visitor_name: visitor || "Boss",
+        factory: factory || undefined,
+        history: (chatHistory || []).slice(-8).map((m) => ({
+          from: m.from === "user" ? "user" : "bot",
+          text: typeof m.text === "string" ? m.text : String(m.text ?? ""),
+        })),
+        message: String(userMessage ?? ""),
+      }),
+    });
+    clearTimeout(timer);
+    if (!r.ok) { m1SkipUntil = Date.now() + M1_COOLDOWN_MS; return null; }
+    const data = await r.json();
+    const bubbles = Array.isArray(data?.bubbles) ? data.bubbles.filter(b => typeof b === "string" && b.trim()) : null;
+    if (!bubbles || bubbles.length === 0) return null;
+    return bubbles;
+  } catch (err) {
+    console.warn("Claude bubbles error, falling back:", err?.message || err);
+    m1SkipUntil = Date.now() + M1_COOLDOWN_MS;
+    return null;
+  }
 };
 
 /* ─── /boss/query — Big Brain routes to PAs and merges ──────────────── */
