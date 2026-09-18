@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useTranslation } from '../translate/TranslationContext';
 import LangFlags from "../components/LangFlags";
 import {
   X,
@@ -46,6 +47,7 @@ const BotVersion2 = ({
   onVersionChange,
   currentVersion = "yai2",
 }) => {
+  const { t } = useTranslation();
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -276,6 +278,18 @@ const BotVersion2 = ({
   // walk-up SEES how talking to Yai feels before they type a word.
   // Input stays locked until the script hands over to the real visitor.
   const [demoPlaying, setDemoPlaying] = useState(true);
+  // Header language (km/en/zh) for chat-owned UI strings like the input
+  // placeholder. Read once at render — the flag is set before this mounts.
+  const chatLang = (() => {
+    try { return (localStorage.getItem("app-language") || "en").toLowerCase().slice(0, 2); }
+    catch { return "en"; }
+  })();
+  const PLACEHOLDERS = {
+    en: { demo: "Watch — Yai will hand over to you in a moment…", live: "Ask about the website… (Shift+Enter for new line)" },
+    km: { demo: "សូមមើល — Yai នឹងប្រគល់ឲ្យលោកក្នុងពេលបន្តិចទៀត…", live: "សួរអំពីវេបសាយ… (Shift+Enter ដើម្បីចុះបន្ទាត់ថ្មី)" },
+    zh: { demo: "请观看 — Yai 稍后就会交给您…", live: "问我关于网站的问题…（Shift+Enter 换行）" },
+  };
+  const ph = PLACEHOLDERS[chatLang] || PLACEHOLDERS.en;
   useEffect(() => {
     try {
       localStorage.removeItem("yai_visitor_name");
@@ -301,7 +315,7 @@ const BotVersion2 = ({
         { pre: 800,  from: "bot",  text: `40+ applications for administration. 30 for operations. Would you like to explore administration, operations — or a special subject, like Quality Management?` },
         { pre: 1600, from: "user", text: `QMS — good topic to discuss. Tell me about QMS.` },
         { pre: 1000, from: "bot",  text: `QMS runs from material-sourcing quality all the way to export quality management — fabric 4-point, AQL 2.5, relaxation tracking, cut-panel inspection, complaints, Call Out.` },
-        { pre: 900,  from: "bot",  text: `And like that, I can walk you through all our 15 Ai agents. Are you ready for a conversation?` },
+        { pre: 900,  from: "bot",  text: `And like that, I can walk you through all our 14 Ai agents. Are you ready for a conversation?` },
       ],
       km: [
         { pre: 700,  from: "bot",  text: `សួស្តី លោកម្ចាស់ — ខ្ញុំឈ្មោះ Yai។` },
@@ -313,7 +327,7 @@ const BotVersion2 = ({
         { pre: 800,  from: "bot",  text: `កម្មវិធីជាង 40 សម្រាប់ផ្នែករដ្ឋបាល។ 30 សម្រាប់ប្រតិបត្តិការ។ តើលោកចង់ស្វែងយល់ផ្នែករដ្ឋបាល ប្រតិបត្តិការ — ឬប្រធានបទពិសេស ដូចជា Quality Management?` },
         { pre: 1600, from: "user", text: `QMS — ជាប្រធានបទល្អ។ ប្រាប់ខ្ញុំអំពី QMS មើល។` },
         { pre: 1000, from: "bot",  text: `QMS គ្រប់គ្រងគុណភាពចាប់ពីការផ្គត់ផ្គង់វត្ថុធាតុដើម រហូតដល់គុណភាពនាំចេញ — fabric 4-point, AQL 2.5, relaxation tracking, cut-panel inspection, ពាក្យបណ្តឹង និង Call Out។` },
-        { pre: 900,  from: "bot",  text: `ហើយបែបនេះឯង ខ្ញុំអាចណែនាំលោកអំពី Ai agent ទាំង 15 របស់យើង។ តើលោកត្រៀមរួចសម្រាប់ការសន្ទនាហើយឬនៅ?` },
+        { pre: 900,  from: "bot",  text: `ហើយបែបនេះឯង ខ្ញុំអាចណែនាំលោកអំពី Ai agent ទាំង 14 របស់យើង។ តើលោកត្រៀមរួចសម្រាប់ការសន្ទនាហើយឬនៅ?` },
       ],
       zh: [
         { pre: 700,  from: "bot",  text: `老板您好 — 我是 Yai。` },
@@ -325,7 +339,7 @@ const BotVersion2 = ({
         { pre: 800,  from: "bot",  text: `行政管理有 40+ 个应用，运营有 30 个。您想了解行政、运营 — 还是某个专题，比如质量管理（QMS）？` },
         { pre: 1600, from: "user", text: `QMS — 好话题。跟我讲讲 QMS 吧。` },
         { pre: 1000, from: "bot",  text: `QMS 覆盖从原料采购质量一直到出口质量管理 — 面料四分制、AQL 2.5、松布追踪、裁片检验、投诉、Call Out。` },
-        { pre: 900,  from: "bot",  text: `就这样，我可以带您了解我们全部 15 个 Ai agent。您准备好开始对话了吗？` },
+        { pre: 900,  from: "bot",  text: `就这样，我可以带您了解我们全部 14 个 Ai agent。您准备好开始对话了吗？` },
       ],
     };
     const script = SCRIPTS[lang] || SCRIPTS.en;
@@ -2217,7 +2231,7 @@ ANSWER RULES
           className="px-4 py-1.5 rounded-full bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm flex items-center gap-1.5 shadow-md transition-colors"
           aria-label="Back to Home"
         >
-          ← Home
+          {t('← Home')}
         </button>
         <LangFlags />
 
@@ -2236,7 +2250,7 @@ ANSWER RULES
           >
             <img src="/assets/modules-image/top-bot.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
           </div>
-          <span className="text-orange-400 font-bold text-base whitespace-nowrap">My Task Agent</span>
+          <span className="text-orange-400 font-bold text-base whitespace-nowrap">{t('My Task Agent')}</span>
           <ClaudeBadge />
         </button>
 
@@ -2256,7 +2270,7 @@ ANSWER RULES
             >
               <img src="assets/modules-image/yai1.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
             </div>
-            <span className="text-blue-400 font-bold text-base whitespace-nowrap">Agent Collective</span>
+            <span className="text-blue-400 font-bold text-base whitespace-nowrap">{t('Agent Collective')}</span>
             <ClaudeBadge />
           </button>
         )}
@@ -2272,7 +2286,7 @@ ANSWER RULES
           >
             <img src="assets/modules-image/yai2.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
           </div>
-          <span className="text-emerald-400 font-bold text-base whitespace-nowrap">Big Brain</span>
+          <span className="text-emerald-400 font-bold text-base whitespace-nowrap">{t('Big Brain')}</span>
           <ClaudeBadge />
         </div>
       </div>
@@ -2554,7 +2568,7 @@ ANSWER RULES
                   }
                 }}
                 disabled={demoPlaying}
-                placeholder={demoPlaying ? "Watch — Yai will hand over to you in a moment…" : "Ask about the website... (Shift+Enter for new line)"}
+                placeholder={demoPlaying ? ph.demo : ph.live}
                 className="flex-1 bg-transparent border-0 outline-none text-white placeholder:text-white/50 text-base resize-none leading-6 py-2"
                 style={{ minHeight: "8.4rem", maxHeight: "14rem" }}
               />
