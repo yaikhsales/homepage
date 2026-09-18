@@ -1,4 +1,5 @@
 import React from 'react';
+import LangFlags from './LangFlags';
 
 /* Header — minimal chrome for the absorbed dashboard.
  *
@@ -23,7 +24,8 @@ const Header = () => {
 
   return (
     <header className="bg-yai-navy/95 backdrop-blur shadow-md px-4 sm:px-6 py-2 flex justify-between items-center sticky top-0 z-50 h-14 sm:h-16">
-      {/* Left: Home button — click returns to yaikh-com homepage */}
+      {/* Left: Home button + Khmer · English · Chinese flags */}
+      <div className="flex items-center gap-3">
       <button
         onClick={goHome}
         aria-label="Back to yaikh.com homepage"
@@ -31,6 +33,8 @@ const Header = () => {
       >
         <span>← Home</span>
       </button>
+      <LangFlags />
+      </div>
 
       {/* Right side intentionally empty — Experience duplicate removed. */}
       <div />
