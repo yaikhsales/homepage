@@ -33,7 +33,7 @@ const LangFlags = () => {
   const { language, changeLanguage } = useTranslation();
   return (
     <div
-      className="flex items-center gap-2 pl-4 ml-2 border-l border-white/20"
+      className="flex items-center gap-2 rounded-full bg-slate-900/70 backdrop-blur px-2 py-1 border border-white/15"
       title="Language · ភាសា · 语言"
       onMouseDown={(e) => e.stopPropagation()}
     >
@@ -1432,10 +1432,15 @@ const AppLayout = () => {
               </span>
               <ClaudeBadge />
             </button>
-
-            {/* Khmer · English · Chinese */}
-            <LangFlags />
           </div>
+        </div>
+      )}
+
+      {/* Khmer · English · Chinese — fixed top-right in the header bar, clear of
+          the draggable 3-mode nav and the page title. */}
+      {!isYaiDataBotOpen && (
+        <div className="fixed z-[60] right-4 top-2 text-white">
+          <LangFlags />
         </div>
       )}
 
