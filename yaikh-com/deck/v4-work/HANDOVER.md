@@ -1,6 +1,6 @@
 # Yai Pitch Deck v4 — Handover (19 Sep 2026)
 
-**Round:** US$3M **Seed** (not pre-seed) · 14 slides · Yai colours / logo · structure from the Cherub pre-seed deck (TikTok breakdown).
+**Round:** US$3M **Seed** (not pre-seed) · 15 slides · Yai colours / logo · structure from the Cherub pre-seed deck (TikTok breakdown).
 
 ## Where it lives
 | What | Path |
@@ -26,7 +26,7 @@ Edit **only** in `deck/v4-work` — the session scratchpad is wiped when the app
 4. Railway ~7 min · check `gh api repos/yaikhsales/homepage/commits/<sha>/status`
 5. `/plan/pitch-deck` sends `X-Frame-Options: SAMEORIGIN` (rest of /plan is DENY) — keep it that way.
 
-## The 14 slides (status)
+## The 15 slides (status)
 | # | Slide | Status |
 |---|---|---|
 | 1 | Title — Ai-Native Manufacturing Intelligence for Soft Goods | ✅ |
@@ -41,8 +41,9 @@ Edit **only** in `deck/v4-work` — the session scratchpad is wiped when the app
 | 10 | Business model — starts $120→$1,200/yr · Ai agents $2,500→$15,000 · corporate $5,000→$15,000 | ✅ |
 | 11 | Path to targets — ~$100K (2024–26) · ~$0.5M (2027–28) · ~$3M (2028–30) + 9-month proof line | ✅ (see open 2) |
 | 12 | The ask — 4 allocation items | ⏳ open 1 |
-| 13 | Team — Arnold (founder) · Gamini (CTO) with photos · 20 Cambodian engineers · 9 partner logos | ✅ (see open 5) |
-| 14 | Close — "The only Commercial Ai MiP for the Soft Goods industry." + 3 boxes: The ask (US$3M seed · 21→100) · See it live · Talk to us (Arnold · Gamini + email, WhatsApp, Telegram, WeChat, Telegram QR → t.me/GKSmartbiz) | ✅ draft (see open 6) |
+| 13 | Our serious competitor — Adidas MiP stack (AWS+SAP · o9 · TrusTrace · project44) vs Yai · sourced | ✅ new 19 Sep |
+| 14 | Team — Arnold (founder) · Gamini (CTO) with photos · 20 Cambodian engineers · 9 partner logos | ✅ (see open 5) |
+| 15 | Close — "The only Commercial Ai MiP for the Soft Goods industry." + 3 boxes: The ask (US$3M seed · 21→100) · See it live · Talk to us (Arnold · Gamini + email, WhatsApp, Telegram, WeChat, Telegram QR → t.me/GKSmartbiz) | ✅ draft (see open 6) |
 
 ## Open items — ask Gamini, don't invent numbers
 1. **The Ask:** proposed $2M Growth + $1M Reserve (18 months runway & working capital) — not yet approved. Real % split unknown (45/25/15/15 are placeholders). City office = Phnom Penh? Milestones box (100 factories · Anthropic Partner Network · Layer 3 at five factories · Series A by Q4 2028) — keep or change?
@@ -52,3 +53,5 @@ Edit **only** in `deck/v4-work` — the session scratchpad is wiped when the app
 5. **Slide 13:** MEF logo implies government endorsement — confirm permission.
 6. **Slide 14:** "Talk to us" has names only — add email / phone / WhatsApp? Keep "Modernised industry." as the headline?
 7. **Title icons:** Microsoft Fluent 3D now; Gamini wants more realistic — swap in his own images if he provides them.
+
+8. **Four decks:** Gamini wants $0.5M / $1M / $2M / $3M versions — needs per-tier allocation %, milestones, round name.
