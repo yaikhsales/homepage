@@ -42,7 +42,7 @@ Edit **only** in `deck/v4-work` — the session scratchpad is wiped when the app
 | 11 | Path to targets — ~$100K (2024–26) · ~$0.5M (2027–28) · ~$3M (2028–30) + 9-month proof line | ✅ (see open 2) |
 | 12 | The ask — 4 allocation items | ⏳ open 1 |
 | 13 | Team — Arnold (founder) · Gamini (CTO) with photos · 20 Cambodian engineers · 9 partner logos | ✅ (see open 5) |
-| 14 | Close | ⏳ not reviewed |
+| 14 | Close — Modernised industry + 3 boxes: The ask (US$3M seed · 21→100) · See it live · Talk to us (Arnold · Gamini) | ✅ draft (see open 6) |
 
 ## Open items — ask Gamini, don't invent numbers
 1. **The Ask:** proposed $2M Growth + $1M Reserve (18 months runway & working capital) — not yet approved. Real % split unknown (45/25/15/15 are placeholders). City office = Phnom Penh? Milestones box (100 factories · Anthropic Partner Network · Layer 3 at five factories · Series A by Q4 2028) — keep or change?
@@ -50,5 +50,5 @@ Edit **only** in `deck/v4-work` — the session scratchpad is wiped when the app
 3. **Slide 7:** Yorkwell tile says "All 14 agents in play" but they move to agents Q1 2027 → suggest "Moving to 14 Ai agents · Q1 2027".
 4. **Slide 7:** "Anthropic Partner Network" shown without "nominated" — application (30 Aug 2026) not confirmed yet.
 5. **Slide 13:** MEF logo implies government endorsement — confirm permission.
-6. **Slide 14:** Close not reviewed.
+6. **Slide 14:** "Talk to us" has names only — add email / phone / WhatsApp? Keep "Modernised industry." as the headline?
 7. **Title icons:** Microsoft Fluent 3D now; Gamini wants more realistic — swap in his own images if he provides them.

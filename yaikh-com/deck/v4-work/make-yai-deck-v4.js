@@ -1,4 +1,4 @@
-/* Yai Pitch Deck v4 — 18-slide investor arc, self-contained HTML.
+/* Yai Pitch Deck v4 — 14-slide investor arc, self-contained HTML.
  * Palette / logo / assets carried over from deck/make-pitch-deck-v3.js.
  * Structure follows the classic pre-seed arc: Title → Problem → Market →
  * Why Now → Solution → Value Prop → Moat → 3× Stakeholder → Traction →
@@ -306,13 +306,17 @@ ${cols3([
 ], "four")}
 `, { cls: "team" }));
 
-/* 18 · CLOSE */
+/* 14 · CLOSE */
 S.push(slide("dark", "", `
 <div class="close">
   <img class="close-logo" src="${logo}" alt="Yai">
   <h1>Modernised industry.</h1>
   <p class="gold big">Forty years of technical and management experience —<br>now Ai-native, on par with any tech industry.</p>
-  <p class="close-cta">See it live · <b>yaikh.com/experience</b></p>
+  <div class="close-row">
+    <div><span>The ask</span><b>US$3M seed round</b><em>21 factories → 100</em></div>
+    <div><span>See it live</span><b>yaikh.com/experience</b><em>70+ apps · 14 Ai agents</em></div>
+    <div><span>Talk to us</span><b>Arnold · Founder</b><em>Gamini · CTO</em></div>
+  </div>
   <p class="close-foot">www.yaikh.com · Texlink Technologies Co., Ltd. · Phnom Penh · September 2026 · Confidential</p>
 </div>
 `, { noFooter: true }));
@@ -440,9 +444,9 @@ td{padding:12px;border-bottom:1px solid rgba(255,255,255,.12);vertical-align:top
 .bigurl{text-align:center;font-size:64px;font-weight:800;letter-spacing:.14em;color:var(--gold);margin-top:48px}
 .title-foot{position:absolute;left:64px;right:64px;bottom:26px;font-size:17px;color:#8FA8D8}
 /* close */
-.close{text-align:center;margin-top:90px}.close-logo{width:170px;height:170px;border-radius:50%;object-fit:cover}
+.close{text-align:center;margin-top:30px}.close-logo{width:150px;height:150px;border-radius:50%;object-fit:cover}
 .close h1{font-size:64px;margin:24px 0 10px;color:#fff}.big{font-size:32px;line-height:1.4;margin:0}
-.close-cta{font-size:24px;color:#fff;margin:34px 0 0}.close-foot{position:absolute;left:64px;right:64px;bottom:26px;font-size:17px;color:#8FA8D8;margin:0}
+.close-row{display:flex;gap:24px;justify-content:center;margin:40px auto 0;max-width:1080px}.close-row div{flex:1;border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:18px 16px;display:flex;flex-direction:column;gap:6px}.close-row span{font-size:17px;letter-spacing:.08em;text-transform:uppercase;color:#8FA8D8}.close-row b{font-size:26px;color:#fff}.close-row em{font-style:normal;font-size:19px;color:var(--gold,#F5C26B)}.close-foot{position:absolute;left:64px;right:64px;bottom:26px;font-size:17px;color:#8FA8D8;margin:0}
 /* footer signature */
 .sig{position:absolute;left:64px;right:64px;bottom:20px;display:flex;justify-content:space-between;align-items:center;font-size:17px;letter-spacing:.08em;color:var(--gray)}
 .dark .sig{color:#8FA8D8}
