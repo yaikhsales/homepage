@@ -297,6 +297,7 @@ S.push(slide("dark", "11 · The ask", `
 /* 12b · SERIOUS COMPETITOR — Adidas's own manufacturing intelligence stack (sourced, see footnote) */
 S.push(slide("light", "12 · Our serious competitor", `
 <h2>Adidas built its own Manufacturing Intelligence Platform.</h2>
+<p class="rival-line">Adidas built it for one brand, from head office. <b>Yai builds it for the factory — every brand, from $120 a year.</b></p>
 <table class="land rival">
   <thead><tr><th>Adidas MiP — the stack</th><th>What it does for Adidas</th><th>Where Yai is different</th></tr></thead>
   <tbody>
@@ -306,7 +307,6 @@ S.push(slide("light", "12 · Our serious competitor", `
     <tr><td><b>project44</b></td><td>Ai visibility of shipments in transit (2026).</td><td>Sees it before it ships — cutting, sewing, QC, packing.</td></tr>
   </tbody>
 </table>
-<p class="rival-line">Adidas built it for one brand, from head office. <b>Yai builds it for the factory — every brand, from $120 a year.</b></p>
 <p class="rival-src">Sources: adidas / AWS (2021) · o9 Solutions · TrusTrace · project44 (2026)</p>
 `, { cls: "rivalslide" }));
 
@@ -457,7 +457,7 @@ td{padding:12px;border-bottom:1px solid rgba(255,255,255,.12);vertical-align:top
 .land td{font-size:22px;padding:18px 14px;line-height:1.32}.land th{padding:12px 14px}.land td:nth-child(4){color:var(--gold);font-weight:700}
 .price{font-size:36px;font-weight:800;color:var(--navy);margin-bottom:8px}.price span{font-size:20px;font-weight:600;color:var(--gray)}
 .ask{display:grid;grid-template-columns:1.35fr 1fr;gap:20px;margin-top:10px}
-.rivalslide h2{font-size:38px;white-space:nowrap}.rivalslide th{color:var(--blue);border-bottom-color:var(--line)}.rivalslide td{border-bottom-color:var(--line)}.rival td{font-size:20px;padding:13px 14px}.rival td:nth-child(1){width:22%}.rival td:nth-child(3){color:var(--orange);font-weight:700}.rival-line{font-size:23px;margin:18px 0 0;line-height:1.35}.rival-src{font-size:17px;color:var(--gray);margin:8px 0 0}.alloc td:nth-child(2){font-weight:800;color:var(--gold)}
+.rivalslide h2{font-size:38px;white-space:nowrap}.rivalslide th{color:var(--blue);border-bottom-color:var(--line)}.rivalslide td{border-bottom-color:var(--line)}.rival td{font-size:20px;padding:13px 14px}.rival td:nth-child(1){width:22%}.rival td:nth-child(3){color:var(--orange);font-weight:700}.rival-line{font-size:23px;margin:-4px 0 0;line-height:1.35}.rival-src{font-size:17px;color:var(--gray);margin:8px 0 0}.alloc td:nth-child(2){font-weight:800;color:var(--gold)}
 .milestones{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:18px 20px;font-size:21px}
 .ms-head{font-size:18px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:4px 0 8px}
 .milestones ol{margin:0 0 14px 18px;padding:0;line-height:1.6}.milestones p{margin:0;line-height:1.5;color:#D6DEF5}
