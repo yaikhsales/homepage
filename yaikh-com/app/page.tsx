@@ -465,6 +465,21 @@ function Hero() {
             {t("hero.pRest")}
           </motion.p>
 
+          {/* Mission + the four pressures (kept in sync with the pitch deck, slides 2 and 4). */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.55 }}
+            className="mt-5 max-w-2xl space-y-2"
+          >
+            <p className="text-base lg:text-lg text-white/90 leading-relaxed text-pretty font-medium">
+              {t("hero.mission")}
+            </p>
+            <p className="text-sm lg:text-base text-yai-amber/95 leading-relaxed text-pretty">
+              {t("hero.pressure")}
+            </p>
+          </motion.div>
+
           {/* Texlink Technologies — the company behind Yai. */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -500,7 +515,7 @@ function Hero() {
         >
           <CompactDreamShowcase />
           <div className="grid grid-cols-2 gap-4">
-            <StatCard value="10" label={t("stats.agents")} />
+            <StatCard value="14" label={t("stats.agents")} />
             <StatCard value="20" label={t("stats.engineers")} />
             <LiveDurationStat startDate="2024-05-20" />
             <StatCard value="40 yrs" label={t("stats.exp")} />

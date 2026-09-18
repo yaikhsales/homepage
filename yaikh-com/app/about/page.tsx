@@ -156,7 +156,7 @@ export default function CustomersPage() {
                     Sen Sok, Phnom Penh, Cambodia.
                   </div>
                   <div className="text-white/95 italic pt-1">
-                    Ai-Native Manufacturing Intelligence Platform.
+                    Ai-Native Manufacturing Intelligence for Soft Goods.
                   </div>
                 </div>
               </div>

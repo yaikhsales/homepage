@@ -24,7 +24,7 @@ const allura = Allura({
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.yaikh.com"),
   title: {
-    default: "Yai · Ai-Native Manufacturing Intelligence Platform",
+    default: "Yai · Ai-Native Manufacturing Intelligence for Soft Goods",
     template: "%s · Yai",
   },
   description:
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     "Texlink Technologies",
   ],
   openGraph: {
-    title: "Yai · Ai-Native Manufacturing Intelligence Platform",
+    title: "Yai · Ai-Native Manufacturing Intelligence for Soft Goods",
     description:
       "Cambodia's Ai-native manufacturing intelligence platform. Built on Claude + Google Cloud, by a 20-engineer Cambodian team.",
     url: "https://www.yaikh.com",
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Yai · Ai-Native Manufacturing Intelligence Platform",
+    title: "Yai · Ai-Native Manufacturing Intelligence for Soft Goods",
     description:
       "Cambodia's Ai-native manufacturing intelligence platform. Built on Claude + Google Cloud.",
   },
@@ -75,7 +75,7 @@ export default function RootLayout({
     url: "https://www.yaikh.com",
     logo: "https://www.yaikh.com/yai-logo.jpg",
     description:
-      "Ai-Native Manufacturing Intelligence Platform — modernises factories from paper-based operations into agentic Ai. Built on Claude (Anthropic) and Google Cloud, by a 20-engineer Cambodian team.",
+      "Ai-Native Manufacturing Intelligence for Soft Goods — modernises factories from paper-based operations into agentic Ai. Built on Claude (Anthropic) and Google Cloud, by a 20-engineer Cambodian team.",
     foundingLocation: { "@type": "Place", name: "Phnom Penh, Cambodia" },
     areaServed: { "@type": "Place", name: "ASEAN" },
     sameAs: ["https://www.yaikh.com/SDTV"],

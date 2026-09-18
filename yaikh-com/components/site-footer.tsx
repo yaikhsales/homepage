@@ -25,7 +25,7 @@ export default function SiteFooter() {
             <span className="text-white/55">Reg. 1000542518 · 03 Oct 2025</span><br />
             TSF-038A Kolap Street, Damnak Village,<br />
             Sen Sok, Phnom Penh, Cambodia.<br />
-            <span className="italic text-white/65">Ai-Native Manufacturing Intelligence Platform.</span>
+            <span className="italic text-white/65">Ai-Native Manufacturing Intelligence for Soft Goods.</span>
           </p>
           {/* Social — LinkedIn / Facebook / YouTube / TikTok / Telegram / WhatsApp. */}
           <div className="mt-5 flex items-center gap-3">
