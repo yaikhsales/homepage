@@ -310,7 +310,7 @@ ${cols3([
 S.push(slide("dark", "", `
 <div class="close">
   <img class="close-logo" src="${logo}" alt="Yai">
-  <h1>The only Commercial Ai MiP.</h1>
+  <h1>The only Commercial Ai MiP<br><span class="sub-h">for the Soft Goods industry.</span></h1>
   <p class="gold big">40 years of industry experience · 20 Ai engineers<br>Built with Claude, Google and NVIDIA technology.</p>
   <div class="close-row">
     <div><span>The ask</span><b>US$3M seed round</b><em>21 factories → 100</em></div>
@@ -458,7 +458,7 @@ td{padding:12px;border-bottom:1px solid rgba(255,255,255,.12);vertical-align:top
 .title-foot{position:absolute;left:64px;right:64px;bottom:26px;font-size:17px;color:#8FA8D8}
 /* close */
 .close{text-align:center;margin-top:0}.close-logo{width:110px;height:110px;border-radius:50%;object-fit:cover}
-.close h1{font-size:60px;margin:14px 0 8px;color:#fff}.big{font-size:32px;line-height:1.4;margin:0}
+.close h1 .sub-h{font-size:44px}.close h1{font-size:56px;line-height:1.12;margin:12px 0 8px;color:#fff}.big{font-size:32px;line-height:1.4;margin:0}
 .close-row{display:flex;gap:24px;justify-content:center;margin:40px auto 0;max-width:1080px}.close-row>div{flex:1;border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:18px 16px;display:flex;flex-direction:column;gap:6px}.close-row>div>span{font-size:17px;letter-spacing:.08em;text-transform:uppercase;color:#8FA8D8}.close-row b{font-size:26px;color:#fff}.close-row b.pp{font-size:24px}.close-row{align-items:stretch;margin-top:30px;max-width:1150px}.close-row .talk{flex:2.1;text-align:left}.close-row .talk>span{text-align:center}.talk-body{display:flex;gap:18px;align-items:center}.qr{margin:0;text-align:center}.qr img{width:150px;height:150px;border-radius:10px;display:block}.qr figcaption{font-size:17px;color:#8FA8D8;margin-top:4px}.talk-lines{display:flex;flex-direction:column;gap:3px}.talk-lines p{margin:0;font-size:19px;color:#fff}.talk-lines p.mail{color:var(--gold);margin-top:4px}.talk-lines i{font-style:normal;color:#8FA8D8;display:inline-block;width:98px}.close-row>div:not(.talk){justify-content:center}.close-row em{font-style:normal;font-size:19px;color:var(--gold,#F5C26B)}.close-foot{position:absolute;left:64px;right:64px;bottom:26px;font-size:17px;color:#8FA8D8;margin:0}
 /* footer signature */
 .sig{position:absolute;left:64px;right:64px;bottom:20px;display:flex;justify-content:space-between;align-items:center;font-size:17px;letter-spacing:.08em;color:var(--gray)}
