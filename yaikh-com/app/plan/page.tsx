@@ -926,6 +926,32 @@ export default async function PlanPage() {
               {about.a3.location && <span className="text-white/60">{about.a3.location}</span>}
             </p>
           </Card>
+
+          {/* A4 · Seed-round pitch deck — served from /plan/pitch-deck (session-gated, not /public) */}
+          <div className="flex items-end justify-between gap-4 mb-3 mt-8">
+            <div>
+              <h3 className="font-bold text-yai-navy text-xl">A4. Pitch Deck · US$3M seed round</h3>
+              <p className="text-sm text-gray-600 mt-1">14 slides — problem, market, solution, traction, roadmap, business model, the ask, team.</p>
+            </div>
+            <a
+              href="/plan/pitch-deck"
+              target="_blank"
+              rel="noopener"
+              className="no-print shrink-0 rounded-full bg-yai-orange text-white text-sm font-bold px-5 py-2.5 hover:opacity-90"
+            >
+              Open full screen ↗
+            </a>
+          </div>
+          <div className="no-print rounded-2xl overflow-hidden border border-yai-border bg-[#0b1020]">
+            <iframe
+              src="/plan/pitch-deck"
+              title="Yai pitch deck — US$3M seed round"
+              className="w-full block"
+              style={{ height: 720 }}
+              loading="lazy"
+            />
+          </div>
+          <p className="hidden print:block text-sm text-gray-600">Pitch deck: yaikh.com/plan/pitch-deck (sign-in required).</p>
         </Section>
 
         {/* Footer (screen only) */}
