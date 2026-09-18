@@ -17,8 +17,14 @@ export const TranslationProvider = ({ children }) => {
     // Language codes: 'en' for English, 'km' for Khmer, 'zh' for Chinese
     // Map to translation files: 'en' -> eng, 'km' -> kh, 'zh' -> ch
     const [language, setLanguage] = useState(() => {
-        const savedLanguage = localStorage.getItem('app-language') || 'en';
-        return savedLanguage;
+        // Saved choice wins; otherwise follow the browser's language once
+        // (Chrome default → km / zh / en). The three header flags override it.
+        const savedLanguage = localStorage.getItem('app-language');
+        if (savedLanguage) return savedLanguage;
+        const nav = String((typeof navigator !== 'undefined' && (navigator.language || (navigator.languages || [])[0])) || 'en').toLowerCase();
+        if (nav.startsWith('km')) return 'km';
+        if (nav.startsWith('zh')) return 'zh';
+        return 'en';
     });
 
     const translations = {

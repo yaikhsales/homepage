@@ -216,6 +216,8 @@ export const generateBossBubbles = async (
       body: JSON.stringify({
         visitor_name: visitor || "Boss",
         factory: factory || undefined,
+        // Header flag choice (km / en / zh) — the worker answers in this language.
+        lang: (typeof localStorage !== "undefined" && localStorage.getItem("app-language")) || "en",
         history: (chatHistory || []).slice(-8).map((m) => ({
           from: m.from === "user" ? "user" : "bot",
           text: typeof m.text === "string" ? m.text : String(m.text ?? ""),
