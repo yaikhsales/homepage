@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import LangFlags from "../components/LangFlags";
 import {
     X, Plus, Grid3x3, Mic, Send, Sparkles, Paperclip,
     Wallet, UserCog, HeartHandshake, Factory,
@@ -5868,6 +5869,7 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                     >
                         ← Home
                     </button>
+                    <LangFlags />
 
                     {/* Orange My Task Agent */}
                     <button

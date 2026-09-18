@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import LangFlags from "../components/LangFlags";
 import {
   X,
   Send,
@@ -2181,6 +2182,7 @@ ANSWER RULES
         >
           ← Home
         </button>
+        <LangFlags />
 
         {/* Orange My Task Agent */}
         <button
