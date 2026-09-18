@@ -42,7 +42,7 @@ Edit **only** in `deck/v4-work` — the session scratchpad is wiped when the app
 | 11 | Path to targets — ~$100K (2024–26) · ~$0.5M (2027–28) · ~$3M (2028–30) + 9-month proof line | ✅ (see open 2) |
 | 12 | The ask — 4 allocation items | ⏳ open 1 |
 | 13 | Team — Arnold (founder) · Gamini (CTO) with photos · 20 Cambodian engineers · 9 partner logos | ✅ (see open 5) |
-| 14 | Close — Modernised industry + 3 boxes: The ask (US$3M seed · 21→100) · See it live · Talk to us (Arnold · Gamini + email, WhatsApp, Telegram, WeChat, Telegram QR → t.me/GKSmartbiz) | ✅ draft (see open 6) |
+| 14 | Close — "The only Commercial Ai MiP." + 3 boxes: The ask (US$3M seed · 21→100) · See it live · Talk to us (Arnold · Gamini + email, WhatsApp, Telegram, WeChat, Telegram QR → t.me/GKSmartbiz) | ✅ draft (see open 6) |
 
 ## Open items — ask Gamini, don't invent numbers
 1. **The Ask:** proposed $2M Growth + $1M Reserve (18 months runway & working capital) — not yet approved. Real % split unknown (45/25/15/15 are placeholders). City office = Phnom Penh? Milestones box (100 factories · Anthropic Partner Network · Layer 3 at five factories · Series A by Q4 2028) — keep or change?

@@ -310,7 +310,7 @@ ${cols3([
 S.push(slide("dark", "", `
 <div class="close">
   <img class="close-logo" src="${logo}" alt="Yai">
-  <h1>Modernised industry.</h1>
+  <h1>The only Commercial Ai MiP.</h1>
   <p class="gold big">Forty years of technical and management experience —<br>now Ai-native, on par with any tech industry.</p>
   <div class="close-row">
     <div><span>The ask</span><b>US$3M seed round</b><em>21 factories → 100</em></div>
