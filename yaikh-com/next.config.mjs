@@ -63,6 +63,13 @@ const nextConfig = {
           { key: "X-Robots-Tag", value: "noindex, nofollow" },
         ],
       },
+      // The pitch deck is embedded in /plan Appendix A4 via an iframe, so it
+      // may be framed by our own origin only. Listed last: Next.js lets the
+      // last matching rule win for the same header key.
+      {
+        source: "/plan/pitch-deck",
+        headers: [{ key: "X-Frame-Options", value: "SAMEORIGIN" }],
+      },
     ];
   },
   // /experience serves the absorbed CRA dashboard directly — no
