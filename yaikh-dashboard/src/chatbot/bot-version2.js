@@ -283,20 +283,55 @@ const BotVersion2 = ({
     } catch { /* private mode */ }
     if (messages.length > 0) return;
     const persona = { title: "Mr", name: "Sam" };
-    // Each line: pause before the bubble starts (reading/typing gap), then
-    // the words FLOW in one by one — human chat rhythm, not drop-drop-drop.
-    const script = [
-      { pre: 700,  from: "bot",  text: `Hello Boss — I am Yai.` },
-      { pre: 700,  from: "bot",  text: `And you?` },
-      { pre: 1400, from: "user", text: `I am ${persona.name}` },
-      { pre: 900,  from: "bot",  text: `Welcome, ${persona.title} ${persona.name} — I'm sure you're here to experience the Yai Big Brain skills, isn't it?` },
-      { pre: 1400, from: "user", text: `Yes — show me what you've got.` },
-      { pre: 900,  from: "bot",  text: `Very well. We are experts in Ai-Native applications for garments and other goods manufacturing.` },
-      { pre: 800,  from: "bot",  text: `40+ applications for administration. 30 for operations. Would you like to explore administration, operations — or a special subject, like Quality Management?` },
-      { pre: 1600, from: "user", text: `QMS — good topic to discuss. Tell me about QMS.` },
-      { pre: 1000, from: "bot",  text: `QMS runs from material-sourcing quality all the way to export quality management — fabric 4-point, AQL 2.5, relaxation tracking, cut-panel inspection, complaints, Call Out.` },
-      { pre: 900,  from: "bot",  text: `And like that, I can walk you through all our 15 Ai agents. Are you ready for a conversation?` },
-    ];
+    // Demo script in the 3 header languages. The flag (localStorage
+    // 'app-language') picks which plays. Real Q&A after handover goes to the
+    // M1 Claude worker, which replies in whatever language the visitor writes.
+    const lang = (() => {
+      try { return (localStorage.getItem("app-language") || "en").toLowerCase().slice(0, 2); }
+      catch { return "en"; }
+    })();
+    const SCRIPTS = {
+      en: [
+        { pre: 700,  from: "bot",  text: `Hello Boss — I am Yai.` },
+        { pre: 700,  from: "bot",  text: `And you?` },
+        { pre: 1400, from: "user", text: `I am ${persona.name}` },
+        { pre: 900,  from: "bot",  text: `Welcome, ${persona.title} ${persona.name} — I'm sure you're here to experience the Yai Big Brain skills, isn't it?` },
+        { pre: 1400, from: "user", text: `Yes — show me what you've got.` },
+        { pre: 900,  from: "bot",  text: `Very well. We are experts in Ai-Native applications for garments and other goods manufacturing.` },
+        { pre: 800,  from: "bot",  text: `40+ applications for administration. 30 for operations. Would you like to explore administration, operations — or a special subject, like Quality Management?` },
+        { pre: 1600, from: "user", text: `QMS — good topic to discuss. Tell me about QMS.` },
+        { pre: 1000, from: "bot",  text: `QMS runs from material-sourcing quality all the way to export quality management — fabric 4-point, AQL 2.5, relaxation tracking, cut-panel inspection, complaints, Call Out.` },
+        { pre: 900,  from: "bot",  text: `And like that, I can walk you through all our 15 Ai agents. Are you ready for a conversation?` },
+      ],
+      km: [
+        { pre: 700,  from: "bot",  text: `សួស្តី លោកម្ចាស់ — ខ្ញុំឈ្មោះ Yai។` },
+        { pre: 700,  from: "bot",  text: `ចុះលោកវិញ?` },
+        { pre: 1400, from: "user", text: `ខ្ញុំឈ្មោះ ${persona.name}` },
+        { pre: 900,  from: "bot",  text: `សូមស្វាគមន៍ លោក ${persona.name} — ខ្ញុំជឿថាលោកមកដើម្បីសាកល្បងសមត្ថភាពរបស់ Yai Big Brain មែនទេ?` },
+        { pre: 1400, from: "user", text: `បាទ — បង្ហាញខ្ញុំមើលអ្វីដែលអ្នកមាន។` },
+        { pre: 900,  from: "bot",  text: `បាទ។ យើងជាអ្នកជំនាញផ្នែកកម្មវិធី Ai-Native សម្រាប់ឧស្សាហកម្មកាត់ដេរ និងផលិតផលផ្សេងៗ។` },
+        { pre: 800,  from: "bot",  text: `កម្មវិធីជាង 40 សម្រាប់ផ្នែករដ្ឋបាល។ 30 សម្រាប់ប្រតិបត្តិការ។ តើលោកចង់ស្វែងយល់ផ្នែករដ្ឋបាល ប្រតិបត្តិការ — ឬប្រធានបទពិសេស ដូចជា Quality Management?` },
+        { pre: 1600, from: "user", text: `QMS — ជាប្រធានបទល្អ។ ប្រាប់ខ្ញុំអំពី QMS មើល។` },
+        { pre: 1000, from: "bot",  text: `QMS គ្រប់គ្រងគុណភាពចាប់ពីការផ្គត់ផ្គង់វត្ថុធាតុដើម រហូតដល់គុណភាពនាំចេញ — fabric 4-point, AQL 2.5, relaxation tracking, cut-panel inspection, ពាក្យបណ្តឹង និង Call Out។` },
+        { pre: 900,  from: "bot",  text: `ហើយបែបនេះឯង ខ្ញុំអាចណែនាំលោកអំពី Ai agent ទាំង 15 របស់យើង។ តើលោកត្រៀមរួចសម្រាប់ការសន្ទនាហើយឬនៅ?` },
+      ],
+      zh: [
+        { pre: 700,  from: "bot",  text: `老板您好 — 我是 Yai。` },
+        { pre: 700,  from: "bot",  text: `您怎么称呼？` },
+        { pre: 1400, from: "user", text: `我是 ${persona.name}` },
+        { pre: 900,  from: "bot",  text: `欢迎，${persona.name} 先生 — 我想您是来体验 Yai Big Brain 的能力的，对吧？` },
+        { pre: 1400, from: "user", text: `好的 — 让我看看你的本事。` },
+        { pre: 900,  from: "bot",  text: `好的。我们专注于服装及其他制造业的 Ai-Native 应用。` },
+        { pre: 800,  from: "bot",  text: `行政管理有 40+ 个应用，运营有 30 个。您想了解行政、运营 — 还是某个专题，比如质量管理（QMS）？` },
+        { pre: 1600, from: "user", text: `QMS — 好话题。跟我讲讲 QMS 吧。` },
+        { pre: 1000, from: "bot",  text: `QMS 覆盖从原料采购质量一直到出口质量管理 — 面料四分制、AQL 2.5、松布追踪、裁片检验、投诉、Call Out。` },
+        { pre: 900,  from: "bot",  text: `就这样，我可以带您了解我们全部 15 个 Ai agent。您准备好开始对话了吗？` },
+      ],
+    };
+    const script = SCRIPTS[lang] || SCRIPTS.en;
+    // English streams by word (space-joined); Khmer/Chinese have no word
+    // spaces, so stream by character for the same "flowing in" feel.
+    const streamByChar = lang === "zh" || lang === "km";
     let cancelled = false;
     const timers = [];
     const wait = (ms) => new Promise((res) => timers.push(setTimeout(res, ms)));
@@ -304,21 +339,23 @@ const BotVersion2 = ({
       for (const line of script) {
         if (cancelled) return;
         await wait(line.pre);
-        // open an empty bubble, then flow the words into it
+        // open an empty bubble, then flow the text into it
         setMessages(prev => [...prev, { from: line.from, text: "" }]);
-        const words = line.text.split(" ");
+        const units = streamByChar ? Array.from(line.text) : line.text.split(" ");
+        const joiner = streamByChar ? "" : " ";
         let acc = "";
-        for (const w of words) {
+        for (const u of units) {
           if (cancelled) return;
-          acc = acc ? `${acc} ${w}` : w;
+          acc = acc ? `${acc}${joiner}${u}` : u;
           const snapshot = acc;
           setMessages(prev => {
             const next = [...prev];
             next[next.length - 1] = { from: line.from, text: snapshot };
             return next;
           });
-          // user "types" a touch slower than Yai "speaks"
-          await wait(line.from === "user" ? 110 : 75);
+          // user "types" a touch slower than Yai "speaks"; per-char is quicker
+          const base = line.from === "user" ? 110 : 75;
+          await wait(streamByChar ? Math.round(base * 0.55) : base);
         }
       }
       if (cancelled) return;
