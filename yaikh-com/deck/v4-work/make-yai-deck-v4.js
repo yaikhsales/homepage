@@ -472,6 +472,7 @@ const html = `<meta charset="utf-8">
 <meta name="viewport" content="width=1320">
 <style>${css}</style>
 <div class="deck">${S.join("\n")}</div>
+<script>(function(){function fit(){var z=Math.min(1,(window.innerWidth-32)/1280);document.querySelectorAll("section.slide").forEach(function(s){s.style.zoom=z;});}fit();window.addEventListener("resize",fit);window.addEventListener("beforeprint",function(){document.querySelectorAll("section.slide").forEach(function(s){s.style.zoom=1;});});window.addEventListener("afterprint",fit);})();</script>
 <script>(function(){var m=location.search.match(/only=(\\d+)/);if(!m)return;var k=m[1];document.querySelectorAll('section.slide').forEach(function(s){if(s.id!=='s'+k)s.style.display='none';else{s.style.margin='0';}});document.body.style.background='#0b1020';})();</script>`;
 
 fs.mkdirSync(path.dirname(OUT), { recursive: true });
