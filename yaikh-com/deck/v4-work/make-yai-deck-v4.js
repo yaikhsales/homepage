@@ -315,7 +315,20 @@ S.push(slide("dark", "", `
   <div class="close-row">
     <div><span>The ask</span><b>US$3M seed round</b><em>21 factories → 100</em></div>
     <div><span>See it live</span><b>yaikh.com/experience</b><em>70+ apps · 14 Ai agents</em></div>
-    <div><span>Talk to us</span><b class="pp">Arnold · Founder</b><b class="pp">Gamini · CTO</b></div>
+    <div class="talk">
+      <span>Talk to us</span>
+      <div class="talk-body">
+        <figure class="qr"><img src="${uri(path.join(LITE, "gamini-telegram-qr.png"))}" alt="Telegram QR"><figcaption>Scan · Telegram</figcaption></figure>
+        <div class="talk-lines">
+          <b class="pp">Arnold · Founder</b>
+          <b class="pp">Gamini · CTO</b>
+          <p class="mail">gamini@yaikh.com</p>
+          <p><i>WhatsApp</i> +855 92 973 194</p>
+          <p><i>Telegram</i> +65 8556 5977</p>
+          <p><i>WeChat</i> +86 178 7617 4767</p>
+        </div>
+      </div>
+    </div>
   </div>
   <p class="close-foot">www.yaikh.com · Texlink Technologies Co., Ltd. · Phnom Penh · September 2026 · Confidential</p>
 </div>
@@ -444,9 +457,9 @@ td{padding:12px;border-bottom:1px solid rgba(255,255,255,.12);vertical-align:top
 .bigurl{text-align:center;font-size:64px;font-weight:800;letter-spacing:.14em;color:var(--gold);margin-top:48px}
 .title-foot{position:absolute;left:64px;right:64px;bottom:26px;font-size:17px;color:#8FA8D8}
 /* close */
-.close{text-align:center;margin-top:30px}.close-logo{width:150px;height:150px;border-radius:50%;object-fit:cover}
-.close h1{font-size:64px;margin:24px 0 10px;color:#fff}.big{font-size:32px;line-height:1.4;margin:0}
-.close-row{display:flex;gap:24px;justify-content:center;margin:40px auto 0;max-width:1080px}.close-row div{flex:1;border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:18px 16px;display:flex;flex-direction:column;gap:6px}.close-row span{font-size:17px;letter-spacing:.08em;text-transform:uppercase;color:#8FA8D8}.close-row b{font-size:26px;color:#fff}.close-row b.pp{font-size:24px}.close-row em{font-style:normal;font-size:19px;color:var(--gold,#F5C26B)}.close-foot{position:absolute;left:64px;right:64px;bottom:26px;font-size:17px;color:#8FA8D8;margin:0}
+.close{text-align:center;margin-top:0}.close-logo{width:110px;height:110px;border-radius:50%;object-fit:cover}
+.close h1{font-size:60px;margin:14px 0 8px;color:#fff}.big{font-size:32px;line-height:1.4;margin:0}
+.close-row{display:flex;gap:24px;justify-content:center;margin:40px auto 0;max-width:1080px}.close-row>div{flex:1;border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:18px 16px;display:flex;flex-direction:column;gap:6px}.close-row>div>span{font-size:17px;letter-spacing:.08em;text-transform:uppercase;color:#8FA8D8}.close-row b{font-size:26px;color:#fff}.close-row b.pp{font-size:24px}.close-row{align-items:stretch;margin-top:30px;max-width:1150px}.close-row .talk{flex:2.1;text-align:left}.close-row .talk>span{text-align:center}.talk-body{display:flex;gap:18px;align-items:center}.qr{margin:0;text-align:center}.qr img{width:150px;height:150px;border-radius:10px;display:block}.qr figcaption{font-size:17px;color:#8FA8D8;margin-top:4px}.talk-lines{display:flex;flex-direction:column;gap:3px}.talk-lines p{margin:0;font-size:19px;color:#fff}.talk-lines p.mail{color:var(--gold);margin-top:4px}.talk-lines i{font-style:normal;color:#8FA8D8;display:inline-block;width:98px}.close-row>div:not(.talk){justify-content:center}.close-row em{font-style:normal;font-size:19px;color:var(--gold,#F5C26B)}.close-foot{position:absolute;left:64px;right:64px;bottom:26px;font-size:17px;color:#8FA8D8;margin:0}
 /* footer signature */
 .sig{position:absolute;left:64px;right:64px;bottom:20px;display:flex;justify-content:space-between;align-items:center;font-size:17px;letter-spacing:.08em;color:var(--gray)}
 .dark .sig{color:#8FA8D8}
