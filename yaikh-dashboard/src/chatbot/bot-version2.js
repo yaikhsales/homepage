@@ -41,6 +41,89 @@ const ClaudeBadge = () => (
   </span>
 );
 
+// Onboarding funnel in the 3 header languages. Openers are kept concise on
+// purpose — the rich per-branch marketing now comes from the in-language M1
+// Claude worker once the visitor chats; this wrapper just needs to read
+// naturally in each language and gather workers/lines/product/pain.
+const obLang = () => {
+  try { return (localStorage.getItem("app-language") || "en").toLowerCase().slice(0, 2); }
+  catch { return "en"; }
+};
+const OB = {
+  en: {
+    ready: `Good. I am Yai — and you? What should I call you?`,
+    met: (n) => `Good to meet you, ${n}.`,
+    qWorkers: `So — how many people show up on your floor on a normal day?`,
+    qLines: (w) => `${w.toLocaleString()} — good size to work with. How many production lines run all that — two, three, more?`,
+    qProduct: (l, per) => `${l} line${l === 1 ? "" : "s"}${per ? `, about ${per} per line` : ""} — got it. What's the main product off those lines — polos, jackets, trousers, or a mix?`,
+    qPain: (p) => `${p || "Got it"} — noted. Where does your team lose the most sleep — quality, machine downtime, cost & efficiency, tech-packs, inventory, or merchandising? ("all of them" works too.)`,
+    pains: {
+      "quality": `Quality drift — my QA PA watches material, fabric relaxation, 4-point and AQL, complaints and Call-Out.`,
+      "maintenance": `Machine downtime — my YTM PA tracks every machine, repair queue, spares, and predicts failures.`,
+      "cost-efficiency": `Cost & efficiency — my CE PA owns standard time, productivity per line, machine allocation, cost centres.`,
+      "tech-details": `Tech-packs — my YPI PA is trilingual, one record per style, feeding shop-floor iPads and TVs.`,
+      "inventory": `Inventory — my MRP PA owns BOM, stock, reorder points, supplier orders, and customs/GDT for imports.`,
+      "merchandising": `Merchandising — my YPI PA runs the pre-production spine: sample approvals, sourcing, POs, handoff to 4DP.`,
+      "all": `All of it — that's why I exist. Every PA watches its own patch and escalates only what needs your call.`,
+      "mixed": `Noted — I'll shape the demo across a couple of PAs so you see the pattern.`,
+    },
+    qBuyer: (opener) => `${opener} Last thing — take a public brand as an example: is GAP-style US mass-market close to your world, or more sports (Adidas/Nike), luxury (Armani/Gucci), or workwear (Carhartt/Patagonia)? One word is fine.`,
+    materialising: `Materialising your factory across all 14 PAs…`,
+    welcomeLead: (n, w, p, l) => `Alright ${n} — your ${w.toLocaleString()}-worker ${p} factory is loaded (${l} line${l === 1 ? "" : "s"}).`,
+    mattersIntro: (t) => `\n\nWhile I walked the floor I spotted 3 matters worth your attention first (${t} open across all 14 PAs):\n\n`,
+    mattersCloser: `\n\nWant to start with one of those (say the number)? Say "next" for the next 3, or tell me what's keeping you awake this week.`,
+    closer: `\n\nWhat's keeping you awake this week?`,
+  },
+  km: {
+    ready: `បាទ។ ខ្ញុំឈ្មោះ Yai — ចុះលោកវិញ? ខ្ញុំគួរហៅលោកយ៉ាងម៉េច?`,
+    met: (n) => `រីករាយដែលបានស្គាល់លោក ${n}។`,
+    qWorkers: `អញ្ចឹង — នៅរោងចក្ររបស់លោក ជាធម្មតាមានកម្មករប៉ុន្មាននាក់មកធ្វើការក្នុងមួយថ្ងៃ?`,
+    qLines: (w) => `${w.toLocaleString()} នាក់ — ជាទំហំល្អ។ តើមានខ្សែផលិតកម្មប៉ុន្មានកំពុងដំណើរការ — ពីរ បី ឬច្រើនជាងនេះ?`,
+    qProduct: (l, per) => `${l} ខ្សែ${per ? ` ប្រហែល ${per} នាក់ក្នុងមួយខ្សែ` : ""} — យល់ហើយ។ តើផលិតផលចម្បងគឺអ្វី — អាវប៉ូឡូ អាវធំ ខោ ឬចម្រុះ?`,
+    qPain: (p) => `${p || "យល់ហើយ"} — កត់ទុក។ តើក្រុមរបស់លោកពិបាកចិត្តបំផុតត្រង់ណា — គុណភាព ម៉ាស៊ីនខូច តម្លៃនិងប្រសិទ្ធភាព tech-pack ស្តុក ឬ merchandising? (ឬនិយាយថា "ទាំងអស់")`,
+    pains: {
+      "quality": `គុណភាព — QA PA របស់ខ្ញុំតាមដានវត្ថុធាតុដើម ការសម្រាកក្រណាត់ 4-point និង AQL ពាក្យបណ្តឹង និង Call-Out។`,
+      "maintenance": `ម៉ាស៊ីនខូច — YTM PA របស់ខ្ញុំតាមដានម៉ាស៊ីនទាំងអស់ ជួសជុល គ្រឿងបន្លាស់ និងទាយការខូចជាមុន។`,
+      "cost-efficiency": `តម្លៃនិងប្រសិទ្ធភាព — CE PA របស់ខ្ញុំគ្រប់គ្រង standard time ផលិតភាពក្នុងមួយខ្សែ និង cost centre។`,
+      "tech-details": `Tech-pack — YPI PA របស់ខ្ញុំមានបីភាសា មួយកំណត់ត្រាក្នុងមួយម៉ូដែល បង្ហាញលើ iPad និងទូរទស្សន៍លើកន្លែងផលិត។`,
+      "inventory": `ស្តុក — MRP PA របស់ខ្ញុំគ្រប់គ្រង BOM ស្តុក ចំណុចបញ្ជាទិញឡើងវិញ និងគយ/GDT សម្រាប់ការនាំចូល។`,
+      "merchandising": `Merchandising — YPI PA របស់ខ្ញុំដំណើរការ pre-production ទាំងមូល៖ ការអនុម័តគំរូ ការផ្គត់ផ្គង់ PO និងប្រគល់ទៅ 4DP។`,
+      "all": `ទាំងអស់ — នេះជាមូលហេតុដែលខ្ញុំមាន។ PA នីមួយៗតាមដានផ្នែករបស់ខ្លួន ហើយបញ្ជូនតែអ្វីដែលត្រូវការការសម្រេចពីលោក។`,
+      "mixed": `កត់ទុក — ខ្ញុំនឹងរៀបចំការបង្ហាញឆ្លងកាត់ PA មួយចំនួន ដើម្បីឲ្យលោកឃើញលំនាំ។`,
+    },
+    qBuyer: (opener) => `${opener} រឿងចុងក្រោយ — យក brand សាធារណៈមួយធ្វើឧទាហរណ៍៖ តើបែប GAP (ទីផ្សារធំសហរដ្ឋអាមេរិក) ជិតនឹងពិភពរបស់លោក ឬបែបកីឡា (Adidas/Nike) ប្រណីត (Armani/Gucci) ឬសម្លៀកបំពាក់ការងារ (Carhartt/Patagonia)? មួយពាក្យក៏បានដែរ។`,
+    materialising: `កំពុងបង្កើតរោងចក្ររបស់លោកឆ្លងកាត់ PA ទាំង 14…`,
+    welcomeLead: (n, w, p, l) => `បាទ ${n} — រោងចក្រ ${p} របស់លោកមានកម្មករ ${w.toLocaleString()} នាក់ បានផ្ទុករួចរាល់ (${l} ខ្សែ)។`,
+    mattersIntro: (t) => `\n\nពេលខ្ញុំដើរលើកន្លែងផលិត ខ្ញុំកត់សម្គាល់ឃើញ 3 រឿងគួរឲ្យលោកចាប់អារម្មណ៍មុនគេ (${t} រឿងកំពុងបើកឆ្លងកាត់ PA ទាំង 14)៖\n\n`,
+    mattersCloser: `\n\nចង់ចាប់ផ្តើមជាមួយមួយក្នុងចំណោមនោះទេ (និយាយលេខ)? និយាយ "next" ដើម្បីមើល 3 បន្ទាប់ ឬប្រាប់ខ្ញុំពីអ្វីដែលធ្វើឲ្យលោកគេងមិនលក់។`,
+    closer: `\n\nតើមានអ្វីធ្វើឲ្យលោកព្រួយបារម្មណ៍សប្តាហ៍នេះ?`,
+  },
+  zh: {
+    ready: `好的。我是 Yai — 您怎么称呼？我该怎么称呼您？`,
+    met: (n) => `很高兴认识您，${n}。`,
+    qWorkers: `那么 — 您的车间正常一天大概有多少人上班？`,
+    qLines: (w) => `${w.toLocaleString()} 人 — 规模不错。有多少条生产线在跑 — 两条、三条，还是更多？`,
+    qProduct: (l, per) => `${l} 条线${per ? `，每条约 ${per} 人` : ""} — 明白了。这些线主要做什么产品 — Polo、夹克、裤子，还是混合款？`,
+    qPain: (p) => `${p || "明白了"} — 记下了。您的团队最头疼哪一块 — 质量、机器停机、成本与效率、技术资料（tech-pack）、库存，还是跟单（merchandising）？（说"全部"也行。）`,
+    pains: {
+      "quality": `质量 — 我的 QA PA 监控原料、面料松弛、四分制和 AQL、投诉以及 Call-Out。`,
+      "maintenance": `机器停机 — 我的 YTM PA 追踪每台机器、维修队列、备件，并提前预测故障。`,
+      "cost-efficiency": `成本与效率 — 我的 CE PA 负责标准工时、每条线产能、机器分配和成本中心。`,
+      "tech-details": `技术资料 — 我的 YPI PA 支持三语，每款一份记录，推送到车间的 iPad 和电视。`,
+      "inventory": `库存 — 我的 MRP PA 负责 BOM、库存、再订货点、供应商订单，以及进口的海关/GDT。`,
+      "merchandising": `跟单 — 我的 YPI PA 运行整个产前流程：样品确认、采购、PO，物料到位后交接给 4DP。`,
+      "all": `全部 — 这正是我存在的意义。每个 PA 看好自己那块，只把需要您拍板的升级上来。`,
+      "mixed": `记下了 — 我会跨几个 PA 来做演示，让您看清整体模式。`,
+    },
+    qBuyer: (opener) => `${opener} 最后一件事 — 拿一个公开品牌举例：您的情况更接近 GAP 那种美国大众市场，还是运动（Adidas/Nike）、奢侈（Armani/Gucci）或工装（Carhartt/Patagonia）？一个词就行。`,
+    materialising: `正在跨全部 14 个 PA 生成您的工厂…`,
+    welcomeLead: (n, w, p, l) => `好的，${n} — 您这家 ${w.toLocaleString()} 人的 ${p} 工厂已加载完成（${l} 条线）。`,
+    mattersIntro: (t) => `\n\n我在车间转了一圈，发现有 3 件事值得您先看看（全部 14 个 PA 共有 ${t} 项待处理）：\n\n`,
+    mattersCloser: `\n\n想先从其中一件开始吗（说编号）？说"next"看下 3 件，或者告诉我这周最让您睡不着的是什么。`,
+    closer: `\n\n这周最让您睡不着的是什么？`,
+  },
+};
+
 const BotVersion2 = ({
   onClose,
   moduleContext,
@@ -109,56 +192,27 @@ const BotVersion2 = ({
   const askNextOnboarding = (step, draft, boss) => {
     let q = null;
     const name = boss || "Boss";
+    const t = OB[obLang()] || OB.en;
 
     if (step === -2) {
       q = `Hello Boss — I am Yai. And you?`;
     } else if (step === -1) {
-      // After name capture — short mission check. WAIT for boss to say yes.
-      q = `Good to meet you, ${name}. I take it you're here to see what Yai can do for you. Am I right?`;
+      q = t.ready;
     } else if (step === 0) {
-      // After mission confirmed — short lead-in + first factory question.
-      q = `Good. So — how many people show up on your floor on a normal day?`;
+      q = t.qWorkers;
     } else if (step === 1) {
-      const w = draft.workers || 0;
-      let opener;
-      if (w >= 2500)      opener = `${w.toLocaleString()} — that's a proper machine, ${name}.`;
-      else if (w >= 1200) opener = `${w.toLocaleString()} — a real operation.`;
-      else if (w >= 600)  opener = `${w.toLocaleString()} — solid middle-weight factory.`;
-      else if (w >= 200)  opener = `${w.toLocaleString()} — nice size to work with.`;
-      else                opener = `${w.toLocaleString()} — a lean crew.`;
-      q = `${opener} Out of curiosity, how many production lines are moving all of that? Two, three, more?`;
+      q = t.qLines(draft.workers || 0);
     } else if (step === 2) {
       const l = draft.lines || 0;
       const perLine = draft.workers && l ? Math.round(draft.workers / l) : 0;
-      let opener;
-      if (l >= 5)          opener = `${l} lines — that's a lot of parallel motion to keep balanced.`;
-      else if (l >= 3)     opener = `${l} lines running${perLine ? `, roughly ${perLine} per line` : ""} — that's a healthy shape.`;
-      else if (l === 2)    opener = `Two lines${perLine ? ` at ${perLine} each` : ""} — tight setup, easier to move people between them when a bottleneck shows up.`;
-      else                 opener = `One line${perLine ? ` with ${perLine} people` : ""} — everyone in the same rhythm, that's a whole different world.`;
-      q = `${opener} So what's the bread-and-butter product coming off those lines? Polos, jackets, trousers, or more of a mix?`;
+      q = t.qProduct(l, perLine);
     } else if (step === 3) {
-      const p = (draft.product || "").toLowerCase();
-      let opener;
-      if (p.includes("polo"))         opener = `Polos — the classic. Long unbroken flows, small margins per piece, but volume forgives a lot. Buyers love the consistency.`;
-      else if (p.includes("jacket"))  opener = `Jackets — trim-heavy, high-value, and unforgiving on the details. Your MRP and 4DP have to be married for that to work.`;
-      else if (p.includes("trouser") || p.includes("pant")) opener = `Trousers — cutting accuracy and fabric consumption are where the money's won or lost. A well-run trouser line is a beautiful thing.`;
-      else if (p.includes("mix"))     opener = `A mix — that's the harder game. Every changeover eats time, but you never have all your eggs in one buyer's basket. Smart.`;
-      else                            opener = `${p ? `${p.charAt(0).toUpperCase() + p.slice(1)}` : "Got it"} — noted.`;
-      q = `${opener} On the floor — where does your team lose the most sleep? Quality drift, machine downtime, cost and efficiency (IE / standard time), tech-pack chaos, inventory surprises, or merchandising bottleneck? Any one is fine — or say "all of them" if it's the whole set.`;
+      const p = (draft.product || "").trim();
+      q = t.qPain(p ? p.charAt(0).toUpperCase() + p.slice(1) : "");
     } else if (step === 4) {
       const pains = draft.painPoints || [];
-      const PAIN_OPENER = {
-        "quality":         `Quality drift — that's the one buyers see first. My QA PA watches upstream material, fabric relaxation, marker consumption, 4-point and AQL, complaints and Call-Out silence. Nothing sits.`,
-        "maintenance":     `Machine downtime — quietest killer on the floor. My YTM PA tracks every machine, repair queue, spare-parts stock, and predicts failures from vibration + heat trends before the line stops.`,
-        "cost-efficiency": `Cost and efficiency — the IE side. My CE PA owns standard time, productivity by line, machine allocation, skill inventory and cost-center rollup. Line-by-line, hour-by-hour.`,
-        "tech-details":    `Tech-pack chaos — the Cambodia special. My YPI PA is trilingual (Khmer / English / Chinese), one record per style, feeding shop-floor iPads and TVs so no one guesses.`,
-        "inventory":       `Inventory surprises — my MRP PA owns BOM, stock, reorder points, supplier orders, and the customs/GDT side for imports. No surprise short at cutting.`,
-        "merchandising":   `Merchandising bottleneck — my YPI PA runs the full pre-production spine: buyer sample approvals, sourcing, purchase orders, invoices, and handoff to 4DP planning when material lands.`,
-        "all":             `All of it — that's why I exist. Every one of my 13 PAs watches its own patch and escalates only what needs your call.`,
-        "mixed":           `Noted — mixed picture. I'll shape the demo across a couple of PAs so you can see the pattern.`,
-      };
-      const opener = PAIN_OPENER[pains[0]] || PAIN_OPENER["mixed"];
-      q = `${opener} Last thing — and I won't ask your buyer names, order numbers, or volumes; that's your business, not mine to pull. Instead let me pick a public brand as an example: **GAP** — US mass-market, WRAP + Higg required, tight 6-week lead. **Is that close to your world, or would sports (Adidas / Nike), luxury (Armani / Gucci), or workwear (Carhartt / Patagonia) be a closer fit?** Yes/no or one word is fine.`;
+      const opener = t.pains[pains[0]] || t.pains["mixed"];
+      q = t.qBuyer(opener);
     }
 
     if (q) setMessages(prev => [...prev, { from: "bot", text: capShort(q) }]);
@@ -167,7 +221,7 @@ const BotVersion2 = ({
   // After all 5 answers, POST to materialize + confirm.
   const materialiseFactory = async (draft, boss) => {
     setOnboardingStep(5);
-    setMessages(prev => [...prev, { from: "bot", text: "Materialising your factory across all 13 PAs…" }]);
+    setMessages(prev => [...prev, { from: "bot", text: (OB[obLang()] || OB.en).materialising }]);
     try {
       const payload = {
         visitor: boss || "Boss",
@@ -229,6 +283,10 @@ const BotVersion2 = ({
         : ``;
 
       // Proactively pull the top 3 matters so Yai brings them up unprompted.
+      // NOTE: matter pa_label/pill/summary are server text (English) from
+      // /api/factory/attention — localising those needs an API change, out of
+      // this file's scope. The framing around them is translated here.
+      const tt = OB[obLang()] || OB.en;
       let mattersBlock = "";
       let mattersList = [];
       let totalOpen = 0;
@@ -240,30 +298,17 @@ const BotVersion2 = ({
           totalOpen = attJson.totalOpen || 0;
           setShownMatterIds(mattersList.map((m) => m.item_id));
           const rendered = attJson.matters.map((m, i) =>
-            `${i + 1}. **${m.pa_label} · ${m.pill}**${m.burning ? " 🔥" : ""} — ${m.summary} _(${m.age_days}d old)_`
+            `${i + 1}. **${m.pa_label} · ${m.pill}**${m.burning ? " 🔥" : ""} — ${m.summary} _(${m.age_days}d)_`
           ).join("\n\n");
-          mattersBlock =
-            `\n\nWhile I was walking the floor I spotted 3 matters worth your attention first (${totalOpen} open across all 13 PAs):\n\n${rendered}`;
+          mattersBlock = tt.mattersIntro(totalOpen) + rendered;
         }
       } catch {
         // silent — welcome message just skips the matters section
       }
 
-      const closer = mattersList.length
-        ? `\n\nWant to start with one of those (say the number)? Say "next" to see the next 3, or tell me what's actually keeping you awake this week.`
-        : `\n\nWhat's keeping you awake this week?`;
-
-      const welcome = bossPacePreference === "short"
-        ? `Alright ${bossName} — your ${payload.workers.toLocaleString()}-worker ${productLower} factory is loaded. ` +
-          (mattersList.length
-            ? `${mattersList.length} matters need your eye first — say a number to open one.`
-            : `What's keeping you awake this week?`)
-        : `Alright ${bossName} — your ${payload.workers.toLocaleString()}-worker ${productLower} factory is loaded ` +
-          `(${payload.lines} line${payload.lines === 1 ? "" : "s"}, ${data.tasksSeeded} live tasks across the team).\n\n` +
-          `Quick thoughts before we dig in: ${observation}${certLine}\n\n` +
-          buyerLine +
-          mattersBlock +
-          closer;
+      const closer = mattersList.length ? tt.mattersCloser : tt.closer;
+      const welcome = tt.welcomeLead(bossName, payload.workers, productLower, payload.lines)
+        + mattersBlock + closer;
       setMessages(prev => [...prev, { from: "bot", text: welcome }]);
     } catch (err) {
       setOnboardingStep(4); // back to the last question so they can retry
@@ -1242,7 +1287,7 @@ const BotVersion2 = ({
         // The scripted opener already asked-and-answered the mission check,
         // so after the name go straight to shaping the demo.
         setOnboardingStep(0);
-        setTimeout(() => setMessages(prev => [...prev, { from: "bot", text: `Good to meet you, ${clean}.` }]), 500);
+        setTimeout(() => setMessages(prev => [...prev, { from: "bot", text: (OB[obLang()] || OB.en).met(clean) }]), 500);
         setTimeout(() => askNextOnboarding(0, onboardingDraft, clean), 1400);
         return;
       }
@@ -1251,9 +1296,7 @@ const BotVersion2 = ({
       // no) — get their name, then shape the demo.
       if (onboardingStep === -1) {
         setOnboardingStep(-2);
-        setTimeout(() => setMessages(prev => [...prev, { from: "bot", text:
-          `Good. I am Yai — and you? What should I call you?`,
-        }]), 500);
+        setTimeout(() => setMessages(prev => [...prev, { from: "bot", text: (OB[obLang()] || OB.en).ready }]), 500);
         return;
       }
 
