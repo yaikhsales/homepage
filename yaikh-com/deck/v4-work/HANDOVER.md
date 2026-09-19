@@ -32,7 +32,7 @@ Edit **only** in `deck/v4-work` — the session scratchpad is wiped when the app
 |---|---|---|
 | 1 | Title — Ai-Native Manufacturing Intelligence for Soft Goods | ✅ |
 | 2 | Problem — 4 problems: brands · government · society · ASEAN | ✅ |
-| 3 | Market — 1,700 exporters · 5,000 non-manufacturing · 6,000 small factories | ✅ |
+| 3 | Market — 1,700 exporters · 5,000 non-manufacturing · 6,000 small businesses | ✅ |
 | 4 | Why now — 4 why-nows | ✅ |
 | 5 | Solution — Ai-Native Apps · Ai Agentic Support · Ai Big Brain · AIoT + 7 platform logos | ✅ |
 | 6 | Who it serves — worker · supervisor · manager · owner · buyer · government | ✅ |

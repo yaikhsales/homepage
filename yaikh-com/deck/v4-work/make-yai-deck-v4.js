@@ -152,16 +152,16 @@ ${cols3([
 /* 3 · MARKET */
 S.push(slide("light", "02 · The market opportunity", `
 <h2 class="bang">The problem is the market.</h2>
-<p class="sub">1,700 exporters · 5,000 businesses · 6,000 small factories — all still on paper and chat apps.<br>We start with the biggest 1,700.</p>
+<p class="sub">1,700 exporters · 5,000 non-manufacturing · 6,000 small businesses — all still on paper and chat apps.<br>We start with the biggest 1,700.</p>
 <div class="stat3">
   <div class="stat"><div class="num orange">1,700</div><div class="lab">export garment · footwear · bag factories</div></div>
   <div class="stat"><div class="num blue">5,000</div><div class="lab">non-manufacturing businesses</div></div>
-  <div class="stat"><div class="num green">6,000</div><div class="lab">small factories</div></div>
+  <div class="stat"><div class="num green">6,000</div><div class="lab">small businesses</div></div>
 </div>
 ${cols3([
-  { tag: "Land — the 1,700 exporters", text: "Garment, footwear and travel-goods factories, 100+ workers each, buyer-audited and already paying for compliance. Yai's home ground: 14 agents, 70+ apps, the full department suite from day one." },
-  { tag: "Ladder — 5,000 non-manufacturing", text: "Hotels, restaurants, retail, schools, hospitals and offices run the same departments — HR, admin, purchasing, accounts, compliance. Same agents, no factory floor needed. No new product to build." },
-  { tag: "Phone-first — 6,000 small factories", text: "Workshops and sub-contractors with no IT staff and no desk. No dashboard, just the chat: Yai Lite from a phone, one agent at a time, in Khmer. The tail is where the volume is." },
+  { tag: "Land — 1,700 exporters", html: `<ul class="mk"><li>Garment · footwear · bags</li><li>100+ workers, buyer-audited</li><li>Full suite: 70+ apps, 14 agents</li></ul>` },
+  { tag: "Ladder — 5,000 non-manufacturing", html: `<ul class="mk"><li>Hotels · retail · schools</li><li>Same HR, admin, accounts</li><li>Nothing new to build</li></ul>` },
+  { tag: "Phone-first — 6,000 small businesses", html: `<ul class="mk"><li>No IT staff, no desk</li><li>Yai Lite on a phone, in Khmer</li><li>Where the volume is</li></ul>` },
 ])}
 <p class="foot-note">Targets drawn from: 703,642 non-manufacturing businesses (NIS Economic Census 2022) · 43,970 SMEs (MISTI 2024) · 1,682 garment factories (MISTI 2025).</p>
 `, { cls: "tight" }));
@@ -244,7 +244,7 @@ S.push(slide("light", "07 · Product roadmap", `
   <div class="rm-cell grow"><b class="big">1</b><span>factory</span></div>
   <div class="rm-cell grow"><b class="big">15</b><span>factories</span></div>
   <div class="rm-cell grow now"><b class="big">21+</b><span>factories + non-garment companies — ES Packing · 3SGS · BICNZ</span></div>
-  <div class="rm-cell grow target"><b>Target</b><span>1,700 exporters · 5,000 non-manufacturing · 6,000 small factories</span></div>
+  <div class="rm-cell grow target"><b>Target</b><span>1,700 exporters · 5,000 non-manufacturing · 6,000 small businesses</span></div>
 </div>
 `, { cls: "rmslide" }));
 
@@ -392,6 +392,7 @@ h2.stack span{display:block}
 .gold{color:var(--gold)!important}
 .orange{color:var(--orange)}.blue{color:var(--blue)}.green{color:var(--green)}
 .why h2.oneline{font-size:58px;line-height:1.06;margin-bottom:14px;white-space:nowrap}.why h2.stack{font-size:56px;line-height:1.06;margin-bottom:10px;white-space:nowrap}.why-sub{font-size:26px;line-height:1.3;white-space:nowrap;color:#DCE4F5;margin:0 0 18px}.why-sub b{color:var(--orange)}.dates{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:4px solid rgba(255,255,255,.2)}.date{padding:12px 18px 0 0;position:relative}.date:before{content:"";position:absolute;top:-12px;left:0;width:20px;height:20px;border-radius:50%;background:var(--gold)}.date.hot:before{background:var(--orange)}.date b{display:block;font-size:44px;line-height:1;color:#fff}.date.hot b{color:var(--orange)}.date span{display:block;font-size:17px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:6px 0 6px;font-weight:700}.date p{margin:0;font-size:19px;line-height:1.36;color:#DCE4F5}.ready{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:12px}.deadlines{margin:14px 0 0;font-size:27px;line-height:1.2;color:#B9C6E4;white-space:nowrap;display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid rgba(255,255,255,.14);border-bottom:1px solid rgba(255,255,255,.14);padding:10px 0}.deadlines b{color:#fff;font-weight:700}.ready div{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:14px 16px}.ready b{display:block;font-size:21px;color:#fff;margin-bottom:4px}.ready span{font-size:18px;color:#B9C6E4;line-height:1.35}.why .foot-note{font-size:22px;margin-top:14px;line-height:1.36}
+.mk{margin:0;padding:0;list-style:none}.mk li{font-size:22px;line-height:1.3;padding:5px 0 5px 22px;position:relative}.mk li:before{content:"";position:absolute;left:0;top:15px;width:9px;height:9px;border-radius:50%;background:var(--orange)}
 .cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:22px}
 .col{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px 24px 22px}
 .dark .col{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14)}
