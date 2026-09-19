@@ -43,9 +43,10 @@ const CONSTELLATION = [
     ["Admin", ["Support Ticket", "Y Shop", "Gate Pass", "Meeting Room", "Car Booking", "Fire Alarm", "CCTV"]],
     ["Billing", ["Purchase Request", "Bill Claim", "Salary Bill", "Shipping Bill"]],
     ["HR", ["YHR", "Org Chart", "Training", "Temporary Worker", "Speak Up"]],
-    [["CSR", ["Digital Audit", "Energy", "Air", "Water", "Waste", "Chemical"]], ["E-GOV", ["E-Government"]]], // stacked
-    ["Shipping", ["Shipping"]], // under Admin
+    ["CSR", ["Digital Audit", "Energy", "Air", "Water", "Waste", "Chemical"]],
+    ["Shipping", ["Shipping"]], // row 2
     ["Accountant", ["Accountant", "IEWS"]],
+    ["E-GOV", ["E-Government"]],
   ] },
   { s: "Management Dashboard", c: "mgmt", cols: 1, g: [
     ["Dashboard", ["Management Dashboard", "SOP"]],
