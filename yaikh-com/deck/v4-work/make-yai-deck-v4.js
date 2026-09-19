@@ -181,7 +181,7 @@ S.push(slide("dark", "03 · Why now", `
   <div><b>Claude · Google for Startups</b><span>Built with their technology and support.</span></div>
   <div><b>20 Ai engineers</b><span>Trained and certified in Phnom Penh.</span></div>
 </div>
-<p class="deadlines">The clock outside: <b>UFLPA 2022</b> · <b>EU Product Passport 2027</b> · <b>buyers want live data 2028</b></p>
+<p class="deadlines">The clock outside: <b>UFLPA 2022</b> · <b>EU Product Passport 2027</b> · <b>buyers want live data 2028</b> · <i>and more coming</i></p>
 <p class="foot-note gold"><b>This is the time.</b> A founder and CTO with 40 years each on the floor — ready to wipe the market with the Ai mop.</p>
 `, { cls: "why" }));
 
