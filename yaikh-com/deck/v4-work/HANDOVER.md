@@ -14,13 +14,14 @@
 Edit **only** in `deck/v4-work` — the session scratchpad is wiped when the app quits.
 
 ## How to work
-1. `cd deck/v4-work && node make-yai-deck-v4.js`
+1. `cd deck/v4-work && node make-yai-deck-v4.js all` — builds all four raise sizes (0.5m · 1m · 2m · 3m; 3m = `yai-deck-v4.html`, others `yai-deck-v4-<ask>.html`). One tier: `ASK=1m node make-yai-deck-v4.js`.
 2. Preview: `python3 -m http.server 8901 --bind 127.0.0.1` → Browser pane `http://127.0.0.1:8901/yai-deck-v4.html` (1320×780). `?only=N` = one slide.
 3. After each edit check the slide fits above its footer (~678px) and has no large empty bottom. Text ≥ ~17px (TV-readable).
 4. Don't use headless Chrome screenshots — they hang.
 
 ## Publishing (only when Gamini says "update the web")
-1. `cp deck/v4-work/yai-deck-v4.html private/pitch-deck-v4.html` (never `/public`)
+1. Copy every built deck into `private/` (never `/public`): `yai-deck-v4.html → private/pitch-deck-v4.html`, `yai-deck-v4-<ask>.html → private/pitch-deck-v4-<ask>.html`, and `deck/Yai-Pitch-Deck-v4-*.pdf → private/`. PDFs: headless Chrome `--print-to-pdf --window-size=1400,900` (wrap in a 90s alarm).
+   Site: /plan A4 shows four small cards → `/plan/pitch-deck?ask=<ask>` (deck) and `&pdf=1` (PDF).
 2. `npm run build` in `yaikh-com`
 3. Commit as **yaikhsales** · `gh auth switch --user yaikhsales` · push · switch back to `Gaminigz`
 4. Railway ~7 min · check `gh api repos/yaikhsales/homepage/commits/<sha>/status`
@@ -54,4 +55,4 @@ Edit **only** in `deck/v4-work` — the session scratchpad is wiped when the app
 6. **Slide 14:** "Talk to us" has names only — add email / phone / WhatsApp? Keep "Modernised industry." as the headline?
 7. **Title icons:** Microsoft Fluent 3D now; Gamini wants more realistic — swap in his own images if he provides them.
 
-8. **Four decks:** Gamini wants $0.5M / $1M / $2M / $3M versions — needs per-tier allocation %, milestones, round name.
+8. **Four decks — BUILT 19 Sep.** Only the amount differs. $0.5M/$1M/$2M say "beyond its first 21 factories" / "21 factories and growing" / milestone "More paying factories" and reuse the $3M allocation % — still need Gamini's per-tier split, factory target and round name (pre-seed?). Edit `TIERS` in the generator.

@@ -14,7 +14,25 @@ const LITE = path.join(__dirname, "img-lite");
 const IMG = LITE;
 const AG = path.join(LITE, "agents");
 const PUB = path.join(LITE, "pub");
-const OUT = path.join(__dirname, "yai-deck-v4.html");
+/* Four raise sizes from one source. `node make-yai-deck-v4.js all` builds every tier;
+ * a single tier: ASK=1m node make-yai-deck-v4.js. 3m keeps the original file name.
+ * Only $3M has a confirmed factory target (21 → 100); the others stay target-free
+ * until Gamini gives their numbers — allocation % and other milestones are shared. */
+const TIERS = {
+  "0.5m": { amt: "US$0.5M", target: null },
+  "1m":   { amt: "US$1M",   target: null },
+  "2m":   { amt: "US$2M",   target: null },
+  "3m":   { amt: "US$3M",   target: 100 },
+};
+if (process.argv[2] === "all") {
+  const { execFileSync } = require("child_process");
+  for (const k of Object.keys(TIERS)) execFileSync(process.execPath, [__filename], { env: { ...process.env, ASK: k }, stdio: "inherit" });
+  process.exit(0);
+}
+const ASK = process.env.ASK || "3m";
+const TIER = TIERS[ASK];
+if (!TIER) throw new Error(`unknown ASK=${ASK}; use ${Object.keys(TIERS).join(" / ")}`);
+const OUT = path.join(__dirname, ASK === "3m" ? "yai-deck-v4.html" : `yai-deck-v4-${ASK}.html`);
 
 let bytes = 0;
 function uri(p) {
@@ -269,7 +287,7 @@ S.push(slide("light", "10 · Path to the targets", `
 
 /* 16 · THE ASK */
 S.push(slide("dark", "11 · The ask", `
-<h2>Raising <span class="gold">US$3M</span> seed round to take Yai from 21 factories to a hundred.</h2>
+<h2>Raising <span class="gold">${TIER.amt}</span> seed round to take Yai ${TIER.target ? "from 21 factories to a hundred" : "beyond its first 21 factories"}.</h2>
 <div class="ask">
   <table class="alloc">
     <thead><tr><th>Allocation</th><th>%</th><th>What it unlocks</th></tr></thead>
@@ -283,7 +301,7 @@ S.push(slide("dark", "11 · The ask", `
   <div class="milestones">
     <div class="ms-head">Four milestones</div>
     <ol>
-      <li>100 paying factories in Cambodia</li>
+      <li>${TIER.target ? `${TIER.target} paying factories in Cambodia` : "More paying factories in Cambodia"}</li>
       <li>Anthropic Partner Network confirmed</li>
       <li>Layer 3 live at five factories</li>
       <li>Series A by Q4 2028</li>
@@ -329,7 +347,7 @@ S.push(slide("dark", "", `
   <h1>The only Commercial Ai MiP<br><span class="sub-h">for the Soft Goods industry.</span></h1>
   <p class="gold big">40 years of industry experience · 20 Ai engineers<br>Built with Claude, Google and NVIDIA technology.</p>
   <div class="close-row">
-    <div><span>The ask</span><b>US$3M seed round</b><em>21 factories → 100</em></div>
+    <div><span>The ask</span><b>${TIER.amt} seed round</b><em>${TIER.target ? `21 factories → ${TIER.target}` : "21 factories and growing"}</em></div>
     <div><span>See it live</span><b>yaikh.com/experience</b><em>70+ apps · 14 Ai agents</em></div>
     <div class="talk">
       <span>Talk to us</span>
@@ -484,7 +502,7 @@ td{padding:12px;border-bottom:1px solid rgba(255,255,255,.12);vertical-align:top
 `;
 
 const html = `<meta charset="utf-8">
-<title>Yai Pitch Deck v4</title>
+<title>Yai Pitch Deck v4 · ${TIER.amt}</title>
 <meta name="viewport" content="width=1320">
 <style>${css}</style>
 <div class="deck">${S.join("\n")}</div>
