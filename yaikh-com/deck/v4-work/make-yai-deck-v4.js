@@ -406,7 +406,7 @@ if (TIER.client) {
   n = 1;
   const sec = (x) => `<div class="csec ${x.c}"><div class="csec-h">${esc(x.s)}</div><div class="ctabs" style="grid-template-columns:repeat(${x.cols},1fr)">${x.g.map((g) => { const one = ([t, m]) => `${t ? `<b>${esc(t)}</b>` : ""}<ul>${m.map((a) => `<li>${esc(a)}</li>`).join("")}</ul>`; return !g ? `<div class="ctab"></div>` : Array.isArray(g[0]) ? `<div class="ctab stack">${g.map(one).join("")}</div>` : `<div class="ctab">${one(g)}</div>`; }).join("")}</div></div>`;
   S.push(slide("dark", "Agent constellation", `
-<h2>My task agent — every department, one constellation.</h2>
+<h2>Individual module price</h2>
 <div class="const">${CONSTELLATION.map(sec).join("")}</div>
 `, { cls: "constslide" }));
   S.push(slide("dark", "", ``));
