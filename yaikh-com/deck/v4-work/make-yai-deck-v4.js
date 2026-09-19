@@ -55,8 +55,11 @@ const CONSTELLATION = [
   ] },
   { s: "Operations", c: "ops", cols: 3, g: [
     ["QA", ["YQMS", "Call Out"]],
-    ["Production", ["FC", "YWIP", "CE", "YTM", "YTM Shop"]],
+    ["Production", ["YTM", "YTM Shop"]],
     [["4DP", ["4DP"]], ["YPI", ["YPI"]], ["MRP", ["MRP"]]], // stacked in one column
+    null,
+    ["", ["FC", "YWIP", "CE"]], // rest of Production, row 2
+    null,
   ] },
 ];
 
