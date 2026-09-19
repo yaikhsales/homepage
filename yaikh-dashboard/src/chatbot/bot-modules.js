@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { generateGeminiResponse, generateDirectGeminiResponse, generateChatResponse, generatePAOrChat, shouldUseGemini } from './gemini-api';
 import { KHMER_NEW_YEAR } from '../thems';
+import { useTranslation } from '../translate/TranslationContext';
 import { useKhmerTTS } from "./useKhmerTTS";
 import { VolumeX } from "lucide-react";
 
@@ -361,6 +362,7 @@ function getDynamicGreeting(name) {
  * external chart lib — series ≤ 30 points, fixed viewBox, scales to
  * the panel width. Keeps the bundle lean and the card snappy. */
 const InlineChart = ({ chart }) => {
+    const { t } = useTranslation();
     if (!chart || !Array.isArray(chart.series) || chart.series.length === 0) return null;
     const W = 320, H = 120, PAD_L = 28, PAD_R = 8, PAD_T = 8, PAD_B = 22;
     const innerW = W - PAD_L - PAD_R;
@@ -480,6 +482,7 @@ const PhoneFrame = ({
     // multi-bot launcher flow.
     initialTopic = null,
 }) => {
+    const { t } = useTranslation();
     const messagesEndRef = useRef(null);
     const inputRef = useRef(null);
     const [isHistoryOpen, setIsHistoryOpen] = useState(false);
@@ -1483,7 +1486,7 @@ const PhoneFrame = ({
                                     className={`px-3 py-1.5 rounded-full hover:bg-black/5 transition text-xs font-medium ${bot.textColor || 'text-gray-600'}`}
                                     title="Menu"
                                 >
-                                    Menu
+                                    {t('Menu')}
                                 </button>
                             </div>
                             {/* Bot Name - Centered. For Accounting PA, the
@@ -1493,8 +1496,8 @@ const PhoneFrame = ({
                             <div className="absolute left-1/2 transform -translate-x-1/2">
                                 <span className={`text-sm font-semibold ${bot.textColor || 'text-gray-800'}`}>
                                     {botId === 'accounting-bot' && activeTopic
-                                        ? `${activeTopic} PA`
-                                        : bot.name}
+                                        ? `${t(activeTopic)} PA`
+                                        : t(bot.name)}
                                 </span>
                             </div>
                             {/* Right Side - Language Selector and Bot Avatar */}
@@ -1600,7 +1603,7 @@ const PhoneFrame = ({
                                                         className={`text-left px-5 py-4 rounded-xl bg-gradient-to-r ${module.lightColor} border-2 border-transparent hover:border-${module.color.split('-')[1]}-300 text-sm ${bot.textColor || 'text-gray-800'} hover:shadow-lg transition-all flex items-center gap-3 font-medium`}
                                                     >
                                                         <span className="text-2xl">{module.icon}</span>
-                                                        <span className="flex-1">{module.name}</span>
+                                                        <span className="flex-1">{t(module.name)}</span>
                                                         <ChevronRight size={18} className="opacity-50" />
                                                     </button>
                                                 ))}
@@ -1646,7 +1649,7 @@ const PhoneFrame = ({
                                                         'Compliance audits':      'Audits',
                                                         'Environmental alerts':   'Alerts',
                                                     };
-                                                    const chipLabel = isAccountingFilter ? (SHORT_LABEL[action.text] || action.text) : action.text;
+                                                    const chipLabel = t(isAccountingFilter ? (SHORT_LABEL[action.text] || action.text) : action.text);
                                                     return (
                                                         <button
                                                             key={idx}
@@ -1667,7 +1670,7 @@ const PhoneFrame = ({
                                                                             from: 'bot',
                                                                             type: 'pending_items',
                                                                             topic: action.text,
-                                                                            text: `Loading "${action.text}"…`,
+                                                                            text: `${t('Loading')} "${t(action.text)}"…`,
                                                                             items: [],
                                                                             chart: null,
                                                                             collection: null,
@@ -1686,7 +1689,7 @@ const PhoneFrame = ({
                                                                                     if (data.chart) {
                                                                                         return {
                                                                                             ...prev,
-                                                                                            text: `${action.text} — ${data.chart.summary || ''}`,
+                                                                                            text: `${t(action.text)} — ${data.chart.summary || ''}`,
                                                                                             chart: data.chart,
                                                                                             items: [],
                                                                                             collection: data.collection || null,
@@ -1697,8 +1700,8 @@ const PhoneFrame = ({
                                                                                     return {
                                                                                         ...prev,
                                                                                         text: n === 0
-                                                                                            ? `No pending items for "${action.text}".`
-                                                                                            : `Here ${n === 1 ? 'is' : 'are'} ${n} ${action.text.toLowerCase()} item${n === 1 ? '' : 's'} awaiting action. Tap Approve to advance each one.`,
+                                                                                            ? `${t('No pending items for')} "${t(action.text)}".`
+                                                                                            : `${n} × ${t(action.text)} — ${t('awaiting action. Tap Approve to advance each one.')}`,
                                                                                         items: data.items || [],
                                                                                         chart: null,
                                                                                         collection: data.collection || null,
@@ -2199,8 +2202,8 @@ const PhoneFrame = ({
                                         onKeyDown={handleKeyPress}
                                         placeholder={
                                             botId === 'accounting-bot' && activeTopic
-                                                ? `Ask about ${activeTopic}`
-                                                : `Ask ${bot.name}`
+                                                ? `${t('Ask about')} ${t(activeTopic)}`
+                                                : `${t('Ask')} ${t(bot.name)}`
                                         }
                                         rows={3}
                                         className={`w-full bg-transparent border-0 outline-none resize-none px-4 pt-3 pb-1 text-base leading-relaxed cursor-text ${bot.textColor || 'text-gray-800'} placeholder:${bot.textColor || 'text-gray-400'}`}
@@ -2266,6 +2269,7 @@ const PhoneFrame = ({
  * lets the user Approve/Advance each one inline, refreshes after each
  * action, and tells the parent to refresh badge counts on close. */
 const PendingItemsModal = ({ topic, onClose, onAction }) => {
+    const { t } = useTranslation();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [items, setItems] = useState([]);
@@ -2330,7 +2334,7 @@ const PendingItemsModal = ({ topic, onClose, onAction }) => {
                     <div>
                         <h3 className="text-lg font-bold text-gray-800">{topic}</h3>
                         <p className="text-xs text-gray-500 mt-0.5">
-                            {loading ? 'Loading…' : `${items.length} item${items.length === 1 ? '' : 's'} awaiting action`}
+                            {loading ? t('Loading…') : `${items.length} ${t('items awaiting action')}`}
                         </p>
                     </div>
                     <button onClick={() => { if (onAction) onAction(); onClose(); }} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
@@ -2346,7 +2350,7 @@ const PendingItemsModal = ({ topic, onClose, onAction }) => {
                     )}
                     {!loading && !error && items.length === 0 && (
                         <div className="text-center py-10 text-sm text-gray-500">
-                            🎉 Nothing pending in this topic. You're all caught up.
+                            🎉 {t("Nothing pending in this topic. You're all caught up.")}
                         </div>
                     )}
                     {items.map((it) => {
@@ -5867,7 +5871,7 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                         className="px-4 py-1.5 rounded-full bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm flex items-center gap-1.5 shadow-md transition-colors"
                         aria-label="Back to Home"
                     >
-                        ← Home
+                        {t('← Home')}
                     </button>
                     <LangFlags />
 
@@ -5886,7 +5890,7 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                         >
                             <img src="/assets/modules-image/top-bot.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
                         </div>
-                        <span className="text-orange-500 font-bold text-base whitespace-nowrap">My Task Agent</span>
+                        <span className="text-orange-500 font-bold text-base whitespace-nowrap">{t('My Task Agent')}</span>
                         <ClaudeBadge />
                     </button>
 
@@ -5901,7 +5905,7 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                         >
                             <img src="assets/modules-image/yai1.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
                         </div>
-                        <span className="text-blue-500 font-bold text-base whitespace-nowrap">Agent Collective</span>
+                        <span className="text-blue-500 font-bold text-base whitespace-nowrap">{t('Agent Collective')}</span>
                         <ClaudeBadge />
                     </div>
 
@@ -5921,7 +5925,7 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                             >
                                 <img src="assets/modules-image/yai2.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
                             </div>
-                            <span className="text-emerald-500 font-bold text-base whitespace-nowrap">Big Brain</span>
+                            <span className="text-emerald-500 font-bold text-base whitespace-nowrap">{t('Big Brain')}</span>
                             <ClaudeBadge />
                         </button>
                     )}

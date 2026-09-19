@@ -11,6 +11,7 @@ import SectionContainer from "./components/SectionContainer";
 import { DASHBOARD_DATA } from "./data/module";
 import YaiDataBot from "./chatbot/YaiDataBot";
 import DragonAnimation from "./components/DragonAnimation";
+import { useTranslation } from "./translate/TranslationContext";
 import { ThemeBackground } from "./thems";
 
 import GMChat from "./chatbot/GMChat";
@@ -38,6 +39,7 @@ const ClaudeBadge = ({ size = "sm" }) => (
 
 // A new layout component to hold the shared UI (Header, Background)
 const AppLayout = () => {
+  const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -1329,7 +1331,7 @@ const AppLayout = () => {
                 <img src="/assets/modules-image/top-bot.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
               </div>
               <span className="text-orange-400 font-bold text-xl whitespace-nowrap">
-                My Task Agent
+                {t('My Task Agent')}
               </span>
               <ClaudeBadge />
             </div>
@@ -1354,7 +1356,7 @@ const AppLayout = () => {
                 <img src="assets/modules-image/yai1.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
               </div>
               <span className="text-blue-400 font-bold text-xl whitespace-nowrap">
-                Agent Collective
+                {t('Agent Collective')}
               </span>
               <ClaudeBadge />
             </button>
@@ -1377,7 +1379,7 @@ const AppLayout = () => {
                 <img src="assets/modules-image/yai2.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
               </div>
               <span className="text-emerald-400 font-bold text-xl whitespace-nowrap">
-                Big Brain
+                {t('Big Brain')}
               </span>
               <ClaudeBadge />
             </button>
