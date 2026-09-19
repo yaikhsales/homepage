@@ -40,13 +40,13 @@ const OUT = path.join(__dirname, ASK === "3m" ? "yai-deck-v4.html" : `yai-deck-v
  * yaikh-dashboard/src/data/module.js (DASHBOARD_DATA). Re-sync if that changes. */
 const CONSTELLATION = [
   { s: "Administration", c: "admin", cols: 4, g: [
-    ["Admin", ["Support Ticket", "Y Shop", "Gate Pass", "Meeting Room", "Car Booking", "Fire Alarm", "CCTV"]],
-    ["Billing", ["Purchase Request", "Bill Claim", "Salary Bill", "Shipping Bill"]],
     ["HR", ["YHR", "Org Chart", "Training", "Temporary Worker", "Speak Up"]],
+    ["Billing", ["Purchase Request", "Bill Claim", "Salary Bill", "Shipping Bill"]],
+    ["Admin", ["Support Ticket", "Y Shop", "Gate Pass", "Meeting Room", "Car Booking", "Fire Alarm", "CCTV"]],
     ["CSR", ["Digital Audit", "Energy", "Air", "Water", "Waste", "Chemical"]],
-    ["Accountant", ["Accountant", "IEWS"]], // row 2: under Admin
+    ["Accountant", ["Accountant", "IEWS"]], // row 2
     ["Shipping", ["Shipping"]],             // under Billing
-    null,                                   // under HR
+    null,
     ["E-GOV", ["E-Government"]],            // under CSR
   ] },
   { s: "Management Dashboard", c: "mgmt", cols: 1, g: [
