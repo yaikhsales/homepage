@@ -2403,6 +2403,7 @@ const PendingItemsModal = ({ topic, onClose, onAction }) => {
 };
 
 const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 'yai1', botsFilter = null, initialTopic = null }) => {
+    const { t } = useTranslation();
     // When BotModules is mounted from a sub-menu (e.g. Purchase Request),
     // botsFilter scopes the horizontal scroll to a single PA so the user
     // doesn't see the full constellation. initialTopic pre-sets the
