@@ -151,7 +151,7 @@ ${cols3([
 
 /* 3 · MARKET */
 S.push(slide("light", "02 · The market opportunity", `
-<h2 class="bang">The problem is the market.</h2>
+<h2 class="bang">The problem is the “market”</h2>
 <p class="sub">1,700 exporters · 5,000 non-manufacturing · 6,000 small businesses — all still on paper and chat apps.<br>We start with the biggest 1,700.</p>
 <div class="stat3">
   <div class="stat"><div class="num orange">1,700</div><div class="lab">export garment · footwear · bag factories</div></div>
