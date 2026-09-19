@@ -42,8 +42,8 @@ const CONSTELLATION = [
   { s: "Administration", c: "admin", cols: 4, g: [
     ["HR", ["YHR", "Org Chart", "Training", "Temporary Worker", "Speak Up"], "$2,000"],
     ["Billing", ["Purchase Request", "Bill Claim", "Salary Bill", "Shipping Bill"]],
-    ["Admin", ["Support Ticket", "Y Shop", "Gate Pass", "Meeting Room"]],
-    ["CSR", ["Digital Audit", "Energy", "Air", "Water", "Waste", "Chemical"]],
+    ["Admin", ["Support Ticket", "Y Shop", "Gate Pass", "Meeting Room"], "$2,000"],
+    ["CSR", ["Digital Audit", "Energy", "Air", "Water", "Waste", "Chemical"], "$2,000"],
     ["Accountant", ["Accountant", "IEWS"]], // row 2
     ["Shipping", ["Shipping"]],             // under Billing
     ["", ["Car Booking", "Fire Alarm", "CCTV"]], // rest of Admin, under it
