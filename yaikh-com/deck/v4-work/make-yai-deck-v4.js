@@ -160,7 +160,7 @@ S.push(slide("light", "02 · The market opportunity", `
 </div>
 ${cols3([
   { tag: "Land — 1,700 exporters", html: `<ul class="mk"><li>Garment · footwear · bags</li><li>100+ workers, buyer-audited</li><li>Full suite: 70+ apps, 14 agents</li></ul>` },
-  { tag: "Ladder — 5,000 non-manufacturing", html: `<ul class="mk"><li>Hotels · retail · schools</li><li>Same HR, admin, accounts</li><li>Nothing new to build</li></ul>` },
+  { tag: "Ladder — 5,000 non-manufacturing", html: `<ul class="mk"><li>Hotels · retail · schools</li><li>YHr · admin · accounts</li><li>Nothing new to build</li></ul>` },
   { tag: "Phone-first — 6,000 small businesses", html: `<ul class="mk"><li>No IT staff, no desk</li><li>Yai Lite on a phone, in Khmer</li><li>Where the volume is</li></ul>` },
 ])}
 <p class="foot-note">Targets drawn from: 703,642 non-manufacturing businesses (NIS Economic Census 2022) · 43,970 SMEs (MISTI 2024) · 1,682 garment factories (MISTI 2025).</p>
