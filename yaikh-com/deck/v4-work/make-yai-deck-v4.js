@@ -42,11 +42,11 @@ const CONSTELLATION = [
   { s: "Administration", c: "admin", cols: 4, g: [
     ["HR", ["YHR", "Org Chart", "Training", "Temporary Worker", "Speak Up"]],
     ["Billing", ["Purchase Request", "Bill Claim", "Salary Bill", "Shipping Bill"]],
-    ["Admin", ["Support Ticket", "Y Shop", "Gate Pass", "Meeting Room", "Car Booking", "Fire Alarm", "CCTV"]],
+    ["Admin", ["Support Ticket", "Y Shop", "Gate Pass", "Meeting Room"]],
     ["CSR", ["Digital Audit", "Energy", "Air", "Water", "Waste", "Chemical"]],
     ["Accountant", ["Accountant", "IEWS"]], // row 2
     ["Shipping", ["Shipping"]],             // under Billing
-    null,
+    ["", ["Car Booking", "Fire Alarm", "CCTV"]], // rest of Admin, under it
     ["E-GOV", ["E-Government"]],            // under CSR
   ] },
   { s: "Management Dashboard", c: "mgmt", cols: 1, g: [
@@ -404,7 +404,7 @@ S.push(slide("dark", "", `
 if (TIER.client) {
   S.splice(1);
   n = 1;
-  const sec = (x) => `<div class="csec ${x.c}"><div class="csec-h">${esc(x.s)}</div><div class="ctabs" style="grid-template-columns:repeat(${x.cols},1fr)">${x.g.map((g) => { const one = ([t, m]) => `<b>${esc(t)}</b><ul>${m.map((a) => `<li>${esc(a)}</li>`).join("")}</ul>`; return !g ? `<div class="ctab"></div>` : Array.isArray(g[0]) ? `<div class="ctab stack">${g.map(one).join("")}</div>` : `<div class="ctab">${one(g)}</div>`; }).join("")}</div></div>`;
+  const sec = (x) => `<div class="csec ${x.c}"><div class="csec-h">${esc(x.s)}</div><div class="ctabs" style="grid-template-columns:repeat(${x.cols},1fr)">${x.g.map((g) => { const one = ([t, m]) => `${t ? `<b>${esc(t)}</b>` : ""}<ul>${m.map((a) => `<li>${esc(a)}</li>`).join("")}</ul>`; return !g ? `<div class="ctab"></div>` : Array.isArray(g[0]) ? `<div class="ctab stack">${g.map(one).join("")}</div>` : `<div class="ctab">${one(g)}</div>`; }).join("")}</div></div>`;
   S.push(slide("dark", "Agent constellation", `
 <h2>My task agent — every department, one constellation.</h2>
 <div class="const">${CONSTELLATION.map(sec).join("")}</div>
