@@ -23,6 +23,8 @@ const TIERS = {
   "1m":   { amt: "US$1M",   target: null },
   "2m":   { amt: "US$2M",   target: null },
   "3m":   { amt: "US$3M",   target: 100 },
+  // 5th deck — internal, for Arnold's client conversations: title slide + agent constellation + (empty) slide 3.
+  "client": { amt: "Client deck", target: null, client: true },
 };
 if (process.argv[2] === "all") {
   const { execFileSync } = require("child_process");
@@ -33,6 +35,31 @@ const ASK = process.env.ASK || "3m";
 const TIER = TIERS[ASK];
 if (!TIER) throw new Error(`unknown ASK=${ASK}; use ${Object.keys(TIERS).join(" / ")}`);
 const OUT = path.join(__dirname, ASK === "3m" ? "yai-deck-v4.html" : `yai-deck-v4-${ASK}.html`);
+
+/* Agent constellation — sections → tabs → agent names, mirrored from
+ * yaikh-dashboard/src/data/module.js (DASHBOARD_DATA). Re-sync if that changes. */
+const CONSTELLATION = [
+  { s: "Administration", c: "admin", g: [
+    ["Accountant", ["Accountant", "IEWS"]],
+    ["Billing", ["Purchase Request", "Bill Claim", "Salary Bill", "Shipping Bill"]],
+    ["HR", ["YHR", "Org Chart", "Training", "Temporary Worker", "Speak Up"]],
+    ["Admin", ["Support Ticket", "Y Shop", "Gate Pass", "Meeting Room", "Car Booking", "Fire Alarm", "CCTV"]],
+    ["CSR", ["Digital Audit", "Energy", "Air", "Water", "Waste", "Chemical"]],
+    ["Shipping", ["Shipping"]],
+    ["E-GOV", ["E-Government"]],
+  ] },
+  { s: "Management Dashboard", c: "mgmt", g: [
+    ["Dashboard", ["Management Dashboard", "SOP"]],
+    ["Data Scientist", ["System Analysis"]],
+  ] },
+  { s: "Operations", c: "ops", g: [
+    ["QA", ["YQMS", "Call Out"]],
+    ["Production", ["FC", "YWIP", "CE", "YTM", "YTM Shop"]],
+    ["4DP", ["4DP"]],
+    ["YPI", ["YPI"]],
+    ["MRP", ["MRP"]],
+  ] },
+];
 
 let bytes = 0;
 function uri(p) {
@@ -77,7 +104,7 @@ const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
 
 /* ---------- slide shell ---------- */
 let n = 0;
-const TOTAL = 15;
+const TOTAL = TIER.client ? 3 : 15;
 function slide(kind, eyebrow, body, opts = {}) {
   n += 1;
   const light = kind === "light";
@@ -374,6 +401,21 @@ S.push(slide("dark", "", `
 </div>
 `, { noFooter: true }));
 
+/* 5th deck: keep the title slide, replace the rest */
+if (TIER.client) {
+  S.splice(1);
+  n = 1;
+  const sec = (x) => `<div class="csec ${x.c}"><div class="csec-h">${esc(x.s)}</div><div class="ctabs" style="grid-template-columns:repeat(${x.g.length},1fr)">${x.g.map(([t, m]) => `<div class="ctab"><b>${esc(t)}</b><ul>${m.map((a) => `<li>${esc(a)}</li>`).join("")}</ul></div>`).join("")}</div></div>`;
+  S.push(slide("dark", "Agent constellation", `
+<h2>My task agent — every department, one constellation.</h2>
+<div class="const">
+  ${sec(CONSTELLATION[0])}
+  <div class="crow2">${sec(CONSTELLATION[1])}${sec(CONSTELLATION[2])}</div>
+</div>
+`, { cls: "constslide" }));
+  S.push(slide("dark", "", ``));
+}
+
 /* ---------- page ---------- */
 const css = `
 :root{--navy:#0A1F47;--blue:#1E4DAA;--orange:#F37021;--green:#10B981;--dgreen:#0A3327;--ink:#1E293B;--gray:#64748B;--line:#E2E8F0;--card:#F8FAFC;--gold:#FFD58A;--cream:#F7F5EF;--mint:#ECFDF5;--mintline:#A7F3D0}
@@ -393,6 +435,7 @@ h2.stack span{display:block}
 .orange{color:var(--orange)}.blue{color:var(--blue)}.green{color:var(--green)}
 .why h2.oneline{font-size:58px;line-height:1.06;margin-bottom:14px;white-space:nowrap}.why h2.stack{font-size:56px;line-height:1.06;margin-bottom:10px;white-space:nowrap}.why-sub{font-size:26px;line-height:1.3;white-space:nowrap;color:#DCE4F5;margin:0 0 18px}.why-sub b{color:var(--orange)}.dates{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:4px solid rgba(255,255,255,.2)}.date{padding:12px 18px 0 0;position:relative}.date:before{content:"";position:absolute;top:-12px;left:0;width:20px;height:20px;border-radius:50%;background:var(--gold)}.date.hot:before{background:var(--orange)}.date b{display:block;font-size:44px;line-height:1;color:#fff}.date.hot b{color:var(--orange)}.date span{display:block;font-size:17px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:6px 0 6px;font-weight:700}.date p{margin:0;font-size:19px;line-height:1.36;color:#DCE4F5}.ready{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:12px}.deadlines{margin:14px 0 0;font-size:27px;line-height:1.2;color:#B9C6E4;white-space:nowrap;display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid rgba(255,255,255,.14);border-bottom:1px solid rgba(255,255,255,.14);padding:10px 0}.deadlines b{color:#fff;font-weight:700}.ready div{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:14px 16px}.ready b{display:block;font-size:21px;color:#fff;margin-bottom:4px}.ready span{font-size:18px;color:#B9C6E4;line-height:1.35}.why .foot-note{font-size:22px;margin-top:14px;line-height:1.36}
 .mk{margin:0;padding:0;list-style:none}.mk li{font-size:22px;line-height:1.3;padding:5px 0 5px 22px;position:relative}.mk li:before{content:"";position:absolute;left:0;top:15px;width:9px;height:9px;border-radius:50%;background:var(--orange)}
+.constslide h2{font-size:36px;margin-bottom:16px}.const{display:flex;flex-direction:column;gap:14px}.crow2{display:grid;grid-template-columns:3fr 5fr;gap:14px}.csec{border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);overflow:hidden}.csec-h{font-size:17px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding:7px 14px;color:#fff}.csec.admin .csec-h{background:var(--blue)}.csec.mgmt .csec-h{background:#6D28D9}.csec.ops .csec-h{background:var(--green)}.ctabs{display:grid;gap:0}.ctab{padding:8px 10px 10px;border-right:1px solid rgba(255,255,255,.08)}.ctab:last-child{border-right:0}.ctab b{display:block;font-size:20px;color:var(--gold);margin-bottom:4px}.ctab ul{margin:0;padding:0;list-style:none}.ctab li{font-size:19px;line-height:1.32;white-space:nowrap;color:#E6ECFA}
 .cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:22px}
 .col{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px 24px 22px}
 .dark .col{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14)}
@@ -510,7 +553,7 @@ td{padding:12px;border-bottom:1px solid rgba(255,255,255,.12);vertical-align:top
 `;
 
 const html = `<meta charset="utf-8">
-<title>Yai Pitch Deck v4 · ${TIER.amt}</title>
+<title>${TIER.client ? "Yai Client Deck · Internal" : `Yai Pitch Deck v4 · ${TIER.amt}`}</title>
 <meta name="viewport" content="width=1320">
 <style>${css}</style>
 <div class="deck">${S.join("\n")}</div>
