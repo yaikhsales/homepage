@@ -39,7 +39,7 @@ const OUT = path.join(__dirname, ASK === "3m" ? "yai-deck-v4.html" : `yai-deck-v
 /* Agent constellation — sections → tabs → agent names, mirrored from
  * yaikh-dashboard/src/data/module.js (DASHBOARD_DATA). Re-sync if that changes. */
 const CONSTELLATION = [
-  { s: "Ai Server Startup Package", c: "aistart", cols: 1, g: [[["", ["Small"], "$120"], ["", ["Medium factory"], "$750"], ["", ["1,000-worker factory"], "$1,200"]]] }, // three packages
+  { s: "Cloud Startup Package", c: "aistart", cols: 1, g: [[["", ["Small"], "$120"], ["", ["Medium factory"], "$750"], ["", ["1,000-worker factory"], "$1,200"]]] }, // three packages
   { s: "Ai Server", c: "aisrv", cols: 1, g: [["", ["NVIDIA", "or Huawei"], "$2,500"]] },
   { s: "Administration", c: "admin", cols: 4, g: [
     ["HR", ["YHR", "Org Chart", "Training", "Temporary Worker", "Speak Up"], "$2,000"],
