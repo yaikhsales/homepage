@@ -168,19 +168,20 @@ ${cols3([
 
 /* 4 · WHY NOW */
 S.push(slide("dark", "03 · Why now", `
-<h2 class="stack"><span>The deadlines are set.</span><span class="gold">The technology is finally ready.</span></h2>
+<h2 class="stack"><span>It's the Ai era.</span><span class="gold">The challenge is head-on. Yai is ready.</span></h2>
 <div class="dates">
-  <div class="date"><b>2022</b><span>USA</span><p>UFLPA — every shipment must prove where its cotton came from.</p></div>
-  <div class="date"><b>Now</b><span>Cambodia</span><p>GDT e-filing, customs, environment returns, labour data — digital, on time, or penalised.</p></div>
-  <div class="date"><b>2027</b><span>EU</span><p>Digital Product Passport — every product carries its own data.</p></div>
-  <div class="date hot"><b>2028</b><span>The buyer</span><p>Live factory data becomes a condition of the order.</p></div>
+  <div class="date"><b>2024</b><span>Private development</span><p>Built in-house, away from the market.</p></div>
+  <div class="date"><b>2025</b><span>Built and tested</span><p>70+ apps and 14 Ai agents, tested in private.</p></div>
+  <div class="date hot"><b>2026</b><span>Go to market</span><p>The only commercial Ai MiP in the market.</p></div>
 </div>
 <div class="ready">
-  <div><b>Ai on a desk</b><span>A GX10 Ai server — no data centre. The data stays in the factory.</span></div>
-  <div><b>Every worker has a phone</b><span>Android, iOS, Huawei — no desk, no PC needed.</span></div>
-  <div><b>Ai speaks Khmer</b><span>The floor talks to it in its own language.</span></div>
+  <div><b>~US$200K invested</b><span>Over the last 2–3 years.</span></div>
+  <div><b>Registered business</b><span>Texlink Technologies Co., Ltd. · ICT-certified.</span></div>
+  <div><b>Claude · Google for Startups</b><span>Built with their technology and support.</span></div>
+  <div><b>20 Ai engineers</b><span>Trained and certified in Phnom Penh.</span></div>
 </div>
-<p class="foot-note gold"><b>This is the time.</b> The factory that installs Ai in 2026 has two years of trained data when the buyer requires it in 2028. The one that starts in 2028 starts from zero.</p>
+<p class="deadlines">The clock outside: <b>UFLPA 2022</b> · <b>GDT e-filing now</b> · <b>EU Product Passport 2027</b> · <b>buyers want live data 2028</b></p>
+<p class="foot-note gold"><b>This is the time.</b> A founder and CTO with 40 years each on the floor — ready to wipe the market with the Ai mop.</p>
 `, { cls: "why" }));
 
 /* 5 · SOLUTION (merged: solution + what we deliver + moat) */
@@ -389,7 +390,7 @@ h2.stack span{display:block}
 .dark .sub{color:#B8C4E6}
 .gold{color:var(--gold)!important}
 .orange{color:var(--orange)}.blue{color:var(--blue)}.green{color:var(--green)}
-.why h2.stack{font-size:58px;line-height:1.06;margin-bottom:22px}.dates{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:4px solid rgba(255,255,255,.2)}.date{padding:16px 18px 0 0;position:relative}.date:before{content:"";position:absolute;top:-12px;left:0;width:20px;height:20px;border-radius:50%;background:var(--gold)}.date.hot:before{background:var(--orange)}.date b{display:block;font-size:44px;line-height:1;color:#fff}.date.hot b{color:var(--orange)}.date span{display:block;font-size:17px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:6px 0 6px;font-weight:700}.date p{margin:0;font-size:19px;line-height:1.36;color:#DCE4F5}.ready{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:26px}.ready div{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:14px 18px}.ready b{display:block;font-size:21px;color:#fff;margin-bottom:4px}.ready span{font-size:18px;color:#B9C6E4;line-height:1.35}.why .foot-note{font-size:21px;margin-top:22px;line-height:1.4}
+.why h2.stack{font-size:56px;line-height:1.06;margin-bottom:22px;white-space:nowrap}.dates{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:4px solid rgba(255,255,255,.2)}.date{padding:16px 18px 0 0;position:relative}.date:before{content:"";position:absolute;top:-12px;left:0;width:20px;height:20px;border-radius:50%;background:var(--gold)}.date.hot:before{background:var(--orange)}.date b{display:block;font-size:44px;line-height:1;color:#fff}.date.hot b{color:var(--orange)}.date span{display:block;font-size:17px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:6px 0 6px;font-weight:700}.date p{margin:0;font-size:19px;line-height:1.36;color:#DCE4F5}.ready{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}.deadlines{margin:16px 0 0;font-size:18px;color:#B9C6E4}.deadlines b{color:#fff;font-weight:700}.ready div{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:14px 18px}.ready b{display:block;font-size:21px;color:#fff;margin-bottom:4px}.ready span{font-size:18px;color:#B9C6E4;line-height:1.35}.why .foot-note{font-size:21px;margin-top:22px;line-height:1.4}
 .cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:22px}
 .col{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px 24px 22px}
 .dark .col{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14)}
