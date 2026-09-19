@@ -168,7 +168,7 @@ ${cols3([
 
 /* 4 · WHY NOW */
 S.push(slide("dark", "03 · Why now", `
-<h2 class="stack"><span>It's the Ai era.</span><span class="gold">The challenge is head-on. Yai is ready.</span></h2>
+<h2 class="stack"><span>It's the Ai era.</span><span class="gold">The challenge is head-on.</span></h2>
 <p class="why-sub">Lots of Ai noise in commercial Ai — almost nothing in industrial Ai.<br>Factories don't know what they want until they see it working next door. <b>Yai is the one they'll see.</b></p>
 <div class="dates">
   <div class="date"><b>2024</b><span>Private development</span><p>Built in-house, away from the market.</p></div>
