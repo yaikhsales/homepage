@@ -442,7 +442,12 @@ ${heading ? `<h2>${heading}</h2>` : ""}
   S.push(planSlide("Yai / TAFTAC · YHR leaning presentation", "", [
     { n: "S.E.C. Mega Factory Co., Ltd.", note: "Customer presentation", at: { "Sep 2026": "Presentation" } },
     { n: "Yakjin (Cambodia) Inc", note: "Customer presentation", at: { "Sep 2026": "Presentation" } },
-    {}, {}, {}, {}, {}, {},
+    { n: "Client 1", note: "from EXPO", at: { "Sep 2026": "Presentation" } },
+    { n: "Client 2", note: "from EXPO", at: { "Sep 2026": "Presentation" } },
+    { n: "Client 3", note: "from EXPO", at: { "Sep 2026": "Presentation" } },
+    { n: "Client 4", note: "from EXPO", at: { "Sep 2026": "Presentation" } },
+    { n: "Client 5", note: "from EXPO", at: { "Sep 2026": "Presentation" } },
+    { n: "Client 6", note: "from EXPO", at: { "Sep 2026": "Presentation" } },
   ]));
   S.push(planSlide("Saman · QMS leaning presentation", "", [
     { n: "Saman", note: "Consultant · 5/25" },
