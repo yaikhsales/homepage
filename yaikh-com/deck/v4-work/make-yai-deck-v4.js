@@ -439,7 +439,7 @@ if (TIER.client) {
 `, { cls: "planslide" });
   S.push(planSlide("Sales confirmed", "Sales confirmed · Aug 2026 → Dec 2027", CUSTOMERS));
   S.push(planSlide("Upcoming presentations", "Upcoming presentations · Aug 2026 → Dec 2027", [
-    { n: "Saman", note: "Consultant · 5 factories" },
+    { n: "Saman", note: "Consultant" },
     { n: "Factory 1", sub: true }, { n: "Factory 2", sub: true }, { n: "Factory 3", sub: true },
     { n: "Factory 4", sub: true }, { n: "Factory 5", sub: true },
     {}, {},
