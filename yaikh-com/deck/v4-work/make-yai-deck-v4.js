@@ -106,7 +106,7 @@ const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
 
 /* ---------- slide shell ---------- */
 let n = 0;
-const TOTAL = TIER.client ? 3 : 15;
+const TOTAL = TIER.client ? 4 : 15;
 function slide(kind, eyebrow, body, opts = {}) {
   n += 1;
   const light = kind === "light";
@@ -425,18 +425,20 @@ if (TIER.client) {
     {}, {},
   ];
   const cells = MONTHS.flatMap(([y, ms]) => ms.map((m) => [m, `${m} ${y}`]));
-  S.push(slide("dark", "Sales confirmed", `
-<h2>Sales confirmed · Aug 2026 → Dec 2027</h2>
+  const planSlide = (eyebrow, heading, rows) => slide("dark", eyebrow, `
+<h2>${heading}</h2>
 <table class="plan">
   <thead>
     <tr><th class="who" rowspan="2">Customer</th>${MONTHS.map(([y, ms]) => `<th class="yr" colspan="${ms.length}">${y}</th>`).join("")}</tr>
     <tr>${cells.map(([m]) => `<th>${m}</th>`).join("")}</tr>
   </thead>
   <tbody>
-    ${CUSTOMERS.map((c) => `<tr${c.sep ? ` class="sep"` : ""}><td class="who">${c.n ? esc(c.n) : "&nbsp;"}${c.note ? ` <span class="mnote">· ${esc(c.note).replace(/\n/g, "<br>")}</span>` : ""}</td>${cells.map(([, key]) => { const v = (c.at && c.at[key]) || c.all || ""; const isPaid = c.paid && c.paid.includes(key); const setting = key.endsWith("2026"); return `<td${!v ? "" : c.all ? ` class="flat"` : ` class="${isPaid ? "paid" : setting ? "setting" : "hit"}"`}>${esc(v)}${!v ? "" : isPaid ? `<span class="paidtag">Paid</span>` : c.all || !setting ? "" : `<span class="settag">Setting</span>`}</td>`; }).join("")}</tr>`).join("")}
+    ${rows.map((c) => `<tr${c.sep ? ` class="sep"` : ""}><td class="who">${c.n ? esc(c.n) : "&nbsp;"}${c.note ? ` <span class="mnote">· ${esc(c.note).replace(/\n/g, "<br>")}</span>` : ""}</td>${cells.map(([, key]) => { const v = (c.at && c.at[key]) || c.all || ""; const isPaid = c.paid && c.paid.includes(key); const setting = key.endsWith("2026"); return `<td${!v ? "" : c.all ? ` class="flat"` : ` class="${isPaid ? "paid" : setting ? "setting" : "hit"}"`}>${esc(v)}${!v ? "" : isPaid ? `<span class="paidtag">Paid</span>` : c.all || !setting ? "" : `<span class="settag">Setting</span>`}</td>`; }).join("")}</tr>`).join("")}
   </tbody>
 </table>
-`, { cls: "planslide" }));
+`, { cls: "planslide" });
+  S.push(planSlide("Sales confirmed", "Sales confirmed · Aug 2026 → Dec 2027", CUSTOMERS));
+  S.push(planSlide("Upcoming presentations", "Upcoming presentations · Aug 2026 → Dec 2027", [{}, {}, {}, {}, {}, {}, {}, {}]));
 }
 
 /* ---------- page ---------- */
