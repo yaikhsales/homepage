@@ -440,7 +440,7 @@ if (TIER.client) {
   S.push(planSlide("Sales confirmed", "Sales confirmed · Aug 2026 → Dec 2027", CUSTOMERS));
   S.push(planSlide("Upcoming presentations", "Upcoming presentations · Aug 2026 → Dec 2027", [
     { n: "Saman", note: "Consultant · 5/25" },
-    { n: "Elegant Garment Co., Ltd", sub: true }, { n: "Factory 2", sub: true }, { n: "Factory 3", sub: true },
+    { n: "Elegant Garment Co., Ltd", sub: true }, { n: "Trax Intertrade Co., Ltd.", sub: true }, { n: "Factory 3", sub: true },
     { n: "Factory 4", sub: true }, { n: "Factory 5", sub: true },
     {}, {},
   ]));
