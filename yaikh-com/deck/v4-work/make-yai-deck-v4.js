@@ -444,7 +444,7 @@ ${heading ? `<h2>${heading}</h2>` : ""}
     { n: "Yakjin (Cambodia) Inc", note: "Customer presentation", at: { "Sep 2026": "Presentation" } },
     { n: "Peouthet168", note: "from EXPO", at: { "Sep 2026": "Presentation" } },
     { n: "Kangbunkym", note: "from EXPO", at: { "Sep 2026": "Presentation" } },
-    { n: "Client 3", note: "from EXPO", at: { "Sep 2026": "Presentation" } },
+    { n: "IejieKitchen", note: "from EXPO", at: { "Sep 2026": "Presentation" } },
     { n: "Client 4", note: "from EXPO", at: { "Sep 2026": "Presentation" } },
     { n: "Client 5", note: "from EXPO", at: { "Sep 2026": "Presentation" } },
     { n: "Client 6", note: "from EXPO", at: { "Sep 2026": "Presentation" } },
