@@ -433,7 +433,7 @@ if (TIER.client) {
     <tr>${cells.map(([m]) => `<th>${m}</th>`).join("")}</tr>
   </thead>
   <tbody>
-    ${CUSTOMERS.map((c) => `<tr><td class="who">${c.n ? esc(c.n) : "&nbsp;"}${c.note ? ` <span class="pnote">· ${esc(c.note)}</span>` : ""}</td>${cells.map(([, key]) => { const v = (c.at && c.at[key]) || c.all || ""; const isPaid = c.paid && c.paid.includes(key); return `<td${v ? ` class="${isPaid ? "paid" : "hit"}"` : ""}>${esc(v)}${!v ? "" : isPaid ? `<span class="paidtag">Paid</span>` : c.all ? "" : `<span class="settag">Setting</span>`}</td>`; }).join("")}</tr>`).join("")}
+    ${CUSTOMERS.map((c) => `<tr><td class="who">${c.n ? esc(c.n) : "&nbsp;"}${c.note ? ` <span class="pnote">· ${esc(c.note)}</span>` : ""}</td>${cells.map(([, key]) => { const v = (c.at && c.at[key]) || c.all || ""; const isPaid = c.paid && c.paid.includes(key); const setting = key.endsWith("2026"); return `<td${v ? ` class="${isPaid ? "paid" : "hit"}"` : ""}>${esc(v)}${!v ? "" : isPaid ? `<span class="paidtag">Paid</span>` : c.all || !setting ? "" : `<span class="settag">Setting</span>`}</td>`; }).join("")}</tr>`).join("")}
   </tbody>
 </table>
 `, { cls: "planslide" }));
