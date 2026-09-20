@@ -106,7 +106,7 @@ const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
 
 /* ---------- slide shell ---------- */
 let n = 0;
-const TOTAL = TIER.client ? 4 : 15;
+const TOTAL = TIER.client ? 5 : 15;
 function slide(kind, eyebrow, body, opts = {}) {
   n += 1;
   const light = kind === "light";
@@ -444,6 +444,7 @@ if (TIER.client) {
     { n: "Factory 4", sub: true }, { n: "Factory 5", sub: true },
     {}, {},
   ]));
+  S.push(planSlide("Yai / TAFTAC · Direct updating presentation", "Yai / TAFTAC · Aug 2026 → Dec 2027", [{}, {}, {}, {}, {}, {}, {}, {}]));
 }
 
 /* ---------- page ---------- */
