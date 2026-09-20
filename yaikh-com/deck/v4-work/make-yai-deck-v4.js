@@ -463,7 +463,7 @@ ${heading ? `<h2>${heading}</h2>` : ""}
     { n: "Factory 4", sub: true }, { n: "Factory 5", sub: true },
     {}, {},
   ]));
-  S.push(planSlide("New presentation", "", [{}, {}, {}, {}, {}, {}, {}, {}]));
+  S.push(planSlide("Joel", "", [{}, {}, {}, {}, {}, {}, {}, {}]));
 }
 
 /* ---------- page ---------- */
