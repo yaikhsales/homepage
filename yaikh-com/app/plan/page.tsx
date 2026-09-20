@@ -930,19 +930,20 @@ export default async function PlanPage() {
           {/* A4 · Seed-round pitch decks — four raise sizes, served from /plan/pitch-deck?ask=… (session-gated, not /public) */}
           <div className="mb-3 mt-8">
             <h3 className="font-bold text-yai-navy text-xl">A4. Pitch Deck · four raise sizes</h3>
-            <p className="text-sm text-gray-600 mt-1">15 slides each — the same deck, sized for US$0.5M, US$1M, US$2M or US$3M.</p>
+            <p className="text-sm text-gray-600 mt-1">15 slides each — the same deck, sized for US$0.5M, US$1M, US$2M or US$3M — plus the 4-slide client deck.</p>
           </div>
-          <div className="no-print grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="no-print grid grid-cols-2 md:grid-cols-5 gap-3">
             {[
               { ask: "0.5m", amt: "US$0.5M" },
               { ask: "1m", amt: "US$1M" },
               { ask: "2m", amt: "US$2M" },
               { ask: "3m", amt: "US$3M" },
+              { ask: "client", amt: "Client deck" },
             ].map((d) => (
               <div key={d.ask} className="rounded-xl bg-yai-navy text-white p-4 flex flex-col gap-3">
                 <div>
                   <div className="text-2xl font-extrabold text-[#FFD58A]">{d.amt}</div>
-                  <div className="text-xs text-white/60 mt-0.5">Seed round · 15 slides</div>
+                  <div className="text-xs text-white/60 mt-0.5">{d.ask === "client" ? "Internal · 4 slides" : "Seed round · 15 slides"}</div>
                 </div>
                 <div className="flex gap-2 mt-auto">
                   <a
