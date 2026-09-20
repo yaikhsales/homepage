@@ -943,7 +943,7 @@ export default async function PlanPage() {
               <div key={d.ask} className="rounded-xl bg-yai-navy text-white p-4 flex flex-col gap-3">
                 <div>
                   <div className="text-2xl font-extrabold text-[#FFD58A]">{d.amt}</div>
-                  <div className="text-xs text-white/60 mt-0.5">{d.ask === "client" ? "Internal · 4 slides" : "Seed round · 15 slides"}</div>
+                  <div className="text-xs text-white/60 mt-0.5">{d.ask === "client" ? "Internal · 8 slides" : "Seed round · 15 slides"}</div>
                 </div>
                 <div className="flex gap-2 mt-auto">
                   <a
