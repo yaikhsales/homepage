@@ -425,8 +425,8 @@ if (TIER.client) {
     {}, {},
   ];
   const cells = MONTHS.flatMap(([y, ms]) => ms.map((m) => [m, `${m} ${y}`]));
-  S.push(slide("dark", "Sales plan", `
-<h2>Customers · Aug 2026 → Dec 2027</h2>
+  S.push(slide("dark", "Sales confirmed", `
+<h2>Sales confirmed · Aug 2026 → Dec 2027</h2>
 <table class="plan">
   <thead>
     <tr><th class="who" rowspan="2">Customer</th>${MONTHS.map(([y, ms]) => `<th class="yr" colspan="${ms.length}">${y}</th>`).join("")}</tr>
