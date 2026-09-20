@@ -440,7 +440,7 @@ ${heading ? `<h2>${heading}</h2>` : ""}
 `, { cls: "planslide" });
   S.push(planSlide("Sales confirmed", "", CUSTOMERS));
   S.push(planSlide("Yai / TAFTAC · YHR leaning presentation", "", [
-    { n: "SEC", note: "Customer presentation", at: { "Sep 2026": "Presentation" } },
+    { n: "S.E.C. Mega Factory Co., Ltd.", note: "Customer presentation", at: { "Sep 2026": "Presentation" } },
     { n: "Yakjin", note: "Customer presentation", at: { "Sep 2026": "Presentation" } },
     {}, {}, {}, {}, {}, {},
   ]));
