@@ -52,7 +52,7 @@ const CONSTELLATION = [
     ["E-GOV", ["E-Government"]],            // under CSR
   ] },
   { s: "Management Dashboard", c: "mgmt", cols: 1, g: [
-    ["Dashboard", ["Management Dashboard", "SOP"]],
+    ["Dashboard", ["Management Dashboard", "SOP"], "On demand"],
     ["Data Scientist", ["System Analysis"]],
   ] },
   { s: "Operations", c: "ops", cols: 2, g: [
