@@ -421,7 +421,7 @@ if (TIER.client) {
     { n: "BICNZ", sep: true, note: "Calibration equipment QR", paid: ["Aug 2026"], at: { "Aug 2026": "$120", "Aug 2027": "$120" } },
     { n: "3SGS", note: "Digital Audit", at: { "Sep 2026": "$750", "Sep 2027": "$750" } },
     { n: "3SGS+", note: "Ai Audit review", at: { "Oct 2026": "$3,000" } },
-    { n: "ES Packing", note: "YHR, Gate Pass, Car Booking", at: { "Oct 2026": "$750", "Oct 2027": "$750" } },
+    { n: "ES Packing", note: "YHR, Gate Pass,\nCar Booking", at: { "Oct 2026": "$750", "Oct 2027": "$750" } },
     {}, {},
   ];
   const cells = MONTHS.flatMap(([y, ms]) => ms.map((m) => [m, `${m} ${y}`]));
@@ -433,7 +433,7 @@ if (TIER.client) {
     <tr>${cells.map(([m]) => `<th>${m}</th>`).join("")}</tr>
   </thead>
   <tbody>
-    ${CUSTOMERS.map((c) => `<tr${c.sep ? ` class="sep"` : ""}><td class="who">${c.n ? esc(c.n) : "&nbsp;"}${c.note ? ` <span class="mnote">· ${esc(c.note)}</span>` : ""}</td>${cells.map(([, key]) => { const v = (c.at && c.at[key]) || c.all || ""; const isPaid = c.paid && c.paid.includes(key); const setting = key.endsWith("2026"); return `<td${!v ? "" : c.all ? ` class="flat"` : ` class="${isPaid ? "paid" : setting ? "setting" : "hit"}"`}>${esc(v)}${!v ? "" : isPaid ? `<span class="paidtag">Paid</span>` : c.all || !setting ? "" : `<span class="settag">Setting</span>`}</td>`; }).join("")}</tr>`).join("")}
+    ${CUSTOMERS.map((c) => `<tr${c.sep ? ` class="sep"` : ""}><td class="who">${c.n ? esc(c.n) : "&nbsp;"}${c.note ? ` <span class="mnote">· ${esc(c.note).replace(/\n/g, "<br>")}</span>` : ""}</td>${cells.map(([, key]) => { const v = (c.at && c.at[key]) || c.all || ""; const isPaid = c.paid && c.paid.includes(key); const setting = key.endsWith("2026"); return `<td${!v ? "" : c.all ? ` class="flat"` : ` class="${isPaid ? "paid" : setting ? "setting" : "hit"}"`}>${esc(v)}${!v ? "" : isPaid ? `<span class="paidtag">Paid</span>` : c.all || !setting ? "" : `<span class="settag">Setting</span>`}</td>`; }).join("")}</tr>`).join("")}
   </tbody>
 </table>
 `, { cls: "planslide" }));
