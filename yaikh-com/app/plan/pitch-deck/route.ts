@@ -21,7 +21,7 @@ const DECKS: Record<string, { html: string; pdf: string }> = {
   "2m": { html: "pitch-deck-v4-2m.html", pdf: "Yai-Pitch-Deck-v4-2M.pdf" },
   "3m": { html: "pitch-deck-v4.html", pdf: "Yai-Pitch-Deck-v4-3M.pdf" },
   // 5th deck — internal, for Arnold's client conversations (4 slides).
-  client: { html: "pitch-deck-v4-client.html", pdf: "Yai-Client-Deck-v4.pdf" },
+  client: { html: "pitch-deck-v4-client.html", pdf: "Price and Client.pdf" },
 };
 
 export async function GET(request: Request) {
