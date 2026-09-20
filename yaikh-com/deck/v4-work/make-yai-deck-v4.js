@@ -414,25 +414,25 @@ if (TIER.client) {
 `, { cls: "constslide" }));
   /* Slide 3 — sales plan: customers down the left, Sep 2026 → Dec 2027 across.
    * Customer rows are blank until Gamini gives the names. */
-  const MONTHS = [["2026", ["Sep", "Oct", "Nov", "Dec"]], ["2027", ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]]];
+  const MONTHS = [["2026", ["Aug", "Sep", "Oct", "Nov", "Dec"]], ["2027", ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]]];
   const CUSTOMERS = [
     { n: "Yorkmars", all: "$2,000" },
     { n: "Caswell" },
-    { n: "BICNZ", note: "Paid $120 · Aug 2026", at: { "Aug 2027": "$120" } },
+    { n: "BICNZ", note: "12-month renewal", at: { "Aug 2026": "$120", "Aug 2027": "$120" } },
     { n: "3SGS", note: "Basic · 12-month renewal", at: { "Sep 2026": "$750", "Sep 2027": "$750" } },
     { n: "3SGS", note: "Plus", at: { "Oct 2026": "$3,000" } },
     {}, {}, {},
   ];
   const cells = MONTHS.flatMap(([y, ms]) => ms.map((m) => [m, `${m} ${y}`]));
   S.push(slide("dark", "Sales plan", `
-<h2>Customers · Sept 2026 → Dec 2027</h2>
+<h2>Customers · Aug 2026 → Dec 2027</h2>
 <table class="plan">
   <thead>
     <tr><th class="who" rowspan="2">Customer</th>${MONTHS.map(([y, ms]) => `<th class="yr" colspan="${ms.length}">${y}</th>`).join("")}</tr>
     <tr>${cells.map(([m]) => `<th>${m}</th>`).join("")}</tr>
   </thead>
   <tbody>
-    ${CUSTOMERS.map((c) => `<tr><td class="who">${c.n ? esc(c.n) : "&nbsp;"}${c.note ? `<span class="pnote">${esc(c.note)}</span>` : ""}</td>${cells.map(([, key]) => `<td${c.at && c.at[key] ? ` class="hit"` : ""}>${esc((c.at && c.at[key]) || c.all || "")}</td>`).join("")}</tr>`).join("")}
+    ${CUSTOMERS.map((c) => `<tr><td class="who">${c.n ? esc(c.n) : "&nbsp;"}${c.note ? ` <span class="pnote">· ${esc(c.note)}</span>` : ""}</td>${cells.map(([, key]) => `<td${c.at && c.at[key] ? ` class="hit"` : ""}>${esc((c.at && c.at[key]) || c.all || "")}</td>`).join("")}</tr>`).join("")}
   </tbody>
 </table>
 `, { cls: "planslide" }));
@@ -457,7 +457,7 @@ h2.stack span{display:block}
 .orange{color:var(--orange)}.blue{color:var(--blue)}.green{color:var(--green)}
 .why h2.oneline{font-size:58px;line-height:1.06;margin-bottom:14px;white-space:nowrap}.why h2.stack{font-size:56px;line-height:1.06;margin-bottom:10px;white-space:nowrap}.why-sub{font-size:26px;line-height:1.3;white-space:nowrap;color:#DCE4F5;margin:0 0 18px}.why-sub b{color:var(--orange)}.dates{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:4px solid rgba(255,255,255,.2)}.date{padding:12px 18px 0 0;position:relative}.date:before{content:"";position:absolute;top:-12px;left:0;width:20px;height:20px;border-radius:50%;background:var(--gold)}.date.hot:before{background:var(--orange)}.date b{display:block;font-size:44px;line-height:1;color:#fff}.date.hot b{color:var(--orange)}.date span{display:block;font-size:17px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:6px 0 6px;font-weight:700}.date p{margin:0;font-size:19px;line-height:1.36;color:#DCE4F5}.ready{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:12px}.deadlines{margin:14px 0 0;font-size:27px;line-height:1.2;color:#B9C6E4;white-space:nowrap;display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid rgba(255,255,255,.14);border-bottom:1px solid rgba(255,255,255,.14);padding:10px 0}.deadlines b{color:#fff;font-weight:700}.ready div{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:14px 16px}.ready b{display:block;font-size:21px;color:#fff;margin-bottom:4px}.ready span{font-size:18px;color:#B9C6E4;line-height:1.35}.why .foot-note{font-size:22px;margin-top:14px;line-height:1.36}
 .mk{margin:0;padding:0;list-style:none}.mk li{font-size:22px;line-height:1.3;padding:5px 0 5px 22px;position:relative}.mk li:before{content:"";position:absolute;left:0;top:15px;width:9px;height:9px;border-radius:50%;background:var(--orange)}
-.planslide h2{font-size:34px;margin-bottom:14px}.plan{width:100%;border-collapse:collapse;table-layout:fixed;margin-top:0}.plan th,.plan td{border:1px solid rgba(255,255,255,.16);height:38px}.plan th{font-size:17px;font-weight:700;color:var(--gold);letter-spacing:.04em;padding:4px}.plan th.yr{background:rgba(243,112,33,.22);color:#fff;font-size:19px;text-align:center}.pnote{display:block;font-size:14px;color:#8FA8D8;font-weight:400;margin-top:1px}.plan td.hit{background:rgba(243,112,33,.28);color:#fff;font-weight:700}.plan th.who,.plan td.who{width:210px;text-align:left;padding-left:12px;font-size:19px;color:#fff}.plan td{background:rgba(255,255,255,.04);text-align:center;font-size:15px;color:#DCE4F5}
+.planslide h2{font-size:34px;margin-bottom:14px}.plan{width:100%;border-collapse:collapse;table-layout:fixed;margin-top:0}.plan th,.plan td{border:1px solid rgba(255,255,255,.16);height:38px}.plan th{font-size:17px;font-weight:700;color:var(--gold);letter-spacing:.04em;padding:4px}.plan th.yr{background:rgba(243,112,33,.22);color:#fff;font-size:19px;text-align:center}.pnote{font-size:15px;color:#8FA8D8;font-weight:400}.planslide{padding-left:40px;padding-right:40px}.plan td.hit{background:rgba(243,112,33,.28);color:#fff;font-weight:700}.plan th.who,.plan td.who{width:246px;text-align:left;padding-left:8px;font-size:18px;color:#fff}.plan td{background:rgba(255,255,255,.04);text-align:center;font-size:15px;color:#DCE4F5}
 .constslide h2{font-size:36px;margin-bottom:16px}.constslide{padding-left:44px;padding-right:44px}.const{display:grid;grid-template-columns:116px 108px 1fr 144px 232px;gap:12px;align-items:stretch}.crow2{display:grid;grid-template-columns:3fr 5fr;gap:14px}.csec{border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);overflow:hidden}.csec-h{display:flex;align-items:center;justify-content:center;text-align:center;height:58px;line-height:1.2;font-size:17px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding:0 10px;color:#fff}.csec.admin .csec-h{background:var(--blue)}.csec.mgmt .csec-h{background:#6D28D9;letter-spacing:.02em}.csec.aisrv .csec-h{background:var(--orange)}.csec.aistart .csec-h{background:#B45309;font-size:14px;letter-spacing:.06em;line-height:1.1}.csec.ops .csec-h{background:var(--green)}.ctabs{display:grid;gap:0;align-content:start}.ctab{padding:14px 8px 16px 10px;border-top:1px solid rgba(243,112,33,.55)}.ctab b{display:block;font-size:19px;color:var(--gold);margin-bottom:6px}.ctab ul{margin:0;padding:0;list-style:none}.cprice{display:block;font-size:18px;font-weight:800;color:#fff;background:rgba(255,213,138,.14);border:1px dashed rgba(255,213,138,.55);border-radius:6px;padding:1px 8px;margin:0 0 4px;width:max-content;min-width:78px}.cprice.ghost{visibility:hidden}.cprice.big{font-size:22px;margin:4px 0 2px;min-width:0}.ctab.stack .cprice.big + ul{margin-bottom:14px}.ctab.stack ul{margin-bottom:12px}.ctab li{font-size:17px;line-height:1.5;hyphens:none;overflow-wrap:normal;color:#E6ECFA}
 .cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:22px}
 .col{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px 24px 22px}
