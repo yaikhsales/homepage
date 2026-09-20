@@ -416,7 +416,7 @@ if (TIER.client) {
    * Customer rows are blank until Gamini gives the names. */
   const MONTHS = [["2026", ["Aug", "Sep", "Oct", "Nov", "Dec"]], ["2027", ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]]];
   const CUSTOMERS = [
-    { n: "Yorkmars", all: "$2,000" },
+    { n: "Yorkmars", note: "Admin, Production", all: "$2,000" },
     { n: "Caswell" },
     { n: "BICNZ", sep: true, note: "external", paid: ["Aug 2026"], at: { "Aug 2026": "$120", "Aug 2027": "$120" } },
     { n: "3SGS", at: { "Sep 2026": "$750", "Sep 2027": "$750" } },
