@@ -438,13 +438,13 @@ if (TIER.client) {
 </table>
 `, { cls: "planslide" });
   S.push(planSlide("Sales confirmed", "Sales confirmed · Aug 2026 → Dec 2027", CUSTOMERS));
+  S.push(planSlide("Yai / TAFTAC · Direct updating presentation", "Yai / TAFTAC · Aug 2026 → Dec 2027", [{}, {}, {}, {}, {}, {}, {}, {}]));
   S.push(planSlide("Saman · Upcoming presentations", "Upcoming presentations · Aug 2026 → Dec 2027", [
     { n: "Saman", note: "Consultant · 5/25" },
     { n: "Elegant Garment Co., Ltd", sub: true, at: { "Sep 2026": { v: "Finalising", span: 2 } } }, { n: "Trax Intertrade Co., Ltd.", sub: true, at: { "Oct 2026": "Finalising" } }, { n: "Factory 3", sub: true },
     { n: "Factory 4", sub: true }, { n: "Factory 5", sub: true },
     {}, {},
   ]));
-  S.push(planSlide("Yai / TAFTAC · Direct updating presentation", "Yai / TAFTAC · Aug 2026 → Dec 2027", [{}, {}, {}, {}, {}, {}, {}, {}]));
 }
 
 /* ---------- page ---------- */
