@@ -453,9 +453,9 @@ ${heading ? `<h2>${heading}</h2>` : ""}
     { n: "Proloeng Top", note: "from EXPO", at: { "Sep 2026": "Presentation" } },
     { n: "Heng / Cool Storage & Trucking", note: "from EXPO", at: { "Sep 2026": "Presentation" } },
     { n: "Sambath Ponnareay", note: "from EXPO", at: { "Sep 2026": "Presentation" } },
-    { n: "Hand.shippe", note: "from EXPO", at: { "Sep 2026": "Presentation" } },
-    { n: "Nicholas Ng", note: "from EXPO", at: { "Sep 2026": "Presentation" } },
-    { n: "Li Pei", note: "WeChat", at: { "Sep 2026": "Presentation" } },
+    { n: "Hand.shippe", note: "from EXPO · WeChat", at: { "Sep 2026": "Presentation" } },
+    { n: "Nicholas Ng", note: "from EXPO · WeChat", at: { "Sep 2026": "Presentation" } },
+    { n: "Li Pei", note: "from EXPO · WeChat", at: { "Sep 2026": "Presentation" } },
   ]));
   S.push(planSlide("Saman · QMS leaning presentation", "", [
     { n: "Saman", note: "Consultant · 5/25" },
