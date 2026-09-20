@@ -439,7 +439,7 @@ ${heading ? `<h2>${heading}</h2>` : ""}
 </table>
 `, { cls: "planslide" });
   S.push(planSlide("Sales confirmed", "", CUSTOMERS));
-  S.push(planSlide("Yai / TAFTAC · Direct updating presentation", "", [
+  S.push(planSlide("Yai / TAFTAC · YHR leaning presentation", "", [
     { n: "SEC", note: "Customer presentation", at: { "Sep 2026": "Presentation" } },
     { n: "Yakjin", note: "Customer presentation", at: { "Sep 2026": "Presentation" } },
     {}, {}, {}, {}, {}, {},
