@@ -419,8 +419,8 @@ if (TIER.client) {
     { n: "Yorkmars", all: "$2,000" },
     { n: "Caswell" },
     { n: "BICNZ", at: { "Aug 2026": "$120", "Aug 2027": "$120" } },
-    { n: "3SGS", note: "Basic", at: { "Sep 2026": "$750", "Sep 2027": "$750" } },
-    { n: "3SGS", note: "Plus", at: { "Oct 2026": "$3,000" } },
+    { n: "3SGS", at: { "Sep 2026": "$750", "Sep 2027": "$750" } },
+    { n: "3SGS+", at: { "Oct 2026": "$3,000" } },
     { n: "ES Packing", at: { "Oct 2026": "$750", "Oct 2027": "$750" } },
     {}, {},
   ];
