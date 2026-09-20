@@ -421,7 +421,7 @@ if (TIER.client) {
     { n: "BICNZ", sep: true, note: "Calibration equipment QR", paid: ["Aug 2026"], at: { "Aug 2026": "$120", "Aug 2027": "$120" } },
     { n: "3SGS", note: "Digital Audit", at: { "Sep 2026": "$750", "Sep 2027": "$750" } },
     { n: "3SGS+", note: "Ai Audit review", at: { "Oct 2026": "$3,000" } },
-    { n: "ES Packing", at: { "Oct 2026": "$750", "Oct 2027": "$750" } },
+    { n: "ES Packing", note: "YHR, Gate Pass, Car Booking", at: { "Oct 2026": "$750", "Oct 2027": "$750" } },
     {}, {},
   ];
   const cells = MONTHS.flatMap(([y, ms]) => ms.map((m) => [m, `${m} ${y}`]));
