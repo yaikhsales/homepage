@@ -418,10 +418,10 @@ if (TIER.client) {
   const CUSTOMERS = [
     { n: "Yorkmars", all: "$2,000" },
     { n: "Caswell" },
-    { n: "BICNZ", note: "12-month renewal", at: { "Aug 2026": "$120", "Aug 2027": "$120" } },
-    { n: "3SGS", note: "Basic · 12-month renewal", at: { "Sep 2026": "$750", "Sep 2027": "$750" } },
+    { n: "BICNZ", at: { "Aug 2026": "$120", "Aug 2027": "$120" } },
+    { n: "3SGS", note: "Basic", at: { "Sep 2026": "$750", "Sep 2027": "$750" } },
     { n: "3SGS", note: "Plus", at: { "Oct 2026": "$3,000" } },
-    { n: "ES Packing", note: "12-month renewal", at: { "Oct 2026": "$750", "Oct 2027": "$750" } },
+    { n: "ES Packing", at: { "Oct 2026": "$750", "Oct 2027": "$750" } },
     {}, {},
   ];
   const cells = MONTHS.flatMap(([y, ms]) => ms.map((m) => [m, `${m} ${y}`]));
