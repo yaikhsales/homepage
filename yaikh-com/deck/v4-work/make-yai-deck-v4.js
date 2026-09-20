@@ -417,8 +417,8 @@ if (TIER.client) {
   const MONTHS = [["2026", ["Aug", "Sep", "Oct", "Nov", "Dec"]], ["2027", ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]]];
   const CUSTOMERS = [
     { n: "Yorkmars", all: "$2,000" },
-    { n: "Caswell", note: "external", sep: true },
-    { n: "BICNZ", paid: ["Aug 2026"], at: { "Aug 2026": "$120", "Aug 2027": "$120" } },
+    { n: "Caswell" },
+    { n: "BICNZ", sep: true, note: "external", paid: ["Aug 2026"], at: { "Aug 2026": "$120", "Aug 2027": "$120" } },
     { n: "3SGS", at: { "Sep 2026": "$750", "Sep 2027": "$750" } },
     { n: "3SGS+", at: { "Oct 2026": "$3,000" } },
     { n: "ES Packing", at: { "Oct 2026": "$750", "Oct 2027": "$750" } },
