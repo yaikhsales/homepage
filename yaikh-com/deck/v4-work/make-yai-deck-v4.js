@@ -415,7 +415,7 @@ if (TIER.client) {
   /* Slide 3 — sales plan: customers down the left, Sep 2026 → Dec 2027 across.
    * Customer rows are blank until Gamini gives the names. */
   const MONTHS = [["2026", ["Sep", "Oct", "Nov", "Dec"]], ["2027", ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]]];
-  const CUSTOMERS = [["Yorkmars", "$2,000"], ["", ""], ["", ""], ["", ""], ["", ""], ["", ""], ["", ""], ["", ""]];
+  const CUSTOMERS = [["Yorkmars", "$2,000"], ["Caswell", ""], ["", ""], ["", ""], ["", ""], ["", ""], ["", ""], ["", ""]];
   const cells = MONTHS.flatMap(([, ms]) => ms);
   S.push(slide("dark", "Sales plan", `
 <h2>Customers · Sept 2026 → Dec 2027</h2>
