@@ -439,7 +439,10 @@ ${heading ? `<h2>${heading}</h2>` : ""}
 </table>
 `, { cls: "planslide" });
   S.push(planSlide("Sales confirmed", "", CUSTOMERS));
-  S.push(planSlide("Yai / TAFTAC · Direct updating presentation", "", [{}, {}, {}, {}, {}, {}, {}, {}]));
+  S.push(planSlide("Yai / TAFTAC · Direct updating presentation", "", [
+    { n: "SEC", note: "Customer presentation", at: { "Sep 2026": "Presentation" } },
+    {}, {}, {}, {}, {}, {}, {},
+  ]));
   S.push(planSlide("Saman · QMS leaning presentation", "", [
     { n: "Saman", note: "Consultant · 5/25" },
     { n: "Elegant Garment Co., Ltd", sub: true, at: { "Sep 2026": { v: "Finalising", span: 2 } } }, { n: "Trax Intertrade Co., Ltd.", sub: true, at: { "Oct 2026": "Finalising" } }, { n: "Factory 3", sub: true },
