@@ -932,18 +932,19 @@ export default async function PlanPage() {
             <h3 className="font-bold text-yai-navy text-xl">A4. Pitch Deck · four raise sizes</h3>
             <p className="text-sm text-gray-600 mt-1">15 slides each — the same deck, sized for US$0.5M, US$1M, US$2M or US$3M — plus the 4-slide client deck.</p>
           </div>
-          <div className="no-print grid grid-cols-2 md:grid-cols-5 gap-3">
+          <div className="no-print grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
             {[
               { ask: "0.5m", amt: "US$0.5M" },
               { ask: "1m", amt: "US$1M" },
               { ask: "2m", amt: "US$2M" },
               { ask: "3m", amt: "US$3M" },
               { ask: "client", amt: "Client deck" },
+              { ask: "m1", amt: "M1 Setup" },
             ].map((d) => (
               <div key={d.ask} className="rounded-xl bg-yai-navy text-white p-4 flex flex-col gap-3">
                 <div>
                   <div className="text-2xl font-extrabold text-[#FFD58A]">{d.amt}</div>
-                  <div className="text-xs text-white/60 mt-0.5">{d.ask === "client" ? "Internal · 8 slides" : "Seed round · 15 slides"}</div>
+                  <div className="text-xs text-white/60 mt-0.5">{d.ask === "m1" ? "How Big Brain runs · web page" : d.ask === "client" ? "Internal · 8 slides" : "Seed round · 15 slides"}</div>
                 </div>
                 <div className="flex gap-2 mt-auto">
                   <a
@@ -954,14 +955,14 @@ export default async function PlanPage() {
                   >
                     Open ↗
                   </a>
-                  <a
+                  {d.ask !== "m1" && <a
                     href={`/plan/pitch-deck?ask=${d.ask}&pdf=1`}
                     target="_blank"
                     rel="noopener"
                     className="flex-1 text-center rounded-full border border-white/30 text-white text-xs font-bold px-3 py-1.5 hover:bg-white/10"
                   >
                     PDF
-                  </a>
+                  </a>}
                 </div>
               </div>
             ))}

@@ -1,0 +1,897 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Yai Big Brain Architecture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    /* Light — warm paper, cool ink, brand hues stay literal */
+    --bg:        #F6F5F0;
+    --panel:     #FFFFFF;
+    --line:      #D8D5CB;
+    --line-2:    #B8B4A7;
+    --ink:       #1A1D26;
+    --ink-muted: #5B6270;
+    --ink-faint: #8B93A3;
+    --grid:      #E8E4D8;
+
+    --orange:    #F97316;  /* My Task Agent */
+    --blue:      #3B82F6;  /* Agent Collective */
+    --green:     #10B981;  /* Big Brain — the router */
+    --claude:    #D97757;  /* Anthropic / Claude runtime */
+    --amber:     #B45309;  /* accent text */
+    --purple:    #7C3AED;  /* pre-production PAs */
+    --red:       #DC2626;  /* production floor PAs */
+    --slate:     #475569;  /* back-office PAs */
+    --teal:      #0D9488;  /* outward PAs */
+
+    --shadow:    0 1px 2px rgba(20,25,35,0.05), 0 8px 24px rgba(20,25,35,0.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg:        #0B0F17;
+      --panel:     #131824;
+      --line:      #232B3B;
+      --line-2:    #3A4358;
+      --ink:       #E8EAF0;
+      --ink-muted: #A5AEC1;
+      --ink-faint: #6B7488;
+      --grid:      #1A2030;
+
+      --orange:    #FB923C;
+      --blue:      #60A5FA;
+      --green:     #34D399;
+      --claude:    #E88A6D;
+      --amber:     #FBBF24;
+      --purple:    #A78BFA;
+      --red:       #F87171;
+      --slate:     #94A3B8;
+      --teal:      #2DD4BF;
+
+      --shadow:    0 1px 2px rgba(0,0,0,0.4), 0 12px 32px rgba(0,0,0,0.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg:        #0B0F17;
+    --panel:     #131824;
+    --line:      #232B3B;
+    --line-2:    #3A4358;
+    --ink:       #E8EAF0;
+    --ink-muted: #A5AEC1;
+    --ink-faint: #6B7488;
+    --grid:      #1A2030;
+
+    --orange:    #FB923C;
+    --blue:      #60A5FA;
+    --green:     #34D399;
+    --claude:    #E88A6D;
+    --amber:     #FBBF24;
+    --purple:    #A78BFA;
+    --red:       #F87171;
+    --slate:     #94A3B8;
+    --teal:      #2DD4BF;
+
+    --shadow:    0 1px 2px rgba(0,0,0,0.4), 0 12px 32px rgba(0,0,0,0.35);
+  }
+
+  html, body { background: var(--bg); color: var(--ink); }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    font-size: 17px;
+    line-height: 1.55;
+    padding: 40px 24px 80px;
+  }
+  .page { max-width: 1320px; margin: 0 auto; }
+  header { margin-bottom: 48px; }
+  .kicker {
+    font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    display: flex; gap: 12px; align-items: center;
+    margin-bottom: 12px;
+  }
+  .kicker::before, .kicker::after {
+    content: ""; flex: 1; height: 1px; background: var(--line);
+    max-width: 60px;
+  }
+  h1 {
+    font-size: 48px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+    margin: 0 0 14px;
+    line-height: 1.05;
+  }
+  .lede {
+    font-size: 19px;
+    color: var(--ink-muted);
+    max-width: 66ch;
+    margin: 0;
+    line-height: 1.5;
+  }
+  .lede b { color: var(--ink); font-weight: 600; }
+
+  section { margin-top: 56px; }
+  h2 {
+    font-size: 16px;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin: 0 0 8px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  h2::before {
+    content: attr(data-n);
+    color: var(--claude);
+    font-size: 14px;
+  }
+  .subhead {
+    font-size: 17px;
+    color: var(--ink-muted);
+    margin: 0 0 28px;
+    max-width: 72ch;
+    line-height: 1.5;
+  }
+
+  figure {
+    margin: 0;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 28px;
+    box-shadow: var(--shadow);
+  }
+  figure svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    color: var(--ink);
+  }
+  figcaption {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--ink-muted);
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--line);
+    line-height: 1.6;
+  }
+
+  /* Ownership grid */
+  .owners {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+  }
+  .owner {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--own, var(--line-2));
+    border-radius: 8px;
+    padding: 16px 18px;
+  }
+  .owner .who {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--own, var(--ink));
+    letter-spacing: 0.04em;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .owner .what {
+    font-size: 14px;
+    color: var(--ink);
+    line-height: 1.45;
+  }
+  .owner .what em {
+    color: var(--ink-muted);
+    font-style: normal;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 11px;
+  }
+
+  /* SVG shared vocabulary */
+  .box-fill  { fill: var(--panel); }
+  .box-line  { stroke: var(--line-2); stroke-width: 1.2; fill: var(--panel); }
+  .box-line-2 { stroke: var(--line-2); stroke-width: 1.2; fill: none; }
+  .grid-fill { fill: var(--grid); }
+  .lbl       { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 15px; fill: var(--ink); }
+  .lbl-sm    { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13px; fill: var(--ink-muted); }
+  .lbl-title { font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 600; fill: var(--ink); }
+  .lbl-huge  { font-family: 'Inter', sans-serif; font-size: 26px; font-weight: 700; fill: var(--ink); letter-spacing: -0.01em; }
+  .caption   { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13px; fill: var(--ink-faint); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; }
+  .flow      { stroke: currentColor; stroke-width: 1.8; fill: none; }
+  .flow-dash { stroke: currentColor; stroke-width: 1.6; fill: none; stroke-dasharray: 6 5; }
+  .arrow-lbl { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13px; fill: var(--ink-muted); font-weight: 500; }
+</style>
+
+<div class="page">
+
+  <header>
+    <div class="kicker">Yaikh · Manufacturing Intelligence Platform</div>
+    <h1>How Yai Big Brain runs — visitor to reply, and the build behind it.</h1>
+    <p class="lede">
+      A visitor lands on <b>yaikh.com/experience</b>, chats with the green <b>Big Brain</b> orb, and gets a reply composed by <b>Claude Haiku on a Mac Mini M1</b> sitting on Gamini's desk in Phnom Penh — with the department PA collective (13 core + Social as 14th), a Mongo RAG index, a Cloudflare named tunnel, and a Railway-hosted Next.js host in between. Full chain went live <b>2026-09-16</b>; Qwen 2.5 3B is now the airbag.
+    </p>
+    <div style="margin-top: 20px; display: inline-flex; align-items: center; gap: 10px; padding: 8px 16px; border: 1.5px solid var(--green); border-radius: 20px; background: color-mix(in srgb, var(--green) 10%, transparent);">
+      <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green);"></span>
+      <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13px; color: var(--green); font-weight: 600; letter-spacing: 0.06em;">LIVE · CLAUDE HAIKU DRIVING · QWEN AIRBAG</span>
+    </div>
+  </header>
+
+  <!-- =================================================================
+       DIAGRAM 1 — REQUEST FLOW (visitor to reply)
+  ================================================================== -->
+  <section>
+    <h2 data-n="A">Request path</h2>
+    <p class="subhead">What happens between the visitor typing a message and the reply landing in the chat.</p>
+
+    <figure>
+      <svg viewBox="0 0 1200 780" role="img" aria-label="Request journey: visitor on phone or laptop chats with the Big Brain, message crosses the Cloudflare tunnel, arrives at the Mac Mini M1 in Phnom Penh where the Claude Haiku worker reads Mongo seeds and composes a reply via the Anthropic cloud, returning to the visitor as short bubbles.">
+        <defs>
+          <marker id="a-mid" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+          </marker>
+          <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--claude)" stop-opacity="0.08"/>
+            <stop offset="100%" stop-color="var(--claude)" stop-opacity="0"/>
+          </linearGradient>
+          <!-- Tunnel arc pattern -->
+          <symbol id="arch" viewBox="0 0 100 60">
+            <path d="M 0 60 Q 50 -10 100 60" fill="none" stroke="currentColor" stroke-width="1"/>
+          </symbol>
+        </defs>
+
+        <!-- ============ SKY / EDGE BAND ============ -->
+        <rect x="0" y="220" width="1200" height="120" fill="url(#skyGrad)"/>
+
+        <!-- Ground line under M1 house -->
+        <line x1="0" y1="720" x2="1200" y2="720" stroke="var(--line)" stroke-width="1"/>
+
+        <!-- Layer captions -->
+        <text x="16" y="22" class="caption">1 · visitor</text>
+        <text x="16" y="252" class="caption" fill="var(--claude)">2 · Cloudflare edge</text>
+        <text x="16" y="484" class="caption" fill="var(--purple)">3 · M1 · Phnom Penh · Mongo Community owns this house</text>
+
+        <!-- ============ 1 · VISITOR SCENE ============ -->
+        <!-- Person + phone -->
+        <g transform="translate(90, 60)">
+          <!-- Head -->
+          <circle cx="0" cy="16" r="14" fill="var(--panel)" stroke="var(--ink)" stroke-width="1.4"/>
+          <!-- Shoulders -->
+          <path d="M -22 60 Q 0 32 22 60" fill="var(--panel)" stroke="var(--ink)" stroke-width="1.4"/>
+          <!-- Phone in hand -->
+          <rect x="26" y="26" width="30" height="50" rx="5" fill="var(--panel)" stroke="var(--green)" stroke-width="1.6"/>
+          <rect x="30" y="32" width="22" height="6" rx="1" fill="var(--green)" opacity="0.25"/>
+          <rect x="30" y="41" width="22" height="6" rx="1" fill="var(--ink-faint)" opacity="0.25"/>
+          <rect x="30" y="50" width="22" height="6" rx="1" fill="var(--green)"/>
+          <text x="0" y="102" text-anchor="middle" class="lbl-sm">Visitor · Alex</text>
+          <text x="0" y="116" text-anchor="middle" class="lbl-sm" fill="var(--ink-faint)">phone or browser</text>
+        </g>
+
+        <!-- Chat bubble from phone -->
+        <g transform="translate(210, 70)">
+          <path d="M 0 20 L 10 8 L 10 34 Z" fill="var(--green)" opacity="0.85"/>
+          <rect x="10" y="0" width="180" height="42" rx="10" fill="var(--green)" opacity="0.85"/>
+          <text x="100" y="18" text-anchor="middle" font-family="Inter" font-size="11" fill="#fff">tell me about quality</text>
+          <text x="100" y="32" text-anchor="middle" font-family="Inter" font-size="11" fill="#fff">management</text>
+        </g>
+
+        <!-- Big Brain modal (green orb + chat pane frame) -->
+        <g transform="translate(440, 40)">
+          <rect x="0" y="0" width="300" height="140" rx="14" fill="var(--panel)" stroke="var(--green)" stroke-width="1.6"/>
+          <!-- window chrome -->
+          <circle cx="14" cy="14" r="4" fill="var(--red)" opacity="0.6"/>
+          <circle cx="26" cy="14" r="4" fill="var(--amber)" opacity="0.6"/>
+          <circle cx="38" cy="14" r="4" fill="var(--green)" opacity="0.7"/>
+          <text x="150" y="18" text-anchor="middle" class="lbl-sm" fill="var(--ink-muted)">yaikh.com/experience</text>
+          <!-- Yai orb -->
+          <circle cx="30" cy="52" r="14" fill="var(--green)"/>
+          <text x="30" y="56" text-anchor="middle" font-family="Inter" font-weight="700" font-size="12" fill="#fff">Yai</text>
+          <!-- reply bubbles inside -->
+          <rect x="52" y="42" width="200" height="20" rx="10" fill="var(--line)"/>
+          <text x="62" y="56" font-family="Inter" font-size="10" fill="var(--ink)">QA — upstream, relaxation, marker…</text>
+          <rect x="52" y="72" width="180" height="20" rx="10" fill="var(--line)"/>
+          <text x="62" y="86" font-family="Inter" font-size="10" fill="var(--ink)">Neighbours: MRP, YPI, CE (IE)</text>
+          <!-- input field -->
+          <rect x="14" y="106" width="272" height="22" rx="11" fill="var(--bg)" stroke="var(--line)"/>
+          <text x="24" y="121" font-family="Inter" font-size="10" fill="var(--ink-faint)">Ask about the website…</text>
+        </g>
+
+        <!-- Session-only privacy note -->
+        <g transform="translate(770, 60)">
+          <rect x="0" y="0" width="200" height="52" rx="8" fill="var(--panel)" stroke="var(--line-2)" stroke-dasharray="3 3"/>
+          <!-- lock icon -->
+          <g transform="translate(12, 14)">
+            <rect x="0" y="8" width="14" height="12" rx="2" fill="none" stroke="var(--ink)" stroke-width="1.2"/>
+            <path d="M 3 8 V 5 A 4 4 0 0 1 11 5 V 8" fill="none" stroke="var(--ink)" stroke-width="1.2"/>
+          </g>
+          <text x="34" y="20" class="lbl-title" font-size="12">Session-only</text>
+          <text x="34" y="34" class="lbl-sm">Chat clears on refresh</text>
+          <text x="34" y="46" class="lbl-sm" fill="var(--ink-faint)">no localStorage</text>
+        </g>
+
+        <!-- Atlas materialise -->
+        <g transform="translate(1000, 50)">
+          <!-- Database cylinder -->
+          <ellipse cx="30" cy="8" rx="30" ry="8" fill="var(--panel)" stroke="var(--blue)" stroke-width="1.4"/>
+          <path d="M 0 8 V 62 A 30 8 0 0 0 60 62 V 8" fill="var(--panel)" stroke="var(--blue)" stroke-width="1.4"/>
+          <ellipse cx="30" cy="8" rx="30" ry="8" fill="var(--blue)" opacity="0.14"/>
+          <text x="30" y="88" text-anchor="middle" class="lbl-title" font-size="12" fill="var(--blue)">Atlas</text>
+          <text x="30" y="102" text-anchor="middle" class="lbl-sm">pa_tasks</text>
+          <text x="30" y="116" text-anchor="middle" class="lbl-sm" fill="var(--ink-faint)">materialised</text>
+        </g>
+
+        <!-- flow: visitor phone → chat pane -->
+        <g color="var(--ink-muted)">
+          <path d="M 200 100 Q 320 90, 440 100" class="flow" marker-end="url(#a-mid)"/>
+          <text x="270" y="82" class="arrow-lbl">types</text>
+        </g>
+
+        <!-- ============ 2 · CLOUDFLARE TUNNEL ============ -->
+        <!-- Big cloud shape wrapping the tunnel -->
+        <g transform="translate(340, 240)" color="var(--claude)">
+          <!-- Cloud silhouette -->
+          <path d="M 60 60
+                   C 40 60, 30 45, 40 32
+                   C 30 20, 50 5, 70 12
+                   C 78 -2, 105 -2, 115 12
+                   C 135 5, 155 20, 145 32
+                   C 175 32, 175 60, 155 60
+                   Q 108 65, 60 60 Z"
+                fill="var(--panel)" stroke="var(--claude)" stroke-width="1.4"/>
+          <text x="98" y="38" text-anchor="middle" class="lbl-title" font-size="13" fill="var(--claude)">Cloudflare</text>
+          <text x="98" y="52" text-anchor="middle" class="lbl-sm">llm.ggmt.sg</text>
+        </g>
+
+        <!-- FastAPI guard shield -->
+        <g transform="translate(560, 250)">
+          <path d="M 30 0 L 60 12 V 42 C 60 60, 30 68, 30 68 C 30 68, 0 60, 0 42 V 12 Z"
+                fill="var(--panel)" stroke="var(--claude)" stroke-width="1.4"/>
+          <text x="30" y="30" text-anchor="middle" class="lbl-title" font-size="10" fill="var(--claude)">GUARD</text>
+          <text x="30" y="44" text-anchor="middle" class="lbl-sm" font-size="9">Bearer</text>
+          <text x="30" y="55" text-anchor="middle" class="lbl-sm" font-size="9">auth</text>
+        </g>
+
+        <!-- Route switch: /claude vs /qwen -->
+        <g transform="translate(660, 250)">
+          <!-- /claude route -->
+          <rect x="0" y="0" width="140" height="26" rx="13" fill="var(--claude)" opacity="0.14"/>
+          <text x="14" y="18" class="lbl-sm" fill="var(--claude)" font-weight="600">/v1/chat/claude</text>
+          <text x="106" y="18" class="lbl-sm" fill="var(--claude)">→ :8765</text>
+          <!-- /qwen route (fallback) -->
+          <rect x="0" y="34" width="140" height="26" rx="13" fill="var(--ink-faint)" opacity="0.14" stroke="var(--ink-faint)" stroke-dasharray="3 3"/>
+          <text x="14" y="52" class="lbl-sm" fill="var(--ink-muted)">/v1/chat/qwen</text>
+          <text x="102" y="52" class="lbl-sm" fill="var(--ink-faint)">fallback</text>
+        </g>
+
+        <!-- Chat modal → cloud arrow (going down) -->
+        <g color="var(--green)">
+          <path d="M 590 180 C 590 210, 490 220, 460 280" class="flow" stroke="var(--green)" stroke-width="1.6" marker-end="url(#a-mid)"/>
+          <text x="490" y="220" class="arrow-lbl" fill="var(--green)">POST /chat/claude</text>
+        </g>
+        <!-- Chat modal → Atlas (once, on materialise) -->
+        <g color="var(--blue)">
+          <path d="M 740 90 Q 900 90, 1000 90" class="flow" marker-end="url(#a-mid)"/>
+          <text x="820" y="82" class="arrow-lbl" fill="var(--blue)">materialise (once)</text>
+        </g>
+
+        <!-- ============ 3 · M1 HOUSE ============ -->
+        <!-- The house: roof + body containing worker + mongo + nomic + qwen -->
+        <g transform="translate(60, 470)">
+          <!-- Roof triangle -->
+          <path d="M 20 40 L 500 40 L 470 0 L 50 0 Z" fill="var(--purple)" opacity="0.16"
+                stroke="var(--purple)" stroke-width="1.4"/>
+          <text x="260" y="26" text-anchor="middle" class="lbl-title" font-size="12" fill="var(--purple)">Mac Mini M1 · Phnom Penh</text>
+          <!-- House body -->
+          <rect x="20" y="40" width="480" height="240" rx="4" fill="var(--panel)" stroke="var(--purple)" stroke-width="1.4"/>
+
+          <!-- Room 1: Claude Haiku worker (top-left) -->
+          <g transform="translate(38, 58)">
+            <rect x="0" y="0" width="220" height="100" rx="6" fill="var(--claude)" opacity="0.08" stroke="var(--claude)" stroke-width="1.2"/>
+            <!-- Anthropic sparkle icon -->
+            <g transform="translate(14, 14)">
+              <path d="M 12 0 C 12.3 3, 13 5, 14 6 C 15 7, 17 7.7, 20 8 C 17 8.3, 15 9, 14 10 C 13 11, 12.3 13, 12 16 C 11.7 13, 11 11, 10 10 C 9 9, 7 8.3, 4 8 C 7 7.7, 9 7, 10 6 C 11 5, 11.7 3, 12 0 Z"
+                    fill="var(--claude)"/>
+            </g>
+            <text x="40" y="22" class="lbl-title" font-size="12" fill="var(--claude)">Claude Haiku worker</text>
+            <text x="14" y="42" class="lbl-sm">FastAPI · :8765 · launchd</text>
+            <text x="14" y="56" class="lbl-sm">claude-haiku-4-5</text>
+            <text x="14" y="74" class="lbl-sm" fill="var(--ink-faint)">1. embed 2. cosine top-5</text>
+            <text x="14" y="88" class="lbl-sm" fill="var(--ink-faint)">3. compose bubbles[]</text>
+          </g>
+
+          <!-- Room 2: Qwen fallback (top-right, dashed) -->
+          <g transform="translate(278, 58)">
+            <rect x="0" y="0" width="200" height="100" rx="6" fill="var(--panel)"
+                  stroke="var(--ink-faint)" stroke-width="1.2" stroke-dasharray="4 3"/>
+            <!-- robot icon -->
+            <g transform="translate(14, 14)">
+              <rect x="0" y="6" width="20" height="14" rx="3" fill="none" stroke="var(--ink-muted)" stroke-width="1.2"/>
+              <line x1="10" y1="0" x2="10" y2="6" stroke="var(--ink-muted)" stroke-width="1.2"/>
+              <circle cx="10" cy="0" r="1.6" fill="var(--ink-muted)"/>
+              <circle cx="6" cy="12" r="1.5" fill="var(--ink-muted)"/>
+              <circle cx="14" cy="12" r="1.5" fill="var(--ink-muted)"/>
+            </g>
+            <text x="40" y="22" class="lbl-title" font-size="12">Qwen 2.5 3B</text>
+            <text x="14" y="42" class="lbl-sm">LM Studio · OpenAI-compat</text>
+            <text x="14" y="58" class="lbl-sm" fill="var(--ink-faint)">Fallback only after</text>
+            <text x="14" y="72" class="lbl-sm" fill="var(--ink-faint)">Claude 5xx / &gt;15s</text>
+          </g>
+
+          <!-- Room 3: Mongo RAG (bottom-left) -->
+          <g transform="translate(38, 174)">
+            <rect x="0" y="0" width="220" height="90" rx="6" fill="var(--purple)" opacity="0.08" stroke="var(--purple)" stroke-width="1.2"/>
+            <!-- Mongo leaf-ish icon -->
+            <g transform="translate(14, 14)">
+              <path d="M 10 0 C 4 8, 4 18, 10 24 C 16 18, 16 8, 10 0 Z" fill="var(--purple)"/>
+              <line x1="10" y1="10" x2="10" y2="26" stroke="var(--purple)" stroke-width="1"/>
+            </g>
+            <text x="40" y="22" class="lbl-title" font-size="12" fill="var(--purple)">Mongo · pa_docs</text>
+            <text x="14" y="46" class="lbl-sm">14 PA seed collections</text>
+            <text x="14" y="60" class="lbl-sm">nomic vectors · cross-PA</text>
+            <text x="14" y="78" class="lbl-sm" fill="var(--ink-faint)">"sewing machine" → YTM + CE</text>
+          </g>
+
+          <!-- Room 4: Nomic embed (bottom-right) -->
+          <g transform="translate(278, 174)">
+            <rect x="0" y="0" width="200" height="90" rx="6" fill="var(--panel)" stroke="var(--line-2)" stroke-width="1.2"/>
+            <!-- vector dots icon -->
+            <g transform="translate(14, 14)">
+              <circle cx="2" cy="2" r="2" fill="var(--ink)"/>
+              <circle cx="10" cy="6" r="2" fill="var(--ink)"/>
+              <circle cx="18" cy="2" r="2" fill="var(--ink)"/>
+              <circle cx="6" cy="14" r="2" fill="var(--ink)"/>
+              <circle cx="14" cy="18" r="2" fill="var(--ink)"/>
+              <circle cx="22" cy="14" r="2" fill="var(--ink)"/>
+              <line x1="2" y1="2" x2="18" y2="2" stroke="var(--ink-faint)" stroke-width="0.6"/>
+              <line x1="10" y1="6" x2="6" y2="14" stroke="var(--ink-faint)" stroke-width="0.6"/>
+              <line x1="18" y1="2" x2="22" y2="14" stroke="var(--ink-faint)" stroke-width="0.6"/>
+            </g>
+            <text x="42" y="22" class="lbl-title" font-size="12">Nomic embed</text>
+            <text x="14" y="46" class="lbl-sm">nomic-embed-text-v1.5</text>
+            <text x="14" y="66" class="lbl-sm" fill="var(--ink-faint)">LM Studio · same host</text>
+          </g>
+
+          <!-- Internal wiring -->
+          <g stroke="var(--purple)" stroke-width="1" fill="none">
+            <line x1="148" y1="158" x2="148" y2="174" marker-end="url(#a-mid)" color="var(--purple)"/>
+          </g>
+          <g stroke="var(--ink-faint)" stroke-width="1" fill="none">
+            <line x1="258" y1="108" x2="278" y2="108" stroke-dasharray="3 3"/>
+          </g>
+        </g>
+
+        <!-- Anthropic cloud (external, right of house) -->
+        <g transform="translate(700, 500)">
+          <path d="M 60 60
+                   C 40 60, 30 45, 40 32
+                   C 30 20, 50 5, 70 12
+                   C 78 -2, 105 -2, 115 12
+                   C 135 5, 155 20, 145 32
+                   C 175 32, 175 60, 155 60
+                   Q 108 65, 60 60 Z"
+                fill="var(--panel)" stroke="var(--claude)" stroke-width="1.4" stroke-dasharray="4 3"/>
+          <!-- big sparkle inside -->
+          <g transform="translate(80, 20)">
+            <path d="M 18 0 C 18.5 6, 20 10, 22 12 C 24 14, 28 15.5, 34 16 C 28 16.5, 24 18, 22 20 C 20 22, 18.5 26, 18 32 C 17.5 26, 16 22, 14 20 C 12 18, 8 16.5, 2 16 C 8 15.5, 12 14, 14 12 C 16 10, 17.5 6, 18 0 Z"
+                  fill="var(--claude)"/>
+          </g>
+          <text x="98" y="80" text-anchor="middle" class="lbl-title" font-size="12" fill="var(--claude)">api.anthropic.com</text>
+          <text x="98" y="94" text-anchor="middle" class="lbl-sm">Haiku 4.5 · San Francisco</text>
+        </g>
+
+        <!-- Cloud → Worker down arrow -->
+        <g color="var(--claude)">
+          <path d="M 460 340 L 460 470" class="flow" stroke="var(--claude)" stroke-width="1.6" marker-end="url(#a-mid)"/>
+          <text x="470" y="410" class="arrow-lbl" fill="var(--claude)">TLS</text>
+        </g>
+        <!-- Worker → Anthropic API and back -->
+        <g color="var(--claude)">
+          <path d="M 300 548 Q 500 500, 700 548" class="flow" stroke="var(--claude)" stroke-width="1.4" marker-end="url(#a-mid)"/>
+          <text x="470" y="516" class="arrow-lbl" fill="var(--claude)">POST /messages</text>
+          <path d="M 700 590 Q 500 630, 300 590" class="flow" stroke="var(--claude)" stroke-width="1.4" stroke-dasharray="3 3" marker-end="url(#a-mid)"/>
+          <text x="470" y="628" class="arrow-lbl" fill="var(--claude)">bubbles[] JSON</text>
+        </g>
+
+        <!-- Reply arc back to visitor -->
+        <g color="var(--green)">
+          <path d="M 90 470 C 30 420, 30 220, 210 130" class="flow-dash" stroke="var(--green)" stroke-width="1.6" marker-end="url(#a-mid)"/>
+          <text x="10" y="360" class="arrow-lbl" fill="var(--green)" transform="rotate(-90, 20, 360)">reply · bubbles rendered 1.4s apart</text>
+        </g>
+
+        <!-- LIVE badge (was IN FLIGHT until 2026-09-16) -->
+        <g transform="translate(950, 250)">
+          <rect x="0" y="0" width="180" height="46" rx="23" fill="var(--green)" fill-opacity="0.08" stroke="var(--green)" stroke-width="1.6"/>
+          <circle cx="18" cy="23" r="6" fill="var(--green)"/>
+          <text x="34" y="20" class="lbl-title" font-size="11" fill="var(--green)">LIVE</text>
+          <text x="34" y="34" class="lbl-sm">smoke curl · 3.2s</text>
+        </g>
+      </svg>
+
+      <figcaption>
+        Live path (solid, green): visitor → guard → Claude Haiku worker → Anthropic API → bubbles[] back. Airbag path (dashed): guard falls to Qwen 2.5 3B if the worker returns 5xx or times out (>15s), tagged source:"qwen-fallback" in the log. The visitor never leaves Cambodia — every request terminates on the M1 in Phnom Penh, except the Anthropic API call that the worker itself makes.
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- =================================================================
+       DIAGRAM 2 — 13 PA COLLECTIVE
+  ================================================================== -->
+  <section>
+    <h2 data-n="B">The department PA collective</h2>
+    <p class="subhead">Big Brain isn't a monolith — it's the 3 management modules (Dashboard · Data Scientist · SOP) sitting on top of the department PAs. 13 core PAs, plus Social as the 14th. Each PA owns its patch, alerts its department head, escalates to Big Brain when silence itself becomes the event.</p>
+
+    <figure>
+      <svg viewBox="0 0 1200 900" role="img" aria-label="Big Brain — composed of Dashboard, Data Scientist, and SOP management modules — sits at the center routing to the department PAs. Pre-production (YPI + PD, MRP + Import Export + PCA, 4DP, Sales, Merchandising), production floor (Production, YTM, CE (IE), QA), back-office (Accounting, HR, Admin, CSR), outward (Shipping Internal, Social as 14th).">
+        <defs>
+          <marker id="b1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+          </marker>
+        </defs>
+
+        <!-- ==== BIG BRAIN CORE — expanded, no overflow, readable text ==== -->
+        <g>
+          <!-- Outer container: wider (480px) and taller (300px) so 3 sub-boxes and rule fit cleanly -->
+          <rect x="360" y="320" width="480" height="300" rx="24"
+                fill="var(--panel)" stroke="var(--green)" stroke-width="2.8"/>
+          <rect x="360" y="320" width="480" height="300" rx="24"
+                fill="var(--green)" opacity="0.06"/>
+
+          <!-- Title -->
+          <text x="600" y="366" text-anchor="middle" class="lbl-huge" fill="var(--green)" font-size="30">Big Brain</text>
+          <text x="600" y="390" text-anchor="middle" class="lbl-sm" font-size="14">router · escalator · <tspan fill="var(--claude)" font-weight="700">Claude Haiku</tspan></text>
+
+          <!-- 3 management modules inside — each 144w × 96h, 12px gap -->
+          <g font-family="Inter">
+            <g transform="translate(378, 410)">
+              <rect x="0" y="0" width="144" height="96" rx="10" fill="var(--panel)" stroke="var(--green)" stroke-width="1.6"/>
+              <text x="72" y="32" text-anchor="middle" class="lbl-title" fill="var(--green)" font-size="16" font-weight="700">Dashboard</text>
+              <text x="72" y="60" text-anchor="middle" class="lbl-sm" font-size="13">3 matters</text>
+              <text x="72" y="78" text-anchor="middle" class="lbl-sm" font-size="13">for today</text>
+            </g>
+            <g transform="translate(528, 410)">
+              <rect x="0" y="0" width="144" height="96" rx="10" fill="var(--panel)" stroke="var(--green)" stroke-width="1.6"/>
+              <text x="72" y="32" text-anchor="middle" class="lbl-title" fill="var(--green)" font-size="15" font-weight="700">Data Scientist</text>
+              <text x="72" y="60" text-anchor="middle" class="lbl-sm" font-size="13">RAG index +</text>
+              <text x="72" y="78" text-anchor="middle" class="lbl-sm" font-size="13">learning loop</text>
+            </g>
+            <g transform="translate(678, 410)">
+              <rect x="0" y="0" width="144" height="96" rx="10" fill="var(--panel)" stroke="var(--green)" stroke-width="1.6"/>
+              <text x="72" y="32" text-anchor="middle" class="lbl-title" fill="var(--green)" font-size="16" font-weight="700">SOP</text>
+              <text x="72" y="60" text-anchor="middle" class="lbl-sm" font-size="13">policy of every</text>
+              <text x="72" y="78" text-anchor="middle" class="lbl-sm" font-size="13">process</text>
+            </g>
+          </g>
+
+          <!-- Explainer — split to two lines so it fits the container width -->
+          <text x="600" y="524" text-anchor="middle" class="lbl-sm" font-size="13" fill="var(--ink-muted)">
+            Big Brain <tspan font-weight="700" fill="var(--ink)">is</tspan> these 3 modules
+          </text>
+          <text x="600" y="542" text-anchor="middle" class="lbl-sm" font-size="13" fill="var(--ink-muted)">
+            sitting on top of the department PAs
+          </text>
+
+          <!-- Universal rule callout, fully inside the container -->
+          <g transform="translate(378, 556)">
+            <rect x="0" y="0" width="444" height="58" rx="10" fill="none" stroke="var(--claude)" stroke-width="1.4" stroke-dasharray="5 4"/>
+            <text x="16" y="24" class="lbl-sm" fill="var(--claude)" font-weight="700" font-size="13">Universal rule (all PAs)</text>
+            <text x="16" y="44" class="lbl-sm" font-size="13">anomaly · escalate to boss · silence = event</text>
+          </g>
+        </g>
+
+        <!-- Group labels -->
+        <text x="30" y="24" class="caption" fill="var(--purple)">pre-production spine (5 agents)</text>
+        <text x="1170" y="24" text-anchor="end" class="caption" fill="var(--red)">production floor (4)</text>
+        <text x="30" y="880" class="caption" fill="var(--slate)">back-office (4)</text>
+        <text x="1170" y="880" text-anchor="end" class="caption" fill="var(--teal)">outward (1 core + Social as 14th)</text>
+
+        <!-- ==== PRE-PRODUCTION (left column, 5 agents) ==== -->
+        <g font-family="Inter">
+          <!-- YPI with PD sub-chip -->
+          <g transform="translate(30, 50)">
+            <rect x="0" y="0" width="240" height="80" rx="8" fill="var(--panel)" stroke="var(--purple)" stroke-width="1.4"/>
+            <text x="12" y="20" class="lbl-title" fill="var(--purple)">YPI</text>
+            <text x="12" y="36" class="lbl-sm">Yai Production Instructions</text>
+            <text x="12" y="50" class="lbl-sm">trilingual · pre-prod spine</text>
+            <!-- PD sub-chip -->
+            <g transform="translate(12, 58)">
+              <rect x="0" y="0" width="34" height="16" rx="3" fill="var(--purple)" opacity="0.14"/>
+              <text x="17" y="12" text-anchor="middle" class="lbl-sm" fill="var(--purple)" font-weight="600">PD</text>
+            </g>
+            <text x="52" y="70" class="lbl-sm" fill="var(--ink-faint)" font-size="10">product development</text>
+          </g>
+
+          <!-- MRP with Import/Export + PCA sub-chips -->
+          <g transform="translate(30, 156)">
+            <rect x="0" y="0" width="240" height="80" rx="8" fill="var(--panel)" stroke="var(--purple)" stroke-width="1.4"/>
+            <text x="12" y="20" class="lbl-title" fill="var(--purple)">MRP</text>
+            <text x="12" y="36" class="lbl-sm">material · BOM · stock</text>
+            <text x="12" y="50" class="lbl-sm">GDT customs for imports</text>
+            <g transform="translate(12, 58)">
+              <rect x="0" y="0" width="88" height="16" rx="3" fill="var(--purple)" opacity="0.14"/>
+              <text x="44" y="12" text-anchor="middle" class="lbl-sm" fill="var(--purple)" font-weight="600">Import Export</text>
+            </g>
+            <g transform="translate(106, 58)">
+              <rect x="0" y="0" width="42" height="16" rx="3" fill="var(--purple)" opacity="0.14"/>
+              <text x="21" y="12" text-anchor="middle" class="lbl-sm" fill="var(--purple)" font-weight="600">PCA</text>
+            </g>
+          </g>
+
+          <!-- 4DP -->
+          <g transform="translate(30, 262)">
+            <rect x="0" y="0" width="240" height="64" rx="8" fill="var(--panel)" stroke="var(--purple)" stroke-width="1.4"/>
+            <text x="12" y="20" class="lbl-title" fill="var(--purple)">4DP</text>
+            <text x="12" y="36" class="lbl-sm">4-Directional Planning</text>
+            <text x="12" y="50" class="lbl-sm">capacity · factory · line · sales</text>
+          </g>
+
+          <!-- Sales (promoted) -->
+          <g transform="translate(30, 352)">
+            <rect x="0" y="0" width="240" height="64" rx="8" fill="var(--panel)" stroke="var(--purple)" stroke-width="1.4"/>
+            <text x="12" y="20" class="lbl-title" fill="var(--purple)">Sales</text>
+            <text x="12" y="36" class="lbl-sm">order intake · buyer contact</text>
+            <text x="12" y="50" class="lbl-sm">quotes · pipeline</text>
+          </g>
+
+          <!-- Merchandising (promoted) -->
+          <g transform="translate(30, 442)">
+            <rect x="0" y="0" width="240" height="64" rx="8" fill="var(--panel)" stroke="var(--purple)" stroke-width="1.4"/>
+            <text x="12" y="20" class="lbl-title" fill="var(--purple)">Merchandising</text>
+            <text x="12" y="36" class="lbl-sm">buyer sample approvals</text>
+            <text x="12" y="50" class="lbl-sm">costing · order confirmation</text>
+          </g>
+        </g>
+
+        <!-- ==== PRODUCTION FLOOR (right column, 4 agents) ==== -->
+        <g font-family="Inter">
+          <g transform="translate(930, 50)">
+            <rect x="0" y="0" width="240" height="64" rx="8" fill="var(--panel)" stroke="var(--red)" stroke-width="1.4"/>
+            <text x="12" y="20" class="lbl-title" fill="var(--red)">Production</text>
+            <text x="12" y="36" class="lbl-sm">today's plan · WIP by line</text>
+            <text x="12" y="50" class="lbl-sm">cutting → finishing throughput</text>
+          </g>
+          <g transform="translate(930, 140)">
+            <rect x="0" y="0" width="240" height="64" rx="8" fill="var(--panel)" stroke="var(--red)" stroke-width="1.4"/>
+            <text x="12" y="20" class="lbl-title" fill="var(--red)">YTM</text>
+            <text x="12" y="36" class="lbl-sm">machine · maintenance</text>
+            <text x="12" y="50" class="lbl-sm">downtime · spares · predictive</text>
+          </g>
+          <g transform="translate(930, 230)">
+            <rect x="0" y="0" width="240" height="64" rx="8" fill="var(--panel)" stroke="var(--red)" stroke-width="1.4"/>
+            <text x="12" y="20" class="lbl-title" fill="var(--red)">CE <tspan font-size="12">(IE)</tspan></text>
+            <text x="12" y="36" class="lbl-sm">cost + efficiency · industrial eng.</text>
+            <text x="12" y="50" class="lbl-sm">standard time · kaizen</text>
+          </g>
+          <g transform="translate(930, 320)">
+            <rect x="0" y="0" width="240" height="64" rx="8" fill="var(--panel)" stroke="var(--red)" stroke-width="1.4"/>
+            <text x="12" y="20" class="lbl-title" fill="var(--red)">QA</text>
+            <text x="12" y="36" class="lbl-sm">upstream → relaxation</text>
+            <text x="12" y="50" class="lbl-sm">marker · AQL · Call Out</text>
+          </g>
+        </g>
+
+        <!-- ==== BACK-OFFICE (left column, below pre-prod) ==== -->
+        <g font-family="Inter">
+          <g transform="translate(30, 620)">
+            <rect x="0" y="0" width="240" height="60" rx="8" fill="var(--panel)" stroke="var(--slate)" stroke-width="1.4"/>
+            <text x="12" y="20" class="lbl-title" fill="var(--slate)">Accounting</text>
+            <text x="12" y="36" class="lbl-sm">books · invoices · payments</text>
+            <text x="12" y="50" class="lbl-sm">bank · tax</text>
+          </g>
+          <g transform="translate(30, 692)">
+            <rect x="0" y="0" width="240" height="60" rx="8" fill="var(--panel)" stroke="var(--slate)" stroke-width="1.4"/>
+            <text x="12" y="20" class="lbl-title" fill="var(--slate)">HR (YHR)</text>
+            <text x="12" y="36" class="lbl-sm">CCTV attendance · payroll</text>
+            <text x="12" y="50" class="lbl-sm">Speak Up · Labour Law</text>
+          </g>
+          <g transform="translate(30, 764)">
+            <rect x="0" y="0" width="116" height="60" rx="8" fill="var(--panel)" stroke="var(--slate)" stroke-width="1.4"/>
+            <text x="12" y="20" class="lbl-title" fill="var(--slate)">Admin</text>
+            <text x="12" y="36" class="lbl-sm">gate · fans</text>
+            <text x="12" y="50" class="lbl-sm">Y Shop · org</text>
+          </g>
+          <g transform="translate(154, 764)">
+            <rect x="0" y="0" width="116" height="60" rx="8" fill="var(--panel)" stroke="var(--slate)" stroke-width="1.4"/>
+            <text x="12" y="20" class="lbl-title" fill="var(--slate)">CSR</text>
+            <text x="12" y="36" class="lbl-sm">ESG · WRAP</text>
+            <text x="12" y="50" class="lbl-sm">BSCI · Higg</text>
+          </g>
+        </g>
+
+        <!-- ==== OUTWARD (right column, below production) ==== -->
+        <g font-family="Inter">
+          <g transform="translate(930, 620)">
+            <rect x="0" y="0" width="240" height="64" rx="8" fill="var(--panel)" stroke="var(--teal)" stroke-width="1.4"/>
+            <text x="12" y="20" class="lbl-title" fill="var(--teal)">Shipping <tspan font-size="12">(Internal)</tspan></text>
+            <text x="12" y="36" class="lbl-sm">container plan · customs</text>
+            <text x="12" y="50" class="lbl-sm">inbound + outbound ETA</text>
+          </g>
+          <!-- Social as 14th — badge -->
+          <g transform="translate(930, 710)">
+            <rect x="0" y="0" width="240" height="80" rx="8" fill="var(--panel)" stroke="var(--teal)" stroke-width="1.4" stroke-dasharray="4 3"/>
+            <text x="12" y="20" class="lbl-title" fill="var(--teal)">Social</text>
+            <text x="12" y="36" class="lbl-sm">TikTok · FB · IG</text>
+            <text x="12" y="50" class="lbl-sm">YouTube · LinkedIn</text>
+            <!-- 14th badge -->
+            <g transform="translate(154, 56)">
+              <rect x="0" y="0" width="36" height="16" rx="8" fill="var(--teal)" opacity="0.16"/>
+              <text x="18" y="12" text-anchor="middle" class="lbl-sm" fill="var(--teal)" font-weight="700">14th</text>
+            </g>
+          </g>
+        </g>
+
+        <!-- Routing lines from Big Brain to each PA (edges: 360 left, 840 right, top 320, bottom 620) -->
+        <g stroke="var(--line-2)" stroke-width="1.2" fill="none" opacity="0.7">
+          <!-- pre-prod (5) — left edge -->
+          <line x1="360" y1="380" x2="270" y2="82"/>
+          <line x1="360" y1="410" x2="270" y2="188"/>
+          <line x1="360" y1="450" x2="270" y2="294"/>
+          <line x1="360" y1="490" x2="270" y2="384"/>
+          <line x1="360" y1="530" x2="270" y2="474"/>
+          <!-- production (4) — right edge -->
+          <line x1="840" y1="380" x2="930" y2="82"/>
+          <line x1="840" y1="410" x2="930" y2="172"/>
+          <line x1="840" y1="450" x2="930" y2="262"/>
+          <line x1="840" y1="490" x2="930" y2="352"/>
+          <!-- back-office (4) — bottom edge → left -->
+          <line x1="420" y1="620" x2="270" y2="650"/>
+          <line x1="440" y1="620" x2="270" y2="722"/>
+          <line x1="460" y1="620" x2="146" y2="794"/>
+          <line x1="480" y1="620" x2="270" y2="794"/>
+          <!-- outward (2 incl 14th) — bottom edge → right -->
+          <line x1="740" y1="620" x2="930" y2="652"/>
+          <line x1="760" y1="620" x2="930" y2="742"/>
+        </g>
+      </svg>
+
+      <figcaption>
+        Big Brain isn't a single thing — it's the 3 management modules (Dashboard, Data Scientist, SOP) as one container, routing over the department PAs. Purple chips inside a PA are its sub-modules (PD under YPI; Import Export + PCA under MRP). The 14th (Social) sits outside the core 13 with a dashed border and a badge.
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- =================================================================
+       DIAGRAM 3 — GIT + DEPLOY PIPELINE
+  ================================================================== -->
+  <section>
+    <h2 data-n="C">Git & deploy pipeline</h2>
+    <p class="subhead">A source-file edit in <code style="font-family:'JetBrains Mono',monospace;font-size:0.9em;color:var(--claude)">yaikh-dashboard/src/</code> is invisible until the CRA is rebuilt and its output committed. This is the trap that ate 7 pushes in a row.</p>
+
+    <figure>
+      <svg viewBox="0 0 1160 420" role="img" aria-label="Git and deploy pipeline: source edit in yaikh-dashboard CRA, run npm run build to write to yaikh-com/public/experience, commit both source and build output, push to yaikhsales/homepage on GitHub, Railway auto-deploys the Next.js app to yaikh.com. Skipping the build step leaves Railway serving the stale bundle.">
+
+        <defs>
+          <marker id="c1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+          </marker>
+        </defs>
+
+        <!-- Steps -->
+        <g font-family="Inter">
+          <!-- 1 · Edit source -->
+          <g transform="translate(20, 90)">
+            <rect x="0" y="0" width="180" height="100" rx="10" class="box-line"/>
+            <text x="16" y="24" class="caption" fill="var(--ink-faint)">1 · edit</text>
+            <text x="16" y="48" class="lbl-title">yaikh-dashboard/</text>
+            <text x="16" y="66" class="lbl-sm">src/chatbot/bot-version2.js</text>
+            <text x="16" y="80" class="lbl-sm">src/AppLayout.js · etc.</text>
+          </g>
+
+          <!-- 2 · Build -->
+          <g transform="translate(240, 90)">
+            <rect x="0" y="0" width="200" height="100" rx="10" class="box-line" stroke="var(--claude)" stroke-width="1.6"/>
+            <text x="16" y="24" class="caption" fill="var(--claude)">2 · build ← the trap</text>
+            <text x="16" y="48" class="lbl-title" fill="var(--claude)">npm run build</text>
+            <text x="16" y="66" class="lbl-sm">CRA · react-scripts build</text>
+            <text x="16" y="80" class="lbl-sm">BUILD_PATH = ../public/experience</text>
+          </g>
+
+          <!-- 3 · Bundle committed -->
+          <g transform="translate(480, 90)">
+            <rect x="0" y="0" width="200" height="100" rx="10" class="box-line"/>
+            <text x="16" y="24" class="caption" fill="var(--ink-faint)">3 · commit</text>
+            <text x="16" y="48" class="lbl-title">yaikh-com/public/</text>
+            <text x="16" y="66" class="lbl-sm">experience/static/js/</text>
+            <text x="16" y="80" class="lbl-sm">main.&lt;hash&gt;.js · both files</text>
+          </g>
+
+          <!-- 4 · Push -->
+          <g transform="translate(720, 90)">
+            <rect x="0" y="0" width="180" height="100" rx="10" class="box-line"/>
+            <text x="16" y="24" class="caption" fill="var(--ink-faint)">4 · push</text>
+            <text x="16" y="48" class="lbl-title">yaikhsales/homepage</text>
+            <text x="16" y="66" class="lbl-sm">main branch</text>
+            <text x="16" y="80" class="lbl-sm">gh identity: yaikhsales</text>
+          </g>
+
+          <!-- 5 · Railway -->
+          <g transform="translate(940, 90)">
+            <rect x="0" y="0" width="200" height="100" rx="10" class="box-line" stroke="var(--blue)" stroke-width="1.4"/>
+            <text x="16" y="24" class="caption" fill="var(--blue)">5 · deploy</text>
+            <text x="16" y="48" class="lbl-title" fill="var(--blue)">Railway · robust-hope</text>
+            <text x="16" y="66" class="lbl-sm">next build (only)</text>
+            <text x="16" y="80" class="lbl-sm">~60–120s to live</text>
+          </g>
+        </g>
+
+        <!-- Arrows step to step -->
+        <g color="var(--ink-muted)">
+          <line x1="200" y1="140" x2="240" y2="140" class="flow" marker-end="url(#c1)"/>
+          <line x1="440" y1="140" x2="480" y2="140" class="flow" marker-end="url(#c1)"/>
+          <line x1="680" y1="140" x2="720" y2="140" class="flow" marker-end="url(#c1)"/>
+          <line x1="900" y1="140" x2="940" y2="140" class="flow" marker-end="url(#c1)"/>
+        </g>
+
+        <!-- Live site badge -->
+        <g transform="translate(940, 240)">
+          <rect x="0" y="0" width="200" height="60" rx="10" class="box-line" stroke="var(--green)" stroke-width="1.6"/>
+          <text x="16" y="24" class="lbl-title" fill="var(--green)">yaikh.com/experience</text>
+          <text x="16" y="44" class="lbl-sm">CRA served from /public/experience</text>
+        </g>
+        <g color="var(--green)">
+          <line x1="1040" y1="190" x2="1040" y2="240" class="flow" stroke="var(--green)" stroke-width="1.4" marker-end="url(#c1)"/>
+        </g>
+
+        <!-- The trap: skip build → stale bundle -->
+        <g color="var(--red)">
+          <path d="M 110 190 C 110 260, 780 300, 1040 240" class="flow-dash" stroke="var(--red)" stroke-width="1.4" marker-end="url(#c1)"/>
+          <text x="500" y="290" class="arrow-lbl" fill="var(--red)" font-weight="600">
+            skip step 2 → stale bundle stays live · commits look successful
+          </text>
+        </g>
+
+        <!-- Verification line -->
+        <g transform="translate(20, 330)">
+          <rect x="0" y="0" width="1120" height="72" rx="10" fill="var(--panel)" stroke="var(--line-2)" stroke-dasharray="3 3"/>
+          <text x="16" y="26" class="lbl-title">Verify with the bundle hash — not the git timestamp, not the Railway commit status</text>
+          <text x="16" y="48" class="lbl-sm" fill="var(--claude)">curl -sL https://yaikh.com/experience | grep -oE 'main\.[a-f0-9]+\.js'</text>
+          <text x="16" y="62" class="lbl-sm">Hash changes on every real CRA rebuild · appears within ~90s of Railway build</text>
+        </g>
+      </svg>
+
+      <figcaption>
+        Step 2 is where the pipeline breaks silently: Railway runs <code style="font-family:'JetBrains Mono',monospace;font-size:0.9em">next build</code> on push, but never <code style="font-family:'JetBrains Mono',monospace;font-size:0.9em">react-scripts build</code>. A source-only push therefore ships nothing user-visible even though every check reports success.
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- =================================================================
+       DIAGRAM 4 — SESSION OWNERSHIP
+  ================================================================== -->
+  <section>
+    <h2 data-n="D">Who owns what · session coordination</h2>
+    <p class="subhead">Five Claude sessions divide the work by machine and by scope. Push protocol: whoever owns the code edits and commits; the current <b>front-man session</b> (name shifts after restart — was gk-dev-7e, currently gk-dev-05) pushes.</p>
+
+    <div class="owners">
+      <div class="owner" style="--own: var(--orange);">
+        <div class="who">Front-man session</div>
+        <div class="what">Voice-facing. Owns the chat pane (<em>bot-version2.js</em>), the LLM client (<em>gemini-api.js</em>), all pushes, cross-session coordination. Wired the CRA frontend to <em>/v1/chat/claude</em> on 2026-09-16.</div>
+      </div>
+      <div class="owner" style="--own: var(--green);">
+        <div class="who">YAI Data Agent</div>
+        <div class="what">Big Brain system prompt, seed writers, Claude Haiku worker code. Edits + commits — never pushes (per-turn permission gate). Extracted <em>bigbrain_prompt.txt</em> and prepared the deploy pack.</div>
+      </div>
+      <div class="owner" style="--own: var(--blue);">
+        <div class="who">Yaikh Main Page 1</div>
+        <div class="what">The 13 PA card content (<em>bot-modules.js</em>), pa-pills, materialise scenarios, per-PA suggested actions.</div>
+      </div>
+      <div class="owner" style="--own: var(--claude);">
+        <div class="who">M5 – M1 Bridge</div>
+        <div class="what">Only session with SSH to the M1. Delivered worker.py + launchd plist to M1; got worker returning valid bubbles on 2026-09-15.</div>
+      </div>
+      <div class="owner" style="--own: var(--purple);">
+        <div class="who">Mongo Community LLM</div>
+        <div class="what">M1-resident. Owns <em>rag_index.pa_docs</em>, LM Studio config, nomic embeddings pipeline, Qwen router, <b>and the FastAPI guard</b>. Wired the /v1/chat/claude route + Qwen fallback shim that unblocked the whole pipeline on 2026-09-16.</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</body></html>

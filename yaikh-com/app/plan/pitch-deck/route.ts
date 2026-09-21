@@ -22,6 +22,8 @@ const DECKS: Record<string, { html: string; pdf: string }> = {
   "3m": { html: "pitch-deck-v4.html", pdf: "Yai-Pitch-Deck-v4-3M.pdf" },
   // 5th deck — internal, for Arnold's client conversations (4 slides).
   client: { html: "pitch-deck-v4-client.html", pdf: "Price and Client.pdf" },
+  // 6th document — "How Yai Big Brain runs": the M1 setup explanation page (web only, no PDF).
+  m1: { html: "m1-setup.html", pdf: "" },
 };
 
 export async function GET(request: Request) {
@@ -34,7 +36,7 @@ export async function GET(request: Request) {
   if (!deck) return new Response("Unknown deck", { status: 404 });
 
   const common = { "Cache-Control": "private, no-store", "X-Robots-Tag": "noindex, nofollow" };
-  if (url.searchParams.get("pdf")) {
+  if (url.searchParams.get("pdf") && deck.pdf) {
     const pdf = await readFile(path.join(process.cwd(), "private", deck.pdf));
     return new Response(pdf, {
       headers: { ...common, "Content-Type": "application/pdf", "Content-Disposition": `inline; filename="${deck.pdf}"` },
