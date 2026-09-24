@@ -153,8 +153,11 @@ S.push(slide("dark", "01 · The founders", `
 S.push(slide("dark", "", `
 <h2 class="mip-h">The only commercial Ai-Native Manufacturing Intelligence Platform.</h2>
 <div class="mip-pc"><svg viewBox="0 0 250 372" aria-hidden="true">
+  <defs><clipPath id="pcLogoT"><circle cx="76" cy="256" r="20"/></clipPath><clipPath id="pcLogoP"><circle cx="196" cy="272" r="15"/></clipPath><clipPath id="pcLogoM"><circle cx="60" cy="33" r="13"/></clipPath></defs>
   <rect class="pc-body" x="30" y="6" width="190" height="128" rx="12"/>
   <rect class="pc-screen" x="41" y="17" width="168" height="106" rx="7"/>
+  <circle class="pc-logoring" cx="60" cy="33" r="14"/>
+  <image href="${logo}" x="46" y="19" width="28" height="28" clip-path="url(#pcLogoM)" preserveAspectRatio="xMidYMid slice"/>
   <circle class="pc-dot blue" cx="105" cy="56" r="25"/>
   <circle class="pc-dot green" cx="145" cy="56" r="25"/>
   <circle class="pc-dot green" cx="125" cy="88" r="25"/>
@@ -166,9 +169,19 @@ S.push(slide("dark", "", `
   <circle class="pc-plug" cx="248" cy="112" r="5"/>
   <rect class="pc-body" x="20" y="212" width="112" height="150" rx="12"/>
   <rect class="pc-screen" x="30" y="224" width="92" height="126" rx="5"/>
+  <circle class="pc-logoring" cx="76" cy="256" r="21"/>
+  <image href="${logo}" x="55" y="235" width="42" height="42" clip-path="url(#pcLogoT)" preserveAspectRatio="xMidYMid slice"/>
+  <rect class="pc-ui" x="44" y="292" width="64" height="7" rx="3.5"/>
+  <rect class="pc-ui" x="44" y="306" width="46" height="7" rx="3.5"/>
+  <rect class="pc-ui hot" x="44" y="320" width="30" height="7" rx="3.5"/>
   <rect class="pc-body" x="156" y="228" width="80" height="134" rx="14"/>
   <rect class="pc-screen" x="165" y="244" width="62" height="102" rx="4"/>
   <path class="pc-body" d="M186 236h20"/>
+  <circle class="pc-logoring" cx="196" cy="272" r="16"/>
+  <image href="${logo}" x="180" y="256" width="32" height="32" clip-path="url(#pcLogoP)" preserveAspectRatio="xMidYMid slice"/>
+  <rect class="pc-ui" x="175" y="300" width="42" height="6" rx="3"/>
+  <rect class="pc-ui" x="175" y="312" width="30" height="6" rx="3"/>
+  <rect class="pc-ui hot" x="175" y="324" width="20" height="6" rx="3"/>
 </svg>
 <div class="pc-cap">PC &amp; Web · Tablet · Phone<span>iOS &amp; Android</span></div></div>
 <div class="mip-tech">
@@ -290,6 +303,9 @@ h2{margin:0 0 10px;font-size:44px;line-height:1.12;color:var(--navy)}
 .mip-pc .pc-dot.green{fill:rgba(16,185,129,.65)}
 .mip-pc .pc-wire{fill:none;stroke:rgba(243,112,33,.85);stroke-width:4;stroke-linecap:round}
 .mip-pc .pc-plug{fill:var(--orange)}
+.mip-pc .pc-logoring{fill:none;stroke:rgba(243,112,33,.85);stroke-width:3}
+.mip-pc .pc-ui{fill:rgba(255,255,255,.28)}
+.mip-pc .pc-ui.hot{fill:rgba(243,112,33,.85)}
 .pc-cap{margin-top:12px;font-size:17px;font-weight:700;color:#E6ECFA;line-height:1.35}
 .pc-cap span{display:block;font-size:15px;font-weight:600;color:var(--gold)}
 .mip-tech{position:absolute;right:38px;top:140px;width:250px;display:flex;flex-wrap:wrap;justify-content:center;gap:18px 16px}
