@@ -46,6 +46,32 @@ const ABOUT_CONTENT = [
   },
 ];
 
+const FOUNDERS = [
+  {
+    name: "Sin Lam Yeung — Arnold",
+    role: "Founder / Director",
+    image: "/assets/about-us/teams/Mr-Arnold.png",
+    bullets: [
+      "Founder of Texlink Technologies and the Yai platform.",
+      "Degree in Engineering Management — Hong Kong National University.",
+      "Management consultant and engineer with 40 years of factory management across the region.",
+      "Route to the brand offices in Hong Kong through Yorkwell Asia.",
+    ],
+  },
+  {
+    name: "Gamini K",
+    role: "Director / CTO",
+    image: "/assets/about-us/teams/gamini.png",
+    bullets: [
+      "Director of technology · industrial engineering · CSR manager.",
+      "Master of Business Administration — Manipal University, India.",
+      "GSD licence holder.",
+      "30 years in the soft-goods industry.",
+      "Builds the platform with the 20-engineer team in Phnom Penh.",
+    ],
+  },
+];
+
 const TEAM: TeamMember[] = [
   { name: "Sin Lam Yeung — Arnold", image: "/assets/about-us/teams/Mr-Arnold.png", linkedin: "https://www.linkedin.com/in/sin-lam-yeung-898a22418/", role: "Founder / Director" },
   { name: "Gamini K",           image: "/assets/about-us/teams/gamini.png", linkedin: "https://www.linkedin.com/in/gaminisg/", role: "Director" },
@@ -302,6 +328,31 @@ export default function CustomersPage() {
                   </div>
                 ))}
               </div>
+            </div>
+          </div>
+
+          {/* Founders — same profiles as slide 2 of the About deck. */}
+          <div className="mt-8 md:mt-10">
+            <h3 className="text-base md:text-lg xl:text-xl font-bold text-white mb-3 text-center uppercase tracking-wider">
+              The Founders
+            </h3>
+            <div className="grid md:grid-cols-2 gap-6 md:gap-10">
+              {FOUNDERS.map((f) => (
+                <div key={f.name} className="flex flex-col items-center text-center">
+                  <img
+                    src={f.image}
+                    alt={f.name}
+                    className="w-24 h-24 md:w-28 md:h-28 rounded-full object-cover object-top mb-2 ring-4 ring-yai-orange/50 shadow-lg"
+                  />
+                  <p className="text-sm md:text-base font-bold text-white">{f.name}</p>
+                  <p className="text-xs md:text-sm text-yai-orange/90 mb-2">{f.role}</p>
+                  <ul className="text-[11px] md:text-xs text-white/85 leading-relaxed space-y-1 max-w-sm">
+                    {f.bullets.map((b) => (
+                      <li key={b}>{b}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </div>
           </div>
         </div>

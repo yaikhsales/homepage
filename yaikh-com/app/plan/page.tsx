@@ -930,21 +930,23 @@ export default async function PlanPage() {
           {/* A4 · Seed-round pitch decks — four raise sizes, served from /plan/pitch-deck?ask=… (session-gated, not /public) */}
           <div className="mb-3 mt-8">
             <h3 className="font-bold text-yai-navy text-xl">A4. Pitch Deck · four raise sizes</h3>
-            <p className="text-sm text-gray-600 mt-1">15 slides each — the same deck, sized for US$0.5M, US$1M, US$2M or US$3M — plus the 4-slide client deck.</p>
+            <p className="text-sm text-gray-600 mt-1">15 slides each — the same deck, sized for US$0.5M, US$1M, US$2M or US$3M — plus the client deck, the M1 setup page and the About deck. Call them by number: 1 to 7.</p>
           </div>
-          <div className="no-print grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+          <div className="no-print grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
             {[
-              { ask: "0.5m", amt: "US$0.5M" },
-              { ask: "1m", amt: "US$1M" },
-              { ask: "2m", amt: "US$2M" },
-              { ask: "3m", amt: "US$3M" },
-              { ask: "client", amt: "Client deck" },
-              { ask: "m1", amt: "M1 Setup" },
-            ].map((d) => (
+              { ask: "0.5m", amt: "US$0.5M", note: "Seed round · 15 slides" },
+              { ask: "1m", amt: "US$1M", note: "Seed round · 15 slides" },
+              { ask: "2m", amt: "US$2M", note: "Seed round · 15 slides" },
+              { ask: "3m", amt: "US$3M", note: "Seed round · 15 slides" },
+              { ask: "client", amt: "Client deck", note: "Internal · 8 slides" },
+              { ask: "m1", amt: "M1 Setup", note: "How Big Brain runs · web page" },
+              { ask: "about", amt: "About deck", note: "Company · founders · MiP · 3 slides" },
+            ].map((d, i) => (
               <div key={d.ask} className="rounded-xl bg-yai-navy text-white p-4 flex flex-col gap-3">
                 <div>
+                  <div className="text-xs font-bold text-white/45 tracking-widest">{i + 1}</div>
                   <div className="text-2xl font-extrabold text-[#FFD58A]">{d.amt}</div>
-                  <div className="text-xs text-white/60 mt-0.5">{d.ask === "m1" ? "How Big Brain runs · web page" : d.ask === "client" ? "Internal · 8 slides" : "Seed round · 15 slides"}</div>
+                  <div className="text-xs text-white/60 mt-0.5">{d.note}</div>
                 </div>
                 <div className="flex gap-2 mt-auto">
                   <a
