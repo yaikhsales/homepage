@@ -24,8 +24,11 @@ const DECKS: Record<string, { html: string; pdf: string }> = {
   client: { html: "pitch-deck-v4-client.html", pdf: "Price and Client.pdf" },
   // 6th document — "How Yai Big Brain runs": the M1 setup explanation page (web only, no PDF).
   m1: { html: "m1-setup.html", pdf: "" },
-  // 7th document — the About deck (company · founders · the Ai-Native MiP), 3 slides.
+  // 7th document — the About deck (company · founders · the Ai-Native MiP), 4 slides.
   about: { html: "about-deck.html", pdf: "Yai-About-Deck.pdf" },
+  // 8th document — the platform deck: the About page, the Ai-Native MiP and the
+  // AIoT sustainability platform, no founders. 3 slides.
+  platform: { html: "platform-deck.html", pdf: "Yai-Platform-Deck.pdf" },
 };
 
 export async function GET(request: Request) {

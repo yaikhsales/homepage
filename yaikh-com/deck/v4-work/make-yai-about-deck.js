@@ -67,7 +67,7 @@ const ABOUT = [
 ];
 
 let n = 0;
-const TOTAL = 4;
+const TOTAL = 3;
 function slide(kind, eyebrow, body, opts = {}) {
   n += 1;
   return `
@@ -118,36 +118,6 @@ S.push(slide("dark", "", `
   </div>
 </div>
 `, { cls: "aboutslide" }));
-
-/* 2 · FOUNDERS — Arnold | Gamini, one slide, two halves */
-S.push(slide("dark", "01 · The founders", `
-<div class="fx">
-  <div class="fx-half">
-    <img class="fx-photo" src="${uri(path.join(AB, "team", "arnold-big.png"))}" alt="Sin Lam Yeung — Arnold">
-    <div class="fx-name">Sin Lam Yeung — Arnold</div>
-    <div class="fx-role">Founder / Director</div>
-    <ul class="fx-list">
-      <li>Founder of Texlink Technologies and the Yai platform.</li>
-      <li>Degree in Engineering Management — Hong Kong National University.</li>
-      <li>Management consultant and engineer with 40 years of factory management across the region.</li>
-      <li>Route to the brand offices in Hong Kong through Yorkwell Asia.</li>
-    </ul>
-  </div>
-  <div class="fx-rule"></div>
-  <div class="fx-half">
-    <img class="fx-photo" src="${uri(path.join(AB, "team", "gamini-big.png"))}" alt="Gamini K">
-    <div class="fx-name">Gamini K</div>
-    <div class="fx-role">Director / CTO</div>
-    <ul class="fx-list">
-      <li>Director of technology · industrial engineering · CSR manager.</li>
-      <li>Master of Business Administration — Manipal University, India.</li>
-      <li>GSD licence holder.</li>
-      <li>30 years in the soft-goods industry.</li>
-      <li>Builds the platform with the 20-engineer team in Phnom Penh.</li>
-    </ul>
-  </div>
-</div>
-`, { cls: "foundersslide" }));
 
 /* 3 · Ai-NATIVE MiP — three rounds: blue, green, green */
 S.push(slide("dark", "", `
@@ -219,15 +189,11 @@ S.push(slide("dark", "", `
 
 /* 4 · COMPLIANCE & SUSTAINABILITY */
 S.push(slide("dark", "", `
-<div class="cs-title"><h2 class="mip-h">AIoT Sustainability Data Platform.</h2><p class="cs-kicker">Revolutionising the way compliance is done.</p></div>
+<div class="cs-title"><img class="cs-logo" src="${logo}" alt="Yai"><h2 class="mip-h">AIoT Sustainability Data Platform, <span class="cs-kicker">Revolutionising the way compliance is done.</span></h2></div>
 <div class="cs">
-  <div class="cs-col c1"><div class="cs-head">Legal</div>
+  <div class="cs-col c1"><div class="cs-head">Legal EMS</div>
     <div class="cs-body">
-      <svg class="cs-ico" viewBox="0 0 64 64" aria-hidden="true">
-        <path d="M14 6h24l12 12v40H14z"/><path d="M38 6v12h12"/>
-        <path d="M21 28h16M21 36h16M21 44h9"/>
-        <circle cx="45" cy="45" r="10" class="hot"/><path d="M52 52l8 8" class="hot"/>
-      </svg>
+      <img class="cs-photo" src="${uri(path.join(AB, "photo", "ems-dashboard.jpg"))}" alt="EMS dashboard in the Yai app">
       <p class="cs-text">Ai reviews every legal document and its supporting papers, and raises the non-compliance issues it finds.</p>
     </div></div>
   <div class="cs-col c2"><div class="cs-head">Energy</div>
@@ -238,6 +204,7 @@ S.push(slide("dark", "", `
   <div class="cs-col c3"><div class="cs-head">Waste</div>
     <div class="cs-body">
       <img class="cs-photo" src="${uri(path.join(AB, "photo", "wall-pad.jpg"))}" alt="Wall-mounted pad at the waste door">
+      <img class="cs-photo wide" src="${uri(path.join(AB, "photo", "waste-kpi.jpg"))}" alt="Waste totals in the Yai app">
       <p class="cs-text">The bag leaving the floor is logged on the pad mounted at the door — kilos and waste type, on the spot.</p>
     </div></div>
   <div class="cs-col c4"><div class="cs-head">Water</div>
@@ -351,6 +318,7 @@ h2{margin:0 0 10px;font-size:44px;line-height:1.12;color:var(--navy)}
 .cs-ico .lbl{fill:rgba(255,255,255,.9);stroke:none;font:700 13px Arial,Helvetica,sans-serif;text-anchor:middle}
 .cs-photo{width:100%;height:auto;object-fit:contain;background:#fff;border-radius:8px;padding:4px}
 .cs-photo.sm{width:auto;max-width:100%;max-height:86px;margin-top:6px}
+.cs-photo.wide{margin-top:8px;padding:2px}
 .cs-duo{display:flex;flex-direction:column;align-items:center;gap:4px;margin-bottom:10px}
 .cs-tag{margin-top:4px}
 .cs-ico.sm{width:46px;height:46px}
@@ -359,9 +327,10 @@ h2{margin:0 0 10px;font-size:44px;line-height:1.12;color:var(--navy)}
 .cs-list{margin:0;padding:14px 12px;list-style:none;flex:1}
 .cs-list li{position:relative;padding-left:16px;margin-bottom:10px;font-size:17px;line-height:1.35;color:#E6ECFA}
 .cs-list li::before{content:"";position:absolute;left:0;top:8px;width:7px;height:7px;border-radius:50%;background:var(--gold)}
-.cs-title{display:flex;align-items:baseline;justify-content:space-between;gap:24px;margin-bottom:10px}
-.cs-title .mip-h{margin:0}
-.cs-kicker{margin:0;font-size:25px;font-weight:800;color:var(--gold);white-space:nowrap}
+.cs-title{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:10px}
+.cs-logo{width:50px;height:50px;border-radius:50%;object-fit:cover}
+.cs-title .mip-h{margin:0;font-size:26px;white-space:nowrap}
+.cs-kicker{color:var(--gold)}
 /* ── slide 3 · Ai-Native MiP ───────────────────────────────────── */
 .mip-h{margin:0 0 6px;font-size:30px;line-height:1.15;color:#fff}
 .mip{position:relative;width:671px;height:582px;margin:0 auto}
