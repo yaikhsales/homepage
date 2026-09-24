@@ -940,7 +940,7 @@ export default async function PlanPage() {
               { ask: "3m", amt: "US$3M", note: "Seed round · 15 slides" },
               { ask: "client", amt: "Client deck", note: "Internal · 8 slides" },
               { ask: "m1", amt: "M1 Setup", note: "How Big Brain runs · web page" },
-              { ask: "about", amt: "About deck", note: "Company · founders · MiP · 3 slides" },
+              { ask: "about", amt: "About deck", note: "Company · founders · MiP · AIoT data · 4 slides" },
             ].map((d, i) => (
               <div key={d.ask} className="rounded-xl bg-yai-navy text-white p-4 flex flex-col gap-3">
                 <div>

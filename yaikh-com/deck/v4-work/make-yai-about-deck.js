@@ -67,7 +67,7 @@ const ABOUT = [
 ];
 
 let n = 0;
-const TOTAL = 3;
+const TOTAL = 4;
 function slide(kind, eyebrow, body, opts = {}) {
   n += 1;
   return `
@@ -217,6 +217,55 @@ S.push(slide("dark", "", `
 </div>
 `, { cls: "mipslide" }));
 
+/* 4 · COMPLIANCE & SUSTAINABILITY */
+S.push(slide("dark", "", `
+<div class="cs-title"><h2 class="mip-h">AIoT Sustainability Data Platform.</h2><p class="cs-kicker">Revolutionising the way compliance is done.</p></div>
+<div class="cs">
+  <div class="cs-col c1"><div class="cs-head">Legal</div>
+    <div class="cs-body">
+      <svg class="cs-ico" viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M14 6h24l12 12v40H14z"/><path d="M38 6v12h12"/>
+        <path d="M21 28h16M21 36h16M21 44h9"/>
+        <circle cx="45" cy="45" r="10" class="hot"/><path d="M52 52l8 8" class="hot"/>
+      </svg>
+      <p class="cs-text">Ai reviews every legal document and its supporting papers, and raises the non-compliance issues it finds.</p>
+    </div></div>
+  <div class="cs-col c2"><div class="cs-head">Energy</div>
+    <div class="cs-body">
+      <img class="cs-photo" src="${uri(path.join(AB, "photo", "energy-meter.jpg"))}" alt="AIoT energy meter">
+      <p class="cs-text">Monitoring and reporting energy use from every source — down to the device that draws it.</p>
+    </div></div>
+  <div class="cs-col c3"><div class="cs-head">Waste</div>
+    <div class="cs-body">
+      <img class="cs-photo" src="${uri(path.join(AB, "photo", "wall-pad.jpg"))}" alt="Wall-mounted pad at the waste door">
+      <p class="cs-text">The bag leaving the floor is logged on the pad mounted at the door — kilos and waste type, on the spot.</p>
+    </div></div>
+  <div class="cs-col c4"><div class="cs-head">Water</div>
+    <div class="cs-body">
+      <img class="cs-photo" src="${uri(path.join(AB, "photo", "water-meter.jpg"))}" alt="AIoT water meter">
+      <p class="cs-text">AIoT water meters read the government supply coming in and what every department draws from it.</p>
+    </div></div>
+  <div class="cs-col c5"><div class="cs-head">Waste Water</div>
+    <div class="cs-body">
+      <img class="cs-photo" src="${uri(path.join(AB, "photo", "water-ions.jpg"))}" alt="Waste-water quality sensors">
+      <span class="cs-tag">Substance sensors</span>
+      <img class="cs-photo sm" src="${uri(path.join(AB, "photo", "water-meter.jpg"))}" alt="Waste-water flow meter">
+      <span class="cs-tag">Flow meter</span>
+      <p class="cs-text">Sensors read the quality of the waste water; the meter reads how much of it leaves.</p>
+    </div></div>
+  <div class="cs-col c6"><div class="cs-head">Air Emission</div>
+    <div class="cs-body">
+      <img class="cs-photo" src="${uri(path.join(AB, "photo", "air-sensor.jpg"))}" alt="Air quality sensor">
+      <p class="cs-text">Sensors watch humidity, temperature and the gas types in the air, and report them as they change.</p>
+    </div></div>
+  <div class="cs-col c7"><div class="cs-head">Chemical</div>
+    <div class="cs-body">
+      <img class="cs-photo" src="${uri(path.join(AB, "photo", "chem-inventory.jpg"))}" alt="Chemical inventory in the Yai app">
+      <p class="cs-text">Eco passports on file for every chemical, and stock controlled from the mobile app — issued, on hand, audit trail.</p>
+    </div></div>
+</div>
+`, { cls: "csslide" }));
+
 const html = `<!doctype html>
 <meta charset="utf-8"><title>Yai About Deck</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -285,8 +334,36 @@ h2{margin:0 0 10px;font-size:44px;line-height:1.12;color:var(--navy)}
 .fx-list li{position:relative;padding-left:22px;margin-bottom:10px;font-size:20px;line-height:1.4;color:#E6ECFA}
 .fx-list li::before{content:"";position:absolute;left:0;top:9px;width:9px;height:9px;border-radius:50%;background:var(--orange)}
 
+/* ── slide 4 · Compliance & Sustainability ─────────────────────── */
+.cs{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-top:0;height:548px}
+.cs-col{display:flex;flex-direction:column;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);border-radius:12px;overflow:hidden}
+.cs-head{padding:14px 8px;text-align:center;font-size:19px;font-weight:800;line-height:1.15;color:#fff;background:var(--blue)}
+.cs-col.c2 .cs-head{background:#B45309}
+.cs-col.c3 .cs-head{background:#6D28D9}
+.cs-col.c4 .cs-head{background:#0E7490}
+.cs-col.c5 .cs-head{background:#115E59}
+.cs-col.c6 .cs-head{background:#475569}
+.cs-col.c7 .cs-head{background:var(--orange)}
+.cs-body{flex:1;display:flex;flex-direction:column;align-items:center;padding:12px 9px;text-align:center}
+.cs-ico{width:56px;height:56px;flex:0 0 auto;fill:none;stroke:rgba(255,255,255,.85);stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
+.cs-ico .hot{stroke:var(--orange)}
+.cs-ico.wide{width:72px;height:60px}
+.cs-ico .lbl{fill:rgba(255,255,255,.9);stroke:none;font:700 13px Arial,Helvetica,sans-serif;text-anchor:middle}
+.cs-photo{width:100%;height:auto;object-fit:contain;background:#fff;border-radius:8px;padding:4px}
+.cs-photo.sm{width:auto;max-width:100%;max-height:86px;margin-top:6px}
+.cs-duo{display:flex;flex-direction:column;align-items:center;gap:4px;margin-bottom:10px}
+.cs-tag{margin-top:4px}
+.cs-ico.sm{width:46px;height:46px}
+.cs-tag{font-size:14px;font-weight:700;color:var(--gold)}
+.cs-text{margin:12px 0 0;font-size:17px;line-height:1.38;color:#E6ECFA}
+.cs-list{margin:0;padding:14px 12px;list-style:none;flex:1}
+.cs-list li{position:relative;padding-left:16px;margin-bottom:10px;font-size:17px;line-height:1.35;color:#E6ECFA}
+.cs-list li::before{content:"";position:absolute;left:0;top:8px;width:7px;height:7px;border-radius:50%;background:var(--gold)}
+.cs-title{display:flex;align-items:baseline;justify-content:space-between;gap:24px;margin-bottom:10px}
+.cs-title .mip-h{margin:0}
+.cs-kicker{margin:0;font-size:25px;font-weight:800;color:var(--gold);white-space:nowrap}
 /* ── slide 3 · Ai-Native MiP ───────────────────────────────────── */
-.mip-h{margin:0 0 10px;font-size:32px;line-height:1.15;color:#fff}
+.mip-h{margin:0 0 6px;font-size:30px;line-height:1.15;color:#fff}
 .mip{position:relative;width:671px;height:582px;margin:0 auto}
 .mip-round{position:absolute;border-radius:50%;border:3px solid rgba(255,255,255,.34)}
 .mip-round.blue{width:344px;height:344px;left:0;top:0;z-index:3;background:rgba(30,77,170,.66)}
