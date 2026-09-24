@@ -100,16 +100,18 @@ const CERTIFICATES = [
   { name: "QIP CDC",         image: "/assets/about-us/certificates/qip-cdc.png" },
 ];
 
+// Same set, same order as slide 1 of the About deck (deck/v4-work/make-yai-about-deck.js):
+// the two Ai vendors lead with their company mark beside the product mark.
 const TECHNOLOGIES = [
+  { name: "Anthropic Claude", logo: "https://cdn.simpleicons.org/claude",                        color: false, pre: "/assets/about-us/anthropic.svg" },
+  { name: "Google Gemini",    logo: "https://cdn.simpleicons.org/googlegemini?v=1",              color: false, pre: "/assets/about-us/google-g.svg" },
+  { name: "Nvidia",   logo: "https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/nvidia.svg",    color: true },
+  { name: "DeepSeek", logo: "/assets/about-us/deepseek.png",                                    color: false },
   { name: "Laravel",  logo: "https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/laravel.svg",    color: true },
   { name: "MongoDB",  logo: "https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/mongodb.svg",    color: true },
   { name: "React",    logo: "https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/react.svg",      color: true },
   { name: "Node.js",  logo: "https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/nodedotjs.svg",  color: true },
   { name: "Express",  logo: "https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/express.svg",    color: true },
-  { name: "Gemini",   logo: "https://cdn.simpleicons.org/googlegemini?v=1",                     color: false },
-  { name: "DeepSeek", logo: "/assets/about-us/deepseek.png",                                    color: false },
-  { name: "Claude",   logo: "https://cdn.simpleicons.org/claude",                               color: false },
-  { name: "Nvidia",   logo: "https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/nvidia.svg",    color: true },
   { name: "AMD",      logo: "https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/amd.svg",       color: true },
   { name: "GitHub",   logo: "https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/github.svg",    color: true },
 ];
@@ -259,12 +261,16 @@ export default function CustomersPage() {
                 <div className="grid grid-cols-4 md:grid-cols-6 gap-2">
                   {TECHNOLOGIES.map((t) => (
                     <div key={t.name} className="flex flex-col items-center justify-center">
-                      <div className="w-7 h-7 md:w-9 md:h-9 mb-1 flex items-center justify-center">
+                      <div className="h-7 md:h-9 mb-1 flex items-center justify-center gap-1">
+                        {t.pre && (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={t.pre} alt="" className="w-6 h-6 md:w-7 md:h-7 object-contain" />
+                        )}
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={t.logo}
                           alt={t.name}
-                          className="w-full h-full object-contain"
+                          className={`${t.pre ? "w-6 h-6 md:w-7 md:h-7" : "w-7 h-7 md:w-9 md:h-9"} object-contain`}
                           style={{ filter: t.color ? COLOR_FILTER : "none" }}
                           onError={(e) => {
                             (e.target as HTMLImageElement).style.filter = "none";

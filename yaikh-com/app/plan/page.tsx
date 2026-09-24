@@ -944,7 +944,7 @@ export default async function PlanPage() {
             ].map((d, i) => (
               <div key={d.ask} className="rounded-xl bg-yai-navy text-white p-4 flex flex-col gap-3">
                 <div>
-                  <div className="text-xs font-bold text-white/45 tracking-widest">{i + 1}</div>
+                  <div className="mb-2 w-7 h-7 rounded-full bg-yai-orange text-white text-sm font-extrabold flex items-center justify-center">{i + 1}</div>
                   <div className="text-2xl font-extrabold text-[#FFD58A]">{d.amt}</div>
                   <div className="text-xs text-white/60 mt-0.5">{d.note}</div>
                 </div>
