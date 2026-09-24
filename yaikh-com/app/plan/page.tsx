@@ -932,7 +932,7 @@ export default async function PlanPage() {
             <h3 className="font-bold text-yai-navy text-xl">A4. Pitch Deck · four raise sizes</h3>
             <p className="text-sm text-gray-600 mt-1">15 slides each — the same deck, sized for US$0.5M, US$1M, US$2M or US$3M — plus the client deck, the M1 setup page and the About deck. Call them by number: 1 to 7.</p>
           </div>
-          <div className="no-print grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
+          <div className="no-print grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {[
               { ask: "0.5m", amt: "US$0.5M", note: "Seed round · 15 slides" },
               { ask: "1m", amt: "US$1M", note: "Seed round · 15 slides" },
@@ -944,9 +944,11 @@ export default async function PlanPage() {
             ].map((d, i) => (
               <div key={d.ask} className="rounded-xl bg-yai-navy text-white p-4 flex flex-col gap-3">
                 <div>
-                  <div className="mb-2 w-7 h-7 rounded-full bg-yai-orange text-white text-sm font-extrabold flex items-center justify-center">{i + 1}</div>
-                  <div className="text-2xl font-extrabold text-[#FFD58A]">{d.amt}</div>
-                  <div className="text-xs text-white/60 mt-0.5">{d.note}</div>
+                  <div className="flex items-center gap-2">
+                    <span className="shrink-0 w-7 h-7 rounded-full bg-yai-orange text-white text-sm font-extrabold flex items-center justify-center">{i + 1}</span>
+                    <span className="text-xl font-extrabold text-[#FFD58A] leading-tight">{d.amt}</span>
+                  </div>
+                  <div className="text-xs text-white/60 mt-1">{d.note}</div>
                 </div>
                 <div className="flex gap-2 mt-auto">
                   <a
