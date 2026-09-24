@@ -401,7 +401,7 @@ h2{margin:0 0 10px;font-size:44px;line-height:1.12;color:var(--navy)}
 .mip-round:nth-of-type(3) .mip-sat{width:104px;height:104px;font-size:14px}
 .mip-num{font-size:25px;font-weight:900;color:rgba(255,255,255,.75)}
 .mip-sat{position:absolute;width:108px;height:108px;border-radius:50%;z-index:6;display:flex;align-items:center;justify-content:center;text-align:center;
-  padding:6px;font-size:16px;font-weight:700;line-height:1.18;color:#fff;background:rgba(255,255,255,.17);border:2px solid rgba(255,255,255,.5);text-shadow:0 2px 8px rgba(5,12,30,.6)}
+  padding:6px;font-size:16px;font-weight:700;line-height:1.18;color:#fff;background:rgba(255,255,255,.17);border:2px solid rgba(255,255,255,.5)}
 .mip-sat.sm{font-size:14px}
 /* five modules on a ring inside the 344px round */
 .mip-sat.s1{left:63px;top:65px}
