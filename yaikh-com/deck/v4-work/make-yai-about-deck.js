@@ -12,7 +12,7 @@ const path = require("path");
 
 const LITE = path.join(__dirname, "img-lite");
 const AB = path.join(__dirname, "img-about");
-const OUT = path.join(__dirname, "yai-deck-v4-about.html");
+const OUT = path.join(__dirname, process.env.FOUNDERS === "1" ? "yai-deck-v4-about-4.html" : "yai-deck-v4-about.html");
 
 let bytes = 0;
 function uri(p) {
@@ -66,8 +66,9 @@ const ABOUT = [
   ["中文", "Yaikh 是一个专门为服装、鞋类、箱包和软质品制造业设计的生产解决方案平台。该平台归属在柬埔寨注册的 Texlink Technologies 公司所有，并支持 Windows、iOS和Android 操作系统", 0],
 ];
 
+const WITH_FOUNDERS = process.env.FOUNDERS === "1";
 let n = 0;
-const TOTAL = 3;
+const TOTAL = WITH_FOUNDERS ? 4 : 3;
 function slide(kind, eyebrow, body, opts = {}) {
   n += 1;
   return `
@@ -118,6 +119,40 @@ S.push(slide("dark", "", `
   </div>
 </div>
 `, { cls: "aboutslide" }));
+
+/* The founders slide only goes in the About deck (document 7); the
+   Platform deck (document 8) leaves it out. FOUNDERS=1 builds it. */
+if (WITH_FOUNDERS) {
+/* 2 · FOUNDERS — Arnold | Gamini, one slide, two halves */
+S.push(slide("dark", "01 · The founders", `
+<div class="fx">
+  <div class="fx-half">
+    <img class="fx-photo" src="${uri(path.join(AB, "team", "arnold-big.png"))}" alt="Sin Lam Yeung — Arnold">
+    <div class="fx-name">Sin Lam Yeung — Arnold</div>
+    <div class="fx-role">Founder / Director</div>
+    <ul class="fx-list">
+      <li>Founder of Texlink Technologies and the Yai platform.</li>
+      <li>Degree in Engineering Management — Hong Kong National University.</li>
+      <li>Management consultant and engineer with 40 years of factory management across the region.</li>
+      <li>Route to the brand offices in Hong Kong through Yorkwell Asia.</li>
+    </ul>
+  </div>
+  <div class="fx-rule"></div>
+  <div class="fx-half">
+    <img class="fx-photo" src="${uri(path.join(AB, "team", "gamini-big.png"))}" alt="Gamini K">
+    <div class="fx-name">Gamini K</div>
+    <div class="fx-role">Director / CTO</div>
+    <ul class="fx-list">
+      <li>Director of technology · industrial engineering · CSR manager.</li>
+      <li>Master of Business Administration — Manipal University, India.</li>
+      <li>GSD licence holder.</li>
+      <li>30 years in the soft-goods industry.</li>
+      <li>Builds the platform with the 20-engineer team in Phnom Penh.</li>
+    </ul>
+  </div>
+</div>
+`, { cls: "foundersslide" }));
+}
 
 /* 3 · Ai-NATIVE MiP — three rounds: blue, green, green */
 S.push(slide("dark", "", `
@@ -301,7 +336,7 @@ h2{margin:0 0 10px;font-size:44px;line-height:1.12;color:var(--navy)}
 .fx-list li::before{content:"";position:absolute;left:0;top:9px;width:9px;height:9px;border-radius:50%;background:var(--orange)}
 
 /* ── slide 4 · Compliance & Sustainability ─────────────────────── */
-.cs{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-top:0;height:548px}
+.cs{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-top:0;align-items:stretch}
 .cs-col{display:flex;flex-direction:column;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);border-radius:12px;overflow:hidden}
 .cs-head{padding:14px 8px;text-align:center;font-size:19px;font-weight:800;line-height:1.15;color:#fff;background:var(--blue)}
 .cs-col.c2 .cs-head{background:#B45309}
@@ -310,19 +345,19 @@ h2{margin:0 0 10px;font-size:44px;line-height:1.12;color:var(--navy)}
 .cs-col.c5 .cs-head{background:#115E59}
 .cs-col.c6 .cs-head{background:#475569}
 .cs-col.c7 .cs-head{background:var(--orange)}
-.cs-body{flex:1;display:flex;flex-direction:column;align-items:center;padding:12px 9px;text-align:center}
+.cs-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 9px;text-align:center}
 .cs-ico{width:56px;height:56px;flex:0 0 auto;fill:none;stroke:rgba(255,255,255,.85);stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
 .cs-ico .hot{stroke:var(--orange)}
 .cs-ico.wide{width:72px;height:60px}
 .cs-ico .lbl{fill:rgba(255,255,255,.9);stroke:none;font:700 13px Arial,Helvetica,sans-serif;text-anchor:middle}
-.cs-photo{width:100%;height:auto;object-fit:contain;background:#fff;border-radius:8px;padding:4px}
-.cs-photo.sm{width:auto;max-width:100%;max-height:86px;margin-top:6px}
-.cs-photo.wide{margin-top:8px;padding:2px}
+.cs-photo{width:100%;height:128px;object-fit:contain;background:#fff;border-radius:8px;padding:5px}
+.cs-photo.sm{width:100%;height:96px;margin-top:6px}
+.cs-photo.wide{height:42px;margin-top:8px;padding:2px}
 .cs-duo{display:flex;flex-direction:column;align-items:center;gap:4px;margin-bottom:10px}
 .cs-tag{margin-top:4px}
 .cs-ico.sm{width:46px;height:46px}
 .cs-tag{font-size:14px;font-weight:700;color:var(--gold)}
-.cs-text{margin:12px 0 0;font-size:17px;line-height:1.38;color:#E6ECFA}
+.cs-text{margin:12px 0 0;font-size:19px;line-height:1.4;color:#E6ECFA}
 .cs-list{margin:0;padding:14px 12px;list-style:none;flex:1}
 .cs-list li{position:relative;padding-left:16px;margin-bottom:10px;font-size:17px;line-height:1.35;color:#E6ECFA}
 .cs-list li::before{content:"";position:absolute;left:0;top:8px;width:7px;height:7px;border-radius:50%;background:var(--gold)}
