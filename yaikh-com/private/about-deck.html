@@ -6,7 +6,7 @@
 *{box-sizing:border-box}
 body{margin:0;background:#0b1020;font-family:Arial,Helvetica,sans-serif;color:var(--ink)}
 @page{size:1280px 720px;margin:0}
-@media print{body{background:#fff}.deck{padding:0}.slide{margin:0;border-radius:0;box-shadow:none;break-after:page}}
+
 .deck{padding:1px 0}
 .slide{position:relative;width:1280px;height:720px;margin:24px auto;padding:34px 44px 60px;border-radius:14px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.35)}
 .slide.dark{background:var(--navy);color:#fff}
@@ -149,6 +149,7 @@ h2{margin:0 0 10px;font-size:44px;line-height:1.12;color:var(--navy)}
 figure.t-yasomi img{object-position:50% 26%}
 .ab-team figcaption{font-size:9.5px;line-height:1.2;color:#E6ECFA;margin-top:3px}
 .ab-team figcaption span{display:block;color:var(--orange);font-weight:700}
+@media print{html,body{margin:0;background:#fff}.deck{padding:0}.slide{margin:0;border-radius:0;box-shadow:none;break-inside:avoid;break-after:page}.slide:last-of-type{break-after:auto}}
 </style>
 <div class="deck">
 <section class="slide dark aboutslide" id="s1">
