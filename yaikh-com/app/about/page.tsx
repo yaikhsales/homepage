@@ -3,7 +3,7 @@
 /* /customers — Ported from yaikh-dashboard/src/components/AboutUs.js.
  *
  * The "Customers" nav link on the homepage opens this page. It introduces
- * TexLink Technologies (the company behind Yaikh) in Khmer + English +
+ * Texlink Technologies (the company behind Yaikh) in Khmer + English +
  * Chinese, shows our certificates, regional flags, tech stack, and the
  * full team grid.
  *
@@ -32,17 +32,17 @@ const ABOUT_CONTENT = [
   {
     language: "ខ្មែរ",
     isKhmer: true,
-    text: "Yaikh គឺជាវេទិកាដំណោះស្រាយសម្រាប់ការផលិតដែលត្រូវបានរចនាជាពិសេសសម្រាប់ការផលិតសម្លៀកបំពាក់ ស្បែកជើង កាបូប និងផលិតផល ក្រណាត់ស្រាលទន់ៗ ផ្សេងៗ។ ជាកម្មសិទ្ធិរបស់ TexLink Technologies ដែលបានចុះបញ្ជីនៅកម្ពុជា វេទិកានេះដំណើរការលើប្រព័ន្ធ Windows, iOS, និង Android។",
+    text: "Yaikh គឺជាវេទិកាដំណោះស្រាយសម្រាប់ការផលិតដែលត្រូវបានរចនាជាពិសេសសម្រាប់ការផលិតសម្លៀកបំពាក់ ស្បែកជើង កាបូប និងផលិតផល ក្រណាត់ស្រាលទន់ៗ ផ្សេងៗ។ ជាកម្មសិទ្ធិរបស់ Texlink Technologies ដែលបានចុះបញ្ជីនៅកម្ពុជា វេទិកានេះដំណើរការលើប្រព័ន្ធ Windows, iOS, និង Android។",
   },
   {
     language: "English",
     isKhmer: false,
-    text: "Yaikh is a manufacturing solution platform specially designed for garment, footwear, bags, and softgoods manufacturing. Owned by TexLink Technologies registered in Cambodia, the platform operates on Windows, iOS, and Android platforms.",
+    text: "Yaikh is a manufacturing solution platform specially designed for garment, footwear, bags, and softgoods manufacturing. Owned by Texlink Technologies registered in Cambodia, the platform operates on Windows, iOS, and Android platforms.",
   },
   {
     language: "中文",
     isKhmer: false,
-    text: "Yaikh 是一个专门为服装、鞋类、箱包和软质品制造业设计的生产解决方案平台。该平台归属在柬埔寨注册的 TexLink Technologies 公司所有，并支持 Windows、iOS和Android 操作系统",
+    text: "Yaikh 是一个专门为服装、鞋类、箱包和软质品制造业设计的生产解决方案平台。该平台归属在柬埔寨注册的 Texlink Technologies 公司所有，并支持 Windows、iOS和Android 操作系统",
   },
 ];
 
@@ -56,7 +56,6 @@ const TEAM: TeamMember[] = [
   { name: "Samipath Yasomi",    image: "/assets/about-us/teams/yasomi.png" },
   { name: "Pich Daly",          image: "/assets/about-us/teams/daly.png", linkedin: "https://www.linkedin.com/in/daly-pich-6ba6ab40b/" },
   { name: "Chhim Seangleng",    image: "/assets/about-us/teams/seangleng.jpg" },
-  { name: "Koem Chichhong",     image: "/assets/about-us/teams/chhorng.jpg" },
   { name: "Yeom Chetra",        image: "/assets/about-us/teams/Yeom-Chetra.jpeg" },
   { name: "Sin Khun",           image: "/assets/about-us/teams/Sin-Khun.jpeg" },
   { name: "Proeurng Sokhim",    image: "/assets/about-us/teams/Proeurng-Sokhim.png" },
@@ -145,7 +144,7 @@ export default function CustomersPage() {
                   </div>
                 </div>
                 <div className="text-[12px] md:text-[13px] leading-relaxed space-y-1 border-t border-white/15 pt-3">
-                  <div className="font-semibold">TexLink Technologies Co., Ltd.</div>
+                  <div className="font-semibold">Texlink Technologies Co., Ltd.</div>
                   <div className="text-white/85">
                     <span className="opacity-70">Reg.</span> 1000542518
                     <span className="opacity-50 mx-1.5">·</span>
