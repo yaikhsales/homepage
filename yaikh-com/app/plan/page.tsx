@@ -942,7 +942,7 @@ export default async function PlanPage() {
               { ask: "client", amt: "Client deck", note: "Internal · 8 slides" },
               { ask: "m1", amt: "M1 Setup", note: "How Big Brain runs · web page" },
               { ask: "about", amt: "Founder information", note: "Company · founders · MiP · AIoT data · 4 slides" },
-              { ask: "platform", amt: "Platform deck", note: "Company · MiP · AIoT data · 3 slides" },
+              { ask: "platform", amt: "About AIoT to GTZ", note: "Company · MiP · AIoT data · 3 slides" },
             ].map((d, i) => (
               <div key={d.ask} className="rounded-xl bg-yai-navy text-white p-4 flex flex-col gap-3">
                 <div>
