@@ -931,7 +931,7 @@ export default async function PlanPage() {
           {/* A4 · Seed-round pitch decks — four raise sizes, served from /plan/pitch-deck?ask=… (session-gated, not /public) */}
           <div className="mb-3 mt-8">
             <h3 className="font-bold text-yai-navy text-xl">A4. Pitch Deck · four raise sizes</h3>
-            <p className="text-sm text-gray-600 mt-1">15 slides each — the same deck, sized for US$0.5M, US$1M, US$2M or US$3M — plus the client deck, the M1 setup page and the About deck. Call them by number: 1 to 8.</p>
+            <p className="text-sm text-gray-600 mt-1">15 slides each — the same deck, sized for US$0.5M, US$1M, US$2M or US$3M — plus the client deck, the M1 setup page and the founder information. Call them by number: 1 to 8.</p>
           </div>
           <div className="no-print grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {[
@@ -941,7 +941,7 @@ export default async function PlanPage() {
               { ask: "3m", amt: "US$3M", note: "Seed round · 15 slides" },
               { ask: "client", amt: "Client deck", note: "Internal · 8 slides" },
               { ask: "m1", amt: "M1 Setup", note: "How Big Brain runs · web page" },
-              { ask: "about", amt: "About deck", note: "Company · founders · MiP · AIoT data · 4 slides" },
+              { ask: "about", amt: "Founder information", note: "Company · founders · MiP · AIoT data · 4 slides" },
               { ask: "platform", amt: "Platform deck", note: "Company · MiP · AIoT data · 3 slides" },
             ].map((d, i) => (
               <div key={d.ask} className="rounded-xl bg-yai-navy text-white p-4 flex flex-col gap-3">
