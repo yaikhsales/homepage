@@ -12,24 +12,11 @@ import { cookies } from "next/headers";
 import { readFile } from "fs/promises";
 import path from "path";
 import { verifySession } from "@/lib/auth";
+import { DECKS } from "@/lib/decks";
 
 export const dynamic = "force-dynamic";
 
-const DECKS: Record<string, { html: string; pdf: string }> = {
-  "0.5m": { html: "pitch-deck-v4-0.5m.html", pdf: "Yai-Pitch-Deck-v4-0.5M.pdf" },
-  "1m": { html: "pitch-deck-v4-1m.html", pdf: "Yai-Pitch-Deck-v4-1M.pdf" },
-  "2m": { html: "pitch-deck-v4-2m.html", pdf: "Yai-Pitch-Deck-v4-2M.pdf" },
-  "3m": { html: "pitch-deck-v4.html", pdf: "Yai-Pitch-Deck-v4-3M.pdf" },
-  // 5th deck — internal, for Arnold's client conversations (4 slides).
-  client: { html: "pitch-deck-v4-client.html", pdf: "Price and Client.pdf" },
-  // 6th document — "How Yai Big Brain runs": the M1 setup explanation page (web only, no PDF).
-  m1: { html: "m1-setup.html", pdf: "" },
-  // 7th document — the About deck (company · founders · the Ai-Native MiP), 4 slides.
-  about: { html: "about-deck.html", pdf: "Yai-About-Deck.pdf" },
-  // 8th document — the platform deck: the About page, the Ai-Native MiP and the
-  // AIoT sustainability platform, no founders. 3 slides.
-  platform: { html: "platform-deck.html", pdf: "Yai-Platform-Deck.pdf" },
-};
+// The deck list lives in lib/decks.ts — shared with the .pdf route.
 
 export async function GET(request: Request) {
   const viewer = verifySession(cookies().get("yai_session")?.value);

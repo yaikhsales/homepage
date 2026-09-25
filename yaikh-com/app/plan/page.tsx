@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { pdfHref } from "@/lib/decks";
 import { redirect } from "next/navigation";
 import { verifySession } from "@/lib/auth";
 import { readSalaryStore } from "@/lib/salary-store";
@@ -961,7 +962,7 @@ export default async function PlanPage() {
                     Open ↗
                   </a>
                   {d.ask !== "m1" && <a
-                    href={`/plan/pitch-deck?ask=${d.ask}&pdf=1`}
+                    href={pdfHref(d.ask)}
                     target="_blank"
                     rel="noopener"
                     className="flex-1 text-center rounded-full border border-white/30 text-white text-xs font-bold px-3 py-1.5 hover:bg-white/10"
