@@ -90,6 +90,7 @@ S.push(slide("dark", "", `
       <img class="ab-logo" src="${logo}" alt="Yai">
       <div>
         <div class="ab-name">YaiKh</div>
+        <div class="ab-company">Texlink Technologies Co., Ltd.</div>
       </div>
     </div>
     <div class="ab-meta">Reg. 1000542518 · 03 Oct 2025</div>
@@ -106,7 +107,6 @@ S.push(slide("dark", "", `
       <figure><img src="${flag.sg}" alt=""><figcaption>Singapore</figcaption></figure>
     </div>
     <div class="ab-company-kh">តិចលីង តិចណូឡូជី ឯ.ក</div>
-    <div class="ab-company">Texlink Technologies Co., Ltd.</div>
     ${ABOUT.map(([lang, text, isKh]) => `<div class="ab-lang"><div class="ab-langname${isKh ? " kh" : ""}">${esc(lang)}</div><p class="ab-text${isKh ? " kh" : ""}">${esc(text)}</p></div>`).join("")}
     <div class="ab-techhead">Technologies</div>
     <div class="ab-tech">${TECH.map(([label, file, mono, pre]) => `<figure>${pre ? `<span class="twin"><img src="${uri(path.join(AB, "tech", pre))}" alt=""><img src="${uri(path.join(AB, "tech", file))}" alt=""></span>` : `<img class="${mono ? "mono" : ""}" src="${uri(path.join(AB, "tech", file))}" alt="${esc(label)}">`}<figcaption>${esc(label)}</figcaption></figure>`).join("")}</div>
@@ -311,7 +311,7 @@ h2{margin:0 0 10px;font-size:44px;line-height:1.12;color:var(--navy)}
 .ab-flags img{height:42px;border-radius:3px;display:block}
 .ab-flags figcaption{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#B8C4E6;margin-top:4px}
 .ab-company-kh{margin-top:12px;font-size:38px;font-weight:700;color:#fff;line-height:1.35}
-.ab-company{margin-top:2px;font-size:28px;font-weight:800;color:#fff;letter-spacing:-.01em}
+.ab-company{margin-top:2px;font-size:20px;font-weight:800;color:#fff;letter-spacing:-.01em}
 .ab-lang{margin-top:8px;max-width:640px}
 .ab-langname{font-size:19px;font-weight:800;color:#fff}
 .ab-langname.kh{color:var(--gold)}
