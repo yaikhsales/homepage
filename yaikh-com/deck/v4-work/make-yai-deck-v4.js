@@ -724,7 +724,7 @@ ${homeBody}
     const stops = [
       ["2024 – 2025", "Pre-revenue development", "Yai platform built · 70+ apps · 14 Ai agents"],
       ["Oct 2025", "Texlink incorporated", "takes over the 21-factory implementation with Yorkwell group"],
-      ["Feb 2026", "21-factory implementation", "officially started · data subscriptions"],
+      ["Feb 2026", "21-factory implementation", "officially started · subscriptions issued"],
       ["Aug – Oct 2026", "First paid factories", "BICNZ · 3SGS · ES Packing · TAFTAC expo, 11 prospects"],
       ["Dec 2026", "25 paying factories", "Layer 3 live at 5 · US$100,000 SIPP"],
       ["2027", "ASEAN", "Vietnam · Thailand · Malaysia · 100 factories · 100,000 users"],
