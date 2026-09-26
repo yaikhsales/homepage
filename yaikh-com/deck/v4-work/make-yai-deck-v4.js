@@ -97,7 +97,8 @@ const part = (n) => uri(path.join(IMG, `partner-${n}.png`));
 const ag = (n) => uri(path.join(AG, `${n}.png`));
 const arch = (n) => uri(path.join(IMG, `arch-${n}.png`));
 
-const cats = ["garments", "bags", "footwear", "toys", "furniture", "carseats", "homeware"].map((n) => ({ n, d: uri(path.join(LITE, "cat3d", `${n}.png`)) }));
+// Real product photos (square, 320px) in img-lite/cats/ — drop a new <name>.jpg there to swap one.
+const cats = ["garments", "bags", "footwear", "toys", "furniture", "carseats", "homeware"].map((n) => ({ n, d: uri(path.join(LITE, "cats", `${n}.jpg`)) }));
 const customers = [
   { n: "Yorkwell Asia", d: part("yorkwell"), what: "21 factories in transformation", bold: "All 14 agents in play", noName: true },
   { n: "3SGS", d: cust("3sgs"), what: "Compliance and ESG AIoT data", bold: "Revolutionising the way compliance audits are done" },
@@ -169,8 +170,10 @@ S.push(slide("dark", "", `
     <p class="tagline">70+ multi-platform apps · 14 Ai agents · AIoT. One system — simple enough to run your factory from your phone.</p>
   </div>
   <div class="title-flags">
-    <div class="flagrow"><img src="${flag.hk}"><img src="${flag.kh}"><img src="${flag.sg}"><img class="asean" src="${asean}"></div>
-    <div class="flagcap">MADE IN CAMBODIA · ASEAN</div>
+    <div class="flaggroups">
+      <div class="flaggroup"><div class="flagrow"><img src="${flag.hk}"><img src="${flag.kh}"><img src="${flag.sg}"></div><div class="flagcap">MADE IN CAMBODIA</div></div>
+      <div class="flaggroup"><div class="flagrow"><img class="asean" src="${asean}"></div><div class="flagcap">ASEAN</div></div>
+    </div>
   </div>
 </div>
 <div class="catrow">${cats.map((c) => `<figure><img src="${c.d}" alt=""><figcaption>${c.n === "carseats" ? "car seats" : c.n}</figcaption></figure>`).join("")}</div>
@@ -605,15 +608,15 @@ td{padding:12px;border-bottom:1px solid rgba(255,255,255,.12);vertical-align:top
 .ms-head{font-size:18px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:4px 0 8px}
 .milestones ol{margin:0 0 14px 18px;padding:0;line-height:1.6}.milestones p{margin:0;line-height:1.5;color:#D6DEF5}
 /* title */
-.title-wrap{display:grid;grid-template-columns:auto 1fr;gap:34px;align-items:center;margin-top:118px}
+.title-wrap{display:grid;grid-template-columns:auto 1fr;gap:34px;align-items:center;margin-top:70px}
 .title-logo{width:200px;height:200px;border-radius:50%;object-fit:cover}
 .title-text h1{margin:0;font-size:46px;white-space:nowrap;line-height:1.1;color:#fff}
 .tagline{margin:18px 0 0;font-size:30px;line-height:1.3;color:var(--gold);font-style:italic}
 .title-flags{position:absolute;top:34px;right:64px;display:flex;flex-direction:column;align-items:center}.flagrow{display:flex;gap:14px;align-items:center;justify-content:center}.flagrow img{height:46px;border-radius:4px}.flagrow .asean{height:60px;border-radius:0}
-.flagcap{margin-top:10px;font-size:17px;font-weight:700;letter-spacing:.12em;margin-right:-.12em;color:var(--gold);white-space:nowrap;text-align:center}
-.catrow{display:flex;justify-content:space-between;margin-top:56px}
-.catrow figure{margin:0;text-align:center;width:150px}.catrow img{width:96px;height:96px}.catrow figcaption{margin-top:8px;font-size:21px;font-weight:700;color:#fff;text-transform:capitalize}
-.bigurl{text-align:center;font-size:64px;font-weight:800;letter-spacing:.14em;color:var(--gold);margin-top:48px}
+.flaggroups{display:flex;gap:26px;align-items:flex-end}.flaggroup{display:flex;flex-direction:column;align-items:center}.flagcap{margin-top:10px;font-size:17px;font-weight:700;letter-spacing:.12em;margin-right:-.12em;color:var(--gold);white-space:nowrap;text-align:center}
+.catrow{display:flex;justify-content:space-between;margin:36px -24px 0}
+.catrow figure{margin:0;text-align:center;width:170px}.catrow img{width:168px;height:168px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,.18);box-shadow:0 6px 18px rgba(0,0,0,.35)}.catrow figcaption{margin-top:8px;font-size:21px;font-weight:700;color:#fff;text-transform:capitalize}
+.bigurl{text-align:center;font-size:64px;font-weight:800;letter-spacing:.14em;color:var(--gold);margin-top:22px}
 .title-foot{position:absolute;left:64px;right:64px;bottom:26px;font-size:17px;color:#8FA8D8}
 /* close */
 .close{text-align:center;margin-top:0}.close-logo{width:110px;height:110px;border-radius:50%;object-fit:cover}
