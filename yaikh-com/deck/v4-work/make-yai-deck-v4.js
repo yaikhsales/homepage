@@ -723,11 +723,19 @@ ${homeBody}
     // Business plan — roadmap: 4 milestones on the road, key takeaways in between
     // Business plan — neural / circuit map
     const nodes = {
-      T1: { x: 70,  y: 470, kind: "take", side: "below", dx: 60,  dy: 0,  y2: "2024 – 25", d: "Pre-revenue development · 70+ apps · 14 Ai agents" },
+      T1: { x: 70,  y: 470, kind: "take", side: "below", dx: 150, dy: -8, y2: "2024 – 25", d: "pre-revenue development" },
+      S5: { x: 60,  y: 545, kind: "sub", side: "below", dx: 10, dy: 0, d: "70+ apps" },
+      S6: { x: 150, y: 545, kind: "sub", side: "below", dx: 0, dy: 0, d: "14 Ai agents" },
       M1: { x: 180, y: 400, kind: "mile", side: "above", dx: 0,   dy: 0,  y2: "2025", t: "Incorporation", d: "Texlink Technologies · Oct 2025" },
-      T2: { x: 320, y: 330, kind: "take", side: "below", dx: 40,  dy: 0,  y2: "Feb 2026", d: "21-factory implementation with Yorkwell · subscriptions issued" },
+      T2: { x: 320, y: 330, kind: "take", side: "below", dx: 140, dy: -8, y2: "Feb 2026", d: "" },
+      S7: { x: 290, y: 425, kind: "sub", side: "below", dx: 0, dy: 0, d: "21-factory implementation with Yorkwell" },
+      S8: { x: 400, y: 425, kind: "sub", side: "below", dx: 0, dy: 0, d: "Subscriptions issued" },
       M2: { x: 460, y: 250, kind: "mile", side: "above", dx: 0,   dy: 0,  y2: "2026", t: "First 25 factories & clients", d: "10,000 app users" },
-      T3: { x: 610, y: 250, kind: "take", side: "below", dx: 0,   dy: 0,  y2: "Aug – Oct 2026", d: "First 3 paying clients: BICNZ · 3SGS · ES Packing · first public expos and events" },
+      T3: { x: 610, y: 250, kind: "take", side: "below", dx: -100, dy: -8, y2: "Aug – Oct 2026", d: "first 3 paying clients · first public expos & events" },
+      S1: { x: 520, y: 345, kind: "sub", side: "below", dx: 0, dy: 0, d: "BICNZ" },
+      S2: { x: 580, y: 345, kind: "sub", side: "below", dx: 0, dy: 0, d: "3SGS" },
+      S3: { x: 640, y: 345, kind: "sub", side: "below", dx: 0, dy: 0, d: "ES Packing" },
+      S4: { x: 715, y: 345, kind: "sub", side: "below", dx: 0, dy: 0, d: "Public expos & events" },
       M3: { x: 760, y: 250, kind: "mile", side: "above", dx: 0,   dy: 0,  y2: "2027", t: "100 factories & clients", d: "1,000,000 app users" },
       T4: { x: 880, y: 250, kind: "take", side: "below", dx: 0,   dy: 0,  y2: "2027", d: "ASEAN: Vietnam · Thailand · Malaysia" },
       J:  { x: 960, y: 250, kind: "junction" },
@@ -743,6 +751,9 @@ ${homeBody}
       "M610 250 H760",                  // T3 → M3
       "M760 250 H880",                  // M3 → T4
       "M880 250 H960",                  // T4 → J
+      "M610 250 V305", "M520 305 H715", "M520 305 V345", "M580 305 V345", "M640 305 V345", "M715 305 V345",   // T3 sub-branch
+      "M70 470 V505", "M60 505 H150", "M60 505 V545", "M150 505 V545",   // T1 sub-branch
+      "M320 330 V385", "M290 385 H400", "M290 385 V425", "M400 385 V425",   // T2 sub-branch
       "M960 250 L1010 200 V150 L1050 110 H1080",   // J → M4
       "M960 250 L1010 300 V350 L1050 390 H1080",   // J → M5
     ];
@@ -780,10 +791,11 @@ ${homeBody}
     }
     const el = document.createElement("div"); el.className = "road-lab " + m.kind + " " + m.side;
     el.style.left = ((m.x + m.dx) / 1160 * 100) + "%"; el.style.top = ((m.y + m.dy) / 590 * 100) + "%";
-    el.innerHTML = m.kind === "mile" ? "<small>" + m.y2 + "</small><b>" + m.t + "</b>" + (m.d ? "<span>" + m.d + "</span>" : "") : "<small>" + m.y2 + "</small><span>" + m.d + "</span>";
+    el.innerHTML = m.kind === "mile" ? "<small>" + m.y2 + "</small><b>" + m.t + "</b>" + (m.d ? "<span>" + m.d + "</span>" : "") : m.kind === "sub" ? "<span>" + m.d + "</span>" : "<small>" + m.y2 + "</small>" + (m.d ? "<span>" + m.d + "</span>" : "");
     labels.appendChild(el);
     const g = document.createElementNS(ns, "g"); g.setAttribute("transform", "translate(" + m.x + " " + m.y + ")");
     if (m.kind === "mile") { n += 1; g.innerHTML = '<circle r="30" fill="#F37021" opacity=".35" filter="url(#glow2)"/><circle r="22" fill="#FF9A5C" filter="url(#glow)"/><circle r="17" fill="#FFF7ED"/><text y="6" text-anchor="middle" font-family="Arial" font-weight="800" font-size="17" fill="#0A1F47">0' + n + '</text>'; }
+    else if (m.kind === "sub") { g.innerHTML = '<circle r="9" fill="#3B82F6" opacity=".5" filter="url(#glow2)"/><circle r="5" fill="#DDE6FF" filter="url(#glow)"/>'; }
     else { g.innerHTML = '<circle r="14" fill="#A855F7" opacity=".45" filter="url(#glow2)"/><circle r="8" fill="#FFD58A" filter="url(#glow)"/><circle r="4" fill="#fff"/>'; }
     pins.appendChild(g);
   });
@@ -1026,7 +1038,7 @@ td{padding:12px;border-bottom:1px solid rgba(255,255,255,.12);vertical-align:top
 
 
 /* business plan roadmap */
-.road{position:relative;width:1160px;height:590px;margin:-4px auto 0}.road svg{position:absolute;inset:0;width:100%;height:100%}.road-labels{position:absolute;inset:0;pointer-events:none}.road-lab{position:absolute;width:300px;font-family:Arial,Helvetica,sans-serif;color:#fff;transform:translate(-50%,0);text-align:center}.road-lab.above{transform:translate(-50%,-100%)}.road-lab.mile.above{margin-top:-34px}.road-lab.mile.below{margin-top:34px}.road-lab.take.above{margin-top:-16px}.road-lab.take.below{margin-top:18px}.neural .road-lab.take span{color:#C7D2F5}.road-lab small{display:block;color:var(--orange);font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase}.road-lab.mile b{display:block;font-size:22px;color:var(--gold);line-height:1.15;margin:3px 0 4px}.road-lab.mile span{display:block;font-size:14.5px;line-height:1.35;color:#DCE4F5}.road-lab.take{width:270px}.road-lab.take small{font-size:11px;color:#FFD58A;letter-spacing:.1em}.road-lab.take span{display:block;font-size:12.5px;line-height:1.35;color:#B9C6DE;margin-top:2px}
+.road{position:relative;width:1160px;height:590px;margin:-4px auto 0}.road svg{position:absolute;inset:0;width:100%;height:100%}.road-labels{position:absolute;inset:0;pointer-events:none}.road-lab{position:absolute;width:300px;font-family:Arial,Helvetica,sans-serif;color:#fff;transform:translate(-50%,0);text-align:center}.road-lab.above{transform:translate(-50%,-100%)}.road-lab.mile.above{margin-top:-34px}.road-lab.mile.below{margin-top:34px}.road-lab.take.above{margin-top:-16px}.road-lab.take.below{margin-top:18px}.neural .road-lab.take span{color:#C7D2F5}.road-lab.sub{width:96px;margin-top:10px}.road-lab.sub span{display:block;font-size:11.5px;line-height:1.25;color:#DDE6FF;font-weight:700}.road-lab small{display:block;color:var(--orange);font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase}.road-lab.mile b{display:block;font-size:22px;color:var(--gold);line-height:1.15;margin:3px 0 4px}.road-lab.mile span{display:block;font-size:14.5px;line-height:1.35;color:#DCE4F5}.road-lab.take{width:270px}.road-lab.take small{font-size:11px;color:#FFD58A;letter-spacing:.1em}.road-lab.take span{display:block;font-size:12.5px;line-height:1.35;color:#B9C6DE;margin-top:2px}
 /* brochure slides */
 .brslide{padding:0;background:#F7F5EF;color:#1E293B;font-family:Georgia,"Times New Roman",serif}
 .br{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr 1fr}
