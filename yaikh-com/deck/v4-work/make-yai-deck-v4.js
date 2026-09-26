@@ -516,7 +516,7 @@ ${heading ? `<h2>${heading}</h2>` : ""}
     <div class="hd2"><span>Today</span><span class="hd-bar"><i></i></span><span>00:00 / 08:00</span><em>·</em><span>Weekly 14:52 h</span><em>·</em><span>6.5 d</span></div>
     <div class="vid-row">
       <div class="vid"><div class="vid-play">▶</div></div>
-      <div class="vcol"><div class="vb"><span>🛒</span><small>Shop</small></div><div class="vb"><span>🏭</span><small>Factory</small></div><div class="vb"><span>📦</span><small>Wholesale</small></div><div class="vb"><span>💬</span><small>Chat</small></div></div>
+      <div class="vcol"><div class="vb"><span>🛒</span><small>Phsar</small></div><div class="vb"><span>🛠️</span><small>Service</small></div><div class="vb"><span>📦</span><small>Wholesale</small></div><div class="vb"><span>✨</span><small>My Ai</small></div></div>
     </div>
     <img class="scr-bot" src="${uri(path.join(LITE, "ui", "app-services.jpg"))}" alt=""><img class="scr-nav" src="${uri(path.join(LITE, "ui", "app-nav.jpg"))}" alt="">
   </div></div></div>
