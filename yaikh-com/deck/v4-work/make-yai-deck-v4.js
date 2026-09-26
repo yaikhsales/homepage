@@ -724,14 +724,14 @@ ${homeBody}
     const miles = [
       { at: 0.13, side: "above", dx: 0, dy: 0, y: "2025", t: "Incorporation", d: "Texlink Technologies · Oct 2025" },
       { at: 0.41, side: "above", dx: 0, dy: 0, y: "2026", t: "First 25 factories & clients", d: "10,000 app users" },
-      { at: 0.69, side: "above", dx: 0, dy: 0, y: "2027", t: "100 factories & clients", d: "" },
+      { at: 0.69, side: "above", dx: 0, dy: 0, y: "2027", t: "100 factories & clients", d: "1,000,000 app users" },
       { at: 0.965, side: "above", dx: -50, dy: 0, y: "2028", t: "Own Ai-Native manufacturing unit", d: "the showcase · Series A" },
     ];
     const takes = [
       { at: 0.02, side: "below", dx: 60, dy: 0, y: "2024 – 25", d: "Pre-revenue development · 70+ apps · 14 Ai agents" },
       { at: 0.27, side: "below", dx: 70, dy: 18, y: "Feb 2026", d: "21-factory implementation with Yorkwell · subscriptions issued" },
       { at: 0.55, side: "below", dx: 0, dy: 0, y: "Aug – Oct 2026", d: "First 3 paying clients: BICNZ · 3SGS · ES Packing · first public events — TAFTAC expo" },
-      { at: 0.83, side: "below", dx: 0, dy: 0, y: "2027", d: "ASEAN: Vietnam · Thailand · Malaysia · 100,000 users" },
+      { at: 0.83, side: "below", dx: 0, dy: 0, y: "2027", d: "ASEAN: Vietnam · Thailand · Malaysia" },
     ];
     const bizplan = slide("dark", "Business plan · 2025 – 2028", `
 <div class="road">
