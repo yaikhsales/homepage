@@ -123,7 +123,7 @@ const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
 /* ---------- slide shell ---------- */
 let n = 0;
 if (TIER.edf) TIER.alloc = TIERS["100k"].alloc;
-const TOTAL = TIER.client ? 8 : TIER.edf ? 7 : 15;
+const TOTAL = TIER.client ? 8 : TIER.edf ? 8 : 15;
 function slide(kind, eyebrow, body, opts = {}) {
   n += 1;
   const light = kind === "light";
@@ -477,7 +477,55 @@ ${heading ? `<h2>${heading}</h2>` : ""}
   </div></div>
 </div>
 `, { cls: "hiwslide" });
-    S.splice(0, S.length, title, howItWorks, solution, prices, sales, ask, close);
+
+    // App UI — redesign concept, drawn (not a screenshot). Yai orange + navy, flat icons, same structure.
+    const ico = (d) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+    const I = {
+      ticket: ico('<path d="M3 9a2 2 0 0 0 2-2V5h14v2a2 2 0 0 0 0 4v0a2 2 0 0 0 0 4v2H5v-2a2 2 0 0 0-2-2z"/><path d="M13 5v14"/>'),
+      shop: ico('<path d="M3 9l1.5-5h15L21 9"/><path d="M3 9h18v11H3z"/><path d="M9 20v-6h6v6"/>'),
+      scan: ico('<path d="M4 8V4h4M16 4h4v4M20 16v4h-4M8 20H4v-4"/><path d="M4 12h16"/>'),
+      web: ico('<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>'),
+      train: ico('<path d="M4 5h16v11H4z"/><path d="M8 21h8M12 16v5"/>'),
+      gate: ico('<path d="M4 20V6M4 10h16l-1 4H4"/>'),
+      hr: ico('<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>'),
+      ytm: ico('<path d="M14 7l3-3 3 3-3 3z"/><path d="M4 20l9-9"/><path d="M4 20l3 0 0-3"/>'),
+      needle: ico('<path d="M4 20L18 6"/><circle cx="19" cy="5" r="2"/>'),
+      waste: ico('<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>'),
+      car: ico('<path d="M5 16l1.5-6h11L19 16"/><path d="M3 16h18v3H3z"/><circle cx="7" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/>'),
+      meet: ico('<circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/><path d="M2 20a6 6 0 0 1 12 0M10 20a6 6 0 0 1 12 0"/>'),
+    };
+    const tile = (k, t) => `<div class="m-tile"><span class="m-ico">${I[k]}</span><span>${t}</span></div>`;
+    const row = (k, t, lock) => `<div class="m-row${lock ? " lock" : ""}"><span class="m-ico sm">${I[k]}</span><span>${t}</span>${lock ? `<i>🔒</i>` : ""}</div>`;
+    const phoneMock = `<div class="phone concept"><div class="phone-notch"></div><div class="m-screen">
+      <div class="m-top"><span class="m-avatar"></span><b>KA…</b><small>TL02</small><span class="m-sp"></span><span class="m-dot"></span><span class="m-dot"></span></div>
+      <div class="m-today"><span>Today</span><span class="m-bar"><i></i></span><span>00:00 / 08:00</span></div>
+      <div class="m-week"><span>Weekly · 14:52 hrs</span><span>6.5 days</span></div>
+      <div class="m-search">Search services…</div>
+      <div class="m-h">Market service</div>
+      <div class="m-banner"><b>Open a shop now</b><span>Phsar · Factory Services · Wholesale</span></div>
+      <div class="m-h">Our services</div>
+      <div class="m-grid">${tile("ticket","TL Ticket")}${tile("shop","TL Shop")}${tile("scan","Scan")}${tile("web","Web")}${tile("train","Training")}${tile("gate","Gate Pass")}</div>
+      <div class="m-h">Explorers <em>View all ›</em></div>
+      <div class="m-list">${row("hr","HR")}${row("ytm","YTM")}${row("needle","Needle")}${row("waste","Waste",true)}${row("car","Booking on map")}${row("meet","Meeting room",true)}</div>
+      <div class="m-nav"><span class="on">Home</span><span>Services</span><span>Chat</span><span>Profile</span></div>
+    </div></div>`;
+    const redesign = slide("dark", "App UI · redesign concept", `
+<div class="rd">
+  <div class="rd-text">
+    <h2>Same functions. Cleaner, faster to read on the floor.</h2>
+    <ul>
+      <li><b>Yai colours</b> — orange for action, navy for structure; one accent, not six.</li>
+      <li><b>Flat line icons</b> — one family, readable at arm's length and in sunlight.</li>
+      <li><b>Same structure</b> — Today bar · Market service · Our services · Explorers — nothing to relearn.</li>
+      <li><b>Bigger tap targets</b> — three tiles per row, locked modules greyed with a lock, not hidden.</li>
+      <li><b>Khmer, English, Chinese</b> — same layout in all three.</li>
+    </ul>
+    <p class="rd-note">Concept for the next release — drawn, not a screenshot. Current app on the previous slide.</p>
+  </div>
+  <div class="rd-phones">${phoneMock}</div>
+</div>
+`, { cls: "rdslide" });
+    S.splice(0, S.length, title, howItWorks, redesign, solution, prices, sales, ask, close);
     S.forEach((html, i) => { S[i] = html.replace(/id="s\d+"/, `id="s${i + 1}"`).replace(/<span>\d+ \/ \d+<\/span>/, `<span>${i + 1} / ${TOTAL}</span>`); });
   }
   if (TIER.client) S.push(planSlide("Yai / TAFTAC · YHR leaning presentation", "", [
@@ -528,6 +576,17 @@ h2.stack span{display:block}
 .why h2.oneline{font-size:58px;line-height:1.06;margin-bottom:14px;white-space:nowrap}.why h2.stack{font-size:56px;line-height:1.06;margin-bottom:10px;white-space:nowrap}.why-sub{font-size:26px;line-height:1.3;white-space:nowrap;color:#DCE4F5;margin:0 0 18px}.why-sub b{color:var(--orange)}.dates{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:4px solid rgba(255,255,255,.2)}.date{padding:12px 18px 0 0;position:relative}.date:before{content:"";position:absolute;top:-12px;left:0;width:20px;height:20px;border-radius:50%;background:var(--gold)}.date.hot:before{background:var(--orange)}.date b{display:block;font-size:44px;line-height:1;color:#fff}.date.hot b{color:var(--orange)}.date span{display:block;font-size:17px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:6px 0 6px;font-weight:700}.date p{margin:0;font-size:19px;line-height:1.36;color:#DCE4F5}.ready{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:12px}.deadlines{margin:14px 0 0;font-size:27px;line-height:1.2;color:#B9C6E4;white-space:nowrap;display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid rgba(255,255,255,.14);border-bottom:1px solid rgba(255,255,255,.14);padding:10px 0}.deadlines b{color:#fff;font-weight:700}.ready div{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:14px 16px}.ready b{display:block;font-size:21px;color:#fff;margin-bottom:4px}.ready span{font-size:18px;color:#B9C6E4;line-height:1.35}.why .foot-note{font-size:22px;margin-top:14px;line-height:1.36}
 .mk{margin:0;padding:0;list-style:none}.mk li{font-size:22px;line-height:1.3;padding:5px 0 5px 22px;position:relative}.mk li:before{content:"";position:absolute;left:0;top:15px;width:9px;height:9px;border-radius:50%;background:var(--orange)}
 .planslide h2{font-size:34px;margin-bottom:14px}.planslide .eyebrow{margin-bottom:14px}.plan{width:100%;border-collapse:collapse;table-layout:fixed;margin-top:0}.plan th,.plan td{border:1px solid rgba(255,255,255,.16);height:44px}.plan th{font-size:17px;font-weight:700;color:var(--gold);letter-spacing:.04em;padding:4px}.plan th.yr{background:rgba(243,112,33,.22);color:#fff;font-size:19px;text-align:center}.mnote{font-size:14px;color:#fff;font-weight:400;line-height:1.25}.planslide{padding-left:40px;padding-right:40px}.plan td.who.sub{padding-left:32px;font-weight:400;color:#DCE4F5}.plan tr.sep td{border-top:4px solid var(--orange)}.plan td.flat{color:#fff;font-weight:700}.plan td.hit{background:rgba(243,112,33,.28);color:#fff;font-weight:700}.plan td.paid{background:#BBF7D0;color:#065F46;font-weight:800}.plan td.setting{background:#FED7AA;color:#9A3412;font-weight:800}.settag{display:block;font-size:10px;font-weight:800;color:#9A3412;letter-spacing:.06em;text-transform:uppercase;margin-top:5px}.paidtag{display:block;font-size:10px;font-weight:800;color:#065F46;letter-spacing:.06em;text-transform:uppercase;margin-top:5px}.plan th.who,.plan td.who{font-family:Arial,Helvetica,"Khmer MN","Khmer Sangam MN","Noto Sans Khmer",sans-serif;width:308px;text-align:left;padding-left:8px;font-size:18px;color:#fff}.plan td{background:rgba(255,255,255,.04);text-align:center;font-size:15px;color:#DCE4F5;overflow:hidden;padding:7px 2px}.plan td.word{font-size:11px;letter-spacing:0;line-height:1.15;padding:0 1px;white-space:normal;overflow-wrap:anywhere}.plan td.paid,.plan td.setting{font-size:14px;line-height:1.2;padding-top:5px;padding-bottom:5px}
+.rdslide .eyebrow{margin-bottom:10px}.rd{display:grid;grid-template-columns:1fr 330px;gap:40px;align-items:start}.rd h2{font-size:38px;margin:0 0 16px}.rd ul{margin:0;padding-left:22px;font-size:20px;line-height:1.45;color:#DCE4F5}.rd li{margin-bottom:9px}.rd li b{color:var(--gold)}.rd-note{margin:18px 0 0;font-size:16px;color:#8FA8D8}
+.phone.concept{height:585px;padding:12px 10px}.m-screen{background:#F6F5F2;border-radius:22px;height:100%;overflow:hidden;font-family:Arial,Helvetica,sans-serif;color:#0A1F47;font-size:11px;padding:14px 10px 0;box-sizing:border-box;display:flex;flex-direction:column;gap:7px}
+.m-top{display:flex;align-items:center;gap:6px;font-size:12px}.m-top b{font-size:13px}.m-top small{color:#64748B}.m-sp{flex:1}.m-avatar{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#F37021,#FFD58A)}.m-dot{width:20px;height:20px;border-radius:50%;background:#E8E6E1}
+.m-today{display:flex;align-items:center;gap:6px;font-size:10px;color:#64748B}.m-bar{flex:1;height:6px;border-radius:3px;background:#E8E6E1;overflow:hidden}.m-bar i{display:block;width:0;height:100%;background:var(--orange)}
+.m-week{display:flex;justify-content:space-between;background:#fff;border-radius:8px;padding:5px 8px;font-size:10px;color:#0A1F47}
+.m-search{background:#fff;border-radius:10px;padding:7px 10px;color:#94A3B8;font-size:11px}
+.m-h{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#0A1F47;display:flex;justify-content:space-between;margin-top:2px}.m-h em{font-style:normal;color:var(--orange);font-weight:700;letter-spacing:0;text-transform:none}
+.m-banner{background:linear-gradient(120deg,#0A1F47,#1E4DAA);color:#fff;border-radius:10px;padding:10px 10px;display:flex;flex-direction:column;gap:2px}.m-banner b{font-size:14px;color:#FFD58A}.m-banner span{font-size:9px;color:#DCE4F5}
+.m-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.m-tile{background:#fff;border-radius:10px;padding:8px 4px 6px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;font-weight:700}.m-ico{width:22px;height:22px;color:var(--orange);display:inline-block}.m-ico svg{width:100%;height:100%;display:block;stroke:currentColor;fill:none}.m-ico.sm{width:16px;height:16px}
+.m-list{display:grid;grid-template-columns:1fr 1fr;gap:5px}.m-row{background:#fff;border-radius:8px;padding:6px 7px;display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;position:relative}.m-row.lock{color:#94A3B8}.m-row.lock .m-ico{color:#CBD5E1}.m-row i{position:absolute;right:5px;top:4px;font-size:8px;font-style:normal}
+.m-nav{margin-top:auto;background:#fff;border-radius:14px 14px 0 0;display:flex;justify-content:space-around;padding:8px 0 10px;font-size:9px;color:#64748B;font-weight:700}.m-nav .on{color:var(--orange)}
 .hiwslide .eyebrow{margin-bottom:14px;letter-spacing:.1em;white-space:nowrap}.hiw{display:grid;grid-template-columns:5.4fr 2.4fr 2.9fr;gap:18px;align-items:start;margin:0 -48px}.hiw figure{margin:0}.hiw img{display:block;border-radius:10px;border:2px solid rgba(255,255,255,.18);box-shadow:0 10px 30px rgba(0,0,0,.4)}.hiw-web img{width:100%;height:585px;border-left:0;object-fit:cover;object-position:top}.hiw-app img{border-radius:22px;width:100%;height:557px;object-fit:contain;object-position:top;background:#f6f6f6}.hiw figcaption{margin-top:8px;font-size:16px;line-height:1.3;color:#DCE4F5}.hiw figcaption b{display:block;color:var(--gold);font-size:19px;margin-bottom:2px}.hiw-aiot{border:1px solid rgba(255,213,138,.35);border-right:0;border-radius:12px 0 0 12px;padding:10px 12px 12px;height:585px;display:flex;flex-direction:column;gap:6px}.hiw-aiot-h{font-size:19px;font-weight:800;color:var(--gold);letter-spacing:.12em;text-transform:uppercase}.phone{position:relative;background:#111827;border-radius:34px;padding:14px 10px;height:585px;box-sizing:border-box;box-shadow:0 14px 34px rgba(0,0,0,.5),inset 0 0 0 2px #2a3446;width:100%;margin:0 auto}.phone-notch{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:34%;height:14px;background:#111827;border-radius:0 0 12px 12px;z-index:2}.phone img{display:block;box-shadow:none;border:0}.hiw-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1;min-height:0}.hiw-aiot figure{margin:0;min-height:0;display:flex;flex-direction:column}.hiw-aiot figure img{flex:1;min-height:0;width:100%;object-fit:contain;background:#fff;border-radius:8px;border:1px solid rgba(255,255,255,.14)}.hiw-aiot figcaption{font-size:13px;color:#DCE4F5;margin-top:3px;text-align:center;white-space:nowrap}.hiw-aiot p{margin:0;font-size:15px;color:#8FA8D8;line-height:1.3}
 .constslide h2{font-size:36px;margin-bottom:16px}.constslide{padding-left:44px;padding-right:44px}.const{display:grid;grid-template-columns:116px 108px 1fr 144px 232px;gap:12px;align-items:stretch}.crow2{display:grid;grid-template-columns:3fr 5fr;gap:14px}.csec{border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);overflow:hidden}.csec-h{display:flex;align-items:center;justify-content:center;text-align:center;height:58px;line-height:1.2;font-size:17px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding:0 10px;color:#fff}.csec.admin .csec-h{background:var(--blue)}.csec.mgmt .csec-h{background:#6D28D9;letter-spacing:.02em}.csec.aisrv .csec-h{background:var(--orange)}.csec.aistart .csec-h{background:#B45309;font-size:14px;letter-spacing:.06em;line-height:1.1}.csec.ops .csec-h{background:var(--green)}.ctabs{display:grid;gap:0;align-content:start}.ctab{padding:14px 8px 16px 10px;border-top:1px solid rgba(243,112,33,.55)}.ctab b{display:block;font-size:19px;color:var(--gold);margin-bottom:6px}.ctab ul{margin:0;padding:0;list-style:none}.cprice{display:block;font-size:18px;font-weight:800;color:#fff;background:rgba(255,213,138,.14);border:1px dashed rgba(255,213,138,.55);border-radius:6px;padding:1px 8px;margin:0 0 4px;width:max-content;min-width:78px}.cprice.ghost{visibility:hidden}.cprice.big{font-size:22px;margin:4px 0 2px;min-width:0}.ctab.stack .cprice.big + ul{margin-bottom:14px}.ctab.stack ul{margin-bottom:12px}.ctab li{font-size:17px;line-height:1.5;hyphens:none;overflow-wrap:normal;color:#E6ECFA}
 .cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:22px}
