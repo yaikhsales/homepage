@@ -23,14 +23,29 @@ const TIERS = {
   "1m":   { amt: "US$1M",   target: null },
   "2m":   { amt: "US$2M",   target: null },
   "3m":   { amt: "US$3M",   target: 100 },
+  // EDF · Startup Investment Package 2 — a US$100,000 ask with EDF's own categories.
+  "100k": { amt: "US$100,000", target: 25, round: "investment", alloc: [
+    ["1 · Technology", "50%", "Higher-capacity Ai servers to train our own LLM in-house · developer-grade machines"],
+    ["2 · Local supplier onboarding", "30%", "City office and training centre in Phnom Penh — neutral ground, 2–3 training rooms"],
+    ["3 · Inventory", "20%", "AIoT stock ready: face-scan machines, meters, sensors — connect a factory the week it signs"],
+    ["4 · Working capital", "0%", "Already covered by revenue — Yorkwell funding and client subscriptions"],
+  ] },
   // 5th deck — internal, for Arnold's client conversations: title slide + agent constellation + (empty) slide 3.
   "client": { amt: "Client deck", target: null, client: true },
+  // EDF essentials — 6 slides: title · solution · module prices · sales confirmed · the ask · close.
+  "edf": { amt: "US$100,000", target: 25, round: "investment", edf: true, alloc: null },
 };
 if (process.argv[2] === "all") {
   const { execFileSync } = require("child_process");
   for (const k of Object.keys(TIERS)) execFileSync(process.execPath, [__filename], { env: { ...process.env, ASK: k }, stdio: "inherit" });
   process.exit(0);
 }
+const DEFAULT_ALLOC = [
+  ["1 · Development hardware", "45%", "Ai development on Mac M5 / M6 · more GX10 Ai servers and GPU docks · AIoT upgrades"],
+  ["2 · Events and promotion", "25%", "Events in Cambodia, Singapore and Hong Kong"],
+  ["3 · City office", "15%", "City office setup in Phnom Penh"],
+  ["4 · Yai's own factory", "15%", "Start planning Yai's own manufacturing facility — fully running on the Yai platform"],
+];
 const ASK = process.env.ASK || "3m";
 const TIER = TIERS[ASK];
 if (!TIER) throw new Error(`unknown ASK=${ASK}; use ${Object.keys(TIERS).join(" / ")}`);
@@ -106,7 +121,8 @@ const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
 
 /* ---------- slide shell ---------- */
 let n = 0;
-const TOTAL = TIER.client ? 8 : 15;
+if (TIER.edf) TIER.alloc = TIERS["100k"].alloc;
+const TOTAL = TIER.client ? 8 : TIER.edf ? 6 : 15;
 function slide(kind, eyebrow, body, opts = {}) {
   n += 1;
   const light = kind === "light";
@@ -159,7 +175,7 @@ S.push(slide("dark", "", `
 </div>
 <div class="catrow">${cats.map((c) => `<figure><img src="${c.d}" alt=""><figcaption>${c.n === "carseats" ? "car seats" : c.n}</figcaption></figure>`).join("")}</div>
 <div class="bigurl">www.yaikh.com</div>
-<div class="title-foot">Texlink Technologies Co., Ltd. · Seed round · September 2026 · Confidential</div>
+<div class="title-foot">Texlink Technologies Co., Ltd. · ${TIER.round === "investment" ? "EDF · Startup Investment Package 2" : "Seed round"} · September 2026 · Confidential</div>
 `, { noFooter: true }));
 
 /* 2 · PROBLEM */
@@ -322,15 +338,12 @@ S.push(slide("light", "10 · Path to the targets", `
 
 /* 16 · THE ASK */
 S.push(slide("dark", "11 · The ask", `
-<h2>Raising <span class="gold">${TIER.amt}</span> seed round to take Yai ${TIER.target ? "from 21 factories to a hundred" : "beyond its first 21 factories"}.</h2>
+<h2>Raising <span class="gold">${TIER.amt}</span> ${TIER.round || "seed round"} to take Yai ${TIER.target === 100 ? "from 21 factories to a hundred" : TIER.target ? `from 21 to ${TIER.target} factories` : "beyond its first 21 factories"}.</h2>
 <div class="ask">
   <table class="alloc">
     <thead><tr><th>Allocation</th><th>%</th><th>What it unlocks</th></tr></thead>
     <tbody>
-      <tr><td>1 · Development hardware</td><td>45%</td><td>Ai development on Mac M5 / M6 · more GX10 Ai servers and GPU docks · AIoT upgrades</td></tr>
-      <tr><td>2 · Events and promotion</td><td>25%</td><td>Events in Cambodia, Singapore and Hong Kong</td></tr>
-      <tr><td>3 · City office</td><td>15%</td><td>City office setup in Phnom Penh</td></tr>
-      <tr><td>4 · Yai's own factory</td><td>15%</td><td>Start planning Yai's own manufacturing facility — fully running on the Yai platform</td></tr>
+      ${(TIER.alloc || DEFAULT_ALLOC).map(([what, pct, unlocks]) => `<tr><td>${esc(what)}</td><td>${esc(pct)}</td><td>${esc(unlocks)}</td></tr>`).join("")}
     </tbody>
   </table>
   <div class="milestones">
@@ -345,7 +358,7 @@ S.push(slide("dark", "11 · The ask", `
     <p>Strategic build partners · shared space and events in new markets · data-centre and GPU alliances. Each opens a faster lane without changing how the platform is built.</p>
   </div>
 </div>
-`));
+`, { cls: TIER.alloc ? "asktight" : "" }));
 
 /* 12b · SERIOUS COMPETITOR — Adidas's own manufacturing intelligence stack (sourced, see footnote) */
 S.push(slide("light", "12 · Our serious competitor", `
@@ -382,7 +395,7 @@ S.push(slide("dark", "", `
   <h1>The only Commercial Ai MiP<br><span class="sub-h">for the Soft Goods industry.</span></h1>
   <p class="gold big">40 years of industry experience · 20 Ai engineers<br>Built with Claude, Google and NVIDIA technology.</p>
   <div class="close-row">
-    <div><span>The ask</span><b>${TIER.amt} seed round</b><em>${TIER.target ? `21 factories → ${TIER.target}` : "21 factories and growing"}</em></div>
+    <div><span>The ask</span><b>${TIER.amt} ${TIER.round || "seed round"}</b><em>${TIER.target ? `21 factories → ${TIER.target}` : "21 factories and growing"}</em></div>
     <div><span>See it live</span><b>yaikh.com/experience</b><em>70+ apps · 14 Ai agents</em></div>
     <div class="talk">
       <span>Talk to us</span>
@@ -404,8 +417,10 @@ S.push(slide("dark", "", `
 `, { noFooter: true }));
 
 /* 5th deck: keep the title slide, replace the rest */
-if (TIER.client) {
-  S.splice(1);
+if (TIER.client || TIER.edf) {
+  const KEEP = TIER.edf ? [S[0], S[4], S[11], S[14]] : [S[0]];
+  S.splice(0);
+  S.push(KEEP[0]);
   n = 1;
   const sec = (x) => { const hasP = (g) => g && (Array.isArray(g[0]) ? g.some((h) => h[2]) : g[2]); const rows = []; x.g.forEach((g, k) => { const r = Math.floor(k / x.cols); rows[r] = rows[r] || hasP(g); }); return `<div class="csec ${x.c}"><div class="csec-h">${esc(x.s)}</div><div class="ctabs" style="grid-template-columns:repeat(${x.cols},1fr)">${x.g.map((g, k) => { const pr = rows[Math.floor(k / x.cols)]; const one = ([t, m, price], i = 0) => !t && price ? `<span class="cprice big">${esc(price)}</span>${m.length ? `<ul>${m.map((a) => `<li>${esc(a)}</li>`).join("")}</ul>` : ""}` : `${t ? `${price ? `<span class="cprice">${esc(price)}</span>` : pr && i === 0 ? `<span class="cprice ghost">&nbsp;</span>` : ""}<b>${esc(t)}</b>` : `${pr ? `<span class="cprice ghost">&nbsp;</span>` : ""}<b style="visibility:hidden">&nbsp;</b>`}<ul>${m.map((a) => `<li>${esc(a)}</li>`).join("")}</ul>`; return !g ? `<div class="ctab"></div>` : Array.isArray(g[0]) ? `<div class="ctab stack">${g.map((h, i) => one(h, i)).join("")}</div>` : `<div class="ctab">${one(g, 0)}</div>`; }).join("")}</div></div>`; }
   S.push(slide("dark", "Agent constellation", `
@@ -439,7 +454,14 @@ ${heading ? `<h2>${heading}</h2>` : ""}
 </table>
 `, { cls: "planslide" });
   S.push(planSlide("Sales confirmed", "", CUSTOMERS));
-  S.push(planSlide("Yai / TAFTAC · YHR leaning presentation", "", [
+  if (TIER.edf) {
+    // title · solution · prices · sales confirmed · ask · close, then renumber the footers
+    const [title, solution, ask, close] = KEEP;
+    const [, prices, sales] = S;
+    S.splice(0, S.length, title, solution, prices, sales, ask, close);
+    S.forEach((html, i) => { S[i] = html.replace(/id="s\d+"/, `id="s${i + 1}"`).replace(/<span>\d+ \/ \d+<\/span>/, `<span>${i + 1} / ${TOTAL}</span>`); });
+  }
+  if (TIER.client) S.push(planSlide("Yai / TAFTAC · YHR leaning presentation", "", [
     { n: "S.E.C. Mega Factory Co., Ltd.", at: { "Sep 2026": "Presentation" } },
     { n: "Yakjin (Cambodia) Inc", at: { "Sep 2026": "Presentation" } },
     { n: "Peouthet168", note: "from EXPO · TG", at: { "Sep 2026": "Presentation" } },
@@ -447,7 +469,7 @@ ${heading ? `<h2>${heading}</h2>` : ""}
     { n: "IejieKitchen", note: "from EXPO · TG", at: { "Sep 2026": "Presentation" } },
     {}, {},
   ]));
-  S.push(planSlide("Yai / TAFTAC · YHR leaning presentation (continued)", "", [
+  if (TIER.client) S.push(planSlide("Yai / TAFTAC · YHR leaning presentation (continued)", "", [
     { n: "Sok Kieng / 李子坚 (贝德)", note: "from EXPO · TG", at: { "Sep 2026": "Presentation" } },
     { n: "Vichea Neak", note: "from EXPO · TG", at: { "Sep 2026": "Presentation" } },
     { n: "Proloeng Top", note: "from EXPO · TG", at: { "Sep 2026": "Presentation" } },
@@ -457,14 +479,14 @@ ${heading ? `<h2>${heading}</h2>` : ""}
     { n: "Nicholas Ng", note: "from EXPO · WeChat", at: { "Sep 2026": "Presentation" } },
     { n: "Li Pei", note: "from EXPO · WeChat", at: { "Sep 2026": "Presentation" } },
   ]));
-  S.push(planSlide("Saman · QMS leaning presentation", "", [
+  if (TIER.client) S.push(planSlide("Saman · QMS leaning presentation", "", [
     { n: "Saman", note: "Consultant · 5/25" },
     { n: "Elegant Garment Co., Ltd", sub: true, at: { "Sep 2026": { v: "Finalising", span: 2 } } }, { n: "Trax Intertrade Co., Ltd.", sub: true, at: { "Oct 2026": "Finalising" } }, { n: "Factory 3", sub: true },
     { n: "Factory 4", sub: true }, { n: "Factory 5", sub: true },
     {}, {},
   ]));
-  S.push(planSlide("Joel", "", [{ n: "Joel" }, {}, {}, {}, {}, {}, {}, {}]));
-  S.push(planSlide("TAFTAC onsite event", "", [{}, {}, {}, {}, {}, {}, {}, {}]));
+  if (TIER.client) S.push(planSlide("Joel", "", [{ n: "Joel" }, {}, {}, {}, {}, {}, {}, {}]));
+  if (TIER.client) S.push(planSlide("TAFTAC onsite event", "", [{}, {}, {}, {}, {}, {}, {}, {}]));
 }
 
 /* ---------- page ---------- */
@@ -578,7 +600,7 @@ td{padding:12px;border-bottom:1px solid rgba(255,255,255,.12);vertical-align:top
 .land td{font-size:22px;padding:18px 14px;line-height:1.32}.land th{padding:12px 14px}.land td:nth-child(4){color:var(--gold);font-weight:700}
 .price{font-size:36px;font-weight:800;color:var(--navy);margin-bottom:8px}.price span{font-size:20px;font-weight:600;color:var(--gray)}
 .ask{display:grid;grid-template-columns:1.35fr 1fr;gap:20px;margin-top:10px}
-.rivalslide h2{font-size:56px;white-space:nowrap;line-height:1.1;margin-bottom:10px}.rivalslide h2 .flash{color:var(--orange)}.rivalslide .eyebrow{margin-bottom:6px}.rivalslide th{color:var(--blue);border-bottom-color:var(--line)}.rivalslide td{border-bottom-color:var(--line)}.rival td{font-size:20px;padding:10px 14px}.rival td:nth-child(1){width:22%}.rival td:nth-child(3){color:var(--orange);font-weight:700}.rival-line{font-size:21px;margin:-4px 0 0;line-height:1.38}.rival-line b{color:var(--orange)}.rival-line .nowrap{white-space:nowrap}.rival-src{font-size:17px;color:var(--gray);margin:8px 0 0}.alloc td:nth-child(2){font-weight:800;color:var(--gold)}
+.rivalslide h2{font-size:56px;white-space:nowrap;line-height:1.1;margin-bottom:10px}.rivalslide h2 .flash{color:var(--orange)}.rivalslide .eyebrow{margin-bottom:6px}.rivalslide th{color:var(--blue);border-bottom-color:var(--line)}.rivalslide td{border-bottom-color:var(--line)}.rival td{font-size:20px;padding:10px 14px}.rival td:nth-child(1){width:22%}.rival td:nth-child(3){color:var(--orange);font-weight:700}.rival-line{font-size:21px;margin:-4px 0 0;line-height:1.38}.rival-line b{color:var(--orange)}.rival-line .nowrap{white-space:nowrap}.rival-src{font-size:17px;color:var(--gray);margin:8px 0 0}.asktight h2{font-size:38px}.asktight .alloc td{font-size:18px;padding:11px 12px;line-height:1.3}.asktight .alloc th{font-size:17px;padding:8px 12px}.asktight .milestones li{font-size:19px}.asktight .milestones p{font-size:18px}.alloc td:nth-child(2){font-weight:800;color:var(--gold)}
 .milestones{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:18px 20px;font-size:21px}
 .ms-head{font-size:18px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:4px 0 8px}
 .milestones ol{margin:0 0 14px 18px;padding:0;line-height:1.6}.milestones p{margin:0;line-height:1.5;color:#D6DEF5}
@@ -605,7 +627,7 @@ td{padding:12px;border-bottom:1px solid rgba(255,255,255,.12);vertical-align:top
 `;
 
 const html = `<meta charset="utf-8">
-<title>${TIER.client ? "Yai Client Deck · Internal" : `Yai Pitch Deck v4 · ${TIER.amt}`}</title>
+<title>${TIER.client ? "Yai Client Deck · Internal" : TIER.edf ? "Yai · EDF application" : `Yai Pitch Deck v4 · ${TIER.amt}`}</title>
 <meta name="viewport" content="width=1320">
 <style>${css}</style>
 <div class="deck">${S.join("\n")}</div>
