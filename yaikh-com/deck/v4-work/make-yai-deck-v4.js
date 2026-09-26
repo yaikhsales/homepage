@@ -665,11 +665,11 @@ ${homeBody}
   <div class="fin-col">
     <h3>Balance sheet</h3>
     <table class="fin-t"><thead><tr><th></th><th>31 Dec 25</th><th>31 Aug 26</th></tr></thead><tbody>
-      ${finRow("Ai server · ASUS Ascent GX10", "–", "3,999.00")}
+      ${finRow("Ai server · ASUS Ascent GX10 (landed)", "–", "5,000.00")}
       ${finRow("Mac mini M4 ×3 · MacBook Pro M5", "–", "4,650.00")}
       ${finRow("Screens ×5", "–", "1,100.00")}
       ${finRow("Computer + office equipment", "1,217.87", "1,217.87")}
-      ${finRow("Cash in bank (ABA)", "56,620.54", "48,068.21")}
+      ${finRow("Cash in bank (ABA)", "56,620.54", "47,067.21")}
       ${finRow("Total assets", "57,838.41", "59,035.08", "tot")}
       ${finRow("Share capital / paid-in", "59,190.21", "59,190.21")}
       ${finRow("Retained earnings brought forward", "–", "(1,351.80)")}
@@ -685,13 +685,13 @@ ${homeBody}
       ${finRow("Result before tax", "(1,351.80)", "1,196.67")}
       ${finRow("Net cash from operating", "(1,351.80)", "1,196.67", "tot")}
       ${finRow("Computer + office equipment", "(1,217.87)", "–")}
-      ${finRow("Ai server, Macs, screens", "–", "(9,749.00)")}
-      ${finRow("Net cash used in investing", "(1,217.87)", "(9,749.00)", "tot")}
+      ${finRow("Ai server, Macs, screens", "–", "(10,750.00)")}
+      ${finRow("Net cash used in investing", "(1,217.87)", "(10,750.00)", "tot")}
       ${finRow("Issuance of share capital", "59,190.21", "–")}
       ${finRow("Net cash from financing", "59,190.21", "–", "tot")}
-      ${finRow("Net change in cash", "56,620.54", "(8,552.33)")}
+      ${finRow("Net change in cash", "56,620.54", "(9,553.33)")}
       ${finRow("Cash at start of period", "–", "56,620.54")}
-      ${finRow("Cash at end of period", "56,620.54", "48,068.21", "net")}
+      ${finRow("Cash at end of period", "56,620.54", "47,067.21", "net")}
     </tbody></table>
   </div>
 </div>
