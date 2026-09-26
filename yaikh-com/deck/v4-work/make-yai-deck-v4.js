@@ -644,10 +644,10 @@ ${homeBody}
   <div class="fin-col">
     <h3>Income statement</h3>
     <table class="fin-t"><thead><tr><th></th><th>Oct–Dec 25</th><th>Jan–Aug 26</th></tr></thead><tbody>
-      ${finRow("Strategic partnership services · Yorkwell Asia (US$12–15k / month)", "73,451.02", "…")}
+      ${finRow("Strategic partnership services · Yorkwell Asia (US$12–15k / month, ongoing)", "73,451.02", "96–120k")}
       ${finRow("Subscriptions · 21 group companies (US$2,000 / month, from Feb 2026)", "–", "14,000.00")}
       ${finRow("Total revenue", "73,451.02", "…", "tot")}
-      ${finRow("Payroll expenses", "73,451.02", "…")}
+      ${finRow("Payroll expenses (paid by Yorkwell)", "73,451.02", "96–120k")}
       ${finRow("Fuel, electricity, water", "69.13", "…")}
       ${finRow("Bank charge", "15.11", "…")}
       ${finRow("Internet", "450.00", "…")}
