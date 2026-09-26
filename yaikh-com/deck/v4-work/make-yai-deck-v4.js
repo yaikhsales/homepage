@@ -123,7 +123,7 @@ const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
 /* ---------- slide shell ---------- */
 let n = 0;
 if (TIER.edf) TIER.alloc = TIERS["100k"].alloc;
-const TOTAL = TIER.client ? 8 : TIER.edf ? 10 : 15;
+const TOTAL = TIER.client ? 8 : TIER.edf ? 6 : 15;
 function slide(kind, eyebrow, body, opts = {}) {
   n += 1;
   const light = kind === "light";
@@ -696,7 +696,7 @@ ${homeBody}
   </div>
 </div>
 `);
-    S.splice(0, S.length, title, howItWorks, redesign, redesignKm, financials, solution, prices, sales, ask, close);
+    S.splice(0, S.length, title, howItWorks, redesign, redesignKm, financials, close);
     S.forEach((html, i) => { S[i] = html.replace(/<div class="eyebrow">\d\d · /, '<div class="eyebrow">').replace(/id="s\d+"/, `id="s${i + 1}"`).replace(/<span>\d+ \/ \d+<\/span>/, `<span>${i + 1} / ${TOTAL}</span>`); });
   }
   if (TIER.client) S.push(planSlide("Yai / TAFTAC · YHR leaning presentation", "", [
