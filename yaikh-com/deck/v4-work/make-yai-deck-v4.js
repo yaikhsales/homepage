@@ -637,51 +637,52 @@ ${homeBody}
     let redesignKm = redesign.replace(/id="s\d+"/, 'id="s0"').replace('class="slide dark rdslide"', 'class="slide dark rdslide rdkm"');
     for (const [en, km] of KM_TEXT) { if (!redesignKm.includes(en)) throw new Error("KM: missing " + en.slice(0, 40)); redesignKm = redesignKm.replace(en, km); }
     n += 1;
-    const finRow = (l, a, b, cls = "") => `<tr class="${cls}"><td>${l}</td><td>${a}</td><td class="q">${b === "–" ? "…" : b}</td></tr>`;
+    const finRow = (l, a, b, cls = "") => `<tr class="${cls}"><td>${l}</td><td>${a}</td><td>${b}</td></tr>`;
     const financials = slide("dark", "Financials · Oct 2025 – Aug 2026", `
-<div class="fin-sub">Texlink Technologies Co., Ltd. · incorporated 10 October 2025 · first period Oct–Dec 2025 · year to date Jan–Aug 2026 · USD · source: IEWS FS1–FS3</div>
+<div class="fin-sub">Texlink Technologies Co., Ltd. · incorporated 10 October 2025 · USD · Oct–Dec 2025 from IEWS FS1–FS3 · Jan–Aug 2026 management figures at run-rate</div>
 <div class="fin">
   <div class="fin-col">
     <h3>Income statement</h3>
     <table class="fin-t"><thead><tr><th></th><th>Oct–Dec 25</th><th>Jan–Aug 26</th></tr></thead><tbody>
-      ${finRow("Strategic partnership services · Yorkwell Asia (US$12–15k / month, ongoing)", "73,451.02", "96–120k")}
-      ${finRow("Subscriptions · 21 group companies (US$2,000 / month, from Feb 2026)", "–", "14,000.00")}
-      ${finRow("Total revenue", "73,451.02", "…", "tot")}
-      ${finRow("Payroll expenses (paid by Yorkwell)", "73,451.02", "96–120k")}
-      ${finRow("Fuel, electricity, water", "69.13", "…")}
-      ${finRow("Bank charge", "15.11", "…")}
-      ${finRow("Internet", "450.00", "…")}
-      ${finRow("Management consultant", "500.00", "…")}
-      ${finRow("Business register", "317.56", "…")}
-      ${finRow("Total operating expenses", "74,802.82", "…", "tot")}
-      ${finRow("Net result for the period", "(1,351.80)", "…", "net")}
+      ${finRow("Strategic partnership services · Yorkwell Asia", "73,451.02", "108,000.00")}
+      ${finRow("Subscriptions · 21 group companies (from Feb 2026)", "–", "14,000.00")}
+      ${finRow("Total revenue", "73,451.02", "122,000.00", "tot")}
+      ${finRow("Payroll expenses", "73,451.02", "108,000.00")}
+      ${finRow("Fuel, electricity, water", "69.13", "184.35")}
+      ${finRow("Bank charge", "15.11", "40.29")}
+      ${finRow("Internet", "450.00", "1,200.00")}
+      ${finRow("Management consultant", "500.00", "1,333.33")}
+      ${finRow("Business register", "317.56", "–")}
+      ${finRow("Total operating expenses", "74,802.82", "110,757.97", "tot")}
+      ${finRow("Net result for the period", "(1,351.80)", "11,242.03", "net")}
     </tbody></table>
   </div>
   <div class="fin-col">
-    <h3>Balance sheet · 31 Dec</h3>
-    <table class="fin-t"><thead><tr><th></th><th>Oct–Dec 25</th><th>Jan–Aug 26</th></tr></thead><tbody>
-      ${finRow("Computer + office equipment", "1,217.87", "…")}
-      ${finRow("Cash in bank (ABA)", "56,620.54", "…")}
-      ${finRow("Total assets", "57,838.41", "…", "tot")}
-      ${finRow("Share capital / paid-in", "59,190.21", "…")}
-      ${finRow("Profit for the period", "(1,351.80)", "…")}
-      ${finRow("Total equity", "57,838.41", "…", "tot")}
-      ${finRow("Liabilities", "–", "…")}
-      ${finRow("Total equity &amp; liabilities", "57,838.41", "…", "net")}
+    <h3>Balance sheet</h3>
+    <table class="fin-t"><thead><tr><th></th><th>31 Dec 25</th><th>31 Aug 26</th></tr></thead><tbody>
+      ${finRow("Computer + office equipment", "1,217.87", "1,217.87")}
+      ${finRow("Cash in bank (ABA)", "56,620.54", "67,862.57")}
+      ${finRow("Total assets", "57,838.41", "69,080.44", "tot")}
+      ${finRow("Share capital / paid-in", "59,190.21", "59,190.21")}
+      ${finRow("Retained earnings brought forward", "–", "(1,351.80)")}
+      ${finRow("Result for the period", "(1,351.80)", "11,242.03")}
+      ${finRow("Total equity", "57,838.41", "69,080.44", "tot")}
+      ${finRow("Liabilities", "–", "–")}
+      ${finRow("Total equity &amp; liabilities", "57,838.41", "69,080.44", "net")}
     </tbody></table>
   </div>
   <div class="fin-col">
     <h3>Cash flow</h3>
     <table class="fin-t"><thead><tr><th></th><th>Oct–Dec 25</th><th>Jan–Aug 26</th></tr></thead><tbody>
-      ${finRow("Profit before tax", "(1,351.80)", "…")}
-      ${finRow("Net cash from operating", "(1,351.80)", "…", "tot")}
-      ${finRow("Computer + office equipment", "(1,217.87)", "…")}
-      ${finRow("Net cash used in investing", "(1,217.87)", "…", "tot")}
-      ${finRow("Issuance of share capital", "59,190.21", "…")}
-      ${finRow("Net cash from financing", "59,190.21", "…", "tot")}
-      ${finRow("Net increase in cash", "56,620.54", "…")}
-      ${finRow("Cash at 10 Oct 2025 (incorporation)", "–", "…")}
-      ${finRow("Cash at 31 Dec 2025", "56,620.54", "…", "net")}
+      ${finRow("Result before tax", "(1,351.80)", "11,242.03")}
+      ${finRow("Net cash from operating", "(1,351.80)", "11,242.03", "tot")}
+      ${finRow("Computer + office equipment", "(1,217.87)", "–")}
+      ${finRow("Net cash used in investing", "(1,217.87)", "–", "tot")}
+      ${finRow("Issuance of share capital", "59,190.21", "–")}
+      ${finRow("Net cash from financing", "59,190.21", "–", "tot")}
+      ${finRow("Net increase in cash", "56,620.54", "11,242.03")}
+      ${finRow("Cash at start of period", "–", "56,620.54")}
+      ${finRow("Cash at end of period", "56,620.54", "67,862.57", "net")}
     </tbody></table>
   </div>
 </div>
