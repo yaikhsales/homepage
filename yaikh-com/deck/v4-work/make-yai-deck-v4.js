@@ -461,12 +461,45 @@ ${heading ? `<h2>${heading}</h2>` : ""}
     // title · solution · prices · sales confirmed · ask · close, then renumber the footers
     const [title, solution, ask, close] = KEEP;
     const [, prices, sales] = S;
+    const homeBody = `
+    <div class="vid-row">
+      <div class="vid"><img class="vid-bg" src="${uri(path.join(LITE, "ui", "video-worker.jpg"))}" alt="">
+        <div class="vid-side"><span>♡<b>2.4k</b></span><span>💬<b>318</b></span><span>↗<b>Share</b></span></div>
+        <div class="vid-meta"><b>@yaikh2025 · Ai for garment factory</b><span>Run your factory from your phone 🧵</span></div>
+        <div class="vid-play">▶</div></div>
+      <div class="vcol"><div class="vb"><span class="vb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l1.5-5h15L21 10"/><path d="M4 10h16v10H4z"/><path d="M9 20v-5h6v5"/><path d="M4 10c0 1.5 1.3 2.5 2.8 2.5S9.7 11.5 9.7 10c0 1.5 1.3 2.5 2.8 2.5s2.8-1 2.8-2.5c0 1.5 1.3 2.5 2.8 2.5S21 11.5 21 10"/></svg></span><small>Phsar Market</small><em>128 shops</em></div><div class="vb"><span class="vb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.2 5.2L4 17l3 3 5.5-5.5a4 4 0 0 0 5.2-5.2l-2.4 2.4-2.1-.6-.6-2.1z"/></svg></span><small>Service Market</small><em>3 requests</em></div><div class="vb"><span class="vb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l9-4 9 4-9 4z"/><path d="M3 8v9l9 4 9-4V8"/><path d="M12 12v9"/><path d="M7.5 6l9 4"/></svg></span><small>Factory Supply Market</small><em>2 orders</em></div><div class="vb hot"><span class="vb-ic yai"><img src="${logo}" alt="Yai"></span><small>My Yai</small><em>ask me</em></div></div>
+    </div>
+    <div class="srow">
+      <div class="stile"><i class="sico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V4h4M16 4h4v4M20 16v4h-4M8 20H4v-4"/><path d="M4 12h16"/></svg></i><span>Scan</span></div>
+      <div class="stile"><i class="sico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H4z"/><path d="M8 21h8M12 16v5"/><path d="M8 9h8M8 12h5"/></svg></i><span>My Learn</span></div>
+      <div class="stile"><i class="sico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><path d="M9 12h6M9 16h6"/><circle cx="18" cy="18" r="3" fill="#F37021" stroke="none"/></svg></i><span>My Requests</span></div>
+      <div class="stile"><i class="sico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-5h6v5"/><path d="M9 10h.01M15 10h.01M9 14h.01M15 14h.01"/></svg></i><span>Organizations</span></div>
+    </div>
+    <div class="ssep"><span>Corporate Services</span></div>
+    <div class="srow srow2">
+      <div class="stile"><i class="sico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></i><span>YACC</span></div>
+      <div class="stile"><i class="sico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20a6 6 0 0 1 12 0"/><circle cx="17" cy="9" r="2.4"/><path d="M15.5 14.5A4.5 4.5 0 0 1 21 19"/></svg></i><span>YHR</span></div>
+      <div class="stile"><i class="sico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V5l7-2 7 2v16"/><path d="M9 9h.01M15 9h.01M9 13h.01M15 13h.01M10 21v-4h4v4"/></svg></i><span>YADMIN</span></div>
+      <div class="stile"><i class="sico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v10H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg></i><span>YCSR</span></div>
+    </div>
+`;
+    const homePhone = `<div class="phone big"><div class="phone-notch"></div><div class="scr">
+    <div class="hd"><span class="hd-av"></span><b>KA…</b><small>TL02</small><span class="hd-sp"></span><span class="hd-ic">🔔</span><span class="hd-ic flag">🇬🇧</span><span class="hd-ic">＋</span></div>
+    <div class="hd2"><span>Today</span><span class="hd-bar"><i></i></span><span>00:00 / 08:00</span><em>·</em><span>Weekly 14:52 h</span><em>·</em><span>6.5 d</span></div>
+${homeBody}
+    <div class="snav">
+      <div class="sn on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg><span>Home</span></div>
+      <div class="sn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg><span>Services</span></div>
+      <div class="sn"><img src="${logo}" alt="Yai"><span>My Yai</span></div>
+      <div class="sn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Profile</span></div>
+    </div>
+  </div></div>`;
     // How it works — PC UI left, phone UI middle, AIoT photo column on the right (20%).
     const howItWorks = slide("dark", "How it works · PC, phone and AIoT sensors — all in one system", `
 
 <div class="hiw">
   <figure class="hiw-web"><img src="${uri(path.join(LITE, "ui", "web-home.jpg"))}" alt="Yai web UI"></figure>
-  <figure class="hiw-app"><div class="phone"><div class="phone-notch"></div><img src="${uri(path.join(LITE, "ui", "app-home.jpg"))}" alt="Yai app UI"></div></figure>
+  <figure class="hiw-app"><div class="hiw-mock">${homePhone}</div></figure>
   <div class="hiw-aiot"><div class="hiw-aiot-h">AIoT</div><div class="hiw-grid">
     <figure><img src="${uri(path.join(__dirname, "img-about", "photo", "energy-meter.jpg"))}" alt=""><figcaption>Electricity</figcaption></figure>
     <figure><img src="${uri(path.join(__dirname, "img-about", "photo", "water-meter.jpg"))}" alt=""><figcaption>Water</figcaption></figure>
@@ -509,41 +542,9 @@ ${heading ? `<h2>${heading}</h2>` : ""}
       <div class="m-list">${row("hr","HR")}${row("ytm","YTM")}${row("needle","Needle")}${row("waste","Waste",true)}${row("car","Booking on map")}${row("meet","Meeting room",true)}</div>
       <div class="m-nav"><span class="on">Home</span><span>Services</span><span>Chat</span><span>Profile</span></div>
     </div></div>`;
-    const homeBody = `
-    <div class="vid-row">
-      <div class="vid"><img class="vid-bg" src="${uri(path.join(LITE, "ui", "video-worker.jpg"))}" alt="">
-        <div class="vid-side"><span>♡<b>2.4k</b></span><span>💬<b>318</b></span><span>↗<b>Share</b></span></div>
-        <div class="vid-meta"><b>@yaikh2025 · Ai for garment factory</b><span>Run your factory from your phone 🧵</span></div>
-        <div class="vid-play">▶</div></div>
-      <div class="vcol"><div class="vb"><span class="vb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l1.5-5h15L21 10"/><path d="M4 10h16v10H4z"/><path d="M9 20v-5h6v5"/><path d="M4 10c0 1.5 1.3 2.5 2.8 2.5S9.7 11.5 9.7 10c0 1.5 1.3 2.5 2.8 2.5s2.8-1 2.8-2.5c0 1.5 1.3 2.5 2.8 2.5S21 11.5 21 10"/></svg></span><small>Phsar Market</small><em>128 shops</em></div><div class="vb"><span class="vb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.2 5.2L4 17l3 3 5.5-5.5a4 4 0 0 0 5.2-5.2l-2.4 2.4-2.1-.6-.6-2.1z"/></svg></span><small>Service Market</small><em>3 requests</em></div><div class="vb"><span class="vb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l9-4 9 4-9 4z"/><path d="M3 8v9l9 4 9-4V8"/><path d="M12 12v9"/><path d="M7.5 6l9 4"/></svg></span><small>Factory Supply Market</small><em>2 orders</em></div><div class="vb hot"><span class="vb-ic yai"><img src="${logo}" alt="Yai"></span><small>My Yai</small><em>ask me</em></div></div>
-    </div>
-    <div class="srow">
-      <div class="stile"><i class="sico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V4h4M16 4h4v4M20 16v4h-4M8 20H4v-4"/><path d="M4 12h16"/></svg></i><span>Scan</span></div>
-      <div class="stile"><i class="sico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H4z"/><path d="M8 21h8M12 16v5"/><path d="M8 9h8M8 12h5"/></svg></i><span>My Learn</span></div>
-      <div class="stile"><i class="sico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><path d="M9 12h6M9 16h6"/><circle cx="18" cy="18" r="3" fill="#F37021" stroke="none"/></svg></i><span>My Requests</span></div>
-      <div class="stile"><i class="sico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-5h6v5"/><path d="M9 10h.01M15 10h.01M9 14h.01M15 14h.01"/></svg></i><span>Organizations</span></div>
-    </div>
-    <div class="ssep"><span>Corporate Services</span></div>
-    <div class="srow srow2">
-      <div class="stile"><i class="sico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></i><span>YACC</span></div>
-      <div class="stile"><i class="sico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20a6 6 0 0 1 12 0"/><circle cx="17" cy="9" r="2.4"/><path d="M15.5 14.5A4.5 4.5 0 0 1 21 19"/></svg></i><span>YHR</span></div>
-      <div class="stile"><i class="sico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V5l7-2 7 2v16"/><path d="M9 9h.01M15 9h.01M9 13h.01M15 13h.01M10 21v-4h4v4"/></svg></i><span>YADMIN</span></div>
-      <div class="stile"><i class="sico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v10H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg></i><span>YCSR</span></div>
-    </div>
-`;
     const redesign = slide("dark", "App UI", `
 <div class="rd">
-  <div class="rd-phones"><div class="phone big"><div class="phone-notch"></div><div class="scr">
-    <div class="hd"><span class="hd-av"></span><b>KA…</b><small>TL02</small><span class="hd-sp"></span><span class="hd-ic">🔔</span><span class="hd-ic flag">🇬🇧</span><span class="hd-ic">＋</span></div>
-    <div class="hd2"><span>Today</span><span class="hd-bar"><i></i></span><span>00:00 / 08:00</span><em>·</em><span>Weekly 14:52 h</span><em>·</em><span>6.5 d</span></div>
-${homeBody}
-    <div class="snav">
-      <div class="sn on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg><span>Home</span></div>
-      <div class="sn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg><span>Services</span></div>
-      <div class="sn"><img src="${logo}" alt="Yai"><span>My Yai</span></div>
-      <div class="sn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Profile</span></div>
-    </div>
-  </div></div></div>
+  <div class="rd-phones">${homePhone}</div>
   <div class="rd-phones"><div class="phone big"><div class="phone-notch"></div><div class="scr up">
     <div class="hd"><span class="hd-av"></span><b>KA…</b><small>TL02</small><span class="hd-sp"></span><span class="hd-ic">🔔</span><span class="hd-ic flag">🇬🇧</span><span class="hd-ic">＋</span></div>
     <div class="sroll"><div class="sroll-in">
@@ -636,7 +637,7 @@ h2.stack span{display:block}
 .m-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.m-tile{background:#fff;border-radius:10px;padding:8px 4px 6px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;font-weight:700}.m-ico{width:22px;height:22px;color:var(--orange);display:inline-block}.m-ico svg{width:100%;height:100%;display:block;stroke:currentColor;fill:none}.m-ico.sm{width:16px;height:16px}
 .m-list{display:grid;grid-template-columns:1fr 1fr;gap:5px}.m-row{background:#fff;border-radius:8px;padding:6px 7px;display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;position:relative}.m-row.lock{color:#94A3B8}.m-row.lock .m-ico{color:#CBD5E1}.m-row i{position:absolute;right:5px;top:4px;font-size:8px;font-style:normal}
 .m-nav{margin-top:auto;background:#fff;border-radius:14px 14px 0 0;display:flex;justify-content:space-around;padding:8px 0 10px;font-size:9px;color:#64748B;font-weight:700}.m-nav .on{color:var(--orange)}
-.hiwslide .eyebrow{margin-bottom:14px;letter-spacing:.1em;white-space:nowrap}.hiw{display:grid;grid-template-columns:5.4fr 2.4fr 2.9fr;gap:18px;align-items:start;margin:0 -48px}.hiw figure{margin:0}.hiw img{display:block;border-radius:10px;border:2px solid rgba(255,255,255,.18);box-shadow:0 10px 30px rgba(0,0,0,.4)}.hiw-web img{width:100%;height:585px;border-left:0;object-fit:cover;object-position:top}.hiw-app img{border-radius:22px;width:100%;height:557px;object-fit:contain;object-position:top;background:#f6f6f6}.hiw figcaption{margin-top:8px;font-size:16px;line-height:1.3;color:#DCE4F5}.hiw figcaption b{display:block;color:var(--gold);font-size:19px;margin-bottom:2px}.hiw-aiot{border:1px solid rgba(255,213,138,.35);border-right:0;border-radius:12px 0 0 12px;padding:10px 12px 12px;height:585px;display:flex;flex-direction:column;gap:6px}.hiw-aiot-h{font-size:19px;font-weight:800;color:var(--gold);letter-spacing:.12em;text-transform:uppercase}.phone{position:relative;background:#111827;border-radius:34px;padding:14px 10px;height:585px;box-sizing:border-box;box-shadow:0 14px 34px rgba(0,0,0,.5),inset 0 0 0 2px #2a3446;width:100%;margin:0 auto}.phone-notch{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:34%;height:14px;background:#111827;border-radius:0 0 12px 12px;z-index:2}.phone img{display:block;box-shadow:none;border:0}.hiw-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1;min-height:0}.hiw-aiot figure{margin:0;min-height:0;display:flex;flex-direction:column}.hiw-aiot figure img{flex:1;min-height:0;width:100%;object-fit:contain;background:#fff;border-radius:8px;border:1px solid rgba(255,255,255,.14)}.hiw-aiot figcaption{font-size:13px;color:#DCE4F5;margin-top:3px;text-align:center;white-space:nowrap}.hiw-aiot p{margin:0;font-size:15px;color:#8FA8D8;line-height:1.3}
+.hiwslide .eyebrow{margin-bottom:14px;letter-spacing:.1em;white-space:nowrap}.hiw{display:grid;grid-template-columns:5.4fr 2.4fr 2.9fr;gap:18px;align-items:start;margin:0 -48px}.hiw figure{margin:0}.hiw img{display:block;border-radius:10px;border:2px solid rgba(255,255,255,.18);box-shadow:0 10px 30px rgba(0,0,0,.4)}.hiw-web img{width:100%;height:585px;border-left:0;object-fit:cover;object-position:top}.hiw-mock{width:320px;height:600px;transform:scale(.975);transform-origin:top center;margin:0 auto}.hiw-mock .phone.big{width:320px}.hiw figcaption{margin-top:8px;font-size:16px;line-height:1.3;color:#DCE4F5}.hiw figcaption b{display:block;color:var(--gold);font-size:19px;margin-bottom:2px}.hiw-aiot{border:1px solid rgba(255,213,138,.35);border-right:0;border-radius:12px 0 0 12px;padding:10px 12px 12px;height:585px;display:flex;flex-direction:column;gap:6px}.hiw-aiot-h{font-size:19px;font-weight:800;color:var(--gold);letter-spacing:.12em;text-transform:uppercase}.phone{position:relative;background:#111827;border-radius:34px;padding:14px 10px;height:585px;box-sizing:border-box;box-shadow:0 14px 34px rgba(0,0,0,.5),inset 0 0 0 2px #2a3446;width:100%;margin:0 auto}.phone-notch{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:34%;height:14px;background:#111827;border-radius:0 0 12px 12px;z-index:2}.phone img{display:block;box-shadow:none;border:0}.hiw-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1;min-height:0}.hiw-aiot figure{margin:0;min-height:0;display:flex;flex-direction:column}.hiw-aiot figure img{flex:1;min-height:0;width:100%;object-fit:contain;background:#fff;border-radius:8px;border:1px solid rgba(255,255,255,.14)}.hiw-aiot figcaption{font-size:13px;color:#DCE4F5;margin-top:3px;text-align:center;white-space:nowrap}.hiw-aiot p{margin:0;font-size:15px;color:#8FA8D8;line-height:1.3}
 .constslide h2{font-size:36px;margin-bottom:16px}.constslide{padding-left:44px;padding-right:44px}.const{display:grid;grid-template-columns:116px 108px 1fr 144px 232px;gap:12px;align-items:stretch}.crow2{display:grid;grid-template-columns:3fr 5fr;gap:14px}.csec{border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);overflow:hidden}.csec-h{display:flex;align-items:center;justify-content:center;text-align:center;height:58px;line-height:1.2;font-size:17px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding:0 10px;color:#fff}.csec.admin .csec-h{background:var(--blue)}.csec.mgmt .csec-h{background:#6D28D9;letter-spacing:.02em}.csec.aisrv .csec-h{background:var(--orange)}.csec.aistart .csec-h{background:#B45309;font-size:14px;letter-spacing:.06em;line-height:1.1}.csec.ops .csec-h{background:var(--green)}.ctabs{display:grid;gap:0;align-content:start}.ctab{padding:14px 8px 16px 10px;border-top:1px solid rgba(243,112,33,.55)}.ctab b{display:block;font-size:19px;color:var(--gold);margin-bottom:6px}.ctab ul{margin:0;padding:0;list-style:none}.cprice{display:block;font-size:18px;font-weight:800;color:#fff;background:rgba(255,213,138,.14);border:1px dashed rgba(255,213,138,.55);border-radius:6px;padding:1px 8px;margin:0 0 4px;width:max-content;min-width:78px}.cprice.ghost{visibility:hidden}.cprice.big{font-size:22px;margin:4px 0 2px;min-width:0}.ctab.stack .cprice.big + ul{margin-bottom:14px}.ctab.stack ul{margin-bottom:12px}.ctab li{font-size:17px;line-height:1.5;hyphens:none;overflow-wrap:normal;color:#E6ECFA}
 .cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:22px}
 .col{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px 24px 22px}
