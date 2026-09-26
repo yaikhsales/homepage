@@ -730,7 +730,7 @@ ${homeBody}
     const takes = [
       { at: 0.02, side: "below", dx: 60, dy: 0, y: "2024 – 25", d: "Pre-revenue development · 70+ apps · 14 Ai agents" },
       { at: 0.27, side: "below", dx: 70, dy: 18, y: "Feb 2026", d: "21-factory implementation with Yorkwell · subscriptions issued" },
-      { at: 0.55, side: "below", dx: 0, dy: 0, y: "Aug – Oct 2026", d: "First paid factories: BICNZ · 3SGS · ES Packing · TAFTAC expo, 11 prospects · US$100,000 SIPP" },
+      { at: 0.55, side: "below", dx: 0, dy: 0, y: "Aug – Oct 2026", d: "First 3 paying clients: BICNZ · 3SGS · ES Packing · first public events — TAFTAC expo" },
       { at: 0.83, side: "below", dx: 0, dy: 0, y: "2027", d: "ASEAN: Vietnam · Thailand · Malaysia · 100,000 users" },
     ];
     const bizplan = slide("dark", "Business plan · 2025 – 2028", `
