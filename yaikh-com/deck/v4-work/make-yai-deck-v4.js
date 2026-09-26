@@ -639,7 +639,7 @@ ${homeBody}
     n += 1;
     const finRow = (l, a, b, cls = "") => `<tr class="${cls}"><td>${l}</td><td>${a}</td><td>${b}</td></tr>`;
     const financials = slide("dark", "Financials · Oct 2025 – Aug 2026", `
-<div class="fin-sub">Texlink Technologies Co., Ltd. · incorporated 10 October 2025 · USD · Oct–Dec 2025 from IEWS FS1–FS3 · Jan–Aug 2026 management figures at run-rate</div>
+<div class="fin-sub">Texlink Technologies Co., Ltd. · incorporated 10 Oct 2025 · USD</div>
 <div class="fin">
   <div class="fin-col">
     <h3>Income statement</h3>
