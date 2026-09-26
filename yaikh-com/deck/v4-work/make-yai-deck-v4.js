@@ -726,7 +726,7 @@ ${homeBody}
       { on: "main", at: 0.45, side: "above", dx: 0, dy: 0, y: "2026", t: "First 25 factories & clients", d: "10,000 app users" },
       { on: "main", at: 0.78, side: "above", dx: -20, dy: 0, y: "2027", t: "100 factories & clients", d: "1,000,000 app users" },
       { on: "brA", at: 0.9, side: "above", dx: -80, dy: 0, y: "2028", t: "Own Ai-Native manufacturing unit", d: "the showcase" },
-      { on: "brB", at: 0.9, side: "below", dx: -80, dy: 0, y: "2028", t: "Brand & organizational partnerships", d: "Series A" },
+      { on: "brB", at: 0.9, side: "below", dx: -80, dy: 0, y: "2028", t: "Brand & organizational partnerships", d: "" },
     ];
     const takes = [
       { on: "main", at: 0.02, side: "below", dx: 60, dy: 0, y: "2024 – 25", d: "Pre-revenue development · 70+ apps · 14 Ai agents" },
