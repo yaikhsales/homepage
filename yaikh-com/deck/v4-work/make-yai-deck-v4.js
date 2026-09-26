@@ -697,7 +697,7 @@ ${homeBody}
 </div>
 `);
     S.splice(0, S.length, title, howItWorks, redesign, redesignKm, financials, solution, prices, sales, ask, close);
-    S.forEach((html, i) => { S[i] = html.replace(/id="s\d+"/, `id="s${i + 1}"`).replace(/<span>\d+ \/ \d+<\/span>/, `<span>${i + 1} / ${TOTAL}</span>`); });
+    S.forEach((html, i) => { S[i] = html.replace(/<div class="eyebrow">\d\d · /, '<div class="eyebrow">').replace(/id="s\d+"/, `id="s${i + 1}"`).replace(/<span>\d+ \/ \d+<\/span>/, `<span>${i + 1} / ${TOTAL}</span>`); });
   }
   if (TIER.client) S.push(planSlide("Yai / TAFTAC · YHR leaning presentation", "", [
     { n: "S.E.C. Mega Factory Co., Ltd.", at: { "Sep 2026": "Presentation" } },
