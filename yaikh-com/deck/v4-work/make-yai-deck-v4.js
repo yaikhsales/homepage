@@ -732,10 +732,11 @@ ${homeBody}
       S8: { x: 320, y: 426, kind: "sub", side: "right", dx: 0, dy: 0, d: "Subscriptions issued" },
       M2: { x: 460, y: 250, kind: "mile", side: "above", dx: 0,   dy: 0,  y2: "2026", t: "First 25 factories & clients", d: "10,000 app users" },
       T3: { x: 610, y: 250, kind: "take", side: "right", dx: 0, dy: 26, y2: "Aug – Oct 2026", d: "" },
-      S1: { x: 610, y: 312, kind: "sub", side: "right", dx: 0, dy: 0, d: "BICNZ — first paying client" },
-      S2: { x: 610, y: 346, kind: "sub", side: "right", dx: 0, dy: 0, d: "3SGS" },
-      S3: { x: 610, y: 380, kind: "sub", side: "right", dx: 0, dy: 0, d: "ES Packing" },
-      S4: { x: 610, y: 414, kind: "sub", side: "right", dx: 0, dy: 0, d: "First public expos & events" },
+      S0: { x: 610, y: 312, kind: "sub", side: "right", dx: 0, dy: 0, d: "21-factory implementation — ongoing" },
+      S1: { x: 610, y: 346, kind: "sub", side: "right", dx: 0, dy: 0, d: "BICNZ — first paying client" },
+      S2: { x: 610, y: 380, kind: "sub", side: "right", dx: 0, dy: 0, d: "3SGS" },
+      S3: { x: 610, y: 414, kind: "sub", side: "right", dx: 0, dy: 0, d: "ES Packing" },
+      S4: { x: 610, y: 448, kind: "sub", side: "right", dx: 0, dy: 0, d: "First public expos & events" },
       M3: { x: 760, y: 250, kind: "mile", side: "above", dx: 0,   dy: 0,  y2: "2027", t: "100 factories & clients", d: "1,000,000 app users" },
       T4: { x: 880, y: 250, kind: "take", side: "right", dx: 0, dy: 26, y2: "2027 · ASEAN", d: "" },
       S9: { x: 880, y: 312, kind: "sub", side: "right", dx: 0, dy: 0, d: "Vietnam" },
@@ -756,7 +757,7 @@ ${homeBody}
       "M880 250 H960",                  // T4 → J
       "M960 250 L1010 200 V150 L1050 110 H1080",   // J → M4
       "M960 250 L1010 300 V350 L1050 390 H1080",   // J → M5
-      "M70 470 V554", "M320 330 V426", "M610 250 V414", "M880 250 V380",   // drop chains
+      "M70 470 V554", "M320 330 V426", "M610 250 V448", "M880 250 V380",   // drop chains
     ];
     // decorative background traces (faint)
     const bg = [
