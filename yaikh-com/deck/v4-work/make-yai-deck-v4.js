@@ -722,19 +722,20 @@ ${homeBody}
     for (const [en, km] of KM_UI) redesignKm = redesignKm.split(en).join(km);
     // Business plan — roadmap
     const stops = [
-      ["Oct 2025", "Texlink incorporated", "Yorkwell strategic partnership"],
-      ["Feb 2026", "21 group companies", "on data subscriptions"],
+      ["2024 – 2025", "Pre-revenue development", "Yai platform built · 70+ apps · 14 Ai agents"],
+      ["Oct 2025", "Texlink incorporated", "takes over the 21-factory implementation with Yorkwell group"],
+      ["Feb 2026", "21-factory implementation", "officially started · data subscriptions"],
       ["Aug – Oct 2026", "First paid factories", "BICNZ · 3SGS · ES Packing · TAFTAC expo, 11 prospects"],
       ["Dec 2026", "25 paying factories", "Layer 3 live at 5 · US$100,000 SIPP"],
       ["2027", "ASEAN", "Vietnam · Thailand · Malaysia · 100 factories · 100,000 users"],
       ["Q4 2028", "Series A", ""],
     ];
-    const bizplan = slide("dark", "Business plan · 2025 – 2028", `
+    const bizplan = slide("dark", "Business plan · 2024 – 2028", `
 <div class="road">
   <svg viewBox="0 0 1160 590" xmlns="http://www.w3.org/2000/svg">
     <defs><filter id="rs" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000" flood-opacity=".45"/></filter></defs>
-    <path id="roadpath" d="M 30 520 C 330 520, 250 300, 560 300 S 760 90, 1130 60" fill="none" stroke="#C9D3E3" stroke-width="54" stroke-linecap="round" filter="url(#rs)"/>
-    <path d="M 30 520 C 330 520, 250 300, 560 300 S 760 90, 1130 60" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="18 14" opacity=".9"/>
+    <path id="roadpath" d="M 30 460 C 330 460, 250 290, 560 290 S 760 90, 1130 60" fill="none" stroke="#C9D3E3" stroke-width="54" stroke-linecap="round" filter="url(#rs)"/>
+    <path d="M 30 460 C 330 460, 250 290, 560 290 S 760 90, 1130 60" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="18 14" opacity=".9"/>
     <g id="pins"></g>
   </svg>
   <div class="road-labels"></div>
@@ -745,7 +746,7 @@ ${homeBody}
   const svg = document.currentScript.previousElementSibling.querySelector("svg");
   const path = svg.querySelector("#roadpath"), pins = svg.querySelector("#pins");
   const labels = document.currentScript.previousElementSibling.querySelector(".road-labels");
-  const L = path.getTotalLength(), fr = [0.03, 0.2, 0.4, 0.58, 0.77, 0.96], side = ["below", "above", "above", "below", "above", "below"], dx = [40, -110, 0, 0, 0, 0], dy = [0, 10, 0, 0, 0, 0];
+  const L = path.getTotalLength(), fr = [0.02, 0.17, 0.33, 0.49, 0.64, 0.8, 0.96], side = ["below", "above", "below", "above", "below", "above", "below"], dx = [60, -120, 100, 0, 110, 0, 0], dy = [0, 10, 0, 0, 0, 0, 0];
   const box = svg.getBoundingClientRect(), sx = 1160 / 1160, ns = "http://www.w3.org/2000/svg";
   stops.forEach((st, i) => {
     const pt = path.getPointAtLength(L * fr[i]);
@@ -996,7 +997,7 @@ td{padding:12px;border-bottom:1px solid rgba(255,255,255,.12);vertical-align:top
 
 
 /* business plan roadmap */
-.road{position:relative;width:1160px;height:590px;margin:-4px auto 0}.road svg{position:absolute;inset:0;width:100%;height:100%}.road-labels{position:absolute;inset:0;pointer-events:none}.road-lab{position:absolute;width:250px;font-family:Arial,Helvetica,sans-serif;color:#fff;transform:translate(-50%,0)}.road-lab.above{transform:translate(-50%,-100%);margin-top:-72px;text-align:center}.road-lab.below{margin-top:40px;text-align:center}.road-lab small{display:block;color:var(--orange);font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase}.road-lab b{display:block;font-size:22px;color:var(--gold);line-height:1.15;margin:3px 0 4px}.road-lab span{display:block;font-size:14.5px;line-height:1.35;color:#DCE4F5}
+.road{position:relative;width:1160px;height:590px;margin:-4px auto 0}.road svg{position:absolute;inset:0;width:100%;height:100%}.road-labels{position:absolute;inset:0;pointer-events:none}.road-lab{position:absolute;width:290px;font-family:Arial,Helvetica,sans-serif;color:#fff;transform:translate(-50%,0)}.road-lab.above{transform:translate(-50%,-100%);margin-top:-72px;text-align:center}.road-lab.below{margin-top:40px;text-align:center}.road-lab small{display:block;color:var(--orange);font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase}.road-lab b{display:block;font-size:20px;color:var(--gold);line-height:1.15;margin:3px 0 4px;white-space:nowrap}.road-lab span{display:block;font-size:14.5px;line-height:1.35;color:#DCE4F5}
 /* brochure slides */
 .brslide{padding:0;background:#F7F5EF;color:#1E293B;font-family:Georgia,"Times New Roman",serif}
 .br{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr 1fr}
