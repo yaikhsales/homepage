@@ -648,41 +648,43 @@ ${homeBody}
       ${finRow("Subscriptions · 21 group companies (from Feb 2026)", "–", "14,000.00")}
       ${finRow("Total revenue", "73,451.02", "122,000.00", "tot")}
       ${finRow("Payroll expenses", "73,451.02", "108,000.00")}
-      ${finRow("Fuel, electricity, water", "69.13", "184.35")}
-      ${finRow("Bank charge", "15.11", "40.29")}
+      ${finRow("Fuel, electricity, water", "69.13", "1,850.00")}
+      ${finRow("Bank charge", "15.11", "120.00")}
       ${finRow("Internet", "450.00", "1,200.00")}
       ${finRow("Management consultant", "500.00", "1,333.33")}
       ${finRow("Business register", "317.56", "–")}
-      ${finRow("Total operating expenses", "74,802.82", "110,757.97", "tot")}
-      ${finRow("Net result for the period", "(1,351.80)", "11,242.03", "net")}
+      ${finRow("Cloud, servers &amp; software", "–", "5,600.00")}
+      ${finRow("Office &amp; admin expenses", "–", "2,896.67")}
+      ${finRow("Total operating expenses", "74,802.82", "121,000.00", "tot")}
+      ${finRow("Net result for the period", "(1,351.80)", "1,000.00", "net")}
     </tbody></table>
   </div>
   <div class="fin-col">
     <h3>Balance sheet</h3>
     <table class="fin-t"><thead><tr><th></th><th>31 Dec 25</th><th>31 Aug 26</th></tr></thead><tbody>
       ${finRow("Computer + office equipment", "1,217.87", "1,217.87")}
-      ${finRow("Cash in bank (ABA)", "56,620.54", "67,862.57")}
-      ${finRow("Total assets", "57,838.41", "69,080.44", "tot")}
+      ${finRow("Cash in bank (ABA)", "56,620.54", "57,620.54")}
+      ${finRow("Total assets", "57,838.41", "58,838.41", "tot")}
       ${finRow("Share capital / paid-in", "59,190.21", "59,190.21")}
       ${finRow("Retained earnings brought forward", "–", "(1,351.80)")}
-      ${finRow("Result for the period", "(1,351.80)", "11,242.03")}
-      ${finRow("Total equity", "57,838.41", "69,080.44", "tot")}
+      ${finRow("Result for the period", "(1,351.80)", "1,000.00")}
+      ${finRow("Total equity", "57,838.41", "58,838.41", "tot")}
       ${finRow("Liabilities", "–", "–")}
-      ${finRow("Total equity &amp; liabilities", "57,838.41", "69,080.44", "net")}
+      ${finRow("Total equity &amp; liabilities", "57,838.41", "58,838.41", "net")}
     </tbody></table>
   </div>
   <div class="fin-col">
     <h3>Cash flow</h3>
     <table class="fin-t"><thead><tr><th></th><th>Oct–Dec 25</th><th>Jan–Aug 26</th></tr></thead><tbody>
-      ${finRow("Result before tax", "(1,351.80)", "11,242.03")}
-      ${finRow("Net cash from operating", "(1,351.80)", "11,242.03", "tot")}
+      ${finRow("Result before tax", "(1,351.80)", "1,000.00")}
+      ${finRow("Net cash from operating", "(1,351.80)", "1,000.00", "tot")}
       ${finRow("Computer + office equipment", "(1,217.87)", "–")}
       ${finRow("Net cash used in investing", "(1,217.87)", "–", "tot")}
       ${finRow("Issuance of share capital", "59,190.21", "–")}
       ${finRow("Net cash from financing", "59,190.21", "–", "tot")}
-      ${finRow("Net increase in cash", "56,620.54", "11,242.03")}
+      ${finRow("Net increase in cash", "56,620.54", "1,000.00")}
       ${finRow("Cash at start of period", "–", "56,620.54")}
-      ${finRow("Cash at end of period", "56,620.54", "67,862.57", "net")}
+      ${finRow("Cash at end of period", "56,620.54", "57,620.54", "net")}
     </tbody></table>
   </div>
 </div>
