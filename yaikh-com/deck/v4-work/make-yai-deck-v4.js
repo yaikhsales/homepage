@@ -720,45 +720,45 @@ ${homeBody}
       ['<span class="hd-ic flag">🇬🇧</span>', '<span class="hd-ic flag">🇰🇭</span>']
     ];
     for (const [en, km] of KM_UI) redesignKm = redesignKm.split(en).join(km);
-    // Business plan
-    const bizplan = slide("dark", "Business plan · 2026 – 2028", `
-<div class="bp">
-  <div class="bp-col">
-    <h3>Revenue model</h3>
-    <ul>
-      <li><b>Cloud packages</b> — $120 small · $750 medium · $1,200 1,000-worker factory, per year</li>
-      <li><b>Ai server</b> — NVIDIA or Huawei, $2,500 per factory</li>
-      <li><b>Modules</b> — $2,000 per department (HR, Billing, Admin, CSR) · Production $5,000 · QA $10,000</li>
-      <li><b>Data subscriptions</b> — $2,000 / month, 21 group companies today</li>
-      <li><b>Marketplaces</b> — Phsar, Service and Factory Supply: commission on every order, paid through ABA and Wing</li>
-    </ul>
-  </div>
-  <div class="bp-col">
-    <h3>Go-to-market</h3>
-    <ul>
-      <li><b>Live</b> — Yorkmars group (21 companies) · BICNZ paid Aug 2026</li>
-      <li><b>Setting</b> — 3SGS, 3SGS+, ES Packing (Sep–Oct 2026)</li>
-      <li><b>TAFTAC channel</b> — 11 factory prospects from the Sep 2026 expo; QMS leaning presentations</li>
-      <li><b>Consultants</b> — Saman: 5 QMS factories (Elegant Garment, Trax Intertrade …)</li>
-      <li><b>Partners</b> — Yorkwell Asia · Google for Startups · Anthropic · 3SGS</li>
-      <li><b>Team</b> — 20 Ai engineers in Phnom Penh, 40 years of factory experience</li>
-    </ul>
-  </div>
-  <div class="bp-col">
-    <h3>Milestones &amp; use of US$100,000</h3>
-    <ul>
-      <li><b>2026</b> — 25 paying factories in Cambodia · Layer 3 live at 5 factories</li>
-      <li><b>2027</b> — ASEAN: Vietnam, Thailand, Malaysia · 100 factories · 100,000 users</li>
-      <li><b>2028</b> — Series A by Q4</li>
-    </ul>
-    <div class="bp-funds">
-      <div><b>50%</b><span>Technology — Ai servers, developer machines</span></div>
-      <div><b>30%</b><span>Local supplier onboarding — city office &amp; training centre</span></div>
-      <div><b>20%</b><span>Inventory — AIoT stock ready to install</span></div>
-      <div><b>0%</b><span>Working capital — covered by Yorkwell and subscriptions</span></div>
-    </div>
-  </div>
+    // Business plan — roadmap
+    const stops = [
+      ["Oct 2025", "Texlink incorporated", "Yorkwell strategic partnership"],
+      ["Feb 2026", "21 group companies", "on data subscriptions"],
+      ["Aug – Oct 2026", "First paid factories", "BICNZ · 3SGS · ES Packing · TAFTAC expo, 11 prospects"],
+      ["Dec 2026", "25 paying factories", "Layer 3 live at 5 · US$100,000 SIPP"],
+      ["2027", "ASEAN", "Vietnam · Thailand · Malaysia · 100 factories · 100,000 users"],
+      ["Q4 2028", "Series A", ""],
+    ];
+    const bizplan = slide("dark", "Business plan · 2025 – 2028", `
+<div class="road">
+  <svg viewBox="0 0 1160 590" xmlns="http://www.w3.org/2000/svg">
+    <defs><filter id="rs" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000" flood-opacity=".45"/></filter></defs>
+    <path id="roadpath" d="M 30 520 C 330 520, 250 300, 560 300 S 760 90, 1130 60" fill="none" stroke="#C9D3E3" stroke-width="54" stroke-linecap="round" filter="url(#rs)"/>
+    <path d="M 30 520 C 330 520, 250 300, 560 300 S 760 90, 1130 60" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="18 14" opacity=".9"/>
+    <g id="pins"></g>
+  </svg>
+  <div class="road-labels"></div>
 </div>
+<script>
+(function(){
+  const stops = ${JSON.stringify(stops)};
+  const svg = document.currentScript.previousElementSibling.querySelector("svg");
+  const path = svg.querySelector("#roadpath"), pins = svg.querySelector("#pins");
+  const labels = document.currentScript.previousElementSibling.querySelector(".road-labels");
+  const L = path.getTotalLength(), fr = [0.03, 0.2, 0.4, 0.58, 0.77, 0.96], side = ["below", "above", "above", "below", "above", "below"], dx = [40, -110, 0, 0, 0, 0], dy = [0, 10, 0, 0, 0, 0];
+  const box = svg.getBoundingClientRect(), sx = 1160 / 1160, ns = "http://www.w3.org/2000/svg";
+  stops.forEach((st, i) => {
+    const pt = path.getPointAtLength(L * fr[i]);
+    const g = document.createElementNS(ns, "g"); g.setAttribute("transform", "translate(" + pt.x + " " + (pt.y - 4) + ")");
+    g.innerHTML = '<path d="M0 0 L-16 -26 A22 22 0 1 1 16 -26 Z" fill="#F37021" stroke="#fff" stroke-width="3"/><circle cy="-34" r="17" fill="#fff"/><text y="-28" text-anchor="middle" font-family="Arial" font-weight="800" font-size="17" fill="#0A1F47">0' + (i + 1) + '</text>';
+    pins.appendChild(g);
+    const el = document.createElement("div"); el.className = "road-lab " + side[i];
+    el.style.left = ((pt.x + dx[i]) / 1160 * 100) + "%"; el.style.top = ((pt.y + dy[i]) / 590 * 100) + "%";
+    el.innerHTML = "<small>" + st[0] + "</small><b>" + st[1] + "</b>" + (st[2] ? "<span>" + st[2] + "</span>" : "");
+    labels.appendChild(el);
+  });
+})();
+</script>
 `);
 
     // Brochure — rebuilt as slides (tri-fold outside + inside)
@@ -995,8 +995,8 @@ td{padding:12px;border-bottom:1px solid rgba(255,255,255,.12);vertical-align:top
 .fin-sub{color:#8FA8D8;font-size:15px;margin:-8px 0 10px}.fin{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:start;margin:0 -36px}.fin-col h3{margin:0 0 6px;font-size:20px;color:var(--gold);letter-spacing:.04em}.fin-t{width:100%;border-collapse:collapse;margin:0;font-size:13px}.fin-t th{white-space:nowrap;font-size:10.5px;color:#8FA8D8;font-weight:700;text-align:right;padding:2px 4px;border-bottom:1px solid rgba(255,255,255,.2);letter-spacing:.06em}.fin-t th:first-child{text-align:left}.fin-t td{background:none;border:0;border-bottom:1px solid rgba(255,255,255,.08);height:auto;padding:4px 3px;text-align:right;color:#DCE4F5;font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap}.fin-t td:first-child{text-align:left;color:#C7D2E6;white-space:normal}.fin-t tr.fund td{color:#C7D2E6;font-weight:400;background:none;font-size:12px}.fin-t tr.fund td:first-child{color:#8FA8D8;font-style:italic}.fin-t td.q{color:#8FA8D8}.fin-t tr.tot td{font-weight:700;color:#fff;border-top:1px solid rgba(255,255,255,.25)}.fin-t tr.net td{font-weight:800;color:var(--gold);border-top:2px solid var(--orange);border-bottom:0}.fin-note{margin-top:12px;padding:10px 18px;border-left:4px solid var(--orange);background:rgba(255,255,255,.05);font-size:17px;line-height:1.4;color:#DCE4F5}.fin-note b{color:var(--gold)}
 
 
-/* business plan */
-.bp{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin-top:6px}.bp-col h3{margin:0 0 14px;font-size:26px;color:var(--gold)}.bp-col ul{margin:0;padding-left:20px;font-size:19px;line-height:1.45;color:#DCE4F5}.bp-col li{margin-bottom:12px}.bp-col li b{color:#fff}.bp-funds{margin-top:16px;border-top:1px solid rgba(255,255,255,.2);padding-top:14px;display:grid;gap:10px}.bp-funds div{display:grid;grid-template-columns:64px 1fr;align-items:baseline;font-size:17px;line-height:1.35;color:#DCE4F5}.bp-funds b{color:var(--orange);font-size:24px}
+/* business plan roadmap */
+.road{position:relative;width:1160px;height:590px;margin:-4px auto 0}.road svg{position:absolute;inset:0;width:100%;height:100%}.road-labels{position:absolute;inset:0;pointer-events:none}.road-lab{position:absolute;width:250px;font-family:Arial,Helvetica,sans-serif;color:#fff;transform:translate(-50%,0)}.road-lab.above{transform:translate(-50%,-100%);margin-top:-72px;text-align:center}.road-lab.below{margin-top:40px;text-align:center}.road-lab small{display:block;color:var(--orange);font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase}.road-lab b{display:block;font-size:22px;color:var(--gold);line-height:1.15;margin:3px 0 4px}.road-lab span{display:block;font-size:14.5px;line-height:1.35;color:#DCE4F5}
 /* brochure slides */
 .brslide{padding:0;background:#F7F5EF;color:#1E293B;font-family:Georgia,"Times New Roman",serif}
 .br{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr 1fr}
