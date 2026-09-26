@@ -721,55 +721,71 @@ ${homeBody}
     ];
     for (const [en, km] of KM_UI) redesignKm = redesignKm.split(en).join(km);
     // Business plan — roadmap: 4 milestones on the road, key takeaways in between
-    const miles = [
-      { on: "main", at: 0.14, side: "above", dx: 0, dy: 0, y: "2025", t: "Incorporation", d: "Texlink Technologies · Oct 2025" },
-      { on: "main", at: 0.45, side: "above", dx: 0, dy: 0, y: "2026", t: "First 25 factories & clients", d: "10,000 app users" },
-      { on: "main", at: 0.78, side: "above", dx: -20, dy: 0, y: "2027", t: "100 factories & clients", d: "1,000,000 app users" },
-      { on: "brA", at: 0.9, side: "above", dx: -80, dy: 0, y: "2028", t: "Own Ai-Native manufacturing unit", d: "the showcase" },
-      { on: "brB", at: 0.9, side: "below", dx: -80, dy: 0, y: "2028", t: "Brand & organizational partnerships", d: "" },
+    // Business plan — neural / circuit map
+    const nodes = {
+      T1: { x: 70,  y: 470, kind: "take", side: "below", dx: 60,  dy: 0,  y2: "2024 – 25", d: "Pre-revenue development · 70+ apps · 14 Ai agents" },
+      M1: { x: 180, y: 400, kind: "mile", side: "above", dx: 0,   dy: 0,  y2: "2025", t: "Incorporation", d: "Texlink Technologies · Oct 2025" },
+      T2: { x: 320, y: 330, kind: "take", side: "below", dx: 40,  dy: 0,  y2: "Feb 2026", d: "21-factory implementation with Yorkwell · subscriptions issued" },
+      M2: { x: 460, y: 250, kind: "mile", side: "above", dx: 0,   dy: 0,  y2: "2026", t: "First 25 factories & clients", d: "10,000 app users" },
+      T3: { x: 610, y: 250, kind: "take", side: "below", dx: 0,   dy: 0,  y2: "Aug – Oct 2026", d: "First 3 paying clients: BICNZ · 3SGS · ES Packing · first public expos and events" },
+      M3: { x: 760, y: 250, kind: "mile", side: "above", dx: 0,   dy: 0,  y2: "2027", t: "100 factories & clients", d: "1,000,000 app users" },
+      T4: { x: 880, y: 250, kind: "take", side: "below", dx: 0,   dy: 0,  y2: "2027", d: "ASEAN: Vietnam · Thailand · Malaysia" },
+      J:  { x: 960, y: 250, kind: "junction" },
+      M4: { x: 1080, y: 110, kind: "mile", side: "above", dx: -60, dy: 0, y2: "2028", t: "Own Ai-Native manufacturing unit", d: "the showcase" },
+      M5: { x: 1080, y: 390, kind: "mile", side: "below", dx: -60, dy: 0, y2: "2028", t: "Brand & organizational partnerships", d: "" },
+    };
+    // circuit traces: orthogonal + 45° bends between nodes
+    const traces = [
+      "M70 470 H120 L180 410",          // T1 → M1
+      "M180 400 H240 L320 330",         // M1 → T2
+      "M320 330 H380 L460 250",         // T2 → M2
+      "M460 250 H610",                  // M2 → T3
+      "M610 250 H760",                  // T3 → M3
+      "M760 250 H880",                  // M3 → T4
+      "M880 250 H960",                  // T4 → J
+      "M960 250 L1010 200 V150 L1050 110 H1080",   // J → M4
+      "M960 250 L1010 300 V350 L1050 390 H1080",   // J → M5
     ];
-    const takes = [
-      { on: "main", at: 0.02, side: "below", dx: 60, dy: 0, y: "2024 – 25", d: "Pre-revenue development · 70+ apps · 14 Ai agents" },
-      { on: "main", at: 0.29, side: "below", dx: 70, dy: 18, y: "Feb 2026", d: "21-factory implementation with Yorkwell · subscriptions issued" },
-      { on: "main", at: 0.58, side: "below", dx: 0, dy: 0, y: "Aug – Oct 2026", d: "First 3 paying clients: BICNZ · 3SGS · ES Packing · first public expos and events" },
-      { on: "main", at: 0.9, side: "below", dx: -30, dy: 10, y: "2027", d: "ASEAN: Vietnam · Thailand · Malaysia" },
+    // decorative background traces (faint)
+    const bg = [
+      "M0 120 H90 L130 80 H260", "M40 560 H200 L240 520 H330", "M520 40 V120 L560 160 H640", "M700 560 H820 L860 520 H930",
+      "M1160 300 H1120 L1090 270 H1040", "M980 580 V520 L1020 480 H1160", "M300 60 H420 L460 100 V140", "M600 470 H660 L700 430 H780 V380",
+      "M1160 40 H1110 L1080 70", "M0 330 H60 L100 290", "M420 520 V470 L460 430 H520", "M820 120 H880 L920 80 H1000 V40",
     ];
-    const ROAD = { main: "M 30 400 C 330 400, 300 250, 580 250 S 800 240, 900 230", brA: "M 900 230 C 980 230, 1000 110, 1100 100", brB: "M 900 230 C 980 230, 1000 360, 1100 370" };
-    const roadPath = (id, d) => `<path id="${id}" d="${d}" fill="none" stroke="#C9D3E3" stroke-width="54" stroke-linecap="round"/>`;
-    const roadDash = (d) => `<path d="${d}" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="18 14" opacity=".9"/>`;
     const bizplan = slide("dark", "Business plan · 2025 – 2028", `
-<div class="road">
+<div class="road neural">
   <svg viewBox="0 0 1160 590" xmlns="http://www.w3.org/2000/svg">
-    <defs><filter id="rs" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000" flood-opacity=".45"/></filter></defs>
-    <g filter="url(#rs)">${roadPath("rp-main", ROAD.main)}${roadPath("rp-brA", ROAD.brA)}${roadPath("rp-brB", ROAD.brB)}</g>
-    ${roadDash(ROAD.main)}${roadDash(ROAD.brA)}${roadDash(ROAD.brB)}
+    <defs>
+      <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      <filter id="glow2" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="10" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      <linearGradient id="tr" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3B82F6"/><stop offset="1" stop-color="#A855F7"/></linearGradient>
+    </defs>
+    <g stroke="#3B4FA3" stroke-width="2" fill="none" opacity=".35">${bg.map((d) => `<path d="${d}"/>`).join("")}</g>
+    <g fill="#6D7FE0" opacity=".5">${[[90,120],[260,120],[330,560],[640,160],[930,560],[1040,270],[520,40],[780,380],[1000,40],[100,290],[520,430],[1160,480]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="3"/>`).join("")}</g>
+    <g stroke="url(#tr)" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)">${traces.map((d) => `<path d="${d}"/>`).join("")}</g>
+    <g stroke="#DDE6FF" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".9">${traces.map((d) => `<path d="${d}"/>`).join("")}</g>
     <g id="pins"></g>
   </svg>
   <div class="road-labels"></div>
 </div>
 <script>
 (function(){
-  const miles = ${JSON.stringify(miles)}, takes = ${JSON.stringify(takes)};
+  const nodes = ${JSON.stringify(nodes)};
   const root = document.currentScript.previousElementSibling, svg = root.querySelector("svg");
   const pins = svg.querySelector("#pins"), labels = root.querySelector(".road-labels"), ns = "http://www.w3.org/2000/svg";
-  const P = { main: svg.querySelector("#rp-main"), brA: svg.querySelector("#rp-brA"), brB: svg.querySelector("#rp-brB") };
-  const put = (m, cls, html) => {
-    const path = P[m.on], pt = path.getPointAtLength(path.getTotalLength() * m.at);
-    const el = document.createElement("div"); el.className = "road-lab " + cls + " " + m.side;
-    el.style.left = ((pt.x + m.dx) / 1160 * 100) + "%"; el.style.top = ((pt.y + m.dy) / 590 * 100) + "%";
-    el.innerHTML = html; labels.appendChild(el); return pt;
-  };
-  miles.forEach((m, i) => {
-    const pt = put(m, "mile", "<small>" + m.y + "</small><b>" + m.t + "</b>" + (m.d ? "<span>" + m.d + "</span>" : ""));
-    const g = document.createElementNS(ns, "g"); g.setAttribute("transform", "translate(" + pt.x + " " + (pt.y - 4) + ")");
-    g.innerHTML = '<path d="M0 0 L-17 -28 A24 24 0 1 1 17 -28 Z" fill="#F37021" stroke="#fff" stroke-width="3"/><circle cy="-36" r="18" fill="#fff"/><text y="-30" text-anchor="middle" font-family="Arial" font-weight="800" font-size="18" fill="#0A1F47">0' + (i + 1) + '</text>';
+  let n = 0;
+  Object.values(nodes).forEach((m) => {
+    if (m.kind === "junction") {
+      const c = document.createElementNS(ns, "circle"); c.setAttribute("cx", m.x); c.setAttribute("cy", m.y); c.setAttribute("r", 7); c.setAttribute("fill", "#DDE6FF"); c.setAttribute("filter", "url(#glow)"); pins.appendChild(c); return;
+    }
+    const el = document.createElement("div"); el.className = "road-lab " + m.kind + " " + m.side;
+    el.style.left = ((m.x + m.dx) / 1160 * 100) + "%"; el.style.top = ((m.y + m.dy) / 590 * 100) + "%";
+    el.innerHTML = m.kind === "mile" ? "<small>" + m.y2 + "</small><b>" + m.t + "</b>" + (m.d ? "<span>" + m.d + "</span>" : "") : "<small>" + m.y2 + "</small><span>" + m.d + "</span>";
+    labels.appendChild(el);
+    const g = document.createElementNS(ns, "g"); g.setAttribute("transform", "translate(" + m.x + " " + m.y + ")");
+    if (m.kind === "mile") { n += 1; g.innerHTML = '<circle r="30" fill="#F37021" opacity=".35" filter="url(#glow2)"/><circle r="22" fill="#FF9A5C" filter="url(#glow)"/><circle r="17" fill="#FFF7ED"/><text y="6" text-anchor="middle" font-family="Arial" font-weight="800" font-size="17" fill="#0A1F47">0' + n + '</text>'; }
+    else { g.innerHTML = '<circle r="14" fill="#A855F7" opacity=".45" filter="url(#glow2)"/><circle r="8" fill="#FFD58A" filter="url(#glow)"/><circle r="4" fill="#fff"/>'; }
     pins.appendChild(g);
-  });
-  takes.forEach((m) => {
-    const pt = put(m, "take", "<small>" + m.y + "</small><span>" + m.d + "</span>");
-    const st = document.createElementNS(ns, "line"); st.setAttribute("x1", pt.x); st.setAttribute("y1", pt.y); st.setAttribute("x2", pt.x + m.dx); st.setAttribute("y2", pt.y + m.dy + 46); st.setAttribute("stroke", "#FFD58A"); st.setAttribute("stroke-width", "1.5"); st.setAttribute("stroke-dasharray", "3 3"); pins.appendChild(st);
-    const c = document.createElementNS(ns, "circle"); c.setAttribute("cx", pt.x); c.setAttribute("cy", pt.y); c.setAttribute("r", 9);
-    c.setAttribute("fill", "#FFD58A"); c.setAttribute("stroke", "#0A1F47"); c.setAttribute("stroke-width", "3"); pins.appendChild(c);
   });
 })();
 </script>
@@ -1010,7 +1026,7 @@ td{padding:12px;border-bottom:1px solid rgba(255,255,255,.12);vertical-align:top
 
 
 /* business plan roadmap */
-.road{position:relative;width:1160px;height:590px;margin:-4px auto 0}.road svg{position:absolute;inset:0;width:100%;height:100%}.road-labels{position:absolute;inset:0;pointer-events:none}.road-lab{position:absolute;width:300px;font-family:Arial,Helvetica,sans-serif;color:#fff;transform:translate(-50%,0);text-align:center}.road-lab.above{transform:translate(-50%,-100%)}.road-lab.mile.above{margin-top:-74px}.road-lab.mile.below{margin-top:40px}.road-lab.take.above{margin-top:-24px}.road-lab.take.below{margin-top:50px}.road-lab small{display:block;color:var(--orange);font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase}.road-lab.mile b{display:block;font-size:22px;color:var(--gold);line-height:1.15;margin:3px 0 4px}.road-lab.mile span{display:block;font-size:14.5px;line-height:1.35;color:#DCE4F5}.road-lab.take{width:270px}.road-lab.take small{font-size:11px;color:#FFD58A;letter-spacing:.1em}.road-lab.take span{display:block;font-size:12.5px;line-height:1.35;color:#B9C6DE;margin-top:2px}
+.road{position:relative;width:1160px;height:590px;margin:-4px auto 0}.road svg{position:absolute;inset:0;width:100%;height:100%}.road-labels{position:absolute;inset:0;pointer-events:none}.road-lab{position:absolute;width:300px;font-family:Arial,Helvetica,sans-serif;color:#fff;transform:translate(-50%,0);text-align:center}.road-lab.above{transform:translate(-50%,-100%)}.road-lab.mile.above{margin-top:-34px}.road-lab.mile.below{margin-top:34px}.road-lab.take.above{margin-top:-16px}.road-lab.take.below{margin-top:18px}.neural .road-lab.take span{color:#C7D2F5}.road-lab small{display:block;color:var(--orange);font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase}.road-lab.mile b{display:block;font-size:22px;color:var(--gold);line-height:1.15;margin:3px 0 4px}.road-lab.mile span{display:block;font-size:14.5px;line-height:1.35;color:#DCE4F5}.road-lab.take{width:270px}.road-lab.take small{font-size:11px;color:#FFD58A;letter-spacing:.1em}.road-lab.take span{display:block;font-size:12.5px;line-height:1.35;color:#B9C6DE;margin-top:2px}
 /* brochure slides */
 .brslide{padding:0;background:#F7F5EF;color:#1E293B;font-family:Georgia,"Times New Roman",serif}
 .br{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr 1fr}
