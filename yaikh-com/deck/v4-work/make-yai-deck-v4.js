@@ -123,7 +123,7 @@ const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
 /* ---------- slide shell ---------- */
 let n = 0;
 if (TIER.edf) TIER.alloc = TIERS["100k"].alloc;
-const TOTAL = TIER.client ? 8 : TIER.edf ? 8 : 15;
+const TOTAL = TIER.client ? 8 : TIER.edf ? 9 : 15;
 function slide(kind, eyebrow, body, opts = {}) {
   n += 1;
   const light = kind === "light";
@@ -720,9 +720,103 @@ ${homeBody}
       ['<span class="hd-ic flag">🇬🇧</span>', '<span class="hd-ic flag">🇰🇭</span>']
     ];
     for (const [en, km] of KM_UI) redesignKm = redesignKm.split(en).join(km);
-    const handout = (k) => slide("dark", "", `<div class="hand"><img src="${uri(path.join(LITE, "brochure", "page-" + k + ".jpg"))}" alt="Yai tri-fold brochure, page ${k}"></div>`, { cls: "handslide", noFooter: true });
-    const handout1 = handout(1), handout2 = handout(2);
-    S.splice(0, S.length, title, howItWorks, redesign, redesignKm, financials, handout1, handout2, close);
+    // Business plan
+    const bizplan = slide("dark", "Business plan · 2026 – 2028", `
+<div class="bp">
+  <div class="bp-col">
+    <h3>Revenue model</h3>
+    <ul>
+      <li><b>Cloud packages</b> — $120 small · $750 medium · $1,200 1,000-worker factory, per year</li>
+      <li><b>Ai server</b> — NVIDIA or Huawei, $2,500 per factory</li>
+      <li><b>Modules</b> — $2,000 per department (HR, Billing, Admin, CSR) · Production $5,000 · QA $10,000</li>
+      <li><b>Data subscriptions</b> — $2,000 / month, 21 group companies today</li>
+      <li><b>Marketplaces</b> — Phsar, Service and Factory Supply: commission on every order, paid through ABA and Wing</li>
+    </ul>
+  </div>
+  <div class="bp-col">
+    <h3>Go-to-market</h3>
+    <ul>
+      <li><b>Live</b> — Yorkmars group (21 companies) · BICNZ paid Aug 2026</li>
+      <li><b>Setting</b> — 3SGS, 3SGS+, ES Packing (Sep–Oct 2026)</li>
+      <li><b>TAFTAC channel</b> — 11 factory prospects from the Sep 2026 expo; QMS leaning presentations</li>
+      <li><b>Consultants</b> — Saman: 5 QMS factories (Elegant Garment, Trax Intertrade …)</li>
+      <li><b>Partners</b> — Yorkwell Asia · Google for Startups · Anthropic · 3SGS</li>
+      <li><b>Team</b> — 20 Ai engineers in Phnom Penh, 40 years of factory experience</li>
+    </ul>
+  </div>
+  <div class="bp-col">
+    <h3>Milestones &amp; use of US$100,000</h3>
+    <ul>
+      <li><b>2026</b> — 25 paying factories in Cambodia · Layer 3 live at 5 factories</li>
+      <li><b>2027</b> — ASEAN: Vietnam, Thailand, Malaysia · 100 factories · 100,000 users</li>
+      <li><b>2028</b> — Series A by Q4</li>
+    </ul>
+    <div class="bp-funds">
+      <div><b>50%</b><span>Technology — Ai servers, developer machines</span></div>
+      <div><b>30%</b><span>Local supplier onboarding — city office &amp; training centre</span></div>
+      <div><b>20%</b><span>Inventory — AIoT stock ready to install</span></div>
+      <div><b>0%</b><span>Working capital — covered by Yorkwell and subscriptions</span></div>
+    </div>
+  </div>
+</div>
+`);
+
+    // Brochure — rebuilt as slides (tri-fold outside + inside)
+    const who = [["Worker","AI-powered safety, motion and workplace support, right from the phone. Informal economic support — Phsar marketplace."],["Supervisor","AI planning and live data for faster, easier floor management."],["Manager","One view of production and sales, without chasing spreadsheets and emails."],["Owner","Secure AI-powered business intelligence across the entire operation."],["Buyer","Live factory data for quality, capacity and sustainability."],["Government","AIoT data for compliance, labour, tax, customs and industry oversight."]];
+    const brochure1 = slide("light", "", `
+<div class="br">
+  <div class="br-p">
+    <h2>Who it serves</h2>
+    ${who.map(([k, v]) => `<div class="br-k">${k}</div><p>${v}</p>`).join("")}
+    <div class="br-tag">AI-Native Manufacturing Intelligence for soft goods.</div>
+  </div>
+  <div class="br-p">
+    <h2>Price</h2>
+    <div class="br-price"><div><b>Starter</b><small>Small business<br>10–15 users</small></div><em>$120<small>per year</small></em></div>
+    <div class="br-price"><div><b>Growth</b><small>Medium business<br>100–300 users</small></div><em>$750<small>per year</small></em></div>
+    <div class="br-price dark"><div><b>Enterprise</b><small>Large business<br>300–1,000 users</small></div><em>$1,200<small>per year</small></em></div>
+    <div class="br-note">All prices in USD, billed yearly.</div>
+    <h3>Main AI functions</h3>
+    <ul class="br-fn"><li>Ai Web, Mobile systems</li><li>AI Agent</li><li>AI OT</li><li>Drones / Robots</li></ul>
+    <div class="br-talk"><img src="${logo}" alt=""><span>Talk to us about scope, pilot and rollout:<br><a>gamini@yaikh.com</a></span></div>
+  </div>
+  <div class="br-p cover">
+    <img class="br-logo" src="${logo}" alt="Yai">
+    <div class="br-km">បញ្ញាឆ្លាតវៃសម្រាប់វិស័យផលិតកម្ម ដែលដំណើរការដោយ AI</div>
+    <div class="br-en">AI-Native Manufacturing Intelligence<br><span>for soft goods</span></div>
+    <div class="br-zh">AI 原生制造智能</div>
+    <div class="br-stats"><div><b>70+</b>multi-platform apps</div><div><b>14</b>special AI agents</div><div><b>20</b>certified AI integrations</div><div><b>40</b>years of experience in factory administration and production</div></div>
+    <div class="br-contact"><div><b>Texlink Technologies Co., Ltd</b><span>Email <u>gamini@yaikh.com</u></span><span>Facebook Yai</span><span>Telegram yaikh</span><em>WWW.YAIKH.COM</em></div><img src="${uri(path.join(LITE, "gamini-telegram-qr.png"))}" alt=""></div>
+  </div>
+</div>
+`, { cls: "brslide", noFooter: true });
+    const card = (cls, t, sub, km, en, zh) => `<div class="br-card ${cls}"><div class="br-ch"><b>${t}</b>${sub ? `<small>${sub}</small>` : ""}</div><div class="br-cb"><div class="km">${km}</div><div class="en">${en}</div><div class="zh">${zh}</div></div></div>`;
+    const brochure2 = slide("light", "", `
+<div class="br in">
+  <div class="br-p">
+    <h2>The problem</h2>
+    <div class="br-k">Brands</div><p>AI-native manufacturing is here, but factories still run on Excel, email and chat — too slow.</p>
+    <div class="br-k">Government</div><p>The digital economy requires accurate data, faster reporting and transparency.</p>
+    <div class="br-k">Society</div><p>Cambodian society is converting to a digital lifestyle, but many factories still rely on paper and disconnected tools.</p>
+    <div class="br-k">ASEAN</div><p>Vietnam, Thailand, Malaysia, Singapore and even China are converting to AI-native manufacturing — Cambodia has not gained that edge yet.</p>
+    <div class="br-box"><b>AI-Native Manufacturing Intelligence for soft goods.</b><span>40 years of factory administration and production, built into one platform.</span></div>
+  </div>
+  <div class="br-p wide">
+    <div class="br-apps"><div><h2>70+ multi-platform apps</h2><p>14 special AI agents · 20 certified AI integrations · one login for the whole factory.</p></div><img src="${logo}" alt=""></div>
+    <div class="br-grid">
+      ${card("blue","Accountant","","ភ្នាក់ងារគណនេយ្យ និងពន្ធ ដែលដំណើរការដោយ AI","AI-native accountant and tax agents","AI 原生会计与税务智能代理")}
+      ${card("blue","HR","","ប្រព័ន្ធកាមេរ៉ាត្រួតពិនិត្យ បុគ្គលិក និងភ្នាក់ងារឆ្លាតវៃ ដែលដំណើរការដោយ AI","AI vision camera monitoring, HR and payroll agents","AI 智能摄像监控、人力资源与智能代理")}
+      ${card("blue","Admin","","ភ្នាក់ងារមុខងាររដ្ឋបាល ដែលដំណើរការដោយ AI","AI-native admin function handling agents","AI 原生行政职能智能代理")}
+      ${card("blue","CSR","","អនុលោមតាមបទប្បញ្ញត្តិ · ចីរភាព · ESG · HIGG · WRAP · BSCI · ILO · ភ្នាក់ងារ AI","Compliance · Sustainability · ESG · HIGG, WRAP, BSCI · ILO · AI agents","合规 · 可持续 · ESG · HIGG · WRAP · BSCI · ILO · AI 代理")}
+      ${card("green","QMS","YQMS","គ្រប់គ្រងគុណភាព · ពីអ្នកផ្គត់ផ្គង់ដល់នាំចេញ · 20+ AI ភ្នាក់ងារ","Quality management · Supplier to export · 20+ AI agents","质量管理 · 供应商至出口 · 20+ AI 代理")}
+      ${card("green","Inventory Control","YFC","អ្នកផ្គត់ផ្គង់ដល់នាំចេញ · គ្រប់គ្រង WIP · AI ភ្នាក់ងារ","Supplier to export · Total WIP control · AI agents","供应商至出口 · WIP 管理 · AI 代理")}
+      ${card("green","IE","IE+YTM+YCE","អភិវឌ្ឍផលិតផលដល់ផលិតកម្ម · AI ភ្នាក់ងារ","Product development to total production · AI agents","产品开发至量产 · AI 代理")}
+      ${card("green","Planning &amp; Merchandising","4DP+YPI+MRP","ពីការលក់ដល់ការនាំចេញ · ភ្នាក់ងារ AI","Sales to export handling · AI agents","销售到出口 · AI 智能代理")}
+    </div>
+  </div>
+</div>
+`, { cls: "brslide", noFooter: true });
+    S.splice(0, S.length, title, howItWorks, redesign, redesignKm, bizplan, financials, brochure1, brochure2, close);
     S.forEach((html, i) => { S[i] = html.replace(/<div class="eyebrow">\d\d · /, '<div class="eyebrow">').replace(/id="s\d+"/, `id="s${i + 1}"`).replace(/<span>\d+ \/ \d+<\/span>/, `<span>${i + 1} / ${TOTAL}</span>`); });
   }
   if (TIER.client) S.push(planSlide("Yai / TAFTAC · YHR leaning presentation", "", [
@@ -899,7 +993,43 @@ td{padding:12px;border-bottom:1px solid rgba(255,255,255,.12);vertical-align:top
 .close h1 .sub-h{font-size:44px}.close h1{font-size:56px;line-height:1.12;margin:12px 0 8px;color:#fff}.big{font-size:32px;line-height:1.4;margin:0}
 .close-row{display:flex;gap:24px;justify-content:center;margin:40px auto 0;max-width:1080px}.close-row>div{flex:1;border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:18px 16px;display:flex;flex-direction:column;gap:6px}.close-row>div>span{font-size:17px;letter-spacing:.08em;text-transform:uppercase;color:#8FA8D8}.close-row b{font-size:26px;color:#fff}.close-row b.pp{font-size:24px}.close-row{align-items:stretch;margin-top:30px;max-width:1150px}.close-row .talk{flex:2.1;text-align:left}.close-row .talk>span{text-align:center}.talk-body{display:flex;gap:18px;align-items:center}.qr{margin:0;text-align:center}.qr img{width:150px;height:150px;border-radius:10px;display:block}.qr figcaption{font-size:17px;color:#8FA8D8;margin-top:4px}.talk-lines{display:flex;flex-direction:column;gap:3px}.talk-lines p{margin:0;font-size:19px;color:#fff}.talk-lines p.mail{color:var(--gold);margin-top:4px}.talk-lines i{font-style:normal;color:#8FA8D8;display:inline-block;width:98px}.close-row>div:not(.talk){justify-content:center}.close-row em{font-style:normal;font-size:19px;color:var(--gold,#F5C26B)}.close-foot{position:absolute;left:64px;right:64px;bottom:26px;font-size:17px;color:#8FA8D8;margin:0}
 .fin-sub{color:#8FA8D8;font-size:15px;margin:-8px 0 10px}.fin{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:start;margin:0 -36px}.fin-col h3{margin:0 0 6px;font-size:20px;color:var(--gold);letter-spacing:.04em}.fin-t{width:100%;border-collapse:collapse;margin:0;font-size:13px}.fin-t th{white-space:nowrap;font-size:10.5px;color:#8FA8D8;font-weight:700;text-align:right;padding:2px 4px;border-bottom:1px solid rgba(255,255,255,.2);letter-spacing:.06em}.fin-t th:first-child{text-align:left}.fin-t td{background:none;border:0;border-bottom:1px solid rgba(255,255,255,.08);height:auto;padding:4px 3px;text-align:right;color:#DCE4F5;font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap}.fin-t td:first-child{text-align:left;color:#C7D2E6;white-space:normal}.fin-t tr.fund td{color:#C7D2E6;font-weight:400;background:none;font-size:12px}.fin-t tr.fund td:first-child{color:#8FA8D8;font-style:italic}.fin-t td.q{color:#8FA8D8}.fin-t tr.tot td{font-weight:700;color:#fff;border-top:1px solid rgba(255,255,255,.25)}.fin-t tr.net td{font-weight:800;color:var(--gold);border-top:2px solid var(--orange);border-bottom:0}.fin-note{margin-top:12px;padding:10px 18px;border-left:4px solid var(--orange);background:rgba(255,255,255,.05);font-size:17px;line-height:1.4;color:#DCE4F5}.fin-note b{color:var(--gold)}
-.handslide{padding:0}.hand{position:absolute;inset:0;display:flex;justify-content:center;align-items:center}.hand>img{height:100%;width:auto;display:block}
+
+
+/* business plan */
+.bp{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin-top:6px}.bp-col h3{margin:0 0 14px;font-size:26px;color:var(--gold)}.bp-col ul{margin:0;padding-left:20px;font-size:19px;line-height:1.45;color:#DCE4F5}.bp-col li{margin-bottom:12px}.bp-col li b{color:#fff}.bp-funds{margin-top:16px;border-top:1px solid rgba(255,255,255,.2);padding-top:14px;display:grid;gap:10px}.bp-funds div{display:grid;grid-template-columns:64px 1fr;align-items:baseline;font-size:17px;line-height:1.35;color:#DCE4F5}.bp-funds b{color:var(--orange);font-size:24px}
+/* brochure slides */
+.brslide{padding:0;background:#F7F5EF;color:#1E293B;font-family:Georgia,"Times New Roman",serif}
+.br{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr 1fr}
+.br.in{grid-template-columns:1fr 2.1fr}
+.br-p{padding:34px 34px 30px;border-right:1px solid #E5E0D3;position:relative;display:flex;flex-direction:column}
+.br-p:last-child{border-right:0}
+.br-p h2{margin:0 0 6px;font-size:28px;color:#1E293B}.br-p h2::after{content:"";display:block;width:56px;height:3px;background:var(--orange);margin-top:8px}
+.br-k{margin-top:14px;font:700 11px Arial,Helvetica,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#C2410C}
+.br-p p{margin:3px 0 0;font-size:15.5px;line-height:1.4;color:#334155}
+.br-tag{margin-top:auto;padding-top:12px;border-top:1px solid #E5E0D3;font-size:15px;color:#334155}
+.br-price{display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid #E5E0D3;border-radius:8px;padding:10px 14px;margin-top:10px}
+.br-price b{font-size:17px;display:block}.br-price small{font:12px Arial,Helvetica,sans-serif;color:#64748B;line-height:1.35}.br-price em{font-style:normal;font-weight:700;font-size:26px;color:#C2410C;text-align:right}.br-price em small{display:block;font-size:11px;color:#94A3B8}
+.br-price.dark{background:#0A1F47;border-color:#0A1F47}.br-price.dark b{color:#fff}.br-price.dark small{color:#BFD0F5}.br-price.dark em{color:#FFD58A}
+.br-note{font:12px Arial,Helvetica,sans-serif;color:#64748B;margin:10px 0 0}
+.br-p h3{margin:22px 0 8px;font-size:20px}.br-fn{margin:0;padding:0;list-style:none;font-size:16px;line-height:1.9}.br-fn li::before{content:"◆";color:var(--orange);margin-right:10px;font-size:12px}
+.br-talk{margin-top:auto;display:flex;align-items:center;gap:10px;font:13px Arial,Helvetica,sans-serif;color:#334155;line-height:1.4}.br-talk img{width:40px;height:40px;border-radius:50%;object-fit:cover}.br-talk a{color:#C2410C;text-decoration:underline}
+.br-p.cover{background:#F3E9DD;padding:34px 40px 30px}.br-logo{width:118px;height:118px;border-radius:50%;object-fit:cover;box-shadow:0 8px 20px rgba(0,0,0,.25);display:block}
+.br-km{margin-top:20px;font-family:"Khmer Sangam MN","Khmer OS","Noto Sans Khmer",sans-serif;font-size:24px;line-height:1.5;font-weight:700;color:#0A1F47}
+.br-en{margin-top:12px;font-size:21px;font-weight:700;line-height:1.25;color:#0A1F47}.br-en span{font-weight:400;font-size:16px;color:#C2410C}
+.br-zh{margin-top:8px;font:14px "PingFang SC","Hiragino Sans GB",sans-serif;color:#64748B}
+.br-stats{margin-top:18px;border-top:1px solid #E5D5C3;padding-top:12px;display:grid;gap:6px;font-size:14px;line-height:1.3;color:#334155}.br-stats div{display:grid;grid-template-columns:50px 1fr;align-items:baseline}.br-stats b{color:#C2410C;font-size:20px}
+.br-contact{margin-top:auto;background:#0A1F47;color:#fff;border-radius:10px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;font:12.5px Arial,Helvetica,sans-serif}.br-contact div{display:flex;flex-direction:column;gap:3px}.br-contact b{font-size:14px;margin-bottom:4px}.br-contact span{color:#BFD0F5}.br-contact u{color:#FFD58A}.br-contact em{font-style:normal;font-weight:700;color:#FFD58A;margin-top:6px;letter-spacing:.06em}.br-contact img{width:88px;height:88px;border-radius:8px;background:#fff;padding:4px;box-sizing:border-box}
+.br-box{margin-top:auto;background:#FBEFE4;border-left:4px solid var(--orange);padding:12px 14px;display:flex;flex-direction:column;gap:4px}.br-box b{font-size:15px;color:#0A1F47}.br-box span{font:12px Arial,Helvetica,sans-serif;color:#64748B}
+.br-p.wide{padding:30px 34px 26px}
+.br-apps{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid #E5E0D3;padding-bottom:12px}.br-apps h2::after{display:none}.br-apps p{margin:4px 0 0;font-size:14.5px}.br-apps img{width:52px;height:52px;border-radius:50%;object-fit:cover}
+.br-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:16px;flex:1}
+.br-card{background:#fff;border:1px solid #E5E0D3;border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.br-ch{text-align:center;padding:9px 6px;background:#D6E8F5;border-bottom:1px solid #C7DCEE}.br-ch b{font-size:17px;color:#0A1F47;display:block}.br-ch small{font-size:12px;color:#64748B;letter-spacing:.08em}
+.br-card.green .br-ch{background:#D9F0DC;border-color:#C2E3C7}
+.br-cb{padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+.br-cb .km{font-family:"Khmer Sangam MN","Khmer OS","Noto Sans Khmer",sans-serif;font-size:12.5px;line-height:1.55;color:#0A1F47}
+.br-cb .en{font-weight:700;font-size:13.5px;line-height:1.3;color:#0A1F47}
+.br-cb .zh{font:12px "PingFang SC","Hiragino Sans GB",sans-serif;color:#64748B;line-height:1.5}
 /* footer signature */
 .sig{position:absolute;left:64px;right:64px;bottom:20px;display:flex;justify-content:space-between;align-items:center;font-size:17px;letter-spacing:.08em;color:var(--gray)}
 .dark .sig{color:#8FA8D8}
