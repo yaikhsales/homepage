@@ -556,7 +556,7 @@ ${homeBody}
     </div></div>
     <div class="rd-sec"><span class="rd-av coin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.2 5.2L4 17l3 3 5.5-5.5a4 4 0 0 0 5.2-5.2l-2.4 2.4-2.1-.6-.6-2.1z"/></svg></span><div class="rd-bub">
       <div class="rd-note-k">Service Market</div>
-      <p>Providers post their services — machine repair, calibration, transport, cleaning, catering, training. Factories order in the app; providers take the order and get paid securely.</p>
+      <p>Service providers post their services — machine repair, calibration, transport, cleaning, catering, training. Factories order in the app; providers take the order and get paid securely.</p>
     </div></div>
     <div class="rd-sec"><span class="rd-av coin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l9-4 9 4-9 4z"/><path d="M3 8v9l9 4 9-4V8"/><path d="M12 12v9"/><path d="M7.5 6l9 4"/></svg></span><div class="rd-bub">
       <div class="rd-note-k">Factory Supply Market</div>
