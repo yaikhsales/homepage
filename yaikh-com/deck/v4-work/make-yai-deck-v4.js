@@ -123,7 +123,7 @@ const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
 /* ---------- slide shell ---------- */
 let n = 0;
 if (TIER.edf) TIER.alloc = TIERS["100k"].alloc;
-const TOTAL = TIER.client ? 8 : TIER.edf ? 6 : 15;
+const TOTAL = TIER.client ? 8 : TIER.edf ? 7 : 15;
 function slide(kind, eyebrow, body, opts = {}) {
   n += 1;
   const light = kind === "light";
@@ -166,7 +166,7 @@ S.push(slide("dark", "", `
 <div class="title-wrap">
   <img class="title-logo" src="${logo}" alt="Yai">
   <div class="title-text">
-    <h1>Ai-Native Manufacturing<br>Intelligence for Soft Goods.</h1>
+    <h1>Ai-Native Manufacturing Intelligence<br><span class="h1sub">for Soft Goods Manufacturing.</span></h1>
     <p class="tagline">70+ multi-platform apps · 14 Ai agents · AIoT. One system — simple enough to run your factory from your phone.</p>
   </div>
   <div class="title-flags">
@@ -461,7 +461,16 @@ ${heading ? `<h2>${heading}</h2>` : ""}
     // title · solution · prices · sales confirmed · ask · close, then renumber the footers
     const [title, solution, ask, close] = KEEP;
     const [, prices, sales] = S;
-    S.splice(0, S.length, title, solution, prices, sales, ask, close);
+    // How it works — PC UI left, phone UI middle, AIoT photo column on the right (20%).
+    const howItWorks = slide("dark", "How it works", `
+<h2>One login. The whole factory — on a PC, a phone, and the machines.</h2>
+<div class="hiw">
+  <figure class="hiw-web"><img src="${uri(path.join(LITE, "ui", "web-home.jpg"))}" alt="Yai web UI"><figcaption><b>Web · management</b>Administration · Management dashboard · Operations — every department on one screen</figcaption></figure>
+  <figure class="hiw-app"><img src="${uri(path.join(LITE, "ui", "app-home.jpg"))}" alt="Yai app UI"><figcaption><b>App · the floor</b>Workers and supervisors: attendance, tickets, gate pass, HR, YTM — Android and iOS</figcaption></figure>
+  <div class="hiw-aiot"><div class="hiw-aiot-h">AIoT</div><div class="hiw-slot"></div><div class="hiw-slot"></div><div class="hiw-slot"></div><p>Face scan · energy meters · sensors — photos to come</p></div>
+</div>
+`, { cls: "hiwslide" });
+    S.splice(0, S.length, title, howItWorks, solution, prices, sales, ask, close);
     S.forEach((html, i) => { S[i] = html.replace(/id="s\d+"/, `id="s${i + 1}"`).replace(/<span>\d+ \/ \d+<\/span>/, `<span>${i + 1} / ${TOTAL}</span>`); });
   }
   if (TIER.client) S.push(planSlide("Yai / TAFTAC · YHR leaning presentation", "", [
@@ -512,6 +521,7 @@ h2.stack span{display:block}
 .why h2.oneline{font-size:58px;line-height:1.06;margin-bottom:14px;white-space:nowrap}.why h2.stack{font-size:56px;line-height:1.06;margin-bottom:10px;white-space:nowrap}.why-sub{font-size:26px;line-height:1.3;white-space:nowrap;color:#DCE4F5;margin:0 0 18px}.why-sub b{color:var(--orange)}.dates{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:4px solid rgba(255,255,255,.2)}.date{padding:12px 18px 0 0;position:relative}.date:before{content:"";position:absolute;top:-12px;left:0;width:20px;height:20px;border-radius:50%;background:var(--gold)}.date.hot:before{background:var(--orange)}.date b{display:block;font-size:44px;line-height:1;color:#fff}.date.hot b{color:var(--orange)}.date span{display:block;font-size:17px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:6px 0 6px;font-weight:700}.date p{margin:0;font-size:19px;line-height:1.36;color:#DCE4F5}.ready{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:12px}.deadlines{margin:14px 0 0;font-size:27px;line-height:1.2;color:#B9C6E4;white-space:nowrap;display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid rgba(255,255,255,.14);border-bottom:1px solid rgba(255,255,255,.14);padding:10px 0}.deadlines b{color:#fff;font-weight:700}.ready div{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:14px 16px}.ready b{display:block;font-size:21px;color:#fff;margin-bottom:4px}.ready span{font-size:18px;color:#B9C6E4;line-height:1.35}.why .foot-note{font-size:22px;margin-top:14px;line-height:1.36}
 .mk{margin:0;padding:0;list-style:none}.mk li{font-size:22px;line-height:1.3;padding:5px 0 5px 22px;position:relative}.mk li:before{content:"";position:absolute;left:0;top:15px;width:9px;height:9px;border-radius:50%;background:var(--orange)}
 .planslide h2{font-size:34px;margin-bottom:14px}.planslide .eyebrow{margin-bottom:14px}.plan{width:100%;border-collapse:collapse;table-layout:fixed;margin-top:0}.plan th,.plan td{border:1px solid rgba(255,255,255,.16);height:44px}.plan th{font-size:17px;font-weight:700;color:var(--gold);letter-spacing:.04em;padding:4px}.plan th.yr{background:rgba(243,112,33,.22);color:#fff;font-size:19px;text-align:center}.mnote{font-size:14px;color:#fff;font-weight:400;line-height:1.25}.planslide{padding-left:40px;padding-right:40px}.plan td.who.sub{padding-left:32px;font-weight:400;color:#DCE4F5}.plan tr.sep td{border-top:4px solid var(--orange)}.plan td.flat{color:#fff;font-weight:700}.plan td.hit{background:rgba(243,112,33,.28);color:#fff;font-weight:700}.plan td.paid{background:#BBF7D0;color:#065F46;font-weight:800}.plan td.setting{background:#FED7AA;color:#9A3412;font-weight:800}.settag{display:block;font-size:10px;font-weight:800;color:#9A3412;letter-spacing:.06em;text-transform:uppercase;margin-top:5px}.paidtag{display:block;font-size:10px;font-weight:800;color:#065F46;letter-spacing:.06em;text-transform:uppercase;margin-top:5px}.plan th.who,.plan td.who{font-family:Arial,Helvetica,"Khmer MN","Khmer Sangam MN","Noto Sans Khmer",sans-serif;width:308px;text-align:left;padding-left:8px;font-size:18px;color:#fff}.plan td{background:rgba(255,255,255,.04);text-align:center;font-size:15px;color:#DCE4F5;overflow:hidden;padding:7px 2px}.plan td.word{font-size:11px;letter-spacing:0;line-height:1.15;padding:0 1px;white-space:normal;overflow-wrap:anywhere}.plan td.paid,.plan td.setting{font-size:14px;line-height:1.2;padding-top:5px;padding-bottom:5px}
+.hiwslide h2{font-size:32px;margin-bottom:12px;white-space:nowrap}.hiw{display:grid;grid-template-columns:5.2fr 2.3fr 2.5fr;gap:18px;align-items:start}.hiw figure{margin:0}.hiw img{display:block;border-radius:10px;border:2px solid rgba(255,255,255,.18);box-shadow:0 10px 30px rgba(0,0,0,.4)}.hiw-web img{width:100%}.hiw-app img{width:100%;max-height:390px;object-fit:cover;object-position:top}.hiw figcaption{margin-top:8px;font-size:16px;line-height:1.3;color:#DCE4F5}.hiw figcaption b{display:block;color:var(--gold);font-size:19px;margin-bottom:2px}.hiw-aiot{border:1px dashed rgba(255,213,138,.5);border-radius:12px;padding:12px;height:440px;display:flex;flex-direction:column;gap:10px}.hiw-aiot-h{font-size:19px;font-weight:800;color:var(--gold);letter-spacing:.12em;text-transform:uppercase}.hiw-slot{flex:1;border-radius:8px;background:rgba(255,255,255,.06)}.hiw-aiot p{margin:0;font-size:15px;color:#8FA8D8;line-height:1.3}
 .constslide h2{font-size:36px;margin-bottom:16px}.constslide{padding-left:44px;padding-right:44px}.const{display:grid;grid-template-columns:116px 108px 1fr 144px 232px;gap:12px;align-items:stretch}.crow2{display:grid;grid-template-columns:3fr 5fr;gap:14px}.csec{border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);overflow:hidden}.csec-h{display:flex;align-items:center;justify-content:center;text-align:center;height:58px;line-height:1.2;font-size:17px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding:0 10px;color:#fff}.csec.admin .csec-h{background:var(--blue)}.csec.mgmt .csec-h{background:#6D28D9;letter-spacing:.02em}.csec.aisrv .csec-h{background:var(--orange)}.csec.aistart .csec-h{background:#B45309;font-size:14px;letter-spacing:.06em;line-height:1.1}.csec.ops .csec-h{background:var(--green)}.ctabs{display:grid;gap:0;align-content:start}.ctab{padding:14px 8px 16px 10px;border-top:1px solid rgba(243,112,33,.55)}.ctab b{display:block;font-size:19px;color:var(--gold);margin-bottom:6px}.ctab ul{margin:0;padding:0;list-style:none}.cprice{display:block;font-size:18px;font-weight:800;color:#fff;background:rgba(255,213,138,.14);border:1px dashed rgba(255,213,138,.55);border-radius:6px;padding:1px 8px;margin:0 0 4px;width:max-content;min-width:78px}.cprice.ghost{visibility:hidden}.cprice.big{font-size:22px;margin:4px 0 2px;min-width:0}.ctab.stack .cprice.big + ul{margin-bottom:14px}.ctab.stack ul{margin-bottom:12px}.ctab li{font-size:17px;line-height:1.5;hyphens:none;overflow-wrap:normal;color:#E6ECFA}
 .cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:22px}
 .col{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px 24px 22px}
@@ -610,7 +620,7 @@ td{padding:12px;border-bottom:1px solid rgba(255,255,255,.12);vertical-align:top
 /* title */
 .title-wrap{display:grid;grid-template-columns:auto 1fr;gap:34px;align-items:center;margin-top:70px}
 .title-logo{width:200px;height:200px;border-radius:50%;object-fit:cover}
-.title-text h1{margin:0;font-size:46px;white-space:nowrap;line-height:1.1;color:#fff}
+.title-text h1 .h1sub{font-size:.78em;font-weight:600;color:#fff}.title-text h1{margin:0;font-size:46px;white-space:nowrap;line-height:1.1;color:#fff}
 .tagline{margin:18px 0 0;font-size:30px;line-height:1.3;color:var(--gold);font-style:italic}
 .title-flags{position:absolute;top:34px;right:64px;display:flex;flex-direction:column;align-items:center}.flagrow{display:flex;gap:14px;align-items:center;justify-content:center}.flagrow img{height:46px;border-radius:4px}.flagrow .asean{height:60px;border-radius:0}
 .flaggroups{display:flex;gap:26px;align-items:flex-end}.flaggroup{display:flex;flex-direction:column;align-items:center}.flagcap{margin-top:10px;font-size:17px;font-weight:700;letter-spacing:.12em;margin-right:-.12em;color:var(--gold);white-space:nowrap;text-align:center}
@@ -630,7 +640,7 @@ td{padding:12px;border-bottom:1px solid rgba(255,255,255,.12);vertical-align:top
 `;
 
 const html = `<meta charset="utf-8">
-<title>${TIER.client ? "Yai Client Deck · Internal" : TIER.edf ? "Yai · EDF application" : `Yai Pitch Deck v4 · ${TIER.amt}`}</title>
+<title>${TIER.client ? "Yai Client Deck · Internal" : TIER.edf ? "Yai — SIPP Cohort 2" : `Yai Pitch Deck v4 · ${TIER.amt}`}</title>
 <meta name="viewport" content="width=1320">
 <style>${css}</style>
 <div class="deck">${S.join("\n")}</div>
