@@ -637,52 +637,52 @@ ${homeBody}
     let redesignKm = redesign.replace(/id="s\d+"/, 'id="s0"').replace('class="slide dark rdslide"', 'class="slide dark rdslide rdkm"');
     for (const [en, km] of KM_TEXT) { if (!redesignKm.includes(en)) throw new Error("KM: missing " + en.slice(0, 40)); redesignKm = redesignKm.replace(en, km); }
     n += 1;
-    const finRow = (l, a, b, cls = "") => `<tr class="${cls}"><td>${l}</td><td>${a}</td></tr>`;
-    const financials = slide("dark", "Financials · first period 2025", `
-<div class="fin-sub">Texlink Technologies Co., Ltd. · incorporated 10 October 2025 · first period 10 Oct – 31 Dec 2025 · USD · source: IEWS FS1–FS3</div>
+    const finRow = (l, a, b, cls = "") => `<tr class="${cls}"><td>${l}</td><td>${a}</td><td class="q">${b === "–" ? "…" : b}</td></tr>`;
+    const financials = slide("dark", "Financials · Oct 2025 – Aug 2026", `
+<div class="fin-sub">Texlink Technologies Co., Ltd. · incorporated 10 October 2025 · first period Oct–Dec 2025 · year to date Jan–Aug 2026 · USD · source: IEWS FS1–FS3</div>
 <div class="fin">
   <div class="fin-col">
     <h3>Income statement</h3>
-    <table class="fin-t"><thead><tr><th></th><th>10 Oct – 31 Dec 2025</th></tr></thead><tbody>
-      ${finRow("Total revenue", "–", "–")}
-      ${finRow("Yorkwell Asia · strategic partnership funding (payroll)", "73,451.02", "–", "fund")}
-      ${finRow("Payroll expenses", "73,451.02", "–")}
-      ${finRow("Fuel, electricity, water", "69.13", "–")}
-      ${finRow("Bank charge", "15.11", "10.00")}
-      ${finRow("Internet", "450.00", "–")}
-      ${finRow("Management consultant", "500.00", "–")}
-      ${finRow("Business register", "317.56", "735.00")}
-      ${finRow("Unreconciled gap / beginning balance", "126,857.68", "22,625.99")}
-      ${finRow("Total operating expenses", "201,660.50", "23,370.99", "tot")}
-      ${finRow("Net loss for the year", "(201,660.50)", "(23,370.99)", "net")}
+    <table class="fin-t"><thead><tr><th></th><th>Oct–Dec 25</th><th>Jan–Aug 26</th></tr></thead><tbody>
+      ${finRow("Total revenue", "–", "…")}
+      ${finRow("Yorkwell Asia · partnership funding (payroll)", "73,451.02", "…", "fund")}
+      ${finRow("Payroll expenses", "73,451.02", "…")}
+      ${finRow("Fuel, electricity, water", "69.13", "…")}
+      ${finRow("Bank charge", "15.11", "…")}
+      ${finRow("Internet", "450.00", "…")}
+      ${finRow("Management consultant", "500.00", "…")}
+      ${finRow("Business register", "317.56", "…")}
+      ${finRow("Unreconciled gap / beginning balance", "126,857.68", "…")}
+      ${finRow("Total operating expenses", "201,660.50", "…", "tot")}
+      ${finRow("Net loss for the year", "(201,660.50)", "…", "net")}
     </tbody></table>
   </div>
   <div class="fin-col">
     <h3>Balance sheet · 31 Dec</h3>
-    <table class="fin-t"><thead><tr><th></th><th>10 Oct – 31 Dec 2025</th></tr></thead><tbody>
-      ${finRow("Computer + office equipment", "1,217.87", "–")}
-      ${finRow("Cash in bank (ABA)", "(33,241.25)", "(4,006.99)")}
-      ${finRow("Total assets", "(32,023.38)", "(4,006.99)", "tot")}
-      ${finRow("Share capital / paid-in", "59,190.21", "20,207.56")}
-      ${finRow("Profit for the year", "(201,660.50)", "(23,370.99)")}
-      ${finRow("Total equity", "(142,470.29)", "(3,163.43)", "tot")}
-      ${finRow("Liabilities", "–", "–")}
-      ${finRow("Suspense / unreconciled difference", "110,446.91", "–")}
-      ${finRow("Total equity &amp; liabilities", "(32,023.38)", "(3,163.43)", "net")}
+    <table class="fin-t"><thead><tr><th></th><th>Oct–Dec 25</th><th>Jan–Aug 26</th></tr></thead><tbody>
+      ${finRow("Computer + office equipment", "1,217.87", "…")}
+      ${finRow("Cash in bank (ABA)", "(33,241.25)", "…")}
+      ${finRow("Total assets", "(32,023.38)", "…", "tot")}
+      ${finRow("Share capital / paid-in", "59,190.21", "…")}
+      ${finRow("Profit for the year", "(201,660.50)", "…")}
+      ${finRow("Total equity", "(142,470.29)", "…", "tot")}
+      ${finRow("Liabilities", "–", "…")}
+      ${finRow("Suspense / unreconciled difference", "110,446.91", "…")}
+      ${finRow("Total equity &amp; liabilities", "(32,023.38)", "…", "net")}
     </tbody></table>
   </div>
   <div class="fin-col">
     <h3>Cash flow</h3>
-    <table class="fin-t"><thead><tr><th></th><th>10 Oct – 31 Dec 2025</th></tr></thead><tbody>
-      ${finRow("Profit before tax", "(201,660.50)", "(23,370.99)")}
-      ${finRow("Net cash used in operating", "(201,660.50)", "–", "tot")}
-      ${finRow("Computer + office equipment", "(1,217.87)", "–")}
-      ${finRow("Net cash used in investing", "(1,217.87)", "–", "tot")}
-      ${finRow("Issuance of share capital", "59,190.21", "–")}
-      ${finRow("Net cash from financing", "59,190.21", "–", "tot")}
-      ${finRow("Net decrease in cash", "(143,688.16)", "–")}
-      ${finRow("Cash at beginning of year", "110,446.91", "–")}
-      ${finRow("Cash at end of year", "(33,241.25)", "–", "net")}
+    <table class="fin-t"><thead><tr><th></th><th>Oct–Dec 25</th><th>Jan–Aug 26</th></tr></thead><tbody>
+      ${finRow("Profit before tax", "(201,660.50)", "…")}
+      ${finRow("Net cash used in operating", "(201,660.50)", "…", "tot")}
+      ${finRow("Computer + office equipment", "(1,217.87)", "…")}
+      ${finRow("Net cash used in investing", "(1,217.87)", "…", "tot")}
+      ${finRow("Issuance of share capital", "59,190.21", "…")}
+      ${finRow("Net cash from financing", "59,190.21", "…", "tot")}
+      ${finRow("Net decrease in cash", "(143,688.16)", "…")}
+      ${finRow("Cash at beginning of year", "110,446.91", "…")}
+      ${finRow("Cash at end of year", "(33,241.25)", "…", "net")}
     </tbody></table>
   </div>
 </div>
@@ -864,7 +864,7 @@ td{padding:12px;border-bottom:1px solid rgba(255,255,255,.12);vertical-align:top
 .close{text-align:center;margin-top:0}.close-logo{width:110px;height:110px;border-radius:50%;object-fit:cover}
 .close h1 .sub-h{font-size:44px}.close h1{font-size:56px;line-height:1.12;margin:12px 0 8px;color:#fff}.big{font-size:32px;line-height:1.4;margin:0}
 .close-row{display:flex;gap:24px;justify-content:center;margin:40px auto 0;max-width:1080px}.close-row>div{flex:1;border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:18px 16px;display:flex;flex-direction:column;gap:6px}.close-row>div>span{font-size:17px;letter-spacing:.08em;text-transform:uppercase;color:#8FA8D8}.close-row b{font-size:26px;color:#fff}.close-row b.pp{font-size:24px}.close-row{align-items:stretch;margin-top:30px;max-width:1150px}.close-row .talk{flex:2.1;text-align:left}.close-row .talk>span{text-align:center}.talk-body{display:flex;gap:18px;align-items:center}.qr{margin:0;text-align:center}.qr img{width:150px;height:150px;border-radius:10px;display:block}.qr figcaption{font-size:17px;color:#8FA8D8;margin-top:4px}.talk-lines{display:flex;flex-direction:column;gap:3px}.talk-lines p{margin:0;font-size:19px;color:#fff}.talk-lines p.mail{color:var(--gold);margin-top:4px}.talk-lines i{font-style:normal;color:#8FA8D8;display:inline-block;width:98px}.close-row>div:not(.talk){justify-content:center}.close-row em{font-style:normal;font-size:19px;color:var(--gold,#F5C26B)}.close-foot{position:absolute;left:64px;right:64px;bottom:26px;font-size:17px;color:#8FA8D8;margin:0}
-.fin-sub{color:#8FA8D8;font-size:16px;margin:-6px 0 14px}.fin{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:start}.fin-col h3{margin:0 0 6px;font-size:20px;color:var(--gold);letter-spacing:.04em}.fin-t{width:100%;border-collapse:collapse;margin:0;font-size:14px}.fin-t th{white-space:nowrap;font-size:12px;color:#8FA8D8;font-weight:700;text-align:right;padding:2px 4px;border-bottom:1px solid rgba(255,255,255,.2);letter-spacing:.06em}.fin-t th:first-child{text-align:left}.fin-t td{background:none;border:0;border-bottom:1px solid rgba(255,255,255,.08);height:auto;padding:5px 4px;text-align:right;color:#DCE4F5;font-size:14px;font-variant-numeric:tabular-nums;white-space:nowrap}.fin-t td:first-child{text-align:left;color:#C7D2E6;white-space:normal}.fin-t tr.fund td{color:var(--gold);font-weight:700;background:rgba(243,112,33,.12)}.fin-t tr.fund td:first-child{color:var(--gold)}.fin-t tr.tot td{font-weight:700;color:#fff;border-top:1px solid rgba(255,255,255,.25)}.fin-t tr.net td{font-weight:800;color:var(--gold);border-top:2px solid var(--orange);border-bottom:0}.fin-note{margin-top:12px;padding:10px 18px;border-left:4px solid var(--orange);background:rgba(255,255,255,.05);font-size:17px;line-height:1.4;color:#DCE4F5}.fin-note b{color:var(--gold)}
+.fin-sub{color:#8FA8D8;font-size:15px;margin:-8px 0 10px}.fin{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:start;margin:0 -36px}.fin-col h3{margin:0 0 6px;font-size:20px;color:var(--gold);letter-spacing:.04em}.fin-t{width:100%;border-collapse:collapse;margin:0;font-size:13px}.fin-t th{white-space:nowrap;font-size:10.5px;color:#8FA8D8;font-weight:700;text-align:right;padding:2px 4px;border-bottom:1px solid rgba(255,255,255,.2);letter-spacing:.06em}.fin-t th:first-child{text-align:left}.fin-t td{background:none;border:0;border-bottom:1px solid rgba(255,255,255,.08);height:auto;padding:4px 3px;text-align:right;color:#DCE4F5;font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap}.fin-t td:first-child{text-align:left;color:#C7D2E6;white-space:normal}.fin-t tr.fund td{color:var(--gold);font-weight:700;background:rgba(243,112,33,.12)}.fin-t tr.fund td:first-child{color:var(--gold)}.fin-t td.q{color:#8FA8D8}.fin-t tr.tot td{font-weight:700;color:#fff;border-top:1px solid rgba(255,255,255,.25)}.fin-t tr.net td{font-weight:800;color:var(--gold);border-top:2px solid var(--orange);border-bottom:0}.fin-note{margin-top:12px;padding:10px 18px;border-left:4px solid var(--orange);background:rgba(255,255,255,.05);font-size:17px;line-height:1.4;color:#DCE4F5}.fin-note b{color:var(--gold)}
 /* footer signature */
 .sig{position:absolute;left:64px;right:64px;bottom:20px;display:flex;justify-content:space-between;align-items:center;font-size:17px;letter-spacing:.08em;color:var(--gray)}
 .dark .sig{color:#8FA8D8}
