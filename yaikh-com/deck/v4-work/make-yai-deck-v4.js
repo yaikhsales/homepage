@@ -463,7 +463,7 @@ ${heading ? `<h2>${heading}</h2>` : ""}
     const [, prices, sales] = S;
     // How it works — PC UI left, phone UI middle, AIoT photo column on the right (20%).
     const howItWorks = slide("dark", "How it works", `
-<h2>One login. The whole factory — on a PC, a phone, and the machines.</h2>
+<h2>One login — PC, phone and AIoT sensors. All in one system.</h2>
 <div class="hiw">
   <figure class="hiw-web"><img src="${uri(path.join(LITE, "ui", "web-home.jpg"))}" alt="Yai web UI"><figcaption><b>Web · management</b>Administration · Management dashboard · Operations — every department on one screen</figcaption></figure>
   <figure class="hiw-app"><img src="${uri(path.join(LITE, "ui", "app-home.jpg"))}" alt="Yai app UI"><figcaption><b>App · the floor</b>Workers and supervisors: attendance, tickets, gate pass, HR, YTM — Android and iOS</figcaption></figure>
