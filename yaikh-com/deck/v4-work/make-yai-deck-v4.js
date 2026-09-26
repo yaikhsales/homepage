@@ -560,7 +560,7 @@ ${homeBody}
     </div></div>
     <div class="rd-sec"><span class="rd-av coin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l9-4 9 4-9 4z"/><path d="M3 8v9l9 4 9-4V8"/><path d="M12 12v9"/><path d="M7.5 6l9 4"/></svg></span><div class="rd-bub">
       <div class="rd-note-k">Factory Supply Market</div>
-      <p>Factories place large orders — fabric, trims, packaging, consumables — and wholesale vendors join to supply them. Payments and deliveries go through official channels.</p>
+      <p>Factories place large orders for non-production materials — administrative consumables, spare parts, maintenance material — and wholesale vendors join to supply them. Payments and deliveries go through official channels.</p>
     </div></div>
     <div class="rd-sec"><span class="rd-av"><img src="${logo}" alt="Yai"></span><div class="rd-bub">
       <div class="rd-note-k">My Yai</div>
