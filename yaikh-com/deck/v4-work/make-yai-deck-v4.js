@@ -652,37 +652,35 @@ ${homeBody}
       ${finRow("Internet", "450.00", "…")}
       ${finRow("Management consultant", "500.00", "…")}
       ${finRow("Business register", "317.56", "…")}
-      ${finRow("Unreconciled gap / beginning balance", "126,857.68", "…")}
-      ${finRow("Total operating expenses", "201,660.50", "…", "tot")}
-      ${finRow("Net loss for the year", "(201,660.50)", "…", "net")}
+      ${finRow("Total operating expenses", "74,802.82", "…", "tot")}
+      ${finRow("Net loss for the period", "(74,802.82)", "…", "net")}
     </tbody></table>
   </div>
   <div class="fin-col">
     <h3>Balance sheet · 31 Dec</h3>
     <table class="fin-t"><thead><tr><th></th><th>Oct–Dec 25</th><th>Jan–Aug 26</th></tr></thead><tbody>
       ${finRow("Computer + office equipment", "1,217.87", "…")}
-      ${finRow("Cash in bank (ABA)", "(33,241.25)", "…")}
-      ${finRow("Total assets", "(32,023.38)", "…", "tot")}
+      ${finRow("Cash in bank (ABA)", "(16,830.48)", "…")}
+      ${finRow("Total assets", "(15,612.61)", "…", "tot")}
       ${finRow("Share capital / paid-in", "59,190.21", "…")}
-      ${finRow("Profit for the year", "(201,660.50)", "…")}
-      ${finRow("Total equity", "(142,470.29)", "…", "tot")}
+      ${finRow("Profit for the period", "(74,802.82)", "…")}
+      ${finRow("Total equity", "(15,612.61)", "…", "tot")}
       ${finRow("Liabilities", "–", "…")}
-      ${finRow("Suspense / unreconciled difference", "110,446.91", "…")}
-      ${finRow("Total equity &amp; liabilities", "(32,023.38)", "…", "net")}
+      ${finRow("Total equity &amp; liabilities", "(15,612.61)", "…", "net")}
     </tbody></table>
   </div>
   <div class="fin-col">
     <h3>Cash flow</h3>
     <table class="fin-t"><thead><tr><th></th><th>Oct–Dec 25</th><th>Jan–Aug 26</th></tr></thead><tbody>
-      ${finRow("Profit before tax", "(201,660.50)", "…")}
-      ${finRow("Net cash used in operating", "(201,660.50)", "…", "tot")}
+      ${finRow("Profit before tax", "(74,802.82)", "…")}
+      ${finRow("Net cash used in operating", "(74,802.82)", "…", "tot")}
       ${finRow("Computer + office equipment", "(1,217.87)", "…")}
       ${finRow("Net cash used in investing", "(1,217.87)", "…", "tot")}
       ${finRow("Issuance of share capital", "59,190.21", "…")}
       ${finRow("Net cash from financing", "59,190.21", "…", "tot")}
-      ${finRow("Net decrease in cash", "(143,688.16)", "…")}
-      ${finRow("Cash at beginning of year", "110,446.91", "…")}
-      ${finRow("Cash at end of year", "(33,241.25)", "…", "net")}
+      ${finRow("Net decrease in cash", "(16,830.48)", "…")}
+      ${finRow("Cash at 10 Oct 2025 (incorporation)", "–", "…")}
+      ${finRow("Cash at 31 Dec 2025", "(16,830.48)", "…", "net")}
     </tbody></table>
   </div>
 </div>
