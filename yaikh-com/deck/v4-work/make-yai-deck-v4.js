@@ -725,8 +725,8 @@ ${homeBody}
       { on: "main", at: 0.14, side: "above", dx: 0, dy: 0, y: "2025", t: "Incorporation", d: "Texlink Technologies · Oct 2025" },
       { on: "main", at: 0.45, side: "above", dx: 0, dy: 0, y: "2026", t: "First 25 factories & clients", d: "10,000 app users" },
       { on: "main", at: 0.78, side: "above", dx: -20, dy: 0, y: "2027", t: "100 factories & clients", d: "1,000,000 app users" },
-      { on: "brA", at: 0.9, side: "above", dx: -30, dy: 0, y: "2028", t: "Own Ai-Native manufacturing unit", d: "the showcase" },
-      { on: "brB", at: 0.9, side: "below", dx: -30, dy: 0, y: "2028", t: "Brand & organizational partnerships", d: "Series A" },
+      { on: "brA", at: 0.9, side: "above", dx: -80, dy: 0, y: "2028", t: "Own Ai-Native manufacturing unit", d: "the showcase" },
+      { on: "brB", at: 0.9, side: "below", dx: -80, dy: 0, y: "2028", t: "Brand & organizational partnerships", d: "Series A" },
     ];
     const takes = [
       { on: "main", at: 0.02, side: "below", dx: 60, dy: 0, y: "2024 – 25", d: "Pre-revenue development · 70+ apps · 14 Ai agents" },
@@ -734,7 +734,7 @@ ${homeBody}
       { on: "main", at: 0.58, side: "below", dx: 0, dy: 0, y: "Aug – Oct 2026", d: "First 3 paying clients: BICNZ · 3SGS · ES Packing · first public expos and events" },
       { on: "main", at: 0.9, side: "below", dx: -30, dy: 10, y: "2027", d: "ASEAN: Vietnam · Thailand · Malaysia" },
     ];
-    const ROAD = { main: "M 30 400 C 330 400, 300 250, 580 250 S 800 240, 900 230", brA: "M 900 230 C 980 230, 1000 110, 1130 100", brB: "M 900 230 C 980 230, 1000 360, 1130 370" };
+    const ROAD = { main: "M 30 400 C 330 400, 300 250, 580 250 S 800 240, 900 230", brA: "M 900 230 C 980 230, 1000 110, 1100 100", brB: "M 900 230 C 980 230, 1000 360, 1100 370" };
     const roadPath = (id, d) => `<path id="${id}" d="${d}" fill="none" stroke="#C9D3E3" stroke-width="54" stroke-linecap="round"/>`;
     const roadDash = (d) => `<path d="${d}" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="18 14" opacity=".9"/>`;
     const bizplan = slide("dark", "Business plan · 2025 – 2028", `
