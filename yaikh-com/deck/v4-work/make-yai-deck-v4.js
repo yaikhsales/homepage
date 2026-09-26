@@ -720,17 +720,21 @@ ${homeBody}
       ['<span class="hd-ic flag">🇬🇧</span>', '<span class="hd-ic flag">🇰🇭</span>']
     ];
     for (const [en, km] of KM_UI) redesignKm = redesignKm.split(en).join(km);
-    // Business plan — roadmap
-    const stops = [
-      ["2024 – 2025", "Pre-revenue development", "Yai platform built · 70+ apps · 14 Ai agents"],
-      ["Oct 2025", "Texlink incorporated", "takes over the 21-factory implementation with Yorkwell group"],
-      ["Feb 2026", "21-factory implementation", "officially started · subscriptions issued"],
-      ["Aug – Oct 2026", "First paid factories", "BICNZ · 3SGS · ES Packing · TAFTAC expo, 11 prospects"],
-      ["Dec 2026", "25 paying factories", "Layer 3 live at 5 · US$100,000 SIPP"],
-      ["2027", "ASEAN", "Vietnam · Thailand · Malaysia · 100 factories · 100,000 users"],
-      ["Q4 2028", "Series A", ""],
+    // Business plan — roadmap: 4 milestones on the road, key takeaways in between
+    const miles = [
+      { at: 0.14, side: "above", dx: -40, dy: 0, y: "2025", t: "Incorporation", d: "Texlink Technologies · Oct 2025" },
+      { at: 0.44, side: "above", dx: 0, dy: 0, y: "2026", t: "First 25 factories & clients", d: "" },
+      { at: 0.72, side: "below", dx: 40, dy: 22, y: "2027", t: "100 factories & clients", d: "" },
+      { at: 0.965, side: "below", dx: -60, dy: 4, y: "2028", t: "Own Ai-Native manufacturing unit", d: "the showcase" },
     ];
-    const bizplan = slide("dark", "Business plan · 2024 – 2028", `
+    const takes = [
+      { at: 0.02, side: "below", dx: 70, dy: 0, y: "2024 – 25", d: "Pre-revenue development · 70+ apps · 14 Ai agents" },
+      { at: 0.29, side: "below", dx: 110, dy: 14, y: "Feb 2026", d: "21-factory implementation with Yorkwell · subscriptions issued" },
+      { at: 0.58, side: "below", dx: -20, dy: 16, y: "Aug – Oct 2026", d: "First paid factories: BICNZ · 3SGS · ES Packing · TAFTAC expo, 11 prospects · US$100,000 SIPP" },
+      { at: 0.82, side: "above", dx: -60, dy: -4, y: "2027", d: "ASEAN: Vietnam · Thailand · Malaysia · 100,000 users" },
+      { at: 0.93, side: "above", dx: -30, dy: -34, y: "2028", d: "Series A" },
+    ];
+    const bizplan = slide("dark", "Business plan · 2025 – 2028", `
 <div class="road">
   <svg viewBox="0 0 1160 590" xmlns="http://www.w3.org/2000/svg">
     <defs><filter id="rs" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000" flood-opacity=".45"/></filter></defs>
@@ -742,21 +746,26 @@ ${homeBody}
 </div>
 <script>
 (function(){
-  const stops = ${JSON.stringify(stops)};
-  const svg = document.currentScript.previousElementSibling.querySelector("svg");
-  const path = svg.querySelector("#roadpath"), pins = svg.querySelector("#pins");
-  const labels = document.currentScript.previousElementSibling.querySelector(".road-labels");
-  const L = path.getTotalLength(), fr = [0.02, 0.17, 0.33, 0.49, 0.64, 0.8, 0.96], side = ["below", "above", "below", "above", "below", "above", "below"], dx = [60, -120, 100, 0, 110, 0, 0], dy = [0, 10, 0, 0, 0, 0, 0];
-  const box = svg.getBoundingClientRect(), sx = 1160 / 1160, ns = "http://www.w3.org/2000/svg";
-  stops.forEach((st, i) => {
-    const pt = path.getPointAtLength(L * fr[i]);
+  const miles = ${JSON.stringify(miles)}, takes = ${JSON.stringify(takes)};
+  const root = document.currentScript.previousElementSibling, svg = root.querySelector("svg");
+  const path = svg.querySelector("#roadpath"), pins = svg.querySelector("#pins"), labels = root.querySelector(".road-labels");
+  const L = path.getTotalLength(), ns = "http://www.w3.org/2000/svg";
+  const put = (m, cls, html) => {
+    const pt = path.getPointAtLength(L * m.at);
+    const el = document.createElement("div"); el.className = "road-lab " + cls + " " + m.side;
+    el.style.left = ((pt.x + m.dx) / 1160 * 100) + "%"; el.style.top = ((pt.y + m.dy) / 590 * 100) + "%";
+    el.innerHTML = html; labels.appendChild(el); return pt;
+  };
+  miles.forEach((m, i) => {
+    const pt = put(m, "mile", "<small>" + m.y + "</small><b>" + m.t + "</b>" + (m.d ? "<span>" + m.d + "</span>" : ""));
     const g = document.createElementNS(ns, "g"); g.setAttribute("transform", "translate(" + pt.x + " " + (pt.y - 4) + ")");
-    g.innerHTML = '<path d="M0 0 L-16 -26 A22 22 0 1 1 16 -26 Z" fill="#F37021" stroke="#fff" stroke-width="3"/><circle cy="-34" r="17" fill="#fff"/><text y="-28" text-anchor="middle" font-family="Arial" font-weight="800" font-size="17" fill="#0A1F47">0' + (i + 1) + '</text>';
+    g.innerHTML = '<path d="M0 0 L-17 -28 A24 24 0 1 1 17 -28 Z" fill="#F37021" stroke="#fff" stroke-width="3"/><circle cy="-36" r="18" fill="#fff"/><text y="-30" text-anchor="middle" font-family="Arial" font-weight="800" font-size="18" fill="#0A1F47">0' + (i + 1) + '</text>';
     pins.appendChild(g);
-    const el = document.createElement("div"); el.className = "road-lab " + side[i];
-    el.style.left = ((pt.x + dx[i]) / 1160 * 100) + "%"; el.style.top = ((pt.y + dy[i]) / 590 * 100) + "%";
-    el.innerHTML = "<small>" + st[0] + "</small><b>" + st[1] + "</b>" + (st[2] ? "<span>" + st[2] + "</span>" : "");
-    labels.appendChild(el);
+  });
+  takes.forEach((m) => {
+    const pt = put(m, "take", "<small>" + m.y + "</small><span>" + m.d + "</span>");
+    const c = document.createElementNS(ns, "circle"); c.setAttribute("cx", pt.x); c.setAttribute("cy", pt.y); c.setAttribute("r", 9);
+    c.setAttribute("fill", "#FFD58A"); c.setAttribute("stroke", "#0A1F47"); c.setAttribute("stroke-width", "3"); pins.appendChild(c);
   });
 })();
 </script>
@@ -997,7 +1006,7 @@ td{padding:12px;border-bottom:1px solid rgba(255,255,255,.12);vertical-align:top
 
 
 /* business plan roadmap */
-.road{position:relative;width:1160px;height:590px;margin:-4px auto 0}.road svg{position:absolute;inset:0;width:100%;height:100%}.road-labels{position:absolute;inset:0;pointer-events:none}.road-lab{position:absolute;width:290px;font-family:Arial,Helvetica,sans-serif;color:#fff;transform:translate(-50%,0)}.road-lab.above{transform:translate(-50%,-100%);margin-top:-72px;text-align:center}.road-lab.below{margin-top:40px;text-align:center}.road-lab small{display:block;color:var(--orange);font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase}.road-lab b{display:block;font-size:20px;color:var(--gold);line-height:1.15;margin:3px 0 4px;white-space:nowrap}.road-lab span{display:block;font-size:14.5px;line-height:1.35;color:#DCE4F5}
+.road{position:relative;width:1160px;height:590px;margin:-4px auto 0}.road svg{position:absolute;inset:0;width:100%;height:100%}.road-labels{position:absolute;inset:0;pointer-events:none}.road-lab{position:absolute;width:300px;font-family:Arial,Helvetica,sans-serif;color:#fff;transform:translate(-50%,0);text-align:center}.road-lab.above{transform:translate(-50%,-100%)}.road-lab.mile.above{margin-top:-74px}.road-lab.mile.below{margin-top:40px}.road-lab.take.above{margin-top:-24px}.road-lab.take.below{margin-top:24px}.road-lab small{display:block;color:var(--orange);font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase}.road-lab.mile b{display:block;font-size:22px;color:var(--gold);line-height:1.15;margin:3px 0 4px}.road-lab.mile span{display:block;font-size:14.5px;line-height:1.35;color:#DCE4F5}.road-lab.take{width:250px}.road-lab.take small{font-size:11px;color:#FFD58A;letter-spacing:.1em}.road-lab.take span{display:block;font-size:12.5px;line-height:1.35;color:#B9C6DE;margin-top:2px}
 /* brochure slides */
 .brslide{padding:0;background:#F7F5EF;color:#1E293B;font-family:Georgia,"Times New Roman",serif}
 .br{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr 1fr}
