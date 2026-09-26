@@ -472,7 +472,7 @@ ${heading ? `<h2>${heading}</h2>` : ""}
     <figure><img src="${uri(path.join(__dirname, "img-about", "photo", "water-meter.jpg"))}" alt=""><figcaption>Water</figcaption></figure>
     <figure><img src="${uri(path.join(__dirname, "img-about", "photo", "air-sensor.jpg"))}" alt=""><figcaption>Humidity · temperature</figcaption></figure>
     <figure><img src="${uri(path.join(__dirname, "img-about", "photo", "wall-pad.jpg"))}" alt=""><figcaption>Waste recording pad</figcaption></figure>
-    <figure><img src="${uri(path.join(__dirname, "img-about", "photo", "water-ions.jpg"))}" alt=""><figcaption>Waste-water sensors</figcaption></figure>
+    <figure><img src="${uri(path.join(__dirname, "img-about", "photo", "water-ions.jpg"))}" alt=""><figcaption>Water sensors</figcaption></figure>
   </div>
 </div>
 `, { cls: "hiwslide" });
