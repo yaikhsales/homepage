@@ -552,7 +552,7 @@ ${homeBody}
     </div></div>
     <div class="rd-sec"><span class="rd-av coin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l1.5-5h15L21 10"/><path d="M4 10h16v10H4z"/><path d="M9 20v-5h6v5"/><path d="M4 10c0 1.5 1.3 2.5 2.8 2.5S9.7 11.5 9.7 10c0 1.5 1.3 2.5 2.8 2.5s2.8-1 2.8-2.5c0 1.5 1.3 2.5 2.8 2.5S21 11.5 21 10"/></svg></span><div class="rd-bub">
       <div class="rd-note-k">Phsar Market · <span class="km">ផ្សារ</div>
-      <p>Workers post their own products — farm produce, home-made food, handicraft, local goods. Buyers in Cambodia and overseas browse and order; Yai handles listing, chat and delivery. Payment and order handling fully secured through ABA and Wing.</p>
+      <p>Users post their own products — farm produce, home-made food, handicraft, local goods. Buyers in Cambodia and overseas browse and order; Yai handles listing, chat and delivery. Payment and order handling fully secured through ABA and Wing.</p>
     </div></div>
     <div class="rd-sec"><span class="rd-av coin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.2 5.2L4 17l3 3 5.5-5.5a4 4 0 0 0 5.2-5.2l-2.4 2.4-2.1-.6-.6-2.1z"/></svg></span><div class="rd-bub">
       <div class="rd-note-k">Service Market</div>
