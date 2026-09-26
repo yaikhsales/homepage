@@ -12,7 +12,7 @@ import { cookies } from "next/headers";
 import { readFile } from "fs/promises";
 import path from "path";
 import { verifySession } from "@/lib/auth";
-import { DECKS } from "@/lib/decks";
+import { DECKS, pdfDisposition } from "@/lib/decks";
 
 export const dynamic = "force-dynamic";
 
@@ -33,7 +33,7 @@ export async function GET(request: Request) {
   if (url.searchParams.get("pdf") && deck.pdf) {
     const pdf = await readFile(path.join(process.cwd(), "private", deck.pdf));
     return new Response(pdf, {
-      headers: { ...common, "Content-Type": "application/pdf", "Content-Disposition": `inline; filename="${deck.pdf}"` },
+      headers: { ...common, "Content-Type": "application/pdf", "Content-Disposition": pdfDisposition(deck.pdf, "inline") },
     });
   }
   const html = await readFile(path.join(process.cwd(), "private", deck.html), "utf8");

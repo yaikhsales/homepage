@@ -7,7 +7,7 @@ import { cookies } from "next/headers";
 import { readFile } from "fs/promises";
 import path from "path";
 import { verifySession } from "@/lib/auth";
-import { PDF_BY_FILE } from "@/lib/decks";
+import { PDF_BY_FILE, pdfDisposition } from "@/lib/decks";
 
 export const dynamic = "force-dynamic";
 
@@ -25,7 +25,7 @@ export async function GET(_request: Request, { params }: { params: { file: strin
       "Cache-Control": "private, no-store",
       "X-Robots-Tag": "noindex, nofollow",
       "Content-Type": "application/pdf",
-      "Content-Disposition": `inline; filename="${name}"`,
+      "Content-Disposition": pdfDisposition(name, "attachment"),
     },
   });
 }

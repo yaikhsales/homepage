@@ -35,3 +35,12 @@ export const pdfHref = (ask: string) => {
   const pdf = DECKS[ask]?.pdf;
   return pdf ? `/plan/pitch-deck/${encodeURIComponent(pdf)}` : "";
 };
+
+/* Content-Disposition for a PDF: HTTP headers are Latin-1 only, so a name with
+ * an em dash ("Yai — SIPP Cohort 2.pdf") must be sent ASCII-safe, with the real
+ * UTF-8 name in filename* (RFC 5987). `attachment` makes phones save/share the
+ * file itself instead of the link. */
+export const pdfDisposition = (name: string, mode: "inline" | "attachment" = "attachment") => {
+  const ascii = name.replace(/[^\x20-\x7e]/g, "-").replace(/"/g, "");
+  return `${mode}; filename="${ascii}"; filename*=UTF-8''${encodeURIComponent(name)}`;
+};
