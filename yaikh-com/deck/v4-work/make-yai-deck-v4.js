@@ -515,9 +515,9 @@ ${heading ? `<h2>${heading}</h2>` : ""}
     <div class="hd"><span class="hd-av"></span><b>KA…</b><small>TL02</small><span class="hd-sp"></span><span class="hd-ic">🔔</span><span class="hd-ic flag">🇬🇧</span><span class="hd-ic">＋</span></div>
     <div class="hd2"><span>Today</span><span class="hd-bar"><i></i></span><span>00:00 / 08:00</span><em>·</em><span>Weekly 14:52 h</span><em>·</em><span>6.5 d</span></div>
     <div class="vid-row">
-      <div class="vid"><div class="vid-bg vid-holder"><span>Cambodian worker video</span><small>real footage to come</small></div>
+      <div class="vid"><img class="vid-bg" src="${uri(path.join(LITE, "ui", "video-worker.jpg"))}" alt="">
         <div class="vid-side"><span>♡<b>2.4k</b></span><span>💬<b>318</b></span><span>↗<b>Share</b></span></div>
-        <div class="vid-meta"><b>@sreyneang · Sewing line 4</b><span>How I log my hours on Yai — 30 sec 🧵</span></div>
+        <div class="vid-meta"><b>@yaikh2025 · Ai for garment factory</b><span>Run your factory from your phone 🧵</span></div>
         <div class="vid-play">▶</div></div>
       <div class="vcol"><div class="vb"><span class="vb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l1.5-5h15L21 10"/><path d="M4 10h16v10H4z"/><path d="M9 20v-5h6v5"/><path d="M4 10c0 1.5 1.3 2.5 2.8 2.5S9.7 11.5 9.7 10c0 1.5 1.3 2.5 2.8 2.5s2.8-1 2.8-2.5c0 1.5 1.3 2.5 2.8 2.5S21 11.5 21 10"/></svg></span><small>Phsar Market</small><em>128 shops</em></div><div class="vb"><span class="vb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.2 5.2L4 17l3 3 5.5-5.5a4 4 0 0 0 5.2-5.2l-2.4 2.4-2.1-.6-.6-2.1z"/></svg></span><small>Service Market</small><em>3 requests</em></div><div class="vb"><span class="vb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l9-4 9 4-9 4z"/><path d="M3 8v9l9 4 9-4V8"/><path d="M12 12v9"/><path d="M7.5 6l9 4"/></svg></span><small>Factory Supply Market</small><em>2 orders</em></div><div class="vb hot"><span class="vb-ic yai"><img src="${logo}" alt="Yai"></span><small>My Ai</small><em>ask me</em></div></div>
     </div>
