@@ -735,7 +735,7 @@ ${homeBody}
       S0: { x: 610, y: 312, kind: "sub", side: "right", dx: 0, dy: 0, d: "21-factory implementation — ongoing" },
       S1: { x: 610, y: 346, kind: "sub", side: "right", dx: 0, dy: 0, d: "BICNZ — calibration service" },
       S2: { x: 610, y: 380, kind: "sub", side: "right", dx: 0, dy: 0, d: "3SGS — Ai compliance platform" },
-      S3: { x: 610, y: 414, kind: "sub", side: "right", dx: 0, dy: 0, d: "ES Packing — administrative applications" },
+      S3: { x: 610, y: 414, kind: "sub", side: "right", dx: 0, dy: 0, d: "ES Packing — admin applications" },
       S4: { x: 610, y: 448, kind: "sub", side: "right", dx: 0, dy: 0, d: "First public expos & events" },
       M3: { x: 760, y: 250, kind: "mile", side: "above", dx: 0,   dy: 0,  y2: "2027", t: "100 factories & clients", d: "1,000,000 app users" },
       T4: { x: 880, y: 250, kind: "take", side: "right", dx: 0, dy: 26, y2: "2027 · ASEAN +", d: "" },
