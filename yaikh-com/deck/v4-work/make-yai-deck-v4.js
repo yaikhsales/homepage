@@ -554,7 +554,7 @@ ${homeBody}
     <div class="rd-sec">
       <div class="rd-note-k">Phsar Market · <span class="km">ផ្សារ</span></div>
       <h3>A marketplace for what workers make and grow.</h3>
-      <p>Workers post their own products — farm produce, home-made food, handicraft, local goods. Buyers inside Cambodia and overseas can browse and order; Yai handles the listing, chat, delivery and payment.</p>
+      <p>Workers post their own products — farm produce, home-made food, handicraft, local goods. Buyers inside Cambodia and overseas can browse and order; Yai handles the listing, chat and delivery. Payment and order handling are fully secured through ABA and Wing.</p>
     </div>
   </div>
   <div class="rd-phones"><div class="phone big"><div class="phone-notch"></div><div class="scr up">
