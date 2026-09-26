@@ -738,10 +738,11 @@ ${homeBody}
       S3: { x: 610, y: 414, kind: "sub", side: "right", dx: 0, dy: 0, d: "ES Packing" },
       S4: { x: 610, y: 448, kind: "sub", side: "right", dx: 0, dy: 0, d: "First public expos & events" },
       M3: { x: 760, y: 250, kind: "mile", side: "above", dx: 0,   dy: 0,  y2: "2027", t: "100 factories & clients", d: "1,000,000 app users" },
-      T4: { x: 880, y: 250, kind: "take", side: "right", dx: 0, dy: 26, y2: "2027 · ASEAN", d: "" },
+      T4: { x: 880, y: 250, kind: "take", side: "right", dx: 0, dy: 26, y2: "2027 · ASEAN +", d: "" },
       S9: { x: 880, y: 312, kind: "sub", side: "right", dx: 0, dy: 0, d: "Vietnam" },
       S10:{ x: 880, y: 346, kind: "sub", side: "right", dx: 0, dy: 0, d: "Thailand" },
       S11:{ x: 880, y: 380, kind: "sub", side: "right", dx: 0, dy: 0, d: "Malaysia" },
+      S12:{ x: 880, y: 414, kind: "sub", side: "right", dx: 0, dy: 0, d: "Bangladesh" },
       J:  { x: 960, y: 250, kind: "junction" },
       M4: { x: 1080, y: 110, kind: "mile", side: "above", dx: -60, dy: 0, y2: "2028", t: "Own Ai-Native manufacturing unit", d: "the showcase" },
       M5: { x: 1080, y: 390, kind: "mile", side: "below", dx: -60, dy: 0, y2: "2028", t: "Brand & organizational partnerships", d: "" },
@@ -757,7 +758,7 @@ ${homeBody}
       "M880 250 H960",                  // T4 → J
       "M960 250 L1010 200 V150 L1050 110 H1080",   // J → M4
       "M960 250 L1010 300 V350 L1050 390 H1080",   // J → M5
-      "M70 470 V554", "M320 330 V426", "M610 250 V448", "M880 250 V380",   // drop chains
+      "M70 470 V554", "M320 330 V426", "M610 250 V448", "M880 250 V414",   // drop chains
     ];
     // decorative background traces (faint)
     const bg = [
