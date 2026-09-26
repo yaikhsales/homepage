@@ -59,3 +59,10 @@ Edit **only** in `deck/v4-work` — the session scratchpad is wiped when the app
 
 ## 5th deck — internal client deck (for Arnold)
 `ASK=client node make-yai-deck-v4.js` → `yai-deck-v4-client.html` (also built by `all`). 4 slides: (1) same title slide as the pitch decks, (2) agent constellation — tabs + agent names only, no icons, mirrored in `CONSTELLATION` from `yaikh-dashboard/src/data/module.js`, (3) sales confirmed grid, (4) Saman upcoming presentations, (5) Yai/TAFTAC direct updating presentation. Live on /plan as the 5th A4 card (ask=client).
+
+## Tiers, decks and documents (as of 26 Sep 2026)
+- `ASK=<tier> node make-yai-deck-v4.js` → tiers `0.5m · 1m · 2m · 3m` (15 slides), `100k` (15 slides, EDF allocation), `edf` (6 slides: title · solution · module prices · sales confirmed · ask · close → "Yai — SIPP Cohort 2"), `client` (8 slides, internal). `all` builds the four raise sizes + client.
+- Title slide: real product photos in `img-lite/cats/<name>.jpg` (square 320px). Drop replacements in `deck/images/cats-in/` and re-crop. Headline is two lines, both white.
+- /plan A4 cards (lib/decks.ts): 1–4 raise sizes · 5 Client deck · 6 M1 setup · 7 Founder information · 8 About AIoT to GTZ · 9 SIPP Cohort 2 · 10 Brochure (PDF only, from Downloads/Yai Tri-Fold Brochure.pdf).
+- PDFs have real `.pdf` URLs: `/plan/pitch-deck/<file>.pdf` — phones share the file, not the link.
+- EDF upload set (5 max): SIPP Cohort 2 deck · Founder information · Price and Client · Brochure · financial summary (TODO — needs 2025 revenue).

@@ -18,6 +18,10 @@ export const DECKS: Record<string, { html: string; pdf: string }> = {
   // 8th document — the platform deck: the About page, the Ai-Native MiP and the
   // AIoT sustainability platform, no founders. 3 slides.
   platform: { html: "platform-deck.html", pdf: "Yai-Platform-Deck.pdf" },
+  // 9th document — the EDF Startup Investment Package 2 application deck (US$100,000 ask), 6 slides.
+  edf: { html: "edf-deck.html", pdf: "Yai — SIPP Cohort 2.pdf" },
+  // 10th document — the printed tri-fold brochure (PDF only, no web version).
+  brochure: { html: "", pdf: "Yai Tri-Fold Brochure.pdf" },
 };
 
 /* Phones decide what a link is from its ending: a URL with no ".pdf" opens as a

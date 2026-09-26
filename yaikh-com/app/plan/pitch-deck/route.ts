@@ -26,6 +26,8 @@ export async function GET(request: Request) {
   const url = new URL(request.url);
   const deck = DECKS[url.searchParams.get("ask") ?? "3m"];
   if (!deck) return new Response("Unknown deck", { status: 404 });
+  // PDF-only documents (the brochure) have no web version — send the PDF.
+  if (!deck.html) url.searchParams.set("pdf", "1");
 
   const common = { "Cache-Control": "private, no-store", "X-Robots-Tag": "noindex, nofollow" };
   if (url.searchParams.get("pdf") && deck.pdf) {

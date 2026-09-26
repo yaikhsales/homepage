@@ -931,7 +931,7 @@ export default async function PlanPage() {
           {/* A4 · Seed-round pitch decks — four raise sizes, served from /plan/pitch-deck?ask=… (session-gated, not /public) */}
           <div className="mb-3 mt-8">
             <h3 className="font-bold text-yai-navy text-xl">A4. Pitch Deck · four raise sizes</h3>
-            <p className="text-sm text-gray-600 mt-1">15 slides each — the same deck, sized for US$0.5M, US$1M, US$2M or US$3M — plus the client deck, the M1 setup page and the founder information. Call them by number: 1 to 8.</p>
+            <p className="text-sm text-gray-600 mt-1">15 slides each — the same deck, sized for US$0.5M, US$1M, US$2M or US$3M — plus the client deck, the M1 setup page and the founder information. Call them by number: 1 to 10.</p>
           </div>
           <div className="no-print grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {[
@@ -943,6 +943,8 @@ export default async function PlanPage() {
               { ask: "m1", amt: "M1 Setup", note: "How Big Brain runs · web page" },
               { ask: "about", amt: "Founder information", note: "Company · founders · MiP · AIoT data · 4 slides" },
               { ask: "platform", amt: "About AIoT to GTZ", note: "Company · MiP · AIoT data · 3 slides" },
+              { ask: "edf", amt: "SIPP Cohort 2", note: "EDF application · US$100,000 · 9 slides" },
+              { ask: "brochure", amt: "Brochure", note: "Tri-fold · 2 pages · PDF only" },
             ].map((d, i) => (
               <div key={d.ask} className="rounded-xl bg-yai-navy text-white p-4 flex flex-col gap-3">
                 <div>
@@ -953,14 +955,14 @@ export default async function PlanPage() {
                   <div className="text-xs text-white/60 mt-1">{d.note}</div>
                 </div>
                 <div className="flex gap-2 mt-auto">
-                  <a
+                  {d.ask !== "brochure" && <a
                     href={`/plan/pitch-deck?ask=${d.ask}`}
                     target="_blank"
                     rel="noopener"
                     className="flex-1 text-center rounded-full bg-yai-orange text-white text-xs font-bold px-3 py-1.5 hover:opacity-90"
                   >
                     Open ↗
-                  </a>
+                  </a>}
                   {d.ask !== "m1" && <a
                     href={pdfHref(d.ask)}
                     target="_blank"
