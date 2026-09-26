@@ -503,9 +503,7 @@ ${homeBody}
       <div class="wc-hd"><img src="${logo}" alt="Yai"><b>Yai</b><small>Ai agent · online</small><span>—</span></div>
       <div class="wc-body">
         <div class="wc me">How many workers are absent today?</div>
-        <div class="wc ai"><b>14 of 612</b> · 2.3%. Line 3 has 5 — your highest. Want the names?</div>
-        <div class="wc me">Yes, and line 3 efficiency</div>
-        <div class="wc ai"><div class="wc-card"><span>Line 3 · today</span><i>Efficiency <b class="warn">71%</b></i><i>Target <b>82%</b></i><i>Output <b>1,240 / 1,800</b></i></div>Sokha · Dara · Chanthy · Bopha · Rith. Message the supervisor?</div>
+        <div class="wc ai"><b>14 of 612</b> · 2.3%. Line 3 has 5 — your highest: Sokha, Dara, Chanthy, Bopha, Rith. Message the supervisor?</div>
         <div class="wc me">Yes, send it</div>
         <div class="wc ai">✅ Sent to Mr. Vannak (Line 3).</div>
       </div>
