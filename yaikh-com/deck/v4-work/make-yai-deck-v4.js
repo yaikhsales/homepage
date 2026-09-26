@@ -723,7 +723,7 @@ ${homeBody}
     // Business plan — roadmap: 4 milestones on the road, key takeaways in between
     const miles = [
       { at: 0.13, side: "above", dx: 0, dy: 0, y: "2025", t: "Incorporation", d: "Texlink Technologies · Oct 2025" },
-      { at: 0.41, side: "above", dx: 0, dy: 0, y: "2026", t: "First 25 factories & clients", d: "" },
+      { at: 0.41, side: "above", dx: 0, dy: 0, y: "2026", t: "First 25 factories & clients", d: "10,000 app users" },
       { at: 0.69, side: "above", dx: 0, dy: 0, y: "2027", t: "100 factories & clients", d: "" },
       { at: 0.965, side: "above", dx: -50, dy: 0, y: "2028", t: "Own Ai-Native manufacturing unit", d: "the showcase · Series A" },
     ];
