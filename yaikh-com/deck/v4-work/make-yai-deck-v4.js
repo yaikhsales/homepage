@@ -645,7 +645,7 @@ ${homeBody}
     <h3>Income statement</h3>
     <table class="fin-t"><thead><tr><th></th><th>2025</th><th>2024</th></tr></thead><tbody>
       ${finRow("Total revenue", "–", "–")}
-      ${finRow("Yorkwell Asia · strategic partnership funding", "15–17k / month", "–", "fund")}
+      ${finRow("Yorkwell Asia · strategic partnership funding (payroll)", "73,451.02", "–", "fund")}
       ${finRow("Payroll expenses", "73,451.02", "–")}
       ${finRow("Fuel, electricity, water", "69.13", "–")}
       ${finRow("Bank charge", "15.11", "10.00")}
