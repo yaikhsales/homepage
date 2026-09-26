@@ -684,7 +684,6 @@ ${homeBody}
     </tbody></table>
   </div>
 </div>
-<div class="fin-note"><b>2025 was a build year.</b> No sales revenue yet — payroll and operating expenses were funded by Yorkwell Asia under the strategic partnership (US$15–17k / month). Paid subscriptions start Aug–Oct 2026 (Yorkmars, BICNZ, 3SGS, ES Packing).</div>
 `);
     S.splice(0, S.length, title, howItWorks, redesign, redesignKm, solution, prices, sales, financials, ask, close);
     S.forEach((html, i) => { S[i] = html.replace(/id="s\d+"/, `id="s${i + 1}"`).replace(/<span>\d+ \/ \d+<\/span>/, `<span>${i + 1} / ${TOTAL}</span>`); });
