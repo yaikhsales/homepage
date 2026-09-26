@@ -725,7 +725,7 @@ ${homeBody}
       { at: 0.13, side: "above", dx: 0, dy: 0, y: "2025", t: "Incorporation", d: "Texlink Technologies · Oct 2025" },
       { at: 0.41, side: "above", dx: 0, dy: 0, y: "2026", t: "First 25 factories & clients", d: "10,000 app users" },
       { at: 0.69, side: "above", dx: 0, dy: 0, y: "2027", t: "100 factories & clients", d: "1,000,000 app users" },
-      { at: 0.965, side: "above", dx: -50, dy: 0, y: "2028", t: "Own Ai-Native manufacturing unit", d: "the showcase · Series A" },
+      { at: 0.965, side: "above", dx: -50, dy: 0, y: "2028", t: "Own Ai-Native manufacturing unit", d: "the showcase · brand and organizational partnerships · Series A" },
     ];
     const takes = [
       { at: 0.02, side: "below", dx: 60, dy: 0, y: "2024 – 25", d: "Pre-revenue development · 70+ apps · 14 Ai agents" },
