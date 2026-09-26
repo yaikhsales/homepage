@@ -123,7 +123,7 @@ const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
 /* ---------- slide shell ---------- */
 let n = 0;
 if (TIER.edf) TIER.alloc = TIERS["100k"].alloc;
-const TOTAL = TIER.client ? 8 : TIER.edf ? 6 : 15;
+const TOTAL = TIER.client ? 8 : TIER.edf ? 8 : 15;
 function slide(kind, eyebrow, body, opts = {}) {
   n += 1;
   const light = kind === "light";
@@ -720,7 +720,9 @@ ${homeBody}
       ['<span class="hd-ic flag">🇬🇧</span>', '<span class="hd-ic flag">🇰🇭</span>']
     ];
     for (const [en, km] of KM_UI) redesignKm = redesignKm.split(en).join(km);
-    S.splice(0, S.length, title, howItWorks, redesign, redesignKm, financials, close);
+    const handout = (k) => slide("dark", "Handout · Tri-fold brochure", `<div class="hand"><img src="${uri(path.join(LITE, "brochure", "page-" + k + ".jpg"))}" alt="Yai tri-fold brochure, page ${k}"></div>`);
+    const handout1 = handout(1), handout2 = handout(2);
+    S.splice(0, S.length, title, howItWorks, redesign, redesignKm, financials, handout1, handout2, close);
     S.forEach((html, i) => { S[i] = html.replace(/<div class="eyebrow">\d\d · /, '<div class="eyebrow">').replace(/id="s\d+"/, `id="s${i + 1}"`).replace(/<span>\d+ \/ \d+<\/span>/, `<span>${i + 1} / ${TOTAL}</span>`); });
   }
   if (TIER.client) S.push(planSlide("Yai / TAFTAC · YHR leaning presentation", "", [
@@ -897,6 +899,7 @@ td{padding:12px;border-bottom:1px solid rgba(255,255,255,.12);vertical-align:top
 .close h1 .sub-h{font-size:44px}.close h1{font-size:56px;line-height:1.12;margin:12px 0 8px;color:#fff}.big{font-size:32px;line-height:1.4;margin:0}
 .close-row{display:flex;gap:24px;justify-content:center;margin:40px auto 0;max-width:1080px}.close-row>div{flex:1;border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:18px 16px;display:flex;flex-direction:column;gap:6px}.close-row>div>span{font-size:17px;letter-spacing:.08em;text-transform:uppercase;color:#8FA8D8}.close-row b{font-size:26px;color:#fff}.close-row b.pp{font-size:24px}.close-row{align-items:stretch;margin-top:30px;max-width:1150px}.close-row .talk{flex:2.1;text-align:left}.close-row .talk>span{text-align:center}.talk-body{display:flex;gap:18px;align-items:center}.qr{margin:0;text-align:center}.qr img{width:150px;height:150px;border-radius:10px;display:block}.qr figcaption{font-size:17px;color:#8FA8D8;margin-top:4px}.talk-lines{display:flex;flex-direction:column;gap:3px}.talk-lines p{margin:0;font-size:19px;color:#fff}.talk-lines p.mail{color:var(--gold);margin-top:4px}.talk-lines i{font-style:normal;color:#8FA8D8;display:inline-block;width:98px}.close-row>div:not(.talk){justify-content:center}.close-row em{font-style:normal;font-size:19px;color:var(--gold,#F5C26B)}.close-foot{position:absolute;left:64px;right:64px;bottom:26px;font-size:17px;color:#8FA8D8;margin:0}
 .fin-sub{color:#8FA8D8;font-size:15px;margin:-8px 0 10px}.fin{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:start;margin:0 -36px}.fin-col h3{margin:0 0 6px;font-size:20px;color:var(--gold);letter-spacing:.04em}.fin-t{width:100%;border-collapse:collapse;margin:0;font-size:13px}.fin-t th{white-space:nowrap;font-size:10.5px;color:#8FA8D8;font-weight:700;text-align:right;padding:2px 4px;border-bottom:1px solid rgba(255,255,255,.2);letter-spacing:.06em}.fin-t th:first-child{text-align:left}.fin-t td{background:none;border:0;border-bottom:1px solid rgba(255,255,255,.08);height:auto;padding:4px 3px;text-align:right;color:#DCE4F5;font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap}.fin-t td:first-child{text-align:left;color:#C7D2E6;white-space:normal}.fin-t tr.fund td{color:#C7D2E6;font-weight:400;background:none;font-size:12px}.fin-t tr.fund td:first-child{color:#8FA8D8;font-style:italic}.fin-t td.q{color:#8FA8D8}.fin-t tr.tot td{font-weight:700;color:#fff;border-top:1px solid rgba(255,255,255,.25)}.fin-t tr.net td{font-weight:800;color:var(--gold);border-top:2px solid var(--orange);border-bottom:0}.fin-note{margin-top:12px;padding:10px 18px;border-left:4px solid var(--orange);background:rgba(255,255,255,.05);font-size:17px;line-height:1.4;color:#DCE4F5}.fin-note b{color:var(--gold)}
+.hand{display:flex;justify-content:center;align-items:flex-start;margin-top:-6px}.hand img{height:590px;width:auto;border-radius:8px;box-shadow:0 12px 30px rgba(0,0,0,.45);display:block}
 /* footer signature */
 .sig{position:absolute;left:64px;right:64px;bottom:20px;display:flex;justify-content:space-between;align-items:center;font-size:17px;letter-spacing:.08em;color:var(--gray)}
 .dark .sig{color:#8FA8D8}
