@@ -549,7 +549,7 @@ ${homeBody}
     <div class="rd-sec"><span class="rd-av"><img src="${logo}" alt="Yai"></span><div class="rd-bub">
       <div class="rd-note-k">Video feed</div>
       <h3>User training and awareness, in a feed workers already know how to use.</h3>
-      <p>Short clips on the home screen — TikTok-style, in Khmer. The company posts onboarding, safety, quality and HR notices; organizations post theirs too — TAFTAC, brands, auditors, government programmes. Yai tracks who watched and who finished.</p>
+      <p>Short clips on the home screen — TikTok-style, in Khmer. The company posts onboarding, safety, quality and HR notices; organizations post theirs too — TAFTAC, brands, auditors, government programmes. Yai tracks who watched and who finished — workers earn training credits to claim Yai gifts.</p>
     </div></div>
     <div class="rd-sec"><span class="rd-av"><img src="${logo}" alt="Yai"></span><div class="rd-bub">
       <div class="rd-note-k">Phsar Market · <span class="km">ផ្សារ</span></div>
