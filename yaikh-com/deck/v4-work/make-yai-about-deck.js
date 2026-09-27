@@ -423,6 +423,7 @@ figure.t-yasomi img{object-position:50% 26%}
 /* print last so it beats the rules above — otherwise the slide keeps its
    24px margin and each slide spills onto a blank second page. */
 @media print{html,body{margin:0;background:#fff}.deck{padding:0}
+.slide *{box-shadow:none !important;text-shadow:none !important}
 .slide{margin:0;border-radius:0;box-shadow:none;break-inside:avoid;break-after:page}
 .slide:last-of-type{break-after:auto}}
 </style>
