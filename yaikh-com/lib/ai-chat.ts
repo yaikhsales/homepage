@@ -23,6 +23,13 @@
 import { getDb } from "@/lib/mongo";
 import { getPaConfig, type PaConfig } from "@/lib/pa-mapping";
 
+/* Demo-data honesty: some retrieval rows are static sample facts frozen on
+ * 2026-09-06 (machine downtime, day plans, YTD costs…). The PAs must never
+ * present them as live figures, and must never name real client brands. */
+const DATA_HONESTY_GUARD =
+  "IMPORTANT: Any dated operational figures in your reference data (e.g. from 2026-09-06) are STATIC SAMPLE DATA for demonstration, not live readings — when you cite one, say it is sample data, never call it today's number. " +
+  "Never name real customer or buyer brands in answers; say 'a buyer' or 'a client brand' instead.";
+
 const M1_URL = (process.env.M1_LLM_URL || "").replace(/\/$/, "");
 const M1_TOKEN = process.env.M1_LLM_TOKEN || "";
 const M1_MODEL = process.env.M1_LLM_MODEL || "qwen2.5-3b-instruct";
@@ -158,7 +165,7 @@ async function askCompletions(
   req: ChatRequest
 ): Promise<{ reply: string; model: string; usage?: ChatResult["usage"] }> {
   const messages = [
-    { role: "system", content: `${cfg.systemPrompt}\n\n${block}` },
+    { role: "system", content: `${cfg.systemPrompt}\n\n${DATA_HONESTY_GUARD}\n\n${block}` },
     ...(req.history || []).slice(-10).map((m) => ({
       role: m.role === "user" ? "user" : "assistant",
       content: m.text,
