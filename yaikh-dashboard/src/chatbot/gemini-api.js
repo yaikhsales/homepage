@@ -15,10 +15,9 @@ const getGeminiApiKey = () => {
   throw new Error("Google Gemini was removed from Yai — use the M1 route.");
 };
 
-const DEFAULT_AGENT_URL =
-  "https://yaikh-ai-agent-77568730259.asia-southeast1.run.app/api/ai-agent";
-
-const getAgentUrl = () => process.env.REACT_APP_AI_AGENT_URL || DEFAULT_AGENT_URL;
+/* The legacy Cloud Run agent was retired 2026-09-29 (endpoint returns 404).
+ * No URL for it belongs in the bundle; callers get the unavailable text
+ * immediately instead of waiting out a doomed fetch. */
 
 /* ─── M1 local LLM (LM Studio via cloudflared tunnel + FastAPI guard) ───
  * The browser talks to the guard through yaikh-com's same-origin proxy
@@ -441,64 +440,9 @@ export const generateGeminiResponse = async (
   chatHistory = [],
   options = {},
 ) => {
-  try {
-    // Intercept Multimodal Image Uploads and map directly to Vision Models internally
-    if (typeof userMessage === 'string' && userMessage.includes('[IMAGE_DATA:')) {
-      console.log('Intercepted image payload. Routing directly to Native Gemini Multimodal vision processor.');
-      return await generateDirectGeminiResponse(userMessage, botName, botContext, chatHistory);
-    }
-
-    const apiUrl = getAgentUrl();
-
-    const userToken =
-      options.userToken || options.systemToken || "";
-
-    const sentConversationId =
-      options.conversationId ||
-      options.sentConversationId ||
-      options.conversation_id ||
-      undefined;
-
-    const response = await fetch(apiUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        ...(userToken ? { Authorization: `Bearer ${userToken}` } : {}),
-      },
-      body: JSON.stringify({
-        message: userMessage,
-        module: options.module || options.activeModule || botName,
-        userId: options.userId || options.user_id || "anonymous-user",
-        user_id: options.userId || options.user_id || "anonymous-user",
-        conversationId: sentConversationId,
-        system_hint: options.system_hint || options.systemHint || botContext,
-        systemToken: userToken,
-        // Backward compatibility (safe for server to ignore)
-        botName: botName,
-        context: botContext,
-        history: chatHistory,
-      }),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("Backend API Error:", response.status, errorText);
-      throw new Error(`Custom API request failed: ${response.status}`);
-    }
-
-    const data = await response.json();
-    console.log("Backend Response:", data);
-
-    // 3. Extract the text based on how your backend formats the response.
-    // Assuming your backend returns something like { reply: "Hello!" } or { text: "..." }
-    // You may need to adjust this depending on what your console.log(data) shows!
-    return data.reply || data.text || data.message || data.response || "No response received from backend.";
-
-  } catch (error) {
-    console.error("API Error:", error);
-    return "I apologize, but I'm having trouble connecting to my server right now. Please try again later.";
-  }
+  // Legacy Cloud Run agent removed — the M1 answers via the backend
+  // (/api/ai-chat/<pa>); this path only ever produced an error fallback.
+  return ASSISTANT_UNAVAILABLE;
 };
 /**
  * Check if a message should use Gemini API (when no predefined response matches)

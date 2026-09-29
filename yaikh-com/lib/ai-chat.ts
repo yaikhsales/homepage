@@ -33,7 +33,8 @@ const DATA_HONESTY_GUARD =
 const M1_URL = (process.env.M1_LLM_URL || "").replace(/\/$/, "");
 const M1_TOKEN = process.env.M1_LLM_TOKEN || "";
 const M1_MODEL = process.env.M1_LLM_MODEL || "qwen2.5-3b-instruct";
-const M1_TIMEOUT_MS = Number(process.env.M1_LLM_TIMEOUT_MS || 20000);
+// 32s: /pa/query worst case is ~15s Claude wait + ~5s Qwen fallback + network.
+const M1_TIMEOUT_MS = Number(process.env.M1_LLM_TIMEOUT_MS || 32000);
 const MAX_OUTPUT_TOKENS = 1024;
 
 export type ChatMessage = {

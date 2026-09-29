@@ -1489,25 +1489,10 @@ const AppLayout = () => {
                                 border: 1px solid rgba(255, 255, 255, 0.5);
                             }
                         `}</style>
-            <div className="relative z-10 min-w-[1200px] max-w-[1800px] mx-auto flex flex-col gap-6">
-              <div
-                className={`w-full flex justify-end mb-4 ${isDropdownOpen ? "" : "apple-fade-in"}`}
-              >
-                <div
-                  className={`flex items-center px-3 py-2 w-64 text-white transition-all duration-300 group light-effect ${isDropdownOpen ? "bg-white/10 backdrop-blur-md border border-white/20 rounded-lg" : "glass-effect-strong rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105"}`}
-                >
-                  <Search
-                    className={`w-4 h-4 mr-2 transition-colors ${isDropdownOpen ? "text-cyan-300" : "text-cyan-300 group-hover:text-cyan-200"}`}
-                  />
-                  <input
-                    type="text"
-                    placeholder="Search modules..."
-                    className={`bg-transparent border-none outline-none w-full text-xs transition-colors ${isDropdownOpen ? "placeholder-cyan-100/50" : "placeholder-cyan-100/50 focus:placeholder-cyan-200/70"}`}
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </div>
-              </div>
+            {/* Hero row — sibling of the wide strip, pinned to the viewport
+                (sticky left-0 + 100vw cap) so it is centred on every screen
+                width and never scrolls off with the module strip. */}
+            <div className="sticky left-0 z-10" style={{ width: "min(100%, 100vw)" }}>
               {/* Hero — its own row, so it can never collide with the nav band
                   or the column title bars at any width. */}
               <div className="flex justify-center items-center gap-2 mb-4">
@@ -1528,6 +1513,26 @@ const AppLayout = () => {
                   />
                 </button>
                 <span className="text-white font-bold text-2xl drop-shadow-lg">task agent</span>
+              </div>
+            </div>
+            <div className="relative z-10 min-w-[1200px] max-w-[1800px] mx-auto flex flex-col gap-6">
+              <div
+                className={`w-full flex justify-end mb-4 ${isDropdownOpen ? "" : "apple-fade-in"}`}
+              >
+                <div
+                  className={`flex items-center px-3 py-2 w-64 text-white transition-all duration-300 group light-effect ${isDropdownOpen ? "bg-white/10 backdrop-blur-md border border-white/20 rounded-lg" : "glass-effect-strong rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105"}`}
+                >
+                  <Search
+                    className={`w-4 h-4 mr-2 transition-colors ${isDropdownOpen ? "text-cyan-300" : "text-cyan-300 group-hover:text-cyan-200"}`}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Search modules..."
+                    className={`bg-transparent border-none outline-none w-full text-xs transition-colors ${isDropdownOpen ? "placeholder-cyan-100/50" : "placeholder-cyan-100/50 focus:placeholder-cyan-200/70"}`}
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
               </div>
               <div className="flex justify-center items-start gap-6">
                 <SectionContainer
