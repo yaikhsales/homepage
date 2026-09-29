@@ -73,11 +73,31 @@ Remove these call sites and route them through `/api/ai-chat/<pa>`:
 - `yaikh-dashboard/src/chatbot/bot-version2.js:21` (import)
 - `yaikh-dashboard/src/chatbot/GMChat.js:3`, `:102`
 
-Note what is already correct in `gemini-api.js`: every surface tries M1 first —
-`/pa/query` then `/v1/chat/completions` for the PAs, `/v1/chat/claude` then
-`/boss/query` for Big Brain. Gemini is only reached when M1 is unreachable,
-returns non-OK, or is inside the `m1SkipUntil` cooldown. Cutting Gemini out means
-deleting the fallback, not rewiring the primary path.
+### Two different jobs — do not treat them as one
+
+**Surfaces that go through `gemini-api.js`** already try M1 first: `/pa/query`
+then `/v1/chat/completions` for the PAs, `/v1/chat/claude` then `/boss/query`
+for Big Brain. Gemini is only reached when M1 is unreachable, returns non-OK, or
+is inside the `m1SkipUntil` cooldown. Here the work is **deleting a fallback**.
+
+**Surfaces that call the Next.js route directly never enter that module** and
+have no M1 in their path at all — they land on `lib/ai-chat.ts`, i.e. Gemini,
+every time. This is the one that is down in front of visitors (a live test on
+29 Sep returned 500 with Google's `RESOURCE_EXHAUSTED` billing text in the
+bubble). Here the work is **rewiring onto the M1 worker** (§1):
+
+- `yaikh-dashboard/src/chatbot/bot-modules.js:3555` → `fetch('/api/ai-chat/accounting')`
+- `yaikh-dashboard/src/general-ag.js:845` → same route
+- `yaikh-dashboard/src/chatbot/Admin-PA/support-ticket-bot.js:9,56` → `/api/ai-chat/admin`
+
+### The 60-second cooldown needs a failure path, not just deletion
+
+`gemini-api.js:26` sets `M1_COOLDOWN_MS = 60000` and `m1SkipUntil` (lines 28,
+42, 76, 83) parks every subsequent request on Gemini for a full minute after one
+M1 hiccup. That was a soft landing while Google credits existed; with them
+exhausted it is a one-minute outage. Before the fallback is removed, put a real
+user-facing failure behind it — "the assistant is unavailable right now" — or
+the cooldown turns every blip into a dead chat.
 
 ## 5 · Rebuild, or nothing ships
 
