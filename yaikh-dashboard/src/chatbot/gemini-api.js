@@ -20,9 +20,14 @@ const DEFAULT_AGENT_URL =
 
 const getAgentUrl = () => process.env.REACT_APP_AI_AGENT_URL || DEFAULT_AGENT_URL;
 
-/* ─── M1 local LLM (LM Studio via cloudflared tunnel + FastAPI guard) ─── */
-const M1_LLM_URL   = process.env.REACT_APP_M1_LLM_URL   || "";
-const M1_LLM_TOKEN = process.env.REACT_APP_M1_LLM_TOKEN || "";
+/* ─── M1 local LLM (LM Studio via cloudflared tunnel + FastAPI guard) ───
+ * The browser talks to the guard through yaikh-com's same-origin proxy
+ * (/api/m1/<route>), which holds the bearer token server-side. Nothing
+ * secret may live here: CRA compiles every REACT_APP_* value into the
+ * public bundle, which is how the old token ended up readable on the web.
+ * REACT_APP_M1_LLM_URL still overrides the proxy for local dev. */
+const M1_LLM_URL   = process.env.REACT_APP_M1_LLM_URL   || "/api/m1";
+const M1_LLM_TOKEN = "";   // sent by the proxy, never by the browser
 const M1_LLM_MODEL = process.env.REACT_APP_M1_LLM_MODEL || "qwen2.5-3b-instruct";
 const M1_LLM_TIMEOUT_MS = 12000;   // fall through to Gemini after this
 const M1_COOLDOWN_MS    = 60000;   // if M1 fails, skip it for 60s
@@ -40,7 +45,7 @@ export const generateM1LocalResponse = async (
   botContext = "",
   chatHistory = [],
 ) => {
-  if (!M1_LLM_URL || !M1_LLM_TOKEN) return null;
+  if (!M1_LLM_URL) return null;
   if (Date.now() < m1SkipUntil) return null;
   try {
     const systemMsg = botContext && botContext.length > 500
@@ -63,7 +68,6 @@ export const generateM1LocalResponse = async (
       signal: ctl.signal,
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${M1_LLM_TOKEN}`,
       },
       body: JSON.stringify({
         model: M1_LLM_MODEL,
@@ -110,7 +114,7 @@ export const generateChatResponse = async (
 
 /* ─── /pa/query — grounded PA answer over Mongo pa_docs ────────────── */
 export const generatePAResponse = async (pa, userMessage, chatHistory = [], visitor = "") => {
-  if (!M1_LLM_URL || !M1_LLM_TOKEN) return null;
+  if (!M1_LLM_URL) return null;
   if (Date.now() < m1SkipUntil) return null;
   try {
     const ctl = new AbortController();
@@ -120,7 +124,6 @@ export const generatePAResponse = async (pa, userMessage, chatHistory = [], visi
       signal: ctl.signal,
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${M1_LLM_TOKEN}`,
       },
       body: JSON.stringify({
         pa: String(pa || "").toLowerCase(),
@@ -203,7 +206,7 @@ export const generateBossBubbles = async (
   factory = null,
 ) => {
   if (YAI_BACKEND === "qwen") return null;
-  if (!M1_LLM_URL || !M1_LLM_TOKEN) return null;
+  if (!M1_LLM_URL) return null;
   if (Date.now() < m1SkipUntil) return null;
   try {
     const ctl = new AbortController();
@@ -213,7 +216,6 @@ export const generateBossBubbles = async (
       signal: ctl.signal,
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${M1_LLM_TOKEN}`,
       },
       body: JSON.stringify({
         visitor_name: visitor || "Boss",
@@ -242,7 +244,7 @@ export const generateBossBubbles = async (
 
 /* ─── /boss/query — Big Brain routes to PAs and merges ──────────────── */
 export const generateBossResponse = async (userMessage, chatHistory = [], visitor = "") => {
-  if (!M1_LLM_URL || !M1_LLM_TOKEN) return null;
+  if (!M1_LLM_URL) return null;
   if (Date.now() < m1SkipUntil) return null;
   try {
     const ctl = new AbortController();
@@ -252,7 +254,6 @@ export const generateBossResponse = async (userMessage, chatHistory = [], visito
       signal: ctl.signal,
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${M1_LLM_TOKEN}`,
       },
       body: JSON.stringify({
         question: String(userMessage ?? ""),
@@ -450,7 +451,7 @@ export const generateGeminiResponse = async (
     const apiUrl = getAgentUrl();
 
     const userToken =
-      options.userToken || options.systemToken || process.env.REACT_APP_AI_AGENT_TOKEN;
+      options.userToken || options.systemToken || "";
 
     const sentConversationId =
       options.conversationId ||
