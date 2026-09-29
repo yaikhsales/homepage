@@ -52,6 +52,9 @@ export type ChatResult = {
   ok: true;
   reply: string;
   model: string;
+  /** Which engine actually answered on the M1: "claude" | "qwen-fallback" |
+   *  "v1-completions" — passed through so the Claude claim stays checkable. */
+  source?: string;
   contextStats: {
     collection: string;
     count: number;
@@ -140,7 +143,7 @@ async function buildMongoContext(
 async function askPaQuery(
   paSlug: string,
   req: ChatRequest
-): Promise<{ reply: string; model: string } | null> {
+): Promise<{ reply: string; model: string; source?: string } | null> {
   try {
     const r = await postM1("/pa/query", {
       pa: paSlug,
@@ -151,9 +154,11 @@ async function askPaQuery(
       })),
     });
     if (!r.ok) return null;
-    const data = (await r.json()) as { answer?: string; model?: string };
+    const data = (await r.json()) as { answer?: string; model?: string; source?: string };
     const answer = typeof data?.answer === "string" ? data.answer.trim() : "";
-    return answer ? { reply: answer, model: data.model || "m1/pa-query" } : null;
+    return answer
+      ? { reply: answer, model: data.model || "m1/pa-query", source: data.source }
+      : null;
   } catch {
     return null;
   }
@@ -218,13 +223,14 @@ export async function runChat(req: ChatRequest): Promise<ChatResult> {
 
   const grounded = await askPaQuery(req.paSlug, req);
   if (grounded) {
-    return { ok: true, reply: grounded.reply, model: grounded.model, contextStats: stats };
+    return { ok: true, reply: grounded.reply, model: grounded.model, source: grounded.source, contextStats: stats };
   }
 
   const completion = await askCompletions(cfg, block, req);
   return {
     ok: true,
     reply: completion.reply,
+    source: "v1-completions",
     model: completion.model,
     contextStats: stats,
     usage: completion.usage,
