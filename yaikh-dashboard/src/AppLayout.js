@@ -1492,7 +1492,11 @@ const AppLayout = () => {
             {/* Hero row — sibling of the wide strip, pinned to the viewport
                 (sticky left-0 + 100vw cap) so it is centred on every screen
                 width and never scrolls off with the module strip. */}
-            <div className="sticky left-0 z-10" style={{ width: "min(100%, 100vw)" }}>
+            {/* Hero row — plain normal-flow block sized to the viewport (not the
+                min-w strip), with explicit top clearance for the FIXED draggable
+                nav panel (default y=80, band ends ~y140). Fixed elements can't
+                be pushed by layout, so clearance is the only correct relation. */}
+            <div className="z-10" style={{ width: "min(100%, 100vw)", marginTop: 128 }}>
               {/* Hero — its own row, so it can never collide with the nav band
                   or the column title bars at any width. */}
               <div className="flex justify-center items-center gap-2 mb-4">
