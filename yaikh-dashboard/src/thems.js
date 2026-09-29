@@ -381,7 +381,7 @@ export const ThemeBackground = () => {
       style={{ zIndex: -1, width: "100vw", height: "100vh" }}
     >
       <img
-        src="/assets/circuit-bg.jpg"
+        src={process.env.PUBLIC_URL + "/assets/circuit-bg.jpg"}
         alt="Theme Background"
         className="absolute inset-0 w-full h-full object-cover"
         style={{ zIndex: -2 }}

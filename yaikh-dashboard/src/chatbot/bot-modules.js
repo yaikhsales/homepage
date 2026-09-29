@@ -2438,9 +2438,9 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
     
     // Language options with flag images - only 3 languages (in order: en, kh, ch)
     const languages = [
-        { code: 'en', name: 'English', flagImage: '/assets/flags/en.svg' },
-        { code: 'kh', name: 'Khmer', flagImage: '/assets/flags/kh.svg' },
-        { code: 'ch', name: 'Chinese', flagImage: '/assets/flags/ch.svg' }
+        { code: 'en', name: 'English', flagImage: process.env.PUBLIC_URL + '/assets/flags/en.svg' },
+        { code: 'kh', name: 'Khmer', flagImage: process.env.PUBLIC_URL + '/assets/flags/kh.svg' },
+        { code: 'ch', name: 'Chinese', flagImage: process.env.PUBLIC_URL + '/assets/flags/ch.svg' }
     ];
     
     // Language state per bot - initialize from localStorage or default to English

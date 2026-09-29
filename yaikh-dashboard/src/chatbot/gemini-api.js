@@ -28,7 +28,7 @@ const getAgentUrl = () => process.env.REACT_APP_AI_AGENT_URL || DEFAULT_AGENT_UR
  * REACT_APP_M1_LLM_URL still overrides the proxy for local dev. */
 const M1_LLM_URL   = process.env.REACT_APP_M1_LLM_URL   || "/api/m1";
 const M1_LLM_TOKEN = "";   // sent by the proxy, never by the browser
-const M1_LLM_MODEL = process.env.REACT_APP_M1_LLM_MODEL || "qwen2.5-3b-instruct";
+const M1_LLM_MODEL = process.env.REACT_APP_M1_LLM_MODEL || "";  // server chooses when empty
 const M1_LLM_TIMEOUT_MS = 12000;   // fall through to Gemini after this
 const M1_COOLDOWN_MS    = 60000;   // if M1 fails, skip it for 60s
 
@@ -70,7 +70,7 @@ export const generateM1LocalResponse = async (
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: M1_LLM_MODEL,
+        ...(M1_LLM_MODEL ? { model: M1_LLM_MODEL } : {}),
         messages,
         temperature: 0.7,
         max_tokens: 512,
