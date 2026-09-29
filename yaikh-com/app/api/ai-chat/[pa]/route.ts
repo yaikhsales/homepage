@@ -2,9 +2,9 @@
  *
  *   POST { message: string, history?: { role, text }[] }
  *
- *   → calls Gemini 2.5 Flash via @google/genai with GEMINI_API_KEY,
- *     reading recent docs from the PA's owned Mongo collections as
- *     ground-truth context. Returns NL reply + usage stats.
+ *   → asks our own M1 (llm.ggmt.sg) — /pa/query first, then
+ *     /v1/chat/completions — reading recent docs from the PA's owned Mongo
+ *     collections as ground-truth context. Returns NL reply + usage stats.
  *
  * Routing: dynamic by PA slug. Only slugs registered in
  * lib/pa-mapping.ts → PA_REGISTRY are accepted (we start with
@@ -14,7 +14,7 @@
  */
 
 import { NextResponse } from "next/server";
-import { runChat, type ChatMessage } from "@/lib/ai-chat";
+import { runChat, AssistantUnavailableError, type ChatMessage } from "@/lib/ai-chat";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -44,8 +44,17 @@ export async function POST(req: Request, { params }: Params) {
 
     return NextResponse.json(result);
   } catch (err) {
+    // Never hand a provider's own text to the browser — that is how a billing
+    // error ended up inside a chat bubble. Detail goes to the server log only.
     const msg = err instanceof Error ? err.message : String(err);
-    const status = msg.startsWith("Unknown PA slug") ? 404 : 500;
-    return NextResponse.json({ ok: false, error: msg }, { status });
+    if (msg.startsWith("Unknown PA slug")) {
+      return NextResponse.json({ ok: false, error: "Unknown assistant." }, { status: 404 });
+    }
+    const detail = err instanceof AssistantUnavailableError ? err.detail : msg;
+    console.error(`[ai-chat/${pa}]`, detail);
+    return NextResponse.json(
+      { ok: false, error: "The assistant is unavailable right now. Please try again in a moment." },
+      { status: 503 }
+    );
   }
 }

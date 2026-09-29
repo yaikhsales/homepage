@@ -2,15 +2,17 @@
 // IMPORTANT: Never hard-code API keys or tokens in frontend code.
 const GEMINI_MODEL = "gemini-2.5-flash"; // Using gemini-2.5-flash model
 
+/* Google Gemini was removed on 2026-09-29 — Yai runs on its own M1
+ * (llm.ggmt.sg). No provider key belongs in browser code: anything reachable
+ * here ships inside the public bundle. The direct-to-Google helpers below are
+ * kept as stubs so their call sites keep compiling while they are unwired. */
+const ASSISTANT_UNAVAILABLE =
+  "The assistant is unavailable right now. Please try again in a moment.";
+
+/* Retired. Kept only so the unreachable Google code below still resolves;
+ * calling it is a bug, not a config problem. */
 const getGeminiApiKey = () => {
-  // Forcing the new key directly to bypass React's .env cache without requiring a server restart
-  const key = "AQ.Ab8RN6Jfagc4w1roAyI7xhY4Intmymxrod26pEIfZ3ITxUYJVA";
-  if (!key) {
-    throw new Error(
-      "Missing REACT_APP_GEMINI_API_KEY. Create a `yaikh-dashboard/.env.local` file and set REACT_APP_GEMINI_API_KEY=... then restart `npm start`.",
-    );
-  }
-  return key;
+  throw new Error("Google Gemini was removed from Yai — use the M1 route.");
 };
 
 const DEFAULT_AGENT_URL =
@@ -287,6 +289,11 @@ export const generateDirectGeminiResponse = async (
   botContext = "",
   chatHistory = [],
 ) => {
+  // Google path retired 2026-09-29 — see lib/ai-chat.ts (server-side M1).
+  console.warn("generateDirectGeminiResponse: Gemini path retired; routing is now M1-only.");
+  return ASSISTANT_UNAVAILABLE;
+  /* eslint-disable no-unreachable */
+
   try {
     // Build context about Yaikh platform
     // If botContext is very long (like the full module list), use it as the main context
@@ -541,6 +548,11 @@ export const generateGeminiResponseWithFiles = async (
   botContext = "",
   chatHistory = []
 ) => {
+  // Google path retired 2026-09-29 — see lib/ai-chat.ts (server-side M1).
+  console.warn("generateGeminiResponseWithFiles: Gemini path retired; routing is now M1-only.");
+  return ASSISTANT_UNAVAILABLE;
+  /* eslint-disable no-unreachable */
+
   try {
     let yaikhContext;
     if (botContext && botContext.length > 500) {
@@ -611,6 +623,11 @@ export const generateGeminiResponseWithFiles = async (
  * Generate image using Gemini
  */
 export const generateImage = async (prompt) => {
+  // Google path retired 2026-09-29 — see lib/ai-chat.ts (server-side M1).
+  console.warn("generateImage: Gemini path retired; routing is now M1-only.");
+  return ASSISTANT_UNAVAILABLE;
+  /* eslint-disable no-unreachable */
+
   try {
     const apiUrl = `https://generativelanguage.googleapis.com/v1/models/${GEMINI_MODEL}:generateContent?key=${getGeminiApiKey()}`;
     const response = await fetch(apiUrl, {
@@ -638,6 +655,11 @@ export const generateImage = async (prompt) => {
  * Deep Research mode
  */
 export const deepResearch = async (query, botContext = "") => {
+  // Google path retired 2026-09-29 — see lib/ai-chat.ts (server-side M1).
+  console.warn("deepResearch: Gemini path retired; routing is now M1-only.");
+  return ASSISTANT_UNAVAILABLE;
+  /* eslint-disable no-unreachable */
+
   try {
     const researchPrompt = `Conduct a deep research analysis on: ${query}. Provide comprehensive information, multiple perspectives, and detailed insights.`;
     return await generateGeminiResponse(researchPrompt, "Yai", botContext, []);

@@ -1,25 +1,32 @@
-/* Gemini-backed chat helper for the Yai PA agents.
+/* Chat helper for the Yai PA agents — runs on our own M1 (llm.ggmt.sg).
  *
  * Flow:
  *   1. Caller passes paSlug + user message (+ optional chat history).
  *   2. We look up the PA's config (collections it owns + system prompt).
  *   3. Fetch the most recent N docs from each owned collection. Attachments
  *      are stripped (base64 images would blow the token budget).
- *   4. Build a structured-data block and prepend it as the model's first
- *      reply context, then add history + user message.
- *   5. Call Gemini 2.5 Flash via @google/genai with GEMINI_API_KEY.
- *   6. Return the reply text + the model name we used + token counts (for
- *      cost tracking later).
+ *   4. Ask the M1 guard, in order:
+ *        a. POST /pa/query          — the PA-aware, Mongo-grounded route.
+ *        b. POST /v1/chat/completions — generic chat, with the PA system
+ *           prompt + the data block as the system message.
+ *      Whichever answers first wins. There is no third-party fallback: if
+ *      the M1 is down the caller gets an error and shows "unavailable".
  *
- * Key handling: GEMINI_API_KEY is server-only — never exposed to the
- * browser. If it's missing we throw a clear error pointing at .env.local.
+ * Google Gemini was removed on 2026-09-29 — Yai runs its own models.
+ *
+ * Env (server-only, never REACT_APP_/NEXT_PUBLIC_):
+ *   M1_LLM_URL    e.g. https://llm.ggmt.sg
+ *   M1_LLM_TOKEN  bearer token for the FastAPI guard
+ *   M1_LLM_MODEL  optional, defaults to qwen2.5-3b-instruct
  */
 
-import { GoogleGenAI } from "@google/genai";
 import { getDb } from "@/lib/mongo";
 import { getPaConfig, type PaConfig } from "@/lib/pa-mapping";
 
-const MODEL = "gemini-2.5-flash";
+const M1_URL = (process.env.M1_LLM_URL || "").replace(/\/$/, "");
+const M1_TOKEN = process.env.M1_LLM_TOKEN || "";
+const M1_MODEL = process.env.M1_LLM_MODEL || "qwen2.5-3b-instruct";
+const M1_TIMEOUT_MS = Number(process.env.M1_LLM_TIMEOUT_MS || 20000);
 const MAX_OUTPUT_TOKENS = 1024;
 
 export type ChatMessage = {
@@ -48,14 +55,39 @@ export type ChatResult = {
   };
 };
 
-function getApiKey(): string {
-  const key = process.env.GEMINI_API_KEY;
-  if (!key) {
-    throw new Error(
-      "GEMINI_API_KEY is not set. Add it to yaikh-com/.env.local (AI Studio → Create API key)."
+/** Thrown when the M1 cannot answer. The route turns this into a neutral
+ *  "assistant unavailable" for the browser — provider detail stays in the log. */
+export class AssistantUnavailableError extends Error {
+  constructor(public readonly detail: string) {
+    super("assistant-unavailable");
+    this.name = "AssistantUnavailableError";
+  }
+}
+
+function requireM1(): void {
+  if (!M1_URL || !M1_TOKEN) {
+    throw new AssistantUnavailableError(
+      "M1_LLM_URL / M1_LLM_TOKEN are not set (Railway → yaikh-com → Variables)."
     );
   }
-  return key;
+}
+
+async function postM1(path: string, body: unknown): Promise<Response> {
+  const ctl = new AbortController();
+  const timer = setTimeout(() => ctl.abort(), M1_TIMEOUT_MS);
+  try {
+    return await fetch(`${M1_URL}${path}`, {
+      method: "POST",
+      signal: ctl.signal,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${M1_TOKEN}`,
+      },
+      body: JSON.stringify(body),
+    });
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 /** Strip attachments + ObjectIds for token-budget safety. */
@@ -96,63 +128,97 @@ async function buildMongoContext(
   return { block, stats };
 }
 
+/** a. /pa/query — the guard's PA-aware route (grounded on rag_index.pa_docs). */
+async function askPaQuery(
+  paSlug: string,
+  req: ChatRequest
+): Promise<{ reply: string; model: string } | null> {
+  try {
+    const r = await postM1("/pa/query", {
+      pa: paSlug,
+      question: req.message,
+      history: (req.history || []).slice(-6).map((m) => ({
+        from: m.role === "user" ? "user" : "bot",
+        text: m.text,
+      })),
+    });
+    if (!r.ok) return null;
+    const data = (await r.json()) as { answer?: string; model?: string };
+    const answer = typeof data?.answer === "string" ? data.answer.trim() : "";
+    return answer ? { reply: answer, model: data.model || "m1/pa-query" } : null;
+  } catch {
+    return null;
+  }
+}
+
+/** b. /v1/chat/completions — generic chat with the PA prompt + data block. */
+async function askCompletions(
+  cfg: PaConfig,
+  block: string,
+  req: ChatRequest
+): Promise<{ reply: string; model: string; usage?: ChatResult["usage"] }> {
+  const messages = [
+    { role: "system", content: `${cfg.systemPrompt}\n\n${block}` },
+    ...(req.history || []).slice(-10).map((m) => ({
+      role: m.role === "user" ? "user" : "assistant",
+      content: m.text,
+    })),
+    { role: "user", content: req.message },
+  ];
+
+  const r = await postM1("/v1/chat/completions", {
+    model: M1_MODEL,
+    messages,
+    temperature: 0.4,
+    max_tokens: MAX_OUTPUT_TOKENS,
+  });
+
+  if (!r.ok) {
+    throw new AssistantUnavailableError(`M1 /v1/chat/completions returned ${r.status}`);
+  }
+
+  const data = (await r.json()) as {
+    choices?: { message?: { content?: string } }[];
+    model?: string;
+    usage?: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number };
+  };
+  const reply = data?.choices?.[0]?.message?.content?.trim() ?? "";
+  if (!reply) {
+    throw new AssistantUnavailableError("M1 returned an empty completion");
+  }
+  return {
+    reply,
+    model: data.model || M1_MODEL,
+    usage: data.usage
+      ? {
+          promptTokens: data.usage.prompt_tokens,
+          candidatesTokens: data.usage.completion_tokens,
+          totalTokens: data.usage.total_tokens,
+        }
+      : undefined,
+  };
+}
+
 export async function runChat(req: ChatRequest): Promise<ChatResult> {
   const cfg = getPaConfig(req.paSlug);
   if (!cfg) {
     throw new Error(`Unknown PA slug: ${req.paSlug}`);
   }
 
-  const apiKey = getApiKey();
+  requireM1();
   const { block, stats } = await buildMongoContext(cfg);
 
-  const ai = new GoogleGenAI({ apiKey });
-
-  // Build the conversation. First "user/model" pair carries the data context
-  // so subsequent turns can reference it without re-sending it every time.
-  const contents: Array<{ role: "user" | "model"; parts: { text: string }[] }> = [
-    { role: "user", parts: [{ text: block }] },
-    { role: "model", parts: [{ text: "Got it — I'll use these records as ground truth." }] },
-  ];
-
-  // Append prior history (most recent ~10 turns to stay cheap).
-  if (req.history && req.history.length) {
-    for (const h of req.history.slice(-10)) {
-      contents.push({ role: h.role, parts: [{ text: h.text }] });
-    }
+  const grounded = await askPaQuery(req.paSlug, req);
+  if (grounded) {
+    return { ok: true, reply: grounded.reply, model: grounded.model, contextStats: stats };
   }
 
-  // Final user turn.
-  contents.push({ role: "user", parts: [{ text: req.message }] });
-
-  const result = await ai.models.generateContent({
-    model: MODEL,
-    contents,
-    config: {
-      systemInstruction: cfg.systemPrompt,
-      temperature: 0.4,
-      maxOutputTokens: MAX_OUTPUT_TOKENS,
-    },
-  });
-
-  const reply =
-    typeof result.text === "string"
-      ? result.text
-      : (result.candidates?.[0]?.content?.parts?.[0]?.text ?? "");
-
-  const usageRaw = (result as unknown as { usageMetadata?: { promptTokenCount?: number; candidatesTokenCount?: number; totalTokenCount?: number } }).usageMetadata;
-  const usage = usageRaw
-    ? {
-        promptTokens: usageRaw.promptTokenCount,
-        candidatesTokens: usageRaw.candidatesTokenCount,
-        totalTokens: usageRaw.totalTokenCount,
-      }
-    : undefined;
-
+  const completion = await askCompletions(cfg, block, req);
   return {
     ok: true,
-    reply: reply || "(Empty reply — the model returned no text. Try rephrasing.)",
-    model: MODEL,
+    reply: completion.reply,
+    model: completion.model,
     contextStats: stats,
-    usage,
+    usage: completion.usage,
   };
 }
