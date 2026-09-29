@@ -1508,6 +1508,27 @@ const AppLayout = () => {
                   />
                 </div>
               </div>
+              {/* Hero — its own row, so it can never collide with the nav band
+                  or the column title bars at any width. */}
+              <div className="flex justify-center items-center gap-2 mb-4">
+                <span className="text-white font-bold text-2xl drop-shadow-lg">My</span>
+                <button
+                  onClick={() => setGMChatOpen(true)}
+                  aria-label="Open My Task Agent"
+                  className="w-11 h-11 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0 transition-transform hover:scale-105 active:scale-95"
+                  style={{
+                    background: "radial-gradient(circle at 30% 25%, #fed7aa 0%, #f97316 55%, #c2410c 100%)",
+                    boxShadow: "inset -4px -4px 8px rgba(0,0,0,0.30), inset 3px 3px 6px rgba(255,255,255,0.35), 0 4px 12px rgba(249,115,22,0.4)",
+                  }}
+                >
+                  <img
+                    src={process.env.PUBLIC_URL + "/assets/modules-image/top-bot.png"}
+                    alt="Yai"
+                    className="w-full h-full rounded-full object-cover"
+                  />
+                </button>
+                <span className="text-white font-bold text-2xl drop-shadow-lg">task agent</span>
+              </div>
               <div className="flex justify-center items-start gap-6">
                 <SectionContainer
                   section={DASHBOARD_DATA[0]}
