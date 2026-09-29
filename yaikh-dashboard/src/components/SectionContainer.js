@@ -10,12 +10,12 @@ const SectionContainer = ({ section, onModuleClick, onGMChatClick, botVersion = 
           <div className={`relative flex flex-col mx-2 shrink-0 hover:z-[100] ${isDropdownOpen ? '' : 'apple-fade-in-delay'}`}>
              {/* My (orange Yai logo) task agent — inline row, logo IS the
                  click target. Hover glow on the logo only, text flanks it. */}
-             <div className="absolute -top-24 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3 whitespace-nowrap">
-                <span className="text-white font-bold text-3xl drop-shadow-lg">My</span>
+             <div className="absolute -top-16 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2 whitespace-nowrap">
+                <span className="text-white font-bold text-2xl drop-shadow-lg">My</span>
                 <button
                   onClick={onGMChatClick}
                   aria-label="Open My Task Agent"
-                  className="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0 transition-transform hover:scale-105 active:scale-95"
+                  className="w-11 h-11 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0 transition-transform hover:scale-105 active:scale-95"
                   style={{
                     background: "radial-gradient(circle at 30% 25%, #fed7aa 0%, #f97316 55%, #c2410c 100%)",
                     boxShadow: "inset -4px -4px 8px rgba(0,0,0,0.30), inset 3px 3px 6px rgba(255,255,255,0.35), 0 4px 12px rgba(249,115,22,0.4)",
@@ -27,7 +27,7 @@ const SectionContainer = ({ section, onModuleClick, onGMChatClick, botVersion = 
                     className="w-full h-full rounded-full object-cover"
                   />
                 </button>
-                <span className="text-white font-bold text-3xl drop-shadow-lg">task agent</span>
+                <span className="text-white font-bold text-2xl drop-shadow-lg">task agent</span>
              </div>
 
              {/* Big Label — lighter emerald base (emerald-800 → emerald-600 → emerald-500)
