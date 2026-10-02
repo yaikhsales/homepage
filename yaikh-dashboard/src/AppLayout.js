@@ -1364,7 +1364,7 @@ const AppLayout = () => {
                   boxShadow: "inset -4px -4px 8px rgba(0,0,0,0.30), inset 3px 3px 6px rgba(255,255,255,0.35), 0 4px 12px rgba(59,130,246,0.4)",
                 }}
               >
-                <img src="assets/modules-image/yai1.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
+                <img src="/assets/modules-image/yai1.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
               </div>
               <span className="text-blue-400 font-bold text-xl whitespace-nowrap">
                 {t('Agent Collective')}
@@ -1387,7 +1387,7 @@ const AppLayout = () => {
                   boxShadow: "inset -4px -4px 8px rgba(0,0,0,0.30), inset 3px 3px 6px rgba(255,255,255,0.35), 0 4px 12px rgba(16,185,129,0.4)",
                 }}
               >
-                <img src="assets/modules-image/yai2.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
+                <img src="/assets/modules-image/yai2.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
               </div>
               <span className="text-emerald-400 font-bold text-xl whitespace-nowrap">
                 {t('Big Brain')}
