@@ -33,6 +33,24 @@ const M1_COOLDOWN_MS    = 60000;   // if M1 fails, skip it for 60s
 
 let m1SkipUntil = 0;
 
+/* When the premium brain (Claude) is NOT the engine that answered — it is
+ * down, out of credits, or over capacity and the guard served the weaker
+ * Qwen fallback — the sales page must not show the degraded answer. Show a
+ * calm, on-brand "busy, back shortly" line instead. Trilingual by the flag. */
+const HOLDING_MESSAGE = {
+  en: "Our training servers are under heavy load right now — give us a moment and we'll be right back with you.",
+  km: "ម៉ាស៊ីនបម្រើបណ្តុះបណ្តាលរបស់យើងកំពុងដំណើរការធ្ងន់ខ្លាំងនៅពេលនេះ — សូមរង់ចាំបន្តិច យើងនឹងត្រឡប់មកវិញក្នុងពេលឆាប់ៗ។",
+  zh: "我们的训练服务器当前负载较重 — 请稍等片刻，我们马上回来为您服务。",
+};
+const holdingMessage = () => {
+  let lang = "en";
+  try { lang = (localStorage.getItem("app-language") || "en").toLowerCase().slice(0, 2); } catch { /* private mode */ }
+  return HOLDING_MESSAGE[lang] || HOLDING_MESSAGE.en;
+};
+// A response is "premium" only when Claude itself answered. Anything else
+// (qwen-fallback, missing source) is the degraded path we mask.
+const isClaude = (src) => src === "claude" || src === "claude-haiku-4-5";
+
 /**
  * Call the M1 Mac mini's LM Studio via the FastAPI guard on cloudflared.
  * Returns null on any failure (network, non-200, bad payload) so the caller
@@ -113,8 +131,8 @@ export const generateChatResponse = async (
 
 /* ─── /pa/query — grounded PA answer over Mongo pa_docs ────────────── */
 export const generatePAResponse = async (pa, userMessage, chatHistory = [], visitor = "") => {
-  if (!M1_LLM_URL) return null;
-  if (Date.now() < m1SkipUntil) return null;
+  if (!M1_LLM_URL) return holdingMessage();
+  if (Date.now() < m1SkipUntil) return holdingMessage();
   try {
     const ctl = new AbortController();
     const timer = setTimeout(() => ctl.abort(), M1_LLM_TIMEOUT_MS);
@@ -135,13 +153,15 @@ export const generatePAResponse = async (pa, userMessage, chatHistory = [], visi
       }),
     });
     clearTimeout(timer);
-    if (!r.ok) { m1SkipUntil = Date.now() + M1_COOLDOWN_MS; return null; }
+    if (!r.ok) { m1SkipUntil = Date.now() + M1_COOLDOWN_MS; return holdingMessage(); }
     const data = await r.json();
-    return typeof data?.answer === "string" ? data.answer.trim() : null;
+    // Mask the degraded Qwen fallback — only a Claude-grounded answer ships.
+    if (!isClaude(data?.source)) return holdingMessage();
+    return typeof data?.answer === "string" ? data.answer.trim() : holdingMessage();
   } catch (err) {
-    console.warn("PA query error, falling back:", err?.message || err);
+    console.warn("PA query error:", err?.message || err);
     m1SkipUntil = Date.now() + M1_COOLDOWN_MS;
-    return null;
+    return holdingMessage();
   }
 };
 
@@ -205,8 +225,9 @@ export const generateBossBubbles = async (
   factory = null,
 ) => {
   if (YAI_BACKEND === "qwen") return null;
-  if (!M1_LLM_URL) return null;
-  if (Date.now() < m1SkipUntil) return null;
+  if (!M1_LLM_URL) return [holdingMessage()];
+  // During a cooldown the premium brain is known-bad — hold, don't degrade.
+  if (Date.now() < m1SkipUntil) return [holdingMessage()];
   try {
     const ctl = new AbortController();
     const timer = setTimeout(() => ctl.abort(), 20000);
@@ -229,15 +250,18 @@ export const generateBossBubbles = async (
       }),
     });
     clearTimeout(timer);
-    if (!r.ok) { m1SkipUntil = Date.now() + M1_COOLDOWN_MS; return null; }
+    if (!r.ok) { m1SkipUntil = Date.now() + M1_COOLDOWN_MS; return [holdingMessage()]; }
     const data = await r.json();
+    // Only Claude's own answer reaches the visitor. A qwen-fallback (Claude
+    // down / out of credits / over capacity) is masked as "busy, back shortly".
+    if (!isClaude(data?.source)) return [holdingMessage()];
     const bubbles = Array.isArray(data?.bubbles) ? data.bubbles.filter(b => typeof b === "string" && b.trim()) : null;
-    if (!bubbles || bubbles.length === 0) return null;
+    if (!bubbles || bubbles.length === 0) return [holdingMessage()];
     return bubbles;
   } catch (err) {
-    console.warn("Claude bubbles error, falling back:", err?.message || err);
+    console.warn("Claude bubbles error:", err?.message || err);
     m1SkipUntil = Date.now() + M1_COOLDOWN_MS;
-    return null;
+    return [holdingMessage()];
   }
 };
 
