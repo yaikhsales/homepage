@@ -183,6 +183,23 @@ const BotVersion2 = ({
     return sentences && sentences.length > 2 ? sentences.slice(0, 2).join(" ").trim() : text;
   };
 
+  // Pull a name out of "hi, I'm Mark" / "ខ្ញុំឈ្មោះ..." / "我叫..." → the name alone.
+  const extractName = (raw) => {
+    const stripped = (raw || "")
+      .replace(/^(hi|hello|hey|howdy|greetings|yo)[,.!\s]+/i, "")
+      .replace(/^(yes|yeah|yep|yup|sure|ok(ay)?|of course|absolutely)[,.!\s]+/i, "")
+      .replace(/^(i am|i'm|my name is|it'?s|this is|call me|the name is|name is|i'm called)\s+/i, "")
+      .replace(/^(ខ្ញុំឈ្មោះ|ខ្ញុំគឺ|ឈ្មោះ)\s*/, "")
+      .replace(/^(我是|我叫|我的名字(是|叫)?|叫我|叫)\s*/, "")
+      .replace(/^[,.!\s]+/, "");
+    return (stripped || raw).slice(0, 60).trim();
+  };
+  // True when the whole message is just a yes/greeting with no name in it.
+  const isBareYes = (raw) => {
+    const low = (raw || "").toLowerCase().replace(/[.!?,\s]+$/, "").trim();
+    return /^(hi|hello|hey|yo|yes|yeah|yep|yup|sure|ok|okay|of course|absolutely|ready|i am ready|i'?m ready|let'?s go|go ahead|please|yes please|បាទ|ចាស|រួចរាល់|ត្រៀមរួច(ហើយ)?|好|好的|是|是的|可以|行|准备好了?|准备好)$/i.test(low);
+  };
+
   // Track which "matter" item_ids Yai has already shown the boss, so the
   // next/more request pulls a fresh batch.
   const [shownMatterIds, setShownMatterIds] = useState([]);
@@ -1274,29 +1291,31 @@ const BotVersion2 = ({
         return; // otherwise stay on the same onboarding step
       }
 
-      // Step -2: capture visitor name — strip "hi, I'm / my name is" prefixes
-      // so "hi i am Mark" becomes "Mark", not the whole sentence.
-      if (onboardingStep === -2) {
-        const stripped = raw
-          .replace(/^(hi|hello|hey|howdy|greetings|yo)[,.!\s]+/i, "")
-          .replace(/^(i am|i'm|my name is|it's|this is|call me|the name is|name is|i'm called)\s+/i, "")
-          .replace(/^[,.!\s]+/, "");
-        const clean = (stripped || raw).slice(0, 60).trim();
+      // Shared: capture a name, greet, and move to the first factory question.
+      const captureNameAndStart = (clean) => {
         try { localStorage.setItem("yai_visitor_name", clean); } catch { /* private mode */ }
         setVisitorName(clean);
-        // The scripted opener already asked-and-answered the mission check,
-        // so after the name go straight to shaping the demo.
         setOnboardingStep(0);
         setTimeout(() => setMessages(prev => [...prev, { from: "bot", text: (OB[obLang()] || OB.en).met(clean) }]), 500);
         setTimeout(() => askNextOnboarding(0, onboardingDraft, clean), 1400);
+      };
+
+      // Step -2: capture visitor name (prefixes stripped: "hi i am Mark" → "Mark").
+      if (onboardingStep === -2) {
+        captureNameAndStart(extractName(raw));
         return;
       }
 
-      // Step -1: ready check. They engaged ("yes" / "ready" / anything but
-      // no) — get their name, then shape the demo.
+      // Step -1: ready check. The visitor often answers "ready?" with their
+      // name already ("I'm joel") — take it and skip the redundant re-ask.
+      // Only a bare yes/greeting gets the "what should I call you?" prompt.
       if (onboardingStep === -1) {
-        setOnboardingStep(-2);
-        setTimeout(() => setMessages(prev => [...prev, { from: "bot", text: (OB[obLang()] || OB.en).ready }]), 500);
+        if (isBareYes(raw)) {
+          setOnboardingStep(-2);
+          setTimeout(() => setMessages(prev => [...prev, { from: "bot", text: (OB[obLang()] || OB.en).ready }]), 500);
+        } else {
+          captureNameAndStart(extractName(raw));
+        }
         return;
       }
 
