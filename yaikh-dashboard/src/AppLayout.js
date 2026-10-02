@@ -1319,8 +1319,19 @@ const AppLayout = () => {
             title="Drag to move"
             style={{ cursor: "move" }}
           >
-            {/* Orange My Task Agent — current mode (highlighted with ring) */}
-            <div className="flex items-center gap-3" title="My Task Agent — where you are now">
+            {/* Orange My Task Agent — the task-agent view lives at "/", so from
+                any other page this has to navigate there. It used to be an
+                inert div, which is why clicking it did nothing off the home
+                page. Any open bot overlay is closed on the way. */}
+            <button
+              onClick={() => {
+                setYaiDataBotOpen(false);
+                setBotModuleContext(null);
+                if (!isHome) navigate("/");
+              }}
+              title={isHome ? "My Task Agent — where you are now" : "Go to My Task Agent"}
+              className={`flex items-center gap-3 ${isHome ? "cursor-default" : "cursor-pointer hover:scale-105 transition-transform"}`}
+            >
               <div
                 className="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0 ring-4 ring-orange-400/60 ring-offset-2 ring-offset-slate-900"
                 style={{
@@ -1334,7 +1345,7 @@ const AppLayout = () => {
                 {t('My Task Agent')}
               </span>
               <ClaudeBadge />
-            </div>
+            </button>
 
             {/* Blue Agent Collective — switch */}
             <button
