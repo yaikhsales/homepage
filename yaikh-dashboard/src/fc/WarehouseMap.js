@@ -2,6 +2,9 @@
 // (L and R) of 8 slots and 3 cages per slot. Every cage is one small cell,
 // coloured by state or by customer. Hover a cell to see what is in it, click an
 // aisle to open it enlarged, click a cage card for its full detail and rolls.
+// Ordinary fabric is in aisles A01-A28. A29 is the rack for damaged rolls and
+// A30 the rack for fabric returned from cutting, which is kept by weight in
+// bags (kg and bags, no rolls).
 // Data: M1 /sim/view {module:"fc", view:"warehouse"} (+ cage for the roll list).
 // Simulated factory — every order, lot and price is invented.
 import React, { useCallback, useEffect, useMemo, useState } from "react";
@@ -13,6 +16,7 @@ const STATE = {
   issuing: { color: "#34d399", short: "Issuing to cutting" },
   hold: { color: "#f43f5e", short: "On hold" },
   returned: { color: "#a78bfa", short: "Returned" },
+  damaged: { color: "#fb923c", short: "Damaged" },
   reserved: { color: "#fbbf24", short: "Reserved" },
 };
 const CUSTOMER = { AA: "#38bdf8", BB: "#fbbf24", CC: "#34d399", DD: "#f472b6" };
@@ -20,6 +24,11 @@ const EMPTY = "rgba(148,163,184,0.13)";
 const ROW_LETTERS = "LRABCDEF";
 const num = (v) => (typeof v === "number" ? v.toLocaleString("en-US") : v);
 const usd = (v) => `USD ${Math.round(v || 0).toLocaleString("en-US")}`;
+const ZONE = { returns: { label: "returns", text: "text-violet-300", badge: "bg-violet-500/20 text-violet-300", name: "returns rack · bags by weight" }, damaged: { label: "damaged", text: "text-orange-300", badge: "bg-orange-500/20 text-orange-300", name: "damaged fabric rack" } };
+const STATE_WORD = { hold: "on hold" };
+const plural = (n, w) => `${num(n)} ${w}${n === 1 ? "" : "s"}`;
+// what a cage holds, in its own unit: returned fabric is bags by weight, everything else is rolls
+const holds = (c) => (c.state === "returned" ? plural(c.bags || 0, "bag") : plural(c.rolls || 0, "roll"));
 
 const WarehouseMap = ({ onBack }) => {
   const [d, setD] = useState(null);
@@ -72,7 +81,7 @@ const WarehouseMap = ({ onBack }) => {
   const byCage = useMemo(() => {
     const m = {};
     ((d && d.cages) || []).forEach((c) => {
-      m[c.cage] = { ...c, hay: [c.cage, c.order, c.order_id, `customer ${c.customer}`, c.colour, c.fabric, c.lot, c.state, ...(c.lots || []).map((x) => x.lot)].join(" ").toLowerCase() };
+      m[c.cage] = { ...c, hay: [c.cage, c.order, c.order_id, `customer ${c.customer}`, c.colour, c.fabric, c.lot, c.state, c.cause, c.next_step, c.claim_no, c.container, ...(c.lots || []).map((x) => x.lot)].join(" ").toLowerCase() };
     });
     return m;
   }, [d]);
@@ -84,7 +93,7 @@ const WarehouseMap = ({ onBack }) => {
 
   const found = useMemo(() => {
     const xs = Object.values(byCage).filter(bright);
-    return { cages: xs.length, rolls: xs.reduce((s, c) => s + (c.rolls || 0), 0), value: xs.reduce((s, c) => s + (c.value || 0), 0), aisles: new Set(xs.map((c) => c.aisle)).size };
+    return { cages: xs.length, rolls: xs.reduce((s, c) => s + (c.rolls || 0), 0), bags: xs.reduce((s, c) => s + (c.bags || 0), 0), value: xs.reduce((s, c) => s + (c.value || 0), 0), aisles: new Set(xs.map((c) => c.aisle)).size };
   }, [byCage, bright]);
 
   const counts = useMemo(() => {
@@ -137,7 +146,7 @@ const WarehouseMap = ({ onBack }) => {
           <div key={a.aisle} data-aisle={a.aisle} className={`rounded-lg border px-1 pb-1 cursor-pointer ${a.aisle === aisle ? "border-white bg-slate-700/70" : "border-slate-700 bg-slate-900/60 hover:border-slate-400"}`}>
             <div className="flex items-baseline justify-between text-[10px] leading-4 pointer-events-none">
               <b className={a.aisle === aisle ? "text-white" : "text-slate-300"}>{a.aisle}</b>
-              <span className={a.zone === "returns" ? "text-violet-300" : "text-slate-500"}>{a.zone === "returns" ? "returns" : a.in_use ? `${a.in_use}/${a.cages}` : ""}</span>
+              <span className={ZONE[a.zone] ? ZONE[a.zone].text : "text-slate-500"}>{ZONE[a.zone] ? ZONE[a.zone].label : a.in_use ? `${a.in_use}/${a.cages}` : ""}</span>
             </div>
             <div className="flex" style={{ gap: 5 }}>
               {rowNames.map((r) => (
@@ -172,12 +181,12 @@ const WarehouseMap = ({ onBack }) => {
         style={{ minHeight: 70, opacity: on ? 1 : 0.2, borderLeft: `4px solid ${paint(c)}` }}>
         <div className="flex items-center justify-between gap-1 text-[11px]">
           <span className="font-mono font-bold text-white">{short}</span>
-          <span className="truncate font-semibold" style={{ color: sc }}>{c.state === "hold" ? "on hold" : c.state}</span>
+          <span className="truncate font-semibold" style={{ color: sc }}>{STATE_WORD[c.state] || c.state}</span>
         </div>
         <div className="truncate text-[12px] font-bold text-white">{c.order} <span className="font-normal text-slate-300">· {c.colour}</span></div>
         <div className="truncate font-mono text-[10px] text-slate-400">{c.lot}</div>
         <div className="truncate text-[11px] text-slate-300 tabular-nums">
-          {c.state === "reserved" ? `${c.expected_rolls} rolls expected` : <><b className="text-white">{c.rolls}</b> rolls · {num(c.kg)} kg · <b className="text-white">{usd(c.value)}</b></>}
+          {c.state === "reserved" ? `${c.expected_rolls} rolls expected` : <><b className="text-white">{holds(c)}</b> · {num(c.kg)} kg · <b className="text-white">{usd(c.value)}</b></>}
         </div>
       </button>
     );
@@ -212,7 +221,7 @@ const WarehouseMap = ({ onBack }) => {
               {d.summary.map((x) => (
                 <div key={x.label} className="rounded-xl border border-slate-700 bg-slate-900/60 px-3 py-1.5 min-w-[120px]">
                   <div className="text-[10px] uppercase tracking-wider text-slate-400">{x.label}</div>
-                  <div className={`text-xl font-black tabular-nums leading-tight ${x.label === "Value on hold" ? "text-rose-300" : x.label.includes("returned") ? "text-violet-300" : "text-white"}`}>{num(x.value)}</div>
+                  <div className={`text-xl font-black tabular-nums leading-tight ${x.label === "Value on hold" ? "text-rose-300" : x.label.includes("returned") ? "text-violet-300" : x.label.includes("damaged") ? "text-orange-300" : "text-white"}`}>{num(x.value)}</div>
                 </div>
               ))}
             </div>
@@ -221,7 +230,7 @@ const WarehouseMap = ({ onBack }) => {
             <div className="mt-2 flex flex-wrap items-center gap-2">
               {(d.states || []).map((s) => (
                 <button key={s.key} type="button" title={s.label} onClick={() => setStateOn(stateOn === s.key ? null : s.key)} className={chip(stateOn === s.key)} style={{ opacity: stateOn && stateOn !== s.key ? 0.45 : 1 }}>
-                  <span className="inline-block w-3 h-3 rounded-sm" style={s.key === "reserved" ? { boxShadow: `inset 0 0 0 2px ${STATE[s.key].color}` } : { background: (STATE[s.key] || {}).color }} />
+                  <span className="inline-block w-3 h-3 rounded-sm" style={s.key === "reserved" ? { boxShadow: `inset 0 0 0 2px ${STATE[s.key].color}` } : { background: (STATE[s.key] || {}).color || "#94a3b8" }} />
                   {(STATE[s.key] || {}).short || s.label} <span className="tabular-nums text-slate-400">{counts.s[s.key] || 0}</span>
                 </button>
               ))}
@@ -238,7 +247,7 @@ const WarehouseMap = ({ onBack }) => {
                 </button>
               ))}
               <div className="ml-auto flex items-center gap-2">
-                {filtering && <span className="text-xs text-slate-300"><b className="text-white tabular-nums">{num(found.cages)}</b> cages in {found.aisles} aisles · <b className="text-white tabular-nums">{num(found.rolls)}</b> rolls · <b className="text-white tabular-nums">{usd(found.value)}</b></span>}
+                {filtering && <span className="text-xs text-slate-300"><b className="text-white tabular-nums">{num(found.cages)}</b> cages in {found.aisles} aisles · <b className="text-white tabular-nums">{num(found.rolls)}</b> rolls{found.bags ? <> · <b className="text-white tabular-nums">{num(found.bags)}</b> bags</> : null} · <b className="text-white tabular-nums">{usd(found.value)}</b></span>}
                 <div className="relative">
                   <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500" />
                   <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search order, customer, colour, fabric, lot" aria-label="Search the warehouse"
@@ -251,7 +260,7 @@ const WarehouseMap = ({ onBack }) => {
 
             {/* the plan of the warehouse */}
             <div className="mt-2 overflow-x-auto" onMouseOver={onMapOver} onMouseLeave={() => setTip(null)} onClick={onMapClick}>{map}</div>
-            <div className="mt-1 text-[11px] text-slate-500">Each block is one aisle: row L on the left, row R on the right, the walkway between them; 8 slots from front to back, 3 cages per slot. Hover a cage, click an aisle to open it below.</div>
+            <div className="mt-1 text-[11px] text-slate-500">Each block is one aisle: row L on the left, row R on the right, the walkway between them; 8 slots from front to back, 3 cages per slot. Hover a cage, click an aisle to open it below. Ordinary fabric is stored in A01–A28; A29 is the rack for damaged rolls and A30 the rack for fabric returned from cutting, kept by weight in bags.</div>
           </div>
 
           {/* the chosen aisle, enlarged */}
@@ -263,10 +272,10 @@ const WarehouseMap = ({ onBack }) => {
                   <span className="px-2 text-sm font-bold text-white tabular-nums">Aisle {A.aisle}</span>
                   <button onClick={() => go(1)} className="p-1.5 hover:bg-slate-700 rounded-lg" aria-label="Next aisle"><ChevronRight size={18} /></button>
                 </div>
-                {A.zone === "returns" && <span className="rounded-full px-2.5 py-0.5 text-xs font-bold bg-violet-500/20 text-violet-300">returns zone</span>}
-                <span className="text-sm text-slate-300"><b className="text-white">{A.in_use}</b> of {A.cages} cages in use · <b className="text-white">{num(A.rolls)}</b> rolls · <b className="text-white">{num(A.kg)}</b> kg · <b className="text-white">{usd(A.value)}</b></span>
+                {ZONE[A.zone] && <span className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${ZONE[A.zone].badge}`}>{ZONE[A.zone].name}</span>}
+                <span className="text-sm text-slate-300"><b className="text-white">{A.in_use}</b> of {A.cages} cages in use{A.rolls || !A.bags ? <> · <b className="text-white">{num(A.rolls)}</b> rolls</> : null}{A.bags ? <> · <b className="text-white">{num(A.bags)}</b> bags</> : null} · <b className="text-white">{num(A.kg)}</b> kg · <b className="text-white">{usd(A.value)}</b></span>
                 <span className="flex flex-wrap items-center gap-x-3 text-xs text-slate-400">
-                  {Object.keys(STATE).filter((k) => A.states[k]).map((k) => <span key={k} className="flex items-center gap-1"><span className="inline-block w-2.5 h-2.5 rounded-sm" style={{ background: STATE[k].color }} />{A.states[k]} {k === "hold" ? "on hold" : k}</span>)}
+                  {Object.keys(STATE).filter((k) => A.states[k]).map((k) => <span key={k} className="flex items-center gap-1"><span className="inline-block w-2.5 h-2.5 rounded-sm" style={{ background: STATE[k].color }} />{A.states[k]} {STATE_WORD[k] || k}</span>)}
                 </span>
               </div>
               <div className="grid gap-3 grid-cols-1 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_300px]">
@@ -280,40 +289,44 @@ const WarehouseMap = ({ onBack }) => {
                 ))}
                 {/* full detail of the chosen cage */}
                 <div className="min-w-0 rounded-xl border border-slate-700 bg-slate-900/70 p-3 self-start">
-                  {!chosen && <div className="text-sm text-slate-400">Click a cage card to see everything about it: order, lot, rolls, value, dates and the rolls inside.</div>}
+                  {!chosen && <div className="text-sm text-slate-400">Click a cage card to see everything about it: order, lot, rolls or bags, value, dates and what is inside.</div>}
                   {chosen && (
                     <>
                       <div className="flex items-center justify-between gap-2 mb-1">
                         <div className="font-mono text-lg font-black text-white">{chosen.cage}</div>
                         <span className="rounded-full px-2.5 py-0.5 text-xs font-bold" style={{ background: `${(STATE[chosen.state] || {}).color}33`, color: (STATE[chosen.state] || {}).color }}>{(STATE[chosen.state] || {}).short || chosen.state}</span>
                       </div>
-                      {chosen.note && <div className={`mb-1 rounded-lg px-2 py-1 text-xs ${chosen.state === "hold" ? "bg-rose-500/15 text-rose-200" : "bg-slate-800 text-slate-300"}`}>{chosen.note}</div>}
-                      {line("Order", `${chosen.order} (${chosen.order_id})`)}
+                      {chosen.state === "damaged"
+                        ? <div className="mb-1 rounded-lg px-2 py-1 text-xs bg-orange-500/15 text-orange-200">Damaged — taken out of stock, not issued to cutting. Cause and next step are below.</div>
+                        : chosen.note && <div className={`mb-1 rounded-lg px-2 py-1 text-xs ${chosen.state === "hold" ? "bg-rose-500/15 text-rose-200" : "bg-slate-800 text-slate-300"}`}>{chosen.note}</div>}
+                      {line("Order", chosen.order_id ? `${chosen.order} (${chosen.order_id})` : chosen.order)}
+                      {line("Order status", chosen.order_note)}
                       {line("Customer", chosen.customer)}
                       {line("Fabric", chosen.fabric)}
                       {line("Colour", chosen.colour)}
                       {line("Lot (dye batch)", chosen.lot)}
                       {chosen.state === "reserved"
                         ? <>{line("Rolls expected", chosen.expected_rolls)}{line("Kg expected", num(chosen.expected_kg))}{line("Value expected", usd(chosen.expected_value))}</>
-                        : <>{line("Rolls in the cage", chosen.state === "returned" ? chosen.rolls : `${chosen.rolls} of ${chosen.rolls_received} received`)}{line("Kg", num(chosen.kg))}{line("Value", usd(chosen.value))}</>}
+                        : <>{chosen.state === "returned" ? line("Bags in the cage", chosen.bags) : chosen.state === "damaged" ? line("Damaged rolls", chosen.rolls) : line("Rolls in the cage", `${chosen.rolls} of ${chosen.rolls_received} received`)}{line("Kg", num(chosen.kg))}{line("Value", usd(chosen.value))}</>}
                       {line("Price", `USD ${Number(chosen.price_kg).toFixed(2)} per kg`)}
-                      {line(chosen.state === "returned" ? "Returned on" : "Arrived", chosen.arrived)}
+                      {line(chosen.state === "returned" ? "Returned on" : chosen.state === "damaged" ? "Found on" : "Arrived", chosen.arrived)}
+                      {chosen.state === "damaged" && <>{line("Cause", chosen.cause)}{line("Next step", chosen.next_step)}{line("Insurance claim", chosen.claim_no)}{line("Container", chosen.container)}</>}
                       {line("Issue to cutting", chosen.issue_from ? `${chosen.issue_from} – ${chosen.issue_to}` : "")}
                       {line("Next in this cage", chosen.next)}
                       {chosen.lots && chosen.lots.length > 0 && (
                         <div className="mt-2">
                           <div className="text-[11px] uppercase tracking-wider text-slate-400 font-bold">Returned lots</div>
-                          {chosen.lots.map((x) => <div key={x.lot} className="flex justify-between gap-2 text-xs py-0.5"><span className="font-mono text-slate-300 truncate">{x.lot}</span><span className="shrink-0 text-slate-300">{x.colour} · {x.rolls} rolls · {usd(x.value)}</span></div>)}
+                          {chosen.lots.map((x) => <div key={x.lot} className="flex justify-between gap-2 text-xs py-0.5"><span className="font-mono text-slate-300 truncate">{x.lot}</span><span className="shrink-0 text-slate-300">{x.colour} · {plural(x.bags || 0, "bag")} · {num(x.kg)} kg · {usd(x.value)}</span></div>)}
                         </div>
                       )}
                       {chosen.state !== "reserved" && (
                         <div className="mt-2">
-                          <div className="text-[11px] uppercase tracking-wider text-slate-400 font-bold">Rolls in this cage{rolls && rolls.cage === chosen.cage ? ` (${rolls.rows.length})` : ""}</div>
+                          <div className="text-[11px] uppercase tracking-wider text-slate-400 font-bold">{chosen.state === "returned" ? "Bags" : chosen.state === "damaged" ? "Damaged rolls" : "Rolls"} in this cage{rolls && rolls.cage === chosen.cage ? ` (${rolls.rows.length})` : ""}</div>
                           {!(rolls && rolls.cage === chosen.cage) && <div className="text-xs text-slate-500">Loading…</div>}
-                          {rolls && rolls.cage === chosen.cage && rolls.rows.length === 0 && <div className="text-xs text-slate-500">No rolls left — the last ones go to cutting today.</div>}
+                          {rolls && rolls.cage === chosen.cage && rolls.rows.length === 0 && <div className="text-xs text-slate-500">{chosen.state === "returned" || chosen.state === "damaged" ? "Nothing listed for this cage." : "No rolls left — the last ones go to cutting today."}</div>}
                           {rolls && rolls.cage === chosen.cage && rolls.rows.length > 0 && (
                             <div className="max-h-56 overflow-y-auto pr-1">
-                              {rolls.rows.map((x) => <div key={x.roll} className="flex justify-between gap-2 text-xs py-0.5 tabular-nums"><span className="font-mono text-slate-300">{x.roll}</span><span className="text-slate-400">{x.net_kg} kg · {usd(x.value)}</span></div>)}
+                              {rolls.rows.map((x) => <div key={x.roll} className="flex justify-between gap-2 text-xs py-0.5 tabular-nums"><span className="font-mono text-slate-300 truncate">{x.roll}</span><span className="shrink-0 text-slate-400">{x.content ? `${x.content} · ` : ""}{x.net_kg} kg · {usd(x.value)}</span></div>)}
                             </div>
                           )}
                         </div>
@@ -336,7 +349,7 @@ const WarehouseMap = ({ onBack }) => {
               <div className="text-white font-semibold">{tipCage.order} · customer {tipCage.customer}</div>
               <div className="text-slate-300">{tipCage.colour} · {tipCage.fabric}</div>
               <div className="font-mono text-slate-400">{tipCage.lot}</div>
-              <div className="text-slate-200 tabular-nums">{tipCage.state === "reserved" ? `${tipCage.expected_rolls} rolls expected · ${usd(tipCage.expected_value)}` : `${tipCage.rolls} rolls · ${num(tipCage.kg)} kg · ${usd(tipCage.value)}`}</div>
+              <div className="text-slate-200 tabular-nums">{tipCage.state === "reserved" ? `${tipCage.expected_rolls} rolls expected · ${usd(tipCage.expected_value)}` : `${holds(tipCage)} · ${num(tipCage.kg)} kg · ${usd(tipCage.value)}`}</div>
               {tipCage.note && <div className="mt-0.5 text-slate-400">{tipCage.note}</div>}
             </>
           )}
