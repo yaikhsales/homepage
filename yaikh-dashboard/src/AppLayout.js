@@ -122,15 +122,29 @@ const AppLayout = () => {
   const routePaBot = paForRoute(location.pathname);
   const isBigBrainRoute = BIG_BRAIN_ROUTES.some((r) => location.pathname.startsWith(r));
   const [routePaOpen, setRoutePaOpen] = useState(false);
+  // Pinned = the PA stays on screen wherever Gamini navigates, until
+  // manually unpinned. Minimize collapses to the PA-coloured bubble.
+  const [routePaPinned, setRoutePaPinned] = useState(false);
+  const [pinnedBot, setPinnedBot] = useState(null);
+  const activeRoutePa = routePaPinned && pinnedBot ? pinnedBot : routePaBot;
   const routePaPrefix = routePaBot ? location.pathname.split("/").slice(0, 3).join("/") : null;
+  // Flag for wide pages (4DP Gantt etc.): while the compact PA panel is
+  // open, body carries .yai-pa-open so those pages can reserve ~424px of
+  // right padding (panel = right-6 + w-[400px]).
+  useEffect(() => {
+    const on = !!(activeRoutePa && routePaOpen);
+    document.body.classList.toggle("yai-pa-open", on);
+    return () => document.body.classList.remove("yai-pa-open");
+  }, [activeRoutePa, routePaOpen]);
   useEffect(() => {
     // (re)open when ENTERING a PA-owned department; keep state while
-    // moving between that department's own pages.
+    // moving between that department's own pages. A pinned PA never
+    // auto-closes on route change.
     if (routePaBot) {
       const t = setTimeout(() => setRoutePaOpen(true), 700);
       return () => clearTimeout(t);
     }
-    setRoutePaOpen(false);
+    if (!routePaPinned) setRoutePaOpen(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [routePaPrefix]);
 
@@ -1580,18 +1594,44 @@ const AppLayout = () => {
       )}
 
       {/* Route-owned department PA (4DP, MRP, direct-nav admin views) */}
-      {routePaBot && routePaOpen && (
-        <BotModules
-          onClose={() => setRoutePaOpen(false)}
-          moduleContext={location.pathname}
-          currentVersion="yai1"
-          botsFilter={[routePaBot]}
-        />
+      {activeRoutePa && routePaOpen && (
+        <>
+          <BotModules
+            onClose={() => setRoutePaOpen(false)}
+            moduleContext={location.pathname}
+            currentVersion="yai1"
+            botsFilter={[activeRoutePa]}
+          />
+          {/* Pin + minimize — float just left of the compact panel */}
+          <div className="fixed right-[432px] bottom-[40vh] z-[210] flex flex-col gap-2">
+            <button
+              onClick={() => {
+                if (routePaPinned) { setRoutePaPinned(false); setPinnedBot(null); }
+                else { setRoutePaPinned(true); setPinnedBot(activeRoutePa); }
+              }}
+              className={`w-10 h-10 rounded-full shadow-lg flex items-center justify-center transition-colors ${routePaPinned ? "bg-orange-500 text-white" : "bg-white/90 text-gray-600 hover:bg-orange-100"}`}
+              aria-pressed={routePaPinned}
+              title={routePaPinned ? "Unpin — PA closes when you leave this area" : "Pin — keep this PA on screen everywhere"}
+            >
+              <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 17v5" />
+                <path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z" />
+              </svg>
+            </button>
+            <button
+              onClick={() => setRoutePaOpen(false)}
+              className="w-10 h-10 rounded-full bg-white/90 text-gray-600 hover:bg-gray-200 shadow-lg flex items-center justify-center"
+              title="Minimise to bubble"
+            >
+              <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M5 12h14" /></svg>
+            </button>
+          </div>
+        </>
       )}
-      {routePaBot && !routePaOpen && (
+      {activeRoutePa && !routePaOpen && (
         <button
           onClick={() => setRoutePaOpen(true)}
-          className={`fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-r ${PA_GRADIENT[routePaBot] || "from-orange-500 to-amber-500"} text-white rounded-full shadow-2xl hover:scale-110 transition-all duration-300 flex items-center justify-center`}
+          className={`fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-r ${PA_GRADIENT[activeRoutePa] || "from-orange-500 to-amber-500"} text-white rounded-full shadow-2xl hover:scale-110 transition-all duration-300 flex items-center justify-center`}
           aria-label="Open department PA"
           title="Open department PA"
         >
