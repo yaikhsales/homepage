@@ -14,8 +14,10 @@ const WALL = new Set(["board", "mrp-tv", "tec-tv"]); // wall screens refresh by 
 
 const tone = (v) => {
   const s = String(v || "").toLowerCase();
-  if (/received|complete|correct|uploaded|filed|handed over|confirmed|ready|shipped|has room|finished/.test(s)) return "bg-emerald-500/20 text-emerald-300 border-emerald-500/30";
-  if (/at sea|on the road|on the truck|in progress|today|sewing|cutting|on track|busy|running/.test(s)) return "bg-sky-500/20 text-sky-300 border-sky-500/30";
+  if (/\bfail\b|on hold/.test(s)) return "bg-rose-500/20 text-rose-300 border-rose-500/30"; // inspection / test failed, lot on hold
+  if (/\bremark\b/.test(s)) return "bg-amber-500/20 text-amber-300 border-amber-500/30"; // pass with remark
+  if (/received|complete|correct|uploaded|filed|handed over|confirmed|ready|shipped|has room|finished|\bpass\b/.test(s)) return "bg-emerald-500/20 text-emerald-300 border-emerald-500/30";
+  if (/at sea|on the road|on the truck|in progress|today|sewing|cutting|on track|busy|running|in the lab/.test(s)) return "bg-sky-500/20 text-sky-300 border-sky-500/30";
   if (/customs|pending|check|awaiting|tomorrow|prepare|not yet|waiting|full|preparation/.test(s)) return "bg-amber-500/20 text-amber-300 border-amber-500/30";
   return "bg-slate-500/20 text-slate-300 border-slate-500/30";
 };
@@ -56,6 +58,82 @@ const Track = ({ steps, big }) => {
       )
     )
   );
+};
+
+// Picture of a finding (Fabric Inspection / Fabric Test): a small drawing of what the inspector photographed, chosen
+// by the key the server sends. Plain shapes on a fabric swatch; "none" or an unknown key draws nothing.
+const SW = { fill: "#3b4a63", stroke: "#64748b" }; // the fabric swatch in the dark theme
+const swatch = (extra) => h("rect", Object.assign({ x: 1, y: 1, width: 54, height: 34, rx: 4, fill: SW.fill, stroke: SW.stroke, strokeWidth: 1 }, extra || {}));
+const frame = () => swatch({ fill: "none" });
+const weave = () => [9, 18, 27].map((y) => h("line", { key: "w" + y, x1: 2, x2: 54, y1: y, y2: y, stroke: SW.stroke, strokeWidth: 0.6 }));
+const PICTURES = {
+  // a dark hole in the fabric
+  hole: () => [swatch({ key: "s" }), ...weave(), h("circle", { key: "h", cx: 30, cy: 18, r: 6.5, fill: "#0b1220", stroke: "#f87171", strokeWidth: 1.2 })],
+  // one thread running thick for a few inches
+  slub: () => [swatch({ key: "s" }), ...weave(), h("line", { key: "t", x1: 17, x2: 39, y1: 18, y2: 18, stroke: "#fbbf24", strokeWidth: 4.5, strokeLinecap: "round" })],
+  // beginning / middle / end of the roll in three slightly different shades
+  "shade-end": () => [
+    h("rect", { key: "a", x: 1, y: 1, width: 18, height: 34, fill: "#33415c" }),
+    h("rect", { key: "b", x: 19, y: 1, width: 18, height: 34, fill: "#4a5f85" }),
+    h("rect", { key: "c", x: 37, y: 1, width: 18, height: 34, fill: "#6b84b0" }),
+    ...["B", "M", "E"].map((t, i) => h("text", { key: t, x: 10 + i * 18, y: 21, textAnchor: "middle", fontSize: 8, fontWeight: 700, fill: "#e2e8f0" }, t)),
+    h(frame, { key: "f" }),
+  ],
+  // one side of the width darker than the other
+  "shade-side": () => [
+    h("rect", { key: "a", x: 1, y: 1, width: 54, height: 17, fill: "#33415c" }),
+    h("rect", { key: "b", x: 1, y: 18, width: 54, height: 17, fill: "#6b84b0" }),
+    h("line", { key: "m", x1: 1, x2: 55, y1: 18, y2: 18, stroke: "#e2e8f0", strokeWidth: 0.8, strokeDasharray: "3 2" }),
+    h(frame, { key: "f" }),
+  ],
+  // measured width against the order: two arrows over a ruler
+  width: () => [
+    swatch({ key: "s" }),
+    h("line", { key: "l", x1: 9, x2: 47, y1: 13, y2: 13, stroke: "#fbbf24", strokeWidth: 1.6 }),
+    h("path", { key: "a1", d: "M5 13 L11 9.5 L11 16.5 Z", fill: "#fbbf24" }),
+    h("path", { key: "a2", d: "M51 13 L45 9.5 L45 16.5 Z", fill: "#fbbf24" }),
+    h("line", { key: "r", x1: 5, x2: 51, y1: 29, y2: 29, stroke: "#cbd5e1", strokeWidth: 1 }),
+    ...[5, 10.75, 16.5, 22.25, 28, 33.75, 39.5, 45.25, 51].map((x, i) => h("line", { key: "k" + i, x1: x, x2: x, y1: i % 2 ? 26 : 23.5, y2: 29, stroke: "#cbd5e1", strokeWidth: 1 })),
+  ],
+  // a selvage strip that takes too much of the width
+  selvage: () => [
+    swatch({ key: "s" }),
+    h("rect", { key: "a", x: 1.5, y: 1.5, width: 53, height: 9, fill: "#fbbf24", fillOpacity: 0.55 }),
+    h("rect", { key: "b", x: 1.5, y: 25.5, width: 53, height: 9, fill: "#fbbf24", fillOpacity: 0.55 }),
+    ...[7, 16, 25, 34, 43, 52].map((x) => h("circle", { key: "p" + x, cx: x - 1.5, cy: 6, r: 1, fill: "#0b1220" })),
+    ...[7, 16, 25, 34, 43, 52].map((x) => h("circle", { key: "q" + x, cx: x - 1.5, cy: 30, r: 1, fill: "#0b1220" })),
+    h(frame, { key: "f" }),
+  ],
+  // fabric test: the 18 × 18 in square before (dashed) and after washing or pressing
+  shrinkage: () => [
+    swatch({ key: "s" }),
+    h("rect", { key: "o", x: 14, y: 4, width: 28, height: 28, fill: "none", stroke: "#cbd5e1", strokeWidth: 1, strokeDasharray: "3 2" }),
+    h("rect", { key: "i", x: 18, y: 8, width: 20, height: 20, fill: "#fbbf24", fillOpacity: 0.35, stroke: "#fbbf24", strokeWidth: 1.2 }),
+  ],
+  // fabric test: the round-cutter piece on the scale
+  weight: () => [
+    swatch({ key: "s" }),
+    h("circle", { key: "c", cx: 28, cy: 15, r: 10, fill: "#6b84b0", stroke: "#e2e8f0", strokeWidth: 1 }),
+    h("line", { key: "p", x1: 12, x2: 44, y1: 30, y2: 30, stroke: "#fbbf24", strokeWidth: 2.4, strokeLinecap: "round" }),
+  ],
+  // fabric test: the lot beside the approved standard on the grey scale
+  shade: () => [
+    h("rect", { key: "a", x: 1, y: 1, width: 27, height: 34, fill: "#4a5f85" }),
+    h("rect", { key: "b", x: 28, y: 1, width: 27, height: 34, fill: "#7f97c2" }),
+    h("line", { key: "m", x1: 28, x2: 28, y1: 1, y2: 35, stroke: "#0b1220", strokeWidth: 1.2 }),
+    h(frame, { key: "f" }),
+  ],
+  // fabric test: colour rubbed off onto the white test cloth
+  rubbing: () => [
+    swatch({ key: "s" }),
+    h("rect", { key: "c", x: 16, y: 6, width: 24, height: 24, rx: 2, fill: "#f1f5f9" }),
+    h("ellipse", { key: "m", cx: 28, cy: 18, rx: 7, ry: 5, fill: "#4a5f85", fillOpacity: 0.75 }),
+  ],
+};
+const Picture = ({ k }) => {
+  const draw = PICTURES[String(k || "").toLowerCase()];
+  if (!draw) return null;
+  return h("svg", { width: 56, height: 36, viewBox: "0 0 56 36", role: "img", "aria-label": String(k), className: "block rounded" }, h("title", null, String(k)), draw());
 };
 
 const MrpView = ({ onBack, module = "mrp", label = "MRP", view: fixedView }) => {
@@ -204,7 +282,7 @@ const MrpView = ({ onBack, module = "mrp", label = "MRP", view: fixedView }) => 
                 h(
                   "td",
                   { key: c.key, className: cell + (typeof r[c.key] === "number" ? " text-right tabular-nums" : "") + (c.key === "order" ? " font-bold text-white whitespace-nowrap" : "") },
-                  Array.isArray(r[c.key]) ? h(Track, { steps: r[c.key], big: board }) : CHIP.has(c.key) && r[c.key] ? h("span", { className: "inline-block rounded-full border px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap " + tone(r[c.key]) }, fmt(r[c.key])) : fmt(r[c.key])
+                  Array.isArray(r[c.key]) ? h(Track, { steps: r[c.key], big: board }) : c.key === "picture" ? h(Picture, { k: r[c.key] }) : CHIP.has(c.key) && r[c.key] ? h("span", { className: "inline-block rounded-full border px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap " + tone(r[c.key]) }, fmt(r[c.key])) : fmt(r[c.key])
                 )
               )
             )

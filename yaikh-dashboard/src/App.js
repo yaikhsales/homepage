@@ -111,8 +111,6 @@ import MrpView from "./mrp/MrpView";
 import FourDP from "./fourdp/FourDP";
 import LineLive from "./fourdp/LineLive";
 import AccessoriesReceiving from "./fc/AccessoriesReceiving";
-import FabricInspection from "./fc/FabricInspection";
-import FabricTest from "./fc/FabricTest";
 import AccessoriesInspection from "./fc/AccessoriesInspection";
 import WarehouseTracking from "./fc/WarehouseTracking";
 import Consumptions from "./fc/Consumptions";
@@ -430,11 +428,11 @@ export default function App() {
           />
           <Route
             path="fc/fabric-inspection"
-            element={<FabricInspection onBack={handleBack} />}
+            element={<MrpView module="fc" view="fabric-inspection" label="Fabric Control" onBack={handleBack} />}
           />
           <Route
             path="fc/fabric-test"
-            element={<FabricTest onBack={handleBack} />}
+            element={<MrpView module="fc" view="fabric-test" label="Fabric Control" onBack={handleBack} />}
           />
           <Route
             path="fc/accessories-inspection"
