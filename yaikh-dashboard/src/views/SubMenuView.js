@@ -5,6 +5,7 @@ import { IconRenderer } from "../components/IconRenderer";
 import { useTranslation } from "../translate/TranslationContext";
 import GeneralAIAgent from "../general-ag";
 import BotModules from "../chatbot/bot-modules";
+import { PA_BY_SUBMENU_TITLE, PA_TITLE_TO_TOPIC, PA_GRADIENT } from "../chatbot/pa-owner";
 import VideoViewer from "../components/VideoViewer";
 
 // Sub-menu titles that belong to the Accounting PA. When the user
@@ -756,20 +757,14 @@ const SubMenuView = () => {
   // after the page mounts with the topic pre-scoped, so the user lands
   // on the page and is met by the right PA. Non-PA modules stay silent
   // (bubble only).
-  const isAccountingSubmenu = ACCOUNTING_SUBMENU_TITLES.has(title);
-  const isHrSubmenu = HR_SUBMENU_TITLES.has(title);
-  const isPaSubmenu = isAccountingSubmenu || isHrSubmenu;
-  // initialTopic: accounting maps title→pill 1:1; HR has its own map.
-  const paInitialTopic = isAccountingSubmenu
-    ? title
-    : (isHrSubmenu ? HR_TITLE_TO_TOPIC[title] : null);
-  const paBotsFilter = isAccountingSubmenu
-    ? ["accounting-bot"]
-    : (isHrSubmenu ? ["hr-bot"] : null);
+  // Every sub-menu title resolves its owning PA from ONE map — Gamini's
+  // rule: the department PA pops up for every module, same PA deeper in.
+  const paBotId = PA_BY_SUBMENU_TITLE[title] || null;
+  const isPaSubmenu = !!paBotId;
+  const paInitialTopic = isPaSubmenu ? (PA_TITLE_TO_TOPIC[title] ?? null) : null;
+  const paBotsFilter = isPaSubmenu ? [paBotId] : null;
   // Bubble palette matches the owning PA's brand gradient.
-  const paBubbleGradient = isAccountingSubmenu
-    ? "from-green-500 to-emerald-500"
-    : (isHrSubmenu ? "from-indigo-500 to-blue-500" : "from-orange-500 to-amber-500");
+  const paBubbleGradient = (paBotId && PA_GRADIENT[paBotId]) || "from-orange-500 to-amber-500";
 
   useEffect(() => {
     if (!isPaSubmenu) return;

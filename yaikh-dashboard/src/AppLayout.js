@@ -4,12 +4,15 @@ import {
   Search,
   ChevronRight,
   Sparkles,
+  MessageCircle,
 } from "lucide-react";
 
 import Header from "./components/Header";
 import SectionContainer from "./components/SectionContainer";
 import { DASHBOARD_DATA } from "./data/module";
 import YaiDataBot from "./chatbot/YaiDataBot";
+import BotModules from "./chatbot/bot-modules";
+import { paForRoute, PA_GRADIENT, BIG_BRAIN_TITLES, BIG_BRAIN_ROUTES, BIG_BRAIN_BUBBLE } from "./chatbot/pa-owner";
 import DragonAnimation from "./components/DragonAnimation";
 import { useTranslation } from "./translate/TranslationContext";
 import { ThemeBackground } from "./thems";
@@ -111,6 +114,26 @@ const AppLayout = () => {
     setYaiDataBotOpen(true);
   };
 
+  // ── Route-owned department PA ─────────────────────────────────────
+  // Pages that never pass through SubMenuView (4DP, MRP, the direct-nav
+  // admin views) get their PA mounted here, keyed on the route, so the
+  // SAME PA follows the user deeper into the department. Auto-opens on
+  // entry; closable down to a PA-coloured bubble.
+  const routePaBot = paForRoute(location.pathname);
+  const isBigBrainRoute = BIG_BRAIN_ROUTES.some((r) => location.pathname.startsWith(r));
+  const [routePaOpen, setRoutePaOpen] = useState(false);
+  const routePaPrefix = routePaBot ? location.pathname.split("/").slice(0, 3).join("/") : null;
+  useEffect(() => {
+    // (re)open when ENTERING a PA-owned department; keep state while
+    // moving between that department's own pages.
+    if (routePaBot) {
+      const t = setTimeout(() => setRoutePaOpen(true), 700);
+      return () => clearTimeout(t);
+    }
+    setRoutePaOpen(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [routePaPrefix]);
+
   // Handle initial dragon animation on page load - DISABLED
   // useEffect(() => {
   //     if (location.pathname === '/' && !hasPlayedInitialAnimation) {
@@ -152,6 +175,12 @@ const AppLayout = () => {
   };
 
   const handleModuleClick = (module) => {
+    // Management Dashboard / SOP / System Analysis belong to the green
+    // Big Brain (yai2), not a department PA — open it alongside navigation.
+    if (module && BIG_BRAIN_TITLES.has(module.title)) {
+      setYaiVersion("yai2");
+      setYaiDataBotOpen(true);
+    }
     if (module.demoType) {
       const { demoType, id, title } = module;
       if ((id === "meeting" || id === "meeting-room") && title === "Meeting Room") {
@@ -1548,6 +1577,38 @@ const AppLayout = () => {
             dragonMode === "back" ? () => setYaiDataBotOpen(false) : undefined
           }
         />
+      )}
+
+      {/* Route-owned department PA (4DP, MRP, direct-nav admin views) */}
+      {routePaBot && routePaOpen && (
+        <BotModules
+          onClose={() => setRoutePaOpen(false)}
+          moduleContext={location.pathname}
+          currentVersion="yai1"
+          botsFilter={[routePaBot]}
+        />
+      )}
+      {routePaBot && !routePaOpen && (
+        <button
+          onClick={() => setRoutePaOpen(true)}
+          className={`fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-r ${PA_GRADIENT[routePaBot] || "from-orange-500 to-amber-500"} text-white rounded-full shadow-2xl hover:scale-110 transition-all duration-300 flex items-center justify-center`}
+          aria-label="Open department PA"
+          title="Open department PA"
+        >
+          <MessageCircle className="w-8 h-8" />
+        </button>
+      )}
+      {/* Green Big Brain bubble on its own routes (SOP map, System Analysis) */}
+      {isBigBrainRoute && !isYaiDataBotOpen && (
+        <button
+          onClick={() => { setYaiVersion("yai2"); setYaiDataBotOpen(true); }}
+          className="fixed bottom-6 right-6 z-50 w-16 h-16 text-white rounded-full shadow-2xl hover:scale-110 transition-all duration-300 flex items-center justify-center"
+          style={{ background: BIG_BRAIN_BUBBLE }}
+          aria-label="Open Big Brain"
+          title="Open Big Brain"
+        >
+          <MessageCircle className="w-8 h-8" />
+        </button>
       )}
 
       {isYaiDataBotOpen && (
