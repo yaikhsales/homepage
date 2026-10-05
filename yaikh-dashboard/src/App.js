@@ -112,7 +112,7 @@ import FourDP from "./fourdp/FourDP";
 import LineLive from "./fourdp/LineLive";
 import AccessoriesReceiving from "./fc/AccessoriesReceiving";
 import AccessoriesInspection from "./fc/AccessoriesInspection";
-import WarehouseTracking from "./fc/WarehouseTracking";
+import WarehouseMap from "./fc/WarehouseMap";
 import Calculator from "./fc/Calculator";
 import FabricIssuing from "./fc/FabricIssuing";
 import AccessoriesIssuing from "./fc/AccessoriesIssuing";
@@ -439,7 +439,7 @@ export default function App() {
           />
           <Route
             path="fc/warehouse-tracking"
-            element={<WarehouseTracking onBack={handleBack} />}
+            element={<WarehouseMap onBack={handleBack} />}
           />
           <Route
             path="fc/consumptions"
