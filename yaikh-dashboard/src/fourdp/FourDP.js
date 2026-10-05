@@ -72,13 +72,15 @@ function StatusPop({ pop, onTab, onClose }) {
   }, [onClose]);
   const W = 430;
   const left = Math.max(8, Math.min(pop.x - 40, window.innerWidth - W - 12));
-  const top = Math.max(8, Math.min(pop.y + 14, window.innerHeight - 330));
+  // Open below the bubble in the top half of the screen, above it in the bottom half, so the feed is never cut off.
+  const below = pop.y < window.innerHeight / 2;
+  const place = below ? { top: pop.y + 14, maxHeight: window.innerHeight - pop.y - 24 } : { bottom: window.innerHeight - pop.y + 14, maxHeight: pop.y - 24 };
   const d = pop.data;
   const grp = d && d.groups[pop.group];
   return (
     <>
       <div className="fixed inset-0 z-40" onClick={onClose} />
-      <div className="fixed z-50 rounded-2xl border border-slate-600 bg-slate-800 shadow-2xl text-slate-200" style={{ left, top, width: W }}>
+      <div className="fixed z-50 rounded-2xl border border-slate-600 bg-slate-800 shadow-2xl text-slate-200 overflow-y-auto" style={{ left, width: W, ...place }}>
         <div className="flex items-center gap-2 px-3 pt-2.5 pb-2 border-b border-slate-700">
           <span className="font-black text-white">{pop.ref}</span>
           {d && <span className="text-[11px] text-slate-400 truncate">{fmtNum(d.pieces)} pcs · {d.factory} · cutting {d.cutting}</span>}
