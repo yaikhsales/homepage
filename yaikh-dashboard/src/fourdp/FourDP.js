@@ -64,6 +64,96 @@ const GROUPS = [["mrp", "MRP"], ["ypi", "YPI"], ["ce", "CE"]];
 const LIGHT = { green: "bg-emerald-400", amber: "bg-amber-400", red: "bg-rose-500", idle: "bg-slate-500", na: "bg-slate-700" };
 const LIGHT_TEXT = { green: "text-emerald-300", amber: "text-amber-300", red: "text-rose-300", idle: "text-slate-400", na: "text-slate-500" };
 
+// Mini sewing line: opened from an order bar on the Line Plan. The same U-shaped hanger line as the full
+// live view, one small box per machine — green on target, orange defects, red breakdown, grey not running.
+const CELL = { green: "bg-emerald-500 text-slate-900", orange: "bg-amber-400 text-slate-900", red: "bg-rose-500 text-white animate-pulse", idle: "bg-slate-600 text-slate-300" };
+
+function LinePop({ pop, onClose, onOpen }) {
+  const [d, setD] = useState(null);
+  const [failed, setFailed] = useState(false);
+  const { line, order, garment } = pop.run;
+  useEffect(() => {
+    let live = true;
+    const load = async () => {
+      try {
+        const r = await fetch(`${API}/sim/view`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ module: "4dp", view: "line-live", line, order, garment }) });
+        const j = await r.json();
+        if (!r.ok || !j.ok) throw new Error("unavailable");
+        if (live) { setD(j); setFailed(false); }
+      } catch (e) {
+        if (live) setFailed(true);
+      }
+    };
+    load();
+    const t = setInterval(load, 20000);
+    const key = (e) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", key);
+    return () => { live = false; clearInterval(t); window.removeEventListener("keydown", key); };
+  }, [line, order, garment, onClose]);
+  const W = 470;
+  const room = window.innerWidth - (document.body.classList.contains("yai-pa-open") ? 436 : 0);
+  const left = Math.max(8, Math.min(pop.x - 60, room - W - 12));
+  const below = pop.y < window.innerHeight / 2;
+  const place = below ? { top: pop.y + 14, maxHeight: window.innerHeight - pop.y - 24 } : { bottom: window.innerHeight - pop.y + 14, maxHeight: pop.y - 24 };
+  const st = (d && d.stations) || [];
+  const side = Math.ceil((st.length - 5) / 2); // machines on each arm of the U
+  const arm = st.slice(0, side);
+  const bottom = st.slice(side, st.length - side);
+  const back = st.slice(st.length - side).reverse(); // flows back up the other arm
+  const bad = st.filter((x) => x.status === "red" || x.status === "orange");
+  const Cell = ({ x }) => (
+    <div title={`#${x.no} ${x.op} · ${x.machine} · ${x.note} · ${x.pieces}/${x.target}`} className={`rounded-md text-[10px] font-black tabular-nums flex items-center justify-center ${CELL[x.status] || CELL.idle}`} style={{ width: 34, height: 20 }}>{x.no}</div>
+  );
+  return (
+    <>
+      <div className="fixed inset-0 z-40" onClick={onClose} />
+      <div className="fixed z-50 rounded-2xl border border-slate-600 bg-slate-800 shadow-2xl text-slate-200 overflow-y-auto" style={{ left, width: W, ...place }}>
+        <div className="flex items-center gap-2 px-3 pt-2.5 pb-2 border-b border-slate-700">
+          <span className="font-black text-white whitespace-nowrap">{line} · {order}</span>
+          <span className="text-[11px] text-slate-400 truncate">{garment}{d ? ` · ${fmtNum(d.pieces)} pcs · ${d.run}` : ""}</span>
+          <button onClick={onClose} className="ml-auto p-1 rounded-lg hover:bg-slate-700" aria-label="Close"><X size={14} /></button>
+        </div>
+        {failed && !d && <div className="py-8 text-center text-sm text-amber-200">Line data is unavailable right now.</div>}
+        {!d && !failed && <div className="py-8 text-center text-sm text-slate-500">Loading…</div>}
+        {d && (
+          <div className="px-3 py-2">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-slate-400 mb-2">
+              <span className={`rounded-full px-2 py-0.5 font-bold ${d.running ? "bg-emerald-500/20 text-emerald-300" : "bg-slate-700 text-slate-300"}`}>{d.state_text}</span>
+              {d.running && <span>Output <b className="text-white text-sm tabular-nums">{fmtNum(d.output_now)}</b> / {fmtNum(d.target_now)}</span>}
+              {d.running && <span>Efficiency <b className="text-white text-sm">{d.efficiency}</b></span>}
+              {d.running && <span>Defects <b className="text-amber-300 text-sm tabular-nums">{d.defects}</b></span>}
+              {d.running && <span>Down <b className="text-rose-300 text-sm tabular-nums">{d.machines_down}</b></span>}
+              {!d.running && <span>{d.operators} machines · target {fmtNum(d.target_day)} a day</span>}
+            </div>
+            <div className="flex gap-1.5">
+              <div className="flex flex-col gap-1">{arm.map((x) => <Cell key={x.no} x={x} />)}</div>
+              <div className="flex-1 min-w-0 flex flex-col">
+                <div className="flex-1 rounded-lg border border-dashed border-slate-600 px-2 py-1.5 mb-1 overflow-hidden">
+                  {bad.length === 0 && <div className="h-full flex items-center justify-center text-xs text-slate-400 text-center">{d.running ? "All machines on target, quality OK" : `Not running — ${d.state_text}`}</div>}
+                  {bad.map((x) => (
+                    <div key={x.no} className="flex items-start gap-1.5 py-0.5">
+                      <span className={`mt-1 inline-block w-2 h-2 rounded-full flex-shrink-0 ${x.status === "red" ? "bg-rose-500 animate-pulse" : "bg-amber-400"}`} />
+                      <span className="text-[11px] leading-snug"><b className="text-white">#{x.no} {x.op}</b> <span className={x.status === "red" ? "text-rose-300" : "text-amber-300"}>{x.note}</span></span>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex gap-1 justify-between">{bottom.map((x) => <Cell key={x.no} x={x} />)}</div>
+              </div>
+              <div className="flex flex-col gap-1">{back.map((x) => <Cell key={x.no} x={x} />)}</div>
+            </div>
+            <div className="flex items-center gap-3 mt-2 text-[10px] text-slate-400">
+              <span className="flex items-center gap-1"><span className="inline-block w-2.5 h-2.5 rounded bg-emerald-500" />on target</span>
+              <span className="flex items-center gap-1"><span className="inline-block w-2.5 h-2.5 rounded bg-amber-400" />defects</span>
+              <span className="flex items-center gap-1"><span className="inline-block w-2.5 h-2.5 rounded bg-rose-500" />breakdown</span>
+              <button onClick={() => onOpen(line)} className="ml-auto rounded-lg border border-sky-500/50 text-sky-300 hover:bg-sky-500/10 px-2 py-0.5 text-[11px] font-bold">Open full live line ›</button>
+            </div>
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
+
 function StatusPop({ pop, onTab, onClose }) {
   useEffect(() => {
     const key = (e) => { if (e.key === "Escape") onClose(); };
@@ -122,7 +212,7 @@ function StatusPop({ pop, onTab, onClose }) {
 
 const hasProblem = (b) => !!b.st && GROUPS.some(([k]) => b.st[k] === "red");
 
-function Gantt({ g, filter, onLine, picked, onStatus, onlyProblems, corner }) {
+function Gantt({ g, filter, onLine, picked, onStatus, onlyProblems, corner, onRun }) {
   const days = useMemo(() => {
     if (!g) return [];
     const n = dayDiff(g.start, g.end) + 1;
@@ -189,7 +279,7 @@ function Gantt({ g, filter, onLine, picked, onStatus, onlyProblems, corner }) {
                   const barW = (to - from + 1) * dayW - 2;
                   const bubbles = b.st && b.ref && onStatus && barW >= 44;
                   return (
-                    <div key={i} title={`${b.title} · ${b.from} → ${b.to}`} className={`absolute top-1 rounded-md text-[10px] font-semibold leading-[18px] shadow transition-opacity flex items-center overflow-hidden ${BAR[b.tone] || BAR.slate} ${barOn(picked, b.tone) && !(onlyProblems && !hasProblem(b)) ? "" : "opacity-10"}`} style={{ left: from * dayW + 1, width: barW, height: ROW_H - 8 }}>
+                    <div key={i} title={`${b.title} · ${b.from} → ${b.to}`} onClick={b.run && onRun ? (e) => onRun(b.run, e) : undefined} className={`absolute top-1 rounded-md text-[10px] font-semibold leading-[18px] shadow transition-opacity flex items-center overflow-hidden ${b.run && onRun ? "cursor-pointer hover:brightness-110 hover:ring-1 hover:ring-white/70" : ""} ${BAR[b.tone] || BAR.slate} ${barOn(picked, b.tone) && !(onlyProblems && !hasProblem(b)) ? "" : "opacity-10"}`} style={{ left: from * dayW + 1, width: barW, height: ROW_H - 8 }}>
                       <span className="truncate px-1.5 flex-1 min-w-0">{b.label}</span>
                       {bubbles && b.st.delay > 0 && barW >= 150 && <span className="flex-shrink-0 mr-1 rounded bg-rose-600 text-white text-[9px] font-black leading-[14px] px-1" title={`Possible delay: ${b.st.delay} days`}>+{b.st.delay}d</span>}
                       {bubbles && (
@@ -259,6 +349,8 @@ const FourDP = () => {
     }
   }, []);
   const closePop = useCallback(() => setPop(null), []);
+  const [linePop, setLinePop] = useState(null); // mini sewing line opened from a Line Plan bar
+  const closeLinePop = useCallback(() => setLinePop(null), []);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -280,7 +372,7 @@ const FourDP = () => {
   }, [view, month, topic.monthly, topic.factory, topic.orders, fac, order]);
 
   useEffect(() => { load(); }, [load]);
-  useEffect(() => { setData(null); setOrder(""); setPicked(new Set()); setPop(null); setOnlyProblems(false); }, [view]);
+  useEffect(() => { setData(null); setOrder(""); setPicked(new Set()); setPop(null); setLinePop(null); setOnlyProblems(false); }, [view]);
   useEffect(() => {
     if (!topic.wall) return undefined;
     const t = setInterval(load, 60000);
@@ -380,7 +472,7 @@ const FourDP = () => {
             </div>
           )}
 
-          {data && data.gantt && !showTable && <Gantt g={data.gantt} filter={q} picked={picked} corner={factoryPick} onlyProblems={onlyProblems} onStatus={openStatus} onLine={(ln) => navigate(`/dashboard/4dp/line/${ln}`)} />}
+          {data && data.gantt && !showTable && <Gantt g={data.gantt} filter={q} picked={picked} corner={factoryPick} onlyProblems={onlyProblems} onStatus={openStatus} onRun={(run, e) => setLinePop({ run, x: e.clientX, y: e.clientY })} onLine={(ln) => navigate(`/dashboard/4dp/line/${ln}`)} />}
 
           {showTable && data && (
             <div className="rounded-2xl border border-slate-700 bg-slate-800/40 overflow-auto" style={{ maxHeight: "calc(100vh - 205px)" }}>
@@ -405,6 +497,7 @@ const FourDP = () => {
             </div>
           )}
 
+          {linePop && <LinePop pop={linePop} onClose={closeLinePop} onOpen={(ln) => navigate(`/dashboard/4dp/line/${ln}`)} />}
           {pop && <StatusPop pop={pop} onTab={(k) => setPop((p) => ({ ...p, group: k }))} onClose={closePop} />}
 
           <p className="mt-1 text-[10px] text-slate-500">{data ? `As of ${String(data.as_of || "").replace("T", " ").slice(0, 16)} · hover a bar or diamond for details · click MRP / YPI / CE on a bar for that order's status · simulated factory data` : loading ? "Loading…" : ""}</p>
