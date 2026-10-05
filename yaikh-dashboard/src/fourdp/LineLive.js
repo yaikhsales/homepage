@@ -65,7 +65,8 @@ const LineLive = () => {
   const go = (k) => navigate(`/dashboard/4dp/line/L${String(((n - 1 + k + 32) % 32) + 1).padStart(2, "0")}`);
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-200 px-4 md:px-6 pb-6 pt-28 font-sans">
+    <div className="yai-pa-aware min-h-screen bg-slate-900 text-slate-200 px-4 md:px-6 pb-6 pt-28 font-sans">
+      <style>{`body.yai-pa-open .yai-pa-aware { padding-right: 436px; }`}</style>
       <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
         <div className="flex items-center gap-3">
           <button onClick={() => navigate("/dashboard/4dp/line-plan")} className="p-2 hover:bg-slate-700 rounded-full text-slate-400 hover:text-white" aria-label="Back to Line Plan"><ArrowLeft size={22} /></button>

@@ -78,7 +78,8 @@ const MrpView = ({ onBack, module = "mrp", label = "MRP" }) => {
 
   return h(
     "div",
-    { className: "min-h-screen bg-slate-900 text-slate-200 px-4 md:px-8 pb-8 pt-28 font-sans" }, // pt-28 clears the fixed 3-mode nav
+    { className: "yai-pa-aware min-h-screen bg-slate-900 text-slate-200 px-4 md:px-8 pb-8 pt-28 font-sans" }, // pt-28 clears the fixed 3-mode nav
+    h("style", null, "body.yai-pa-open .yai-pa-aware { padding-right: 436px; }"), // room for the PA panel while it is open
     h(
       "div",
       { className: "flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6" },

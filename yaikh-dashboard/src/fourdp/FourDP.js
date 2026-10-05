@@ -195,7 +195,9 @@ const FourDP = () => {
   }, [data, q]);
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-200 px-3 pb-3 pt-28 font-sans">
+    <div className="yai-pa-aware min-h-screen bg-slate-900 text-slate-200 px-3 pb-3 pt-28 font-sans">
+      {/* Leave room for the department PA panel while it is open (body.yai-pa-open is set by the PA mount). */}
+      <style>{`body.yai-pa-open .yai-pa-aware { padding-right: 436px; }`}</style>
       <div className="flex gap-3 items-start">
         {/* LEFT — topics */}
         <aside className="w-40 flex-shrink-0 rounded-xl border border-slate-700 bg-slate-800/60 p-1.5 sticky top-28">
