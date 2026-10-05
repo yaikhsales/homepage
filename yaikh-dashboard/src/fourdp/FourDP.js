@@ -54,7 +54,11 @@ const shiftMonth = (m, by) => { const d = new Date(Number(m.slice(0, 4)), Number
 const LABEL_W = 210;
 const ROW_H = 26;
 
-function Gantt({ g, filter, onLine }) {
+// A legend entry matches a bar by tone, and a milestone by "<tone>-marker" (or "marker" for the rose arrival/ex-factory diamond).
+const barOn = (picked, tone) => picked.size === 0 || picked.has(tone);
+const markOn = (picked, tone) => picked.size === 0 || picked.has(`${tone}-marker`) || (tone === "rose" && picked.has("marker"));
+
+function Gantt({ g, filter, onLine, picked }) {
   const days = useMemo(() => {
     if (!g) return [];
     const n = dayDiff(g.start, g.end) + 1;
@@ -118,7 +122,7 @@ function Gantt({ g, filter, onLine }) {
                   const to = Math.min(dayDiff(g.start, b.to), days.length - 1);
                   if (to < 0 || from > days.length - 1 || to < from) return null;
                   return (
-                    <div key={i} title={`${b.title} · ${b.from} → ${b.to}`} className={`absolute top-1 rounded-md px-1.5 text-[10px] font-semibold leading-[18px] truncate shadow ${BAR[b.tone] || BAR.slate}`} style={{ left: from * dayW + 1, width: (to - from + 1) * dayW - 2, height: ROW_H - 8 }}>
+                    <div key={i} title={`${b.title} · ${b.from} → ${b.to}`} className={`absolute top-1 rounded-md px-1.5 text-[10px] font-semibold leading-[18px] truncate shadow transition-opacity ${BAR[b.tone] || BAR.slate} ${barOn(picked, b.tone) ? "" : "opacity-10"}`} style={{ left: from * dayW + 1, width: (to - from + 1) * dayW - 2, height: ROW_H - 8 }}>
                       {b.label}
                     </div>
                   );
@@ -127,7 +131,7 @@ function Gantt({ g, filter, onLine }) {
                   const x = dayDiff(g.start, m.date);
                   if (x < 0 || x > days.length - 1) return null;
                   return (
-                    <div key={`m${i}`} title={`${m.label} · ${m.date}`} className={`absolute rotate-45 border border-slate-900 ${DOT[m.tone] || DOT.rose} ${m.done === false ? "opacity-60" : ""}`} style={{ left: x * dayW + dayW / 2 - 5, top: ROW_H / 2 - 5, width: 10, height: 10 }} />
+                    <div key={`m${i}`} title={`${m.label} · ${m.date}`} className={`absolute rotate-45 border border-slate-900 transition-opacity ${DOT[m.tone] || DOT.rose} ${!markOn(picked, m.tone) ? "opacity-10" : m.done === false ? "opacity-60" : ""}`} style={{ left: x * dayW + dayW / 2 - 5, top: ROW_H / 2 - 5, width: 10, height: 10 }} />
                   );
                 })}
               </div>
@@ -153,6 +157,8 @@ const FourDP = () => {
   const [showTable, setShowTable] = useState(false);
   const [factory, setFactory] = useState(null); // null = topic default
   const [order, setOrder] = useState("");
+  const [picked, setPicked] = useState(() => new Set()); // legend entries ticked: show only these, fade the rest
+  const togglePick = (tone) => setPicked((old) => { const n = new Set(old); if (n.has(tone)) n.delete(tone); else n.add(tone); return n; });
   const fac = factory === null ? (topic.factory || "") : factory;
 
   const load = useCallback(async () => {
@@ -175,7 +181,7 @@ const FourDP = () => {
   }, [view, month, topic.monthly, topic.factory, topic.orders, fac, order]);
 
   useEffect(() => { load(); }, [load]);
-  useEffect(() => { setData(null); setOrder(""); setFactory(null); }, [view]);
+  useEffect(() => { setData(null); setOrder(""); setFactory(null); setPicked(new Set()); }, [view]);
   useEffect(() => {
     if (!topic.wall) return undefined;
     const t = setInterval(load, 60000);
@@ -253,13 +259,15 @@ const FourDP = () => {
               {data.gantt.legend.map((l) => {
                 const marker = l.tone === "marker" || l.tone.endsWith("-marker");
                 const tone = l.tone.replace("-marker", "");
+                const on = picked.has(l.tone);
                 return (
-                  <span key={l.label} className="flex items-center gap-1">
+                  <button key={l.label} onClick={() => togglePick(l.tone)} title="Click to show only this; click again to release" className={`flex items-center gap-1 rounded-md px-1.5 py-0.5 border transition-colors ${on ? "border-white/60 bg-white/10 text-white" : picked.size ? "border-transparent opacity-40 hover:opacity-80" : "border-transparent hover:bg-slate-800"}`}>
                     {marker ? <span className={`inline-block w-2 h-2 rotate-45 ${DOT[tone] || DOT.rose}`} /> : <span className={`inline-block w-4 h-2 rounded ${(BAR[tone] || BAR.slate).split(" ")[0]}`} />}
                     {l.label}
-                  </span>
+                  </button>
                 );
               })}
+              {picked.size > 0 && <button onClick={() => setPicked(new Set())} className="rounded-md px-1.5 py-0.5 border border-slate-600 text-slate-300 hover:bg-slate-800">Show all</button>}
               <span className="flex items-center gap-1"><span className="inline-block w-0.5 h-3 bg-orange-400" />Today</span>
               {data.subtitle && topic.orders && <span className="text-slate-300 truncate">· {data.subtitle}</span>}
             </div>
@@ -276,7 +284,7 @@ const FourDP = () => {
             </div>
           )}
 
-          {data && data.gantt && !showTable && <Gantt g={data.gantt} filter={q} onLine={(ln) => navigate(`/dashboard/4dp/line/${ln}`)} />}
+          {data && data.gantt && !showTable && <Gantt g={data.gantt} filter={q} picked={picked} onLine={(ln) => navigate(`/dashboard/4dp/line/${ln}`)} />}
 
           {showTable && data && (
             <div className="rounded-2xl border border-slate-700 bg-slate-800/40 overflow-auto" style={{ maxHeight: "calc(100vh - 205px)" }}>
