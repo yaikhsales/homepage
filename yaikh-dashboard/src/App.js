@@ -110,6 +110,7 @@ import AutoPost from "./autopost/AutoPost";
 import FabricReceiving from "./fc/FabricReceiving";
 import MrpView from "./mrp/MrpView";
 import FourDP from "./fourdp/FourDP";
+import LineLive from "./fourdp/LineLive";
 import AccessoriesReceiving from "./fc/AccessoriesReceiving";
 import FabricInspection from "./fc/FabricInspection";
 import FabricTest from "./fc/FabricTest";
@@ -415,6 +416,7 @@ export default function App() {
           {/* MRP sub-modules — data from the simulated factory on the M1 */}
           <Route path="mrp/:view" element={<MrpView onBack={handleBack} />} />
           {/* 4DP sub-modules: Master Plan, Unit Plan, Line Plan T&A, Line Plan, MRP TV, TEC TV */}
+          <Route path="4dp/line/:line" element={<LineLive />} />
           <Route path="4dp/:view" element={<FourDP onBack={() => navigate("/")} />} />
           <Route path="4dp" element={<FourDP onBack={() => navigate("/")} />} />
 

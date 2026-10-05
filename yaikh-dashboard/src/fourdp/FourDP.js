@@ -13,10 +13,10 @@ import {
 const API = (process.env.REACT_APP_M1_LLM_URL || "/api/m1").replace(/\/$/, "");
 
 const TOPICS = [
-  { id: "master-plan", label: "Master Plan", hint: "Every order, fabric to ex-factory", icon: LayoutDashboard, monthly: true },
-  { id: "unit-plan", label: "Unit Plan", hint: "Load on each production unit", icon: Building, monthly: true },
-  { id: "line-plan-ta", label: "Line Plan T&A", hint: "Time and action before the line", icon: ClipboardCheck },
-  { id: "line-plan", label: "Line Plan", hint: "What each sewing line makes", icon: Layers, monthly: true },
+  { id: "master-plan", label: "Master Plan", hint: "Orders handed to each factory", icon: LayoutDashboard, monthly: true },
+  { id: "unit-plan", label: "Unit Plan", hint: "Factory plan, by department", icon: Building, monthly: true, factory: "F1" },
+  { id: "line-plan-ta", label: "Line Plan T&A", hint: "One order, lot by lot", icon: ClipboardCheck, monthly: true, factory: "F1", noAll: true, orders: true },
+  { id: "line-plan", label: "Line Plan", hint: "Sewing lines — click one for live", icon: Layers, monthly: true, factory: "" },
   { id: "mrp-tv", label: "MRP TV", hint: "Deliveries on the way", icon: MonitorPlay, wall: true },
   { id: "tec-tv", label: "TEC TV", hint: "Technical readiness", icon: MonitorPlay, wall: true },
 ];
@@ -54,7 +54,7 @@ const shiftMonth = (m, by) => { const d = new Date(Number(m.slice(0, 4)), Number
 const LABEL_W = 250;
 const ROW_H = 30;
 
-function Gantt({ g, filter }) {
+function Gantt({ g, filter, onLine }) {
   const days = useMemo(() => {
     if (!g) return [];
     const n = dayDiff(g.start, g.end) + 1;
@@ -80,7 +80,7 @@ function Gantt({ g, filter }) {
         {/* header: months + days */}
         <div className="sticky top-0 z-20 flex bg-slate-800 border-b border-slate-700">
           <div className="sticky left-0 z-30 bg-slate-800 border-r border-slate-700 flex items-end px-3 pb-1 text-[11px] uppercase tracking-wider text-slate-400 font-bold" style={{ width: LABEL_W, minWidth: LABEL_W }}>
-            {rows.filter((r) => !r.header).length} rows
+            {g.caption || `${rows.filter((r) => !r.header).length} rows`}
           </div>
           <div style={{ width }}>
             <div className="flex">
@@ -105,7 +105,11 @@ function Gantt({ g, filter }) {
           {rows.map((r, idx) => (
             <div key={`${r.label}-${idx}`} className={`flex border-b border-slate-700/50 ${r.header ? "bg-slate-700/50" : "hover:bg-slate-700/30"}`} style={{ height: ROW_H }}>
               <div className={`sticky left-0 z-10 border-r border-slate-700 px-3 flex items-center gap-2 overflow-hidden ${r.header ? "bg-slate-700" : "bg-slate-800"}`} style={{ width: LABEL_W, minWidth: LABEL_W }} title={`${r.label} — ${r.sub || ""}`}>
-                <span className={`font-bold whitespace-nowrap ${r.header ? "text-emerald-300 text-sm" : "text-white text-xs"}`}>{r.label}</span>
+                {r.line && onLine ? (
+                  <button onClick={() => onLine(r.line)} className="font-bold whitespace-nowrap text-xs text-sky-300 hover:text-white underline underline-offset-2">{r.label}</button>
+                ) : (
+                  <span className={`font-bold whitespace-nowrap ${r.header ? "text-emerald-300 text-sm" : "text-white text-xs"}`}>{r.label}</span>
+                )}
                 <span className="text-[11px] text-slate-400 truncate">{r.sub}</span>
               </div>
               <div className="relative" style={{ width, backgroundImage: "linear-gradient(to right, rgba(51,65,85,0.45) 1px, transparent 1px)", backgroundSize: `${dayW}px 100%` }}>
@@ -147,6 +151,9 @@ const FourDP = ({ onBack }) => {
   const [q, setQ] = useState("");
   const [month, setMonth] = useState(thisMonth());
   const [showTable, setShowTable] = useState(false);
+  const [factory, setFactory] = useState(null); // null = topic default
+  const [order, setOrder] = useState("");
+  const fac = factory === null ? (topic.factory || "") : factory;
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -155,7 +162,7 @@ const FourDP = ({ onBack }) => {
       const r = await fetch(`${API}/sim/view`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ module: "4dp", view, gantt: true, month: topic.monthly ? month : undefined }),
+        body: JSON.stringify({ module: "4dp", view, gantt: true, month: topic.monthly ? month : undefined, factory: topic.factory !== undefined ? fac : undefined, order: topic.orders ? order : undefined }),
       });
       const j = await r.json();
       if (!r.ok || !j.ok) throw new Error(j.error || "unavailable");
@@ -165,9 +172,10 @@ const FourDP = ({ onBack }) => {
     } finally {
       setLoading(false);
     }
-  }, [view, month, topic.monthly]);
+  }, [view, month, topic.monthly, topic.factory, topic.orders, fac, order]);
 
-  useEffect(() => { setData(null); load(); }, [load]);
+  useEffect(() => { load(); }, [load]);
+  useEffect(() => { setData(null); setOrder(""); setFactory(null); }, [view]);
   useEffect(() => {
     if (!topic.wall) return undefined;
     const t = setInterval(load, 60000);
@@ -262,7 +270,30 @@ const FourDP = ({ onBack }) => {
             </div>
           )}
 
-          {data && data.gantt && !showTable && <Gantt g={data.gantt} filter={q} />}
+          {topic.factory !== undefined && data && data.factories && (
+            <div className="flex flex-wrap items-center gap-2 mb-2">
+              {!topic.noAll && (
+                <button onClick={() => { setFactory(""); setOrder(""); }} className={`px-3 py-1.5 rounded-xl border text-sm font-semibold ${fac === "" ? "bg-emerald-500/20 border-emerald-500/40 text-white" : "bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700"}`}>All factories</button>
+              )}
+              {data.factories.map((F) => (
+                <button key={F.id} onClick={() => { setFactory(F.id); setOrder(""); }} title={F.focus} className={`px-3 py-1.5 rounded-xl border text-sm font-semibold ${fac === F.id ? "bg-emerald-500/20 border-emerald-500/40 text-white" : "bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700"}`}>{F.name}</button>
+              ))}
+            </div>
+          )}
+
+          {topic.orders && data && data.orders && (
+            <div className="flex gap-2 overflow-x-auto pb-2 mb-2">
+              {data.orders.map((o) => (
+                <button key={o.ref} onClick={() => setOrder(o.ref)} title={`${o.style} · ${o.status}`} className={`flex-shrink-0 text-left rounded-xl border px-3 py-1.5 ${data.selected === o.ref ? "bg-sky-500/20 border-sky-400 text-white" : "bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700"}`}>
+                  <span className="block text-sm font-bold leading-tight">{o.ref}</span>
+                  <span className="block text-[10px] text-slate-400 leading-tight">{fmtNum(o.pieces)} pcs · {o.status}</span>
+                </button>
+              ))}
+              {data.orders.length === 0 && <span className="text-sm text-slate-500">No orders for this factory in {month}.</span>}
+            </div>
+          )}
+
+          {data && data.gantt && !showTable && <Gantt g={data.gantt} filter={q} onLine={(ln) => navigate(`/dashboard/4dp/line/${ln}`)} />}
 
           {showTable && data && (
             <div className="rounded-2xl border border-slate-700 bg-slate-800/40 overflow-auto" style={{ maxHeight: "calc(100vh - 330px)" }}>
