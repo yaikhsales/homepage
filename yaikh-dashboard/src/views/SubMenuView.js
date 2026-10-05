@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { ArrowLeft, MessageCircle, Video } from "lucide-react";
+import { MessageCircle, Video } from "lucide-react";
 import { IconRenderer } from "../components/IconRenderer";
 import { useTranslation } from "../translate/TranslationContext";
 import GeneralAIAgent from "../general-ag";
@@ -754,7 +754,7 @@ const SubMenuView = () => {
     ? stateCards
     : (MODULE_ID_TO_CARDS[moduleId] || []);
   const theme = "normal"; // Default theme
-  const { translateModuleTitle, t } = useTranslation();
+  const { translateModuleTitle } = useTranslation();
   const [selectedBotModule, setSelectedBotModule] = useState(null);
   const [isBotOpen, setIsBotOpen] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState(null);
@@ -869,25 +869,7 @@ const SubMenuView = () => {
         className={`w-full max-w-[95vw] ${isGroupedStructure ? "mb-4" : "mb-8"} flex flex-col items-center gap-4`}
       >
         <div className="w-full grid grid-cols-3 items-center gap-2 px-1">
-          <div className="flex items-center gap-3 justify-self-start">
-            <button
-              onClick={() => navigate(-1)}
-              className={`flex items-center text-white hover:text-cyan-400 gap-2 font-bold ${theme === "normal" ? "bg-slate-800/70" : "bg-slate-800/50"} ${isGroupedStructure ? "px-3 py-1.5 text-sm" : "px-4 py-2"} rounded-lg backdrop-blur-sm transition-colors`}
-            >
-              <ArrowLeft size={isGroupedStructure ? 16 : 20} /> {t("back")}
-            </button>
-            <button
-              onClick={() => navigate("/")}
-              className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-white/30 hover:border-white/50 transition-all hover:scale-110 cursor-pointer flex-shrink-0"
-              title="Home"
-            >
-              <img
-                src="/logo.jpg"
-                alt="Home"
-                className="w-full h-full object-cover"
-              />
-            </button>
-          </div>
+          <div aria-hidden className="justify-self-start" />
           <div aria-hidden className="justify-self-center" />
           <div className="flex justify-end justify-self-end min-h-[40px] items-center">
             {isTrainingModule ? (
@@ -939,7 +921,7 @@ const SubMenuView = () => {
                 group.label === "First Output";
               // Calculate column width - First Output takes 2x width for 2-column grid, others take equal width
               // Calculate column width - First Output takes 2x width for 2-column grid, others take equal width
-              const isProminentModule = title === "YQMS" || title === "FC" || title === "MRP";
+              const isProminentModule = title === "YQMS" || title === "FC" || title === "MRP" || title === "YPI";
               const columnWidth = isFirstOutput
                 ? isProminentModule
                   ? "w-[calc(23%)] min-w-[340px]"

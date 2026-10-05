@@ -1258,6 +1258,51 @@ const AppLayout = () => {
                                                 },
                                               ],
                                             }
+                                        : demoType === "SUBMENU_YPI"
+                                          ? {
+                                              grouped: true,
+                                              groups: [
+                                                {
+                                                  label: "Tech-pack",
+                                                  cards: [
+                                                  {
+                                                    title: "Tech-pack",
+                                                    icon: "BookOpen",
+                                                    color: "bg-sky-500/30 text-white",
+                                                    action: "/dashboard/ypi/techpack",
+                                                  },
+                                                  ],
+                                                },
+                                                {
+                                                  label: "Marker & Cut Plan",
+                                                  cards: [
+                                                  {
+                                                    title: "Marker & Cut Plan",
+                                                    icon: "Scissors",
+                                                    color: "bg-emerald-500/30 text-white",
+                                                    action: "/dashboard/ypi/cut-plan",
+                                                  },
+                                                  ],
+                                                },
+                                                {
+                                                  label: "Material Portal",
+                                                  cards: [
+                                                  {
+                                                    title: "Material Portal",
+                                                    icon: "Package",
+                                                    color: "bg-amber-500/30 text-white",
+                                                    action: "/dashboard/ypi/material-portal",
+                                                  },
+                                                  {
+                                                    title: "BOM Status",
+                                                    icon: "ClipboardCheck",
+                                                    color: "bg-amber-500/30 text-white",
+                                                    action: "/dashboard/ypi/bom-status",
+                                                  },
+                                                  ],
+                                                },
+                                              ],
+                                            }
                                         : demoType === "SUBMENU_DEPARTMENTS"
                                           ? [
                                               {
@@ -1428,7 +1473,6 @@ const AppLayout = () => {
 
         navigate(`/dashboard/submenu/${id}`, { state: { title, cards } });
       } else if (demoType === "VIEW_4DP") navigate("/dashboard/4dp/master-plan"); // topics left, Gantt right
-      else if (demoType === "VIEW_YPI") navigate("/dashboard/ypi/cut-plan");
       else if (demoType === "GRID_TRAINING") navigate("/dashboard/training");
       else if (demoType === "VIEW_TICKET_CUSTOM") navigate("/dashboard/ticket");
       else if (demoType === "DASH_WASTE") navigate("/dashboard/waste");

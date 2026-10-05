@@ -6,7 +6,8 @@
 // Data: M1 /sim/view {module:"ypi", view:"cut-plan" | "markers", pick}. Simulated.
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ArrowLeft, RefreshCw, Search, CheckCircle2, XCircle, Scissors, LayoutGrid } from "lucide-react";
+import { ArrowLeft, RefreshCw, Search, CheckCircle2, XCircle } from "lucide-react";
+import { YpiTabs } from "./MaterialPortal";
 
 const API = (process.env.REACT_APP_M1_LLM_URL || "/api/m1").replace(/\/$/, "");
 const num = (v) => (typeof v === "number" ? v.toLocaleString("en-US") : v === null || v === undefined ? "" : String(v));
@@ -177,11 +178,6 @@ const CutPlan = ({ onBack, view: fixedView = "cut-plan" }) => {
   const picker = isPlan ? d.picker : null;
   const o = isPlan ? d.order : null;
   const multi = Boolean(o && o.parts && o.parts.length > 1);
-  const tab = (v, label, Icon) => (
-    <button onClick={() => navigate(`/dashboard/ypi/${v}`)} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-bold ${view === v ? "bg-emerald-500/20 text-emerald-300" : "text-slate-400 hover:bg-slate-700 hover:text-white"}`}>
-      <Icon size={15} />{label}
-    </button>
-  );
 
   return (
     <div className="yai-pa-aware min-h-screen bg-slate-900 text-slate-200 px-4 md:px-6 pb-6 pt-28 font-sans">
@@ -196,10 +192,7 @@ const CutPlan = ({ onBack, view: fixedView = "cut-plan" }) => {
           </div>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
-          <div className="flex items-center gap-1 bg-slate-800 border border-slate-700 rounded-xl px-1 py-1">
-            {tab("cut-plan", "Cut plan", Scissors)}
-            {tab("markers", "Markers", LayoutGrid)}
-          </div>
+          <YpiTabs view={view} />
           <div className="flex items-center gap-2 bg-slate-800 border border-slate-700 rounded-xl px-3 py-2">
             <Search size={16} className="text-slate-500" />
             <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={view === "markers" ? "Search order, colour, marker…" : "Search lay, colour, lot…"} className="bg-transparent outline-none text-sm w-48 text-white placeholder-slate-500" />

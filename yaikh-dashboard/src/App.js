@@ -111,6 +111,7 @@ import MrpView from "./mrp/MrpView";
 import FourDP from "./fourdp/FourDP";
 import LineLive from "./fourdp/LineLive";
 import CutPlan from "./ypi/CutPlan";
+import MaterialPortal from "./ypi/MaterialPortal";
 import AccessoriesReceiving from "./fc/AccessoriesReceiving";
 import AccessoriesInspection from "./fc/AccessoriesInspection";
 import WarehouseMap from "./fc/WarehouseMap";
@@ -416,6 +417,10 @@ export default function App() {
           {/* YPI: Marker & Cut Plan (the cut plan of one order, and the list of markers) */}
           <Route path="ypi/cut-plan" element={<CutPlan view="cut-plan" onBack={() => navigate("/")} />} />
           <Route path="ypi/markers" element={<CutPlan view="markers" onBack={() => navigate("/")} />} />
+          {/* YPI: Material Portal (BOM and buying of one order), BOM status (every order), Tech-pack overview */}
+          <Route path="ypi/material-portal" element={<MaterialPortal view="material-portal" onBack={() => navigate("/")} />} />
+          <Route path="ypi/bom-status" element={<MaterialPortal view="bom-status" onBack={() => navigate("/")} />} />
+          <Route path="ypi/techpack" element={<MaterialPortal view="techpack" onBack={() => navigate("/")} />} />
 
           {/* FC Module Routes */}
           <Route
