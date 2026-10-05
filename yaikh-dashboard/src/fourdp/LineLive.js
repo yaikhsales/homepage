@@ -1,10 +1,13 @@
-// Live view of one sewing line, drawn as a U-shaped hanger line: one box per
-// machine with its operation, a status light and its count. Last level of the
-// 4DP plan (Master Plan → Unit Plan → Section Plan → Line Plan → this).
+// Live view of one sewing line, drawn as a line diagram (LineDiagram): every
+// style has its own layout, a zig-zag line or a U-shape hanger line, with a few
+// machines off-line. Last level of the 4DP plan
+// (Master Plan → Unit Plan → Section Plan → Line Plan → this).
 // Data: M1 /sim/view {module:"4dp", view:"line-live", line}. Simulated.
 import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { ArrowLeft, ChevronLeft, ChevronRight, RefreshCw, Maximize } from "lucide-react";
+
+import LineDiagram, { withSteps } from "./LineDiagram";
 
 const API = (process.env.REACT_APP_M1_LLM_URL || "/api/m1").replace(/\/$/, "");
 const TONE = {
@@ -15,25 +18,12 @@ const TONE = {
 };
 const num = (v) => (typeof v === "number" ? v.toLocaleString("en-US") : v);
 
-function Station({ s }) {
-  const t = TONE[s.status] || TONE.idle;
-  return (
-    <div title={`${s.machine_id} · ${s.operator} · ${s.note}`} className={`relative rounded-xl border ${t.box} px-2.5 py-1.5 w-full`} style={{ minHeight: 56 }}>
-      <div className="flex items-center justify-between gap-2">
-        <span className="text-[10px] font-bold text-slate-400 tabular-nums">#{String(s.no).padStart(2, "0")} · {s.machine}</span>
-        <span className={`inline-block w-3 h-3 rounded-full ${t.light} ${s.status === "idle" ? "" : "animate-pulse"}`} />
-      </div>
-      <div className="text-xs font-bold text-white leading-tight truncate">{s.op}</div>
-      <div className={`text-[10px] leading-tight truncate ${t.text}`}>
-        {s.status === "red" ? "BREAKDOWN" : s.status === "orange" ? `${s.defects} defects` : s.status === "idle" ? "not running" : "OK"} · {num(s.pieces)}/{num(s.target)}
-      </div>
-    </div>
-  );
-}
-
 const LineLive = () => {
   const { line } = useParams();
   const navigate = useNavigate();
+  const [search] = useSearchParams();
+  const order = search.get("order") || undefined; // a chosen order on this line; otherwise the one running now
+  const garment = search.get("garment") || undefined;
   const [d, setD] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
@@ -43,7 +33,7 @@ const LineLive = () => {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const r = await fetch(`${API}/sim/view`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ module: "4dp", view: "line-live", line: id }) });
+      const r = await fetch(`${API}/sim/view`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ module: "4dp", view: "line-live", line: id, order, garment }) });
       const j = await r.json();
       if (!r.ok || !j.ok) throw new Error("unavailable");
       setD(j);
@@ -53,15 +43,12 @@ const LineLive = () => {
     } finally {
       setLoading(false);
     }
-  }, [id]);
+  }, [id, order, garment]);
 
   useEffect(() => { setD(null); load(); const t = setInterval(load, 20000); return () => clearInterval(t); }, [load]);
 
   const st = (d && d.stations) || [];
-  const side = Math.ceil((st.length - 5) / 2); // machines on each arm of the U
-  const left = st.slice(0, side);
-  const bottom = st.slice(side, st.length - side);
-  const right = st.slice(st.length - side).reverse(); // flows back up the other arm
+  const bad = withSteps(st).filter((x) => x.status === "red" || x.status === "orange");
   const go = (k) => navigate(`/dashboard/4dp/line/L${String(((n - 1 + k + 32) % 32) + 1).padStart(2, "0")}`);
 
   return (
@@ -90,54 +77,46 @@ const LineLive = () => {
       {error && <div className="mb-3 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-200 px-4 py-3 text-sm">{error}</div>}
 
       {d && (
-        <div className="grid gap-3" style={{ gridTemplateColumns: "minmax(170px, 1fr) minmax(0, 3.2fr) minmax(170px, 1fr)" }}>
-          {/* left arm — garment enters at the top and travels down */}
-          <div className="flex flex-col gap-1.5">
-            <div className="text-[10px] uppercase tracking-wider text-slate-400 text-center">cut pieces in ↓</div>
-            {left.map((s) => <Station key={s.no} s={s} />)}
-          </div>
-
-          {/* middle — the open part of the U, then the bottom run */}
-          <div className="flex flex-col justify-between gap-3">
-            <div className="rounded-2xl border border-slate-700 bg-slate-800/50 p-4">
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                {d.summary.map((x) => (
-                  <div key={x.label} className="rounded-xl border border-slate-700 bg-slate-900/60 px-3 py-2">
-                    <div className="text-[11px] uppercase tracking-wider text-slate-400">{x.label}</div>
-                    <div className={`text-3xl font-black tabular-nums leading-tight ${x.label === "Machines down" && x.value ? "text-rose-400" : "text-white"}`}>{num(x.value)}</div>
-                  </div>
-                ))}
+        <div className="rounded-2xl border border-slate-700 bg-slate-800/40 p-3">
+          {/* figures in one row */}
+          <div className="flex flex-wrap items-stretch gap-2">
+            {d.summary.map((x) => (
+              <div key={x.label} className="rounded-xl border border-slate-700 bg-slate-900/60 px-3 py-1.5 min-w-[130px]">
+                <div className="text-[10px] uppercase tracking-wider text-slate-400">{x.label}</div>
+                <div className={`text-2xl font-black tabular-nums leading-tight ${x.label === "Machines down" && x.value ? "text-rose-400" : "text-white"}`}>{num(x.value)}</div>
               </div>
-              <div className="mt-3 flex flex-wrap items-center gap-x-6 gap-y-1 text-sm">
+            ))}
+            <div className="flex flex-col justify-center gap-1 px-2 text-sm">
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
+                <span className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${d.running ? "bg-emerald-500/20 text-emerald-300" : "bg-slate-700 text-slate-300"}`}>{d.state_text || (d.running ? "running" : "not running")}</span>
                 <span>Efficiency <b className="text-white">{d.efficiency}</b></span>
                 <span>Daily target <b className="text-white">{num(d.target_day)}</b></span>
                 <span>Machines <b className="text-white">{d.operators}</b></span>
-                <span className="text-slate-400">{d.running ? "Line is running" : "Line is not running now (outside shift, or this order starts later)"}</span>
+                {d.layout_name && <span className="rounded-full px-2.5 py-0.5 text-xs font-bold bg-sky-500/20 text-sky-300">{d.layout_name} · {d.offline_machines} off-line</span>}
               </div>
-              <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1 text-xs text-slate-300">
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-300">
                 <span className="flex items-center gap-1.5"><span className={`inline-block w-3 h-3 rounded-full ${TONE.green.light}`} />Target OK · quality OK</span>
                 <span className="flex items-center gap-1.5"><span className={`inline-block w-3 h-3 rounded-full ${TONE.orange.light}`} />Defects at this machine</span>
                 <span className="flex items-center gap-1.5"><span className={`inline-block w-3 h-3 rounded-full ${TONE.red.light}`} />Machine breakdown</span>
-              </div>
-              <ul className="mt-3 space-y-1 text-sm">
-                {st.filter((s) => s.status === "red" || s.status === "orange").map((s) => (
-                  <li key={s.no} className={TONE[s.status].text}>#{String(s.no).padStart(2, "0")} {s.op} ({s.machine_id}) — {s.note}</li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <div className="text-[10px] uppercase tracking-wider text-slate-400 text-center mb-1">→ hanger line turns →</div>
-              <div className="grid gap-1.5" style={{ gridTemplateColumns: `repeat(${Math.max(bottom.length, 1)}, minmax(0, 1fr))` }}>
-                {bottom.map((s) => <Station key={s.no} s={s} />)}
+                <span className="text-slate-400">number in the round = operation step</span>
               </div>
             </div>
           </div>
 
-          {/* right arm — travels back up to the end-line check */}
-          <div className="flex flex-col gap-1.5">
-            <div className="text-[10px] uppercase tracking-wider text-slate-400 text-center">↑ finished garments out</div>
-            {right.map((s) => <Station key={s.no} s={s} />)}
-          </div>
+          {/* the line */}
+          <div className="mt-1"><LineDiagram stations={st} layout={d.layout} size="big" /></div>
+
+          {bad.length > 0 && (
+            <ul className="flex flex-wrap gap-x-6 gap-y-1 text-sm">
+              {bad.map((x) => (
+                <li key={x.no} className={`flex items-center gap-2 ${TONE[x.status].text}`}>
+                  <span className={`inline-block w-2.5 h-2.5 rounded-full ${x.status === "red" ? "bg-rose-500 animate-pulse" : "bg-amber-400"}`} />
+                  <b className="text-white">Step {x.step} {x.op}{x.offline ? " (off-line)" : ""}</b> ({x.machine_id}) — {x.note}
+                </li>
+              ))}
+            </ul>
+          )}
+          {!d.running && <div className="text-sm text-slate-400">Line is not running now (outside shift, or this order starts later).</div>}
         </div>
       )}
       <p className="mt-3 text-[11px] text-slate-500">{d ? `As of ${String(d.as_of).replace("T", " ").slice(0, 19)} · refreshes every 20 seconds · ` : ""}Simulated line — machine and operator codes are invented.</p>

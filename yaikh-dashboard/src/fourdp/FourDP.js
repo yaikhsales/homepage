@@ -9,6 +9,7 @@ import {
   LayoutDashboard, Building, ClipboardCheck, Layers, MonitorPlay,
   ChevronLeft, ChevronRight, RefreshCw, Search, Maximize, Table2, X,
 } from "lucide-react";
+import LineDiagram, { withSteps } from "./LineDiagram";
 
 const API = (process.env.REACT_APP_M1_LLM_URL || "/api/m1").replace(/\/$/, "");
 
@@ -64,13 +65,8 @@ const GROUPS = [["mrp", "MRP"], ["ypi", "YPI"], ["ce", "CE"]];
 const LIGHT = { green: "bg-emerald-400", amber: "bg-amber-400", red: "bg-rose-500", idle: "bg-slate-500", na: "bg-slate-700" };
 const LIGHT_TEXT = { green: "text-emerald-300", amber: "text-amber-300", red: "text-rose-300", idle: "text-slate-400", na: "text-slate-500" };
 
-// Mini sewing line: opened from an order bar on the Line Plan. Drawn as a line diagram: the line runs left
-// to right, input on the left and output on the right, machines above and below the centre table. Each
-// round is one machine carrying its operation step number (two machines on one operation share the number):
-// green on target, orange defects, red breakdown, grey not running.
-const ROUND = { green: ["#10b981", "#0f172a"], orange: ["#fbbf24", "#0f172a"], red: ["#f43f5e", "#ffffff"], idle: ["#475569", "#e2e8f0"] };
-const NOTE_INK = { red: "#fda4af", orange: "#fcd34d" };
-
+// Mini sewing line: opened from an order bar on the Line Plan. Every order has its own layout (zig-zag line
+// or U-shape hanger line, a few machines off-line); LineDiagram draws it.
 function LinePop({ pop, onClose, onOpen }) {
   const [d, setD] = useState(null);
   const [failed, setFailed] = useState(false);
@@ -95,22 +91,11 @@ function LinePop({ pop, onClose, onOpen }) {
   }, [line, order, garment, onClose]);
   const room = window.innerWidth - (document.body.classList.contains("yai-pa-open") ? 436 : 0);
   const W = Math.min(760, room - 24);
-  const VW = 736, VH = 268, CY = VH / 2; // drawing size; the centre table runs along CY
   const left = Math.max(8, Math.min(pop.x - 120, room - W - 12));
   const below = pop.y < window.innerHeight / 2;
   const place = below ? { top: pop.y + 14, maxHeight: window.innerHeight - pop.y - 24 } : { bottom: window.innerHeight - pop.y + 14, maxHeight: pop.y - 24 };
   const st = (d && d.stations) || [];
-  // Operation step numbers: machines next to each other on the same operation share one number.
-  // Machines alternate above and below the table, half a place apart.
-  let step = 0;
-  const pitch = (VW - 56 - 96) / Math.max(st.length - 1, 1);
-  const pts = st.map((x, i) => {
-    if (i === 0 || st[i - 1].op !== x.op) step += 1;
-    const top = i % 2 === 0;
-    return { ...x, step, top, cx: 56 + i * pitch, cy: top ? CY - 34 : CY + 34 };
-  });
-  const bad = pts.filter((x) => x.status === "red" || x.status === "orange");
-  const clip = (t, n) => (t.length > n ? `${t.slice(0, n - 1)}…` : t);
+  const bad = withSteps(st).filter((x) => x.status === "red" || x.status === "orange");
   return (
     <>
       <div className="fixed inset-0 z-40" onClick={onClose} />
@@ -126,49 +111,20 @@ function LinePop({ pop, onClose, onOpen }) {
           <div className="px-3 py-2">
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-slate-400 mb-2">
               <span className={`rounded-full px-2 py-0.5 font-bold ${d.running ? "bg-emerald-500/20 text-emerald-300" : "bg-slate-700 text-slate-300"}`}>{d.state_text}</span>
+              {d.layout_name && <span className="rounded-full px-2 py-0.5 font-bold bg-sky-500/20 text-sky-300">{d.layout_name} · {d.offline_machines} off-line</span>}
               {d.running && <span>Output <b className="text-white text-sm tabular-nums">{fmtNum(d.output_now)}</b> / {fmtNum(d.target_now)}</span>}
               {d.running && <span>Efficiency <b className="text-white text-sm">{d.efficiency}</b></span>}
               {d.running && <span>Defects <b className="text-amber-300 text-sm tabular-nums">{d.defects}</b></span>}
               {d.running && <span>Down <b className="text-rose-300 text-sm tabular-nums">{d.machines_down}</b></span>}
               {!d.running && <span>{d.operators} machines · target {fmtNum(d.target_day)} a day</span>}
             </div>
-            <svg viewBox={`0 0 ${VW} ${VH}`} className="block w-full">
-              <defs>
-                <marker id="yai-flow" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#94a3b8" /></marker>
-                <marker id="yai-io" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="4" markerHeight="4" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#fb923c" /></marker>
-              </defs>
-              {/* centre table */}
-              <rect x={30} y={CY - 13} width={VW - 60} height={26} rx={4} fill="#0f172a" stroke="#64748b" />
-              <text x={2} y={CY - 44} fontSize="9" fontWeight="700" fill="#fb923c">LINE</text>
-              <text x={2} y={CY - 34} fontSize="9" fontWeight="700" fill="#fb923c">INPUT</text>
-              <line x1={4} y1={CY} x2={32} y2={CY} stroke="#fb923c" strokeWidth="3" markerEnd="url(#yai-io)" />
-              <text x={VW - 2} y={CY + 38} fontSize="9" fontWeight="700" fill="#fb923c" textAnchor="end">LINE</text>
-              <text x={VW - 2} y={CY + 48} fontSize="9" fontWeight="700" fill="#fb923c" textAnchor="end">OUTPUT</text>
-              <line x1={VW - 30} y1={CY} x2={VW - 4} y2={CY} stroke="#fb923c" strokeWidth="3" markerEnd="url(#yai-io)" />
-              {/* work flows from one machine to the next, across the table */}
-              {pts.slice(0, -1).map((a, i) => {
-                const n = pts[i + 1];
-                return <line key={`f${a.no}`} x1={a.cx} y1={a.cy + (a.top ? 10 : -10)} x2={n.cx} y2={n.cy + (n.top ? 11 : -11)} stroke="#94a3b8" strokeWidth="1" markerEnd="url(#yai-flow)" />;
-              })}
-              {pts.map((x) => {
-                const [fill, ink] = ROUND[x.status] || ROUND.idle;
-                const lx = x.cx + 5, ly = x.top ? x.cy - 13 : x.cy + 19;
-                return (
-                  <g key={x.no}>
-                    <title>{`Machine ${x.no} · step ${x.step} ${x.op} · ${x.machine} · ${x.note} · ${x.pieces}/${x.target}`}</title>
-                    <circle cx={x.cx} cy={x.cy} r={10} fill={fill} stroke="#0f172a" strokeWidth="1.5" className={x.status === "red" ? "animate-pulse" : ""} />
-                    <text x={x.cx} y={x.cy + 3.5} fontSize="10" fontWeight="800" fill={ink} textAnchor="middle">{x.step}</text>
-                    <text x={lx} y={ly} fontSize="9.5" fontWeight={NOTE_INK[x.status] ? 800 : 500} fill={NOTE_INK[x.status] || "#cbd5e1"} transform={`rotate(${x.top ? -45 : 45} ${lx} ${ly})`}>{clip(x.op, 22)}</text>
-                  </g>
-                );
-              })}
-            </svg>
+            <LineDiagram stations={st} layout={d.layout} size="mini" />
             {bad.length > 0 && (
               <div className="flex flex-wrap gap-x-4 gap-y-0.5 mt-1">
                 {bad.map((x) => (
                   <span key={x.no} className="flex items-center gap-1.5 text-[11px]">
                     <span className={`inline-block w-2 h-2 rounded-full ${x.status === "red" ? "bg-rose-500 animate-pulse" : "bg-amber-400"}`} />
-                    <b className="text-white">Step {x.step} {x.op}</b> <span className={x.status === "red" ? "text-rose-300" : "text-amber-300"}>{x.note}</span>
+                    <b className="text-white">Step {x.step} {x.op}{x.offline ? " (off-line)" : ""}</b> <span className={x.status === "red" ? "text-rose-300" : "text-amber-300"}>{x.note}</span>
                   </span>
                 ))}
               </div>
@@ -530,7 +486,7 @@ const FourDP = () => {
             </div>
           )}
 
-          {linePop && <LinePop pop={linePop} onClose={closeLinePop} onOpen={(ln) => navigate(`/dashboard/4dp/line/${ln}`)} />}
+          {linePop && <LinePop pop={linePop} onClose={closeLinePop} onOpen={(ln) => navigate(`/dashboard/4dp/line/${ln}?order=${encodeURIComponent(linePop.run.order)}&garment=${encodeURIComponent(linePop.run.garment)}`)} />}
           {pop && <StatusPop pop={pop} onTab={(k) => setPop((p) => ({ ...p, group: k }))} onClose={closePop} />}
 
           <p className="mt-1 text-[10px] text-slate-500">{data ? `As of ${String(data.as_of || "").replace("T", " ").slice(0, 16)} · hover a bar or diamond for details · click MRP / YPI / CE on a bar for that order's status · simulated factory data` : loading ? "Loading…" : ""}</p>
