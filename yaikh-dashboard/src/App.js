@@ -107,7 +107,6 @@ import MoneyClaim from "./money-claim/money-claim";
 import AutoPost from "./autopost/AutoPost";
 
 // FC Module Components
-import FabricReceiving from "./fc/FabricReceiving";
 import MrpView from "./mrp/MrpView";
 import FourDP from "./fourdp/FourDP";
 import LineLive from "./fourdp/LineLive";
@@ -423,7 +422,7 @@ export default function App() {
           {/* FC Module Routes */}
           <Route
             path="fc/fabric-receiving"
-            element={<FabricReceiving onBack={handleBack} />}
+            element={<MrpView module="fc" view="fabric-receiving" label="Fabric Control" onBack={handleBack} />}
           />
           <Route
             path="fc/accessories-receiving"

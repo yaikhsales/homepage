@@ -58,8 +58,9 @@ const Track = ({ steps, big }) => {
   );
 };
 
-const MrpView = ({ onBack, module = "mrp", label = "MRP" }) => {
-  const { view } = useParams();
+const MrpView = ({ onBack, module = "mrp", label = "MRP", view: fixedView }) => {
+  const params = useParams();
+  const view = fixedView || params.view; // a fixed route (e.g. fc/fabric-receiving) names its view; otherwise it comes from the route
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);

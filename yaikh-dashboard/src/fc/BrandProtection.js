@@ -70,7 +70,7 @@ const BrandProtection = ({ onBack }) => {
   const protectionData = [
     {
       id: "SEC-001",
-      brand: "Nike",
+      brand: "Customer AA",
       item: "Logo Heat Transfer",
       action: "Shredded",
       witness: "Vichea P.",
@@ -79,8 +79,8 @@ const BrandProtection = ({ onBack }) => {
     },
     {
       id: "SEC-002",
-      brand: "Adidas",
-      item: "Primeknit Fabric (Waste)",
+      brand: "Customer BB",
+      item: "Knit Fabric (Waste)",
       action: "Incinerated",
       witness: "Sovan M.",
       date: "2026-02-14",
@@ -88,7 +88,7 @@ const BrandProtection = ({ onBack }) => {
     },
     {
       id: "SEC-003",
-      brand: "H&M",
+      brand: "Customer CC",
       item: "Main Labels",
       action: "Held for Destruction",
       witness: "-",
@@ -97,7 +97,7 @@ const BrandProtection = ({ onBack }) => {
     },
     {
       id: "SEC-004",
-      brand: "Nike",
+      brand: "Customer DD",
       item: "Branded Hangtags",
       action: "Shredded",
       witness: "Dara K.",
