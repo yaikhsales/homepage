@@ -113,7 +113,6 @@ import LineLive from "./fourdp/LineLive";
 import AccessoriesReceiving from "./fc/AccessoriesReceiving";
 import AccessoriesInspection from "./fc/AccessoriesInspection";
 import WarehouseTracking from "./fc/WarehouseTracking";
-import Consumptions from "./fc/Consumptions";
 import Calculator from "./fc/Calculator";
 import FabricIssuing from "./fc/FabricIssuing";
 import AccessoriesIssuing from "./fc/AccessoriesIssuing";
@@ -444,7 +443,7 @@ export default function App() {
           />
           <Route
             path="fc/consumptions"
-            element={<Consumptions onBack={handleBack} />}
+            element={<MrpView module="fc" view="consumptions" label="Fabric Control" onBack={handleBack} />}
           />
           <Route
             path="fc/calculator"
