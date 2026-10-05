@@ -1609,7 +1609,7 @@ const AppLayout = () => {
                                under the nav band without scrolling. */
                             :root {
                                 --yai-tile-h: clamp(70px, calc((100vh - 240px) / 8), 144px);
-                                --yai-icon: clamp(30px, calc(var(--yai-tile-h) - 46px), 80px);
+                                --yai-icon: clamp(40px, calc(var(--yai-tile-h) - 26px), 104px);
                             }
                             .apple-card {
                                 transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);

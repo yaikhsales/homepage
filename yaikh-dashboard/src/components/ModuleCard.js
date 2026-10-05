@@ -165,11 +165,11 @@ const ModuleCard = ({ data, onClick, botVersion = 'default', onBotClick, isDropd
           `}
       >
         {/* Inner Content */}
-        <div className="rounded-md overflow-hidden flex justify-center items-center p-1.5 h-full min-h-0 relative">
+        <div className="rounded-md overflow-hidden flex justify-center items-center pt-1 px-1 h-full min-h-0 relative">
           {renderIcon()}
         </div>
 
-        <p className="text-gray-600 text-center font-medium text-xs leading-tight px-1.5 pb-1.5 line-clamp-2">
+        <p className="text-gray-700 text-center font-semibold text-[11px] leading-none px-1 pb-1 truncate">
           {translateModuleTitle(data.title)}
         </p>
       </div>
