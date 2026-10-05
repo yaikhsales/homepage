@@ -108,6 +108,7 @@ import AutoPost from "./autopost/AutoPost";
 
 // FC Module Components
 import FabricReceiving from "./fc/FabricReceiving";
+import MrpView from "./mrp/MrpView";
 import AccessoriesReceiving from "./fc/AccessoriesReceiving";
 import FabricInspection from "./fc/FabricInspection";
 import FabricTest from "./fc/FabricTest";
@@ -409,6 +410,9 @@ export default function App() {
             path="training/:department"
             element={<Training onBack={handleBack} />}
           />
+
+          {/* MRP sub-modules — data from the simulated factory on the M1 */}
+          <Route path="mrp/:view" element={<MrpView onBack={handleBack} />} />
 
           {/* FC Module Routes */}
           <Route

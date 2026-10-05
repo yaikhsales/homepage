@@ -476,8 +476,9 @@ export const DASHBOARD_DATA = [
             title: "MRP",
             image: "IMG/avatars/mrp_avatar.png",
             status: "active",
+            demoType: "SUBMENU_MRP",
             popupTitle: "OPERATIONS · MRP",
-            description: "I run material requirements planning — fabric and trims, what's needed and when."
+            description: "I follow every material from the order to the warehouse gate — supplier documents, ships and trucks, customs, and the day it reaches FC."
           }
         ]
       }

@@ -28,6 +28,7 @@ const ALLOWED = new Set([
   "boss/query",
   "v1/chat/claude",
   "v1/chat/completions",
+  "sim/view", // read-only screens over the simulated factory (MRP sub-modules)
 ]);
 
 export async function POST(req: Request, { params }: { params: { path: string[] } }) {
