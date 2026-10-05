@@ -377,19 +377,12 @@ export const ThemeBackground = () => {
   return createPortal(
     <div
       id="background"
-      className="fixed inset-0 overflow-hidden pointer-events-none bg-slate-900"
+      className="fixed inset-0 overflow-hidden pointer-events-none bg-slate-950"
       style={{ zIndex: -1, width: "100vw", height: "100vh" }}
     >
-      <img
-        src={process.env.PUBLIC_URL + "/assets/circuit-bg.jpg"}
-        alt="Theme Background"
-        className="absolute inset-0 w-full h-full object-cover"
-        style={{ zIndex: -2 }}
-        onError={(e) => { e.target.style.display = "none"; }}
-      />
-      
-      {/* Very light overlay to ensure some text readability if needed */}
-      <div className="absolute inset-0 bg-slate-900/10" style={{ zIndex: 0 }}></div>
+      {/* Solid background (2026-10-05, Gamini): the AI-chip circuit image was
+          removed so the home grid and sub-menus match the solid slate-950 of
+          the module screens. */}
     </div>,
     document.body,
   );
