@@ -71,7 +71,9 @@ function StatusPop({ pop, onTab, onClose }) {
     return () => window.removeEventListener("keydown", key);
   }, [onClose]);
   const W = 430;
-  const left = Math.max(8, Math.min(pop.x - 40, window.innerWidth - W - 12));
+  // Stay clear of the department PA panel on the right while it is open.
+  const room = window.innerWidth - (document.body.classList.contains("yai-pa-open") ? 436 : 0);
+  const left = Math.max(8, Math.min(pop.x - 40, room - W - 12));
   // Open below the bubble in the top half of the screen, above it in the bottom half, so the feed is never cut off.
   const below = pop.y < window.innerHeight / 2;
   const place = below ? { top: pop.y + 14, maxHeight: window.innerHeight - pop.y - 24 } : { bottom: window.innerHeight - pop.y + 14, maxHeight: pop.y - 24 };
@@ -84,6 +86,7 @@ function StatusPop({ pop, onTab, onClose }) {
         <div className="flex items-center gap-2 px-3 pt-2.5 pb-2 border-b border-slate-700">
           <span className="font-black text-white">{pop.ref}</span>
           {d && <span className="text-[11px] text-slate-400 truncate">{fmtNum(d.pieces)} pcs · {d.factory} · cutting {d.cutting}</span>}
+          {d && d.start_delay > 0 && <span className="rounded-full bg-rose-600 text-white text-[11px] font-bold px-2 py-0.5 whitespace-nowrap">possible delay {d.start_delay} {d.start_delay === 1 ? "day" : "days"}</span>}
           <button onClick={onClose} className="ml-auto p-1 rounded-lg hover:bg-slate-700" aria-label="Close"><X size={14} /></button>
         </div>
         <div className="flex gap-1 px-3 pt-2">
@@ -98,14 +101,15 @@ function StatusPop({ pop, onTab, onClose }) {
           {pop.error && <div className="py-6 text-center text-sm text-amber-200">Status is unavailable right now.</div>}
           {!d && !pop.error && <div className="py-6 text-center text-sm text-slate-500">Loading…</div>}
           {grp && grp.rows.map((r) => (
-            <div key={r.item} className="flex items-start gap-2 py-1.5 border-b border-slate-700/60 last:border-b-0">
+            <div key={r.item} className={`flex items-start gap-2 py-1.5 border-b border-slate-700/60 last:border-b-0 ${r.tone === "red" ? "bg-rose-500/10 -mx-3 px-3" : ""}`}>
               <span className={`mt-1 inline-block w-2.5 h-2.5 rounded-full flex-shrink-0 ${LIGHT[r.tone] || LIGHT.idle}`} />
               <div className="min-w-0 flex-1">
                 <div className="flex items-baseline gap-2">
                   <span className="text-sm font-bold text-white whitespace-nowrap">{r.item}</span>
-                  <span className={`text-[11px] font-semibold truncate ${LIGHT_TEXT[r.tone] || LIGHT_TEXT.idle}`}>{r.status}</span>
+                  <span className={`text-[11px] font-semibold min-w-0 leading-tight ${LIGHT_TEXT[r.tone] || LIGHT_TEXT.idle}`}>{r.status}</span>
                   <span className="ml-auto text-xs font-bold tabular-nums text-slate-200 whitespace-nowrap">{r.date}</span>
                 </div>
+                {r.impact && <div className="text-xs font-bold text-rose-300 leading-snug">{r.impact}</div>}
                 {r.detail && <div className="text-[11px] text-slate-400 leading-snug">{r.detail}</div>}
               </div>
             </div>
@@ -116,7 +120,9 @@ function StatusPop({ pop, onTab, onClose }) {
   );
 }
 
-function Gantt({ g, filter, onLine, picked, onStatus }) {
+const hasProblem = (b) => !!b.st && GROUPS.some(([k]) => b.st[k] === "red");
+
+function Gantt({ g, filter, onLine, picked, onStatus, onlyProblems }) {
   const days = useMemo(() => {
     if (!g) return [];
     const n = dayDiff(g.start, g.end) + 1;
@@ -182,13 +188,14 @@ function Gantt({ g, filter, onLine, picked, onStatus }) {
                   const barW = (to - from + 1) * dayW - 2;
                   const bubbles = b.st && b.ref && onStatus && barW >= 44;
                   return (
-                    <div key={i} title={`${b.title} · ${b.from} → ${b.to}`} className={`absolute top-1 rounded-md text-[10px] font-semibold leading-[18px] shadow transition-opacity flex items-center overflow-hidden ${BAR[b.tone] || BAR.slate} ${barOn(picked, b.tone) ? "" : "opacity-10"}`} style={{ left: from * dayW + 1, width: barW, height: ROW_H - 8 }}>
+                    <div key={i} title={`${b.title} · ${b.from} → ${b.to}`} className={`absolute top-1 rounded-md text-[10px] font-semibold leading-[18px] shadow transition-opacity flex items-center overflow-hidden ${BAR[b.tone] || BAR.slate} ${barOn(picked, b.tone) && !(onlyProblems && !hasProblem(b)) ? "" : "opacity-10"}`} style={{ left: from * dayW + 1, width: barW, height: ROW_H - 8 }}>
                       <span className="truncate px-1.5 flex-1 min-w-0">{b.label}</span>
+                      {bubbles && b.st.delay > 0 && barW >= 150 && <span className="flex-shrink-0 mr-1 rounded bg-rose-600 text-white text-[9px] font-black leading-[14px] px-1" title={`Possible delay: ${b.st.delay} days`}>+{b.st.delay}d</span>}
                       {bubbles && (
                         <span className="flex items-center gap-0.5 pr-0.5 flex-shrink-0">
                           {GROUPS.map(([k, name]) => (
-                            <button key={k} onClick={(e) => { e.stopPropagation(); onStatus(b, k, e); }} title={`${name} status — ${b.ref}`} className="flex items-center gap-1 rounded-full bg-slate-900/90 hover:bg-black text-white text-[9px] font-bold leading-[14px] px-1.5">
-                              <span className={`inline-block w-1.5 h-1.5 rounded-full ${LIGHT[b.st[k]] || LIGHT.idle}`} />
+                            <button key={k} onClick={(e) => { e.stopPropagation(); onStatus(b, k, e); }} title={`${name} status — ${b.ref}`} className={`flex items-center gap-1 rounded-full text-white text-[9px] font-bold leading-[14px] px-1.5 ${b.st[k] === "red" ? "bg-rose-950 ring-1 ring-rose-400 hover:bg-black" : "bg-slate-900/90 hover:bg-black"}`}>
+                              <span className={`inline-block rounded-full ${b.st[k] === "red" ? "w-2 h-2 bg-red-500 animate-pulse" : `w-1.5 h-1.5 ${LIGHT[b.st[k]] || LIGHT.idle}`}`} />
                               {barW >= 190 ? name : barW >= 110 ? name[0] : null}
                             </button>
                           ))}
@@ -230,6 +237,7 @@ const FourDP = () => {
   const [picked, setPicked] = useState(() => new Set()); // legend entries ticked: show only these, fade the rest
   const togglePick = (tone) => setPicked((old) => { const n = new Set(old); if (n.has(tone)) n.delete(tone); else n.add(tone); return n; });
   const fac = factory === null ? (topic.factory || "") : factory;
+  const [onlyProblems, setOnlyProblems] = useState(false);
   const [pop, setPop] = useState(null); // order status feed opened from a bar bubble
   const openStatus = useCallback(async (bar, group, e) => {
     setPop({ ref: bar.ref, st: bar.st, group, x: e.clientX, y: e.clientY, data: null });
@@ -264,7 +272,7 @@ const FourDP = () => {
   }, [view, month, topic.monthly, topic.factory, topic.orders, fac, order]);
 
   useEffect(() => { load(); }, [load]);
-  useEffect(() => { setData(null); setOrder(""); setFactory(null); setPicked(new Set()); setPop(null); }, [view]);
+  useEffect(() => { setData(null); setOrder(""); setFactory(null); setPicked(new Set()); setPop(null); setOnlyProblems(false); }, [view]);
   useEffect(() => {
     if (!topic.wall) return undefined;
     const t = setInterval(load, 60000);
@@ -315,9 +323,13 @@ const FourDP = () => {
               </div>
             )}
             <div className="flex items-center gap-x-3 gap-y-1 flex-wrap text-xs text-slate-400">
-              {((data && data.summary) || []).map((x) => (
+              {((data && data.summary) || []).map((x) => (x.label === "Problems" ? (
+                <button key={x.label} onClick={() => setOnlyProblems((v) => !v)} title="Click to show only the orders with a problem; click again to release" className={`flex items-center gap-1.5 whitespace-nowrap rounded-lg border px-2 py-0.5 ${onlyProblems ? "bg-rose-600 border-rose-400 text-white" : "border-rose-500/50 text-rose-300 hover:bg-rose-500/10"}`}>
+                  <span className="inline-block w-2 h-2 rounded-full bg-red-500 animate-pulse" />{x.label} <b className="tabular-nums text-sm">{fmtNum(x.value)}</b>
+                </button>
+              ) : (
                 <span key={x.label} className="whitespace-nowrap">{x.label} <b className="text-white tabular-nums text-sm">{fmtNum(x.value)}</b></span>
-              ))}
+              )))}
             </div>
             <div className="flex items-center gap-1.5 ml-auto">
               {topic.monthly && (
@@ -369,7 +381,7 @@ const FourDP = () => {
             </div>
           )}
 
-          {data && data.gantt && !showTable && <Gantt g={data.gantt} filter={q} picked={picked} onStatus={openStatus} onLine={(ln) => navigate(`/dashboard/4dp/line/${ln}`)} />}
+          {data && data.gantt && !showTable && <Gantt g={data.gantt} filter={q} picked={picked} onlyProblems={onlyProblems} onStatus={openStatus} onLine={(ln) => navigate(`/dashboard/4dp/line/${ln}`)} />}
 
           {showTable && data && (
             <div className="rounded-2xl border border-slate-700 bg-slate-800/40 overflow-auto" style={{ maxHeight: "calc(100vh - 205px)" }}>
