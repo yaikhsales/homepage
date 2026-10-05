@@ -58,7 +58,7 @@ const ModuleCard = ({ data, onClick, botVersion = 'default', onBotClick, isDropd
         WebkitFilter: 'none',
       };
       return (
-        <div className={`relative flex items-center justify-center w-20 h-20 group-hover:w-21 group-hover:h-21 transition-all duration-300`}>
+        <div className={`relative flex items-center justify-center transition-all duration-300`} style={{ width: "var(--yai-icon, 80px)", height: "var(--yai-icon, 80px)" }}>
           <img
             src={`${process.env.PUBLIC_URL}/IMG/unavail.avif`}
             alt="Coming Soon"
@@ -93,7 +93,7 @@ const ModuleCard = ({ data, onClick, botVersion = 'default', onBotClick, isDropd
 
       return (
         // Large media area that fills the card so it's easy to read.
-        <div className="yai-fade-scene w-20 h-20 group-hover:w-[88px] group-hover:h-[88px] transition-all duration-300">
+        <div className="yai-fade-scene transition-all duration-300" style={{ width: "var(--yai-icon, 80px)", height: "var(--yai-icon, 80px)" }}>
           {/* ICON — AI-generated, transparent PNG that fills the tile.
               White backing so it's a clean plate (the card is white too)
               and fully occludes the face during its phase. */}
@@ -151,8 +151,10 @@ const ModuleCard = ({ data, onClick, botVersion = 'default', onBotClick, isDropd
     );
   };
 
+  // Tile height follows the window height (--yai-tile-h, set in AppLayout) so all
+  // eight rows of the My Task Agent grid fit on one screen.
   return (
-    <div className="relative group w-full h-28 sm:h-32 md:h-36 hover:z-[100]">
+    <div className="relative group w-full hover:z-[100]" style={{ height: "var(--yai-tile-h, 144px)" }}>
       <div
         onClick={handleCardClick}
         className={`
@@ -163,11 +165,11 @@ const ModuleCard = ({ data, onClick, botVersion = 'default', onBotClick, isDropd
           `}
       >
         {/* Inner Content */}
-        <div className="rounded-md overflow-hidden flex justify-center items-center p-2 h-full relative">
+        <div className="rounded-md overflow-hidden flex justify-center items-center p-1.5 h-full min-h-0 relative">
           {renderIcon()}
         </div>
 
-        <p className="text-gray-600 text-center font-medium text-xs sm:text-sm px-2 pb-2 line-clamp-2">
+        <p className="text-gray-600 text-center font-medium text-xs leading-tight px-1.5 pb-1.5 line-clamp-2">
           {translateModuleTitle(data.title)}
         </p>
       </div>

@@ -1605,6 +1605,12 @@ const AppLayout = () => {
                                 animation-delay: 0.4s;
                                 opacity: 0;
                             }
+                            /* Tiles shrink with the window so the whole grid (8 rows) fits
+                               under the nav band without scrolling. */
+                            :root {
+                                --yai-tile-h: clamp(70px, calc((100vh - 240px) / 8), 144px);
+                                --yai-icon: clamp(30px, calc(var(--yai-tile-h) - 46px), 80px);
+                            }
                             .apple-card {
                                 transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
                             }
@@ -1643,15 +1649,21 @@ const AppLayout = () => {
                 min-w strip), with explicit top clearance for the FIXED draggable
                 nav panel (default y=80, band ends ~y140). Fixed elements can't
                 be pushed by layout, so clearance is the only correct relation. */}
-            <div className="z-10" style={{ width: "min(100%, 100vw)", marginTop: 128 }}>
-              {/* Hero — its own row, so it can never collide with the nav band
-                  or the column title bars at any width. */}
-              <div className="flex justify-center items-center gap-2 mb-4">
-                <span className="text-white font-bold text-2xl drop-shadow-lg">My</span>
-                <button
-                  onClick={() => setGMChatOpen(true)}
-                  aria-label="Open My Task Agent"
-                  className="w-11 h-11 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0 transition-transform hover:scale-105 active:scale-95"
+            {/* Compact header row (2026-10-05, Gamini): the big centred hero and the
+                separate search row used to push the module grid ~240px down, so the
+                whole My Task Agent grid did not fit on screen during presentations.
+                The Yai orb + label and the search box now sit on ONE row, right-
+                aligned at the same height as the FIXED 3-mode nav (which occupies
+                the left side), and the grid starts directly under that band. */}
+            <div className="z-10 flex items-center justify-end gap-3 pr-6" style={{ width: "min(100%, 100vw)", height: 56, marginBottom: 8 }}>
+              <button
+                onClick={() => setGMChatOpen(true)}
+                aria-label="Open My Task Agent"
+                className="flex items-center gap-2 transition-transform hover:scale-105 active:scale-95"
+              >
+                <span className="hidden xl:inline text-white font-bold text-base drop-shadow-lg">My</span>
+                <span
+                  className="w-9 h-9 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0"
                   style={{
                     background: "radial-gradient(circle at 30% 25%, #fed7aa 0%, #f97316 55%, #c2410c 100%)",
                     boxShadow: "inset -4px -4px 8px rgba(0,0,0,0.30), inset 3px 3px 6px rgba(255,255,255,0.35), 0 4px 12px rgba(249,115,22,0.4)",
@@ -1662,29 +1674,25 @@ const AppLayout = () => {
                     alt="Yai"
                     className="w-full h-full rounded-full object-cover"
                   />
-                </button>
-                <span className="text-white font-bold text-2xl drop-shadow-lg">task agent</span>
+                </span>
+                <span className="hidden xl:inline text-white font-bold text-base drop-shadow-lg">task agent</span>
+              </button>
+              <div
+                className={`flex items-center px-3 py-2 w-48 text-white transition-all duration-300 group light-effect ${isDropdownOpen ? "bg-white/10 backdrop-blur-md border border-white/20 rounded-lg" : "glass-effect-strong rounded-2xl shadow-xl hover:shadow-2xl"}`}
+              >
+                <Search
+                  className={`w-4 h-4 mr-2 transition-colors ${isDropdownOpen ? "text-cyan-300" : "text-cyan-300 group-hover:text-cyan-200"}`}
+                />
+                <input
+                  type="text"
+                  placeholder="Search modules..."
+                  className={`bg-transparent border-none outline-none w-full text-xs transition-colors ${isDropdownOpen ? "placeholder-cyan-100/50" : "placeholder-cyan-100/50 focus:placeholder-cyan-200/70"}`}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
               </div>
             </div>
             <div className="relative z-10 min-w-[1200px] max-w-[1800px] mx-auto flex flex-col gap-6">
-              <div
-                className={`w-full flex justify-end mb-4 ${isDropdownOpen ? "" : "apple-fade-in"}`}
-              >
-                <div
-                  className={`flex items-center px-3 py-2 w-64 text-white transition-all duration-300 group light-effect ${isDropdownOpen ? "bg-white/10 backdrop-blur-md border border-white/20 rounded-lg" : "glass-effect-strong rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105"}`}
-                >
-                  <Search
-                    className={`w-4 h-4 mr-2 transition-colors ${isDropdownOpen ? "text-cyan-300" : "text-cyan-300 group-hover:text-cyan-200"}`}
-                  />
-                  <input
-                    type="text"
-                    placeholder="Search modules..."
-                    className={`bg-transparent border-none outline-none w-full text-xs transition-colors ${isDropdownOpen ? "placeholder-cyan-100/50" : "placeholder-cyan-100/50 focus:placeholder-cyan-200/70"}`}
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </div>
-              </div>
               <div className="flex justify-center items-start gap-6">
                 <SectionContainer
                   section={DASHBOARD_DATA[0]}
