@@ -114,12 +114,9 @@ import AccessoriesReceiving from "./fc/AccessoriesReceiving";
 import AccessoriesInspection from "./fc/AccessoriesInspection";
 import WarehouseMap from "./fc/WarehouseMap";
 import Calculator from "./fc/Calculator";
-import FabricIssuing from "./fc/FabricIssuing";
 import AccessoriesIssuing from "./fc/AccessoriesIssuing";
 import DeliveryTracking from "./fc/DeliveryTracking";
-import ReturnFabric from "./fc/ReturnFabric";
 import ReturnAccessories from "./fc/ReturnAccessories";
-import BrandProtection from "./fc/BrandProtection";
 import InternalRollingQC from "./yqms/InternalRollingQC";
 import CuttingInspection from "./yqms/CuttingInspection";
 import GarmentCheckOutput from "./yqms/GarmentCheckOutput";
@@ -451,7 +448,7 @@ export default function App() {
           />
           <Route
             path="fc/fabric-issuing"
-            element={<FabricIssuing onBack={handleBack} />}
+            element={<MrpView module="fc" view="fabric-issuing" label="Fabric Control" onBack={handleBack} />}
           />
           <Route
             path="fc/accessories-issuing"
@@ -463,7 +460,7 @@ export default function App() {
           />
           <Route
             path="fc/return-fabric"
-            element={<ReturnFabric onBack={handleBack} />}
+            element={<MrpView module="fc" view="return-fabric" label="Fabric Control" onBack={handleBack} />}
           />
           <Route
             path="fc/return-accessories"
@@ -471,7 +468,7 @@ export default function App() {
           />
           <Route
             path="fc/brand-protection"
-            element={<BrandProtection onBack={handleBack} />}
+            element={<MrpView module="fc" view="brand-protection" label="Fabric Control" onBack={handleBack} />}
           />
 
           {/* YQMS Module Routes */}
