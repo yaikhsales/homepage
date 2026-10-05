@@ -74,6 +74,23 @@ export const PA_TITLE_TO_TOPIC = {
   "Temporary Worker": "Temp worker requests",
 };
 
+/* botId → display name for bubbles and docks. */
+export const PA_NAME = {
+  "accounting-bot": "Accounting PA",
+  "hr-bot": "HR PA",
+  "admin-bot": "Admin PA",
+  "csr-bot": "CSR PA",
+  "shipping-bot": "Shipping PA",
+  "mrp-bot": "MRP PA",
+  "qa-bot": "QA PA",
+  "production-bot": "Production PA",
+  "ce-bot": "CE PA",
+  "ytm-bot": "YTM PA",
+  "4dp-bot": "4DP PA",
+  "ypi-bot": "YPI PA",
+  "social-bot": "Social PA",
+};
+
 /* botId → bubble gradient (mirrors bgGradient in bot-modules.js). */
 export const PA_GRADIENT = {
   "accounting-bot": "from-green-500 to-emerald-500",

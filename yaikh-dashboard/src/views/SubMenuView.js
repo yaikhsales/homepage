@@ -5,7 +5,7 @@ import { IconRenderer } from "../components/IconRenderer";
 import { useTranslation } from "../translate/TranslationContext";
 import GeneralAIAgent from "../general-ag";
 import BotModules from "../chatbot/bot-modules";
-import { PA_BY_SUBMENU_TITLE, PA_TITLE_TO_TOPIC, PA_GRADIENT } from "../chatbot/pa-owner";
+import { PA_BY_SUBMENU_TITLE, PA_TITLE_TO_TOPIC, PA_GRADIENT, PA_NAME } from "../chatbot/pa-owner";
 import VideoViewer from "../components/VideoViewer";
 
 // Sub-menu titles that belong to the Accounting PA. When the user
@@ -53,6 +53,12 @@ const MODULE_ID_TO_TITLE = {
   "iews": "IEWS",
   "accountant": "Accountant",
 };
+// Every PA-owned sub-menu title also registers its slug (direct URL /
+// refresh), so ALL departments' PAs wake on land — not just Accounting.
+Object.keys(PA_BY_SUBMENU_TITLE).forEach((t) => {
+  const slug = t.toLowerCase().replace(/\s+/g, "-");
+  if (!MODULE_ID_TO_TITLE[slug]) MODULE_ID_TO_TITLE[slug] = t;
+});
 
 // Cards-by-moduleId fallback. Mirrors the inline arrays in
 // AppLayout.handleModuleClick — must stay in sync until both call
@@ -1151,11 +1157,12 @@ const SubMenuView = () => {
             setSelectedBotModule(title);
             setIsBotOpen(true);
           }}
-          className={`fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-r ${paBubbleGradient} text-white rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 flex items-center justify-center group`}
+          className={`fixed bottom-6 right-6 z-50 h-14 pl-4 pr-5 bg-gradient-to-r ${paBubbleGradient} text-white rounded-full shadow-2xl hover:shadow-3xl hover:scale-105 transition-all duration-300 flex items-center gap-2 group`}
           aria-label={`Ask ${title} bot`}
           title={`Ask ${title} bot`}
         >
-          <MessageCircle className="w-8 h-8 group-hover:rotate-12 transition-transform" />
+          <MessageCircle className="w-7 h-7 group-hover:rotate-12 transition-transform" />
+          <span className="font-bold text-base whitespace-nowrap">{(paBotId && PA_NAME[paBotId]) || title}</span>
         </button>
       )}
 
@@ -1164,16 +1171,27 @@ const SubMenuView = () => {
           PA + with the topic pre-selected. Non-PA sub-menus keep the
           legacy GeneralAIAgent. One PA → one UI. */}
       {isBotOpen && selectedBotModule && isPaSubmenu && (
-        <BotModules
-          onClose={() => {
-            setIsBotOpen(false);
-            setSelectedBotModule(null);
-          }}
-          moduleContext={selectedBotModule}
-          currentVersion="yai1"
-          botsFilter={paBotsFilter}
-          initialTopic={paInitialTopic}
-        />
+        <>
+          <BotModules
+            onClose={() => {
+              setIsBotOpen(false);
+              setSelectedBotModule(null);
+            }}
+            moduleContext={selectedBotModule}
+            currentVersion="yai1"
+            botsFilter={paBotsFilter}
+            initialTopic={paInitialTopic}
+          />
+          {/* Minimise — same control as the route-mounted PAs, so every PA can
+              collapse to its named bubble. */}
+          <button
+            onClick={() => setIsBotOpen(false)}
+            className="fixed right-[432px] bottom-[40vh] z-[210] w-10 h-10 rounded-full bg-white/90 text-gray-600 hover:bg-gray-200 shadow-lg flex items-center justify-center"
+            title="Minimise to bubble"
+          >
+            <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M5 12h14" /></svg>
+          </button>
+        </>
       )}
       {isBotOpen && selectedBotModule && !isPaSubmenu && (
         <GeneralAIAgent

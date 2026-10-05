@@ -12,7 +12,7 @@ import SectionContainer from "./components/SectionContainer";
 import { DASHBOARD_DATA } from "./data/module";
 import YaiDataBot from "./chatbot/YaiDataBot";
 import BotModules from "./chatbot/bot-modules";
-import { paForRoute, PA_GRADIENT, BIG_BRAIN_TITLES, BIG_BRAIN_ROUTES, BIG_BRAIN_BUBBLE } from "./chatbot/pa-owner";
+import { paForRoute, PA_GRADIENT, PA_NAME, BIG_BRAIN_TITLES, BIG_BRAIN_ROUTES, BIG_BRAIN_BUBBLE } from "./chatbot/pa-owner";
 import DragonAnimation from "./components/DragonAnimation";
 import { useTranslation } from "./translate/TranslationContext";
 import { ThemeBackground } from "./thems";
@@ -121,6 +121,12 @@ const AppLayout = () => {
   // entry; closable down to a PA-coloured bubble.
   const routePaBot = paForRoute(location.pathname);
   const isBigBrainRoute = BIG_BRAIN_ROUTES.some((r) => location.pathname.startsWith(r));
+  // Sticky green bubble after clicking a Big Brain-driven module whose
+  // route we can't enumerate (e.g. Management Dashboard image view).
+  const [bbBubble, setBbBubble] = useState(false);
+  useEffect(() => {
+    if (location.pathname === "/") setBbBubble(false);
+  }, [location.pathname]);
   const [routePaOpen, setRoutePaOpen] = useState(false);
   // Pinned = the PA stays on screen wherever Gamini navigates, until
   // manually unpinned. Minimize collapses to the PA-coloured bubble.
@@ -192,8 +198,11 @@ const AppLayout = () => {
     // Management Dashboard / SOP / System Analysis belong to the green
     // Big Brain (yai2), not a department PA — open it alongside navigation.
     if (module && BIG_BRAIN_TITLES.has(module.title)) {
+      // Big Brain DRIVES these modules but must not replace them: land on
+      // the module page with the green Big Brain bubble ready, instead of
+      // opening the full-screen takeover (Gamini 2026-10-05).
       setYaiVersion("yai2");
-      setYaiDataBotOpen(true);
+      setBbBubble(true);
     }
     if (module.demoType) {
       const { demoType, id, title } = module;
@@ -1631,23 +1640,25 @@ const AppLayout = () => {
       {activeRoutePa && !routePaOpen && (
         <button
           onClick={() => setRoutePaOpen(true)}
-          className={`fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-r ${PA_GRADIENT[activeRoutePa] || "from-orange-500 to-amber-500"} text-white rounded-full shadow-2xl hover:scale-110 transition-all duration-300 flex items-center justify-center`}
+          className={`fixed bottom-6 right-6 z-50 h-14 pl-4 pr-5 bg-gradient-to-r ${PA_GRADIENT[activeRoutePa] || "from-orange-500 to-amber-500"} text-white rounded-full shadow-2xl hover:scale-105 transition-all duration-300 flex items-center gap-2`}
           aria-label="Open department PA"
           title="Open department PA"
         >
-          <MessageCircle className="w-8 h-8" />
+          <MessageCircle className="w-7 h-7" />
+          <span className="font-bold text-base whitespace-nowrap">{PA_NAME[activeRoutePa] || "PA"}</span>
         </button>
       )}
       {/* Green Big Brain bubble on its own routes (SOP map, System Analysis) */}
-      {isBigBrainRoute && !isYaiDataBotOpen && (
+      {(isBigBrainRoute || bbBubble) && !isYaiDataBotOpen && (
         <button
           onClick={() => { setYaiVersion("yai2"); setYaiDataBotOpen(true); }}
-          className="fixed bottom-6 right-6 z-50 w-16 h-16 text-white rounded-full shadow-2xl hover:scale-110 transition-all duration-300 flex items-center justify-center"
+          className="fixed bottom-6 right-6 z-50 h-14 pl-4 pr-5 text-white rounded-full shadow-2xl hover:scale-105 transition-all duration-300 flex items-center gap-2"
           style={{ background: BIG_BRAIN_BUBBLE }}
           aria-label="Open Big Brain"
           title="Open Big Brain"
         >
-          <MessageCircle className="w-8 h-8" />
+          <MessageCircle className="w-7 h-7" />
+          <span className="font-bold text-base whitespace-nowrap">Big Brain</span>
         </button>
       )}
 
