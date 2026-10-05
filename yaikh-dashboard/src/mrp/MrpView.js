@@ -5,11 +5,11 @@
 // syntax-checked with plain `node --check`.
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import { ArrowLeft, Search, RefreshCw, ChevronLeft, ChevronRight, Maximize } from "lucide-react";
+import { ArrowLeft, Search, RefreshCw, ChevronLeft, ChevronRight, Maximize, Package, Anchor, Ship, Truck, Factory, Flag } from "lucide-react";
 
 const h = React.createElement;
 const API = (process.env.REACT_APP_M1_LLM_URL || "/api/m1").replace(/\/$/, "");
-const MONTHLY = new Set(["orders", "confirmation", "packing-lists", "delivery-orders", "documents", "consumption", "check", "master-plan", "unit-plan", "line-plan"]);
+const MONTHLY = new Set(["orders", "confirmation", "packing-lists", "delivery-orders", "documents", "consumption", "check", "master-plan", "unit-plan", "line-plan", "supplier-orders", "supplier-portal", "logistics"]);
 const WALL = new Set(["board", "mrp-tv", "tec-tv"]); // wall screens refresh by themselves
 
 const tone = (v) => {
@@ -30,6 +30,34 @@ const thisMonth = () => {
   return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0");
 };
 
+// Tracking line: the journey of one shipment as connected points (ex-factory, port of loading, sailing,
+// Sihanoukville port, truck, factory). Green = passed, blue and pulsing = where it is now, grey = still to come.
+const STEP_ICON = { exf: Package, pol: Anchor, sail: Ship, pod: Anchor, border: Flag, truck: Truck, fc: Factory };
+const Track = ({ steps, big }) => {
+  const R = big ? 15 : 11;
+  return h(
+    "div",
+    { className: "flex items-start", style: { minWidth: steps.length * (big ? 108 : 86) } },
+    steps.map((s, i) =>
+      h(
+        "div",
+        { key: s.key, className: "flex-1 flex flex-col items-center relative" },
+        i > 0 && h("div", { className: "absolute h-0.5 " + (s.done ? "bg-emerald-400" : "bg-slate-600"), style: { top: R - 1, left: "-50%", width: "100%" } }),
+        h(
+          "div",
+          {
+            className: "relative z-10 rounded-full flex items-center justify-center " + (s.now ? "bg-sky-400 text-slate-900 ring-4 ring-sky-400/30 animate-pulse" : s.done ? "bg-emerald-500 text-slate-900" : "bg-slate-700 text-slate-400 border border-slate-500"),
+            style: { width: R * 2, height: R * 2 },
+          },
+          h(STEP_ICON[s.key] || Package, { size: R + 1 })
+        ),
+        h("div", { className: "mt-1 leading-tight text-center whitespace-nowrap " + (big ? "text-xs " : "text-[10px] ") + (s.now ? "text-sky-300 font-bold" : s.done ? "text-slate-300" : "text-slate-500") }, s.label),
+        h("div", { className: "tabular-nums " + (big ? "text-xs " : "text-[10px] ") + (s.now ? "text-sky-300 font-bold" : s.done ? "text-slate-400" : "text-slate-500") }, s.date)
+      )
+    )
+  );
+};
+
 const MrpView = ({ onBack, module = "mrp", label = "MRP" }) => {
   const { view } = useParams();
   const [data, setData] = useState(null);
@@ -37,6 +65,7 @@ const MrpView = ({ onBack, module = "mrp", label = "MRP" }) => {
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState("");
   const [month, setMonth] = useState(thisMonth());
+  const [pick, setPick] = useState(""); // chosen entry of the left-hand list (supplier), when the screen has one
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -45,7 +74,7 @@ const MrpView = ({ onBack, module = "mrp", label = "MRP" }) => {
       const r = await fetch(API + "/sim/view", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ module, view, month: MONTHLY.has(view) ? month : undefined }),
+        body: JSON.stringify({ module, view, month: MONTHLY.has(view) ? month : undefined, supplier: pick || undefined }),
       });
       const j = await r.json();
       if (!r.ok || !j.ok) throw new Error(j.error || j.detail || "unavailable");
@@ -55,7 +84,7 @@ const MrpView = ({ onBack, module = "mrp", label = "MRP" }) => {
     } finally {
       setLoading(false);
     }
-  }, [module, label, view, month]);
+  }, [module, label, view, month, pick]);
 
   useEffect(() => {
     load();
@@ -73,6 +102,7 @@ const MrpView = ({ onBack, module = "mrp", label = "MRP" }) => {
     return s ? all.filter((r) => Object.values(r).join(" ").toLowerCase().includes(s)) : all;
   }, [data, q]);
   const cols = (data && data.columns) || [];
+  const picker = data && data.picker;
   const board = Boolean(data && data.board);
   const cell = board ? "px-4 py-3 text-base" : "px-3 py-2 text-sm";
 
@@ -136,7 +166,28 @@ const MrpView = ({ onBack, module = "mrp", label = "MRP" }) => {
     ),
     h(
       "div",
-      { className: "rounded-2xl border border-slate-700 bg-slate-800/40 overflow-x-auto" },
+      { className: "flex gap-4 items-start" },
+      picker &&
+        h(
+          "aside",
+          { className: "w-64 flex-shrink-0 rounded-2xl border border-slate-700 bg-slate-800/60 p-2 sticky top-28" },
+          h("div", { className: "px-2 pb-1 text-xs uppercase tracking-wider text-slate-400 font-bold" }, picker.label),
+          picker.options.map((o) =>
+            h(
+              "button",
+              {
+                key: o.id,
+                onClick: () => setPick(o.id),
+                className: "w-full text-left rounded-xl px-3 py-2 mb-1 border transition-colors " + (picker.selected === o.id ? "bg-emerald-500/20 border-emerald-500/40" : "border-transparent hover:bg-slate-700/60"),
+              },
+              h("div", { className: "flex items-center justify-between gap-2" }, h("span", { className: "text-sm font-bold text-white leading-tight" }, o.name), h("span", { className: "text-xs font-bold tabular-nums text-emerald-300" }, fmt(o.count))),
+              h("div", { className: "text-[11px] text-slate-400 leading-tight" }, o.sub)
+            )
+          )
+        ),
+    h(
+      "div",
+      { className: "flex-1 min-w-0 rounded-2xl border border-slate-700 bg-slate-800/40 overflow-x-auto" },
       h(
         "table",
         { className: "w-full border-collapse" },
@@ -147,12 +198,12 @@ const MrpView = ({ onBack, module = "mrp", label = "MRP" }) => {
           rows.map((r, i) =>
             h(
               "tr",
-              { key: (r.shipment || r.document || r.order || "") + "-" + i, className: "border-t border-slate-700/70 hover:bg-slate-700/40" },
+              { key: (r.shipment || r.po || r.supplier || r.order || "") + "-" + i, className: "border-t border-slate-700/70 hover:bg-slate-700/40" },
               cols.map((c) =>
                 h(
                   "td",
                   { key: c.key, className: cell + (typeof r[c.key] === "number" ? " text-right tabular-nums" : "") + (c.key === "order" ? " font-bold text-white whitespace-nowrap" : "") },
-                  CHIP.has(c.key) && r[c.key] ? h("span", { className: "inline-block rounded-full border px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap " + tone(r[c.key]) }, fmt(r[c.key])) : fmt(r[c.key])
+                  Array.isArray(r[c.key]) ? h(Track, { steps: r[c.key], big: board }) : CHIP.has(c.key) && r[c.key] ? h("span", { className: "inline-block rounded-full border px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap " + tone(r[c.key]) }, fmt(r[c.key])) : fmt(r[c.key])
                 )
               )
             )
@@ -160,6 +211,7 @@ const MrpView = ({ onBack, module = "mrp", label = "MRP" }) => {
           !loading && rows.length === 0 && h("tr", null, h("td", { colSpan: Math.max(cols.length, 1), className: "px-4 py-10 text-center text-slate-500" }, "Nothing to show."))
         )
       )
+    )
     ),
     h(
       "p",

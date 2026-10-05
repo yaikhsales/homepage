@@ -1137,6 +1137,29 @@ const AppLayout = () => {
                                               grouped: true,
                                               groups: [
                                                 {
+                                                  label: "Suppliers",
+                                                  cards: [
+                                                  {
+                                                    title: "Suppliers",
+                                                    icon: "CheckCircle",
+                                                    color: "bg-teal-500/30 text-white",
+                                                    action: "/dashboard/mrp/suppliers",
+                                                  },
+                                                  {
+                                                    title: "Orders by Supplier",
+                                                    icon: "FileText",
+                                                    color: "bg-teal-500/30 text-white",
+                                                    action: "/dashboard/mrp/supplier-orders",
+                                                  },
+                                                  {
+                                                    title: "Supplier Portal",
+                                                    icon: "Layers",
+                                                    color: "bg-teal-500/30 text-white",
+                                                    action: "/dashboard/mrp/supplier-portal",
+                                                  },
+                                                  ],
+                                                },
+                                                {
                                                   label: "Orders",
                                                   cards: [
                                                   {
@@ -1174,6 +1197,12 @@ const AppLayout = () => {
                                                   label: "Logistics",
                                                   cards: [
                                                   {
+                                                    title: "Logistics",
+                                                    icon: "Truck",
+                                                    color: "bg-emerald-500/30 text-white",
+                                                    action: "/dashboard/mrp/logistics",
+                                                  },
+                                                  {
                                                     title: "Shipping Documents",
                                                     icon: "Layers",
                                                     color: "bg-emerald-500/30 text-white",
@@ -1197,7 +1226,7 @@ const AppLayout = () => {
                                                   label: "Arrival",
                                                   cards: [
                                                   {
-                                                    title: "Tracking Board",
+                                                    title: "Arrival Board (TV)",
                                                     icon: "MonitorPlay",
                                                     color: "bg-amber-500/30 text-white",
                                                     action: "/dashboard/mrp/board",
