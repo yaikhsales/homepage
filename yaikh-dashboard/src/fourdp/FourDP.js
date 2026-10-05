@@ -13,7 +13,7 @@ import {
 const API = (process.env.REACT_APP_M1_LLM_URL || "/api/m1").replace(/\/$/, "");
 
 const TOPICS = [
-  { id: "master-plan", label: "Master Plan", hint: "Orders handed to each factory", icon: LayoutDashboard, monthly: true },
+  { id: "master-plan", label: "Master Plan", hint: "Orders handed to each factory", icon: LayoutDashboard, monthly: true, factory: "" },
   { id: "unit-plan", label: "Unit Plan", hint: "Factory plan, by department", icon: Building, monthly: true, factory: "F1" },
   { id: "line-plan-ta", label: "Section Plan", hint: "One order: cutting, sewing, finishing by lot", icon: ClipboardCheck, monthly: true, factory: "F1", noAll: true, orders: true },
   { id: "line-plan", label: "Line Plan", hint: "Sewing lines — click one for live", icon: Layers, monthly: true, factory: "" },
@@ -122,7 +122,7 @@ function StatusPop({ pop, onTab, onClose }) {
 
 const hasProblem = (b) => !!b.st && GROUPS.some(([k]) => b.st[k] === "red");
 
-function Gantt({ g, filter, onLine, picked, onStatus, onlyProblems }) {
+function Gantt({ g, filter, onLine, picked, onStatus, onlyProblems, corner }) {
   const days = useMemo(() => {
     if (!g) return [];
     const n = dayDiff(g.start, g.end) + 1;
@@ -147,8 +147,9 @@ function Gantt({ g, filter, onLine, picked, onStatus, onlyProblems }) {
       <div style={{ width: LABEL_W + width, minWidth: "100%" }}>
         {/* header: months + days */}
         <div className="sticky top-0 z-20 flex bg-slate-800 border-b border-slate-700">
-          <div className="sticky left-0 z-30 bg-slate-800 border-r border-slate-700 flex items-end px-3 pb-1 text-[11px] uppercase tracking-wider text-slate-400 font-bold" style={{ width: LABEL_W, minWidth: LABEL_W }}>
-            {g.caption || `${rows.filter((r) => !r.header).length} rows`}
+          <div className="sticky left-0 z-30 bg-slate-800 border-r border-slate-700 flex flex-col justify-center gap-0.5 px-2 text-[10px] uppercase tracking-wider text-slate-400 font-bold overflow-hidden" style={{ width: LABEL_W, minWidth: LABEL_W }}>
+            {corner}
+            {(!corner || (g.caption || "").trim()) && <span className="truncate">{g.caption || `${rows.filter((r) => !r.header).length} rows`}</span>}
           </div>
           <div style={{ width }}>
             <div className="flex">
@@ -236,7 +237,14 @@ const FourDP = () => {
   const [order, setOrder] = useState("");
   const [picked, setPicked] = useState(() => new Set()); // legend entries ticked: show only these, fade the rest
   const togglePick = (tone) => setPicked((old) => { const n = new Set(old); if (n.has(tone)) n.delete(tone); else n.add(tone); return n; });
-  const fac = factory === null ? (topic.factory || "") : factory;
+  // The factory picked stays picked from one topic to the next. A topic that needs one factory falls back to its own.
+  const fac = factory === null || (factory === "" && topic.noAll) ? (topic.factory || "") : factory;
+  const factoryPick = topic.factory !== undefined && data && data.factories ? (
+    <select value={fac} onChange={(e) => { setFactory(e.target.value); setOrder(""); }} aria-label="Factory" className="w-full bg-slate-900 border border-slate-600 rounded-lg px-2 py-1 text-sm font-bold normal-case tracking-normal text-emerald-300 outline-none cursor-pointer hover:border-emerald-400">
+      {!topic.noAll && <option value="">All factories</option>}
+      {data.factories.map((F) => <option key={F.id} value={F.id}>{F.name} — {F.focus}</option>)}
+    </select>
+  ) : null;
   const [onlyProblems, setOnlyProblems] = useState(false);
   const [pop, setPop] = useState(null); // order status feed opened from a bar bubble
   const openStatus = useCallback(async (bar, group, e) => {
@@ -272,7 +280,7 @@ const FourDP = () => {
   }, [view, month, topic.monthly, topic.factory, topic.orders, fac, order]);
 
   useEffect(() => { load(); }, [load]);
-  useEffect(() => { setData(null); setOrder(""); setFactory(null); setPicked(new Set()); setPop(null); setOnlyProblems(false); }, [view]);
+  useEffect(() => { setData(null); setOrder(""); setPicked(new Set()); setPop(null); setOnlyProblems(false); }, [view]);
   useEffect(() => {
     if (!topic.wall) return undefined;
     const t = setInterval(load, 60000);
@@ -312,16 +320,7 @@ const FourDP = () => {
               The space belongs to the plan, not to statistics. */}
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 mb-1.5">
             <h1 className="text-lg font-black text-white leading-none whitespace-nowrap">{topic.label}</h1>
-            {topic.factory !== undefined && data && data.factories && (
-              <div className="flex items-center gap-1">
-                {!topic.noAll && (
-                  <button onClick={() => { setFactory(""); setOrder(""); }} className={`px-2.5 py-1 rounded-lg border text-xs font-semibold ${fac === "" ? "bg-emerald-500/20 border-emerald-500/40 text-white" : "bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700"}`}>All</button>
-                )}
-                {data.factories.map((F) => (
-                  <button key={F.id} onClick={() => { setFactory(F.id); setOrder(""); }} title={F.focus} className={`px-2.5 py-1 rounded-lg border text-xs font-semibold ${fac === F.id ? "bg-emerald-500/20 border-emerald-500/40 text-white" : "bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700"}`}>{F.name}</button>
-                ))}
-              </div>
-            )}
+            {showTable && factoryPick && <div className="w-56">{factoryPick}</div>}
             <div className="flex items-center gap-x-3 gap-y-1 flex-wrap text-xs text-slate-400">
               {((data && data.summary) || []).map((x) => (x.label === "Problems" ? (
                 <button key={x.label} onClick={() => setOnlyProblems((v) => !v)} title="Click to show only the orders with a problem; click again to release" className={`flex items-center gap-1.5 whitespace-nowrap rounded-lg border px-2 py-0.5 ${onlyProblems ? "bg-rose-600 border-rose-400 text-white" : "border-rose-500/50 text-rose-300 hover:bg-rose-500/10"}`}>
@@ -381,7 +380,7 @@ const FourDP = () => {
             </div>
           )}
 
-          {data && data.gantt && !showTable && <Gantt g={data.gantt} filter={q} picked={picked} onlyProblems={onlyProblems} onStatus={openStatus} onLine={(ln) => navigate(`/dashboard/4dp/line/${ln}`)} />}
+          {data && data.gantt && !showTable && <Gantt g={data.gantt} filter={q} picked={picked} corner={factoryPick} onlyProblems={onlyProblems} onStatus={openStatus} onLine={(ln) => navigate(`/dashboard/4dp/line/${ln}`)} />}
 
           {showTable && data && (
             <div className="rounded-2xl border border-slate-700 bg-slate-800/40 overflow-auto" style={{ maxHeight: "calc(100vh - 205px)" }}>
