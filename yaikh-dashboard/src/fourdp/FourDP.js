@@ -7,7 +7,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   LayoutDashboard, Building, ClipboardCheck, Layers, MonitorPlay,
-  ChevronLeft, ChevronRight, RefreshCw, Search, Maximize, Table2,
+  ChevronLeft, ChevronRight, RefreshCw, Search, Maximize, Table2, X,
 } from "lucide-react";
 
 const API = (process.env.REACT_APP_M1_LLM_URL || "/api/m1").replace(/\/$/, "");
@@ -58,7 +58,63 @@ const ROW_H = 26;
 const barOn = (picked, tone) => picked.size === 0 || picked.has(tone);
 const markOn = (picked, tone) => picked.size === 0 || picked.has(`${tone}-marker`) || (tone === "rose" && picked.has("marker"));
 
-function Gantt({ g, filter, onLine, picked }) {
+// Order status feed: three bubbles on each Master Plan bar (MRP, YPI, CE). The light on a bubble is the
+// department's overall state for that order; clicking it opens the detail feed.
+const GROUPS = [["mrp", "MRP"], ["ypi", "YPI"], ["ce", "CE"]];
+const LIGHT = { green: "bg-emerald-400", amber: "bg-amber-400", red: "bg-rose-500", idle: "bg-slate-500", na: "bg-slate-700" };
+const LIGHT_TEXT = { green: "text-emerald-300", amber: "text-amber-300", red: "text-rose-300", idle: "text-slate-400", na: "text-slate-500" };
+
+function StatusPop({ pop, onTab, onClose }) {
+  useEffect(() => {
+    const key = (e) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", key);
+    return () => window.removeEventListener("keydown", key);
+  }, [onClose]);
+  const W = 430;
+  const left = Math.max(8, Math.min(pop.x - 40, window.innerWidth - W - 12));
+  const top = Math.max(8, Math.min(pop.y + 14, window.innerHeight - 330));
+  const d = pop.data;
+  const grp = d && d.groups[pop.group];
+  return (
+    <>
+      <div className="fixed inset-0 z-40" onClick={onClose} />
+      <div className="fixed z-50 rounded-2xl border border-slate-600 bg-slate-800 shadow-2xl text-slate-200" style={{ left, top, width: W }}>
+        <div className="flex items-center gap-2 px-3 pt-2.5 pb-2 border-b border-slate-700">
+          <span className="font-black text-white">{pop.ref}</span>
+          {d && <span className="text-[11px] text-slate-400 truncate">{fmtNum(d.pieces)} pcs · {d.factory} · cutting {d.cutting}</span>}
+          <button onClick={onClose} className="ml-auto p-1 rounded-lg hover:bg-slate-700" aria-label="Close"><X size={14} /></button>
+        </div>
+        <div className="flex gap-1 px-3 pt-2">
+          {GROUPS.map(([k, name]) => (
+            <button key={k} onClick={() => onTab(k)} className={`flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-bold ${pop.group === k ? "bg-white/10 border-white/50 text-white" : "border-slate-600 text-slate-300 hover:bg-slate-700"}`}>
+              <span className={`inline-block w-2 h-2 rounded-full ${LIGHT[(d && d.groups[k].tone) || (pop.st && pop.st[k]) || "idle"]}`} />{name}
+            </button>
+          ))}
+          {grp && <span className="ml-auto self-center text-[11px] text-slate-400 truncate">{grp.title.split("— ")[1]}</span>}
+        </div>
+        <div className="px-3 py-2">
+          {pop.error && <div className="py-6 text-center text-sm text-amber-200">Status is unavailable right now.</div>}
+          {!d && !pop.error && <div className="py-6 text-center text-sm text-slate-500">Loading…</div>}
+          {grp && grp.rows.map((r) => (
+            <div key={r.item} className="flex items-start gap-2 py-1.5 border-b border-slate-700/60 last:border-b-0">
+              <span className={`mt-1 inline-block w-2.5 h-2.5 rounded-full flex-shrink-0 ${LIGHT[r.tone] || LIGHT.idle}`} />
+              <div className="min-w-0 flex-1">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-sm font-bold text-white whitespace-nowrap">{r.item}</span>
+                  <span className={`text-[11px] font-semibold truncate ${LIGHT_TEXT[r.tone] || LIGHT_TEXT.idle}`}>{r.status}</span>
+                  <span className="ml-auto text-xs font-bold tabular-nums text-slate-200 whitespace-nowrap">{r.date}</span>
+                </div>
+                {r.detail && <div className="text-[11px] text-slate-400 leading-snug">{r.detail}</div>}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
+
+function Gantt({ g, filter, onLine, picked, onStatus }) {
   const days = useMemo(() => {
     if (!g) return [];
     const n = dayDiff(g.start, g.end) + 1;
@@ -121,9 +177,21 @@ function Gantt({ g, filter, onLine, picked }) {
                   const from = Math.max(dayDiff(g.start, b.from), 0);
                   const to = Math.min(dayDiff(g.start, b.to), days.length - 1);
                   if (to < 0 || from > days.length - 1 || to < from) return null;
+                  const barW = (to - from + 1) * dayW - 2;
+                  const bubbles = b.st && b.ref && onStatus && barW >= 44;
                   return (
-                    <div key={i} title={`${b.title} · ${b.from} → ${b.to}`} className={`absolute top-1 rounded-md px-1.5 text-[10px] font-semibold leading-[18px] truncate shadow transition-opacity ${BAR[b.tone] || BAR.slate} ${barOn(picked, b.tone) ? "" : "opacity-10"}`} style={{ left: from * dayW + 1, width: (to - from + 1) * dayW - 2, height: ROW_H - 8 }}>
-                      {b.label}
+                    <div key={i} title={`${b.title} · ${b.from} → ${b.to}`} className={`absolute top-1 rounded-md text-[10px] font-semibold leading-[18px] shadow transition-opacity flex items-center overflow-hidden ${BAR[b.tone] || BAR.slate} ${barOn(picked, b.tone) ? "" : "opacity-10"}`} style={{ left: from * dayW + 1, width: barW, height: ROW_H - 8 }}>
+                      <span className="truncate px-1.5 flex-1 min-w-0">{b.label}</span>
+                      {bubbles && (
+                        <span className="flex items-center gap-0.5 pr-0.5 flex-shrink-0">
+                          {GROUPS.map(([k, name]) => (
+                            <button key={k} onClick={(e) => { e.stopPropagation(); onStatus(b, k, e); }} title={`${name} status — ${b.ref}`} className="flex items-center gap-1 rounded-full bg-slate-900/90 hover:bg-black text-white text-[9px] font-bold leading-[14px] px-1.5">
+                              <span className={`inline-block w-1.5 h-1.5 rounded-full ${LIGHT[b.st[k]] || LIGHT.idle}`} />
+                              {barW >= 190 ? name : barW >= 110 ? name[0] : null}
+                            </button>
+                          ))}
+                        </span>
+                      )}
                     </div>
                   );
                 })}
@@ -160,6 +228,19 @@ const FourDP = () => {
   const [picked, setPicked] = useState(() => new Set()); // legend entries ticked: show only these, fade the rest
   const togglePick = (tone) => setPicked((old) => { const n = new Set(old); if (n.has(tone)) n.delete(tone); else n.add(tone); return n; });
   const fac = factory === null ? (topic.factory || "") : factory;
+  const [pop, setPop] = useState(null); // order status feed opened from a bar bubble
+  const openStatus = useCallback(async (bar, group, e) => {
+    setPop({ ref: bar.ref, st: bar.st, group, x: e.clientX, y: e.clientY, data: null });
+    try {
+      const r = await fetch(`${API}/sim/view`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ module: "4dp", view: "order-status", order: bar.ref }) });
+      const j = await r.json();
+      if (!r.ok || !j.ok) throw new Error("unavailable");
+      setPop((p) => (p && p.ref === bar.ref ? { ...p, data: j } : p));
+    } catch (err) {
+      setPop((p) => (p && p.ref === bar.ref ? { ...p, error: true } : p));
+    }
+  }, []);
+  const closePop = useCallback(() => setPop(null), []);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -181,7 +262,7 @@ const FourDP = () => {
   }, [view, month, topic.monthly, topic.factory, topic.orders, fac, order]);
 
   useEffect(() => { load(); }, [load]);
-  useEffect(() => { setData(null); setOrder(""); setFactory(null); setPicked(new Set()); }, [view]);
+  useEffect(() => { setData(null); setOrder(""); setFactory(null); setPicked(new Set()); setPop(null); }, [view]);
   useEffect(() => {
     if (!topic.wall) return undefined;
     const t = setInterval(load, 60000);
@@ -286,7 +367,7 @@ const FourDP = () => {
             </div>
           )}
 
-          {data && data.gantt && !showTable && <Gantt g={data.gantt} filter={q} picked={picked} onLine={(ln) => navigate(`/dashboard/4dp/line/${ln}`)} />}
+          {data && data.gantt && !showTable && <Gantt g={data.gantt} filter={q} picked={picked} onStatus={openStatus} onLine={(ln) => navigate(`/dashboard/4dp/line/${ln}`)} />}
 
           {showTable && data && (
             <div className="rounded-2xl border border-slate-700 bg-slate-800/40 overflow-auto" style={{ maxHeight: "calc(100vh - 205px)" }}>
@@ -311,7 +392,9 @@ const FourDP = () => {
             </div>
           )}
 
-          <p className="mt-1 text-[10px] text-slate-500">{data ? `As of ${String(data.as_of || "").replace("T", " ").slice(0, 16)} · hover a bar or diamond for details · simulated factory data` : loading ? "Loading…" : ""}</p>
+          {pop && <StatusPop pop={pop} onTab={(k) => setPop((p) => ({ ...p, group: k }))} onClose={closePop} />}
+
+          <p className="mt-1 text-[10px] text-slate-500">{data ? `As of ${String(data.as_of || "").replace("T", " ").slice(0, 16)} · hover a bar or diamond for details · click MRP / YPI / CE on a bar for that order's status · simulated factory data` : loading ? "Loading…" : ""}</p>
         </main>
       </div>
     </div>
