@@ -51,8 +51,8 @@ const fmtNum = (v) => (typeof v === "number" ? v.toLocaleString("en-US") : v ===
 const thisMonth = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`; };
 const shiftMonth = (m, by) => { const d = new Date(Number(m.slice(0, 4)), Number(m.slice(5, 7)) - 1 + by, 1); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`; };
 
-const LABEL_W = 250;
-const ROW_H = 30;
+const LABEL_W = 210;
+const ROW_H = 26;
 
 function Gantt({ g, filter, onLine }) {
   const days = useMemo(() => {
@@ -75,7 +75,7 @@ function Gantt({ g, filter, onLine }) {
   });
 
   return (
-    <div className="rounded-2xl border border-slate-700 bg-slate-800/40 overflow-auto" style={{ maxHeight: "calc(100vh - 330px)" }}>
+    <div className="rounded-2xl border border-slate-700 bg-slate-800/40 overflow-auto" style={{ maxHeight: "calc(100vh - 205px)" }}>
       <div style={{ width: LABEL_W + width, minWidth: "100%" }}>
         {/* header: months + days */}
         <div className="sticky top-0 z-20 flex bg-slate-800 border-b border-slate-700">
@@ -118,7 +118,7 @@ function Gantt({ g, filter, onLine }) {
                   const to = Math.min(dayDiff(g.start, b.to), days.length - 1);
                   if (to < 0 || from > days.length - 1 || to < from) return null;
                   return (
-                    <div key={i} title={`${b.title} · ${b.from} → ${b.to}`} className={`absolute top-1 rounded-md px-1.5 text-[10px] font-semibold leading-[22px] truncate shadow ${BAR[b.tone] || BAR.slate}`} style={{ left: from * dayW + 1, width: (to - from + 1) * dayW - 2, height: ROW_H - 8 }}>
+                    <div key={i} title={`${b.title} · ${b.from} → ${b.to}`} className={`absolute top-1 rounded-md px-1.5 text-[10px] font-semibold leading-[18px] truncate shadow ${BAR[b.tone] || BAR.slate}`} style={{ left: from * dayW + 1, width: (to - from + 1) * dayW - 2, height: ROW_H - 8 }}>
                       {b.label}
                     </div>
                   );
@@ -189,93 +189,86 @@ const FourDP = () => {
   }, [data, q]);
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-200 px-4 md:px-6 pb-6 pt-28 font-sans">
-      <div className="flex gap-4 items-start">
+    <div className="min-h-screen bg-slate-900 text-slate-200 px-3 pb-3 pt-28 font-sans">
+      <div className="flex gap-3 items-start">
         {/* LEFT — topics */}
-        <aside className="w-60 flex-shrink-0 rounded-2xl border border-slate-700 bg-slate-800/60 p-3 sticky top-28">
+        <aside className="w-40 flex-shrink-0 rounded-xl border border-slate-700 bg-slate-800/60 p-1.5 sticky top-28">
           <nav className="flex flex-col gap-1">
             {TOPICS.map((t) => {
               const Icon = t.icon;
               const on = t.id === view;
               return (
-                <button key={t.id} onClick={() => navigate(`/dashboard/4dp/${t.id}`)} className={`flex items-center gap-3 text-left rounded-xl px-3 py-2.5 transition-colors ${on ? "bg-emerald-500/20 border border-emerald-500/40 text-white" : "border border-transparent hover:bg-slate-700/60 text-slate-300"}`}>
-                  <Icon size={18} className={on ? "text-emerald-300" : "text-slate-400"} />
-                  <span>
-                    <span className="block text-sm font-bold leading-tight">{t.label}</span>
-                    <span className="block text-[11px] text-slate-400 leading-tight">{t.hint}</span>
-                  </span>
+                <button key={t.id} onClick={() => navigate(`/dashboard/4dp/${t.id}`)} title={t.hint} className={`flex items-center gap-2 text-left rounded-lg px-2 py-2 transition-colors ${on ? "bg-emerald-500/20 border border-emerald-500/40 text-white" : "border border-transparent hover:bg-slate-700/60 text-slate-300"}`}>
+                  <Icon size={16} className={`flex-shrink-0 ${on ? "text-emerald-300" : "text-slate-400"}`} />
+                  <span className="text-sm font-bold leading-tight">{t.label}</span>
                 </button>
               );
             })}
           </nav>
-          <p className="mt-3 px-1 text-[10px] text-slate-500 leading-snug">Simulated factory data — no real customer, supplier or person.</p>
         </aside>
 
         {/* RIGHT — Gantt */}
         <main className="flex-1 min-w-0">
-          <div className="flex flex-wrap items-center justify-end gap-3 mb-3">
-            <div className="flex items-center gap-2 flex-wrap">
+          {/* One compact toolbar: factory tabs + figures on the left, controls on the right.
+              The space belongs to the plan, not to statistics. */}
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 mb-1.5">
+            {topic.factory !== undefined && data && data.factories && (
+              <div className="flex items-center gap-1">
+                {!topic.noAll && (
+                  <button onClick={() => { setFactory(""); setOrder(""); }} className={`px-2.5 py-1 rounded-lg border text-xs font-semibold ${fac === "" ? "bg-emerald-500/20 border-emerald-500/40 text-white" : "bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700"}`}>All</button>
+                )}
+                {data.factories.map((F) => (
+                  <button key={F.id} onClick={() => { setFactory(F.id); setOrder(""); }} title={F.focus} className={`px-2.5 py-1 rounded-lg border text-xs font-semibold ${fac === F.id ? "bg-emerald-500/20 border-emerald-500/40 text-white" : "bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700"}`}>{F.name}</button>
+                ))}
+              </div>
+            )}
+            <div className="flex items-center gap-x-3 gap-y-1 flex-wrap text-xs text-slate-400">
+              {((data && data.summary) || []).map((x) => (
+                <span key={x.label} className="whitespace-nowrap">{x.label} <b className="text-white tabular-nums text-sm">{fmtNum(x.value)}</b></span>
+              ))}
+            </div>
+            <div className="flex items-center gap-1.5 ml-auto">
               {topic.monthly && (
-                <div className="flex items-center gap-1 bg-slate-800 border border-slate-700 rounded-xl px-1 py-1">
-                  <button onClick={() => setMonth(shiftMonth(month, -1))} className="p-1.5 hover:bg-slate-700 rounded-lg" aria-label="Previous month"><ChevronLeft size={18} /></button>
-                  <span className="px-2 text-sm font-bold text-white tabular-nums">{month}</span>
-                  <button onClick={() => setMonth(shiftMonth(month, 1))} className="p-1.5 hover:bg-slate-700 rounded-lg" aria-label="Next month"><ChevronRight size={18} /></button>
+                <div className="flex items-center bg-slate-800 border border-slate-700 rounded-lg">
+                  <button onClick={() => setMonth(shiftMonth(month, -1))} className="p-1 hover:bg-slate-700 rounded-lg" aria-label="Previous month"><ChevronLeft size={16} /></button>
+                  <span className="px-1.5 text-xs font-bold text-white tabular-nums">{month}</span>
+                  <button onClick={() => setMonth(shiftMonth(month, 1))} className="p-1 hover:bg-slate-700 rounded-lg" aria-label="Next month"><ChevronRight size={16} /></button>
                 </div>
               )}
-              <div className="flex items-center gap-2 bg-slate-800 border border-slate-700 rounded-xl px-3 py-2">
-                <Search size={16} className="text-slate-500" />
-                <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Filter order, line, supplier…" className="bg-transparent outline-none text-sm w-48 text-white placeholder-slate-500" />
+              <div className="flex items-center gap-1.5 bg-slate-800 border border-slate-700 rounded-lg px-2 py-1">
+                <Search size={14} className="text-slate-500" />
+                <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Filter…" className="bg-transparent outline-none text-xs w-28 text-white placeholder-slate-500" />
               </div>
-              <button onClick={() => setShowTable((v) => !v)} className={`flex items-center gap-1.5 px-3 py-2 rounded-xl border text-sm font-semibold ${showTable ? "bg-emerald-500/20 border-emerald-500/40 text-white" : "bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700"}`}><Table2 size={16} />Table</button>
-              <button onClick={load} className="p-2.5 bg-slate-800 border border-slate-700 rounded-xl hover:bg-slate-700" aria-label="Refresh"><RefreshCw size={16} className={loading ? "animate-spin" : ""} /></button>
-              <button onClick={() => document.documentElement.requestFullscreen && document.documentElement.requestFullscreen()} className="p-2.5 bg-slate-800 border border-slate-700 rounded-xl hover:bg-slate-700" aria-label="Full screen"><Maximize size={16} /></button>
+              <button onClick={() => setShowTable((v) => !v)} className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-xs font-semibold ${showTable ? "bg-emerald-500/20 border-emerald-500/40 text-white" : "bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700"}`}><Table2 size={14} />Table</button>
+              <button onClick={load} className="p-1.5 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700" aria-label="Refresh"><RefreshCw size={14} className={loading ? "animate-spin" : ""} /></button>
+              <button onClick={() => document.documentElement.requestFullscreen && document.documentElement.requestFullscreen()} className="p-1.5 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700" aria-label="Full screen"><Maximize size={14} /></button>
             </div>
           </div>
 
-          {error && <div className="mb-3 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-200 px-4 py-3 text-sm">{error}</div>}
-
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-3">
-            {((data && data.summary) || []).map((s) => (
-              <div key={s.label} className="rounded-2xl border border-slate-700 bg-slate-800/60 px-4 py-2.5">
-                <div className="text-[11px] uppercase tracking-wider text-slate-400">{s.label}</div>
-                <div className="text-2xl font-black text-white tabular-nums leading-tight">{fmtNum(s.value)}</div>
-              </div>
-            ))}
-          </div>
+          {error && <div className="mb-2 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-200 px-3 py-2 text-sm">{error}</div>}
 
           {data && data.gantt && (
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mb-2 text-[11px] text-slate-300">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 mb-1.5 text-[11px] text-slate-400">
               {data.gantt.legend.map((l) => {
                 const marker = l.tone === "marker" || l.tone.endsWith("-marker");
                 const tone = l.tone.replace("-marker", "");
                 return (
-                  <span key={l.label} className="flex items-center gap-1.5">
-                    {marker ? <span className={`inline-block w-2.5 h-2.5 rotate-45 ${DOT[tone] || DOT.rose}`} /> : <span className={`inline-block w-5 h-2.5 rounded ${(BAR[tone] || BAR.slate).split(" ")[0]}`} />}
+                  <span key={l.label} className="flex items-center gap-1">
+                    {marker ? <span className={`inline-block w-2 h-2 rotate-45 ${DOT[tone] || DOT.rose}`} /> : <span className={`inline-block w-4 h-2 rounded ${(BAR[tone] || BAR.slate).split(" ")[0]}`} />}
                     {l.label}
                   </span>
                 );
               })}
-              <span className="flex items-center gap-1.5"><span className="inline-block w-0.5 h-3 bg-orange-400" />Today</span>
-            </div>
-          )}
-
-          {topic.factory !== undefined && data && data.factories && (
-            <div className="flex flex-wrap items-center gap-2 mb-2">
-              {!topic.noAll && (
-                <button onClick={() => { setFactory(""); setOrder(""); }} className={`px-3 py-1.5 rounded-xl border text-sm font-semibold ${fac === "" ? "bg-emerald-500/20 border-emerald-500/40 text-white" : "bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700"}`}>All factories</button>
-              )}
-              {data.factories.map((F) => (
-                <button key={F.id} onClick={() => { setFactory(F.id); setOrder(""); }} title={F.focus} className={`px-3 py-1.5 rounded-xl border text-sm font-semibold ${fac === F.id ? "bg-emerald-500/20 border-emerald-500/40 text-white" : "bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700"}`}>{F.name}</button>
-              ))}
+              <span className="flex items-center gap-1"><span className="inline-block w-0.5 h-3 bg-orange-400" />Today</span>
+              {data.subtitle && topic.orders && <span className="text-slate-300 truncate">· {data.subtitle}</span>}
             </div>
           )}
 
           {topic.orders && data && data.orders && (
-            <div className="flex gap-2 overflow-x-auto pb-2 mb-2">
+            <div className="flex gap-1 overflow-x-auto pb-1 mb-1.5">
               {data.orders.map((o) => (
-                <button key={o.ref} onClick={() => setOrder(o.ref)} title={`${o.style} · ${o.status}`} className={`flex-shrink-0 text-left rounded-xl border px-3 py-1.5 ${data.selected === o.ref ? "bg-sky-500/20 border-sky-400 text-white" : "bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700"}`}>
-                  <span className="block text-sm font-bold leading-tight">{o.ref}</span>
-                  <span className="block text-[10px] text-slate-400 leading-tight">{fmtNum(o.pieces)} pcs · {o.status}</span>
+                <button key={o.ref} onClick={() => setOrder(o.ref)} title={`${o.style} · ${o.status}`} className={`flex-shrink-0 rounded-lg border px-2 py-1 text-xs font-bold whitespace-nowrap ${data.selected === o.ref ? "bg-sky-500/20 border-sky-400 text-white" : "bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700"}`}>
+                  {o.ref} <span className="font-normal text-[10px] text-slate-400">{fmtNum(o.pieces)} · {o.status}</span>
                 </button>
               ))}
               {data.orders.length === 0 && <span className="text-sm text-slate-500">No orders for this factory in {month}.</span>}
@@ -285,7 +278,7 @@ const FourDP = () => {
           {data && data.gantt && !showTable && <Gantt g={data.gantt} filter={q} onLine={(ln) => navigate(`/dashboard/4dp/line/${ln}`)} />}
 
           {showTable && data && (
-            <div className="rounded-2xl border border-slate-700 bg-slate-800/40 overflow-auto" style={{ maxHeight: "calc(100vh - 330px)" }}>
+            <div className="rounded-2xl border border-slate-700 bg-slate-800/40 overflow-auto" style={{ maxHeight: "calc(100vh - 205px)" }}>
               <table className="w-full border-collapse">
                 <thead className="sticky top-0">
                   <tr className="bg-slate-800 text-left">
@@ -307,7 +300,7 @@ const FourDP = () => {
             </div>
           )}
 
-          <p className="mt-2 text-[11px] text-slate-500">{data ? `As of ${String(data.as_of || "").replace("T", " ").slice(0, 16)} · hover a bar or diamond for details` : loading ? "Loading…" : ""}</p>
+          <p className="mt-1 text-[10px] text-slate-500">{data ? `As of ${String(data.as_of || "").replace("T", " ").slice(0, 16)} · hover a bar or diamond for details · simulated factory data` : loading ? "Loading…" : ""}</p>
         </main>
       </div>
     </div>

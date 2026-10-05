@@ -1,29 +1,17 @@
 {
   "files": {
-    "main.css": "/experience/static/css/main.fa5ea0d9.css",
-<<<<<<< Updated upstream
-    "main.js": "/experience/static/js/main.50401f9d.js",
-=======
-    "main.js": "/experience/static/js/main.1ad572c9.js",
->>>>>>> Stashed changes
+    "main.css": "/experience/static/css/main.de66520e.css",
+    "main.js": "/experience/static/js/main.6e1ef294.js",
     "static/js/977.b93257ba.chunk.js": "/experience/static/js/977.b93257ba.chunk.js",
     "static/js/455.38c7ad9e.chunk.js": "/experience/static/js/455.38c7ad9e.chunk.js",
     "index.html": "/experience/index.html",
-    "main.fa5ea0d9.css.map": "/experience/static/css/main.fa5ea0d9.css.map",
-<<<<<<< Updated upstream
-    "main.50401f9d.js.map": "/experience/static/js/main.50401f9d.js.map",
-=======
-    "main.1ad572c9.js.map": "/experience/static/js/main.1ad572c9.js.map",
->>>>>>> Stashed changes
+    "main.de66520e.css.map": "/experience/static/css/main.de66520e.css.map",
+    "main.6e1ef294.js.map": "/experience/static/js/main.6e1ef294.js.map",
     "977.b93257ba.chunk.js.map": "/experience/static/js/977.b93257ba.chunk.js.map",
     "455.38c7ad9e.chunk.js.map": "/experience/static/js/455.38c7ad9e.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.fa5ea0d9.css",
-<<<<<<< Updated upstream
-    "static/js/main.50401f9d.js"
-=======
-    "static/js/main.1ad572c9.js"
->>>>>>> Stashed changes
+    "static/css/main.de66520e.css",
+    "static/js/main.6e1ef294.js"
   ]
 }
