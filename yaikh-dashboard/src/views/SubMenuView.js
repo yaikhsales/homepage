@@ -938,7 +938,7 @@ const SubMenuView = () => {
                 group.label === "First Output";
               // Calculate column width - First Output takes 2x width for 2-column grid, others take equal width
               // Calculate column width - First Output takes 2x width for 2-column grid, others take equal width
-              const isProminentModule = title === "YQMS" || title === "FC";
+              const isProminentModule = title === "YQMS" || title === "FC" || title === "MRP";
               const columnWidth = isFirstOutput
                 ? isProminentModule
                   ? "w-[calc(23%)] min-w-[340px]"

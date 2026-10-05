@@ -1034,6 +1034,142 @@ const AppLayout = () => {
                                               },
                                             ],
                                           }
+                                        : demoType === "SUBMENU_4DP"
+                                          ? [
+                                              {
+                                                title: "Master Plan",
+                                                icon: "LayoutDashboard",
+                                                color: "bg-blue-500/30 text-white",
+                                                action: "/dashboard/4dp/master-plan",
+                                              },
+                                              {
+                                                title: "Unit Plan",
+                                                icon: "Building",
+                                                color: "bg-indigo-500/30 text-white",
+                                                action: "/dashboard/4dp/unit-plan",
+                                              },
+                                              {
+                                                title: "Line Plan T&A",
+                                                icon: "ClipboardCheck",
+                                                color: "bg-amber-500/30 text-white",
+                                                action: "/dashboard/4dp/line-plan-ta",
+                                              },
+                                              {
+                                                title: "Line Plan",
+                                                icon: "Layers",
+                                                color: "bg-emerald-500/30 text-white",
+                                                action: "/dashboard/4dp/line-plan",
+                                              },
+                                              {
+                                                title: "MRP TV",
+                                                icon: "MonitorPlay",
+                                                color: "bg-sky-500/30 text-white",
+                                                action: "/dashboard/4dp/mrp-tv",
+                                              },
+                                              {
+                                                title: "TEC TV",
+                                                icon: "MonitorPlay",
+                                                color: "bg-violet-500/30 text-white",
+                                                action: "/dashboard/4dp/tec-tv",
+                                              },
+                                            ]
+                                        : demoType === "SUBMENU_MRP"
+                                          ? {
+                                              grouped: true,
+                                              groups: [
+                                                {
+                                                  label: "Orders",
+                                                  cards: [
+                                                  {
+                                                    title: "Material Orders",
+                                                    icon: "FileText",
+                                                    color: "bg-blue-500/30 text-white",
+                                                    action: "/dashboard/mrp/orders",
+                                                  },
+                                                  {
+                                                    title: "Supplier Confirmation",
+                                                    icon: "CheckCircle",
+                                                    color: "bg-blue-500/30 text-white",
+                                                    action: "/dashboard/mrp/confirmation",
+                                                  },
+                                                  ],
+                                                },
+                                                {
+                                                  label: "Supplier Documents",
+                                                  cards: [
+                                                  {
+                                                    title: "Packing Lists",
+                                                    icon: "Package",
+                                                    color: "bg-indigo-500/30 text-white",
+                                                    action: "/dashboard/mrp/packing-lists",
+                                                  },
+                                                  {
+                                                    title: "Delivery Orders",
+                                                    icon: "FileCheck",
+                                                    color: "bg-indigo-500/30 text-white",
+                                                    action: "/dashboard/mrp/delivery-orders",
+                                                  },
+                                                  ],
+                                                },
+                                                {
+                                                  label: "Logistics",
+                                                  cards: [
+                                                  {
+                                                    title: "Shipping Documents",
+                                                    icon: "Layers",
+                                                    color: "bg-emerald-500/30 text-white",
+                                                    action: "/dashboard/mrp/documents",
+                                                  },
+                                                  {
+                                                    title: "Vessel & Truck Tracking",
+                                                    icon: "Truck",
+                                                    color: "bg-emerald-500/30 text-white",
+                                                    action: "/dashboard/mrp/tracking",
+                                                  },
+                                                  {
+                                                    title: "Customs Clearance",
+                                                    icon: "Shield",
+                                                    color: "bg-emerald-500/30 text-white",
+                                                    action: "/dashboard/mrp/customs",
+                                                  },
+                                                  ],
+                                                },
+                                                {
+                                                  label: "Arrival",
+                                                  cards: [
+                                                  {
+                                                    title: "Tracking Board",
+                                                    icon: "MonitorPlay",
+                                                    color: "bg-amber-500/30 text-white",
+                                                    action: "/dashboard/mrp/board",
+                                                  },
+                                                  {
+                                                    title: "Arrivals to FC",
+                                                    icon: "Warehouse",
+                                                    color: "bg-amber-500/30 text-white",
+                                                    action: "/dashboard/mrp/arrivals",
+                                                  },
+                                                  ],
+                                                },
+                                                {
+                                                  label: "Consumption",
+                                                  cards: [
+                                                  {
+                                                    title: "Consumption",
+                                                    icon: "BarChart2",
+                                                    color: "bg-violet-500/30 text-white",
+                                                    action: "/dashboard/mrp/consumption",
+                                                  },
+                                                  {
+                                                    title: "Ordered vs Required",
+                                                    icon: "CheckSquare",
+                                                    color: "bg-violet-500/30 text-white",
+                                                    action: "/dashboard/mrp/check",
+                                                  },
+                                                  ],
+                                                },
+                                              ],
+                                            }
                                         : demoType === "SUBMENU_DEPARTMENTS"
                                           ? [
                                               {
