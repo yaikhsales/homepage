@@ -634,7 +634,7 @@ Provide helpful, accurate, and professional responses. Be concise but informativ
                     <div className="flex items-center gap-2 md:gap-3 mb-1 md:mb-2">
                         {/* User Avatar */}
                         <img 
-                            src="/assets/modules-image/top-bot.png" 
+                            src={process.env.PUBLIC_URL + "/assets/modules-image/top-bot.png"} 
                             alt="User Avatar" 
                             className="w-9 h-9 md:w-12 md:h-12 rounded-full object-cover border-2 border-white/20 shadow-lg flex-shrink-0"
                         />
@@ -777,7 +777,7 @@ Provide helpful, accurate, and professional responses. Be concise but informativ
                                     >
                                         {message.sender === 'bot' && (
                                             <img 
-                                                src="/assets/modules-image/top-bot.png" 
+                                                src={process.env.PUBLIC_URL + "/assets/modules-image/top-bot.png"} 
                                                 alt="Bot" 
                                                 className="w-7 h-7 md:w-8 md:h-8 lg:w-10 lg:h-10 rounded-full object-cover border-2 border-purple-400/50 flex-shrink-0" 
                                             />
@@ -822,7 +822,7 @@ Provide helpful, accurate, and professional responses. Be concise but informativ
                                 {isTyping && (
                                     <div className="flex items-start gap-2 md:gap-3">
                                         <img 
-                                            src="/assets/modules-image/top-bot.png" 
+                                            src={process.env.PUBLIC_URL + "/assets/modules-image/top-bot.png"} 
                                             alt="Bot" 
                                             className="w-7 h-7 md:w-8 md:h-8 lg:w-10 lg:h-10 rounded-full object-cover border-2 border-purple-400/50 flex-shrink-0" 
                                         />

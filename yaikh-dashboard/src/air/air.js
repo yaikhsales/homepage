@@ -80,7 +80,7 @@ const Air = ({ onBack }) => {
                                 {/* Device Icon */}
                                 <div className="w-full bg-gradient-to-br from-slate-50 to-slate-100 p-6 flex items-center justify-center">
                                     <img 
-                                        src="/assets/icons/sub-icons/air.png" 
+                                        src={process.env.PUBLIC_URL + "/assets/icons/sub-icons/air.png"} 
                                         alt="Air Sensor Icon"
                                         className="h-32 w-auto object-contain"
                                     />

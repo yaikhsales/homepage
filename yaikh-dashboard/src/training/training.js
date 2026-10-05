@@ -400,7 +400,7 @@ const Training = ({ onBack }) => {
             {/* Header Image */}
             {/* <div className="bg-white rounded-lg p-6 mb-6 overflow-hidden">
                         <img
-                            src="/assets/icons/sub-icons/header.png"
+                            src={process.env.PUBLIC_URL + "/assets/icons/sub-icons/header.png"}
                             alt="Company Header"
                             className="w-full h-auto object-contain"
                             onError={(e) => {

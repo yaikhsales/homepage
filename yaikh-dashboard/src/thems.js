@@ -320,7 +320,7 @@ export const ThemeBackground = () => {
       >
         {/* === LAYER 1: Main Khmer New Year scene === */}
         <img
-          src="/assets/background/bg-khmer.jpg"
+          src={process.env.PUBLIC_URL + "/assets/background/bg-khmer.jpg"}
           alt="Khmer New Year Background"
           style={{
             position: 'absolute', inset: 0,

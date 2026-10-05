@@ -2245,7 +2245,7 @@ const PhoneFrame = ({
                                             }`}
                                         >
                                             <img
-                                                src="/assets/modules-image/yai1.png"
+                                                src={process.env.PUBLIC_URL + "/assets/modules-image/yai1.png"}
                                                 alt="Send"
                                                 className="w-10 h-10 rounded-full object-cover shadow-md ring-2 ring-yai-blue/50"
                                             />
@@ -5889,7 +5889,7 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                                 boxShadow: "inset -3px -3px 6px rgba(0,0,0,0.30), inset 2px 2px 4px rgba(255,255,255,0.35), 0 3px 8px rgba(249,115,22,0.4)",
                             }}
                         >
-                            <img src="/assets/modules-image/top-bot.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
+                            <img src={process.env.PUBLIC_URL + "/assets/modules-image/top-bot.png"} alt="Yai" className="w-full h-full rounded-full object-cover" />
                         </div>
                         <span className="text-orange-500 font-bold text-base whitespace-nowrap">{t('My Task Agent')}</span>
                         <ClaudeBadge />
@@ -5904,7 +5904,7 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                                 boxShadow: "inset -3px -3px 6px rgba(0,0,0,0.30), inset 2px 2px 4px rgba(255,255,255,0.35), 0 3px 12px rgba(59,130,246,0.55)",
                             }}
                         >
-                            <img src="assets/modules-image/yai1.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
+                            <img src={process.env.PUBLIC_URL + "/assets/modules-image/yai1.png"} alt="Yai" className="w-full h-full rounded-full object-cover" />
                         </div>
                         <span className="text-blue-500 font-bold text-base whitespace-nowrap">{t('Agent Collective')}</span>
                         <ClaudeBadge />
@@ -5924,7 +5924,7 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                                     boxShadow: "inset -3px -3px 6px rgba(0,0,0,0.30), inset 2px 2px 4px rgba(255,255,255,0.35), 0 3px 8px rgba(16,185,129,0.4)",
                                 }}
                             >
-                                <img src="assets/modules-image/yai2.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
+                                <img src={process.env.PUBLIC_URL + "/assets/modules-image/yai2.png"} alt="Yai" className="w-full h-full rounded-full object-cover" />
                             </div>
                             <span className="text-emerald-500 font-bold text-base whitespace-nowrap">{t('Big Brain')}</span>
                             <ClaudeBadge />

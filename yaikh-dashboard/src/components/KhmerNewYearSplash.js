@@ -99,7 +99,7 @@ const KhmerNewYearSplash = () => {
                     {/* Angkor Wat Majestic Image w/ Masking */}
                     <div className="absolute inset-0 z-20 w-[110%] -left-[5%] h-[120%] -top-[10%]">
                          <img 
-                            src="/assets/theme/angkor-wat.png" 
+                            src={process.env.PUBLIC_URL + "/assets/theme/angkor-wat.png"} 
                             alt="Angkor Wat Sunrise" 
                             className="w-full h-full object-cover mix-blend-screen opacity-90 animate-ken-burns transition-transform duration-[20s]"
                             style={{ WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%)', maskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%)' }}

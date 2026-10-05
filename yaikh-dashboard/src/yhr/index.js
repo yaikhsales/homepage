@@ -444,7 +444,7 @@ const YHR = ({ onBack }) => {
                 <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="relative z-10 w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center">
                   <img
-                    src="/assets/icons/sub-icons/checklist-attendant.jpg"
+                    src={process.env.PUBLIC_URL + "/assets/icons/sub-icons/checklist-attendant.jpg"}
                     alt="Checklist Attendant"
                     className="w-full h-full object-contain drop-shadow-2xl"
                   />
@@ -460,7 +460,7 @@ const YHR = ({ onBack }) => {
                 <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="relative z-10 w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center">
                   <img
-                    src="/assets/icons/sub-icons/my-attendant.jpg"
+                    src={process.env.PUBLIC_URL + "/assets/icons/sub-icons/my-attendant.jpg"}
                     alt={translateModuleTitle("My Attendant")}
                     className="w-full h-full object-contain drop-shadow-2xl"
                   />
@@ -491,7 +491,7 @@ const YHR = ({ onBack }) => {
                 <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="relative z-10 w-40 h-40 sm:w-44 sm:h-44 md:w-48 md:h-48 flex items-center justify-center bg-white rounded-xl p-4 sm:p-5 shadow-xl">
                   <img
-                    src="/assets/icons/sub-icons/FWCMS.png"
+                    src={process.env.PUBLIC_URL + "/assets/icons/sub-icons/FWCMS.png"}
                     alt="FWCMS Portal"
                     className="w-full h-full object-contain"
                   />
@@ -507,7 +507,7 @@ const YHR = ({ onBack }) => {
                 <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="relative z-10 w-40 h-40 sm:w-44 sm:h-44 md:w-48 md:h-48 flex items-center justify-center bg-white rounded-xl p-4 sm:p-5 shadow-xl">
                   <img
-                    src="/assets/icons/sub-icons/FWCMS.png"
+                    src={process.env.PUBLIC_URL + "/assets/icons/sub-icons/FWCMS.png"}
                     alt="Ministry of Labour"
                     className="w-full h-full object-contain"
                   />
@@ -540,7 +540,7 @@ const YHR = ({ onBack }) => {
                 <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="relative z-10 w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center bg-white rounded-xl p-3 shadow-lg">
                   <img
-                    src="/assets/icons/sub-icons/benefit-profile.png"
+                    src={process.env.PUBLIC_URL + "/assets/icons/sub-icons/benefit-profile.png"}
                     alt="Benefit Profile"
                     className="w-full h-full object-contain"
                   />
@@ -556,7 +556,7 @@ const YHR = ({ onBack }) => {
                 <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="relative z-10 w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center bg-white rounded-xl p-3 shadow-lg">
                   <img
-                    src="/assets/icons/sub-icons/food-canteen.png"
+                    src={process.env.PUBLIC_URL + "/assets/icons/sub-icons/food-canteen.png"}
                     alt="Canteen"
                     className="w-full h-full object-contain"
                   />

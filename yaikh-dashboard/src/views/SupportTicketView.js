@@ -283,7 +283,7 @@ const SupportTicketView = ({ onBack }) => {
                             <X size={24} className="text-white" />
                         </button>
                         <img
-                            src="/assets/icons/sub-icons/support-ticket.png"
+                            src={process.env.PUBLIC_URL + "/assets/icons/sub-icons/support-ticket.png"}
                             alt={t('supportTicket')}
                             className="max-w-full max-h-full object-contain"
                             style={{ 

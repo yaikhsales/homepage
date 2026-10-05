@@ -511,7 +511,7 @@ const AboutUs = ({ onClose }) => {
                 >
                   <img
                     // src="https://flagcdn.com/w80/hk.png"
-                    src="/assets/about-us/flags/Hongkong.svg"
+                    src={process.env.PUBLIC_URL + "/assets/about-us/flags/Hongkong.svg"}
                     alt="Hong Kong"
                     className="h-8 sm:h-10 md:h-12 lg:h-14 w-auto"
                     style={{ width: "99%", objectFit: "contain" }}
@@ -523,7 +523,7 @@ const AboutUs = ({ onClose }) => {
                 <div className="flex flex-col items-center">
                   <img
                     // src="https://flagcdn.com/w80/kh.png"
-                    src="/assets/about-us/flags/cambodia-4k.png"
+                    src={process.env.PUBLIC_URL + "/assets/about-us/flags/cambodia-4k.png"}
                     alt="Cambodia"
                     className="h-8 sm:h-10 md:h-12 lg:h-14 w-auto"
                     style={{ objectFit: "contain" }}
@@ -538,7 +538,7 @@ const AboutUs = ({ onClose }) => {
                 >
                   <img
                     // src="https://flagcdn.com/w80/sg.png"
-                    src="/assets/about-us/flags/Singapore-4k.png"
+                    src={process.env.PUBLIC_URL + "/assets/about-us/flags/Singapore-4k.png"}
                     alt="Singapore"
                     className="h-8 sm:h-10 md:h-12 lg:h-14 w-auto"
                     style={{ width: "99%", objectFit: "contain" }}

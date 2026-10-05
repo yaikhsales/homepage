@@ -12,6 +12,7 @@ import SectionContainer from "./components/SectionContainer";
 import { DASHBOARD_DATA } from "./data/module";
 import YaiDataBot from "./chatbot/YaiDataBot";
 import BotModules from "./chatbot/bot-modules";
+import BigBrainPanel from "./chatbot/BigBrainPanel";
 import { paForRoute, PA_GRADIENT, PA_NAME, BIG_BRAIN_TITLES, BIG_BRAIN_ROUTES, BIG_BRAIN_BUBBLE } from "./chatbot/pa-owner";
 import DragonAnimation from "./components/DragonAnimation";
 import { useTranslation } from "./translate/TranslationContext";
@@ -124,8 +125,12 @@ const AppLayout = () => {
   // Sticky green bubble after clicking a Big Brain-driven module whose
   // route we can't enumerate (e.g. Management Dashboard image view).
   const [bbBubble, setBbBubble] = useState(false);
+  const [bigBrainOpen, setBigBrainOpen] = useState(false);
+  const [bigBrainPage, setBigBrainPage] = useState("Management Dashboard");
   useEffect(() => {
-    if (location.pathname === "/") setBbBubble(false);
+    if (location.pathname === "/") { setBbBubble(false); setBigBrainOpen(false); }
+    else if (location.pathname.startsWith("/dashboard/sop-map")) setBigBrainPage("SOP");
+    else if (location.pathname.startsWith("/dashboard/system-analysis")) setBigBrainPage("System Analysis");
   }, [location.pathname]);
   const [routePaOpen, setRoutePaOpen] = useState(false);
   // Pinned = the PA stays on screen wherever Gamini navigates, until
@@ -138,10 +143,10 @@ const AppLayout = () => {
   // open, body carries .yai-pa-open so those pages can reserve ~424px of
   // right padding (panel = right-6 + w-[400px]).
   useEffect(() => {
-    const on = !!(activeRoutePa && routePaOpen);
+    const on = !!(activeRoutePa && routePaOpen) || bigBrainOpen;
     document.body.classList.toggle("yai-pa-open", on);
     return () => document.body.classList.remove("yai-pa-open");
-  }, [activeRoutePa, routePaOpen]);
+  }, [activeRoutePa, routePaOpen, bigBrainOpen]);
   useEffect(() => {
     // (re)open when ENTERING a PA-owned department; keep state while
     // moving between that department's own pages. A pinned PA never
@@ -203,6 +208,8 @@ const AppLayout = () => {
       // opening the full-screen takeover (Gamini 2026-10-05).
       setYaiVersion("yai2");
       setBbBubble(true);
+      setBigBrainPage(module.title);
+      setBigBrainOpen(true);
     }
     if (module.demoType) {
       const { demoType, id, title } = module;
@@ -1528,7 +1535,7 @@ const AppLayout = () => {
                   boxShadow: "inset -4px -4px 8px rgba(0,0,0,0.30), inset 3px 3px 6px rgba(255,255,255,0.35), 0 4px 16px rgba(249,115,22,0.55)",
                 }}
               >
-                <img src="/assets/modules-image/top-bot.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
+                <img src={process.env.PUBLIC_URL + "/assets/modules-image/top-bot.png"} alt="Yai" className="w-full h-full rounded-full object-cover" />
               </div>
               <span className="text-orange-400 font-bold text-xl whitespace-nowrap">
                 {t('My Task Agent')}
@@ -1553,7 +1560,7 @@ const AppLayout = () => {
                   boxShadow: "inset -4px -4px 8px rgba(0,0,0,0.30), inset 3px 3px 6px rgba(255,255,255,0.35), 0 4px 12px rgba(59,130,246,0.4)",
                 }}
               >
-                <img src="/assets/modules-image/yai1.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
+                <img src={process.env.PUBLIC_URL + "/assets/modules-image/yai1.png"} alt="Yai" className="w-full h-full rounded-full object-cover" />
               </div>
               <span className="text-blue-400 font-bold text-xl whitespace-nowrap">
                 {t('Agent Collective')}
@@ -1576,7 +1583,7 @@ const AppLayout = () => {
                   boxShadow: "inset -4px -4px 8px rgba(0,0,0,0.30), inset 3px 3px 6px rgba(255,255,255,0.35), 0 4px 12px rgba(16,185,129,0.4)",
                 }}
               >
-                <img src="/assets/modules-image/yai2.png" alt="Yai" className="w-full h-full rounded-full object-cover" />
+                <img src={process.env.PUBLIC_URL + "/assets/modules-image/yai2.png"} alt="Yai" className="w-full h-full rounded-full object-cover" />
               </div>
               <span className="text-emerald-400 font-bold text-xl whitespace-nowrap">
                 {t('Big Brain')}
@@ -1649,9 +1656,9 @@ const AppLayout = () => {
         </button>
       )}
       {/* Green Big Brain bubble on its own routes (SOP map, System Analysis) */}
-      {(isBigBrainRoute || bbBubble) && !isYaiDataBotOpen && (
+      {(isBigBrainRoute || bbBubble) && !isYaiDataBotOpen && !bigBrainOpen && (
         <button
-          onClick={() => { setYaiVersion("yai2"); setYaiDataBotOpen(true); }}
+          onClick={() => { setYaiVersion("yai2"); setBigBrainOpen(true); }}
           className="fixed bottom-6 right-6 z-50 h-14 pl-4 pr-5 text-white rounded-full shadow-2xl hover:scale-105 transition-all duration-300 flex items-center gap-2"
           style={{ background: BIG_BRAIN_BUBBLE }}
           aria-label="Open Big Brain"
@@ -1660,6 +1667,12 @@ const AppLayout = () => {
           <MessageCircle className="w-7 h-7" />
           <span className="font-bold text-base whitespace-nowrap">Big Brain</span>
         </button>
+      )}
+
+      {/* Compact green Big Brain panel — drives Management Dashboard /
+          System Analysis / SOP without replacing the page. */}
+      {bigBrainOpen && (
+        <BigBrainPanel page={bigBrainPage} onClose={() => setBigBrainOpen(false)} />
       )}
 
       {isYaiDataBotOpen && (

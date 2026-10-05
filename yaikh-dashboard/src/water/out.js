@@ -200,7 +200,7 @@ const WaterOut = ({ onBack }) => {
                                     {/* Water Meter Image/Icon */}
                                     <div className="w-48 h-48 bg-slate-800 rounded-lg flex items-center justify-center mb-4 relative overflow-hidden">
                                         <img 
-                                            src="/assets/icons/sub-icons/water.jpg"
+                                            src={process.env.PUBLIC_URL + "/assets/icons/sub-icons/water.jpg"}
                                             alt={t('waterMeter')}
                                             className="w-full h-full object-contain"
                                             onError={(e) => {
