@@ -2074,7 +2074,7 @@ ANSWER RULES
 
   return (
     <div
-      className="fixed inset-0 z-[200] flex overflow-hidden bg-[#050505] text-white"
+      className="fixed inset-0 z-[200] flex overflow-hidden bg-[#0f172a] text-white"
       style={{
         top: 0,
         left: 0,
@@ -2153,7 +2153,7 @@ ANSWER RULES
       {/* Sidebar - Chat History (pushed further down so it clears the
           Yai Agents / Agent Collective / Big Brain header row) */}
       <div
-        className={`fixed left-0 z-50 w-80 bg-[#050505] border-r border-white/10 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed left-0 z-50 w-80 bg-[#0f172a] border-r border-white/10 transform transition-transform duration-300 ease-in-out ${
           isHistoryOpen ? "translate-x-0" : "-translate-x-full"
         }`}
         style={{ top: "220px", bottom: "0", height: "calc(100vh - 220px)" }}
@@ -2340,7 +2340,7 @@ ANSWER RULES
         {/* Green Big Brain — current mode, ringed */}
         <div className="flex items-center gap-2 flex-shrink-0" title="Big Brain — you are here">
           <div
-            className="w-11 h-11 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0 ring-2 ring-emerald-400/60 ring-offset-2 ring-offset-[#050505]"
+            className="w-11 h-11 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0 ring-2 ring-emerald-400/60 ring-offset-2 ring-offset-[#0f172a]"
             style={{
               background: "radial-gradient(circle at 30% 25%, #a7f3d0 0%, #10b981 55%, #047857 100%)",
               boxShadow: "inset -3px -3px 6px rgba(0,0,0,0.30), inset 2px 2px 4px rgba(255,255,255,0.35), 0 3px 12px rgba(16,185,129,0.55)",
@@ -2356,7 +2356,7 @@ ANSWER RULES
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden w-full h-full min-h-0 flex-shrink relative z-20 pt-4">
         {/* Header with Bot Name and Avatar */}
-        <div className={`flex-shrink-0 flex flex-col px-4 sm:px-6 py-3 pt-16 sm:pt-20 border-b ${KHMER_NEW_YEAR.isActive ? 'border-red-500/30 bg-gradient-to-b from-red-900/40 via-orange-900/20 to-[#050505]/80' : 'border-white/10 bg-[#050505]/80'} backdrop-blur-sm w-full h-auto relative z-30`}>
+        <div className={`flex-shrink-0 flex flex-col px-4 sm:px-6 py-3 pt-16 sm:pt-20 border-b ${KHMER_NEW_YEAR.isActive ? 'border-red-500/30 bg-gradient-to-b from-red-900/40 via-orange-900/20 to-[#0f172a]/80' : 'border-white/10 bg-[#0f172a]/80'} backdrop-blur-sm w-full h-auto relative z-30`}>
           <style>{`
                         @keyframes float {
                             0%, 100% { transform: translateY(0px) rotate(0deg); }
@@ -2453,7 +2453,7 @@ ANSWER RULES
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 overflow-y-auto overflow-x-hidden px-4 sm:px-6 py-8 bg-[#050505]/60 backdrop-blur-sm relative z-20 min-h-0 w-full flex-shrink">
+        <div className="flex-1 overflow-y-auto overflow-x-hidden px-4 sm:px-6 py-8 bg-[#0f172a]/60 backdrop-blur-sm relative z-20 min-h-0 w-full flex-shrink">
           {!hasMessages ? (
             // Rare — messages have't been seeded yet. Should self-correct on next tick.
             <div className="pt-16 max-w-md mx-auto text-center text-white/60 text-sm">
@@ -2599,7 +2599,7 @@ ANSWER RULES
         </div>
 
         {/* Input Field with Thinking Status */}
-        <div className="flex-shrink-0 px-4 sm:px-6 py-4 border-t border-white/10 bg-[#050505] w-full">
+        <div className="flex-shrink-0 px-4 sm:px-6 py-4 border-t border-white/10 bg-[#0f172a] w-full">
           <form onSubmit={handleSend} className="relative max-w-6xl mx-auto">
         {uploadedImage && (
           <div className="absolute bottom-full mb-3 left-0 p-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/20 flex items-start gap-2 shadow-xl">

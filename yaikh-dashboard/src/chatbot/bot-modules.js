@@ -5858,10 +5858,10 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                 }
             `}</style>
 
-            {/* Background — gated in compact mode so the page underneath
+            {/* Background (solid dark blue, same as home and module screens) — gated in compact mode so the page underneath
                 stays visible through transparent gaps of the phone-frame */}
             {!isCompactMount && (
-                <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 transition-colors duration-300"></div>
+                <div className="absolute inset-0 bg-slate-900 transition-colors duration-300"></div>
             )}
 
             {/* Top nav — matches the home page: ← Home · My Task Agent · Agent Collective · Big Brain */}

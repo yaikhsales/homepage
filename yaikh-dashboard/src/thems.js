@@ -377,11 +377,11 @@ export const ThemeBackground = () => {
   return createPortal(
     <div
       id="background"
-      className="fixed inset-0 overflow-hidden pointer-events-none bg-slate-950"
+      className="fixed inset-0 overflow-hidden pointer-events-none bg-slate-900"
       style={{ zIndex: -1, width: "100vw", height: "100vh" }}
     >
       {/* Solid background (2026-10-05, Gamini): the AI-chip circuit image was
-          removed so the home grid and sub-menus match the solid slate-950 of
+          removed so the home grid and sub-menus match the solid slate-900 (dark blue) of
           the module screens. */}
     </div>,
     document.body,

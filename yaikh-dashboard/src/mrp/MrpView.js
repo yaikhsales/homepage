@@ -78,14 +78,14 @@ const MrpView = ({ onBack, module = "mrp", label = "MRP" }) => {
 
   return h(
     "div",
-    { className: "min-h-screen bg-slate-950 text-slate-200 px-4 md:px-8 pb-8 pt-28 font-sans" }, // pt-28 clears the fixed 3-mode nav
+    { className: "min-h-screen bg-slate-900 text-slate-200 px-4 md:px-8 pb-8 pt-28 font-sans" }, // pt-28 clears the fixed 3-mode nav
     h(
       "div",
       { className: "flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6" },
       h(
         "div",
         { className: "flex items-center gap-4" },
-        h("button", { onClick: onBack, className: "p-2 hover:bg-slate-800 rounded-full transition-colors text-slate-400 hover:text-white", "aria-label": "Back" }, h(ArrowLeft, { size: 24 })),
+        h("button", { onClick: onBack, className: "p-2 hover:bg-slate-700 rounded-full transition-colors text-slate-400 hover:text-white", "aria-label": "Back" }, h(ArrowLeft, { size: 24 })),
         h(
           "div",
           null,
@@ -100,22 +100,22 @@ const MrpView = ({ onBack, module = "mrp", label = "MRP" }) => {
         MONTHLY.has(view) &&
           h(
             "div",
-            { className: "flex items-center gap-1 bg-slate-900 border border-slate-800 rounded-xl px-1 py-1" },
-            h("button", { onClick: () => setMonth(shiftMonth(month, -1)), className: "p-1.5 hover:bg-slate-800 rounded-lg", "aria-label": "Previous month" }, h(ChevronLeft, { size: 18 })),
+            { className: "flex items-center gap-1 bg-slate-800 border border-slate-700 rounded-xl px-1 py-1" },
+            h("button", { onClick: () => setMonth(shiftMonth(month, -1)), className: "p-1.5 hover:bg-slate-700 rounded-lg", "aria-label": "Previous month" }, h(ChevronLeft, { size: 18 })),
             h("span", { className: "px-2 text-sm font-bold text-white tabular-nums" }, month),
-            h("button", { onClick: () => setMonth(shiftMonth(month, 1)), className: "p-1.5 hover:bg-slate-800 rounded-lg", "aria-label": "Next month" }, h(ChevronRight, { size: 18 }))
+            h("button", { onClick: () => setMonth(shiftMonth(month, 1)), className: "p-1.5 hover:bg-slate-700 rounded-lg", "aria-label": "Next month" }, h(ChevronRight, { size: 18 }))
           ),
         h(
           "div",
-          { className: "flex items-center gap-2 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2" },
+          { className: "flex items-center gap-2 bg-slate-800 border border-slate-700 rounded-xl px-3 py-2" },
           h(Search, { size: 16, className: "text-slate-500" }),
           h("input", { value: q, onChange: (e) => setQ(e.target.value), placeholder: "Search order, supplier, status…", className: "bg-transparent outline-none text-sm w-56 text-white placeholder-slate-500" })
         ),
-        h("button", { onClick: load, className: "p-2.5 bg-slate-900 border border-slate-800 rounded-xl hover:bg-slate-800", "aria-label": "Refresh" }, h(RefreshCw, { size: 16, className: loading ? "animate-spin" : "" })),
+        h("button", { onClick: load, className: "p-2.5 bg-slate-800 border border-slate-700 rounded-xl hover:bg-slate-700", "aria-label": "Refresh" }, h(RefreshCw, { size: 16, className: loading ? "animate-spin" : "" })),
         board &&
           h(
             "button",
-            { onClick: () => document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(), className: "p-2.5 bg-slate-900 border border-slate-800 rounded-xl hover:bg-slate-800", "aria-label": "Full screen" },
+            { onClick: () => document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(), className: "p-2.5 bg-slate-800 border border-slate-700 rounded-xl hover:bg-slate-700", "aria-label": "Full screen" },
             h(Maximize, { size: 16 })
           )
       )
@@ -127,7 +127,7 @@ const MrpView = ({ onBack, module = "mrp", label = "MRP" }) => {
       ((data && data.summary) || []).map((s) =>
         h(
           "div",
-          { key: s.label, className: "rounded-2xl border border-slate-800 bg-slate-900/60 px-4 py-3" },
+          { key: s.label, className: "rounded-2xl border border-slate-700 bg-slate-800/60 px-4 py-3" },
           h("div", { className: "text-xs uppercase tracking-wider text-slate-400" }, s.label),
           h("div", { className: (board ? "text-4xl" : "text-2xl") + " font-black text-white tabular-nums" }, fmt(s.value))
         )
@@ -135,18 +135,18 @@ const MrpView = ({ onBack, module = "mrp", label = "MRP" }) => {
     ),
     h(
       "div",
-      { className: "rounded-2xl border border-slate-800 bg-slate-900/40 overflow-x-auto" },
+      { className: "rounded-2xl border border-slate-700 bg-slate-800/40 overflow-x-auto" },
       h(
         "table",
         { className: "w-full border-collapse" },
-        h("thead", null, h("tr", { className: "bg-slate-900 text-left" }, cols.map((c) => h("th", { key: c.key, className: cell + " font-bold text-slate-300 uppercase tracking-wider text-xs whitespace-nowrap" }, c.label)))),
+        h("thead", null, h("tr", { className: "bg-slate-800 text-left" }, cols.map((c) => h("th", { key: c.key, className: cell + " font-bold text-slate-300 uppercase tracking-wider text-xs whitespace-nowrap" }, c.label)))),
         h(
           "tbody",
           null,
           rows.map((r, i) =>
             h(
               "tr",
-              { key: (r.shipment || r.document || r.order || "") + "-" + i, className: "border-t border-slate-800/70 hover:bg-slate-800/40" },
+              { key: (r.shipment || r.document || r.order || "") + "-" + i, className: "border-t border-slate-700/70 hover:bg-slate-700/40" },
               cols.map((c) =>
                 h(
                   "td",
