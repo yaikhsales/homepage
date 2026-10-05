@@ -1,6 +1,6 @@
 // Live view of one sewing line, drawn as a U-shaped hanger line: one box per
 // machine with its operation, a status light and its count. Last level of the
-// 4DP plan (Master Plan → Unit Plan → Line Plan T&A → Line Plan → this).
+// 4DP plan (Master Plan → Unit Plan → Section Plan → Line Plan → this).
 // Data: M1 /sim/view {module:"4dp", view:"line-live", line}. Simulated.
 import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";

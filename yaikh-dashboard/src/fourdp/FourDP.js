@@ -15,7 +15,7 @@ const API = (process.env.REACT_APP_M1_LLM_URL || "/api/m1").replace(/\/$/, "");
 const TOPICS = [
   { id: "master-plan", label: "Master Plan", hint: "Orders handed to each factory", icon: LayoutDashboard, monthly: true },
   { id: "unit-plan", label: "Unit Plan", hint: "Factory plan, by department", icon: Building, monthly: true, factory: "F1" },
-  { id: "line-plan-ta", label: "Line Plan T&A", hint: "One order, lot by lot", icon: ClipboardCheck, monthly: true, factory: "F1", noAll: true, orders: true },
+  { id: "line-plan-ta", label: "Section Plan", hint: "One order: cutting, sewing, finishing by lot", icon: ClipboardCheck, monthly: true, factory: "F1", noAll: true, orders: true },
   { id: "line-plan", label: "Line Plan", hint: "Sewing lines — click one for live", icon: Layers, monthly: true, factory: "" },
   { id: "mrp-tv", label: "MRP TV", hint: "Deliveries on the way", icon: MonitorPlay, wall: true },
   { id: "tec-tv", label: "TEC TV", hint: "Technical readiness", icon: MonitorPlay, wall: true },
