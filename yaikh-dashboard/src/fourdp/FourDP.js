@@ -212,6 +212,7 @@ const FourDP = () => {
           {/* One compact toolbar: factory tabs + figures on the left, controls on the right.
               The space belongs to the plan, not to statistics. */}
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 mb-1.5">
+            <h1 className="text-lg font-black text-white leading-none whitespace-nowrap">{topic.label}</h1>
             {topic.factory !== undefined && data && data.factories && (
               <div className="flex items-center gap-1">
                 {!topic.noAll && (
