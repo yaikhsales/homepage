@@ -6,7 +6,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  ArrowLeft, LayoutDashboard, Building, ClipboardCheck, Layers, MonitorPlay,
+  LayoutDashboard, Building, ClipboardCheck, Layers, MonitorPlay,
   ChevronLeft, ChevronRight, RefreshCw, Search, Maximize, Table2,
 } from "lucide-react";
 
@@ -140,7 +140,7 @@ function Gantt({ g, filter, onLine }) {
   );
 }
 
-const FourDP = ({ onBack }) => {
+const FourDP = () => {
   const { view: routeView } = useParams();
   const navigate = useNavigate();
   const view = TOPICS.some((t) => t.id === routeView) ? routeView : "master-plan";
@@ -213,11 +213,7 @@ const FourDP = ({ onBack }) => {
 
         {/* RIGHT — Gantt */}
         <main className="flex-1 min-w-0">
-          <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
-            <div>
-              <h1 className="text-2xl font-black text-white leading-tight">{(data && data.title) || topic.label}</h1>
-              <p className="text-sm text-slate-400">{(data && data.subtitle) || topic.hint}</p>
-            </div>
+          <div className="flex flex-wrap items-center justify-end gap-3 mb-3">
             <div className="flex items-center gap-2 flex-wrap">
               {topic.monthly && (
                 <div className="flex items-center gap-1 bg-slate-800 border border-slate-700 rounded-xl px-1 py-1">
