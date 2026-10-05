@@ -97,7 +97,7 @@ Each Yai chat agent (PA) consumes one or more digitalization modules. This table
 | Production PA | FC, YWIP | `production_schedule`, `wip` | `agent/production` |
 | CE PA | CE | `customer_visits`, `feedback` | `agent/ce` |
 | YTM PA | YTM | `machine_maintenance`, `repair_log` | `agent/ytm` |
-| 4DP PA | 4DP | `designs`, `patterns`, `samples`, `specs` | `agent/4dp` |
+| 4DP PA | 4DP: Master Plan, Unit Plan, Line Plan T&A, Line Plan, MRP TV, TEC TV (`/dashboard/4dp/<view>`) | simulated factory on the M1 (`yai_factory`: `orders`, `line_plan`, `units`, `lines`, `ta`), read through `/api/m1/sim/view` — not Atlas | `agent/4dp` |
 | YPI PA | YPI | `kaizen`, `sop_reviews`, `process_optimization` | `agent/ypi` |
 | MRP PA | MRP: Orders, Supplier Documents, Logistics, Arrival, Consumption (11 screens under `/dashboard/mrp/<view>`) | simulated factory on the M1 (`yai_factory`: `orders`, `shipments`, `packing_lists`), read through `/api/m1/sim/view` — not Atlas | `agent/mrp` |
 | Social PA | (no sub-modules yet) | `social_posts`, `social_comments` | `agent/social` |

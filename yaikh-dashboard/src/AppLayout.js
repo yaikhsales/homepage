@@ -1034,6 +1034,45 @@ const AppLayout = () => {
                                               },
                                             ],
                                           }
+                                        : demoType === "SUBMENU_4DP"
+                                          ? [
+                                              {
+                                                title: "Master Plan",
+                                                icon: "LayoutDashboard",
+                                                color: "bg-blue-500/30 text-white",
+                                                action: "/dashboard/4dp/master-plan",
+                                              },
+                                              {
+                                                title: "Unit Plan",
+                                                icon: "Building",
+                                                color: "bg-indigo-500/30 text-white",
+                                                action: "/dashboard/4dp/unit-plan",
+                                              },
+                                              {
+                                                title: "Line Plan T&A",
+                                                icon: "ClipboardCheck",
+                                                color: "bg-amber-500/30 text-white",
+                                                action: "/dashboard/4dp/line-plan-ta",
+                                              },
+                                              {
+                                                title: "Line Plan",
+                                                icon: "Layers",
+                                                color: "bg-emerald-500/30 text-white",
+                                                action: "/dashboard/4dp/line-plan",
+                                              },
+                                              {
+                                                title: "MRP TV",
+                                                icon: "MonitorPlay",
+                                                color: "bg-sky-500/30 text-white",
+                                                action: "/dashboard/4dp/mrp-tv",
+                                              },
+                                              {
+                                                title: "TEC TV",
+                                                icon: "MonitorPlay",
+                                                color: "bg-violet-500/30 text-white",
+                                                action: "/dashboard/4dp/tec-tv",
+                                              },
+                                            ]
                                         : demoType === "SUBMENU_MRP"
                                           ? {
                                               grouped: true,

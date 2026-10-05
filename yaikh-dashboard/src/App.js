@@ -413,6 +413,8 @@ export default function App() {
 
           {/* MRP sub-modules — data from the simulated factory on the M1 */}
           <Route path="mrp/:view" element={<MrpView onBack={handleBack} />} />
+          {/* 4DP sub-modules: Master Plan, Unit Plan, Line Plan T&A, Line Plan, MRP TV, TEC TV */}
+          <Route path="4dp/:view" element={<MrpView onBack={handleBack} module="4dp" label="4DP" />} />
 
           {/* FC Module Routes */}
           <Route

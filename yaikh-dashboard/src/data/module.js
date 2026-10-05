@@ -446,7 +446,7 @@ export const DASHBOARD_DATA = [
             title: "4DP",
             image: "IMG/avatars/agent-37.png",
             status: "active",
-            demoType: "IFRAME_VIEW",
+            demoType: "SUBMENU_4DP",
             popupTitle: "OPERATIONS · 4DP",
             description: "I'm the production plan — scheduling orders across lines day by day."
           }
