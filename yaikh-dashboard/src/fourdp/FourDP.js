@@ -193,13 +193,6 @@ const FourDP = ({ onBack }) => {
       <div className="flex gap-4 items-start">
         {/* LEFT — topics */}
         <aside className="w-60 flex-shrink-0 rounded-2xl border border-slate-700 bg-slate-800/60 p-3 sticky top-28">
-          <div className="flex items-center gap-2 px-1 pb-3 mb-2 border-b border-slate-700">
-            <button onClick={onBack} className="p-1.5 hover:bg-slate-700 rounded-full text-slate-400 hover:text-white" aria-label="Back"><ArrowLeft size={18} /></button>
-            <div>
-              <div className="text-lg font-black text-white leading-none">4DP</div>
-              <div className="text-[11px] text-slate-400">4-Directional Planning</div>
-            </div>
-          </div>
           <nav className="flex flex-col gap-1">
             {TOPICS.map((t) => {
               const Icon = t.icon;
