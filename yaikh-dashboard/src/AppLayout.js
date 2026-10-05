@@ -1428,6 +1428,7 @@ const AppLayout = () => {
 
         navigate(`/dashboard/submenu/${id}`, { state: { title, cards } });
       } else if (demoType === "VIEW_4DP") navigate("/dashboard/4dp/master-plan"); // topics left, Gantt right
+      else if (demoType === "VIEW_YPI") navigate("/dashboard/ypi/cut-plan");
       else if (demoType === "GRID_TRAINING") navigate("/dashboard/training");
       else if (demoType === "VIEW_TICKET_CUSTOM") navigate("/dashboard/ticket");
       else if (demoType === "DASH_WASTE") navigate("/dashboard/waste");

@@ -461,7 +461,7 @@ export const DASHBOARD_DATA = [
             title: "YPI",
             image: "IMG/avatars/agent-26.png",
             status: "active",
-            demoType: "EXTERNAL_URL",
+            demoType: "VIEW_YPI",
             popupTitle: "OPERATIONS · YPI",
             description: "I got all the technical details in 3 languages or even more, from 1st sample to shipment every technical details."
           }

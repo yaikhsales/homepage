@@ -110,6 +110,7 @@ import AutoPost from "./autopost/AutoPost";
 import MrpView from "./mrp/MrpView";
 import FourDP from "./fourdp/FourDP";
 import LineLive from "./fourdp/LineLive";
+import CutPlan from "./ypi/CutPlan";
 import AccessoriesReceiving from "./fc/AccessoriesReceiving";
 import AccessoriesInspection from "./fc/AccessoriesInspection";
 import WarehouseMap from "./fc/WarehouseMap";
@@ -412,6 +413,9 @@ export default function App() {
           <Route path="4dp/line/:line" element={<LineLive />} />
           <Route path="4dp/:view" element={<FourDP onBack={() => navigate("/")} />} />
           <Route path="4dp" element={<FourDP onBack={() => navigate("/")} />} />
+          {/* YPI: Marker & Cut Plan (the cut plan of one order, and the list of markers) */}
+          <Route path="ypi/cut-plan" element={<CutPlan view="cut-plan" onBack={() => navigate("/")} />} />
+          <Route path="ypi/markers" element={<CutPlan view="markers" onBack={() => navigate("/")} />} />
 
           {/* FC Module Routes */}
           <Route
