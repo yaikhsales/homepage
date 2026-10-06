@@ -248,21 +248,41 @@ const CSR = {
   ],
 };
 
+const YTM_SHOP = {
+  kind: "cycle",
+  title: "YTM Shop · Spare parts",
+  summary: "Needles, parts and attachments — requested on the line, issued from the shop, re-ordered before they run out.",
+  loopTo: "req", loopLabel: "for every part request",
+  acts: [
+    { id: "req", lane: "prod", title: "Part request from the line", screen: ["YTM Shop", "/dashboard/ytm-shop"],
+      roles: [R("Mechanic", "ytm", "Raises the request with the machine number"), R("Line supervisor", "prod", "Confirms the breakdown")], inputs: "Broken / worn part", outputs: "Part request" },
+    { id: "ok", lane: "ytm", title: "Approve", screen: ["YTM Shop", "/dashboard/ytm-shop"],
+      roles: [R("YTM supervisor", "ytm", "Approves against the machine history")], inputs: "Part request", outputs: "Approved request" },
+    { id: "issue", lane: "ytm", title: "Issue from the shop", screen: ["YTM Shop", "/dashboard/ytm-shop"],
+      roles: [R("Shop keeper", "ytm", "Issues the part, takes the old one back"), R("Mechanic", "ytm", "Fits the part")], inputs: "Approved request", outputs: "Machine running" },
+    { id: "reorder", lane: "mrp", title: "Re-order at minimum stock", screen: ["YTM Shop", "/dashboard/ytm-shop"],
+      roles: [R("Shop keeper", "ytm", "Flags minimum stock"), R("Purchaser", "mrp", "Orders from the supplier")], inputs: "Stock level", outputs: "Stock refilled" },
+  ],
+};
+
+// Order (Gamini 2026-10-06): overview first, production modules in flow
+// sequence, then the support departments, Accounting last.
 const PROCESSES = [
   { id: "order", name: "Order → Ship", sub: "Merchandising to shipping", flow: ORDER },
-  { id: "ypi", name: "Merchandising · YPI", flow: ORDER, focus: ["sales", "ypi"] },
+  { id: "dp", name: "4DP · Planning", flow: ORDER, focus: ["dp"] },
+  { id: "ypi", name: "YPI · Merchandising", flow: ORDER, focus: ["sales", "ypi"] },
   { id: "mrp", name: "MRP · Materials", flow: ORDER, focus: ["mrp"] },
   { id: "fc", name: "FC · Fabric Center", flow: ORDER, focus: ["fc"] },
-  { id: "dp", name: "4DP · Planning", flow: ORDER, focus: ["dp"] },
-  { id: "ie", name: "IE · CE", flow: ORDER, focus: ["ce"] },
+  { id: "ie", name: "CE · IE", flow: ORDER, focus: ["ce"] },
   { id: "prod", name: "Production", sub: "Cut · sew · finish · pack", flow: ORDER, focus: ["prod"] },
   { id: "qa", name: "Quality Management", flow: ORDER, focus: ["qa"] },
-  { id: "ytm", name: "Maintenance · YTM", flow: ORDER, focus: ["ytm"] },
-  { id: "ship", name: "Shipping", flow: ORDER, focus: ["ship"] },
+  { id: "ytm", name: "YTM · Maintenance", flow: ORDER, focus: ["ytm"] },
+  { id: "ytmshop", name: "YTM Shop", flow: YTM_SHOP },
   { id: "hr", name: "HR", flow: HR },
-  { id: "acct", name: "Accounting · Payroll", flow: ACCT },
   { id: "admin", name: "Admin", flow: ADMIN },
   { id: "csr", name: "CSR", flow: CSR },
+  { id: "ship", name: "Shipping", flow: ORDER, focus: ["ship"] },
+  { id: "acct", name: "Accounting · Payroll", flow: ACCT },
 ];
 
 /* ---------- timeline layout ---------- */
