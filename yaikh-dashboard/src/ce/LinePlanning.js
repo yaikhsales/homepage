@@ -100,9 +100,16 @@ const LinePlanning = ({ onBack }) => {
   const placedWs = useMemo(() => new Set(Object.values(placed).map(String)), [placed]);
   const unplaced = stations.filter((s) => !placedWs.has(String(s.ws)));
 
-  // metres → percent of the drawing area
+  // metres → percent of the drawing area; the canvas is as tall as the line needs so a workstation box
+  // (about 50 px) always fits between two slots (station pitch 0.9 m on the U and zigzag, 1.2 m straight)
   const px = (x) => ((x + 1.2) / foot.width) * 100;
   const py = (y) => 100 - ((y + 2.2) / foot.length) * 100;
+  const pxPerM = Math.max(31, 54 / (dims.station_pitch_m || 0.9));
+  const canvasH = Math.round(foot.length * pxPerM);
+  const offline = (sl) => sl.x_m < 0 || sl.slot > 40;
+  // a box is 150 px wide, except where slots sit side by side on the same row (the U-turn): there it is
+  // as wide as the slot step, so neighbours never touch
+  const boxW = (sl) => { let step = null; slots.forEach((o) => { if (o.slot === sl.slot || Math.abs(o.y_m - sl.y_m) > 0.05) return; const dx = Math.abs(o.x_m - sl.x_m); if (dx > 0 && dx < 1.6 && (step === null || dx < step)) step = dx; }); return step ? `${(step / foot.width) * 100 - 0.5}%` : 150; };
 
   const dropOnSlot = (slot) => {
     if (dragWs == null) return;
@@ -152,8 +159,13 @@ const LinePlanning = ({ onBack }) => {
     }
   };
 
-  // the flow order: slots that carry a workstation, in slot order
-  const flow = slots.filter((s) => placed[s.slot] != null);
+  // the flow: in-line slots that carry a workstation, in slot order; between two of them the arrow runs
+  // along the template's slot path (slot to slot) instead of one long diagonal. Off-line slots sit beside
+  // the line and feed the nearest in-line slot with a short dashed arrow.
+  const inline = slots.filter((sl) => !offline(sl));
+  const flow = inline.filter((sl) => placed[sl.slot] != null);
+  const pathBetween = (a, b) => inline.filter((sl) => sl.slot >= a.slot && sl.slot <= b.slot);
+  const feeds = (sl) => { let best = null; inline.forEach((x) => { if (placed[x.slot] == null) return; const dd = Math.abs(x.y_m - sl.y_m); if (!best || dd < best.d) best = { d: dd, x }; }); return best && best.x; };
 
   return (
     <div ref={topRef} className="min-h-screen bg-slate-900 text-white" style={{ paddingTop: topPad }}>
@@ -161,7 +173,7 @@ const LinePlanning = ({ onBack }) => {
       <div className="mx-auto max-w-[1800px] px-4 pb-10">
         <div className="mb-3 flex flex-wrap items-center gap-3">
           <button onClick={onBack} aria-label="Back"><ArrowLeft /></button>
-          <h1 className="text-lg font-bold">Line Planning — construct the line layout</h1>
+          <h1 className="text-lg font-bold">IE Production Line Plan — construct the line layout</h1>
           <span className="text-xs text-slate-400">
             {style.order ? `${style.order} · ${style.style} · ${style.line || line} · SAM ${num(style.sam, 2)} min` : "pick an order"}
           </span>
@@ -302,7 +314,7 @@ const LinePlanning = ({ onBack }) => {
               </button>
             </div>
 
-            <div className="relative w-full rounded-xl bg-slate-950/70 ring-1 ring-white/10" style={{ height: 620 }}>
+            <div className="relative w-full rounded-xl bg-slate-950/70 ring-1 ring-white/10" style={{ height: canvasH }}>
               {/* grid, dimensions and the north arrow */}
               <svg className="pointer-events-none absolute inset-0 h-full w-full">
                 <defs>
@@ -318,10 +330,16 @@ const LinePlanning = ({ onBack }) => {
                 ))}
                 {flow.slice(0, -1).map((s, i) => {
                   const b = flow[i + 1];
-                  return (
-                    <line key={s.slot} x1={`${px(s.x_m)}%`} y1={`${py(s.y_m)}%`} x2={`${px(b.x_m)}%`} y2={`${py(b.y_m)}%`}
-                          stroke="#22c55e" strokeOpacity="0.7" strokeWidth="2" markerEnd="url(#lp-arrow)" />
-                  );
+                  const path = pathBetween(s, b);
+                  return path.slice(0, -1).map((q, k) => {
+                    const n = path[k + 1];
+                    return <line key={`${s.slot}-${q.slot}`} x1={`${px(q.x_m)}%`} y1={`${py(q.y_m)}%`} x2={`${px(n.x_m)}%`} y2={`${py(n.y_m)}%`} stroke="#22c55e" strokeOpacity="0.7" strokeWidth="2" markerEnd={k === path.length - 2 ? "url(#lp-arrow)" : undefined} />;
+                  });
+                })}
+                {slots.filter((sl) => offline(sl) && placed[sl.slot] != null).map((sl) => {
+                  const t = feeds(sl);
+                  if (!t) return null;
+                  return <line key={"o" + sl.slot} x1={`${px(sl.x_m)}%`} y1={`${py(sl.y_m)}%`} x2={`${px(t.x_m)}%`} y2={`${py(t.y_m)}%`} stroke="#94a3b8" strokeDasharray="4 3" strokeWidth="1.5" markerEnd="url(#lp-arrow)" />;
                 })}
                 <g transform="translate(28,30)">
                   <path d="M0,16 L0,-10 M-5,-4 L0,-12 L5,-4" stroke="#94a3b8" strokeWidth="1.6" fill="none" />
@@ -369,7 +387,7 @@ const LinePlanning = ({ onBack }) => {
                     onDrop={() => dropOnSlot(s.slot)}
                     className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-lg text-[10px] ring-1 transition-colors ${
                       st ? "z-20 bg-slate-800 ring-sky-500/60" : "bg-slate-900/60 ring-white/10"}`}
-                    style={{ left: `${px(s.x_m)}%`, top: `${py(s.y_m)}%`, width: st ? 124 : 30, padding: st ? 6 : 2 }}>
+                    style={{ left: `${px(s.x_m)}%`, top: `${py(s.y_m)}%`, width: st ? boxW(s) : 30, padding: st ? 5 : 2, maxHeight: st ? Math.round(pxPerM * (dims.station_pitch_m || 0.9)) - 6 : undefined, overflow: "hidden" }}>
                     {!st ? (
                       <div className="text-center text-[9px] text-slate-600">{s.slot}</div>
                     ) : firstSlotOfWs ? (
@@ -378,10 +396,10 @@ const LinePlanning = ({ onBack }) => {
                           <span className="font-bold text-sky-300">WS {st.ws}</span>
                           <span className="tabular-nums text-slate-400">{num(st.sam_min ?? st.ws_sam_min, 2)}</span>
                         </div>
-                        <div className="font-semibold leading-tight text-slate-100">
+                        <div className="truncate font-semibold leading-tight text-slate-100" title={(st.ops || []).map((o) => o.operation).join(" + ")}>
                           {(st.ops || []).map((o) => o.operation).join(" + ")}
                         </div>
-                        <div className="text-slate-400">{st.machine_name || st.machine}</div>
+                        <div className="truncate text-slate-400" title={st.machine_name || st.machine}>{st.machine}{offline(s) ? " · off-line" : ""}</div>
                         <div className="flex flex-wrap items-center gap-1 text-[9px]">
                           <span className="rounded bg-white/10 px-1 py-0.5 text-slate-200">{st.workers || 1} op</span>
                           {st.skill ? <span className="rounded bg-white/10 px-1 py-0.5 text-slate-200">{st.skill.split("—")[0].trim()}</span> : null}
