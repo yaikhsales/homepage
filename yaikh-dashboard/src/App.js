@@ -108,6 +108,7 @@ import AutoPost from "./autopost/AutoPost";
 
 // FC Module Components
 import MrpView from "./mrp/MrpView";
+import DeptView from "./deptview/DeptView";
 import FourDP from "./fourdp/FourDP";
 import LineLive from "./fourdp/LineLive";
 import CutPlan from "./ypi/CutPlan";
@@ -407,6 +408,13 @@ export default function App() {
 
           {/* MRP sub-modules — data from the simulated factory on the M1 */}
           <Route path="mrp/:view" element={<MrpView onBack={handleBack} />} />
+          {/* Admin & Support sub-modules — same simulated factory, one shared
+              screen that also draws the trend chart and the extra tables these
+              departments send (HR absence trend, CSR area/waste-water tables). */}
+          <Route path="hr/:view" element={<DeptView module="hr" label="HR" onBack={handleBack} />} />
+          <Route path="admin/:view" element={<DeptView module="admin" label="Admin" onBack={handleBack} />} />
+          <Route path="accounting/:view" element={<DeptView module="accounting" label="Accounting" onBack={handleBack} />} />
+          <Route path="csr/:view" element={<DeptView module="csr" label="CSR" onBack={handleBack} />} />
           {/* 4DP sub-modules: Master Plan, Unit Plan, Line Plan T&A, Line Plan, MRP TV, TEC TV */}
           <Route path="4dp/line/:line" element={<LineLive />} />
           <Route path="4dp/:view" element={<FourDP onBack={() => navigate("/")} />} />
