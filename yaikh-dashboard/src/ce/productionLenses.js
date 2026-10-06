@@ -7,8 +7,10 @@
 //   learning     — day n on the style, line and station curve against plan
 //   downtime     — minutes lost, the events (cause, mechanic, open / fixed), red if down now
 // Data: {"module":"ce","view":"floor","lens":<lens>,"line":<line>} → detail (keys read below).
-import React from "react";
-import { AlertTriangle, Trophy, Award, TrendingUp, Timer } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { AlertTriangle, Trophy, Award, TrendingUp, Timer, Bell, DollarSign } from "lucide-react";
+
+const API = (process.env.REACT_APP_M1_LLM_URL || "/api/m1").replace(/\/$/, "");
 
 const num = (v, d = 1) => (typeof v === "number" ? v.toLocaleString("en-US", { maximumFractionDigits: d }) : v === null || v === undefined || v === "" ? "—" : String(v));
 const pct = (v) => (typeof v === "number" ? v : Number(String(v || "").replace("%", "")) || 0);
@@ -184,6 +186,7 @@ export const LearningBody = ({ detail: d }) => {
       <Panel title="Line efficiency day by day against the plan" right={<span className="inline-flex items-center gap-2"><span className="inline-block w-4 h-0.5 bg-emerald-400" />actual <span className="inline-block w-4 border-t border-dashed border-slate-400" />plan</span>}>
         <Curve points={l.curve} />
       </Panel>
+      <LearningPlanActual line={d.line} />
       <Panel title="Stations — today against plan, and each one's curve">
         <div className="overflow-x-auto max-h-96 overflow-y-auto">
           <table className="w-full text-xs">
@@ -193,6 +196,101 @@ export const LearningBody = ({ detail: d }) => {
             </tbody>
           </table>
         </div>
+      </Panel>
+    </div>
+  );
+};
+
+/* ── learning · plan vs actual on a new style (per line and per worker) ─────────────────────────────
+   {"module":"ce","view":"learning-plan-actual","line"} → rows (every line on a new run: plan_curve,
+   actual_curve, cum plan / actual, achieved, status ahead | achieving | behind | "starts …", projected
+   target day, days late, minutes lost, cost effect, owners), tables.by_day and tables.workers for the
+   selected line, cpm. Behind = amber / red with the reason and the "notified" owner chain; the cost
+   effect = minutes lost × cost per minute, so the style costs more than planned. */
+const STATUS = { ahead: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30", achieving: "bg-sky-500/20 text-sky-300 border-sky-500/30", behind: "bg-rose-500/20 text-rose-300 border-rose-500/30", planned: "bg-slate-500/20 text-slate-300 border-slate-500/30" };
+const Status = ({ v, tone }) => <span className={`inline-block rounded-full border px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ${tone === "red" ? STATUS.behind : tone === "orange" || tone === "amber" ? "bg-amber-500/20 text-amber-300 border-amber-500/30" : STATUS[String(v || "").split(" ")[0]] || STATUS.planned}`}>{v || "—"}</span>;
+const curve = (txt) => String(txt || "").split("→").map((x) => Number(String(x).replace(/[^0-9.]/g, ""))).filter((x) => !Number.isNaN(x) && x > 0);
+const PlanActual = ({ plan, actual, height = 130 }) => {
+  const n = Math.max(plan.length, actual.length);
+  if (!n) return null;
+  const W = 600, H = height, top = 12, base = H - 22, left = 36, right = W - 12;
+  const max = Math.max(1, ...plan, ...actual);
+  const X = (i) => left + ((right - left) * i) / Math.max(n - 1, 1);
+  const Y = (v) => base - ((base - top) * v) / max;
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ height: H }} preserveAspectRatio="none">
+      {[0.5, 1].map((g) => <g key={g}><line x1={left} x2={right} y1={Y(max * g)} y2={Y(max * g)} stroke="#334155" strokeDasharray="3 4" /><text x={left - 4} y={Y(max * g) + 3} textAnchor="end" fontSize={9} fill="#64748b">{num(Math.round(max * g), 0)}</text></g>)}
+      <polyline points={plan.map((v, i) => `${X(i)},${Y(v)}`).join(" ")} fill="none" stroke="#94a3b8" strokeWidth={1.5} strokeDasharray="5 4" />
+      {actual.length > 0 && <polyline points={actual.map((v, i) => `${X(i)},${Y(v)}`).join(" ")} fill="none" stroke="#34d399" strokeWidth={2.5} strokeLinejoin="round" />}
+      {plan.map((v, i) => <g key={i}><circle cx={X(i)} cy={Y(v)} r={2.5} fill="#94a3b8" /><text x={X(i)} y={H - 6} textAnchor="middle" fontSize={9} fill="#94a3b8">day {i + 1}</text></g>)}
+      {actual.map((v, i) => <g key={"a" + i}><circle cx={X(i)} cy={Y(v)} r={3.5} fill={v >= (plan[i] || 0) ? "#34d399" : v >= (plan[i] || 0) * 0.82 ? "#fbbf24" : "#f43f5e"} /><text x={X(i)} y={Y(v) - 7} textAnchor="middle" fontSize={9} fontWeight={700} fill="#e2e8f0">{num(v, 0)}</text></g>)}
+    </svg>
+  );
+};
+const LearningPlanActual = ({ line }) => {
+  const [d, setD] = useState(null);
+  const [err, setErr] = useState("");
+  useEffect(() => {
+    let live = true;
+    setD(null);
+    setErr("");
+    fetch(API + "/sim/view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ module: "ce", view: "learning-plan-actual", line: line || undefined }) })
+      .then((r) => r.json())
+      .then((j) => { if (!live) return; if (!j.ok) throw new Error(j.error || "unavailable"); setD(j); })
+      .catch(() => { if (live) setErr("Plan vs actual is unavailable right now."); });
+    return () => { live = false; };
+  }, [line]);
+  if (err) return <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-200 px-3 py-2 text-sm">{err}</div>;
+  if (!d) return <div className="text-xs text-slate-500">Loading plan vs actual…</div>;
+  const rows = d.rows || [];
+  const me = rows.find((r) => r.line === (d.line || line)) || rows.find((r) => r.line === line) || null;
+  const tables = Object.fromEntries((d.tables || []).map((t) => [t.key, t]));
+  const workers = (tables.workers && tables.workers.rows) || [];
+  const byDay = ((tables.by_day && tables.by_day.rows) || []).filter((r) => !me || r.line === me.line);
+  const plan = me ? curve(me.plan_curve) : [];
+  const actual = me ? curve(me.actual_curve) : [];
+  const behind = me && /behind/.test(me.status || "");
+  const started = me && me.day_today > 0;
+  const cpm = d.cpm && typeof d.cpm === "object" ? d.cpm.cpm : d.cpm;
+  const sum = Object.fromEntries((d.summary || []).map((x) => [x.label, x.value]));
+  return (
+    <div className="grid gap-3">
+      <Panel title="Plan vs actual on the new style" right={me ? `${me.order} · ${me.garment} · starts ${me.start} · ${me.per_day ? num(me.per_day, 0) + " pcs/day at full speed" : ""}` : "this line has no new run"}>
+        {me ? (
+          <div className="grid gap-3">
+            <div className="flex flex-wrap gap-2">
+              <Tile label="Status" value={<Status v={me.status} tone={me.tone} />} />
+              <Tile label="Day on the style" value={started ? `day ${me.day_today}` : "not started"} sub={`learning ${num(me.learning_days, 0)} day(s) · target from day ${me.plan_target_day}`} />
+              <Tile label="Plan curve" value={plan.map((v) => num(v, 0)).join(" → ")} sub="pieces per day" />
+              <Tile label="Actual so far" value={actual.length ? actual.map((v) => num(v, 0)).join(" → ") : "—"} sub={started ? `${num(me.cum_actual, 0)} of ${num(me.cum_plan, 0)} planned · ${me.achieved}` : "no day run yet"} tone={behind ? "text-rose-300" : started ? "text-emerald-300" : undefined} />
+              <Tile label="Reaches target" value={`day ${me.projected_target_day}`} sub={me.days_late ? `${me.days_late} day(s) late · plan day ${me.plan_target_day}` : `on plan (${me.projection})`} tone={me.days_late ? "text-rose-300" : "text-emerald-300"} />
+              <Tile label="Minutes lost" value={num(me.minutes_lost, 0)} tone={me.minutes_lost ? "text-amber-300" : undefined} />
+              <Tile label="Cost effect" value={<span className="inline-flex items-center gap-1"><DollarSign size={14} />{num(me.cost_effect, 2)}</span>} sub={cpm ? `minutes lost × CPM USD ${cpm}` : "minutes lost × CPM"} tone={me.cost_effect ? "text-rose-300" : undefined} />
+              <Tile label="Workers behind" value={num(me.workers_behind, 0)} tone={me.workers_behind ? "text-rose-300" : "text-emerald-300"} />
+            </div>
+            {behind && <div className="rounded-lg border border-rose-500/40 bg-rose-500/10 px-3 py-2 text-xs text-rose-200"><div className="font-bold flex items-center gap-1"><AlertTriangle size={13} />Behind the ramp — {me.achieved} of plan so far, target now projected day {me.projected_target_day} ({me.days_late} late), {num(me.minutes_lost, 0)} min lost = USD {num(me.cost_effect, 2)} more than planned</div><div className="mt-1 flex items-center gap-1 text-rose-300/90"><Bell size={12} />notified: {String(me.owners || "").split("→").map((o) => o.trim().split("·").pop().trim()).join(" · ")}</div></div>}
+            {!started && <div className="text-xs text-slate-400">Nothing to compare yet — the run starts {me.start}. The plan ramps {plan.map((v) => num(v, 0)).join(" → ")} pieces a day; actual fills in day by day, ahead / achieving / behind, with the owner chain alerted when a day falls under 82% of plan.</div>}
+            <div className="grid gap-3 xl:grid-cols-2">
+              <div><div className="text-[11px] text-slate-500 mb-1">pieces per day — plan (dashed) against actual</div><PlanActual plan={plan} actual={actual} /></div>
+              <div className="overflow-auto max-h-48">
+                <table className="w-full text-xs"><Th cols={["Day", "Date", "Plan", "Actual", "Gap", "Status"]} /><tbody>{byDay.map((r, i) => <tr key={i} className={`border-t border-slate-700/60 ${r.tone === "red" ? "bg-rose-500/10" : ""}`}><td className="px-2 py-1 tabular-nums text-slate-400">{r.day}</td><td className="px-2 py-1 text-slate-300 whitespace-nowrap">{r.date}</td><td className="px-2 py-1 tabular-nums text-right text-slate-300">{num(r.plan, 0)}</td><td className="px-2 py-1 tabular-nums text-right font-bold text-white">{r.actual === "" ? "—" : num(r.actual, 0)}</td><td className={`px-2 py-1 tabular-nums text-right ${Number(r.gap) < 0 ? "text-rose-300 font-bold" : "text-slate-400"}`}>{r.gap === "" ? "—" : num(r.gap, 0)}</td><td className="px-2 py-1"><Status v={r.status} tone={r.tone} /></td></tr>)}</tbody></table>
+              </div>
+            </div>
+          </div>
+        ) : <div className="text-xs text-slate-500">This line is not on a new style — pick one of the {rows.length} lines with a new run below.</div>}
+      </Panel>
+      <Panel title="Workers — plan vs actual by day" right={workers.length ? `${workers.length} workers · behind = amber / red with the reason` : undefined}>
+        {workers.length ? (
+          <div className="overflow-x-auto max-h-96 overflow-y-auto">
+            <table className="w-full text-xs"><Th cols={["Worker", "Station", "Operation", "Grade", "SMV", "Plan by day", "Actual by day", "Achieved", "Last eff", "Status", "Min lost", "Cost"]} /><tbody>{workers.map((w, i) => <tr key={i} className={`border-t border-slate-700/60 ${w.tone === "red" || /behind/.test(w.status || "") ? "bg-rose-500/10" : ""}`}><td className="px-2 py-1 font-bold text-white whitespace-nowrap">{w.worker || w.operator}</td><td className="px-2 py-1 tabular-nums text-slate-400">{w.station}</td><td className="px-2 py-1 text-slate-300">{w.operation}</td><td className="px-2 py-1"><Grade g={w.grade} /></td><td className="px-2 py-1 tabular-nums text-slate-400">{num(w.smv, 3)}</td><td className="px-2 py-1 tabular-nums text-slate-400 whitespace-nowrap">{w.plan_by_day}</td><td className="px-2 py-1 tabular-nums text-slate-200 whitespace-nowrap">{w.actual_by_day || "—"}</td><td className="px-2 py-1 tabular-nums text-right text-white font-bold">{w.achieved}</td><td className="px-2 py-1 tabular-nums text-right text-slate-300">{w.last_eff}</td><td className="px-2 py-1"><Status v={w.status} tone={w.tone} /></td><td className="px-2 py-1 tabular-nums text-right text-amber-300">{num(w.minutes_lost, 0)}</td><td className="px-2 py-1 tabular-nums text-right text-rose-300">{w.cost_effect ? "USD " + num(w.cost_effect, 2) : "—"}</td></tr>)}</tbody></table>
+          </div>
+        ) : <div className="text-xs text-slate-500">{me && !started ? "Per-worker plan vs actual starts with the run on " + me.start + "." : "No worker rows for this line."}</div>}
+      </Panel>
+      <Panel title="All lines on a new style" right={`${sum["New runs"] ?? rows.length} new runs · ${sum["Started"] ?? 0} started · ${sum["Behind"] ?? 0} behind · ${sum["Achieving"] ?? 0} achieving · ${sum["Ahead"] ?? 0} ahead · gap cost USD ${sum["Cost of the gap (USD)"] ?? "0.00"}`}>
+        <div className="overflow-x-auto max-h-72 overflow-y-auto">
+          <table className="w-full text-xs"><Th cols={["Line", "Order", "Garment", "Start", "Day", "Plan curve", "Actual", "Achieved", "Status", "Target day", "Late", "Min lost", "Cost", "Workers behind"]} /><tbody>{rows.map((r) => <tr key={r.line} className={`border-t border-slate-700/60 ${r.line === (me && me.line) ? "bg-sky-500/10" : r.tone === "red" ? "bg-rose-500/10" : ""}`}><td className="px-2 py-1 font-bold text-white">{r.line}</td><td className="px-2 py-1 text-slate-300">{r.order}</td><td className="px-2 py-1 text-slate-400">{r.garment}</td><td className="px-2 py-1 text-slate-300 whitespace-nowrap">{r.start}</td><td className="px-2 py-1 tabular-nums text-slate-400">{r.day_today || "—"}</td><td className="px-2 py-1 tabular-nums text-slate-400 whitespace-nowrap">{r.plan_curve}</td><td className="px-2 py-1 tabular-nums text-slate-200 whitespace-nowrap">{r.actual_curve || "—"}</td><td className="px-2 py-1 tabular-nums text-right text-white">{r.achieved}</td><td className="px-2 py-1"><Status v={r.status} tone={r.tone} /></td><td className="px-2 py-1 tabular-nums text-slate-300">day {r.projected_target_day}{r.plan_target_day !== r.projected_target_day ? ` (plan ${r.plan_target_day})` : ""}</td><td className={`px-2 py-1 tabular-nums text-right ${r.days_late ? "text-rose-300 font-bold" : "text-slate-500"}`}>{r.days_late || "—"}</td><td className="px-2 py-1 tabular-nums text-right text-amber-300">{r.minutes_lost || "—"}</td><td className="px-2 py-1 tabular-nums text-right text-rose-300">{r.cost_effect ? "USD " + num(r.cost_effect, 2) : "—"}</td><td className="px-2 py-1 tabular-nums text-right text-slate-300">{r.workers_behind || "—"}</td></tr>)}</tbody></table>
+        </div>
+        <div className="mt-1 text-[10px] text-slate-500">behind = a day under 82% of plan · owners notified in order: line leader → supervisor → production manager → factory manager · cost effect = minutes lost × cost per minute{d.cpm_source ? " (" + d.cpm_source + ")" : ""}</div>
       </Panel>
     </div>
   );
