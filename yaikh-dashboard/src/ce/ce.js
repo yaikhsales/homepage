@@ -1,5 +1,5 @@
 // CE — Cost & Efficiency hub. The real CE module's menu as columns: AIVM, Product Development, Production,
-// People, Machine — 20 sub-modules, every one a screen read from the simulated factory on the M1
+// Machine, Product Costing — 21 sub-modules, every one a screen read from the simulated factory on the M1
 // (sim/view, module "ce"). Cards keep the module's own icons where it has them (/assets/icons/sub-icons),
 // the newer ones use a line icon. Written with React.createElement like the other simulated screens.
 import React, { useState } from "react";
@@ -12,6 +12,9 @@ import { NavCover, useScreenTop } from "../components/ScreenTop";
 const h = React.createElement;
 
 // The CE menu as Gamini's module shows it. `img` = the module's own icon file, `icon` = a line icon instead.
+// Line Planning's screen is being built elsewhere; until its route is on main the card shows a 'building' tag instead of a dead link.
+const HAS_LINE_PLANNING = false;
+
 const GROUPS = [
   {
     title: "AIVM — AI Vision Motion Analysis",
@@ -35,16 +38,8 @@ const GROUPS = [
     title: "Production",
     tone: "border-teal-500/40",
     items: [
+      { view: "line-planning", title: "Line Planning", sub: "Construct the line layout — stations, machines and operators for the order", icon: LayoutGrid, building: !HAS_LINE_PLANNING },
       { view: "line-balancing", title: "Line Balancing", sub: "Station loads against the pitch — the bottleneck of each line", icon: Scale },
-      { view: "style-costing", title: "Style Costing", sub: "CM a piece from SAM × cost per minute, against FOB", img: "style-costing.png" },
-      { view: "cost-centers", title: "Cost centers ,Direct/Indirect Cost", sub: "Direct and indirect cost centres and the cost per minute", img: "center-direct-indirect-cost.png" },
-      { view: "cpm", title: "CPM", sub: "Critical path of an order — floats, delays, the Master Plan factors", img: "cpm.png" },
-    ],
-  },
-  {
-    title: "People",
-    tone: "border-amber-500/40",
-    items: [
       { view: "productivity", title: "Cut,Sew,Pack Productivity", sub: "Cut, sew and pack against target, line by line, live today", img: "cut-sew-pack-worker-capacity.png" },
       { view: "team-performance", title: "Team Performance", sub: "Lines ranked by achievement, efficiency, DHU and downtime", img: "individual-team-production-record.png" },
       { view: "skill-inventory", title: "Skill inventory", sub: "Grades A / B / C / newcomer per line, certified critical operators", img: "skill-inventory.png" },
@@ -61,6 +56,15 @@ const GROUPS = [
       { view: "machine-inventory", title: "Machine Inventory", sub: "Every machine: model, line, station, maintenance dates", icon: Database },
       { view: "line-plan", title: "Line Plan", sub: "What each line runs now and next, loaded days and free days", icon: CalendarDays },
       { view: "machine-requirement", title: "Machine Requirement", sub: "Machines each order needs against the lines — rent or borrow", icon: ClipboardList },
+    ],
+  },
+  {
+    title: "Product Costing",
+    tone: "border-amber-500/40",
+    items: [
+      { view: "style-costing", title: "Style Costing", sub: "CM a piece from SAM × cost per minute, against FOB", img: "style-costing.png" },
+      { view: "cost-centers", title: "Cost centers ,Direct/Indirect Cost", sub: "Direct and indirect cost centres and the cost per minute", img: "center-direct-indirect-cost.png" },
+      { view: "cpm", title: "CPM", sub: "Critical path of an order — floats, delays, the Master Plan factors", img: "cpm.png" },
     ],
   },
 ];
@@ -82,7 +86,7 @@ const CE = ({ onBack }) => {
       { className: "flex items-center gap-3 mb-3" },
       h("button", { onClick: back, className: "p-1 -ml-1 hover:bg-slate-700 rounded-full transition-colors text-slate-400 hover:text-white", "aria-label": "Back" }, h(ArrowLeft, { size: 18 })),
       h("h1", { className: "text-lg font-black text-white leading-none" }, "CE · Cost & Efficiency"),
-      h("span", { className: "text-xs text-slate-400" }, "20 sub-modules in five columns — every screen reads the simulated factory")
+      h("span", { className: "text-xs text-slate-400" }, "21 sub-modules in five columns — every screen reads the simulated factory")
     ),
     h(
       "div",
@@ -98,13 +102,13 @@ const CE = ({ onBack }) => {
             g.items.map((m) =>
               h(
                 "button",
-                { key: m.view, onClick: () => navigate("/dashboard/ce/" + m.view), className: "w-full text-left flex items-center gap-3 rounded-xl border border-slate-700 bg-slate-900/60 hover:bg-slate-700/60 hover:border-slate-500 transition-colors px-3 py-2" },
+                { key: m.view, onClick: m.building ? undefined : () => navigate("/dashboard/ce/" + m.view), disabled: !!m.building, title: m.building ? "being built — not open yet" : undefined, className: "w-full text-left flex items-center gap-3 rounded-xl border border-slate-700 bg-slate-900/60 transition-colors px-3 py-2 " + (m.building ? "opacity-70 cursor-default" : "hover:bg-slate-700/60 hover:border-slate-500") },
                 h(
                   "div",
                   { className: "w-12 h-12 flex-shrink-0 rounded-lg bg-white p-1.5 flex items-center justify-center" },
                   m.img ? h("img", { src: process.env.PUBLIC_URL + "/assets/icons/sub-icons/" + m.img, alt: "", className: "w-full h-full object-contain" }) : h(m.icon, { size: 26, className: "text-slate-700" })
                 ),
-                h("div", { className: "min-w-0" }, h("div", { className: "font-bold text-white text-sm leading-tight" }, translateModuleTitle(m.title)), h("div", { className: "text-[11px] text-slate-400 leading-tight mt-0.5" }, m.sub))
+                h("div", { className: "min-w-0" }, h("div", { className: "font-bold text-white text-sm leading-tight flex items-center gap-2" }, translateModuleTitle(m.title), m.building && h("span", { className: "rounded-full border border-amber-500/40 bg-amber-500/15 text-amber-300 text-[10px] font-semibold px-1.5 py-px" }, "building")), h("div", { className: "text-[11px] text-slate-400 leading-tight mt-0.5" }, m.sub))
               )
             )
           )
