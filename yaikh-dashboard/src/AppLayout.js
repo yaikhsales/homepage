@@ -1009,6 +1009,15 @@ const AppLayout = () => {
                                                     image:
                                                       "assets/fc/warehouse-tracking-location.jpg",
                                                   },
+                                                  {
+                                                    title: "Warehouse Location Plan",
+                                                    icon: "MapPin",
+                                                    color:
+                                                      "bg-cyan-500/30 text-white",
+                                                    image:
+                                                      "assets/fc/warehouse-tracking-location.jpg",
+                                                    action: "/dashboard/fc/location-plan",
+                                                  },
                                                 ],
                                               },
                                               {
@@ -1746,7 +1755,7 @@ const AppLayout = () => {
       {/* Compact green Big Brain panel — drives Management Dashboard /
           System Analysis / SOP without replacing the page. */}
       {bigBrainOpen && (
-        <BigBrainPanel page={bigBrainPage} onClose={() => setBigBrainOpen(false)} />
+        <BigBrainPanel page={bigBrainPage} pa="all" onClose={() => setBigBrainOpen(false)} onNavigate={(p) => navigate(p)} />
       )}
 
       {isYaiDataBotOpen && (

@@ -199,6 +199,11 @@ function StatusPop({ pop, onTab, onClose }) {
   );
 }
 
+// Colour-name → swatch css for the bar's colour chips (fallback: the name
+// itself — most simulated colours are valid css colours).
+const COLOUR_CSS = { burgundy: "#800020", "forest green": "forestgreen", navy: "#001f3f", "heather grey": "#9aa0a6", "off white": "#faf6ef", offwhite: "#faf6ef", charcoal: "#36454f", sand: "#d7c49e", cream: "#f5f0dc" };
+const colourCss = (n) => { const k = String(n || "").toLowerCase(); return COLOUR_CSS[k] || k.replace(/\s+/g, "") || "#999"; };
+
 const hasProblem = (b) => !!b.st && GROUPS.some(([k]) => b.st[k] === "red");
 
 function Gantt({ g, filter, onLine, picked, onStatus, onlyProblems, corner, onRun }) {
@@ -270,6 +275,25 @@ function Gantt({ g, filter, onLine, picked, onStatus, onlyProblems, corner, onRu
                   return (
                     <div key={i} title={`${b.title} · ${b.from} → ${b.to}`} onClick={b.run && onRun ? (e) => onRun(b.run, e) : undefined} className={`absolute top-1 rounded-md text-[10px] font-semibold leading-[18px] shadow transition-opacity flex items-center overflow-hidden ${b.run && onRun ? "cursor-pointer hover:brightness-110 hover:ring-1 hover:ring-white/70" : ""} ${BAR[b.tone] || BAR.slate} ${barOn(picked, b.tone) && !(onlyProblems && !hasProblem(b)) ? "" : "opacity-10"}`} style={{ left: from * dayW + 1, width: barW, height: ROW_H - 8 }}>
                       <span className="truncate px-1.5 flex-1 min-w-0">{b.label}</span>
+                      {barW >= 300 && b.brand_order && (
+                        <span className="flex-shrink-0 mr-1 rounded bg-slate-900/70 text-slate-200 text-[9px] leading-[14px] px-1" title={`Brand order ${b.brand_order} · ${(b.qty || 0).toLocaleString()} pcs`}>{b.brand_order}</span>
+                      )}
+                      {barW >= 200 && Array.isArray(b.colours) && b.colours.length > 0 && (
+                        <span className="flex items-center gap-0.5 mr-1 flex-shrink-0">
+                          {b.colours.slice(0, 3).map((c, ci) => (
+                            <span key={ci} className="flex items-center gap-0.5 rounded bg-black/30 px-1 text-[9px] leading-[14px]" title={`${c.colour} — ${(c.qty || 0).toLocaleString()} pcs`}>
+                              <span className="inline-block w-2 h-2 rounded-full border border-white/60" style={{ background: colourCss(c.colour) }} />
+                              {barW >= 360 ? (c.qty || 0).toLocaleString() : null}
+                            </span>
+                          ))}
+                          {b.colours.length > 3 && <span className="text-[9px] text-white/70">+{b.colours.length - 3}</span>}
+                        </span>
+                      )}
+                      {barW >= 440 && Array.isArray(b.sizes) && b.sizes.length > 0 && (
+                        <span className="flex-shrink-0 mr-1 rounded bg-black/30 px-1 text-[9px] leading-[14px] text-white/85" title={"Size ratio " + b.sizes.map((x) => `${x.size} ${x.ratio}`).join(" : ")}>
+                          {b.sizes.map((x) => `${x.size}${x.ratio}`).join("·")}
+                        </span>
+                      )}
                       {bubbles && b.st.delay > 0 && barW >= 150 && <span className="flex-shrink-0 mr-1 rounded bg-rose-600 text-white text-[9px] font-black leading-[14px] px-1" title={`Possible delay: ${b.st.delay} days`}>+{b.st.delay}d</span>}
                       {bubbles && (
                         <span className="flex items-center gap-0.5 pr-0.5 flex-shrink-0">
