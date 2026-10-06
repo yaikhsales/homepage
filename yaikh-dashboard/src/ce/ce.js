@@ -61,9 +61,9 @@ const GROUPS = [
     title: "Product Costing",
     tone: "border-amber-500/40",
     items: [
+      { view: "cpm", title: "CPM", sub: "Critical path of an order — floats, delays, the Master Plan factors", img: "cpm.png" },
       { view: "style-costing", title: "Style Costing", sub: "CM a piece from SAM × cost per minute, against FOB", img: "style-costing.png" },
       { view: "cost-centers", title: "Cost centers ,Direct/Indirect Cost", sub: "Direct and indirect cost centres and the cost per minute", img: "center-direct-indirect-cost.png" },
-      { view: "cpm", title: "CPM", sub: "Critical path of an order — floats, delays, the Master Plan factors", img: "cpm.png" },
     ],
   },
 ];
