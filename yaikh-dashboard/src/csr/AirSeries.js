@@ -4,7 +4,7 @@
 // Data: csr view air-series.
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useView, num, Chip, Tile, Select, Panel, Table, Screen } from "./csr";
+import { useView, num, Chip, Select, Panel, Table, Screen } from "./csr";
 import { METRICS, fmt } from "./AirSensors";
 
 // one metric: a line over the day, the limit as a dashed line, the points over it in red
@@ -46,12 +46,11 @@ const AirSeries = ({ onBack }) => {
         <div className="inline-flex rounded-lg border border-slate-700 overflow-hidden text-xs">{((d.filters || {}).interval || ["15m", "30m", "1h"]).map((k) => <button key={k} onClick={() => setInterval_(k)} className={`px-2.5 py-1 font-bold ${interval === k ? "bg-white text-slate-900" : "bg-slate-800 text-slate-300 hover:bg-slate-700"}`}>{k}</button>)}</div>
         {dev.device && <span className="text-[11px] text-slate-400 ml-auto">{dev.kind_name} · {dev.zone} · <Chip tone={dev.status === "online" ? "green" : "red"}>{dev.status}</Chip></span>}
       </div>
-      <div className="flex flex-wrap gap-2 mb-3">{metrics.map((k) => <Tile key={k} label={(lim[k] && lim[k].name) || k} value={fmt(k, st[k] && st[k].daily_average)} sub={`max ${fmt(k, st[k] && st[k].max)} · ${num(st[k] && st[k].points_over)} over${lim[k] ? ` · limit ${lim[k].limit} ${lim[k].unit}` : ""}`} tone={st[k] && st[k].points_over ? "text-rose-300" : undefined} />)}</div>
       <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3 mb-3">
-        {metrics.map((k) => <Panel key={k} title={`${(lim[k] && lim[k].name) || k} ${lim[k] ? "(" + lim[k].unit + ")" : ""}`} right={`avg ${fmt(k, st[k] && st[k].daily_average)}`}><Line t={s.t} v={s[k]} lim={lim[k] && lim[k].limit} name={lim[k] && lim[k].name} unit={lim[k] && lim[k].unit} /></Panel>)}
-        {metrics.length === 0 && <div className="text-xs text-slate-500 p-3">{loading ? "Loading…" : "No series for this device and date."}</div>}
+        {metrics.map((k) => <Panel key={k} title={`${(lim[k] && lim[k].name) || k} ${lim[k] ? "(" + lim[k].unit + ")" : ""}`} right={<span>avg <b className="text-white">{fmt(k, st[k] && st[k].daily_average)}</b> · max <b className="text-white">{fmt(k, st[k] && st[k].max)}</b> · <b className={st[k] && st[k].points_over ? "text-rose-300" : "text-white"}>{num(st[k] && st[k].points_over)}</b> over</span>}><Line t={s.t} v={s[k]} lim={lim[k] && lim[k].limit} name={lim[k] && lim[k].name} unit={lim[k] && lim[k].unit} /></Panel>)}
+        {metrics.length === 0 && <div className="text-sm p-3">{error ? <span className="text-amber-200">{error}</span> : loading ? <span className="text-slate-400">Loading…</span> : <span className="text-slate-500">No series for this device and date.</span>}</div>}
       </div>
-      <Table columns={d.columns} rows={d.rows} max={420} render={{ over: (v) => v ? <Chip tone="red">{v}</Chip> : <span className="text-slate-600">—</span>, ...Object.fromEntries(METRICS.map((k) => [k, (v) => <span className={`tabular-nums ${lim[k] && typeof v === "number" && v > lim[k].limit ? "text-rose-300 font-bold" : ""}`}>{fmt(k, v)}</span>])) }} />
+      <Table columns={d.columns} rows={d.rows} max={420} dense loading={loading} error={error} onRetry={reload} render={{ over: (v) => v ? <Chip tone="red">{v}</Chip> : <span className="text-slate-600">—</span>, ...Object.fromEntries(METRICS.map((k) => [k, (v) => <span className={`tabular-nums ${lim[k] && typeof v === "number" && v > lim[k].limit ? "text-rose-300 font-bold" : ""}`}>{fmt(k, v)}</span>])) }} />
     </Screen>
   );
 };

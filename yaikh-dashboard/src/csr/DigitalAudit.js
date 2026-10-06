@@ -9,7 +9,7 @@
 // Data: csr views question-bank, findings. Every question of the bank is simulated; no real audit text.
 import React, { useMemo, useState } from "react";
 import { FileText, Paperclip, AlertTriangle, CheckCircle2 } from "lucide-react";
-import { useView, num, pct, Chip, Status, Panel, Tile, Bar, Select, Tabs, Table, Screen } from "./csr";
+import { useView, num, pct, Chip, Status, Panel, Bar, Select, Tabs, Table, Clip, Summary, Info, Screen } from "./csr";
 
 const Tree = ({ tree, sel, onSel }) => (
   <div className="space-y-2">
@@ -58,16 +58,15 @@ const QuestionBank = ({ goFinding }) => {
   const [status, setStatus] = useState("");
   const [sel, setSel] = useState({ standard: "", section: "" });
   const body = useMemo(() => ({ view: "question-bank", factory, standard: sel.standard || undefined, section: sel.section || undefined, status: status || undefined }), [factory, sel, status]);
-  const { d, error, loading } = useView(body);
+  const { d, error, loading, reload } = useView(body);
   const rows = d.rows || [];
   return (
     <>
-      {error && <div className="mb-2 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-200 px-3 py-2 text-sm">{error}</div>}
-      <p className="text-[11px] text-slate-500 mb-2">{d.subtitle}</p>
+      {error && <div className="mb-2 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-200 px-3 py-2 text-sm flex items-center gap-2">{error}<button onClick={reload} className="rounded border border-amber-400/50 px-2 py-0.5 text-xs font-bold hover:bg-amber-500/10">Retry</button></div>}
       <div className="flex flex-wrap items-center gap-2 mb-3">
         <div className="inline-flex rounded-lg border border-slate-700 overflow-hidden text-xs">{((d.filters || {}).factory || ["F1", "F2", "F3", "F4", "all"]).map((k) => <button key={k} onClick={() => setFactory(k)} className={`px-2.5 py-1 font-bold ${factory === k ? "bg-white text-slate-900" : "bg-slate-800 text-slate-300 hover:bg-slate-700"}`}>{k === "all" ? "All factories" : "Digital Audit " + k}</button>)}</div>
         <div className="inline-flex rounded-lg border border-slate-700 overflow-hidden text-xs">{[["", "All"], ["green", "Green"], ["red", "Red"]].map(([k, l]) => <button key={k} onClick={() => setStatus(k)} className={`px-2.5 py-1 font-bold ${status === k ? (k === "red" ? "bg-rose-400 text-slate-900" : k === "green" ? "bg-emerald-400 text-slate-900" : "bg-white text-slate-900") : "bg-slate-800 text-slate-300 hover:bg-slate-700"}`}>{l}</button>)}</div>
-        <div className="flex flex-wrap gap-2 ml-auto">{(d.summary || []).slice(0, 4).map((x) => <Tile key={x.label} label={x.label} value={typeof x.value === "number" ? num(x.value) : x.value} tone={x.label === "Red" ? "text-rose-300" : x.label === "Green" ? "text-emerald-300" : undefined} />)}</div>
+        <span className="ml-auto"><Info text={d.subtitle} /></span>
       </div>
       <div className="grid gap-3 lg:grid-cols-[18rem,1fr] items-start">
         <div>
@@ -82,7 +81,7 @@ const QuestionBank = ({ goFinding }) => {
           <div className="flex items-center gap-2 mb-2 text-[11px] text-slate-500">{sel.standard ? <><Chip tone="grey" onClick={() => setSel({ standard: "", section: "" })}>{sel.standard}{sel.section ? " · " + sel.section : ""} ✕</Chip></> : "all standards"}<span className="ml-auto">{loading ? "loading…" : `${rows.length} question${rows.length === 1 ? "" : "s"}`}</span></div>
           <div className="space-y-2 overflow-auto pr-1" style={{ maxHeight: 720 }}>
             {rows.map((q) => <Question key={q.code + q.factory} q={q} onFinding={goFinding} />)}
-            {rows.length === 0 && <div className="text-xs text-slate-500 p-3">{loading ? "Loading…" : "No questions match."}</div>}
+            {rows.length === 0 && <div className="text-sm p-3">{error ? <span className="text-amber-200">{error}</span> : loading ? <span className="text-slate-400">Loading…</span> : <span className="text-slate-500">No questions match.</span>}</div>}
           </div>
         </div>
       </div>
@@ -93,32 +92,30 @@ const QuestionBank = ({ goFinding }) => {
 const SEV = { zero_tolerance: "red", major: "amber", minor: "sky" };
 const Findings = ({ focus }) => {
   const [f, setF] = useState({ standard: "", severity: "", status: "", factory: "" });
-  const { d, error, loading } = useView({ view: "findings", standard: f.standard || undefined, severity: f.severity || undefined, status: f.status || undefined, factory: f.factory || undefined });
+  const { d, error, loading, reload } = useView({ view: "findings", standard: f.standard || undefined, severity: f.severity || undefined, status: f.status || undefined, factory: f.factory || undefined });
   const rows = (d.rows || []).filter((r) => !focus || r.id === focus);
   const fu = (d.tables || []).find((t) => t.key === "follow-ups");
   return (
     <>
-      {error && <div className="mb-2 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-200 px-3 py-2 text-sm">{error}</div>}
-      <p className="text-[11px] text-slate-500 mb-2">{d.subtitle}</p>
-      <div className="flex flex-wrap gap-2 mb-2">{(d.summary || []).map((x) => <Tile key={x.label} label={x.label} value={num(x.value)} tone={/zero|past|overdue/i.test(x.label) && x.value ? "text-rose-300" : /major/i.test(x.label) && x.value ? "text-amber-300" : undefined} />)}</div>
+      <div className="mb-2"><Summary items={d.summary} info={d.subtitle} /></div>
       <div className="flex flex-wrap items-center gap-2 mb-2">
         <Select label="Standard" value={f.standard} onChange={(v) => setF({ ...f, standard: v })} options={(d.filters || {}).standard} />
         <Select label="Severity" value={f.severity} onChange={(v) => setF({ ...f, severity: v })} options={(d.filters || {}).severity} />
         <Select label="Status" value={f.status} onChange={(v) => setF({ ...f, status: v })} options={(d.filters || {}).status} />
         <Select label="Factory" value={f.factory} onChange={(v) => setF({ ...f, factory: v })} options={(d.filters || {}).factory} />
         <span className="flex gap-1.5">{Object.entries(SEV).map(([k, t]) => <Chip key={k} tone={t} onClick={() => setF({ ...f, severity: f.severity === k ? "" : k })} on={f.severity === k}>{k.replace("_", " ")} {d.by_severity && d.by_severity[k] !== undefined ? "· " + num(d.by_severity[k]) + " open" : ""}</Chip>)}</span>
-        <span className="ml-auto text-[11px] text-slate-500">{loading ? "loading…" : `${rows.length} finding${rows.length === 1 ? "" : "s"}`}</span>
+        <span className="ml-auto text-xs text-slate-500">{loading ? "loading…" : `${rows.length} finding${rows.length === 1 ? "" : "s"} · click a row for root cause, action and closure`}</span>
       </div>
-      <Table columns={d.columns} rows={rows} max={560} empty={loading ? "Loading…" : "No findings match."} render={{
-        id: (v, r) => <div className="whitespace-nowrap"><div className="font-bold text-white">{v}</div>{(r.overdue_60d || r.past_target) && <Chip tone="red">{r.overdue_60d ? "overdue 60+ d" : "past target"}</Chip>}</div>,
-        audit: (v, r) => <div><div>{v}</div><div className="text-[10px] text-slate-500">{r.audit_name} · {r.audit_date}</div></div>,
-        finding: (v) => <span className="text-slate-100">{v}</span>,
+      <Table columns={d.columns} rows={rows} max={560} empty="No findings match." loading={loading} error={error} onRetry={reload} expand keys={["id", "audit", "standard", "question_code", "factory", "finding", "severity", "owner_role", "target_date", "status"]} weights={{ id: 1.5, audit: 2.2, standard: 1, question_code: 0.9, factory: 0.6, finding: 3.2, severity: 1, owner_role: 2, target_date: 1.1, status: 1.1 }} render={{
+        id: (v, r) => <span className="font-bold text-white">{v}{(r.overdue_60d || r.past_target) && <Chip tone="red" title={r.overdue_60d ? "overdue 60+ days" : "past target date"}> !</Chip>}</span>,
+        audit: (v, r) => <Clip v={`${v} · ${r.audit_name}`} />,
+        finding: (v) => <Clip v={v} cls="text-slate-100" />,
         severity: (v) => <Chip tone={SEV[v] || "grey"}>{String(v).replace("_", " ")}</Chip>,
-        owner_role: (v, r) => <span>{v} <span className="text-sky-300">{r.owner_emp}</span></span>,
-        target_date: (v, r) => <span className={`whitespace-nowrap ${r.past_target ? "text-rose-300 font-bold" : ""}`}>{v}</span>,
+        owner_role: (v, r) => <Clip v={`${v} ${r.owner_emp || ""}`} />,
+        target_date: (v, r) => <span className={r.past_target ? "text-rose-300 font-bold" : ""}>{v}</span>,
         closure_evidence: (v) => v ? <span className="inline-flex items-center gap-1 text-[10px] text-slate-300"><FileText size={10} className="text-sky-300" />{typeof v === "string" ? v : Array.isArray(v) ? v.length + " files" : "on file"}</span> : <span className="text-slate-600">—</span>,
       }} />
-      {fu && <Panel title={fu.title} className="mt-3"><Table columns={fu.columns} rows={fu.rows} max={240} render={{ id: (v) => <b className="text-white">{v}</b> }} /></Panel>}
+      {fu && <Panel title={fu.title} className="mt-3"><Table columns={fu.columns} rows={fu.rows} max={240} loading={loading} error={error} onRetry={reload} weights={{ id: 1.2, audit_name: 2, follow_up_of: 1.2 }} render={{ id: (v) => <b className="text-white">{v}</b> }} /></Panel>}
     </>
   );
 };
@@ -128,7 +125,7 @@ const DigitalAudit = ({ onBack }) => {
   const [focus, setFocus] = useState("");
   const head = useView({ view: "question-bank", factory: "F1" });
   return (
-    <Screen onBack={onBack} heading="Digital Audit" summary={tab === "bank" ? head.d.summary : undefined} loading={head.loading} onReload={head.reload}>
+    <Screen onBack={onBack} heading="Digital Audit" summary={tab === "bank" ? head.d.summary : undefined} loading={head.loading} error={head.error} onReload={head.reload}>
       <div className="flex flex-wrap items-center gap-2 mb-3">
         <Tabs tabs={[["bank", "Question bank"], ["findings", "Findings & CAP"]]} value={tab} onChange={(t) => { setTab(t); if (t === "bank") setFocus(""); }} />
         {focus && <Chip tone="sky" onClick={() => setFocus("")}>showing finding {focus} ✕</Chip>}
@@ -138,5 +135,4 @@ const DigitalAudit = ({ onBack }) => {
     </Screen>
   );
 };
-export { Status };
 export default DigitalAudit;

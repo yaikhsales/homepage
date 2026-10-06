@@ -1,9 +1,12 @@
 // CSR — shared bits for the CSR screens (Audit Plan · Certificates · Digital Audit · Checklist · Air).
 // Data: the simulated factory on the M1, POST /api/m1/sim/view, module "csr". Every view returns
 // title, subtitle, summary, columns, rows plus its own rich keys. People are role code + YAI id, no names.
+// Gamini's UI rules: one compact header line carrying the figures (no stat-card rows repeating them), the
+// long explanation behind a small "i", tables that reflow to the width left beside the PA panel, one line
+// per cell, "Loading…" / an error with Retry — never an empty state for a pending or failed call.
 import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, RefreshCw } from "lucide-react";
+import { ArrowLeft, RefreshCw, Info as InfoIcon } from "lucide-react";
 import { NavCover, useScreenTop } from "../components/ScreenTop";
 
 export const API = (process.env.REACT_APP_M1_LLM_URL || "/api/m1").replace(/\/$/, "");
@@ -21,7 +24,7 @@ export const useView = (body) => {
   const [loading, setLoading] = useState(true);
   const load = useCallback(async () => {
     setLoading(true); setError("");
-    try { setD(await post(JSON.parse(key))); } catch (e) { setError("This CSR view is unavailable right now. Please try again in a moment."); } finally { setLoading(false); }
+    try { setD(await post(JSON.parse(key))); } catch (e) { setError("This CSR view is unavailable right now."); } finally { setLoading(false); }
   }, [key]);
   useEffect(() => { load(); }, [load]);
   return { d: d || {}, error, loading, reload: load };
@@ -46,63 +49,98 @@ export const toneOf = (s) => {
   if (/^(on-site|reporting|cap)/.test(x)) return "violet";
   return "grey";
 };
-export const Chip = ({ tone, cls, children, onClick, on }) => <span onClick={onClick} className={`inline-block rounded-full border px-2 py-0.5 text-[11px] font-semibold whitespace-nowrap ${cls || TONE[tone] || TONE.grey} ${onClick ? "cursor-pointer hover:brightness-125" : ""} ${on ? "ring-1 ring-white" : ""}`}>{children}</span>;
+export const Chip = ({ tone, cls, children, onClick, on, title: t }) => <span title={t} onClick={onClick} className={`inline-block rounded-full border px-2 py-0.5 text-xs font-semibold whitespace-nowrap leading-4 ${cls || TONE[tone] || TONE.grey} ${onClick ? "cursor-pointer hover:brightness-125" : ""} ${on ? "ring-1 ring-white" : ""}`}>{children}</span>;
 export const Status = ({ s }) => <Chip tone={toneOf(s)}>{title(s)}</Chip>;
-export const Panel = ({ title: t, right, children, className }) => <section className={`rounded-xl border border-slate-700 bg-slate-800/40 p-3 min-w-0 ${className || ""}`}>{(t || right) && <div className="flex items-baseline justify-between gap-2 mb-2"><div className="text-[11px] uppercase tracking-wider text-slate-400 font-bold">{t}</div>{right && <div className="text-[11px] text-slate-500">{right}</div>}</div>}{children}</section>;
-export const Tile = ({ label, value, sub, tone, onClick, on }) => <button onClick={onClick} disabled={!onClick} className={`text-left rounded-lg border bg-slate-900/60 px-2.5 py-1.5 min-w-[6.5rem] ${on ? "border-white" : "border-slate-700"} ${onClick ? "hover:border-slate-400" : "cursor-default"}`}><div className="text-[10px] uppercase tracking-wider text-slate-500 whitespace-nowrap">{label}</div><div className={`font-black tabular-nums text-base leading-tight ${tone || "text-white"}`}>{value}</div>{sub && <div className="text-[10px] text-slate-500">{sub}</div>}</button>;
+// the long explanation of a view, behind a small "i"
+export const Info = ({ text }) => (text ? <span title={text} className="inline-flex items-center text-slate-500 hover:text-slate-300 cursor-help align-middle" aria-label="about this view"><InfoIcon size={14} /></span> : null);
+export const Panel = ({ title: t, right, info, children, className }) => <section className={`rounded-xl border border-slate-700 bg-slate-800/40 p-3 min-w-0 ${className || ""}`}>{(t || right) && <div className="flex items-baseline justify-between gap-2 mb-2"><div className="text-[11px] uppercase tracking-wider text-slate-400 font-bold flex items-center gap-1.5">{t}{info && <Info text={info} />}</div>{right && <div className="text-xs text-slate-500">{right}</div>}</div>}{children}</section>;
 export const Bar = ({ v, tone, h = 6 }) => <div className="w-full rounded-full bg-slate-700/70 overflow-hidden" style={{ height: h }}><div className={`h-full rounded-full ${tone || (v >= 95 ? "bg-emerald-400" : v >= 85 ? "bg-amber-400" : "bg-rose-400")}`} style={{ width: `${Math.max(0, Math.min(100, Number(v) || 0))}%` }} /></div>;
 export const Select = ({ label, value, onChange, options, all = "all" }) => (
-  <label className="inline-flex items-center gap-1 text-[11px] text-slate-400">{label}
-    <select value={value || ""} onChange={(e) => onChange(e.target.value)} className="bg-slate-800 border border-slate-700 rounded-md px-1.5 py-0.5 text-[11px] text-white">
+  <label className="inline-flex items-center gap-1 text-xs text-slate-400">{label}
+    <select value={value || ""} onChange={(e) => onChange(e.target.value)} className="bg-slate-800 border border-slate-700 rounded-md px-1.5 py-1 text-xs text-white">
       <option value="">{all}</option>
       {(options || []).map((o) => <option key={String(o)} value={String(o)}>{String(o)}</option>)}
     </select>
   </label>
 );
-export const Tabs = ({ tabs, value, onChange }) => <div className="inline-flex rounded-lg border border-slate-700 overflow-hidden text-xs">{tabs.map(([k, l]) => <button key={k} onClick={() => onChange(k)} className={`px-3 py-1 font-bold ${value === k ? "bg-white text-slate-900" : "bg-slate-800 text-slate-300 hover:bg-slate-700"}`}>{l}</button>)}</div>;
-// a table from a view's columns + rows; `render[key]` overrides a cell, `onRow` makes rows clickable
-export const Table = ({ columns, rows, render = {}, onRow, max = 400, empty = "No rows." }) => {
-  const cs = cols(columns);
+export const Tabs = ({ tabs, value, onChange }) => <div className="inline-flex rounded-lg border border-slate-700 overflow-hidden text-sm">{tabs.map(([k, l]) => <button key={k} onClick={() => onChange(k)} className={`px-3 py-1 font-bold ${value === k ? "bg-white text-slate-900" : "bg-slate-800 text-slate-300 hover:bg-slate-700"}`}>{l}</button>)}</div>;
+// one line in a cell, the whole text on hover
+export const Clip = ({ v, cls }) => (v === null || v === undefined || v === "" ? <span className="text-slate-600">—</span> : <span className={`block truncate ${cls || ""}`} title={typeof v === "string" ? v : undefined}>{v}</span>);
+// the key figures as one text line (the same look as the header's)
+export const Summary = ({ items, info }) => <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-sm text-slate-400">{(items || []).map((x) => <span key={x.label} className="whitespace-nowrap">{x.label} <b className="text-white tabular-nums">{num(x.value)}</b></span>)}{info && <Info text={info} />}</div>;
+// the state of a call: pending → "Loading…", failed → the error with Retry; never an empty state for those
+export const State = ({ loading, error, onRetry, empty, colSpan }) => {
+  const body = error ? <span className="text-amber-200">{error} {onRetry && <button onClick={onRetry} className="ml-1 rounded border border-amber-400/50 px-2 py-0.5 text-xs font-bold text-amber-200 hover:bg-amber-500/10">Retry</button>}</span> : loading ? <span className="text-slate-400">Loading…</span> : <span className="text-slate-500">{empty || "No rows match."}</span>;
+  return colSpan ? <tr><td colSpan={colSpan} className="px-2 py-3 text-sm">{body}</td></tr> : <div className="px-2 py-3 text-sm">{body}</div>;
+};
+// a table that always fits the width it has (fixed layout, every column a share of the width, long text
+// clipped to one line with the full text on hover). `keys` picks the columns to show, `weights` their share,
+// `expand` opens the whole record under the row on click; `render[key]` overrides a cell
+export const Table = ({ columns, rows, render = {}, onRow, max = 400, empty, loading, error, onRetry, dense, keys, weights = {}, expand }) => {
+  const all = cols(columns);
+  const cs = keys ? keys.map((k) => all.find((c) => c.key === k) || { key: k, label: title(k) }) : all;
+  const total = cs.reduce((t, c) => t + (weights[c.key] || 1), 0);
+  const [open, setOpen] = useState(null);
+  const list = rows || [];
+  const rowKey = (r, i) => r.id || r.code || r.device || i;
   return (
     <div className="overflow-auto rounded-lg border border-slate-700" style={{ maxHeight: max }}>
-      <table className="min-w-full text-xs">
-        <thead className="text-slate-500 sticky top-0 bg-slate-800 z-10"><tr>{cs.map((c) => <th key={c.key} className="text-left font-normal px-2 py-1 whitespace-nowrap">{c.label}</th>)}</tr></thead>
+      <table className={`w-full ${dense ? "text-xs" : "text-[13px]"}`} style={{ tableLayout: "fixed" }}>
+        <colgroup>{cs.map((c) => <col key={c.key} style={{ width: `${((weights[c.key] || 1) / total) * 100}%` }} />)}</colgroup>
+        <thead className="text-slate-500 sticky top-0 bg-slate-800 z-10"><tr>{cs.map((c) => <th key={c.key} className="text-left font-normal px-2 py-1 align-bottom leading-tight truncate" title={c.label}>{c.label}</th>)}</tr></thead>
         <tbody>
-          {(rows || []).map((r, i) => <tr key={r.id || r.code || r.device || i} onClick={onRow ? () => onRow(r) : undefined} className={`border-t border-slate-800 ${onRow ? "cursor-pointer hover:bg-slate-700/40" : ""}`}>{cs.map((c) => <td key={c.key} className="px-2 py-1 align-top text-slate-200">{render[c.key] ? render[c.key](r[c.key], r) : cell(r[c.key], c.key)}</td>)}</tr>)}
-          {(rows || []).length === 0 && <tr><td colSpan={cs.length} className="px-2 py-3 text-slate-500">{empty}</td></tr>}
+          {list.map((r, i) => {
+            const k = rowKey(r, i), isOpen = expand && open === k;
+            return (
+              <React.Fragment key={k}>
+                <tr onClick={onRow ? () => onRow(r) : expand ? () => setOpen(isOpen ? null : k) : undefined} className={`border-t border-slate-800 ${onRow || expand ? "cursor-pointer hover:bg-slate-700/40" : ""} ${isOpen ? "bg-slate-700/30" : ""}`}>
+                  {cs.map((c) => <td key={c.key} className="px-2 py-1 align-top text-slate-200 truncate" title={typeof r[c.key] === "string" && !render[c.key] ? r[c.key] : undefined}>{render[c.key] ? render[c.key](r[c.key], r) : cell(r[c.key], c.key)}</td>)}
+                </tr>
+                {isOpen && <tr className="border-t border-slate-800 bg-slate-900/60"><td colSpan={cs.length} className="px-3 py-2"><Record columns={all} row={r} /></td></tr>}
+              </React.Fragment>
+            );
+          })}
+          {list.length === 0 && <State loading={loading} error={error} onRetry={onRetry} empty={empty} colSpan={cs.length || 1} />}
         </tbody>
       </table>
     </div>
   );
 };
+// the whole record of a row, label: value, for the expand under a table row
+export const Record = ({ columns, row }) => {
+  const shown = new Set(cols(columns).map((c) => c.key));
+  const extra = Object.keys(row || {}).filter((k) => !shown.has(k) && !/^(id|chips|stages|evidence_files|weeks)$/.test(k) && typeof row[k] !== "object");
+  const items = [...cols(columns), ...extra.map((k) => ({ key: k, label: title(k) }))];
+  return <div className="grid gap-x-4 gap-y-1 sm:grid-cols-2 lg:grid-cols-3 text-xs">{items.map((c) => <div key={c.key} className="min-w-0"><span className="text-slate-500">{c.label}</span> <span className="text-slate-200 break-words">{cell(row[c.key], c.key)}</span></div>)}</div>;
+};
 export const cell = (v, key) => {
   if (v === null || v === undefined || v === "") return <span className="text-slate-600">—</span>;
   if (typeof v === "boolean") return <span className={v ? "text-emerald-300" : "text-slate-600"}>{v ? "yes" : "no"}</span>;
   if (/^(status|result|stage|severity|level)$/.test(key) && typeof v === "string") return <Status s={v} />;
-  if (Array.isArray(v)) return <span className="text-slate-400">{v.map((x) => (typeof x === "object" ? x.name || JSON.stringify(x) : String(x))).join(", ")}</span>;
+  if (Array.isArray(v)) { const t = v.map((x) => (typeof x === "object" ? x.name || JSON.stringify(x) : String(x))).join(", "); return <span className="text-slate-400" title={t}>{t}</span>; }
   if (typeof v === "object") return <span className="text-slate-400">{JSON.stringify(v)}</span>;
-  if (typeof v === "number") return <span className="tabular-nums">{num(v, 2)}</span>;
-  return <span className="whitespace-pre-wrap">{String(v)}</span>;
+  if (typeof v === "number") return <span className="tabular-nums whitespace-nowrap">{num(v, 2)}</span>;
+  if (/^\d{4}-\d{2}-\d{2}/.test(String(v))) return <span className="whitespace-nowrap">{String(v)}</span>;
+  return <span>{String(v)}</span>;
 };
-export const Summary = ({ items }) => <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-slate-400">{(items || []).map((x) => <span key={x.label} className="whitespace-nowrap">{x.label} <b className="text-white tabular-nums">{num(x.value)}</b></span>)}</div>;
 
-// the screen frame every CSR screen uses: below the nav, back arrow, title, summary strip, refresh
+// the screen frame every CSR screen uses: below the nav, back arrow, title with the "i", the figures on the
+// same line, refresh; the content keeps clear of the PA panel AND of its pin / minus buttons when it is open
 export const Screen = ({ onBack, heading, sub, summary, loading, error, onReload, children }) => {
   const navigate = useNavigate();
   const [topRef, topPad] = useScreenTop();
   const back = () => (onBack ? onBack() : navigate(-1));
   return (
-    <div ref={topRef} style={{ paddingTop: topPad }} className="yai-pa-aware min-h-screen bg-slate-900 text-slate-200 px-3 md:px-5 pb-8 font-sans">
-      <style>{`body.yai-pa-open .yai-pa-aware { padding-right: 436px; }`}</style>
+    <div ref={topRef} style={{ paddingTop: topPad }} className="yai-pa-aware csr-screen min-h-screen bg-slate-900 text-slate-200 px-3 md:px-5 pb-8 font-sans">
+      <style>{`body.yai-pa-open .yai-pa-aware.csr-screen { padding-right: 484px; }`}</style>
       <NavCover />
-      <div className="flex flex-wrap items-center gap-2 mb-1">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-2">
         <button onClick={back} className="p-1 -ml-1 hover:bg-slate-700 rounded-full transition-colors text-slate-400 hover:text-white" aria-label="Back"><ArrowLeft size={18} /></button>
-        <h1 className="text-lg font-black text-white leading-none">{heading}</h1>
-        <div className="ml-auto"><Summary items={summary} /></div>
+        <h1 className="text-lg font-black text-white leading-none flex items-center gap-1.5">{heading}<Info text={sub} /></h1>
+        <div className="flex-1 min-w-[16rem]"><Summary items={summary} /></div>
         {onReload && <button onClick={onReload} className="p-1.5 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700" aria-label="Refresh"><RefreshCw size={14} className={loading ? "animate-spin" : ""} /></button>}
       </div>
-      {sub && <p className="text-[11px] text-slate-500 mb-2">{sub}</p>}
-      {error && <div className="mb-2 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-200 px-3 py-2 text-sm">{error}</div>}
+      {error && <div className="mb-2 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-200 px-3 py-2 text-sm flex items-center gap-2">{error}{onReload && <button onClick={onReload} className="rounded border border-amber-400/50 px-2 py-0.5 text-xs font-bold hover:bg-amber-500/10">Retry</button>}</div>}
       {children}
       <p className="mt-3 text-[10px] text-slate-500">simulated factory — role codes and employee numbers only, no real company, person or device</p>
     </div>

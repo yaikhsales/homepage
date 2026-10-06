@@ -5,7 +5,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Wind, Thermometer, WifiOff, Wifi } from "lucide-react";
-import { useView, num, Chip, Tile, Select, Panel, Screen } from "./csr";
+import { useView, num, Chip, Select, Screen } from "./csr";
 
 export const METRICS = ["co2", "pm25", "pm10", "ch2o", "tvoc", "temp", "rh"];
 export const fmt = (k, v) => (v === null || v === undefined ? "—" : k === "ch2o" || k === "tvoc" ? Number(v).toFixed(k === "ch2o" ? 3 : 2) : k === "temp" ? Number(v).toFixed(1) : num(v));
@@ -45,10 +45,9 @@ const AirSensors = ({ onBack }) => {
             </button>
           );
         })}
-        {rows.length === 0 && <div className="text-xs text-slate-500 p-3">{loading ? "Loading…" : "No devices match."}</div>}
+        {rows.length === 0 && <div className="text-sm p-3">{error ? <span className="text-amber-200">{error}</span> : loading ? <span className="text-slate-400">Loading…</span> : <span className="text-slate-500">No devices match.</span>}</div>}
       </div>
-      <Panel title="Reading the grid" className="mt-3"><div className="text-[11px] text-slate-400">A red cell is a reading over its limit (the limits are the chips above; PM2.5 / PM10 follow the ambient standard {d.standard ? `${d.standard.pm25} / ${d.standard.pm10} µg/m³` : ""}). Click a device to see its 24-hour series with the daily average and the points over the limit.</div></Panel>
-      <div className="mt-2 flex flex-wrap gap-2">{(d.summary || []).map((x) => <Tile key={x.label} label={x.label} value={num(x.value)} tone={/offline|over/i.test(x.label) && x.value ? "text-rose-300" : undefined} />)}</div>
+      <div className="mt-2 text-xs text-slate-500">a red cell is a reading over its limit (the chips above; PM2.5 / PM10 follow the ambient standard{d.standard ? ` ${d.standard.pm25} / ${d.standard.pm10} µg/m³` : ""}) · click a device for its 24-hour series</div>
     </Screen>
   );
 };

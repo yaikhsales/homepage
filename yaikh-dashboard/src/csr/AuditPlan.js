@@ -5,7 +5,7 @@
 // Schedule" button). Data: csr views audit-plan, visits, csr-calendar.
 import React, { useMemo, useState } from "react";
 import { CalendarDays, FileText, Users, ClipboardList } from "lucide-react";
-import { useView, num, Chip, Status, Panel, Tile, Select, Tabs, Table, cell, toneOf, Screen } from "./csr";
+import { useView, num, Chip, Status, Panel, Select, Tabs, Table, Clip, Summary, State, toneOf, Screen } from "./csr";
 
 
 // evidence_files comes as a list, or as a map stage → list, or as a count
@@ -16,20 +16,13 @@ const files = (v) => {
 };
 const STAGES = [["plan", "Planned"], ["pre-audit", "Pre-Audit"], ["on-site", "On-Site Audit"], ["reporting", "Reporting & Assessment"], ["CAP", "CAP (Verification & Final)"], ["completed", "Completed"]];
 
-// the five stage chips of a row: name · date (or Pending / In Progress) · evidence count
+// the five stages of a row on ONE line: a short chip per stage coloured by its status, the date on hover
+const SHORT = { "pre-audit": "pre", "on-site": "on-site", reporting: "report", CAP: "CAP", completed: "done" };
 const Flow = ({ stages }) => (
-  <div className="flex items-center gap-1 flex-wrap">
+  <div className="flex items-center gap-0.5 whitespace-nowrap overflow-hidden">
     {(stages || []).map((s, i) => {
       const tone = toneOf(s.status) === "grey" ? (s.date === "In Progress" ? "amber" : s.date === "Pending" ? "grey" : "green") : toneOf(s.status);
-      return (
-        <React.Fragment key={s.name}>
-          {i > 0 && <span className="text-slate-600">›</span>}
-          <span className={`inline-flex flex-col rounded-md border px-1.5 py-0.5 leading-tight ${{ green: "border-emerald-500/40 bg-emerald-500/10", amber: "border-amber-500/40 bg-amber-500/10", red: "border-rose-500/40 bg-rose-500/10", grey: "border-slate-700 bg-slate-800/60", sky: "border-sky-500/40 bg-sky-500/10", violet: "border-violet-500/40 bg-violet-500/10" }[tone]}`} title={`${s.name} · planned ${s.planned || "—"} · ${s.status || ""}${s.evidence ? " · " + s.evidence + " evidence" : ""}`}>
-            <span className="text-[10px] font-bold text-white whitespace-nowrap">{s.name}</span>
-            <span className="text-[10px] text-slate-400 whitespace-nowrap">{s.date || "—"}{typeof s.evidence === "number" && s.evidence > 0 ? <span className="text-sky-300"> · {s.evidence}📎</span> : null}</span>
-          </span>
-        </React.Fragment>
-      );
+      return <React.Fragment key={s.name}>{i > 0 && <span className="text-slate-600 text-[10px]">›</span>}<Chip tone={tone} title={`${s.name} · ${s.date || "—"} · planned ${s.planned || "—"}${s.evidence ? " · " + s.evidence + " evidence" : ""}`}>{SHORT[s.name] || s.name}</Chip></React.Fragment>;
     })}
   </div>
 );
@@ -68,8 +61,7 @@ const Plans = ({ year, setYear }) => {
   const rows = d.rows || [];
   return (
     <>
-      {error && <div className="mb-2 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-200 px-3 py-2 text-sm">{error}</div>}
-      <Panel title="Activity audit plan — track every audit through its five stages" right={d.subtitle} className="mb-3">
+      <Panel title="Activity audit plan — track every audit through its five stages" right="click a stage to filter" className="mb-3">
         <div className="flex flex-wrap items-stretch gap-2">
           {STAGES.map(([k, l]) => { const t = (d.stage_tracker || []).find((x) => x.stage === k); const n = t ? t.count : 0; const on = f.stage === k; return (
             <button key={k} onClick={() => setF({ ...f, stage: on ? "" : k })} className={`relative rounded-xl border px-3 py-2 text-left min-w-[9rem] ${on ? "border-white bg-slate-700/60" : "border-slate-700 bg-slate-900/60 hover:border-slate-500"}`}>
@@ -88,26 +80,26 @@ const Plans = ({ year, setYear }) => {
         <button onClick={reload} className="text-[11px] text-slate-400 hover:text-white">refresh</button>
       </div>
       <div className="overflow-auto rounded-lg border border-slate-700" style={{ maxHeight: 640 }}>
-        <table className="min-w-full text-xs">
-          <thead className="text-slate-500 sticky top-0 bg-slate-800 z-10"><tr>{["Plan", "Audit", "Standard · customer", "Type · form", "Handled by", "Dates", "Activity process flow", "Findings", "Result"].map((h) => <th key={h} className="text-left font-normal px-2 py-1 whitespace-nowrap">{h}</th>)}</tr></thead>
+        <table className="w-full text-[13px]" style={{ tableLayout: "fixed" }}>
+          <colgroup>{[9, 16, 10, 12, 7, 20, 7, 8].map((w, i) => <col key={i} style={{ width: `${w}%` }} />)}</colgroup>
+          <thead className="text-slate-500 sticky top-0 bg-slate-800 z-10"><tr>{["Plan", "Audit", "Standard · customer", "Handled by", "Audit date", "Activity process flow", "Findings", "Stage"].map((h) => <th key={h} className="text-left font-normal px-2 py-1 leading-tight truncate">{h}</th>)}</tr></thead>
           <tbody>
             {rows.map((r) => (
               <React.Fragment key={r.id}>
                 <tr onClick={() => setOpenRow(openRow === r.id ? null : r.id)} className={`border-t border-slate-800 cursor-pointer hover:bg-slate-700/40 ${openRow === r.id ? "bg-slate-700/30" : ""}`}>
-                  <td className="px-2 py-1.5 align-top whitespace-nowrap"><div className="font-bold text-white">{r.id}</div><div className="text-[10px] text-slate-500">{r.location}</div>{r.follow_up_of && <Chip tone="sky">follow-up of {r.follow_up_of}</Chip>}</td>
-                  <td className="px-2 py-1.5 align-top"><div className="font-bold text-white">{r.audit_name}</div><div className="text-[10px] text-slate-500">{r.programme !== r.audit_name ? r.programme : ""}</div></td>
-                  <td className="px-2 py-1.5 align-top whitespace-nowrap"><div>{r.standard}</div><div className="text-[10px] text-slate-500">{r.customer}</div></td>
-                  <td className="px-2 py-1.5 align-top"><div>{r.type}</div><div className="text-[10px] text-slate-500">{r.audit_form}</div></td>
-                  <td className="px-2 py-1.5 align-top whitespace-nowrap"><div>{r.handled_by}</div><div className="text-[10px] text-sky-300">{r.handled_by_emp}</div></td>
-                  <td className="px-2 py-1.5 align-top whitespace-nowrap text-slate-300"><div>pre {r.pre_audit_date}</div><div>audit {r.audit_date} · {r.period_days}d</div></td>
+                  <td className="px-2 py-1.5 align-top truncate" title={r.location}><span className="font-bold text-white">{r.id}</span>{r.follow_up_of && <Chip tone="sky" title={"follow-up of " + r.follow_up_of}> FU</Chip>}</td>
+                  <td className="px-2 py-1.5 align-top truncate" title={`${r.audit_name} · ${r.type} · ${r.audit_form}`}><span className="font-bold text-white">{r.audit_name}</span></td>
+                  <td className="px-2 py-1.5 align-top truncate" title={`${r.standard}${r.customer && r.customer !== "—" ? " · customer " + r.customer : ""}`}>{r.standard}{r.customer && r.customer !== "—" ? <span className="text-slate-500"> · {r.customer}</span> : null}</td>
+                  <td className="px-2 py-1.5 align-top truncate" title={`${r.handled_by} ${r.handled_by_emp || ""}`}>{r.handled_by}</td>
+                  <td className="px-2 py-1.5 align-top truncate text-slate-300" title={`pre-audit ${r.pre_audit_date} · audit ${(r.audit_dates || [r.audit_date]).join(", ")}`}>{r.audit_date} · {r.period_days}d</td>
                   <td className="px-2 py-1.5 align-top"><Flow stages={r.stages} /></td>
-                  <td className="px-2 py-1.5 align-top whitespace-nowrap tabular-nums">{num(r.findings)}{r.open_findings ? <span className="text-rose-300"> · {num(r.open_findings)} open</span> : null}</td>
-                  <td className="px-2 py-1.5 align-top"><Status s={r.stage} /><div className="text-[10px] text-slate-400 mt-0.5">{r.result}</div></td>
+                  <td className="px-2 py-1.5 align-top truncate tabular-nums">{num(r.findings)}{r.open_findings ? <span className="text-rose-300"> · {num(r.open_findings)} open</span> : null}</td>
+                  <td className="px-2 py-1.5 align-top truncate"><Status s={r.stage} /></td>
                 </tr>
-                {openRow === r.id && <tr className="border-t border-slate-800 bg-slate-900/60"><td colSpan={9} className="px-2 py-2"><Details r={r} /></td></tr>}
+                {openRow === r.id && <tr className="border-t border-slate-800 bg-slate-900/60"><td colSpan={8} className="px-2 py-2"><Details r={r} /></td></tr>}
               </React.Fragment>
             ))}
-            {rows.length === 0 && <tr><td colSpan={9} className="px-2 py-3 text-slate-500">{loading ? "Loading…" : "No audits match."}</td></tr>}
+            {rows.length === 0 && <State loading={loading} error={error} onRetry={reload} empty="No audits match." colSpan={8} />}
           </tbody>
         </table>
       </div>
@@ -117,24 +109,22 @@ const Plans = ({ year, setYear }) => {
 
 const Visits = () => {
   const [f, setF] = useState({ customer: "", level: "", status: "" });
-  const { d, error, loading } = useView({ view: "visits" });
+  const { d, error, loading, reload } = useView({ view: "visits" });
   const rows = (d.rows || []).filter((r) => (!f.customer || r.customer === f.customer) && (!f.level || r.level === f.level) && (!f.status || r.status === f.status));
   return (
     <>
-      {error && <div className="mb-2 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-200 px-3 py-2 text-sm">{error}</div>}
-      <p className="text-[11px] text-slate-500 mb-2">{d.subtitle}</p>
-      <div className="flex flex-wrap gap-2 mb-2">{(d.summary || []).map((x) => <Tile key={x.label} label={x.label} value={num(x.value)} />)}</div>
+      <div className="mb-2"><Summary items={d.summary} info={d.subtitle} /></div>
       <div className="flex flex-wrap items-center gap-2 mb-2">
         <Select label="Customer" value={f.customer} onChange={(v) => setF({ ...f, customer: v })} options={(d.filters || {}).customer} />
         <Select label="Level" value={f.level} onChange={(v) => setF({ ...f, level: v })} options={(d.filters || {}).level} />
         <Select label="Status" value={f.status} onChange={(v) => setF({ ...f, status: v })} options={(d.filters || {}).status} />
         <span className="ml-auto flex gap-1.5">{(d.levels || []).map((l) => <Chip key={l.level} tone="grey">{l.level} · {l.name.replace(/^Level \d — /, "")} · {l.minutes} min</Chip>)}</span>
       </div>
-      <Table columns={d.columns} rows={rows} max={560} empty={loading ? "Loading…" : "No visits match."} render={{
-        customer: (v) => <b className="text-white">customer {v}</b>,
+      <Table columns={d.columns} rows={rows} max={560} empty="No visits match." loading={loading} error={error} onRetry={reload} expand keys={["id", "customer", "level", "subject", "date", "time", "rehearsal_date", "report_cap", "status"]} weights={{ id: 1.4, level: 1.2, subject: 1.2, rehearsal_date: 1.2, report_cap: 1.1 }} render={{
+        id: (v) => <span className="font-bold text-white">{v}</span>,
+        customer: (v) => <span>customer <b className="text-white">{v}</b></span>,
         level: (v, r) => <Chip tone={v === "L1" ? "violet" : v === "L2" ? "sky" : "grey"}>{v} · {r.duration_min} min</Chip>,
-        participants_roles: (v) => <span className="text-slate-400">{String(v || "").split("; ").join(" · ")}</span>,
-        report_cap: (v) => <Status s={v} />,
+                report_cap: (v) => <Status s={v} />,
       }} />
     </>
   );
@@ -145,14 +135,12 @@ const TYPE_TONE = { audit: "violet", "pre-audit": "sky", "follow-up": "amber", r
 const Calendar = ({ year, setYear }) => {
   const [type, setType] = useState("");
   const [month, setMonth] = useState("");
-  const { d, error, loading } = useView({ view: "csr-calendar", year: year || undefined, type: type || undefined, month: month ? Number(month) : undefined });
+  const { d, error, loading, reload } = useView({ view: "csr-calendar", year: year || undefined, type: type || undefined, month: month ? Number(month) : undefined });
   const months = d.months || [];
   const peak = Math.max(1, ...months.map((m) => TYPES.reduce((s, t) => s + (m[t] || 0), 0)));
   return (
     <>
-      {error && <div className="mb-2 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-200 px-3 py-2 text-sm">{error}</div>}
-      <p className="text-[11px] text-slate-500 mb-2">{d.subtitle}</p>
-      <div className="flex flex-wrap gap-2 mb-2">{(d.summary || []).map((x) => <Tile key={x.label} label={x.label} value={num(x.value)} onClick={TYPES.includes(String(x.label).toLowerCase()) ? () => setType(type === String(x.label).toLowerCase() ? "" : String(x.label).toLowerCase()) : undefined} on={type === String(x.label).toLowerCase()} />)}</div>
+      <div className="mb-2"><Summary items={d.summary} info={d.subtitle} /></div>
       <Panel title={`Year timeline ${d.year || year || ""} — events per month, click a month`} className="mb-3">
         <div className="grid grid-cols-12 gap-1">
           {months.map((m) => { const tot = TYPES.reduce((s, t) => s + (m[t] || 0), 0); const mm = Number(String(m.month).slice(-2)); const on = String(mm) === month; return (
@@ -169,7 +157,7 @@ const Calendar = ({ year, setYear }) => {
         {(type || month) && <button onClick={() => { setType(""); setMonth(""); }} className="text-[11px] text-sky-300 hover:underline">clear filters</button>}
         <span className="ml-auto text-[11px] text-slate-500">{loading ? "loading…" : `${(d.rows || []).length} events`}</span>
       </div>
-      <Table columns={d.columns} rows={d.rows} max={560} render={{ type: (v) => <Chip tone={TYPE_TONE[v] || "grey"}>{v}</Chip>, title: (v) => <b className="text-white">{v}</b>, ref: (v) => <span className="text-sky-300">{v}</span> }} />
+      <Table columns={d.columns} rows={d.rows} max={560} loading={loading} error={error} onRetry={reload} empty="No events match." expand weights={{ date: 1, type: 1, title: 3.2, ref: 1.3, owner: 2, status: 1, detail: 2.4 }} render={{ type: (v) => <Chip tone={TYPE_TONE[v] || "grey"}>{v}</Chip>, title: (v) => <Clip v={v} cls="font-bold text-white" />, ref: (v) => <span className="text-sky-300">{v}</span>, detail: (v) => <Clip v={v} cls="text-slate-400" /> }} />
     </>
   );
 };
@@ -179,7 +167,7 @@ const AuditPlan = ({ onBack }) => {
   const [year, setYear] = useState("");
   const head = useView({ view: "audit-plan", year: year || undefined });
   return (
-    <Screen onBack={onBack} heading="Audit Plan" sub={tab === "plans" ? head.d.subtitle : undefined} summary={tab === "plans" ? head.d.summary : undefined} loading={head.loading} onReload={head.reload}>
+    <Screen onBack={onBack} heading="Audit Plan" sub={tab === "plans" ? head.d.subtitle : undefined} summary={tab === "plans" ? head.d.summary : undefined} loading={head.loading} error={head.error} onReload={head.reload}>
       <div className="flex flex-wrap items-center gap-2 mb-3">
         <Tabs tabs={[["plans", "Audit plans"], ["visits", "Visits"], ["calendar", "CSR calendar"]]} value={tab} onChange={setTab} />
         <button onClick={() => setTab("calendar")} className={`inline-flex items-center gap-1 rounded-md border px-2 py-1 text-[11px] font-bold ${tab === "calendar" ? "bg-white text-slate-900 border-white" : "border-sky-500/50 bg-sky-500/10 text-sky-200 hover:bg-sky-500/25"}`}><CalendarDays size={12} />CSR Schedule</button>
@@ -191,5 +179,4 @@ const AuditPlan = ({ onBack }) => {
     </Screen>
   );
 };
-export { cell };
 export default AuditPlan;
