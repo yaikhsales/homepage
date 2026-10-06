@@ -22,7 +22,13 @@ export const usePaSkills = (pa) => {
     finally { setLoading(false); }
   }, [pa]);
   useEffect(() => { load(); const t = setInterval(load, 60000); return () => clearInterval(t); }, [load]);
-  return [data, loading, load];
+  const act = useCallback(async (taskId, action) => {
+    try {
+      await fetch(`${API}/pa/skills`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ pa, task_id: taskId, action, by: "boss" }) });
+    } catch (e) { /* refetch shows the truth either way */ }
+    load();
+  }, [pa, load]);
+  return [data, loading, load, act];
 };
 
 const REMIND_ICON = { meeting: "📅", training: "🎓", question: "❓", deadline: "⏰" };
@@ -44,14 +50,15 @@ const MiniChart = ({ chart }) => {
   );
 };
 
-const PaSkills = ({ data, loading, onRefresh, onOpenLink }) => {
+const PaSkills = ({ data, loading, onRefresh, onOpenLink, onTaskAction }) => {
   const [showAll, setShowAll] = useState(false);
   if (!data) return null;
   const alerts = [...(data.alerts || [])].sort((a, b) => (a.severity === "red" ? -1 : 1) - (b.severity === "red" ? -1 : 1));
   const shown = showAll ? alerts.slice(0, 20) : alerts.slice(0, 6);
   const reminders = (data.reminders || []).slice(0, 5);
   const forecasts = (data.forecasts || []).slice(0, 4);
-  const empty = alerts.length === 0 && reminders.length === 0 && forecasts.length === 0;
+  const tasks = (data.tasks || []).slice(0, 12);
+  const empty = tasks.length === 0 && alerts.length === 0 && reminders.length === 0 && forecasts.length === 0;
   const go = (link) => { if (link && onOpenLink) onOpenLink(link); };
 
   return (
@@ -68,6 +75,32 @@ const PaSkills = ({ data, loading, onRefresh, onOpenLink }) => {
       {empty && (
         <div className="flex items-center gap-2 rounded-xl bg-emerald-50 border border-emerald-200 px-3 py-2.5 text-xs text-emerald-700">
           <CheckCircle2 size={15} /> Nothing needs attention right now — all clear.
+        </div>
+      )}
+
+      {tasks.length > 0 && (
+        <div className="space-y-1">
+          <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-extrabold text-gray-400">Tasks &amp; approvals{data.approvals_count != null && <span className="rounded-full bg-rose-600 text-white px-1.5 leading-4 text-[9px] font-black">{data.approvals_count}</span>}</div>
+          {tasks.map((tk) => (
+            <div key={tk.id} className="rounded-lg px-2.5 py-2 bg-white border border-gray-200 text-[11px] leading-snug">
+              <div className="flex items-start gap-2">
+                <span className={`mt-1 inline-block w-2 h-2 rounded-full flex-shrink-0 ${tk.priority === "high" ? "bg-rose-500 animate-pulse" : "bg-sky-400"}`} />
+                <span className="flex-1 text-gray-800 font-semibold">{tk.title}</span>
+                {tk.ref && <button onClick={() => go(tk.link)} className="flex-shrink-0 rounded bg-gray-100 border border-gray-200 text-[9px] font-bold px-1.5 leading-4 hover:bg-gray-200">{tk.ref}</button>}
+              </div>
+              <div className="pl-4 text-[10px] text-gray-500 mt-0.5">
+                {tk.from && <>from {tk.from} · </>}{tk.since && <>since {tk.since} · </>}{tk.due && <>due {tk.due}</>}
+                {tk.blocks && <div className="text-amber-700">blocks {tk.blocks}</div>}
+              </div>
+              {Array.isArray(tk.actions) && tk.actions.length > 0 && onTaskAction && (
+                <div className="pl-4 mt-1 flex gap-1.5">
+                  {tk.actions.includes("approve") && <button onClick={() => onTaskAction(tk.id, "approve")} className="rounded-md bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold px-2.5 py-0.5">Approve</button>}
+                  {tk.actions.includes("reject") && <button onClick={() => onTaskAction(tk.id, "reject")} className="rounded-md bg-rose-600 hover:bg-rose-700 text-white text-[10px] font-bold px-2.5 py-0.5">Reject</button>}
+                  {tk.actions.includes("done") && <button onClick={() => onTaskAction(tk.id, "done")} className="rounded-md bg-sky-600 hover:bg-sky-700 text-white text-[10px] font-bold px-2.5 py-0.5">Done</button>}
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       )}
 

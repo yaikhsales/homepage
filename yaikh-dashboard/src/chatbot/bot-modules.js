@@ -538,7 +538,8 @@ const PhoneFrame = ({
     // answers, it REPLACES the fixed suggested-action chips below; when the
     // M1 is unreachable the old chips stay as the fallback.
     const navigateTo = useNavigate();
-    const [paSkills, paSkillsLoading, reloadPaSkills] = usePaSkills(notifSlug);
+    const [paSkills, paSkillsLoading, reloadPaSkills, paSkillsAct] = usePaSkills(notifSlug);
+    const [skillsOpen, setSkillsOpen] = useState(false);
 
     const refreshNotifCounts = React.useCallback(() => {
         if (!notifSlug) return;
@@ -1485,16 +1486,19 @@ const PhoneFrame = ({
                                 >
                                     <Menu size={18} className={bot.textColor || 'text-gray-600'} />
                                 </button>
-                                <button
-                                    onClick={() => {
-                                        setInputValue('');
-                                        if (onNewChat) onNewChat();
-                                    }}
-                                    className={`px-3 py-1.5 rounded-full hover:bg-black/5 transition text-xs font-medium ${bot.textColor || 'text-gray-600'}`}
-                                    title="Menu"
-                                >
-                                    {t('Menu')}
-                                </button>
+                                {/* Blue Yai — opens the PA's four-skills view (tasks &
+                                    approvals first); red badge = alerts + open approvals. */}
+                                {notifSlug && (
+                                    <button
+                                        onClick={() => setSkillsOpen((v) => !v)}
+                                        className="relative w-9 h-9 rounded-full overflow-hidden flex items-center justify-center transition-transform hover:scale-105 active:scale-95 flex-shrink-0"
+                                        style={{ background: "radial-gradient(circle at 30% 25%, #93c5fd 0%, #3b82f6 55%, #1d4ed8 100%)", boxShadow: "inset -3px -3px 6px rgba(0,0,0,0.3), inset 2px 2px 5px rgba(255,255,255,0.35)" }}
+                                        title="Yai — tasks, alerts, reminders, forecasts"
+                                    >
+                                        <span className="text-white font-black text-[11px] italic">Yai</span>
+                                        {paSkills && paSkills.badge > 0 && <span className="absolute top-0 right-0 min-w-[16px] h-4 px-0.5 rounded-full bg-rose-600 text-white text-[9px] font-black leading-4 text-center">{paSkills.badge}</span>}
+                                    </button>
+                                )}
                             </div>
                             {/* Bot Name - Centered. For Accounting PA, the
                                 identity shifts to the active topic agent so the
@@ -1617,11 +1621,7 @@ const PhoneFrame = ({
                                             </div>
                                         </div>
                                     ) : (
-                                        // Four-skills panel when the M1 feed is live; the fixed
-                                        // suggested-action chips only as fallback.
-                                        paSkills ? (
-                                            <PaSkills data={paSkills} loading={paSkillsLoading} onRefresh={reloadPaSkills} onOpenLink={(l) => { if (onClose) onClose(); navigateTo(l); }} />
-                                        ) :
+                                        // Regular Suggested Actions or Admin PA Module Actions
                                         suggestedActions.length > 0 && (
                                             <div className={`${notifSlug ? 'flex flex-wrap gap-1.5 mt-4 justify-start' : 'flex flex-col gap-2 mt-8'}`}>
                                                 {suggestedActions.map((action, idx) => {
@@ -2268,6 +2268,16 @@ const PhoneFrame = ({
                     </div>
                 </div>
             </div>
+            {/* Four-skills view — opened by the blue Yai header button. */}
+            {skillsOpen && (
+                <div className="absolute inset-x-0 top-16 bottom-0 z-30 overflow-y-auto bg-white px-3 pb-4 rounded-b-3xl">
+                    {paSkills ? (
+                        <PaSkills data={paSkills} loading={paSkillsLoading} onRefresh={reloadPaSkills} onTaskAction={paSkillsAct} onOpenLink={(l) => { setSkillsOpen(false); if (onClose) onClose(); navigateTo(l); }} />
+                    ) : (
+                        <div className="text-xs text-gray-400 text-center pt-10">Loading the department feed…</div>
+                    )}
+                </div>
+            )}
             {/* Modal flow superseded by in-chat agentic cards — keeping
                 pendingModalTopic state slot harmless for now in case any
                 other branch references it. */}

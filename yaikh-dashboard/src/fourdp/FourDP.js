@@ -157,7 +157,7 @@ function StatusPop({ pop, onTab, onClose }) {
   const below = pop.y < window.innerHeight / 2;
   const place = below ? { top: pop.y + 14, maxHeight: window.innerHeight - pop.y - 24 } : { bottom: window.innerHeight - pop.y + 14, maxHeight: pop.y - 24 };
   const d = pop.data;
-  const grp = d && d.groups[pop.group];
+  const grp = d && d.groups && d.groups[pop.group];
   return (
     <>
       <div className="fixed inset-0 z-40" onClick={onClose} />
@@ -171,7 +171,7 @@ function StatusPop({ pop, onTab, onClose }) {
         <div className="flex gap-1 px-3 pt-2">
           {GROUPS.map(([k, name]) => (
             <button key={k} onClick={() => onTab(k)} className={`flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-bold ${pop.group === k ? "bg-white/10 border-white/50 text-white" : "border-slate-600 text-slate-300 hover:bg-slate-700"}`}>
-              <span className={`inline-block w-2 h-2 rounded-full ${LIGHT[(d && d.groups[k].tone) || (pop.st && pop.st[k]) || "idle"]}`} />{name}
+              <span className={`inline-block w-2 h-2 rounded-full ${LIGHT[(d && d.groups && d.groups[k] && d.groups[k].tone) || (pop.st && pop.st[k]) || "idle"]}`} />{name}
             </button>
           ))}
           {grp && <span className="ml-auto self-center text-[11px] text-slate-400 truncate">{grp.title.split("— ")[1]}</span>}
