@@ -26,9 +26,9 @@ const TrafficLight = ({ onBack }) => {
         const data = {};
         for (let i = 1; i <= 30; i++) {
             data[`Line ${i}`] = [
-                `${prefix}${i}-1 GPAR12270-1`,
-                `${prefix}${i}-2 GPAR12270-1`,
-                `${prefix}${i}-3 GPAR12270-1`
+                `${prefix}${i}-1 YAIAA80-1`,
+                `${prefix}${i}-2 YAIAA80-1`,
+                `${prefix}${i}-3 YAIAA80-1`
             ];
         }
         return data;
@@ -48,30 +48,30 @@ const TrafficLight = ({ onBack }) => {
 
     // Sample data for Finishing Input (A, B, C, ...)
     const finishingInputData = {
-        'A': ['A-001 GPAR12270-1', 'A-002 GPAR12270-1'],
-        'B': ['B-001 GPAR12270-1', 'B-002 GPAR12270-1'],
-        'C': ['C-001 GPAR12270-1', 'C-002 GPAR12270-1'],
-        'D': ['D-001 GPAR12270-1', 'D-002 GPAR12270-1'],
-        'E': ['E-001 GPAR12270-1', 'E-002 GPAR12270-1'],
-        'F': ['F-001 GPAR12270-1', 'F-002 GPAR12270-1'],
-        'G': ['G-001 GPAR12270-1', 'G-002 GPAR12270-1'],
-        'H': ['H-001 GPAR12270-1', 'H-002 GPAR12270-1'],
-        'I': ['I-001 GPAR12270-1', 'I-002 GPAR12270-1'],
-        'J': ['J-001 GPAR12270-1', 'J-002 GPAR12270-1']
+        'A': ['A-001 YAIAA80-1', 'A-002 YAIAA80-1'],
+        'B': ['B-001 YAIAA80-1', 'B-002 YAIAA80-1'],
+        'C': ['C-001 YAIAA80-1', 'C-002 YAIAA80-1'],
+        'D': ['D-001 YAIAA80-1', 'D-002 YAIAA80-1'],
+        'E': ['E-001 YAIAA80-1', 'E-002 YAIAA80-1'],
+        'F': ['F-001 YAIAA80-1', 'F-002 YAIAA80-1'],
+        'G': ['G-001 YAIAA80-1', 'G-002 YAIAA80-1'],
+        'H': ['H-001 YAIAA80-1', 'H-002 YAIAA80-1'],
+        'I': ['I-001 YAIAA80-1', 'I-002 YAIAA80-1'],
+        'J': ['J-001 YAIAA80-1', 'J-002 YAIAA80-1']
     };
 
     // Sample data for Packing (A, B, C, ...)
     const packingData = {
-        'A': ['A-001 GPAR12270-1', 'A-002 GPAR12270-1'],
-        'B': ['B-001 GPAR12270-1', 'B-002 GPAR12270-1'],
-        'C': ['C-001 GPAR12270-1', 'C-002 GPAR12270-1'],
-        'D': ['D-001 GPAR12270-1', 'D-002 GPAR12270-1'],
-        'E': ['E-001 GPAR12270-1', 'E-002 GPAR12270-1'],
-        'F': ['F-001 GPAR12270-1', 'F-002 GPAR12270-1'],
-        'G': ['G-001 GPAR12270-1', 'G-002 GPAR12270-1'],
-        'H': ['H-001 GPAR12270-1', 'H-002 GPAR12270-1'],
-        'I': ['I-001 GPAR12270-1', 'I-002 GPAR12270-1'],
-        'J': ['J-001 GPAR12270-1', 'J-002 GPAR12270-1']
+        'A': ['A-001 YAIAA80-1', 'A-002 YAIAA80-1'],
+        'B': ['B-001 YAIAA80-1', 'B-002 YAIAA80-1'],
+        'C': ['C-001 YAIAA80-1', 'C-002 YAIAA80-1'],
+        'D': ['D-001 YAIAA80-1', 'D-002 YAIAA80-1'],
+        'E': ['E-001 YAIAA80-1', 'E-002 YAIAA80-1'],
+        'F': ['F-001 YAIAA80-1', 'F-002 YAIAA80-1'],
+        'G': ['G-001 YAIAA80-1', 'G-002 YAIAA80-1'],
+        'H': ['H-001 YAIAA80-1', 'H-002 YAIAA80-1'],
+        'I': ['I-001 YAIAA80-1', 'I-002 YAIAA80-1'],
+        'J': ['J-001 YAIAA80-1', 'J-002 YAIAA80-1']
     };
 
 
