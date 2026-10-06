@@ -17,9 +17,9 @@ const GROUPS = [
     title: "Standard Time",
     tone: "border-sky-500/40",
     items: [
-      { view: "operation-video", title: "Operation Video", sub: "AI vision analysis of each operation — motion, posture, waste, SMV", icon: Video },
-      { view: "standard-time-library", title: "ST Standard Time", sub: "Standard minutes of every operation by garment", img: "standard-time-analysis.png" },
-      { view: "ie-master", title: "IE Master", sub: "Operation master: machine, stitch, presser foot, attachment, grade", icon: BookOpen },
+      { view: "operation-video", title: "AI Vision Motion Analysis", sub: "AVMA — IE adds a video of an operation, the AI analyses the motion and gives the SMV", icon: Video },
+      { view: "standard-time-library", title: "Operation Library", sub: "Operations by style — T-shirt, jacket, pants — with machine types, grouped by category", img: "standard-time-analysis.png" },
+      { view: "ie-master", title: "IE Master", sub: "Garment type → category → operation: standard video, who has done it, best operator, defect history", icon: BookOpen },
     ],
   },
   {
