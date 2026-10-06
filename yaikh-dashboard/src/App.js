@@ -58,6 +58,7 @@ import GarmentAnalysis from "./ce/GarmentAnalysis";
 import IeMaster from "./ce/IeMaster";
 import MachineFloor from "./ce/MachineFloor";
 import ProductionFloor from "./ce/ProductionFloor";
+import ModuleFrame from "./components/ModuleFrame";
 import Cpm from "./ce/Cpm";
 import StyleCosting from "./ce/StyleCosting";
 import CostCentres from "./ce/CostCentres";
@@ -157,110 +158,110 @@ export default function App() {
           <Route index element={<div />} />
           <Route
             path="training"
-            element={<TrainingGridView onBack={handleBack} />}
+            element={<ModuleFrame><TrainingGridView onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="sensors"
-            element={<SensorGridView onBack={handleBack} />}
+            element={<ModuleFrame><SensorGridView onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="waste/analytics"
-            element={<Waste onBack={handleBack} />}
+            element={<ModuleFrame><Waste onBack={handleBack} /></ModuleFrame>}
           />
-          <Route path="waste/boiler" element={<Boiler onBack={handleBack} />} />
-          <Route path="ytm-shop" element={<YTMShop onBack={handleBack} />} />
-          <Route path="ytm" element={<YTM onBack={handleBack} />} />
-          <Route path="y-shop" element={<YShop onBack={handleBack} />} />
+          <Route path="waste/boiler" element={<ModuleFrame><Boiler onBack={handleBack} /></ModuleFrame>} />
+          <Route path="ytm-shop" element={<ModuleFrame><YTMShop onBack={handleBack} /></ModuleFrame>} />
+          <Route path="ytm" element={<ModuleFrame><YTM onBack={handleBack} /></ModuleFrame>} />
+          <Route path="y-shop" element={<ModuleFrame><YShop onBack={handleBack} /></ModuleFrame>} />
           <Route
             path="traffic-light"
-            element={<TrafficLight onBack={handleBack} />}
+            element={<ModuleFrame><TrafficLight onBack={handleBack} /></ModuleFrame>}
           />
-          <Route path="pwip" element={<PWIP onBack={handleBack} />} />
-          <Route path="call-out" element={<CallOut onBack={handleBack} />} />
+          <Route path="pwip" element={<ModuleFrame><PWIP onBack={handleBack} /></ModuleFrame>} />
+          <Route path="call-out" element={<ModuleFrame><CallOut onBack={handleBack} /></ModuleFrame>} />
           <Route
             path="meeting"
-            element={<TimelineView onBack={handleBack} onAdd={() => {}} />}
+            element={<ModuleFrame><TimelineView onBack={handleBack} onAdd={() => {}} /></ModuleFrame>}
           />
           <Route
             path="meeting-room"
-            element={<MeetingRoom onBack={handleBack} />}
+            element={<ModuleFrame><MeetingRoom onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="car-booking"
-            element={<CarBooking onBack={handleBack} />}
+            element={<ModuleFrame><CarBooking onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="cctv/face-scan"
-            element={<FaceScan onBack={handleBack} />}
+            element={<ModuleFrame><FaceScan onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="cctv/my-face-scan"
-            element={<MyFaceScan onBack={handleBack} />}
+            element={<ModuleFrame><MyFaceScan onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="ticket"
-            element={<SupportTicketManagement onBack={handleBack} />}
+            element={<ModuleFrame><SupportTicketManagement onBack={handleBack} /></ModuleFrame>}
           />
           <Route path="submenu/:moduleId" element={<SubMenuView />} />
           <Route path="image/*" element={<ImageView onBack={handleBack} />} />
           <Route path="iframe" element={<IframeView onBack={handleBack} />} />
-          <Route path="verify-pr" element={<VerifyPR onBack={handleBack} />} />
+          <Route path="verify-pr" element={<ModuleFrame><VerifyPR onBack={handleBack} /></ModuleFrame>} />
           <Route
             path="approval-pr"
-            element={<ApprovalPR onBack={handleBack} />}
+            element={<ModuleFrame><ApprovalPR onBack={handleBack} /></ModuleFrame>}
           />
-          <Route path="pay-pr" element={<PayPR onBack={handleBack} />} />
-          <Route path="yhr" element={<YHR onBack={handleBack} />} />
-          <Route path="speak-up" element={<SpeakUp onBack={handleBack} />} />
-          <Route path="fire-alarm" element={<FireAlarm onBack={handleBack} />} />
-          <Route path="cctv" element={<CCTV onBack={handleBack} />} />
+          <Route path="pay-pr" element={<ModuleFrame><PayPR onBack={handleBack} /></ModuleFrame>} />
+          <Route path="yhr" element={<ModuleFrame><YHR onBack={handleBack} /></ModuleFrame>} />
+          <Route path="speak-up" element={<ModuleFrame><SpeakUp onBack={handleBack} /></ModuleFrame>} />
+          <Route path="fire-alarm" element={<ModuleFrame><FireAlarm onBack={handleBack} /></ModuleFrame>} />
+          <Route path="cctv" element={<ModuleFrame><CCTV onBack={handleBack} /></ModuleFrame>} />
           <Route
             path="recruitment"
-            element={<Recruitment onBack={handleBack} />}
+            element={<ModuleFrame><Recruitment onBack={handleBack} /></ModuleFrame>}
           />
-          <Route path="interview" element={<Interview onBack={handleBack} />} />
+          <Route path="interview" element={<ModuleFrame><Interview onBack={handleBack} /></ModuleFrame>} />
           <Route
             path="onboarding"
-            element={<Onboarding onBack={handleBack} />}
+            element={<ModuleFrame><Onboarding onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="benefit-profile"
-            element={<BenefitProfile onBack={handleBack} />}
+            element={<ModuleFrame><BenefitProfile onBack={handleBack} /></ModuleFrame>}
           />
-          <Route path="payroll" element={<Payroll onBack={handleBack} />} />
+          <Route path="payroll" element={<ModuleFrame><Payroll onBack={handleBack} /></ModuleFrame>} />
           <Route
             path="visa-work-permit"
-            element={<VisaWorkPermit onBack={handleBack} />}
+            element={<ModuleFrame><VisaWorkPermit onBack={handleBack} /></ModuleFrame>}
           />
-          <Route path="canteen" element={<Canteen onBack={handleBack} />} />
-          <Route path="nssf" element={<NSSF onBack={handleBack} />} />
+          <Route path="canteen" element={<ModuleFrame><Canteen onBack={handleBack} /></ModuleFrame>} />
+          <Route path="nssf" element={<ModuleFrame><NSSF onBack={handleBack} /></ModuleFrame>} />
           <Route
             path="salary-bill"
-            element={<SalaryBill onBack={handleBack} />}
+            element={<ModuleFrame><SalaryBill onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="bill-claim"
-            element={<BillClaim onBack={handleBack} />}
+            element={<ModuleFrame><BillClaim onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="shipping-bill"
-            element={<ShippingBill onBack={handleBack} />}
+            element={<ModuleFrame><ShippingBill onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="monthly-salary"
-            element={<MonthlySalary onBack={handleBack} />}
+            element={<ModuleFrame><MonthlySalary onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="weekly-incentive"
-            element={<WeeklyIncentive onBack={handleBack} />}
+            element={<ModuleFrame><WeeklyIncentive onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="permit-fee"
-            element={<PermitFee onBack={handleBack} />}
+            element={<ModuleFrame><PermitFee onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="resign-payment"
-            element={<ResignPayment onBack={handleBack} />}
+            element={<ModuleFrame><ResignPayment onBack={handleBack} /></ModuleFrame>}
           />
           <Route path="ce" element={<CE onBack={handleBack} />} />
           {/* CE sub-modules read the simulated factory (sim/view, module "ce"); two have custom visuals */}
@@ -300,43 +301,43 @@ export default function App() {
           <Route path="style-costing" element={<Navigate to="/dashboard/ce/style-costing" replace />} />
           <Route
             path="checklist-attendance"
-            element={<ChecklistAttendance onBack={handleBack} />}
+            element={<ModuleFrame><ChecklistAttendance onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="my-attendance"
-            element={<MyAttendance onBack={handleBack} />}
+            element={<ModuleFrame><MyAttendance onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="compliance-certificate"
-            element={<ComplianceCertificate onBack={handleBack} />}
+            element={<ModuleFrame><ComplianceCertificate onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="audit-plan"
-            element={<AuditPlan onBack={handleBack} />}
+            element={<ModuleFrame><AuditPlan onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="checklist-6s"
-            element={<Checklist6S onBack={handleBack} />}
+            element={<ModuleFrame><Checklist6S onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="digital-audit-questions"
-            element={<AuditQuestions onBack={handleBack} />}
+            element={<ModuleFrame><AuditQuestions onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="purchase-requisition-form"
-            element={<PurchaseRequisitionForm onBack={handleBack} />}
+            element={<ModuleFrame><PurchaseRequisitionForm onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="show-list-request"
-            element={<ShowListRequest onBack={handleBack} />}
+            element={<ModuleFrame><ShowListRequest onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="master-list"
-            element={<MasterList onBack={handleBack} />}
+            element={<ModuleFrame><MasterList onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="my-confirm-received"
-            element={<MyConfirmReceived onBack={handleBack} />}
+            element={<ModuleFrame><MyConfirmReceived onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="org-chart-master"
@@ -344,48 +345,48 @@ export default function App() {
           />
           <Route
             path="energy/meters"
-            element={<Meters onBack={handleBack} />}
+            element={<ModuleFrame><Meters onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="energy/switch-board"
-            element={<SwitchBoard onBack={handleBack} />}
+            element={<ModuleFrame><SwitchBoard onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="energy/energy-source"
-            element={<EnergySource onBack={handleBack} />}
+            element={<ModuleFrame><EnergySource onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="energy/solar-dashboard"
-            element={<SolarDashboard onBack={handleBack} />}
+            element={<ModuleFrame><SolarDashboard onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="air/temperature"
-            element={<Temperature onBack={handleBack} />}
+            element={<ModuleFrame><Temperature onBack={handleBack} /></ModuleFrame>}
           />
-          <Route path="air/quality" element={<Air onBack={handleBack} />} />
+          <Route path="air/quality" element={<ModuleFrame><Air onBack={handleBack} /></ModuleFrame>} />
           <Route
             path="temp-worker-request/form"
-            element={<RequestWorkerForm onBack={handleBack} />}
+            element={<ModuleFrame><RequestWorkerForm onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="temp-worker-request/list"
-            element={<RequestWorkerList onBack={handleBack} />}
+            element={<ModuleFrame><RequestWorkerList onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="bill-record"
-            element={<BillRecord onBack={handleBack} />}
+            element={<ModuleFrame><BillRecord onBack={handleBack} /></ModuleFrame>}
           />
-          <Route path="water" element={<Water onBack={handleBack} />} />
-          <Route path="water/in" element={<WaterIn onBack={handleBack} />} />
-          <Route path="water/out" element={<WaterOut onBack={handleBack} />} />
-          <Route path="gatepass" element={<GatePass onBack={handleBack} />} />
+          <Route path="water" element={<ModuleFrame><Water onBack={handleBack} /></ModuleFrame>} />
+          <Route path="water/in" element={<ModuleFrame><WaterIn onBack={handleBack} /></ModuleFrame>} />
+          <Route path="water/out" element={<ModuleFrame><WaterOut onBack={handleBack} /></ModuleFrame>} />
+          <Route path="gatepass" element={<ModuleFrame><GatePass onBack={handleBack} /></ModuleFrame>} />
           <Route
             path="gatepass/visitor"
-            element={<Visitor onBack={handleBack} />}
+            element={<ModuleFrame><Visitor onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="system-analysis"
-            element={<SystemAnalyze onBack={handleBack} />}
+            element={<ModuleFrame><SystemAnalyze onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="sop-map"
@@ -397,11 +398,11 @@ export default function App() {
           />
           <Route
             path="waste"
-            element={<WasteDashboardView onBack={handleBack} />}
+            element={<ModuleFrame><WasteDashboardView onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="training/:department"
-            element={<Training onBack={handleBack} />}
+            element={<ModuleFrame><Training onBack={handleBack} /></ModuleFrame>}
           />
 
           {/* YWIP — the work-in-progress flow as an isometric infographic */}
@@ -468,7 +469,7 @@ export default function App() {
           />
           <Route
             path="fc/calculator"
-            element={<Calculator onBack={handleBack} />}
+            element={<ModuleFrame><Calculator onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="fc/fabric-issuing"
@@ -496,197 +497,225 @@ export default function App() {
           />
 
           {/* YQMS Module Routes */}
-          <Route path="yqms/qc-file" element={<QCFile onBack={handleBack} />} />
+          <Route path="yqms/qc-file" element={<ModuleFrame><QCFile onBack={handleBack} /></ModuleFrame>} />
           <Route
             path="yqms/pre-production-meeting"
-            element={<PreProductionMeeting onBack={handleBack} />}
+            element={<ModuleFrame><PreProductionMeeting onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/fin-check"
-            element={<FinCheckDashboard onBack={handleBack} />}
+            element={<ModuleFrame><FinCheckDashboard onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/rolling-qc"
-            element={<InternalRollingQC onBack={handleBack} />}
+            element={<ModuleFrame><InternalRollingQC onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/cutting-inspection"
-            element={<CuttingInspection onBack={handleBack} />}
+            element={<ModuleFrame><CuttingInspection onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/sewing-output"
-            element={<GarmentCheckOutput onBack={handleBack} />}
+            element={<ModuleFrame><GarmentCheckOutput onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/packing-inspection"
-            element={<PackingInspection onBack={handleBack} />}
+            element={<ModuleFrame><PackingInspection onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/final-inspection"
-            element={<FinalInspection onBack={handleBack} />}
+            element={<ModuleFrame><FinalInspection onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/ppm"
-            element={<PreProductionMeeting onBack={handleBack} />}
+            element={<ModuleFrame><PreProductionMeeting onBack={handleBack} /></ModuleFrame>}
           />
 
           {/* Additional YQMS Routes using AuditReport */}
           <Route
             path="yqms/20pcs-audit"
-            element={<AuditReport title="QA 20pcs Audit" onBack={handleBack} />}
+            element={<ModuleFrame><AuditReport title="QA 20pcs Audit" onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/inline-audit"
             element={
+            <ModuleFrame>
               <AuditReport title="Inline Audit Rolling" onBack={handleBack} />
+            </ModuleFrame>
             }
           />
           <Route
             path="yqms/offline-audit"
-            element={<AuditReport title="Offline Audit" onBack={handleBack} />}
+            element={<ModuleFrame><AuditReport title="Offline Audit" onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/endline-check"
             element={
+            <ModuleFrame>
               <AuditReport title="QC End Line Checking" onBack={handleBack} />
+            </ModuleFrame>
             }
           />
 
           <Route
             path="yqms/first-output-cutting"
             element={
+            <ModuleFrame>
               <AuditReport title="First Output Cutting" onBack={handleBack} />
+            </ModuleFrame>
             }
           />
           <Route
             path="yqms/pre-final"
             element={
+            <ModuleFrame>
               <AuditReport title="Pre Final Inspection" onBack={handleBack} />
+            </ModuleFrame>
             }
           />
           <Route
             path="yqms/buyer-final"
-            element={<BuyerFinalInspection onBack={handleBack} />}
+            element={<ModuleFrame><BuyerFinalInspection onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/supplier-evaluation"
-            element={<SupplierEvaluation onBack={handleBack} />}
+            element={<ModuleFrame><SupplierEvaluation onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/cap"
-            element={<CustomerComplainCap onBack={handleBack} />}
+            element={<ModuleFrame><CustomerComplainCap onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/qa-audit-finishing"
             element={
+            <ModuleFrame>
               <AuditReport
                 title="QA Audit Finishing Packing"
                 onBack={handleBack}
               />
+            </ModuleFrame>
             }
           />
           <Route
             path="yqms/first-output-finishing"
             element={
+            <ModuleFrame>
               <AuditReport
                 title="First Output Finishing And Packing"
                 onBack={handleBack}
               />
+            </ModuleFrame>
             }
           />
           <Route
             path="yqms/report"
-            element={<YQMSReport onBack={handleBack} />}
+            element={<ModuleFrame><YQMSReport onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/ironing-inspection"
             element={
+            <ModuleFrame>
               <AuditReport title="Ironing Inspection" onBack={handleBack} />
+            </ModuleFrame>
             }
           />
           <Route
             path="yqms/aquaboy"
-            element={<HumidityReportAdd onBack={handleBack} />}
+            element={<ModuleFrame><HumidityReportAdd onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/aquaboy/list"
-            element={<HumidityReportList onBack={handleBack} />}
+            element={<ModuleFrame><HumidityReportList onBack={handleBack} /></ModuleFrame>}
           />
 
           <Route
             path="yqms/dashboard"
-            element={<YQMSDashboard onBack={handleBack} />}
+            element={<ModuleFrame><YQMSDashboard onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/qc-roving"
-            element={<CuttingDashboard onBack={handleBack} />}
+            element={<ModuleFrame><CuttingDashboard onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/cutting"
-            element={<QCRovingDashboard onBack={handleBack} />}
+            element={<ModuleFrame><QCRovingDashboard onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/first-output-print"
             element={
+            <ModuleFrame>
               <AuditReport
                 title="First Output Printing/Embroidery"
                 onBack={handleBack}
               />
+            </ModuleFrame>
             }
           />
           <Route
             path="yqms/first-output-sewing"
             element={
+            <ModuleFrame>
               <AuditReport title="First Output Sewing" onBack={handleBack} />
+            </ModuleFrame>
             }
           />
           <Route
             path="yqms/qa-cutting"
-            element={<AuditReport title="QA Cutting" onBack={handleBack} />}
+            element={<ModuleFrame><AuditReport title="QA Cutting" onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/qa-print"
             element={
+            <ModuleFrame>
               <AuditReport title="QA Printing/Embroidery" onBack={handleBack} />
+            </ModuleFrame>
             }
           />
           <Route
             path="yqms/cut-panel-inspection"
-            element={<CuttingPanel onBack={handleBack} />}
+            element={<ModuleFrame><CuttingPanel onBack={handleBack} /></ModuleFrame>}
           />
 
           <Route
             path="yqms/printing-inspection"
             element={
+            <ModuleFrame>
               <AuditReport title="Printing Inspection" onBack={handleBack} />
+            </ModuleFrame>
             }
           />
           <Route
             path="yqms/embroidery-inspection"
             element={
+            <ModuleFrame>
               <AuditReport title="Embroidery Inspection" onBack={handleBack} />
+            </ModuleFrame>
             }
           />
           <Route
             path="yqms/finishing-inspection"
             element={
+            <ModuleFrame>
               <AuditReport title="Finishing Inspection" onBack={handleBack} />
+            </ModuleFrame>
             }
           />
           <Route
             path="yqms/ironing-inspection"
             element={
+            <ModuleFrame>
               <AuditReport title="Ironing Inspection" onBack={handleBack} />
+            </ModuleFrame>
             }
           />
 
           <Route
             path="shipping/request"
-            element={<ShippingRequest onBack={handleBack} />}
+            element={<ModuleFrame><ShippingRequest onBack={handleBack} /></ModuleFrame>}
           />
 
-          <Route path="money-claim" element={<MoneyClaim onBack={handleBack} />} />
-          <Route path="autopost" element={<AutoPost onBack={handleBack} />} />
+          <Route path="money-claim" element={<ModuleFrame><MoneyClaim onBack={handleBack} /></ModuleFrame>} />
+          <Route path="autopost" element={<ModuleFrame><AutoPost onBack={handleBack} /></ModuleFrame>} />
           <Route path=":moduleId" element={<TableView onBack={handleBack} />} />
         </Route>
       </Routes>
