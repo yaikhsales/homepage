@@ -124,7 +124,7 @@ const Icom = ({ dept, onMyChats }) => {
   useEffect(() => {
     const el = rootRef.current;
     if (!el || typeof ResizeObserver === "undefined") return;
-    const ro = new ResizeObserver((es) => { for (const e of es) setNarrow(e.contentRect.width < 300); });
+    const ro = new ResizeObserver((es) => { for (const e of es) setNarrow(e.contentRect.width < 230); });
     ro.observe(el);
     return () => ro.disconnect();
   }, [ready]);
@@ -225,7 +225,7 @@ const Icom = ({ dept, onMyChats }) => {
       {/* body: left topic list + right thread */}
       <div className="flex-1 flex min-h-0 relative">
         {!narrow && (
-          <div className="w-[38%] min-w-[118px] max-w-[170px] border-r border-gray-200 flex-shrink-0">{listEl}</div>
+          <div className="w-[38%] min-w-[100px] max-w-[170px] border-r border-gray-200 flex-shrink-0">{listEl}</div>
         )}
 
         {narrow && drawer && (
