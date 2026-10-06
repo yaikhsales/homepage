@@ -11,6 +11,8 @@ import {
 import { generateGeminiResponse, generateDirectGeminiResponse, generateChatResponse, generatePAOrChat, shouldUseGemini } from './gemini-api';
 import { KHMER_NEW_YEAR } from '../thems';
 import { useTranslation } from '../translate/TranslationContext';
+import { useNavigate } from 'react-router-dom';
+import PaSkills, { usePaSkills } from './PaSkills';
 import { useKhmerTTS } from "./useKhmerTTS";
 import { VolumeX } from "lucide-react";
 
@@ -532,6 +534,11 @@ const PhoneFrame = ({
         'social-bot':     'social',
     };
     const notifSlug = NOTIF_SLUG[botId];
+    // Four-skills feed from the M1 (alerts / reminders / forecasts). When it
+    // answers, it REPLACES the fixed suggested-action chips below; when the
+    // M1 is unreachable the old chips stay as the fallback.
+    const navigateTo = useNavigate();
+    const [paSkills, paSkillsLoading, reloadPaSkills] = usePaSkills(notifSlug);
 
     const refreshNotifCounts = React.useCallback(() => {
         if (!notifSlug) return;
@@ -1610,7 +1617,11 @@ const PhoneFrame = ({
                                             </div>
                                         </div>
                                     ) : (
-                                        // Regular Suggested Actions or Admin PA Module Actions
+                                        // Four-skills panel when the M1 feed is live; the fixed
+                                        // suggested-action chips only as fallback.
+                                        paSkills ? (
+                                            <PaSkills data={paSkills} loading={paSkillsLoading} onRefresh={reloadPaSkills} onOpenLink={(l) => { if (onClose) onClose(); navigateTo(l); }} />
+                                        ) :
                                         suggestedActions.length > 0 && (
                                             <div className={`${notifSlug ? 'flex flex-wrap gap-1.5 mt-4 justify-start' : 'flex flex-col gap-2 mt-8'}`}>
                                                 {suggestedActions.map((action, idx) => {
