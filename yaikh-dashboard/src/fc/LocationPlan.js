@@ -80,11 +80,11 @@ const LocationPlan = ({ onBack }) => {
         { className: "mb-3 rounded-2xl border border-slate-700 bg-slate-800/40 px-3 pt-2 pb-1 overflow-x-auto" },
         h(
           "div",
-          { className: "flex items-end gap-1.5", style: { minWidth: rows.length * 58 } },
+          { className: "flex items-end gap-1", style: { minWidth: rows.length * 50 } },
           rows.map((r) =>
             h(
               "button",
-              { key: r.day, onClick: () => setDay(day === r.day ? "" : r.day), className: "flex-1 min-w-[52px] text-center group", title: r.day + " · " + r.action },
+              { key: r.day, onClick: () => setDay(day === r.day ? "" : r.day), className: "flex-1 min-w-[46px] text-center group", title: r.day + " · " + r.action },
               h("div", { className: "text-[11px] tabular-nums text-slate-300 font-bold" }, fmt(r.free_after)),
               h(
                 "div",
