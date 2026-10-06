@@ -276,6 +276,7 @@ export const DASHBOARD_DATA = [
             id: "chemical",
             title: "Chemical",
             image: "IMG/avatars/agent-23.png",
+            demoType: "SUBMENU_CHEMICAL",
             status: "active",
             popupTitle: "ADMINISTRATION · CSR",
             description: "I manage chemical inventory and MRSL / ZDHC compliance."

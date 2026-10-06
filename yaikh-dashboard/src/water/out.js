@@ -17,7 +17,7 @@ const WaterOut = ({ onBack }) => {
     const device = {
         id: 1,
         name: `${category} Out`,
-        deviceId: 'Bcc3023201230ead',
+        deviceId: 'SIM-WM-OUT-01',
         totalWaterConsumed: 108.987
     };
 

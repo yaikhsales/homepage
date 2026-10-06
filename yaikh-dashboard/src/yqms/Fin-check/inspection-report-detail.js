@@ -9,7 +9,7 @@ const InspectionReportDetail = ({ onClose, data }) => {
     const report = data || {
         id: "PTCOC396",
         date: "3/6/2026",
-        company: "Yorkmars (Cambodia) Garment MFG Co., LTD",
+        company: "Unit 1 — simulated factory",
         inspectionStatus: "N/A",
         groupNo: "145177",
         title: "Inspection Summary Report",

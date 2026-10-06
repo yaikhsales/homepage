@@ -9,18 +9,18 @@ const Air = ({ onBack }) => {
 
     // Sample device data
     const devices = [
-        { id: 1, name: 'Dehumidify Room', deviceId: 'bf68553ca0e82106a83afw', status: 'Online' },
-        { id: 2, name: 'Fabric Inspection', deviceId: 'a8fbe8708a8a49709c9b', status: 'Online' },
-        { id: 3, name: 'Fabric WHD', deviceId: 'b9fce9819b9b59819d0c', status: 'Online' },
-        { id: 4, name: 'QA room', deviceId: 'c0gdf0920c0c60920e1d', status: 'Online' },
-        { id: 5, name: 'Cutting', deviceId: 'd1hef1a31d1d71a31f2e', status: 'Online' },
-        { id: 6, name: 'Assembling Room', deviceId: 'e2ifg2b42e2e82b42g3f', status: 'Online' },
-        { id: 7, name: 'Supervisor room', deviceId: 'f3jgh3c53f3f93c53h4g', status: 'Online' },
-        { id: 8, name: 'Fabric folding', deviceId: 'a4khi4d64a4a04d64i5h', status: 'Online' },
-        { id: 9, name: 'Deliverally Room', deviceId: 'c6mjk6f86c6c26f86k7j', status: 'Online' },
-        { id: 10, name: 'Packing', deviceId: 'd7nkl7g97d7d37g97l8k', status: 'Online' },    
-        { id: 11, name: 'Sewing C', deviceId: 'e8olm8h08e8e48h08m9l', status: 'Online' },
-        { id: 12, name: 'Winding Dept', deviceId: 'f9pmn9i19f9f59i19n0m', status: 'Online' }
+        { id: 1, name: 'Dehumidify Room', deviceId: 'SIM-AQ-01', status: 'Online' },
+        { id: 2, name: 'Fabric Inspection', deviceId: 'SIM-AQ-02', status: 'Online' },
+        { id: 3, name: 'Fabric WHD', deviceId: 'SIM-AQ-03', status: 'Online' },
+        { id: 4, name: 'QA room', deviceId: 'SIM-AQ-04', status: 'Online' },
+        { id: 5, name: 'Cutting', deviceId: 'SIM-AQ-05', status: 'Online' },
+        { id: 6, name: 'Assembling Room', deviceId: 'SIM-AQ-06', status: 'Online' },
+        { id: 7, name: 'Supervisor room', deviceId: 'SIM-AQ-07', status: 'Online' },
+        { id: 8, name: 'Fabric folding', deviceId: 'SIM-AQ-08', status: 'Online' },
+        { id: 9, name: 'Delivery room', deviceId: 'SIM-AQ-09', status: 'Online' },
+        { id: 10, name: 'Packing', deviceId: 'SIM-AQ-10', status: 'Online' },    
+        { id: 11, name: 'Sewing C', deviceId: 'SIM-AQ-11', status: 'Online' },
+        { id: 12, name: 'Winding Dept', deviceId: 'SIM-AQ-12', status: 'Online' }
     ];
 
     const handleBack = () => {
@@ -32,7 +32,7 @@ const Air = ({ onBack }) => {
     };
 
     const handleDeviceClick = (deviceId) => {
-        console.log('View device details:', deviceId);
+        navigate('/dashboard/sensors', { state: { deviceId } });
     };
 
     return (

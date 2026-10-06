@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Table2 } from 'lucide-react';
 import { useTranslation } from '../translate/TranslationContext';
 
 // Mapping function to match category titles to icon image filenames
@@ -199,6 +199,16 @@ const Water = ({ onBack }) => {
                                     </button>
                                 );
                             })}
+                            {/* the simulated-factory water screen (DeptView, data from the M1) — the "Live data" card the other
+                                CSR hubs get from the generic sub-menu; this hub navigates directly so it adds its own */}
+                            <button
+                                onClick={() => navigate("/dashboard/csr/water")}
+                                className="bg-gradient-to-br from-sky-600 to-sky-700 text-white p-6 sm:p-8 rounded-xl shadow-lg shadow-sky-200 hover:shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 flex flex-col items-center justify-center gap-4 min-h-[160px] sm:min-h-[180px]"
+                            >
+                                <Table2 size={44} />
+                                <span className="font-bold text-lg">Live data</span>
+                                <span className="text-xs opacity-80 -mt-3">meters · consumption · discharge</span>
+                            </button>
                         </div>
                     </div>
                 ) : (

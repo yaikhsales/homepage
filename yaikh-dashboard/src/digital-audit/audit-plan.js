@@ -122,9 +122,9 @@ const AuditPlan = ({ onBack }) => {
           status: createForm.auditStage === "Reporting" ? "active" : "pending",
         },
         {
-          name: "Post-Audit",
+          name: "CAP",
           date: formatDate(createForm.auditDate),
-          status: createForm.auditStage === "Post-Audit" ? "active" : "pending",
+          status: createForm.auditStage === "CAP" ? "active" : "pending",
         },
         {
           name: "Completed",
@@ -231,118 +231,118 @@ const AuditPlan = ({ onBack }) => {
 
   // Sample audit plan data
   const [auditPlans, setAuditPlans] = useState(() => {
-    const savedPlans = localStorage.getItem("auditPlans");
+    const savedPlans = localStorage.getItem("auditPlans.v2");
     if (savedPlans && JSON.parse(savedPlans).length > 0) {
       return JSON.parse(savedPlans);
     }
     return [
       {
         id: 1,
-        location: "Yorkmars (Cambodia) Garment MFG Co., LTD",
-        company: "Yorkmars (Cambodia) Garment MFG Co., LTD",
+        location: "Unit 1 — simulated factory",
+        company: "Unit 1 — simulated factory",
         form: "CTPAT",
         details: {
-          auditLocation: "Yorkmars (Cambodia) Garment MFG Co., LTD",
-          auditName: "Yorkmars (Cambodia) Garment MFG Co., LTD",
+          auditLocation: "Unit 1 — simulated factory",
+          auditName: "Unit 1 — simulated factory",
           auditFrom: "CTPAT",
-          auditor: "BV",
-          auditDate: "2026-01-16",
+          auditor: "AF-01 (audit firm)",
+          auditDate: "2026-02-12",
           auditStage: "Reporting",
-          preAuditDate: "2026-01-10",
+          preAuditDate: "2026-02-06",
         },
         stages: [
-          { name: "Pre-Audit", date: "10 Jan 2026", status: "completed" },
-          { name: "On-site Audit", date: "16 Jan 2026", status: "completed" },
-          { name: "Reporting", date: "16 Jan 2026", status: "active" },
-          { name: "Post-Audit", date: "", status: "pending" },
+          { name: "Pre-Audit", date: "06 Feb 2026", status: "completed" },
+          { name: "On-site Audit", date: "12 Feb 2026", status: "completed" },
+          { name: "Reporting", date: "12 Feb 2026", status: "active" },
+          { name: "CAP", date: "", status: "pending" },
           { name: "Completed", date: "", status: "pending" },
         ],
       },
       {
         id: 2,
-        location: "Yorkmars (Cambodia) Garment MFG Co., LTD",
-        company: "Yorkmars (Cambodia) Garment MFG Co., LTD",
+        location: "Unit 1 — simulated factory",
+        company: "Unit 1 — simulated factory",
         form: "WRAP",
         details: {
-          auditLocation: "Yorkmars (Cambodia) Garment MFG Co., LTD",
-          auditName: "Yorkmars (Cambodia) Garment MFG Co., LTD",
+          auditLocation: "Unit 1 — simulated factory",
+          auditName: "Unit 1 — simulated factory",
           auditFrom: "WRAP",
-          auditor: "BV",
-          auditDate: "2026-01-21",
+          auditor: "AF-01 (audit firm)",
+          auditDate: "2026-03-18",
           auditStage: "Pre-Audit",
-          preAuditDate: "2026-01-15",
+          preAuditDate: "2026-03-12",
         },
         stages: [
-          { name: "Pre-Audit", date: "15 Jan 2026", status: "active" },
-          { name: "On-site Audit", date: "21 Jan 2026", status: "pending" },
+          { name: "Pre-Audit", date: "12 Mar 2026", status: "active" },
+          { name: "On-site Audit", date: "18 Mar 2026", status: "pending" },
           { name: "Reporting", date: "", status: "pending" },
-          { name: "Post-Audit", date: "", status: "pending" },
+          { name: "CAP", date: "", status: "pending" },
           { name: "Completed", date: "", status: "pending" },
         ],
       },
       {
         id: 3,
-        location: "Yorkmars (Cambodia) Garment MFG Co., LTD",
-        company: "Yorkmars (Cambodia) Garment MFG Co., LTD",
+        location: "Unit 1 — simulated factory",
+        company: "Unit 1 — simulated factory",
         form: "HIGG",
         details: {
-          auditLocation: "Yorkmars (Cambodia) Garment MFG Co., LTD",
-          auditName: "Yorkmars (Cambodia) Garment MFG Co., LTD",
+          auditLocation: "Unit 1 — simulated factory",
+          auditName: "Unit 1 — simulated factory",
           auditFrom: "HIGG",
-          auditor: "IDFL",
-          auditDate: "2026-04-22",
+          auditor: "AF-02 (audit firm)",
+          auditDate: "2026-05-07",
           auditStage: "Pre-Audit",
-          preAuditDate: "2026-04-15",
+          preAuditDate: "2026-04-30",
         },
         stages: [
-          { name: "Pre-Audit", date: "15 Apr 2026", status: "active" },
-          { name: "On-site Audit", date: "22 Apr 2026", status: "pending" },
+          { name: "Pre-Audit", date: "30 Apr 2026", status: "active" },
+          { name: "On-site Audit", date: "07 May 2026", status: "pending" },
           { name: "Reporting", date: "", status: "pending" },
-          { name: "Post-Audit", date: "", status: "pending" },
+          { name: "CAP", date: "", status: "pending" },
           { name: "Completed", date: "", status: "pending" },
         ],
       },
       {
         id: 4,
-        location: "Yorkmars (Cambodia) Garment MFG Co., LTD",
-        company: "Yorkmars (Cambodia) Garment MFG Co., LTD",
+        location: "Unit 1 — simulated factory",
+        company: "Unit 1 — simulated factory",
         form: "ILO",
         details: {
-          auditLocation: "Yorkmars (Cambodia) Garment MFG Co., LTD",
-          auditName: "Yorkmars (Cambodia) Garment MFG Co., LTD",
+          auditLocation: "Unit 1 — simulated factory",
+          auditName: "Unit 1 — simulated factory",
           auditFrom: "ILO",
-          auditor: "ILO",
-          auditDate: "2026-06-03",
+          auditor: "Programme auditor",
+          auditDate: "2026-06-24",
           auditStage: "Pre-Audit",
-          preAuditDate: "2026-05-28",
+          preAuditDate: "2026-06-18",
         },
         stages: [
-          { name: "Pre-Audit", date: "28 May 2026", status: "active" },
-          { name: "On-site Audit", date: "03 Jun 2026", status: "pending" },
+          { name: "Pre-Audit", date: "18 Jun 2026", status: "active" },
+          { name: "On-site Audit", date: "24 Jun 2026", status: "pending" },
           { name: "Reporting", date: "", status: "pending" },
-          { name: "Post-Audit", date: "", status: "pending" },
+          { name: "CAP", date: "", status: "pending" },
           { name: "Completed", date: "", status: "pending" },
         ],
       },
       {
         id: 5,
-        location: "Yorkmars (Cambodia) Garment MFG Co., LTD",
-        company: "Yorkmars (Cambodia) Garment MFG Co., LTD",
+        location: "Unit 1 — simulated factory",
+        company: "Unit 1 — simulated factory",
         form: "BSCI",
         details: {
-          auditLocation: "Yorkmars (Cambodia) Garment MFG Co., LTD",
-          auditName: "Yorkmars (Cambodia) Garment MFG Co., LTD",
+          auditLocation: "Unit 1 — simulated factory",
+          auditName: "Unit 1 — simulated factory",
           auditFrom: "BSCI",
-          auditor: "BV",
-          auditDate: "2026-05-26",
+          auditor: "AF-01 (audit firm)",
+          auditDate: "2026-07-15",
           auditStage: "Pre-Audit",
-          preAuditDate: "2026-05-20",
+          preAuditDate: "2026-07-09",
         },
         stages: [
-          { name: "Pre-Audit", date: "20 May 2026", status: "active" },
-          { name: "On-site Audit", date: "26 May 2026", status: "pending" },
+          { name: "Pre-Audit", date: "09 Jul 2026", status: "active" },
+          { name: "On-site Audit", date: "15 Jul 2026", status: "pending" },
           { name: "Reporting", date: "", status: "pending" },
-          { name: "Post-Audit", date: "", status: "pending" },
+          { name: "CAP", date: "", status: "pending" },
           { name: "Completed", date: "", status: "pending" },
         ],
       },
@@ -351,7 +351,7 @@ const AuditPlan = ({ onBack }) => {
 
   // Save to localStorage whenever auditPlans changes
   useEffect(() => {
-    localStorage.setItem("auditPlans", JSON.stringify(auditPlans));
+    localStorage.setItem("auditPlans.v2", JSON.stringify(auditPlans));
   }, [auditPlans]);
 
   const handleBack = () => {
@@ -445,7 +445,7 @@ const AuditPlan = ({ onBack }) => {
       "On-site Audit": t("onSiteAudit"),
       Reporting: t("reporting"),
       "Reporting & Assessment": t("reportingAssessment"),
-      "Post-Audit": t("postAudit"),
+      "CAP": t("postAudit"),
       Completed: t("completed"),
     };
 
@@ -454,7 +454,7 @@ const AuditPlan = ({ onBack }) => {
       "On-site Audit": "bg-blue-500",
       Reporting: "bg-purple-500",
       "Reporting & Assessment": "bg-purple-500",
-      "Post-Audit": "bg-orange-500",
+      "CAP": "bg-orange-500",
       Completed: "bg-green-500",
     };
 
@@ -463,7 +463,7 @@ const AuditPlan = ({ onBack }) => {
       "On-site Audit": MapPin,
       Reporting: FileText,
       "Reporting & Assessment": FileText,
-      "Post-Audit": MapPin,
+      "CAP": MapPin,
       Completed: CheckCircle,
     };
 
@@ -471,7 +471,7 @@ const AuditPlan = ({ onBack }) => {
       "bg-yellow-400", // Pre-Audit
       "bg-blue-400", // On-site Audit
       "bg-purple-400", // Reporting
-      "bg-orange-400", // Post-Audit
+      "bg-orange-400", // CAP
       "bg-green-400", // Completed
     ];
 
@@ -713,7 +713,7 @@ const AuditPlan = ({ onBack }) => {
                 icon: FileText,
               },
               {
-                name: "Post-Audit",
+                name: "CAP",
                 date: t("verificationFinal"),
                 status: "pending",
                 icon: MapPin,
@@ -753,7 +753,7 @@ const AuditPlan = ({ onBack }) => {
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-5 h-5 rounded bg-orange-400 border border-orange-200"></div>
-                <span className="text-sm text-slate-600 font-medium">Post-Audit</span>
+                <span className="text-sm text-slate-600 font-medium">CAP</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-5 h-5 rounded bg-green-400 border border-green-200"></div>
@@ -1049,7 +1049,7 @@ const AuditPlan = ({ onBack }) => {
                         <option value="Pre-Audit">Pre-Audit</option>
                         <option value="On-site Audit">On-site Audit</option>
                         <option value="Reporting">Reporting</option>
-                        <option value="Post-Audit">Post-Audit</option>
+                        <option value="CAP">CAP</option>
                       </select>
                       <div className="absolute right-4 top-3.5 pointer-events-none text-slate-500">
                         <svg

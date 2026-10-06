@@ -38,143 +38,39 @@ const ComplianceCertificate = ({ onBack }) => {
   const [selectedDocument, setSelectedDocument] = useState(null);
   const itemsPerPage = 10;
 
-  // Sample certificate data
+  // Simulated certificate register — generic permits, role codes instead of people, no real issuer
   const sampleCertificates = [
-    {
-      id: 1,
-      name: "ADML testing report",
-      ministry: "Intertek",
-      issueDate: "2026-05-10",
-      expiredDate: "2026-05-14",
-      validityPeriod: "1 year",
-      renewalDate: "2026-05-10",
-      responsiblePerson: "MLNicolo",
-      status: "Valid",
-      hasImage: true,
-    },
-    {
-      id: 2,
-      name: "GARMENT MANUFACTURING ASSOCIATION IN CAMBODIA (GMAC) membership certificate",
-      ministry: "GMAC",
-      issueDate: "2024-12-30",
-      expiredDate: null,
-      validityPeriod: "1 year",
-      renewalDate: null,
-      responsiblePerson: "Mr.Bobby",
-      status: "Valid",
-      hasImage: false,
-    },
-    {
-      id: 3,
-      name: "Labor union registration (union) certificate",
-      ministry: "Ministry of Labor",
-      issueDate: "2024-06-28",
-      expiredDate: null,
-      validityPeriod: "2 years",
-      renewalDate: null,
-      responsiblePerson: "Mr.Bobby",
-      status: "Valid",
-      hasImage: false,
-    },
-    {
-      id: 4,
-      name: "Air analysis report",
-      ministry: "Ministry of Environment (laboratory)",
-      issueDate: "2024-06-28",
-      expiredDate: "2026-06-28",
-      validityPeriod: "1 year",
-      renewalDate: null,
-      responsiblePerson: "MLNicolo",
-      status: "Expired",
-      hasImage: false,
-    },
-    {
-      id: 5,
-      name: "Analysis report (wastewater testing)",
-      ministry: "Ministry of Environment (laboratory)",
-      issueDate: "2024-06-10",
-      expiredDate: "2026-06-10",
-      validityPeriod: "1 year",
-      renewalDate: null,
-      responsiblePerson: "MLNicolo",
-      status: "Expired",
-      hasImage: false,
-    },
-    {
-      id: 6,
-      name: "Environment contract (yearly payment)",
-      ministry: "Ministry of Environment",
-      issueDate: "2024-04-22",
-      expiredDate: "2026-04-22",
-      validityPeriod: "1 year",
-      renewalDate: null,
-      responsiblePerson: "Mr.Bobby",
-      status: "Expired",
-      hasImage: false,
-    },
-    {
-      id: 7,
-      name: "Certificate of establishment (factory, handicraft operation)",
-      ministry: "Ministry of Industrial",
-      issueDate: "2024-04-08",
-      expiredDate: null,
-      validityPeriod: "4 years",
-      renewalDate: null,
-      responsiblePerson: "Mr.Bobby",
-      status: "Valid",
-      hasImage: false,
-    },
-    {
-      id: 8,
-      name: "Indoor air quality monitoring report",
-      ministry: "Ministry of Environment",
-      issueDate: "2024-03-10",
-      expiredDate: "2026-03-10",
-      validityPeriod: "1 year",
-      renewalDate: null,
-      responsiblePerson: "MLNicolo",
-      status: "Expired",
-      hasImage: false,
-    },
-    {
-      id: 9,
-      name: "Noise control report",
-      ministry: "Ministry of Environment",
-      issueDate: "2024-03-10",
-      expiredDate: "2026-03-10",
-      validityPeriod: "1 year",
-      renewalDate: null,
-      responsiblePerson: "MLNicolo",
-      status: "Expired",
-      hasImage: false,
-    },
-    {
-      id: 10,
-      name: "Air emission permit",
-      ministry: "Ministry of Environment",
-      issueDate: "2024-03-10",
-      expiredDate: "2026-03-10",
-      validityPeriod: "1 year",
-      renewalDate: null,
-      responsiblePerson: "MLNicolo",
-      status: "Expired",
-      hasImage: false,
-    },
+    { id: 1, name: "Fire safety certificate", ministry: "Fire authority", issueDate: "2025-09-01", expiredDate: "2026-09-01", validityPeriod: "1 year", renewalDate: null, responsiblePerson: "CSR-01", status: "Expired", hasImage: true },
+    { id: 2, name: "Building permit", ministry: "Ministry of Land Management", issueDate: "2024-02-15", expiredDate: null, validityPeriod: "permanent", renewalDate: null, responsiblePerson: "ADM-02", status: "Valid", hasImage: false },
+    { id: 3, name: "Environmental impact approval", ministry: "Ministry of Environment", issueDate: "2025-04-20", expiredDate: "2027-04-20", validityPeriod: "2 years", renewalDate: null, responsiblePerson: "CSR-01", status: "Valid", hasImage: false },
+    { id: 4, name: "Wastewater discharge permit", ministry: "Ministry of Environment", issueDate: "2025-11-05", expiredDate: "2026-11-05", validityPeriod: "1 year", renewalDate: null, responsiblePerson: "CSR-01", status: "Valid", hasImage: false },
+    { id: 5, name: "Wastewater test report", ministry: "Testing lab A", issueDate: "2026-07-10", expiredDate: "2026-10-10", validityPeriod: "3 months", renewalDate: null, responsiblePerson: "CSR-02", status: "Valid", hasImage: true },
+    { id: 6, name: "Air emission test report", ministry: "Testing lab A", issueDate: "2026-06-20", expiredDate: "2026-12-20", validityPeriod: "6 months", renewalDate: null, responsiblePerson: "CSR-02", status: "Valid", hasImage: false },
+    { id: 7, name: "Noise test report", ministry: "Testing lab A", issueDate: "2026-01-12", expiredDate: "2026-07-12", validityPeriod: "6 months", renewalDate: null, responsiblePerson: "CSR-02", status: "Expired", hasImage: false },
+    { id: 8, name: "Drinking water test report", ministry: "Testing lab B", issueDate: "2026-08-01", expiredDate: "2026-11-01", validityPeriod: "3 months", renewalDate: null, responsiblePerson: "CSR-02", status: "Valid", hasImage: false },
+    { id: 9, name: "Boiler inspection certificate", ministry: "Ministry of Industry", issueDate: "2025-12-01", expiredDate: "2026-12-01", validityPeriod: "1 year", renewalDate: null, responsiblePerson: "YTM-01", status: "Valid", hasImage: false },
+    { id: 10, name: "Electrical installation certificate", ministry: "Ministry of Industry", issueDate: "2025-03-15", expiredDate: "2027-03-15", validityPeriod: "2 years", renewalDate: null, responsiblePerson: "YTM-01", status: "Valid", hasImage: false },
+    { id: 11, name: "Chemical storage licence", ministry: "Ministry of Industry", issueDate: "2025-10-30", expiredDate: "2026-10-30", validityPeriod: "1 year", renewalDate: null, responsiblePerson: "CSR-01", status: "Valid", hasImage: false },
+    { id: 12, name: "Factory operating licence", ministry: "Ministry of Industry", issueDate: "2024-04-08", expiredDate: "2028-04-08", validityPeriod: "4 years", renewalDate: null, responsiblePerson: "ADM-02", status: "Valid", hasImage: false },
+    { id: 13, name: "Labour compliance registration", ministry: "Ministry of Labour", issueDate: "2024-06-28", expiredDate: null, validityPeriod: "permanent", renewalDate: null, responsiblePerson: "HR-01", status: "Valid", hasImage: false },
+    { id: 14, name: "Social compliance certificate (standard A)", ministry: "Certification body A", issueDate: "2025-08-18", expiredDate: "2026-08-18", validityPeriod: "1 year", renewalDate: null, responsiblePerson: "CSR-01", status: "Expired", hasImage: true },
+    { id: 15, name: "Security compliance certificate (standard B)", ministry: "Certification body B", issueDate: "2026-02-12", expiredDate: "2027-02-12", validityPeriod: "1 year", renewalDate: null, responsiblePerson: "CSR-01", status: "Valid", hasImage: false },
+    { id: 16, name: "Industry association membership", ministry: "Industry association", issueDate: "2026-01-01", expiredDate: "2026-12-31", validityPeriod: "1 year", renewalDate: null, responsiblePerson: "ADM-02", status: "Valid", hasImage: false },
   ];
 
   // Generate more certificates for pagination
   const generateMoreCertificates = () => {
     const moreCertificates = [];
-    for (let i = 11; i <= 23; i++) {
+    for (let i = 17; i <= 23; i++) {
       moreCertificates.push({
         id: i,
-        name: `Certificate ${i}`,
+        name: `Section permit ${i} (simulated)`,
         ministry: "Ministry of Environment",
-        issueDate: "2024-01-01",
-        expiredDate: "2026-01-01",
+        issueDate: "2025-01-01",
+        expiredDate: i % 2 === 0 ? "2027-01-01" : "2026-01-01",
         validityPeriod: "1 year",
         renewalDate: null,
-        responsiblePerson: "MLNicolo",
+        responsiblePerson: "CSR-02",
         status: i % 2 === 0 ? "Valid" : "Expired",
         hasImage: false,
       });
@@ -401,8 +297,8 @@ const ComplianceCertificate = ({ onBack }) => {
             <option value="Ministry of Industrial">
               Ministry of Industrial
             </option>
-            <option value="GMAC">GMAC</option>
-            <option value="Intertek">Intertek</option>
+            <option value="Industry association">Industry association</option>
+            <option value="Testing lab A">Testing lab A</option>
           </select>
         </div>
         <div className="flex items-center gap-2">

@@ -1362,7 +1362,7 @@ const translations = {
     onSiteAudit: "现场审计",
     reporting: "报告",
     reportingAssessment: "报告与评估",
-    postAudit: "审计后",
+    postAudit: "CAP（纠正措施计划）",
     inProgress: "进行中",
     activityAuditPlan: "活动审计计划",
     trackTheProgress: "跟踪每个阶段的审计活动进度",

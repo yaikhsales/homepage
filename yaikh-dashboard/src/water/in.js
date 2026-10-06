@@ -17,7 +17,7 @@ const WaterIn = ({ onBack }) => {
     const device = {
         id: 1,
         name: `${category} In`,
-        deviceId: 'Bcc3023201230toa',
+        deviceId: 'SIM-WM-IN-01',
         totalWaterConsumed: 60.483,
         image: '/water/washing-in.png'
     };

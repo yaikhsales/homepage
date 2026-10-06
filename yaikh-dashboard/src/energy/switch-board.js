@@ -8,24 +8,24 @@ const SwitchBoard = ({ onBack }) => {
     const { t } = useTranslation();
 
     // Sample switch board data
+    // Simulated switch boards — one per area of the simulated unit (F1–F4 floors, sections, services)
     const switchBoards = [
-        { id: 1, name: 'Front Desk, shipping, GM Office, Planing', equipmentCount: 20 },
-        { id: 2, name: 'IT Server, IT Room, VIP WC, Staff WC, CESA Office', equipmentCount: 21 },
-        { id: 3, name: 'Merchandising Floor', equipmentCount: 13 },
-        { id: 4, name: 'Staff Pantry, Accounting', equipmentCount: 15 },
-        { id: 5, name: 'GM Office, SMall meeting room, QA Meeting room, Admin Shop', equipmentCount: 12 },
-        { id: 6, name: 'QA, HR, Admin', equipmentCount: 14 },
-        { id: 7, name: 'CSR, YAIL, Meeting room 5, QA Checking Table', equipmentCount: 25 },
-        { id: 8, name: 'Sample Room', equipmentCount: 43 },
-        { id: 9, name: 'Boiler', equipmentCount: 2 },
-        { id: 10, name: 'Cutting Room', equipmentCount: 10 },
-        { id: 11, name: 'Pressing', equipmentCount: 10 },
-        { id: 12, name: 'SCC', equipmentCount: 13 },
-        { id: 13, name: 'Washing', equipmentCount: 11 },
-        { id: 14, name: 'New Pressing', equipmentCount: 15 },
-        { id: 15, name: 'Finish good wharehouse', equipmentCount: 7 },
-        { id: 16, name: 'Air compressor', equipmentCount: 6 },
-        { id: 17, name: 'test', equipmentCount: 1 }
+        { id: 1, name: 'SB-01 · F1 sewing floor', equipmentCount: 24 },
+        { id: 2, name: 'SB-02 · F1 cutting room', equipmentCount: 10 },
+        { id: 3, name: 'SB-03 · F2 sewing floor', equipmentCount: 22 },
+        { id: 4, name: 'SB-04 · F2 finishing & pressing', equipmentCount: 15 },
+        { id: 5, name: 'SB-05 · F3 sewing floor', equipmentCount: 21 },
+        { id: 6, name: 'SB-06 · F3 printing & embroidery', equipmentCount: 12 },
+        { id: 7, name: 'SB-07 · F4 sewing floor', equipmentCount: 20 },
+        { id: 8, name: 'SB-08 · F4 washing', equipmentCount: 11 },
+        { id: 9, name: 'SB-09 · Sample room', equipmentCount: 18 },
+        { id: 10, name: 'SB-10 · Boiler house', equipmentCount: 2 },
+        { id: 11, name: 'SB-11 · Compressor room', equipmentCount: 6 },
+        { id: 12, name: 'SB-12 · Finished-goods warehouse', equipmentCount: 7 },
+        { id: 13, name: 'SB-13 · Fabric warehouse', equipmentCount: 8 },
+        { id: 14, name: 'SB-14 · Office block', equipmentCount: 16 },
+        { id: 15, name: 'SB-15 · IT & server room', equipmentCount: 9 },
+        { id: 16, name: 'SB-16 · Canteen & dormitory', equipmentCount: 13 },
     ];
 
     const totalSwitchBoards = switchBoards.length;

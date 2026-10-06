@@ -1362,7 +1362,7 @@ const translations = {
     onSiteAudit: "សវនកម្មនៅកន្លែង",
     reporting: "របាយការណ៍",
     reportingAssessment: "របាយការណ៍ និងការវាយតម្លៃ",
-    postAudit: "ក្រោយសវនកម្ម",
+    postAudit: "CAP (ផែនការកែតម្រូវ)",
     inProgress: "កំពុងដំណើរការ",
     activityAuditPlan: "ផែនការសវនកម្មសកម្មភាព",
     trackTheProgress: "តាមដានដំណើរការនៃសកម្មភាពសវនកម្មតាមដំណាក់កាលនីមួយៗ",

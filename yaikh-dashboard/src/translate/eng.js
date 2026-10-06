@@ -1143,7 +1143,7 @@ const translations = {
     onSiteAudit: "On-site Audit",
     reporting: "Reporting",
     reportingAssessment: "Reporting & Assessment",
-    postAudit: "Post-Audit",
+    postAudit: "CAP",
     inProgress: "In Progress",
     activityAuditPlan: "Activity Audit Plan",
     trackTheProgress: "Track the progress of audit activities through each stage",

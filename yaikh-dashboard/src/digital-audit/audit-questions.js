@@ -29,16 +29,17 @@ import DocumentViewer from "../components/DocumentViewer";
 const AuditQuestions = ({ onBack }) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const [activeTab, setActiveTab] = useState("YorkMars");
+  const [activeTab, setActiveTab] = useState("F1");
   const [expandedCategories, setExpandedCategories] = useState(["GMP", "ILO"]);
   const [selectedCategory, setSelectedCategory] = useState("GMP");
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [selectedDocument, setSelectedDocument] = useState(null);
 
   const tabs = [
-    { id: "YorkMars", label: "Digital Audit YorkMars" },
-    { id: "YY", label: "Digital Audit YY" },
-    { id: "CA", label: "Digital Audit CA" },
+    { id: "F1", label: "Digital Audit F1" },
+    { id: "F2", label: "Digital Audit F2" },
+    { id: "F3", label: "Digital Audit F3" },
+    { id: "F4", label: "Digital Audit F4" },
   ];
 
   const categories = [

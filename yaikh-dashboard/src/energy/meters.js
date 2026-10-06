@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Gauge } from 'lucide-react';
 import { useTranslation } from '../translate/TranslationContext';
+// deterministic pseudo-random for the simulated readings (same numbers on every load)
+let seed = 20261006;
+const rnd = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
 
 const Meters = ({ onBack }) => {
     const navigate = useNavigate();
@@ -12,7 +15,7 @@ const Meters = ({ onBack }) => {
         {
             id: 1,
             name: 'New boiler',
-            deviceId: 'b8fbe8708a8a49709c9b',
+            deviceId: 'SIM-EM-01',
             energyData: {
                 a: [10, 12, 15, 18, 20, 25, 30, 35],
                 b: [5, 6, 8, 10, 12, 15, 18, 20],
@@ -24,7 +27,7 @@ const Meters = ({ onBack }) => {
         {
             id: 2,
             name: 'Pressing',
-            deviceId: 'a7c8d9e0f1a2b3c4d5e6',
+            deviceId: 'SIM-EM-02',
             energyData: {
                 a: [15, 16, 18, 20, 22, 28, 35, 42],
                 b: [8, 9, 10, 12, 14, 18, 22, 26],
@@ -36,7 +39,7 @@ const Meters = ({ onBack }) => {
         {
             id: 3,
             name: 'Air-Compressor',
-            deviceId: 'c9d0e1f2a3b4c5d6e7f8',
+            deviceId: 'SIM-EM-03',
             energyData: {
                 a: [12, 13, 15, 17, 19, 24, 30, 38],
                 b: [6, 7, 8, 9, 10, 13, 16, 20],
@@ -48,7 +51,7 @@ const Meters = ({ onBack }) => {
         {
             id: 4,
             name: 'Secondary SP',
-            deviceId: 'd0e1f2a3b4c5d6e7f8a9',
+            deviceId: 'SIM-EM-04',
             energyData: {
                 a: [18, 19, 20, 22, 25, 30, 38, 45],
                 b: [10, 11, 12, 14, 16, 20, 25, 30],
@@ -60,7 +63,7 @@ const Meters = ({ onBack }) => {
         {
             id: 5,
             name: 'Raw pile source',
-            deviceId: 'e1f2a3b4c5d6e7f8a9b0',
+            deviceId: 'SIM-EM-05',
             energyData: {
                 a: [20, 21, 23, 26, 30, 38, 48, 58],
                 b: [12, 13, 14, 16, 18, 23, 29, 35],
@@ -72,7 +75,7 @@ const Meters = ({ onBack }) => {
         {
             id: 6,
             name: 'Oilbox',
-            deviceId: 'f2a3b4c5d6e7f8a9b0c1',
+            deviceId: 'SIM-EM-06',
             energyData: {
                 a: [14, 15, 17, 19, 22, 28, 35, 42],
                 b: [7, 8, 9, 10, 12, 15, 19, 23],
@@ -91,13 +94,13 @@ const Meters = ({ onBack }) => {
             moreDevices.push({
                 id: i,
                 name: names[i - 7] || `Device ${i}`,
-                deviceId: `${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 10)}`,
+                deviceId: `SIM-EM-${String(i).padStart(2, '0')}`,
                 energyData: {
-                    a: Array.from({ length: 8 }, () => Math.floor(Math.random() * 50) + 10),
-                    b: Array.from({ length: 8 }, () => Math.floor(Math.random() * 30) + 5),
-                    c: Array.from({ length: 8 }, () => Math.floor(Math.random() * 40) + 8),
-                    d: Array.from({ length: 8 }, () => Math.floor(Math.random() * 20) + 3),
-                    total: Array.from({ length: 8 }, () => Math.floor(Math.random() * 150) + 30)
+                    a: Array.from({ length: 8 }, () => Math.floor(rnd() * 50) + 10),
+                    b: Array.from({ length: 8 }, () => Math.floor(rnd() * 30) + 5),
+                    c: Array.from({ length: 8 }, () => Math.floor(rnd() * 40) + 8),
+                    d: Array.from({ length: 8 }, () => Math.floor(rnd() * 20) + 3),
+                    total: Array.from({ length: 8 }, () => Math.floor(rnd() * 150) + 30)
                 }
             });
         }

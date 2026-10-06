@@ -312,6 +312,9 @@ const AppLayout = () => {
       } else if (demoType === "SUBMENU_WATER") {
         // Navigate directly to Water component
         navigate("/dashboard/water");
+      } else if (demoType === "SUBMENU_CHEMICAL") {
+        // Chemical has no sub-menu of its own: straight to the simulated-factory chemical screen
+        navigate("/dashboard/csr/chemical");
       } else if (demoType === "SUBMENU_CE") {
         // Navigate directly to CE component
         navigate("/dashboard/ce");
