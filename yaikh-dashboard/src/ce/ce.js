@@ -1,5 +1,5 @@
-// CE — Cost & Efficiency hub. The real CE module's menu: four columns (Standard Time, Production,
-// People, Machine) with 20 sub-modules, every one a screen read from the simulated factory on the M1
+// CE — Cost & Efficiency hub. The real CE module's menu as columns: AIVM, Product Development, Production,
+// People, Machine — 21 sub-modules, every one a screen read from the simulated factory on the M1
 // (sim/view, module "ce"). Cards keep the module's own icons where it has them (/assets/icons/sub-icons),
 // the newer ones use a line icon. Written with React.createElement like the other simulated screens.
 import React, { useState } from "react";
@@ -14,21 +14,28 @@ const h = React.createElement;
 // The CE menu as Gamini's module shows it. `img` = the module's own icon file, `icon` = a line icon instead.
 const GROUPS = [
   {
-    title: "Standard Time",
+    title: "AIVM — AI Vision Motion Analysis",
     tone: "border-sky-500/40",
     items: [
       { view: "avma", title: "AI Vision Motion Analysis", sub: "AVMA — IE adds a video of an operation, the AI analyses the motion and gives the SMV", icon: Video },
-      { view: "standard-time-library", title: "Operation Library", sub: "Operations by style — T-shirt, jacket, pants — with machine types, grouped by category", img: "standard-time-analysis.png" },
+      { view: "operation-library", title: "Operation Library", sub: "Operations by style — T-shirt, jacket, pants — with machine types, grouped by category", img: "standard-time-analysis.png" },
       { view: "ie-master", title: "IE Master", sub: "Garment type → category → operation: standard video, who has done it, best operator, defect history", icon: BookOpen },
     ],
   },
   {
-    title: "Production",
+    title: "Product Development",
     tone: "border-emerald-500/40",
     items: [
+      { view: "pd-unit-plan", title: "Unit Plan", sub: "Each unit's orders as in the 4DP unit plan, with the IE fields: new order, analysis done, total SAM, target efficiency, operators needed", icon: CalendarDays },
+      { view: "garment-analysis", title: "Garment Analysis", sub: "Build the operation list on the garment drawing — SAM, machine, seam width, totals by machine type", img: "garment-analysis.png" },
+      { view: "operation-breakdown", title: "Operation Breakdown", sub: "Saved garment analyses — open one as a printable operation sheet", icon: ListOrdered },
+    ],
+  },
+  {
+    title: "Production",
+    tone: "border-teal-500/40",
+    items: [
       { view: "product-development", title: "Product development", sub: "SAM 1 after the sample, SAM 2 after the pilot run, machines, critical ops", img: "product-development-analysis.png" },
-      { view: "garment-analysis", title: "Garment Analysis", sub: "Operations, stations, machines and complexity by garment", img: "garment-analysis.png" },
-      { view: "operation-breakdown", title: "Operation Breakdown", sub: "Build the garment step by step — machine, foot, attachment, grade", icon: ListOrdered },
       { view: "line-balancing", title: "Line Balancing", sub: "Station loads against the pitch — the bottleneck of each line", icon: Scale },
       { view: "style-costing", title: "Style Costing", sub: "CM a piece from SAM × cost per minute, against FOB", img: "style-costing.png" },
       { view: "cost-centers", title: "Cost centers ,Direct/Indirect Cost", sub: "Direct and indirect cost centres and the cost per minute", img: "center-direct-indirect-cost.png" },
@@ -76,11 +83,11 @@ const CE = ({ onBack }) => {
       { className: "flex items-center gap-3 mb-3" },
       h("button", { onClick: back, className: "p-1 -ml-1 hover:bg-slate-700 rounded-full transition-colors text-slate-400 hover:text-white", "aria-label": "Back" }, h(ArrowLeft, { size: 18 })),
       h("h1", { className: "text-lg font-black text-white leading-none" }, "CE · Cost & Efficiency"),
-      h("span", { className: "text-xs text-slate-400" }, "20 sub-modules in four groups — every screen reads the simulated factory")
+      h("span", { className: "text-xs text-slate-400" }, "21 sub-modules in five columns — every screen reads the simulated factory")
     ),
     h(
       "div",
-      { className: "grid gap-4 md:grid-cols-2 xl:grid-cols-4" },
+      { className: "grid gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5" },
       GROUPS.map((g) =>
         h(
           "section",

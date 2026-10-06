@@ -43,7 +43,7 @@ const Hub = ({ onBack }) => {
       h("h1", { className: "text-lg font-black text-white leading-none" }, "AI Vision Operation Modules"),
       h(
         "button",
-        { onClick: () => navigate("/dashboard/ce/standard-time-library"), className: "ml-auto flex items-center gap-1.5 text-xs font-bold text-sky-300 hover:text-white whitespace-nowrap" },
+        { onClick: () => navigate("/dashboard/ce/operation-library"), className: "ml-auto flex items-center gap-1.5 text-xs font-bold text-sky-300 hover:text-white whitespace-nowrap" },
         h(Video, { size: 14 }),
         "ST Video Library & Motion Analysis",
         h(ArrowRight, { size: 14 })

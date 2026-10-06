@@ -50,6 +50,8 @@ import CE from "./ce/ce";
 import OperationBreakdown from "./ce/OperationBreakdown";
 import LineBalancing from "./ce/LineBalancing";
 import Avma from "./ce/Avma";
+import GarmentAnalysis from "./ce/GarmentAnalysis";
+import IeMaster from "./ce/IeMaster";
 import ComplianceCertificate from "./digital-audit/compliance-certificate";
 import AuditPlan from "./digital-audit/audit-plan";
 import Checklist6S from "./digital-audit/checklist-6s";
@@ -255,11 +257,14 @@ export default function App() {
           <Route path="ce/avma" element={<Avma onBack={handleBack} />} />
           <Route path="ce/avma/:type" element={<Avma onBack={handleBack} />} />
           <Route path="ce/operation-video" element={<Navigate to="/dashboard/ce/avma" replace />} />
+          <Route path="ce/ie-master" element={<IeMaster onBack={handleBack} />} />
+          <Route path="ce/standard-time-library" element={<Navigate to="/dashboard/ce/operation-library" replace />} />
+          <Route path="ce/garment-analysis" element={<GarmentAnalysis onBack={handleBack} />} />
           <Route path="ce/operation-breakdown" element={<OperationBreakdown onBack={handleBack} />} />
           <Route path="ce/line-balancing" element={<LineBalancing onBack={handleBack} />} />
           <Route path="ce/:view" element={<MrpView module="ce" label="CE" onBack={handleBack} />} />
           {/* old CE addresses keep working */}
-          <Route path="standard-time" element={<Navigate to="/dashboard/ce/standard-time-library" replace />} />
+          <Route path="standard-time" element={<Navigate to="/dashboard/ce/operation-library" replace />} />
           <Route path="product-development" element={<Navigate to="/dashboard/ce/product-development" replace />} />
           <Route path="garment-analysis" element={<Navigate to="/dashboard/ce/garment-analysis" replace />} />
           <Route path="productivity" element={<Navigate to="/dashboard/ce/productivity" replace />} />

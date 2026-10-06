@@ -7,6 +7,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ArrowLeft, Search, RefreshCw, ChevronLeft, ChevronRight, Maximize, Package, Anchor, Ship, Truck, Factory, Flag } from "lucide-react";
 import { NavCover, useScreenTop, Figures } from "../components/ScreenTop";
+import { Seam } from "../ce/seams";
 
 const h = React.createElement;
 const API = (process.env.REACT_APP_M1_LLM_URL || "/api/m1").replace(/\/$/, "");
@@ -447,7 +448,7 @@ const MrpView = ({ onBack, module = "mrp", label = "MRP", view: fixedView, rende
                 h(
                   "td",
                   { key: c.key, className: cell + (typeof r[c.key] === "number" ? " text-right tabular-nums" : "") + (c.key === "order" ? " font-bold text-white whitespace-nowrap" : "") + (c.key === "group" ? (i === 0 || rows[i - 1].group !== r.group ? " font-bold text-white whitespace-nowrap" : " text-slate-500 whitespace-nowrap") : "") },
-                  Array.isArray(r[c.key]) ? h(Track, { steps: r[c.key], big: board }) : c.key === "picture" ? h(Picture, { k: r[c.key] }) : c.key === "grade" && r[c.key] ? gradeChip(r[c.key]) : CHIP.has(c.key) && r[c.key] ? h("span", { className: "inline-block rounded-full border px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap " + tone(r[c.key]) }, fmt(r[c.key])) : fmt(r[c.key])
+                  Array.isArray(r[c.key]) ? h(Track, { steps: r[c.key], big: board }) : c.key === "picture" ? h(Picture, { k: r[c.key] }) : c.key === "seam_image_key" ? h(Seam, { k: r[c.key], code: r.code, size: 64 }) : c.key === "grade" && r[c.key] ? gradeChip(r[c.key]) : CHIP.has(c.key) && r[c.key] ? h("span", { className: "inline-block rounded-full border px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap " + tone(r[c.key]) }, fmt(r[c.key])) : fmt(r[c.key])
                 )
               )
             )
