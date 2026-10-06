@@ -13,7 +13,7 @@ import { KHMER_NEW_YEAR } from '../thems';
 import { useTranslation } from '../translate/TranslationContext';
 import { useNavigate } from 'react-router-dom';
 import PaSkills, { usePaSkills } from './PaSkills';
-import Icom, { useIcomUnread } from './Icom';
+import Icom, { useIcomUnread, ICOM_DEPT } from './Icom';
 import { paOpenPush, paOpenPop } from './pa-owner';
 import { useKhmerTTS } from "./useKhmerTTS";
 import { VolumeX } from "lucide-react";
@@ -563,7 +563,19 @@ const PhoneFrame = ({
         window.addEventListener('keydown', onKey);
         return () => window.removeEventListener('keydown', onKey);
     }, [skillsOpen, icomOpen]);
-    const icomUnread = useIcomUnread(notifSlug);
+    const icomDept = ICOM_DEPT[notifSlug] || notifSlug;
+    const icomUnread = useIcomUnread(icomDept);
+    // "My PA chats" sample conversations (kb/pa-history) — every PA shows
+    // 1-3 look-alike past chats instead of blank "New Chat" rows.
+    const [paSamples, setPaSamples] = useState([]);
+    const [sampleView, setSampleView] = useState(null);
+    useEffect(() => {
+        if (!isHistoryOpen || !notifSlug || paSamples.length) return;
+        fetch(`${(process.env.REACT_APP_M1_LLM_URL || "/api/m1").replace(/\/$/, "")}/sim/view`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ module: "kb", view: "pa-history", pa: notifSlug }) })
+            .then((r) => r.json()).then((j) => { if (j && j.ok && Array.isArray(j.conversations)) setPaSamples(j.conversations); })
+            .catch(() => {});
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isHistoryOpen, notifSlug]);
 
     const refreshNotifCounts = React.useCallback(() => {
         if (!notifSlug) return;
@@ -1413,13 +1425,22 @@ const PhoneFrame = ({
 
                                 {/* Chat List */}
                                 <div className="flex-1 overflow-y-auto">
-                                    {chatHistory && chatHistory.length === 0 ? (
+                                    {paSamples.length === 0 && chatHistory && chatHistory.filter((c) => c.messages && c.messages.length > 0).length === 0 ? (
                                         <div className={`p-4 text-center ${bot.textColor || 'text-gray-500'} text-xs`}>
                                             No chat history yet
                                         </div>
                                     ) : (
                                         <div className="p-2">
-                                            {chatHistory && chatHistory.map((chat) => (
+                                            {paSamples.map((c) => (
+                                                <div key={c.id} onClick={() => { setSampleView(c); setIsHistoryOpen(false); }} className="group relative flex items-center gap-2 p-2 rounded-lg cursor-pointer hover:bg-black/5 transition">
+                                                    <div className="flex-1 min-w-0">
+                                                        <p className={`text-xs ${bot.textColor || 'text-gray-800'} font-medium truncate`}>{c.title}</p>
+                                                        <p className={`text-[10px] ${bot.textColor || 'text-gray-500'} mt-0.5`}>{c.date}{c.time ? ` · ${c.time}` : ''}</p>
+                                                    </div>
+                                                    <span className="text-[8px] font-bold uppercase tracking-wide rounded bg-gray-200 text-gray-500 px-1 py-0.5">sample</span>
+                                                </div>
+                                            ))}
+                                            {chatHistory && chatHistory.filter((chat) => chat.messages && chat.messages.length > 0).map((chat) => (
                                                 <div
                                                     key={chat.id}
                                                     onClick={() => {
@@ -1473,9 +1494,15 @@ const PhoneFrame = ({
                             <div className="flex items-center gap-2">
                                 <button
                                     onClick={() => {
-                                        // For Admin PA, Finance PA, HR PA, and CSR PA:
-                                        // - If a module is selected, reset to show module selection
-                                        // - If no module is selected, show chat history
+                                        // Department PAs: the Icom button is the TEAM CHAT —
+                                        // it must never open the old chat-history drawer
+                                        // (Gamini, HR PA live review 2026-10-06).
+                                        if (notifSlug) {
+                                            setSkillsOpen(false);
+                                            setIcomOpen((v) => !v);
+                                            return;
+                                        }
+                                        // Legacy bots: module reset / chat history.
                                         if (botId === 'admin-bot') {
                                             if (adminPAModule && onResetAdminPAModule) {
                                                 onResetAdminPAModule();
@@ -1500,9 +1527,6 @@ const PhoneFrame = ({
                                             } else {
                                                 setIsHistoryOpen(true);
                                             }
-                                        } else if (notifSlug) {
-                                            // Department PAs: the team chat (Icom)
-                                            setSkillsOpen(false); setIcomOpen((v) => !v);
                                         } else {
                                             // For other bots, show chat history
                                             setIsHistoryOpen(true);
@@ -2320,11 +2344,26 @@ const PhoneFrame = ({
                     )}
                 </div>
             )}
+            {/* Read-only sample conversation viewer (from "My PA chats"). */}
+            {sampleView && (
+                <div className="absolute inset-x-0 top-16 bottom-0 z-30 bg-white rounded-b-3xl flex flex-col">
+                    <div className="flex items-center gap-2 px-3 py-2 border-b border-gray-200">
+                        <button onClick={() => setSampleView(null)} className="text-[10px] font-bold text-sky-600 hover:text-sky-700">← Back to PA</button>
+                        <span className="text-[11px] font-bold text-gray-700 truncate flex-1">{sampleView.title}</span>
+                        <span className="text-[8px] font-bold uppercase rounded bg-gray-200 text-gray-500 px-1 py-0.5">sample</span>
+                    </div>
+                    <div className="flex-1 overflow-y-auto px-3 py-2 space-y-1.5">
+                        {(sampleView.messages || []).map((m, i) => (
+                            <div key={i} className={`max-w-[85%] rounded-xl px-2.5 py-1.5 text-[11px] leading-snug ${m.role === 'user' ? 'ml-auto bg-sky-100' : 'bg-gray-100'}`}>{m.text}</div>
+                        ))}
+                    </div>
+                </div>
+            )}
             {/* Icom — the department team chat, from the header's Icom button. */}
             {icomOpen && notifSlug && (
                 <div ref={measurePaOverlay} style={{ top: paOverlayBox.top, left: paOverlayBox.left, width: paOverlayBox.width, height: paOverlayBox.height }} className="absolute z-30 bg-white rounded-b-3xl overflow-hidden flex flex-col">
                     <div className="flex-shrink-0 px-3 py-2 border-b border-gray-100"><button onClick={() => setIcomOpen(false)} className="inline-flex items-center gap-1 text-xs font-semibold text-blue-700 hover:text-blue-900">← Back to PA</button></div>
-                    <div className="flex-1 min-h-0"><Icom dept={notifSlug} onMyChats={() => { setIcomOpen(false); setIsHistoryOpen(true); }} /></div>
+                    <div className="flex-1 min-h-0"><Icom dept={icomDept} onMyChats={() => { setIcomOpen(false); setIsHistoryOpen(true); }} /></div>
                 </div>
             )}
             {/* Modal flow superseded by in-chat agentic cards — keeping
@@ -3676,11 +3715,12 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
         // Demo Rate Limiting: Max 1 question per chat
         if (currentBotState) {
             const userMessageCount = currentBotState.messages.filter(msg => msg.from === 'user').length;
-            if (userMessageCount >= 1) {
+            if (false) { // demo question limit removed (Gamini 2026-10-06); userMessageCount kept for telemetry
+                void userMessageCount;
                 setBotStates(prev => {
                     const botState = prev[botId];
                     const userMsg = { from: 'user', text: message };
-                    const botMsg = { from: 'bot', text: "You have reached your limit of 1 question for this demo. If you want to chat more, please visit ChatGPT or Gemini directly." };
+                    const botMsg = { from: 'bot', text: "Let me pull that together for you." };
                     
                     const updatedMessages = [...botState.messages, userMsg, botMsg];
                     const updatedHistory = botState.currentChatId ? botState.chatHistory.map(chat =>

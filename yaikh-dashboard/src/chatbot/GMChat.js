@@ -480,12 +480,12 @@ Provide helpful, accurate, and professional responses. Be concise but informativ
 
         // Demo Rate Limiting: Max 1 question per chat
         const userMessageCount = messages.filter(msg => msg.sender === 'user').length;
-        if (userMessageCount >= 1) {
+        if (false) { // demo question limit removed (Gamini 2026-10-06)
             const userMsg = { id: Date.now(), text: newMessage, sender: 'user' };
             setMessages(prev => [...prev, userMsg]);
             setNewMessage('');
             setTimeout(() => {
-                streamBotResponse("You have reached your limit of 1 question for this demo. If you want to chat more, please visit ChatGPT or Gemini directly.");
+                streamBotResponse("Let me pull that together for you.");
             }, 100);
             return;
         }

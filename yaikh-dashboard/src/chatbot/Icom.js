@@ -14,7 +14,15 @@ const API = (process.env.REACT_APP_M1_LLM_URL || "/api/m1").replace(/\/$/, "");
 const icom = (body) => fetch(`${API}/sim/view`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ module: "icom", ...body }) }).then((r) => r.json());
 
 /* Departments whose conversation context Gamini has dictated. */
-const ICOM_READY = new Set(["4dp"]);
+const ICOM_READY = new Set(["4dp", "fc", "qa", "hr", "ypi", "mrp", "ce"]);
+/* PA slug → icom dept (Production PA talks in the FC warehouse chat). */
+export const ICOM_DEPT = { production: "fc" };
+/* QMS stages for the QA department chat (Gamini's YQMS columns). */
+const QA_STAGES = [
+  ["pre_production", "Pre Production"], ["cut", "Cut"], ["decoration", "Decoration"],
+  ["sewing", "Sewing"], ["finishing_packing", "Finishing & Packing"],
+  ["final_inspection", "Final Inspection"], ["reporting", "Reporting & Compliance"],
+];
 
 export const useIcomUnread = (dept) => {
   const [unread, setUnread] = useState(0);
@@ -41,6 +49,7 @@ const Icom = ({ dept, onMyChats }) => {
   const [d, setD] = useState(null);
   const [loading, setLoading] = useState(true);
   const [topicId, setTopicId] = useState(null);
+  const [stage, setStage] = useState(null); // QA: QMS stage filter
   const [text, setText] = useState("");
   const [showMembers, setShowMembers] = useState(false);
   const endRef = useRef(null);
@@ -48,11 +57,11 @@ const Icom = ({ dept, onMyChats }) => {
   const load = useCallback(() => {
     if (!ready) { setLoading(false); return; }
     setLoading(true);
-    icom({ view: "chat", dept, ...(topicId ? { topic_id: topicId } : {}) })
+    icom({ view: "chat", dept, ...(topicId ? { topic_id: topicId } : {}), ...(stage ? { stage } : {}) })
       .then((j) => { if (j && j.ok) setD(j); })
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, [dept, topicId, ready]);
+  }, [dept, topicId, stage, ready]);
   useEffect(() => { load(); }, [load]);
   useEffect(() => { if (endRef.current) endRef.current.scrollIntoView({ block: "end" }); }, [d]);
 
@@ -62,7 +71,7 @@ const Icom = ({ dept, onMyChats }) => {
     if (!t || !me) return;
     setText("");
     try {
-      const j = await icom({ view: "post", dept, text: t, from_code: me, ...(topicId ? { topic_id: topicId } : {}) });
+      const j = await icom({ view: "post", dept, text: t, from_code: me, ...(topicId ? { topic_id: topicId } : {}), ...(stage ? { stage } : {}) });
       if (j && j.ok) setD(j); else load();
     } catch (e) { load(); }
   };
@@ -109,6 +118,23 @@ const Icom = ({ dept, onMyChats }) => {
               <span className={`w-1.5 h-1.5 rounded-full ${m.online ? "bg-emerald-500" : "bg-gray-300"}`} />
             </span>
           ))}
+        </div>
+      )}
+
+      {/* QMS stage chips — QA only */}
+      {dept === "qa" && (
+        <div className="bg-white/90 border-b border-gray-200 px-2 py-1 flex gap-1 overflow-x-auto">
+          <button onClick={() => { setStage(null); setTopicId(null); }} className={`flex-shrink-0 rounded-full px-2 py-0.5 text-[9px] font-bold border ${!stage ? "bg-violet-600 text-white border-violet-600" : "bg-white text-gray-600 border-gray-200"}`}>All</button>
+          {QA_STAGES.map(([k, label]) => {
+            const st = ((d && d.stages) || []).find((x) => x.stage === k || x.id === k) || {};
+            return (
+              <button key={k} onClick={() => { setStage(k === stage ? null : k); setTopicId(null); }} className={`flex items-center gap-1 flex-shrink-0 rounded-full px-2 py-0.5 text-[9px] font-semibold border ${stage === k ? "bg-violet-600 text-white border-violet-600" : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50"}`}>
+                {label}
+                {st.count != null && <span className="text-[8px] opacity-70">{st.count}</span>}
+                {st.unread > 0 && <span className="rounded-full bg-rose-600 text-white px-1 leading-3 text-[8px] font-black">{st.unread}</span>}
+              </button>
+            );
+          })}
         </div>
       )}
 
