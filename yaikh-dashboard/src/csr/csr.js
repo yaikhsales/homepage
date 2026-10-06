@@ -73,30 +73,33 @@ export const State = ({ loading, error, onRetry, empty, colSpan }) => {
   const body = error ? <span className="text-amber-200">{error} {onRetry && <button onClick={onRetry} className="ml-1 rounded border border-amber-400/50 px-2 py-0.5 text-xs font-bold text-amber-200 hover:bg-amber-500/10">Retry</button>}</span> : loading ? <span className="text-slate-400">Loading…</span> : <span className="text-slate-500">{empty || "No rows match."}</span>;
   return colSpan ? <tr><td colSpan={colSpan} className="px-2 py-3 text-sm">{body}</td></tr> : <div className="px-2 py-3 text-sm">{body}</div>;
 };
-// a table that always fits the width it has (fixed layout, every column a share of the width, long text
-// clipped to one line with the full text on hover). `keys` picks the columns to show, `weights` their share,
-// `expand` opens the whole record under the row on click; `render[key]` overrides a cell
-export const Table = ({ columns, rows, render = {}, onRow, max = 400, empty, loading, error, onRetry, dense, keys, weights = {}, expand }) => {
+// a table that never clips an id, code, date, number, rank or status chip: those columns take their natural
+// width (and the table scrolls sideways inside its own card when the minimums don't fit); only free-text
+// columns (names, findings, actions, remarks) clip to one line with the full text on hover. `keys` picks the
+// columns, `labels` gives short real header labels, `widths` the clip width of a text column, `expand` opens
+// the whole record under the row on click; `render[key]` overrides a cell
+const FIXED_KEY = /^(id|code|device|ref|issue_no|date|time|month|week|w\d|rank|status|result|stage|severity|level|factory|location|question_code|photo|before_photo|after_photo|report_cap|customer|days_to_expiry|validity_years|period_days|duration_min|findings|open_findings|submissions|passed|failed|pass_rate|penalty|avg_40|monthly_avg_40|completion_pct|evaluated|locations|co2|pm25|pm10|ch2o|tvoc|temp|rh|over|kind|interval)$|_date$|^(issued|expires|renewal|last_seen)/;
+const isText = (key, rows) => !FIXED_KEY.test(key) && (rows || []).slice(0, 30).some((r) => typeof r[key] === "string" && r[key].length > 22);
+export const Table = ({ columns, rows, render = {}, onRow, max = 400, empty, loading, error, onRetry, dense, keys, labels = {}, widths = {}, expand }) => {
   const all = cols(columns);
   const cs = keys ? keys.map((k) => all.find((c) => c.key === k) || { key: k, label: title(k) }) : all;
-  const total = cs.reduce((t, c) => t + (weights[c.key] || 1), 0);
   const [open, setOpen] = useState(null);
   const list = rows || [];
+  const text = Object.fromEntries(cs.map((c) => [c.key, isText(c.key, list)]));
   const rowKey = (r, i) => r.id || r.code || r.device || i;
   return (
     <div className="overflow-auto rounded-lg border border-slate-700" style={{ maxHeight: max }}>
-      <table className={`w-full ${dense ? "text-xs" : "text-[13px]"}`} style={{ tableLayout: "fixed" }}>
-        <colgroup>{cs.map((c) => <col key={c.key} style={{ width: `${((weights[c.key] || 1) / total) * 100}%` }} />)}</colgroup>
-        <thead className="text-slate-500 sticky top-0 bg-slate-800 z-10"><tr>{cs.map((c) => <th key={c.key} className="text-left font-normal px-2 py-1 align-bottom leading-tight truncate" title={c.label}>{c.label}</th>)}</tr></thead>
+      <table className={`min-w-full ${dense ? "text-xs" : "text-[13px]"}`}>
+        <thead className="text-slate-500 sticky top-0 bg-slate-800 z-10"><tr>{cs.map((c) => <th key={c.key} className="text-left font-normal px-2 py-1 align-bottom leading-tight whitespace-nowrap">{labels[c.key] || c.label}</th>)}</tr></thead>
         <tbody>
           {list.map((r, i) => {
             const k = rowKey(r, i), isOpen = expand && open === k;
             return (
               <React.Fragment key={k}>
                 <tr onClick={onRow ? () => onRow(r) : expand ? () => setOpen(isOpen ? null : k) : undefined} className={`border-t border-slate-800 ${onRow || expand ? "cursor-pointer hover:bg-slate-700/40" : ""} ${isOpen ? "bg-slate-700/30" : ""}`}>
-                  {cs.map((c) => <td key={c.key} className="px-2 py-1 align-top text-slate-200 truncate" title={typeof r[c.key] === "string" && !render[c.key] ? r[c.key] : undefined}>{render[c.key] ? render[c.key](r[c.key], r) : cell(r[c.key], c.key)}</td>)}
+                  {cs.map((c) => <td key={c.key} className={`px-2 py-1 align-top text-slate-200 ${text[c.key] ? "truncate" : "whitespace-nowrap"}`} style={text[c.key] ? { maxWidth: widths[c.key] || "16rem", minWidth: "6rem" } : undefined} title={typeof r[c.key] === "string" && text[c.key] && !render[c.key] ? r[c.key] : undefined}>{render[c.key] ? render[c.key](r[c.key], r) : cell(r[c.key], c.key)}</td>)}
                 </tr>
-                {isOpen && <tr className="border-t border-slate-800 bg-slate-900/60"><td colSpan={cs.length} className="px-3 py-2"><Record columns={all} row={r} /></td></tr>}
+                {isOpen && <tr className="border-t border-slate-800 bg-slate-900/60"><td colSpan={cs.length} className="px-3 py-2 whitespace-normal"><Record columns={all} row={r} /></td></tr>}
               </React.Fragment>
             );
           })}

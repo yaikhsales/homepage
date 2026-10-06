@@ -106,7 +106,7 @@ const Findings = ({ focus }) => {
         <span className="flex gap-1.5">{Object.entries(SEV).map(([k, t]) => <Chip key={k} tone={t} onClick={() => setF({ ...f, severity: f.severity === k ? "" : k })} on={f.severity === k}>{k.replace("_", " ")} {d.by_severity && d.by_severity[k] !== undefined ? "· " + num(d.by_severity[k]) + " open" : ""}</Chip>)}</span>
         <span className="ml-auto text-xs text-slate-500">{loading ? "loading…" : `${rows.length} finding${rows.length === 1 ? "" : "s"} · click a row for root cause, action and closure`}</span>
       </div>
-      <Table columns={d.columns} rows={rows} max={560} empty="No findings match." loading={loading} error={error} onRetry={reload} expand keys={["id", "audit", "standard", "question_code", "factory", "finding", "severity", "owner_role", "target_date", "status"]} weights={{ id: 1.5, audit: 2.2, standard: 1, question_code: 0.9, factory: 0.6, finding: 3.2, severity: 1, owner_role: 2, target_date: 1.1, status: 1.1 }} render={{
+      <Table columns={d.columns} rows={rows} max={560} empty="No findings match." loading={loading} error={error} onRetry={reload} expand keys={["id", "audit", "standard", "question_code", "factory", "finding", "severity", "owner_role", "target_date", "status"]} widths={{ audit: "14rem", finding: "20rem", owner_role: "13rem" }} render={{
         id: (v, r) => <span className="font-bold text-white">{v}{(r.overdue_60d || r.past_target) && <Chip tone="red" title={r.overdue_60d ? "overdue 60+ days" : "past target date"}> !</Chip>}</span>,
         audit: (v, r) => <Clip v={`${v} · ${r.audit_name}`} />,
         finding: (v) => <Clip v={v} cls="text-slate-100" />,
@@ -115,7 +115,7 @@ const Findings = ({ focus }) => {
         target_date: (v, r) => <span className={r.past_target ? "text-rose-300 font-bold" : ""}>{v}</span>,
         closure_evidence: (v) => v ? <span className="inline-flex items-center gap-1 text-[10px] text-slate-300"><FileText size={10} className="text-sky-300" />{typeof v === "string" ? v : Array.isArray(v) ? v.length + " files" : "on file"}</span> : <span className="text-slate-600">—</span>,
       }} />
-      {fu && <Panel title={fu.title} className="mt-3"><Table columns={fu.columns} rows={fu.rows} max={240} loading={loading} error={error} onRetry={reload} weights={{ id: 1.2, audit_name: 2, follow_up_of: 1.2 }} render={{ id: (v) => <b className="text-white">{v}</b> }} /></Panel>}
+      {fu && <Panel title={fu.title} className="mt-3"><Table columns={fu.columns} rows={fu.rows} max={240} loading={loading} error={error} onRetry={reload} widths={{ audit_name: "14rem" }} render={{ id: (v) => <b className="text-white">{v}</b> }} /></Panel>}
     </>
   );
 };

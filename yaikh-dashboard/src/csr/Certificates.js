@@ -19,7 +19,7 @@ const Certificates = ({ onBack }) => {
         {(f.status || f.issuer || f.audit_type) && <button onClick={() => setF({ status: "", issuer: "", audit_type: "" })} className="text-[11px] text-sky-300 hover:underline">clear filters</button>}
         <span className="ml-auto text-xs text-slate-500">{loading ? "loading…" : `${rows.length} certificate${rows.length === 1 ? "" : "s"} · click a row for the full record`}</span>
       </div>
-      <Table columns={d.columns} rows={rows} max={640} empty="No certificates match." loading={loading} error={error} onRetry={reload} expand keys={["id", "type", "issuer", "issued", "expires", "days_to_expiry", "status", "responsible"]} weights={{ id: 1, type: 3, issuer: 2, issued: 1.1, expires: 1.1, days_to_expiry: 1.3, status: 1, responsible: 2 }} render={{
+      <Table columns={d.columns} rows={rows} max={640} empty="No certificates match." loading={loading} error={error} onRetry={reload} expand keys={["id", "type", "issuer", "issued", "expires", "days_to_expiry", "status", "responsible"]} widths={{ type: "20rem", issuer: "13rem", responsible: "13rem" }} render={{
         id: (v) => <span className="font-bold text-white">{v}</span>,
         type: (v) => <Clip v={v} cls="font-bold text-white" />,
         issuer: (v, r) => <Clip v={v} cls={r.issuer_type === "lab" ? "text-sky-200" : ""} />,
