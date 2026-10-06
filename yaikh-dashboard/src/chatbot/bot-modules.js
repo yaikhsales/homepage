@@ -5623,7 +5623,15 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
         <div
             className={outerClass}
             style={{
-                animation: isClosing ? 'none' : 'fadeInScale 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                animation: isClosing ? 'none' : 'fadeInScale 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                // Inline geometry for the docked panel: some screens mount this
+                // inside a zero-width tree where the utility classes compute to
+                // 0 — inline wins everywhere. Bottom sheet on narrow screens.
+                ...(isCompactMount
+                    ? (window.matchMedia && window.matchMedia('(max-width: 767px)').matches
+                        ? { position: 'fixed', left: 0, right: 0, bottom: 0, top: 'auto', height: '70vh', width: '100%' }
+                        : { position: 'fixed', top: 0, right: 0, bottom: 0, width: 380 })
+                    : {}),
             }}
         >
             <style>{`
