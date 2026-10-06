@@ -170,7 +170,7 @@ export default function BigBrainPanel({ page = "this page", pa = "all", onClose,
 
   return (
     <div
-      className="fixed bottom-6 right-6 w-[400px] max-h-[96vh] z-50 flex flex-col rounded-2xl overflow-hidden shadow-2xl border border-emerald-500/30 bg-slate-900"
+      className="fixed bottom-6 right-6 w-[400px] max-h-[calc(100vh-11rem)] z-[61] flex flex-col rounded-2xl overflow-hidden shadow-2xl border border-emerald-500/30 bg-slate-900"
       style={{ maxWidth: "calc(100vw - 2rem)" }}
       role="dialog"
       aria-label="Big Brain"
