@@ -61,7 +61,7 @@ const markOn = (picked, tone) => picked.size === 0 || picked.has(`${tone}-marker
 
 // Order status feed: three bubbles on each Master Plan bar (MRP, YPI, CE). The light on a bubble is the
 // department's overall state for that order; clicking it opens the detail feed.
-const GROUPS = [["mrp", "MRP"], ["ypi", "YPI"], ["ce", "CE"]];
+const GROUPS = [["mrp", "MRP"], ["fc", "FC"], ["tp", "TP"], ["smp", "SMP"], ["ce", "CE"], ["cp", "CP"]];
 const LIGHT = { green: "bg-emerald-400", amber: "bg-amber-400", red: "bg-rose-500", idle: "bg-slate-500", na: "bg-slate-700" };
 const LIGHT_TEXT = { green: "text-emerald-300", amber: "text-amber-300", red: "text-rose-300", idle: "text-slate-400", na: "text-slate-500" };
 
@@ -204,7 +204,7 @@ function StatusPop({ pop, onTab, onClose }) {
 const COLOUR_CSS = { burgundy: "#800020", "forest green": "forestgreen", navy: "#001f3f", "heather grey": "#9aa0a6", "off white": "#faf6ef", offwhite: "#faf6ef", charcoal: "#36454f", sand: "#d7c49e", cream: "#f5f0dc" };
 const colourCss = (n) => { const k = String(n || "").toLowerCase(); return COLOUR_CSS[k] || k.replace(/\s+/g, "") || "#999"; };
 
-const hasProblem = (b) => !!b.st && GROUPS.some(([k]) => b.st[k] === "red");
+const hasProblem = (b) => (Array.isArray(b.factors) && b.factors.some((f) => f.tone === "red")) || b.beyond_buffer || (!!b.st && GROUPS.some(([k]) => b.st[k] === "red"));
 
 function Gantt({ g, filter, onLine, picked, onStatus, onlyProblems, corner, onRun }) {
   const days = useMemo(() => {
@@ -267,13 +267,38 @@ function Gantt({ g, filter, onLine, picked, onStatus, onlyProblems, corner, onRu
               </div>
               <div className="relative" style={{ width, backgroundImage: "linear-gradient(to right, rgba(51,65,85,0.45) 1px, transparent 1px)", backgroundSize: `${dayW}px 100%` }}>
                 {r.bars.map((b, i) => {
-                  const from = Math.max(dayDiff(g.start, b.from), 0);
-                  const to = Math.min(dayDiff(g.start, b.to), days.length - 1);
+                  // Solid bar sits at the PROJECTED dates (material/CE moves it);
+                  // the faint dashed outline marks the original PLANNED slot and
+                  // the dotted tail is the remaining BUFFER (may overlap the next
+                  // order without being a clash). Red ring = beyond the buffer.
+                  const projF = (b.projected && b.projected.from) || b.from;
+                  const projT = (b.projected && b.projected.to) || b.to;
+                  const from = Math.max(dayDiff(g.start, projF), 0);
+                  const to = Math.min(dayDiff(g.start, projT), days.length - 1);
                   if (to < 0 || from > days.length - 1 || to < from) return null;
                   const barW = (to - from + 1) * dayW - 2;
-                  const bubbles = b.st && b.ref && onStatus && barW >= 44;
+                  const factors = Array.isArray(b.factors) && b.factors.length ? b.factors : null;
+                  const bubbles = (factors || b.st) && b.ref && onStatus && barW >= 44;
+                  const delayDays = (b.delay_days != null ? b.delay_days : b.st && b.st.delay) || 0;
+                  const plF = b.planned && b.planned.from, plT = b.planned && b.planned.to;
+                  const ghost = plF && plT && (plF !== projF || plT !== projT);
+                  const gFrom = ghost ? Math.max(dayDiff(g.start, plF), 0) : 0;
+                  const gTo = ghost ? Math.min(dayDiff(g.start, plT), days.length - 1) : -1;
+                  const bufT = b.buffer && b.buffer.to;
+                  const bFrom = to + 1;
+                  const bTo = bufT ? Math.min(dayDiff(g.start, bufT), days.length - 1) : -1;
+                  const dim = barOn(picked, b.tone) && !(onlyProblems && !hasProblem(b)) ? "" : "opacity-10";
+                  const ttl = `${b.title}${ghost ? ` · planned ${plF} → ${plT} · projected ${projF} → ${projT}` : ` · ${projF} → ${projT}`}${b.projected && b.projected.reason ? ` · ${b.projected.reason}` : ""}${b.buffer ? ` · buffer ${b.buffer.days}d left` : ""}`;
+                  const btns = factors || GROUPS.map(([k, name]) => ({ key: k, label: name, tone: (b.st && b.st[k]) || "grey" }));
                   return (
-                    <div key={i} title={`${b.title} · ${b.from} → ${b.to}`} onClick={b.run && onRun ? (e) => onRun(b.run, e) : undefined} className={`absolute top-1 rounded-md text-[10px] font-semibold leading-[18px] shadow transition-opacity flex items-center overflow-hidden ${b.run && onRun ? "cursor-pointer hover:brightness-110 hover:ring-1 hover:ring-white/70" : ""} ${BAR[b.tone] || BAR.slate} ${barOn(picked, b.tone) && !(onlyProblems && !hasProblem(b)) ? "" : "opacity-10"}`} style={{ left: from * dayW + 1, width: barW, height: ROW_H - 8 }}>
+                    <React.Fragment key={i}>
+                      {ghost && gTo >= gFrom && (
+                        <div className={`absolute top-1 rounded-md border border-dashed border-white/50 pointer-events-none transition-opacity ${dim}`} title={`Planned: ${plF} → ${plT}`} style={{ left: gFrom * dayW + 1, width: (gTo - gFrom + 1) * dayW - 2, height: ROW_H - 8 }} />
+                      )}
+                      {bTo >= bFrom && (
+                        <div className={`absolute top-1 rounded-r-md border-2 border-dotted pointer-events-none transition-opacity ${b.beyond_buffer ? "border-rose-400" : "border-white/40"} ${dim}`} title={`Buffer: ${(b.buffer && b.buffer.days) || 0} day(s) left${b.buffer_used ? ` · ${b.buffer_used} used` : ""}`} style={{ left: bFrom * dayW, width: (bTo - bFrom + 1) * dayW - 2, height: ROW_H - 8, borderLeft: "none" }} />
+                      )}
+                      <div title={ttl} onClick={b.run && onRun ? (e) => onRun(b.run, e) : undefined} className={`absolute top-1 rounded-md text-[10px] font-semibold leading-[18px] shadow transition-opacity flex items-center overflow-hidden ${b.run && onRun ? "cursor-pointer hover:brightness-110 hover:ring-1 hover:ring-white/70" : ""} ${BAR[b.tone] || BAR.slate} ${b.beyond_buffer ? "ring-2 ring-rose-500" : ""} ${dim}`} style={{ left: from * dayW + 1, width: barW, height: ROW_H - 8 }}>
                       <span className="truncate px-1.5 flex-1 min-w-0">{b.label}</span>
                       {barW >= 300 && b.brand_order && (
                         <span className="flex-shrink-0 mr-1 rounded bg-slate-900/70 text-slate-200 text-[9px] leading-[14px] px-1" title={`Brand order ${b.brand_order} · ${(b.qty || 0).toLocaleString()} pcs`}>{b.brand_order}</span>
@@ -294,18 +319,19 @@ function Gantt({ g, filter, onLine, picked, onStatus, onlyProblems, corner, onRu
                           {b.sizes.map((x) => `${x.size}${x.ratio}`).join("·")}
                         </span>
                       )}
-                      {bubbles && b.st.delay > 0 && barW >= 150 && <span className="flex-shrink-0 mr-1 rounded bg-rose-600 text-white text-[9px] font-black leading-[14px] px-1" title={`Possible delay: ${b.st.delay} days`}>+{b.st.delay}d</span>}
+                      {delayDays > 0 && barW >= 150 && <span className="flex-shrink-0 mr-1 rounded bg-rose-600 text-white text-[9px] font-black leading-[14px] px-1" title={`Projected ${delayDays} day(s) past the planned finish${b.buffer_left != null ? ` · buffer left ${b.buffer_left}d` : ""}`}>+{delayDays}d</span>}
                       {bubbles && (
                         <span className="flex items-center gap-0.5 pr-0.5 flex-shrink-0">
-                          {GROUPS.map(([k, name]) => (
-                            <button key={k} onClick={(e) => { e.stopPropagation(); onStatus(b, k, e); }} title={`${name} status — ${b.ref}`} className={`flex items-center gap-1 rounded-full text-white text-[9px] font-bold leading-[14px] px-1.5 ${b.st[k] === "red" ? "bg-rose-950 ring-1 ring-rose-400 hover:bg-black" : "bg-slate-900/90 hover:bg-black"}`}>
-                              <span className={`inline-block rounded-full ${b.st[k] === "red" ? "w-2 h-2 bg-red-500 animate-pulse" : `w-1.5 h-1.5 ${LIGHT[b.st[k]] || LIGHT.idle}`}`} />
-                              {barW >= 190 ? name : barW >= 110 ? name[0] : null}
+                          {btns.map((fx) => (
+                            <button key={fx.key} onClick={(e) => { e.stopPropagation(); onStatus(b, fx.key, e); }} title={`${fx.label} status — ${b.ref}`} className={`flex items-center gap-1 rounded-full text-white text-[9px] font-bold leading-[14px] px-1 ${fx.tone === "red" ? "bg-rose-950 ring-1 ring-rose-400 hover:bg-black" : "bg-slate-900/90 hover:bg-black"}`}>
+                              <span className={`inline-block rounded-full ${fx.tone === "red" ? "w-2 h-2 bg-red-500 animate-pulse" : `w-1.5 h-1.5 ${LIGHT[fx.tone] || LIGHT.idle}`}`} />
+                              {barW >= 290 ? fx.label : null}
                             </button>
                           ))}
                         </span>
                       )}
                     </div>
+                    </React.Fragment>
                   );
                 })}
                 {r.markers.map((m, i) => {
