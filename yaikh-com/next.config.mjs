@@ -78,16 +78,28 @@ const nextConfig = {
   // yaikh-dashboard/package.json) so URLs like /experience/static/...
   // resolve to the real files in public/experience/.
   async rewrites() {
-    return [
-      {
-        source: "/experience",
-        destination: "/experience/index.html",
-      },
-      {
-        source: "/experience/:path((?!static|assets|.*\\..*).*)",
-        destination: "/experience/index.html",
-      },
-    ];
+    return {
+      afterFiles: [
+        {
+          source: "/experience",
+          destination: "/experience/index.html",
+        },
+        {
+          source: "/experience/:path((?!static|assets|.*\\..*).*)",
+          destination: "/experience/index.html",
+        },
+      ],
+      // The CRA dashboard references its images with root-absolute paths
+      // (/assets/ytm/…, /assets/icons/sub-icons/…, /pdf/…) although it is
+      // served under /experience, so every such image 404'd on yaikh.com
+      // (hub card icons, PR photos, ytm screenshots …). Fallback rewrites run
+      // only when nothing at the root matches, so the marketing site's own
+      // /assets/about-us and /assets/modules-image keep winning.
+      fallback: [
+        { source: "/assets/:path*", destination: "/experience/assets/:path*" },
+        { source: "/pdf/:path*", destination: "/experience/pdf/:path*" },
+      ],
+    };
   },
 };
 
