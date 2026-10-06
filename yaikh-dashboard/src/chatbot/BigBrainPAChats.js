@@ -54,12 +54,13 @@ const dmFor = (topics, pa) => topics.find((t) =>
   (t.kind === "dm" && [pa.slug, pa.code].includes(String(t.pa || "").replace(/-bot$/, "")))
 );
 
-const BigBrainPAChats = ({ fontSize = 14 }) => {
+const BigBrainPAChats = ({ fontSize = 14, onThreadChange }) => {
   const [topics, setTopics] = useState([]);
   const [open, setOpen] = useState(null); // PA object
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(false);
   const [text, setText] = useState("");
+  const [waiting, setWaiting] = useState(0); // ms timestamp of the GM's last send, 0 = not waiting
   const endRef = useRef(null);
 
   const loadTopics = useCallback(() => {
@@ -67,7 +68,7 @@ const BigBrainPAChats = ({ fontSize = 14 }) => {
   }, []);
   useEffect(() => {
     loadTopics();
-    const t = setInterval(loadTopics, 60000);
+    const t = setInterval(loadTopics, 20000);
     return () => clearInterval(t);
   }, [loadTopics]);
 
@@ -83,7 +84,25 @@ const BigBrainPAChats = ({ fontSize = 14 }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [topics]);
 
-  useEffect(() => { if (open) loadThread(open); }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { setWaiting(0); if (open) loadThread(open); if (onThreadChange) onThreadChange(!!open); }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Every PA answers to Big Brain (the GM). After the GM sends, poll the
+  // thread until the PA's reply lands (M1 writes it), up to 2 minutes;
+  // otherwise refresh an open thread every 20 s.
+  useEffect(() => {
+    if (!open) return undefined;
+    const tick = () => icom({ view: "thread", topic_id: topicIdOf(open) }).then((j) => {
+      if (!j || !j.ok) return;
+      const r = j.rows || j.messages || [];
+      const last = r[r.length - 1];
+      if (waiting) {
+        if (last && last.from_code !== ME) { setRows(r); setWaiting(0); }
+        else if (Date.now() - waiting > 120000) setWaiting(0);
+      } else setRows(r);
+    }).catch(() => {});
+    const t = setInterval(tick, waiting ? 4000 : 20000);
+    return () => clearInterval(t);
+  }, [open, waiting]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { if (endRef.current) endRef.current.scrollIntoView({ block: "end" }); }, [rows]);
 
   const send = async () => {
@@ -96,6 +115,7 @@ const BigBrainPAChats = ({ fontSize = 14 }) => {
       const j = await icom({ view: "post", topic_id: topicIdOf(open), text: t, from_code: ME });
       if (j && j.ok && (j.rows || j.messages || []).length) setRows(j.rows || j.messages);
       else settle(!(j && j.ok));
+      if (j && j.ok) setWaiting(Date.now());
       loadTopics();
     } catch (e) { settle(true); }
   };
@@ -108,7 +128,7 @@ const BigBrainPAChats = ({ fontSize = 14 }) => {
           <PAIcon pa={open} size={28} />
           <div className="flex-1 min-w-0">
             <div className="text-sm font-semibold text-white truncate">{open.code}</div>
-            <div className="text-[10px] text-white/50 truncate">{open.dept} · direct chat</div>
+            <div className="text-[10px] text-white/50 truncate">{open.dept} · answers to you, the GM</div>
           </div>
           <button onClick={() => loadThread(open)} className="p-1.5 rounded-full hover:bg-white/10" title="Refresh"><RefreshCw size={13} className={loading ? "animate-spin text-white/40" : "text-white/50"} /></button>
         </div>
@@ -127,6 +147,9 @@ const BigBrainPAChats = ({ fontSize = 14 }) => {
               </div>
             );
           })}
+          {waiting > 0 && (
+            <div className="flex justify-start"><div className="rounded-2xl px-3 py-1.5 bg-white/5 text-white/50 text-xs italic">{open.code} is replying…</div></div>
+          )}
           {rows.length === 0 && !loading && (
             <div className="text-center text-xs text-white/50 pt-8 px-4">No messages with {open.code} yet — type below to start.</div>
           )}
@@ -144,7 +167,10 @@ const BigBrainPAChats = ({ fontSize = 14 }) => {
 
   return (
     <div className="p-2">
-      <div className="px-2 pt-1 pb-2 text-[10px] uppercase tracking-wider text-white/40">Department PAs</div>
+      <div className="px-2 pt-1 pb-2">
+        <div className="text-[10px] uppercase tracking-wider text-white/40">Department PAs</div>
+        <div className="text-[11px] text-white/50 mt-0.5">Every PA answers to Big Brain, the GM. Tap a PA to ask — the reply comes back here.</div>
+      </div>
       {PAS.map((pa) => {
         const t = dmFor(topics, pa) || {};
         const unread = Number(t.unread) || 0;

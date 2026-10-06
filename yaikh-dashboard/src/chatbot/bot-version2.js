@@ -139,6 +139,7 @@ const BotVersion2 = ({
   // and the font-size slider are always in reach.
   const [isHistoryOpen, setIsHistoryOpen] = useState(true);
   const [isHistoryPinned, setIsHistoryPinned] = useState(true);
+  const [paThreadOpen, setPaThreadOpen] = useState(false); // a PA thread is open in the drawer
   // Font-size preference for the chat bubbles (12–24px). Persists in localStorage.
   const [chatFontSize, setChatFontSize] = useState(() => {
     try {
@@ -2186,6 +2187,8 @@ ANSWER RULES
             </div>
           </div>
 
+          {/* Controls hide while a PA thread is open so the chat gets the drawer. */}
+          {!paThreadOpen && (<>
           {/* New Chat + Restart Demo buttons */}
           <div className="p-4 border-b border-white/10 space-y-2">
             <button
@@ -2240,10 +2243,12 @@ ANSWER RULES
             Yai about emailing you the transcript (from ecom@yaikh.com).
           </div>
 
+          </>)}
+
           {/* The 14 department PAs — direct threads with each (Gamini
               2026-10-06: the history list becomes Big Brain's PA chats). */}
           <div className="flex-1 min-h-0 overflow-y-auto flex flex-col">
-            <BigBrainPAChats fontSize={chatFontSize} />
+            <BigBrainPAChats fontSize={chatFontSize} onThreadChange={setPaThreadOpen} />
           </div>
         </div>
       </div>
