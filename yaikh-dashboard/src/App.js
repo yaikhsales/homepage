@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import AppLayout from "./AppLayout";
 import { TranslationProvider } from "./translate/TranslationContext";
 
@@ -47,18 +47,8 @@ import SalaryBill from "./salary-bill/salary-bill";
 import BillClaim from "./bill-claim/bill-claim";
 import ShippingBill from "./shipping-bill/shipping-bill";
 import CE from "./ce/ce";
-import StandardTime from "./ce/standard-time";
-import ProductDevelopment from "./ce/product-development";
-import GarmentAnalysis from "./ce/garment-analysis";
-import Productivity from "./ce/productivity";
-import MachineAllocation from "./ce/machine-allocation";
-import SkillInventory from "./ce/skill-inventory";
-import TeamPerformance from "./ce/team-performance";
-import LearningCurve from "./ce/learning-curve";
-import Downtimes from "./ce/downtimes";
-import CostCenters from "./ce/cost-centers";
-import CPM from "./ce/cpm";
-import StyleCosting from "./ce/style-costing";
+import OperationBreakdown from "./ce/OperationBreakdown";
+import LineBalancing from "./ce/LineBalancing";
 import ComplianceCertificate from "./digital-audit/compliance-certificate";
 import AuditPlan from "./digital-audit/audit-plan";
 import Checklist6S from "./digital-audit/checklist-6s";
@@ -260,48 +250,23 @@ export default function App() {
             element={<ResignPayment onBack={handleBack} />}
           />
           <Route path="ce" element={<CE onBack={handleBack} />} />
-          <Route
-            path="standard-time"
-            element={<StandardTime onBack={handleBack} />}
-          />
-          <Route
-            path="product-development"
-            element={<ProductDevelopment onBack={handleBack} />}
-          />
-          <Route
-            path="garment-analysis"
-            element={<GarmentAnalysis onBack={handleBack} />}
-          />
-          <Route
-            path="productivity"
-            element={<Productivity onBack={handleBack} />}
-          />
-          <Route
-            path="machine-allocation"
-            element={<MachineAllocation onBack={handleBack} />}
-          />
-          <Route
-            path="skill-inventory"
-            element={<SkillInventory onBack={handleBack} />}
-          />
-          <Route
-            path="team-performance"
-            element={<TeamPerformance onBack={handleBack} />}
-          />
-          <Route
-            path="learning-curve"
-            element={<LearningCurve onBack={handleBack} />}
-          />
-          <Route path="downtimes" element={<Downtimes onBack={handleBack} />} />
-          <Route
-            path="cost-centers"
-            element={<CostCenters onBack={handleBack} />}
-          />
-          <Route path="cpm" element={<CPM onBack={handleBack} />} />
-          <Route
-            path="style-costing"
-            element={<StyleCosting onBack={handleBack} />}
-          />
+          {/* CE sub-modules read the simulated factory (sim/view, module "ce"); two have custom visuals */}
+          <Route path="ce/operation-breakdown" element={<OperationBreakdown onBack={handleBack} />} />
+          <Route path="ce/line-balancing" element={<LineBalancing onBack={handleBack} />} />
+          <Route path="ce/:view" element={<MrpView module="ce" label="CE" onBack={handleBack} />} />
+          {/* old CE addresses keep working */}
+          <Route path="standard-time" element={<Navigate to="/dashboard/ce/standard-time-library" replace />} />
+          <Route path="product-development" element={<Navigate to="/dashboard/ce/product-development" replace />} />
+          <Route path="garment-analysis" element={<Navigate to="/dashboard/ce/garment-analysis" replace />} />
+          <Route path="productivity" element={<Navigate to="/dashboard/ce/productivity" replace />} />
+          <Route path="machine-allocation" element={<Navigate to="/dashboard/ce/machine-allocation" replace />} />
+          <Route path="skill-inventory" element={<Navigate to="/dashboard/ce/skill-inventory" replace />} />
+          <Route path="team-performance" element={<Navigate to="/dashboard/ce/team-performance" replace />} />
+          <Route path="learning-curve" element={<Navigate to="/dashboard/ce/learning-curve" replace />} />
+          <Route path="downtimes" element={<Navigate to="/dashboard/ce/downtimes" replace />} />
+          <Route path="cost-centers" element={<Navigate to="/dashboard/ce/cost-centers" replace />} />
+          <Route path="cpm" element={<Navigate to="/dashboard/ce/cpm" replace />} />
+          <Route path="style-costing" element={<Navigate to="/dashboard/ce/style-costing" replace />} />
           <Route
             path="checklist-attendance"
             element={<ChecklistAttendance onBack={handleBack} />}

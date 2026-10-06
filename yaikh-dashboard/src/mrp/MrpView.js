@@ -15,14 +15,50 @@ const WALL = new Set(["board", "mrp-tv", "tec-tv"]); // wall screens refresh by 
 
 const tone = (v) => {
   const s = String(v || "").toLowerCase();
-  if (/\bfail\b|on hold|\bheld\b|mismatch|incident|^late\b|unaccounted|under investigation/.test(s)) return "bg-rose-500/20 text-rose-300 border-rose-500/30"; // inspection / test failed, lot on hold; consumption late; branded pieces unaccounted
+  if (/\bfail\b|on hold|\bheld\b|mismatch|incident|^late\b|unaccounted|under investigation|^red$|bottleneck|^short\b|breakdown|over pitch/.test(s)) return "bg-rose-500/20 text-rose-300 border-rose-500/30"; // inspection / test failed, lot on hold; consumption late; branded pieces unaccounted
   if (/\bremark\b|to be destroyed/.test(s)) return "bg-amber-500/20 text-amber-300 border-amber-500/30"; // pass with remark; leftover branded items waiting to be destroyed
   if (/received|delivered|back in stock|complete|correct|uploaded|^updated|filed|handed over|confirmed|ready|shipped|has room|finished|\bpass\b|^issued\b/.test(s)) return "bg-emerald-500/20 text-emerald-300 border-emerald-500/30";
-  if (/at sea|on the road|on the truck|in transit|in progress|today|sewing|cutting|on track|busy|running|in the lab|^issuing\b/.test(s)) return "bg-sky-500/20 text-sky-300 border-sky-500/30";
-  if (/customs|pending|check|awaiting|tomorrow|prepare|not yet|waiting|full|preparation/.test(s)) return "bg-amber-500/20 text-amber-300 border-amber-500/30";
+  if (/at sea|on the road|on the truck|in transit|in progress|today|sewing|cutting|on track|busy|running|in the lab|^issuing\b|^green$|^yes$|in use/.test(s)) return "bg-sky-500/20 text-sky-300 border-sky-500/30";
+  if (/customs|pending|check|awaiting|tomorrow|prepare|not yet|waiting|full|preparation|^orange$|^amber$|under pitch|rent|borrow/.test(s)) return "bg-amber-500/20 text-amber-300 border-amber-500/30";
   return "bg-slate-500/20 text-slate-300 border-slate-500/30";
 };
-const CHIP = new Set(["status", "result", "declaration", "handover", "day"]);
+const CHIP = new Set(["status", "result", "declaration", "handover", "day", "critical", "live"]);
+// Columns arrive as {key,label} objects, or as [key, label] pairs on the extra tables of the CE views.
+const normCols = (cs) => (cs || []).map((c) => (Array.isArray(c) ? { key: c[0], label: c[1] } : c));
+// A worker grade (CE): A green, B blue, C amber, newcomer grey.
+const GRADE = { A: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30", B: "bg-sky-500/20 text-sky-300 border-sky-500/30", C: "bg-amber-500/20 text-amber-300 border-amber-500/30" };
+const gradeChip = (g) => h("span", { className: "inline-block rounded-full border px-2 py-0.5 text-xs font-bold " + (GRADE[g] || "bg-slate-500/20 text-slate-300 border-slate-500/30") }, g);
+// One extra table under the main one (CE: machines, CM by garment, Master Plan factors, newcomers, runs).
+const Extra = ({ t, cell }) => {
+  const cs = normCols(t.columns);
+  return h(
+    "div",
+    { className: "mt-4" },
+    h("div", { className: "text-xs uppercase tracking-wider text-slate-400 font-bold mb-1 px-1" }, t.title || t.key),
+    h(
+      "div",
+      { className: "rounded-2xl border border-slate-700 bg-slate-800/40 overflow-x-auto" },
+      h(
+        "table",
+        { className: "w-full border-collapse" },
+        h("thead", null, h("tr", { className: "bg-slate-800 text-left" }, cs.map((c) => h("th", { key: c.key, className: cell + " font-bold text-slate-300 uppercase tracking-wider text-xs whitespace-nowrap" }, c.label)))),
+        h("tbody", null, (t.rows || []).map((r, i) => h("tr", { key: i, className: "border-t border-slate-700/70" }, cs.map((c) => h("td", { key: c.key, className: cell + (typeof r[c.key] === "number" ? " text-right tabular-nums" : "") }, CHIP.has(c.key) && r[c.key] ? h("span", { className: "inline-block rounded-full border px-2 py-0.5 text-xs whitespace-nowrap " + tone(r[c.key]) }, r[c.key]) : fmt(r[c.key]))))))
+      )
+    )
+  );
+};
+// Small figures the CE views send beside the rows (cost per minute, skill totals, balance, SAM) — shown as one line.
+const extraFigures = (d) => {
+  if (!d) return [];
+  const out = [];
+  if (d.cpm && typeof d.cpm === "object") { const c = d.cpm; out.push({ label: "Factory cost " + (c.month || ""), value: "USD " + fmt(c.factory_cost) }, { label: "Available minutes", value: fmt(c.available_minutes) }, { label: "Earned minutes", value: fmt(c.earned_minutes) }, { label: "Efficiency", value: c.efficiency + "%" }, { label: "Cost per minute", value: "USD " + c.cpm }); }
+  if (d.totals && typeof d.totals === "object") Object.keys(d.totals).forEach((k) => out.push({ label: k, value: fmt(d.totals[k]) }));
+  if (d.total_smv && typeof d.total_smv === "object") Object.keys(d.total_smv).forEach((k) => out.push({ label: "SAM " + k, value: d.total_smv[k] + " min" }));
+  if (d.balance_efficiency !== undefined) out.push({ label: "Balance", value: d.balance_efficiency + "%" });
+  if (d.layout_name) out.push({ label: "Layout", value: d.layout_name });
+  if (d.order && d.garment && !d.rows?.[0]?.order) out.push({ label: "Running", value: d.order + " · " + d.garment });
+  return out;
+};
 const fmt = (v) => (typeof v === "number" ? v.toLocaleString("en-US") : v === null || v === undefined ? "" : String(v));
 const shiftMonth = (m, by) => {
   const d = new Date(Number(m.slice(0, 4)), Number(m.slice(5, 7)) - 1 + by, 1);
@@ -243,7 +279,7 @@ const Picture = ({ k }) => {
 // amber = not updated yet, red and pulsing = late).
 const LIGHT = { green: "bg-emerald-400", amber: "bg-amber-400", red: "bg-rose-500 ring-2 ring-rose-500/40 animate-pulse" };
 
-const MrpView = ({ onBack, module = "mrp", label = "MRP", view: fixedView }) => {
+const MrpView = ({ onBack, module = "mrp", label = "MRP", view: fixedView, renderBody }) => {
   const params = useParams();
   const view = fixedView || params.view; // a fixed route (e.g. fc/fabric-receiving) names its view; otherwise it comes from the route
   const [data, setData] = useState(null);
@@ -292,7 +328,7 @@ const MrpView = ({ onBack, module = "mrp", label = "MRP", view: fixedView }) => 
     const s = q.trim().toLowerCase();
     return s ? all.filter((r) => Object.values(r).join(" ").toLowerCase().includes(s)) : all;
   }, [data, q]);
-  const cols = (data && data.columns) || [];
+  const cols = normCols(data && data.columns);
   const picker = data && data.picker;
   const board = Boolean(data && data.board);
   const cell = board ? "px-4 py-3 text-base" : "px-3 py-2 text-sm";
@@ -320,7 +356,7 @@ const MrpView = ({ onBack, module = "mrp", label = "MRP", view: fixedView }) => 
           h("span", { className: "px-1.5 text-xs font-bold text-white tabular-nums" }, month),
           h("button", { onClick: () => setMonth(shiftMonth(month, 1)), className: "p-1 hover:bg-slate-700 rounded-lg", "aria-label": "Next month" }, h(ChevronRight, { size: 16 }))
         ),
-      !board && h(Figures, { items: data && data.summary, fmt }),
+      !board && h(Figures, { items: ((data && data.summary) || []).concat(extraFigures(data)), fmt }),
       h(
         "div",
         { className: "flex items-center gap-1.5 ml-auto" },
@@ -340,6 +376,8 @@ const MrpView = ({ onBack, module = "mrp", label = "MRP", view: fixedView }) => 
       )
     ),
     error && h("div", { className: "mb-2 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-200 px-3 py-2 text-sm" }, error),
+    data && data.reason && h("div", { className: "mb-2 rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-200 px-3 py-2 text-sm" }, data.reason),
+    data && data.cpm && data.cpm.rule && h("div", { className: "mb-2 text-xs text-slate-400" }, data.cpm.rule),
     // Wall board (TV): the big figures stay, read from across the room.
     board &&
       h(
@@ -385,9 +423,14 @@ const MrpView = ({ onBack, module = "mrp", label = "MRP", view: fixedView }) => 
             )
           )
         ),
-    h(
+    renderBody
+      ? h("div", { className: "flex-1 min-w-0" }, renderBody(data, rows, loading), (data && data.tables ? data.tables : []).map((t) => h(Extra, { key: t.key || t.title, t, cell })))
+      : h(
       "div",
-      { className: "flex-1 min-w-0 rounded-2xl border border-slate-700 bg-slate-800/40 overflow-x-auto" },
+      { className: "flex-1 min-w-0" },
+      h(
+      "div",
+      { className: "rounded-2xl border border-slate-700 bg-slate-800/40 overflow-x-auto" },
       h(
         "table",
         { className: "w-full border-collapse" },
@@ -403,7 +446,7 @@ const MrpView = ({ onBack, module = "mrp", label = "MRP", view: fixedView }) => 
                 h(
                   "td",
                   { key: c.key, className: cell + (typeof r[c.key] === "number" ? " text-right tabular-nums" : "") + (c.key === "order" ? " font-bold text-white whitespace-nowrap" : "") + (c.key === "group" ? (i === 0 || rows[i - 1].group !== r.group ? " font-bold text-white whitespace-nowrap" : " text-slate-500 whitespace-nowrap") : "") },
-                  Array.isArray(r[c.key]) ? h(Track, { steps: r[c.key], big: board }) : c.key === "picture" ? h(Picture, { k: r[c.key] }) : CHIP.has(c.key) && r[c.key] ? h("span", { className: "inline-block rounded-full border px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap " + tone(r[c.key]) }, fmt(r[c.key])) : fmt(r[c.key])
+                  Array.isArray(r[c.key]) ? h(Track, { steps: r[c.key], big: board }) : c.key === "picture" ? h(Picture, { k: r[c.key] }) : c.key === "grade" && r[c.key] ? gradeChip(r[c.key]) : CHIP.has(c.key) && r[c.key] ? h("span", { className: "inline-block rounded-full border px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap " + tone(r[c.key]) }, fmt(r[c.key])) : fmt(r[c.key])
                 )
               )
             )
@@ -411,6 +454,8 @@ const MrpView = ({ onBack, module = "mrp", label = "MRP", view: fixedView }) => 
           !loading && rows.length === 0 && h("tr", null, h("td", { colSpan: Math.max(cols.length, 1), className: "px-4 py-10 text-center text-slate-500" }, "Nothing to show."))
         )
       )
+      ),
+      (data && data.tables ? data.tables : []).map((t) => h(Extra, { key: t.key || t.title, t, cell }))
     )
     ),
     h(
