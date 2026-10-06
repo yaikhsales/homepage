@@ -29,6 +29,7 @@ const ALLOWED = new Set([
   "v1/chat/claude",
   "v1/chat/completions",
   "sim/view", // read-only screens over the simulated factory (MRP sub-modules)
+  "pa/skills", // read-only: each PA's alerts, reminders and forecasts ("all" for Big Brain)
 ]);
 
 export async function POST(req: Request, { params }: { params: { path: string[] } }) {
