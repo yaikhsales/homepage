@@ -16,7 +16,7 @@ const num = (v, d = 1) => (typeof v === "number" ? v.toLocaleString("en-US", { m
 const pct = (v) => (typeof v === "number" ? v : Number(String(v || "").replace("%", "")) || 0);
 const H = ({ children, right }) => <div className="flex items-baseline justify-between gap-2 mb-1.5"><div className="text-[11px] uppercase tracking-wider text-slate-400 font-bold">{children}</div>{right && <div className="text-[11px] text-slate-500">{right}</div>}</div>;
 const Panel = ({ title, right, children, className }) => <section className={`rounded-xl border border-slate-700 bg-slate-800/40 p-3 min-w-0 ${className || ""}`}><H right={right}>{title}</H>{children}</section>;
-const Tile = ({ label, value, tone, sub }) => <div className="rounded-lg border border-slate-700 bg-slate-900/60 px-2.5 py-1.5"><div className="text-[10px] uppercase tracking-wider text-slate-500">{label}</div><div className={`font-black tabular-nums text-base leading-tight ${tone || "text-white"}`}>{value}</div>{sub && <div className="text-[10px] text-slate-500">{sub}</div>}</div>;
+const Tile = ({ label, value, tone, sub }) => <span className="inline-flex items-baseline gap-1.5 rounded-full border border-slate-700 bg-slate-900/60 px-2.5 py-1 text-xs whitespace-nowrap"><span className="text-slate-400">{label}</span><b className={`tabular-nums text-sm ${tone || "text-white"}`}>{value}</b>{sub && <span className="text-[11px] text-slate-500">{sub}</span>}</span>;
 const GRADE = { A: "bg-emerald-500 text-slate-900", B: "bg-sky-400 text-slate-900", C: "bg-amber-400 text-slate-900", newcomer: "bg-slate-500 text-white", N: "bg-slate-500 text-white" };
 const Grade = ({ g }) => <span className={`inline-flex w-6 h-6 rounded-full items-center justify-center text-[11px] font-black ${GRADE[g] || "bg-slate-600 text-white"}`} title={"grade " + g}>{g === "newcomer" ? "N" : g}</span>;
 const Th = ({ cols }) => <thead className="text-slate-500"><tr>{cols.map((c) => <th key={c} className="text-left font-normal px-2 py-1 whitespace-nowrap">{c}</th>)}</tr></thead>;
@@ -125,7 +125,7 @@ export const TeamBody = ({ detail: d }) => {
       <Panel title="Workers — efficiency, DHU, achievement" right="sorted by efficiency">
         <div className="overflow-x-auto max-h-96 overflow-y-auto">
           <table className="w-full text-xs">
-            <Th cols={["#", "Worker", "Grade", "Operation", "Efficiency", "", "DHU", "Achievement", "Done / target", "Rejects"]} />
+            <Th cols={["#", "Worker", "Grade", "Operation", "Efficiency", "vs target", "DHU", "Achievement", "Done / target", "Rejects"]} />
             <tbody>
               {st.map((s) => <tr key={s.no} className="border-t border-slate-700/60 hover:bg-slate-800/40"><td className="px-2 py-1 tabular-nums text-slate-500">{s.no}</td><td className="px-2 py-1 font-bold text-white whitespace-nowrap">{s.worker}</td><td className="px-2 py-1"><Grade g={s.worker_grade} /></td><td className="px-2 py-1 text-slate-300">{s.operation}</td><td className="px-2 py-1 tabular-nums text-right font-bold text-white">{num(s.worker_efficiency_pct, 1)}%</td><td className="px-2 py-1 w-28"><Bar v={s.worker_efficiency_pct} tone={pct(s.worker_efficiency_pct) >= 85 ? "bg-emerald-400" : pct(s.worker_efficiency_pct) >= 70 ? "bg-amber-400" : "bg-rose-500"} /></td><td className={`px-2 py-1 tabular-nums text-right ${pct(s.dhu) > 3 ? "text-rose-300 font-bold" : "text-slate-300"}`}>{num(s.dhu, 1)}%</td><td className="px-2 py-1 tabular-nums text-right text-slate-300">{num(s.achievement_pct, 0)}%</td><td className="px-2 py-1 tabular-nums text-right text-slate-400">{num(s.done, 0)} / {num(s.target_now, 0)}</td><td className="px-2 py-1 tabular-nums text-right text-slate-400">{num(s.rejects, 0)}</td></tr>)}
             </tbody>
@@ -190,7 +190,7 @@ export const LearningBody = ({ detail: d }) => {
       <Panel title="Stations — today against plan, and each one's curve">
         <div className="overflow-x-auto max-h-96 overflow-y-auto">
           <table className="w-full text-xs">
-            <Th cols={["#", "Worker", "Grade", "Operation", "Days", "Today", "Plan", "", "Curve (eff / plan by day)"]} />
+            <Th cols={["#", "Worker", "Grade", "Operation", "Days", "Today", "Plan", "vs plan", "Curve (eff / plan by day)"]} />
             <tbody>
               {st.map((s) => <tr key={s.no} className="border-t border-slate-700/60 hover:bg-slate-800/40"><td className="px-2 py-1 tabular-nums text-slate-500">{s.no}</td><td className="px-2 py-1 font-bold text-white whitespace-nowrap">{s.worker}</td><td className="px-2 py-1"><Grade g={s.worker_grade} /></td><td className="px-2 py-1 text-slate-300">{s.operation}</td><td className="px-2 py-1 tabular-nums text-right text-slate-300">{num(s.days_on_style, 0)}</td><td className={`px-2 py-1 tabular-nums text-right font-bold ${pct(s.efficiency_today) >= pct(s.plan_today) ? "text-emerald-300" : "text-amber-300"}`}>{num(s.efficiency_today, 1)}%</td><td className="px-2 py-1 tabular-nums text-right text-slate-400">{num(s.plan_today, 1)}%</td><td className="px-2 py-1 w-24"><Bar v={s.efficiency_today} tone={pct(s.efficiency_today) >= pct(s.plan_today) ? "bg-emerald-400" : "bg-amber-400"} /></td><td className="px-2 py-1 text-slate-400 tabular-nums">{(s.curve || []).map((c) => `d${c.day} ${num(c.eff, 0)}/${num(c.plan_eff, 0)}`).join(" · ") || "—"}</td></tr>)}
             </tbody>

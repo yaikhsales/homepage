@@ -34,7 +34,7 @@ const Hub = ({ onBack }) => {
   return h(
     "div",
     { ref: topRef, style: { paddingTop: topPad }, className: "yai-pa-aware min-h-screen bg-slate-900 text-slate-200 px-4 md:px-6 pb-8 font-sans" },
-    h("style", null, "body.yai-pa-open .yai-pa-aware { padding-right: 436px; }"),
+    h("style", null, "body.yai-pa-open .yai-pa-aware { padding-right: 484px; }"),
     h(NavCover),
     h(
       "div",

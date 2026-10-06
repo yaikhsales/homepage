@@ -60,7 +60,7 @@ const OperationBreakdown = ({ onBack }) => {
   return h(
     "div",
     { ref: topRef, style: { paddingTop: topPad }, className: "yai-pa-aware min-h-screen bg-slate-900 text-slate-200 px-3 md:px-5 pb-8 font-sans" },
-    h("style", null, "body.yai-pa-open .yai-pa-aware { padding-right: 436px; } " + PRINT),
+    h("style", null, "body.yai-pa-open .yai-pa-aware { padding-right: 484px; } " + PRINT),
     h(NavCover),
     h(
       "div",
@@ -71,7 +71,7 @@ const OperationBreakdown = ({ onBack }) => {
       h("div", { className: "ml-auto relative" }, h(Search, { size: 13, className: "absolute left-2 top-1/2 -translate-y-1/2 text-slate-500" }), h("input", { value: q, onChange: (e) => setQ(e.target.value), placeholder: "Search style, order, IE…", className: "rounded-md border border-slate-700 bg-slate-800 text-xs text-slate-200 pl-7 pr-2 py-1 w-48" })),
       h("button", { onClick: load, className: "p-1.5 rounded-md border border-slate-700 bg-slate-800 text-slate-300 hover:text-white", "aria-label": "Refresh", title: "Refresh" }, h(RefreshCw, { size: 13, className: loading ? "animate-spin" : "" }))
     ),
-    error && h("div", { className: "mb-3 rounded-xl border border-amber-500/40 bg-amber-500/10 text-amber-200 text-sm px-3 py-2 ob-noprint" }, error),
+    error && h("div", { className: "mb-3 rounded-xl border border-amber-500/40 bg-amber-500/10 text-amber-200 text-sm px-3 py-2 ob-noprint" }, error, " ", h("button", { onClick: load, className: "rounded border border-amber-400/50 px-2 py-0.5 text-xs font-bold hover:bg-amber-500/10" }, "Retry")),
     h(
       "div",
       { className: "grid gap-3 " + (id ? "xl:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]" : "") },
@@ -111,7 +111,7 @@ const OperationBreakdown = ({ onBack }) => {
             // the sketch of the garment (both pieces of a set), printed with the sheet
             h("div", { className: "flex-shrink-0" }, h(SketchSet, { text: a ? a.garment_type || a.style : d.garment && d.garment.garment, size: garmentsOf(a ? a.garment_type || a.style : "").length > 1 ? 120 : 150 }))
           ),
-          h("div", { className: "grid grid-cols-4 gap-2 text-xs mb-2" }, [["Total SAM", num(t.total_sam) + " min"], ["Operations", num(t.operations, 0)], ["Stations", num(t.stations, 0)], ["Machines", (t.machines || []).reduce((s, m) => s + (m.count || 0), 0) || "—"]].map(([k, v]) => h("div", { key: k, className: "rounded border border-slate-300 p-1.5" }, h("div", { className: "text-[10px] uppercase tracking-wider text-slate-500" }, k), h("div", { className: "font-black tabular-nums" }, v)))),
+          h("div", { className: "flex flex-wrap gap-2 text-xs mb-2" }, [["Total SAM", num(t.total_sam) + " min"], ["Operations", num(t.operations, 0)], ["Stations", num(t.stations, 0)], ["Machines", (t.machines || []).reduce((s, m) => s + (m.count || 0), 0) || "—"]].map(([k, v]) => h("span", { key: k, className: "inline-flex items-baseline gap-1.5 rounded-full border border-slate-300 px-2.5 py-1 whitespace-nowrap" }, h("span", { className: "text-slate-500" }, k), h("b", { className: "tabular-nums text-sm" }, v)))),
           h(
             "table",
             { className: "w-full text-xs" },

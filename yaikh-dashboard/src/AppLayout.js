@@ -928,8 +928,7 @@ const AppLayout = () => {
         !location.pathname.includes("yhr") &&
         !location.pathname.includes("salary-bill") &&
         !location.pathname.includes("shipping/request") &&
-        !location.pathname.includes("money-claim") &&
-        !/\/dashboard\/ce(\/|$)/.test(location.pathname) && <ThemeBackground />}
+        !location.pathname.includes("money-claim") && <ThemeBackground />}
 
       <KhmerNewYearSplash />
 
@@ -961,8 +960,7 @@ const AppLayout = () => {
         !location.pathname.includes("yhr") &&
         !location.pathname.includes("salary-bill") &&
         !location.pathname.includes("shipping/request") &&
-        !location.pathname.includes("money-claim") &&
-        !/\/dashboard\/ce(\/|$)/.test(location.pathname) && <Header />}
+        !location.pathname.includes("money-claim") && <Header />}
 
       {/* Yai Data panel — horizontal row: Yai Agents · Agent Collective · Big Brain
           (shown on every page, not just home). Hidden while a chat modal

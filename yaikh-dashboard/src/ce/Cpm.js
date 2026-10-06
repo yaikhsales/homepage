@@ -11,7 +11,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, RefreshCw } from "lucide-react";
 import { NavCover, useScreenTop } from "../components/ScreenTop";
-import { post, num, usd, cpm4, CostingNav, Panel, Tile, Chip, TONE, Th, Explain } from "./costing";
+import { post, num, usd, cpm4, CostingNav, Panel, Tile, Chip, TONE, Th, Explain, InfoI } from "./costing";
 
 const PERIODS = [["now", "Now"], ["week", "This week"], ["month", "Month to date"]];
 const KIND = { support: "border-slate-600", cutting: "border-sky-500/50", line: "border-emerald-500/40", finishing: "border-teal-500/50", packing: "border-violet-500/50", overhead: "border-amber-500/50" };
@@ -82,7 +82,7 @@ const Cpm = ({ onBack }) => {
 
   return (
     <div ref={topRef} style={{ paddingTop: topPad }} className="yai-pa-aware min-h-screen bg-slate-900 text-slate-200 px-3 md:px-5 pb-8 font-sans">
-      <style>{`body.yai-pa-open .yai-pa-aware { padding-right: 436px; } .cpm-strip::-webkit-scrollbar { height: 6px; } .cpm-strip::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }`}</style>
+      <style>{`body.yai-pa-open .yai-pa-aware { padding-right: 484px; } .cpm-strip::-webkit-scrollbar { height: 6px; } .cpm-strip::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }`}</style>
       <NavCover />
       <div className="flex flex-wrap items-center gap-2 mb-2">
         <button onClick={back} className="p-1 -ml-1 hover:bg-slate-700 rounded-full transition-colors text-slate-400 hover:text-white" aria-label="Back"><ArrowLeft size={18} /></button>
@@ -92,7 +92,7 @@ const Cpm = ({ onBack }) => {
         <div className="ml-auto inline-flex rounded-lg border border-slate-700 overflow-hidden text-xs">{PERIODS.map(([k, l]) => <button key={k} onClick={() => setPeriod(k)} className={`px-3 py-1 font-bold ${period === k ? "bg-white text-slate-900" : "bg-slate-800 text-slate-300 hover:bg-slate-700"}`}>{l}</button>)}</div>
         <button onClick={load} className="p-1.5 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700" aria-label="Refresh"><RefreshCw size={14} className={loading ? "animate-spin" : ""} /></button>
       </div>
-      {error && <div className="mb-2 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-200 px-3 py-2 text-sm">{error}</div>}
+      {error && <div className="mb-2 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-200 px-3 py-2 text-sm flex items-center gap-2">{error}<button onClick={load} className="rounded border border-amber-400/50 px-2 py-0.5 text-xs font-bold hover:bg-amber-500/10">Retry</button></div>}
 
       {/* TOP — the strip, numbers only */}
       <div className="cpm-strip flex gap-1.5 overflow-x-auto pb-1.5 mb-1">
@@ -112,7 +112,7 @@ const Cpm = ({ onBack }) => {
           </div>
         ); })}
       </div>
-      <div className="flex flex-wrap gap-x-3 text-[10px] text-slate-500 mb-3"><span>each section's cost per earned minute for the period, against its plan share · red = over plan ({overCount} over)</span><span>warehouse → fabric wh → accessory wh → cutting → lines → finishing → packing · overhead apart</span></div>
+      <div className="mb-3 flex items-center gap-2 text-xs text-slate-500"><InfoI text={`Each section's cost per earned minute for the period, against its plan share. Red = over plan (${overCount} over). Order: warehouse → fabric wh → accessory wh → cutting → lines → finishing → packing; overhead apart.`} /><span>{overCount} section{overCount === 1 ? "" : "s"} over plan</span></div>
 
       {/* the headline */}
       <div className="flex flex-wrap gap-2 mb-3">
@@ -132,12 +132,12 @@ const Cpm = ({ onBack }) => {
       <div className="grid gap-3 xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] mt-3">
         <Panel title="By line" right="cost per earned minute of each sewing line">
           <div className="overflow-auto max-h-96">
-            <table className="w-full text-xs"><Th cols={["Line", "Factory · unit", "Now", "Week", "Month", "Plan", "Cost", "Earned minutes", ""]} /><tbody>{(d.by_line || []).map((l) => { const v = lineVal(l); const bad = typeof v === "number" ? v > l.plan : l.over; return <tr key={l.line} className={`border-t border-slate-700/60 ${bad ? "bg-rose-500/10" : "hover:bg-slate-800/40"}`}><td className="px-2 py-1 font-bold text-white">{l.line}</td><td className="px-2 py-1 text-slate-400">{l.factory} · {l.unit}</td><td className={`px-2 py-1 tabular-nums text-right ${period === "now" ? "font-bold text-white" : "text-slate-300"}`}>{cpm4(l.cpm_now)}</td><td className={`px-2 py-1 tabular-nums text-right ${period === "week" ? "font-bold text-white" : "text-slate-300"}`}>{cpm4(l.cpm_week)}</td><td className={`px-2 py-1 tabular-nums text-right ${period === "month" ? "font-bold text-white" : "text-slate-300"}`}>{cpm4(l.cpm_month)}</td><td className="px-2 py-1 tabular-nums text-right text-slate-400">{cpm4(l.plan)}</td><td className="px-2 py-1 tabular-nums text-right text-slate-300">{usd(l.cost)}</td><td className="px-2 py-1 tabular-nums text-right text-slate-300">{num(l.earned_minutes)}</td><td className="px-2 py-1">{bad ? <Chip cls={TONE.red}>over plan</Chip> : <Chip cls={TONE.green}>ok</Chip>}</td></tr>; })}</tbody></table>
+            <table className="w-full text-xs"><Th cols={["Line", "Factory · unit", "Now", "Week", "Month", "Plan", "Cost", "Earned minutes", "vs plan"]} /><tbody>{(d.by_line || []).map((l) => { const v = lineVal(l); const bad = typeof v === "number" ? v > l.plan : l.over; return <tr key={l.line} className={`border-t border-slate-700/60 ${bad ? "bg-rose-500/10" : "hover:bg-slate-800/40"}`}><td className="px-2 py-1 font-bold text-white">{l.line}</td><td className="px-2 py-1 text-slate-400">{l.factory} · {l.unit}</td><td className={`px-2 py-1 tabular-nums text-right ${period === "now" ? "font-bold text-white" : "text-slate-300"}`}>{cpm4(l.cpm_now)}</td><td className={`px-2 py-1 tabular-nums text-right ${period === "week" ? "font-bold text-white" : "text-slate-300"}`}>{cpm4(l.cpm_week)}</td><td className={`px-2 py-1 tabular-nums text-right ${period === "month" ? "font-bold text-white" : "text-slate-300"}`}>{cpm4(l.cpm_month)}</td><td className="px-2 py-1 tabular-nums text-right text-slate-400">{cpm4(l.plan)}</td><td className="px-2 py-1 tabular-nums text-right text-slate-300">{usd(l.cost)}</td><td className="px-2 py-1 tabular-nums text-right text-slate-300">{num(l.earned_minutes)}</td><td className="px-2 py-1">{bad ? <Chip cls={TONE.red}>over plan</Chip> : <Chip cls={TONE.green}>ok</Chip>}</td></tr>; })}</tbody></table>
           </div>
         </Panel>
         <Panel title="By section" right="each section's share of the factory CPM">
           <div className="overflow-auto max-h-96">
-            <table className="w-full text-xs"><Th cols={["Section", "Now", "Week", "Month", "Plan", "Cost", "Minutes", ""]} /><tbody>{(d.by_section || []).map((s) => { const v = period === "now" ? s.cpm_now : period === "week" ? s.cpm_week : s.cpm_month; const bad = typeof v === "number" && typeof s.plan === "number" ? v > s.plan : s.over; return <tr key={s.section} className={`border-t border-slate-700/60 ${bad ? "bg-rose-500/10" : ""} ${/^Factory$/.test(s.section) ? "font-bold bg-slate-800/60" : ""}`}><td className="px-2 py-1 text-white">{s.section}</td><td className={`px-2 py-1 tabular-nums text-right ${period === "now" ? "font-bold text-white" : "text-slate-300"}`}>{cpm4(s.cpm_now)}</td><td className={`px-2 py-1 tabular-nums text-right ${period === "week" ? "font-bold text-white" : "text-slate-300"}`}>{cpm4(s.cpm_week)}</td><td className={`px-2 py-1 tabular-nums text-right ${period === "month" ? "font-bold text-white" : "text-slate-300"}`}>{cpm4(s.cpm_month)}</td><td className="px-2 py-1 tabular-nums text-right text-slate-400">{cpm4(s.plan)}</td><td className="px-2 py-1 tabular-nums text-right text-slate-300">{usd(s.cost)}</td><td className="px-2 py-1 tabular-nums text-right text-slate-300">{num(s.earned_minutes)}</td><td className="px-2 py-1">{bad ? <Chip cls={TONE.red}>over</Chip> : null}</td></tr>; })}</tbody></table>
+            <table className="w-full text-xs"><Th cols={["Section", "Now", "Week", "Month", "Plan", "Cost", "Minutes", "vs plan"]} /><tbody>{(d.by_section || []).map((s) => { const v = period === "now" ? s.cpm_now : period === "week" ? s.cpm_week : s.cpm_month; const bad = typeof v === "number" && typeof s.plan === "number" ? v > s.plan : s.over; return <tr key={s.section} className={`border-t border-slate-700/60 ${bad ? "bg-rose-500/10" : ""} ${/^Factory$/.test(s.section) ? "font-bold bg-slate-800/60" : ""}`}><td className="px-2 py-1 text-white">{s.section}</td><td className={`px-2 py-1 tabular-nums text-right ${period === "now" ? "font-bold text-white" : "text-slate-300"}`}>{cpm4(s.cpm_now)}</td><td className={`px-2 py-1 tabular-nums text-right ${period === "week" ? "font-bold text-white" : "text-slate-300"}`}>{cpm4(s.cpm_week)}</td><td className={`px-2 py-1 tabular-nums text-right ${period === "month" ? "font-bold text-white" : "text-slate-300"}`}>{cpm4(s.cpm_month)}</td><td className="px-2 py-1 tabular-nums text-right text-slate-400">{cpm4(s.plan)}</td><td className="px-2 py-1 tabular-nums text-right text-slate-300">{usd(s.cost)}</td><td className="px-2 py-1 tabular-nums text-right text-slate-300">{num(s.earned_minutes)}</td><td className="px-2 py-1">{bad ? <Chip cls={TONE.red}>over</Chip> : null}</td></tr>; })}</tbody></table>
           </div>
         </Panel>
       </div>

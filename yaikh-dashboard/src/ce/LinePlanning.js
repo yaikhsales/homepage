@@ -168,7 +168,8 @@ const LinePlanning = ({ onBack }) => {
   const feeds = (sl) => { let best = null; inline.forEach((x) => { if (placed[x.slot] == null) return; const dd = Math.abs(x.y_m - sl.y_m); if (!best || dd < best.d) best = { d: dd, x }; }); return best && best.x; };
 
   return (
-    <div ref={topRef} className="min-h-screen bg-slate-900 text-white" style={{ paddingTop: topPad }}>
+    <div ref={topRef} className="yai-pa-aware min-h-screen bg-slate-900 text-white" style={{ paddingTop: topPad }}>
+      <style>{`body.yai-pa-open .yai-pa-aware { padding-right: 484px; }`}</style>
       <NavCover />
       <div className="mx-auto max-w-[1800px] px-4 pb-10">
         <div className="mb-3 flex flex-wrap items-center gap-3">
@@ -204,12 +205,6 @@ const LinePlanning = ({ onBack }) => {
           <button onClick={load} className="flex items-center gap-1.5 rounded-lg bg-sky-600 px-3 py-2 text-sm font-semibold hover:bg-sky-500">
             <Wand2 className="h-4 w-4" /> Divide the work
           </button>
-          {assignment.pitch_min != null && (
-            <span className="text-xs text-slate-400">
-              {num(style.sam, 2)} min ÷ {assignment.workers} = <b className="text-white">{num(assignment.pitch_min, 3)} min</b> each
-              {assignment.target_ph ? ` · ${num(assignment.target_ph)} pcs/h` : ""}
-            </span>
-          )}
           <div className="ml-auto flex items-center gap-2">
             <button onClick={() => save(false)} className="flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-2 text-sm font-semibold ring-1 ring-white/15 hover:bg-white/15">
               <Save className="h-4 w-4" /> Save draft
@@ -239,10 +234,9 @@ const LinePlanning = ({ onBack }) => {
                           className={`cursor-grab rounded-lg px-2.5 py-1.5 text-xs ring-1 ${on ? "bg-slate-800/40 text-slate-400 ring-white/5" : "bg-slate-800 ring-sky-500/30"}`}>
                         <div className="flex items-baseline justify-between gap-2">
                           <span className="font-bold text-sky-300">WS {s.ws}</span>
-                          <span className="tabular-nums text-slate-400">{num(s.sam_min ?? s.ws_sam_min, 3)} min</span>
                         </div>
                         <div className="leading-tight text-slate-100">
-                          {(s.ops || []).map((o) => `${o.no}. ${o.operation}${o.share_pct != null && o.share_pct < 99.5 ? ` (${num(o.share_pct, 0)}%)` : ""}`).join(" + ")}
+                          {(s.ops || []).map((o) => `${o.no}. ${o.operation}`).join(" + ")}
                         </div>
                         <div className="text-[11px] text-slate-400">
                           {s.machine_name || s.machine}
@@ -394,7 +388,7 @@ const LinePlanning = ({ onBack }) => {
                       <div className="flex flex-col gap-0.5">
                         <div className="flex items-baseline justify-between">
                           <span className="font-bold text-sky-300">WS {st.ws}</span>
-                          <span className="tabular-nums text-slate-400">{num(st.sam_min ?? st.ws_sam_min, 2)}</span>
+                          <span className="tabular-nums text-slate-400">{""}</span>
                         </div>
                         <div className="truncate font-semibold leading-tight text-slate-100" title={(st.ops || []).map((o) => o.operation).join(" + ")}>
                           {(st.ops || []).map((o) => o.operation).join(" + ")}
@@ -438,7 +432,6 @@ const LinePlanning = ({ onBack }) => {
             ["Sewing operators (direct)", headcount.direct ?? "—"],
             ["Indirect", headcount.indirect_total != null
               ? `${headcount.indirect_total} — roving QC, 2 checkers, line leader` : "—"],
-            ["Line target", assignment.line_target_ph != null ? `${num(assignment.line_target_ph)} pcs/h` : "—"],
           ].map(([k, v]) => (
             <span key={k} className="whitespace-nowrap text-slate-400">{k} <b className="ml-1 text-white tabular-nums">{v}</b></span>
           ))}

@@ -79,7 +79,7 @@ const GarmentAnalysis = ({ onBack }) => {
   return h(
     "div",
     { ref: topRef, style: { paddingTop: topPad }, className: "yai-pa-aware min-h-screen bg-slate-900 text-slate-200 px-3 md:px-5 pb-8 font-sans" },
-    h("style", null, "body.yai-pa-open .yai-pa-aware { padding-right: 436px; }"),
+    h("style", null, "body.yai-pa-open .yai-pa-aware { padding-right: 484px; }"),
     h(NavCover),
     h(
       "div",
@@ -91,7 +91,7 @@ const GarmentAnalysis = ({ onBack }) => {
       h("div", { className: "ml-auto flex flex-wrap gap-x-3 text-xs text-slate-400" }, h("span", null, "Total SAM ", h("b", { className: "text-white tabular-nums" }, num(totalSam))), h("span", null, "Operations ", h("b", { className: "text-white tabular-nums" }, rows.length)), h("span", null, "Stations ", h("b", { className: "text-white tabular-nums" }, num(t.stations, 0)))),
       h("button", { onClick: load, className: "p-1.5 rounded-md border border-slate-700 bg-slate-800 text-slate-300 hover:text-white", "aria-label": "Refresh", title: "Refresh" }, h(RefreshCw, { size: 13, className: loading ? "animate-spin" : "" }))
     ),
-    error && h("div", { className: "mb-3 rounded-xl border border-amber-500/40 bg-amber-500/10 text-amber-200 text-sm px-3 py-2" }, error),
+    error && h("div", { className: "mb-3 rounded-xl border border-amber-500/40 bg-amber-500/10 text-amber-200 text-sm px-3 py-2" }, error, " ", h("button", { onClick: load, className: "rounded border border-amber-400/50 px-2 py-0.5 text-xs font-bold hover:bg-amber-500/10" }, "Retry")),
     h(
       "div",
       { className: "grid gap-3 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]" },
@@ -109,7 +109,7 @@ const GarmentAnalysis = ({ onBack }) => {
             h(
               "table",
               { className: "w-full text-xs" },
-              h("thead", { className: "bg-slate-900/80" }, h("tr", null, ["#", "Operation", "SAM", "Machine", "Seam mm", "Seam", ""].map((c, i) => h("th", { key: i, className: "text-left font-normal text-slate-500 px-2 py-1 whitespace-nowrap " + (i === 2 || i === 4 ? "text-right" : "") }, c)))),
+              h("thead", { className: "bg-slate-900/80" }, h("tr", null, ["#", "Operation", "SAM", "Machine", "Seam mm", "Seam", "Remove"].map((c, i) => h("th", { key: i, className: "text-left font-normal text-slate-500 px-2 py-1 whitespace-nowrap " + (i === 2 || i === 4 ? "text-right" : "") }, c)))),
               h(
                 "tbody",
                 null,
@@ -156,7 +156,7 @@ const GarmentAnalysis = ({ onBack }) => {
           "div",
           { className: "rounded-2xl border border-slate-700 bg-slate-950/70 p-3" },
           h("div", { className: "text-[11px] uppercase tracking-wider text-slate-400 font-bold mb-2" }, "Totals"),
-          h("div", { className: "grid grid-cols-3 gap-2 mb-2" }, [["Total SAM", num(totalSam), "min"], ["Single needle", num(t.single_needle_min), "min"], ["Overlock", num(t.overlock_min), "min"], ["Flatlock", num(t.flatlock_min), "min"], ["Bartack", num(t.bartack_min), "min"], ["Manual", num(t.manual_min), "min"]].map(([k, v, u]) => h("div", { key: k, className: "rounded-lg border border-slate-700 bg-slate-900 p-2" }, h("div", { className: "text-[10px] uppercase tracking-wider text-slate-500" }, k), h("div", { className: "font-black text-white tabular-nums" }, v, h("span", { className: "text-xs text-slate-400 font-normal" }, " " + u))))),
+          h("div", { className: "flex flex-wrap gap-2 mb-2" }, [["Total SAM", num(totalSam), "min"], ["Single needle", num(t.single_needle_min), "min"], ["Overlock", num(t.overlock_min), "min"], ["Flatlock", num(t.flatlock_min), "min"], ["Bartack", num(t.bartack_min), "min"], ["Manual", num(t.manual_min), "min"]].map(([k, v, u]) => h("span", { key: k, className: "inline-flex items-baseline gap-1.5 rounded-full border border-slate-700 bg-slate-900 px-2.5 py-1 text-xs whitespace-nowrap" }, h("span", { className: "text-slate-400" }, k), h("b", { className: "text-white tabular-nums text-sm" }, v, h("span", { className: "text-[11px] text-slate-400 font-normal" }, " " + u))))),
           (t.machines || []).length > 0 && h("table", { className: "w-full text-xs" }, h("thead", null, h("tr", { className: "text-slate-500" }, h("th", { className: "text-left font-normal py-0.5" }, "Machines allocated"), h("th", { className: "text-right font-normal py-0.5" }, "count"), h("th", { className: "text-right font-normal py-0.5" }, "minutes"))), h("tbody", null, t.machines.map((m) => h("tr", { key: m.type, className: "border-t border-slate-800/70" }, h("td", { className: "py-0.5 text-slate-200" }, m.type), h("td", { className: "py-0.5 text-right tabular-nums text-white font-bold" }, m.count), h("td", { className: "py-0.5 text-right tabular-nums text-slate-300" }, num(m.minutes)))))),
           added.length > 0 && h("div", { className: "mt-2 text-[11px] text-sky-300" }, added.length + " operation" + (added.length > 1 ? "s" : "") + " added here (+" + num(addedSam) + " min) — not saved")
         )

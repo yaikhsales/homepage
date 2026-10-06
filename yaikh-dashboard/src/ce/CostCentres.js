@@ -7,7 +7,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, RefreshCw, AlertTriangle } from "lucide-react";
 import { NavCover, useScreenTop } from "../components/ScreenTop";
-import { post, num, usd, cpm4, CostingNav, Panel, Tile, Chip, TONE, Th, Explain } from "./costing";
+import { post, num, usd, cpm4, CostingNav, Panel, Tile, Chip, TONE, Th, Explain, InfoI } from "./costing";
 
 const KIND = { support: "border-slate-600", cutting: "border-sky-500/50", line: "border-emerald-500/40", finishing: "border-teal-500/50", packing: "border-violet-500/50", overhead: "border-amber-500/50" };
 const short = (t) => String(t || "").replace("Warehouse (general)", "Warehouse").replace("Accessory warehouse", "Accessory wh").replace("Fabric warehouse", "Fabric wh").replace("Line ", "");
@@ -57,7 +57,7 @@ const CostCentres = ({ onBack }) => {
 
   return (
     <div ref={topRef} style={{ paddingTop: topPad }} className="yai-pa-aware min-h-screen bg-slate-900 text-slate-200 px-3 md:px-5 pb-8 font-sans">
-      <style>{`body.yai-pa-open .yai-pa-aware { padding-right: 436px; } .cc-strip::-webkit-scrollbar { height: 6px; } .cc-strip::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }`}</style>
+      <style>{`body.yai-pa-open .yai-pa-aware { padding-right: 484px; } .cc-strip::-webkit-scrollbar { height: 6px; } .cc-strip::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }`}</style>
       <NavCover />
       <div className="flex flex-wrap items-center gap-2 mb-2">
         <button onClick={back} className="p-1 -ml-1 hover:bg-slate-700 rounded-full transition-colors text-slate-400 hover:text-white" aria-label="Back"><ArrowLeft size={18} /></button>
@@ -66,7 +66,7 @@ const CostCentres = ({ onBack }) => {
         <span className="text-xs text-slate-400">{h.month ? `${h.month} · as of ${h.as_of} · OT 150% · Sunday / holiday 200%` : ""}</span>
         <button onClick={load} className="ml-auto p-1.5 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700" aria-label="Refresh"><RefreshCw size={14} className={loading ? "animate-spin" : ""} /></button>
       </div>
-      {error && <div className="mb-2 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-200 px-3 py-2 text-sm">{error}</div>}
+      {error && <div className="mb-2 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-200 px-3 py-2 text-sm flex items-center gap-2">{error}<button onClick={load} className="rounded border border-amber-400/50 px-2 py-0.5 text-xs font-bold hover:bg-amber-500/10">Retry</button></div>}
 
       {/* the strip: a section's manpower at a glance; red = OT over 2 h a day per worker */}
       <div className="cc-strip flex gap-1.5 overflow-x-auto pb-1.5 mb-1">
@@ -79,7 +79,7 @@ const CostCentres = ({ onBack }) => {
           </button>
         ))}
       </div>
-      <div className="flex flex-wrap gap-x-3 text-[10px] text-slate-500 mb-3"><span>direct + indirect headcount · labour cost this month · OT hours a day per worker — red = over 2 h ({flagged.length} sections) · click a section</span></div>
+      <div className="mb-3 flex items-center gap-2 text-xs text-slate-500"><InfoI text={`Direct + indirect headcount, labour cost this month and OT hours a day per worker; red = over 2 h (${flagged.length} sections). Click a section for its detail.`} /><span>{flagged.length} section{flagged.length === 1 ? "" : "s"} over 2 h OT · click a section</span></div>
 
       <div className="flex flex-wrap gap-2 mb-3">
         <Tile label="Direct" value={`${num(h.direct_hc)} people`} sub={usd(h.direct_cost)} />

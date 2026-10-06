@@ -21,7 +21,7 @@ const mmss = (s) => (s === undefined || s === null ? "00:00" : Math.floor(s / 60
 const Panel = (title, children, extra) => h("section", { className: "rounded-xl border border-slate-700 bg-slate-950/60 p-3" }, h("div", { className: "flex items-center justify-between mb-2" }, h("div", { className: "text-[11px] uppercase tracking-wider text-slate-400 font-bold" }, title), extra || null), children);
 const Chip = (label, Icon, on) => h("span", { className: "inline-flex items-center gap-1 rounded-md border px-2 py-1 text-[11px] " + (on ? "border-emerald-500/40 bg-emerald-500/15 text-emerald-200" : "border-slate-700 bg-slate-900 text-slate-300") }, Icon ? h(Icon, { size: 12 }) : null, label);
 const Btn = (label, Icon, onClick) => h("button", { type: "button", onClick, className: "inline-flex items-center gap-1 rounded-md border border-slate-700 bg-slate-800 px-2 py-1 text-[11px] text-slate-200 hover:bg-slate-700" }, Icon ? h(Icon, { size: 12 }) : null, label);
-const Tile = (label, value, unit) => h("div", { className: "rounded-lg border border-slate-700 bg-slate-900 p-2" }, h("div", { className: "text-[10px] uppercase tracking-wider text-slate-500" }, label), h("div", { className: "font-black text-white tabular-nums text-base leading-tight" }, value, unit ? h("span", { className: "text-xs text-slate-400 font-normal" }, " " + unit) : null));
+const Tile = (label, value, unit) => h("span", { className: "inline-flex items-baseline gap-1.5 rounded-full border border-slate-700 bg-slate-900/60 px-2.5 py-1 text-xs whitespace-nowrap" }, h("span", { className: "text-slate-400" }, label), h("b", { className: "text-white tabular-nums text-sm" }, value, unit ? h("span", { className: "text-[11px] text-slate-400 font-normal" }, " " + unit) : null));
 const Bar = (label, right, share, colour) => h("div", { className: "text-xs" }, h("div", { className: "flex justify-between text-slate-300" }, h("span", null, label), h("span", { className: "tabular-nums text-slate-400" }, right)), h("div", { className: "h-2.5 rounded bg-slate-800 mt-1 overflow-hidden" }, h("div", { className: "h-full rounded " + colour, style: { width: Math.min(100, Number(share) || 0) + "%" } })));
 
 // Block 1 — quality & compliance: the eight checks of the study in two columns, a status pill each.
@@ -123,7 +123,7 @@ const StationStudy = ({ type, onBack }) => {
   return h(
     "div",
     { ref: topRef, style: { paddingTop: topPad }, className: "yai-pa-aware min-h-screen bg-slate-900 text-slate-200 px-3 md:px-5 pb-8 font-sans" },
-    h("style", null, "body.yai-pa-open .yai-pa-aware { padding-right: 436px; }"),
+    h("style", null, "body.yai-pa-open .yai-pa-aware { padding-right: 484px; }"),
     h(NavCover),
     h(
       "div",
@@ -134,7 +134,7 @@ const StationStudy = ({ type, onBack }) => {
       picker && h("select", { value: pick || picker.selected || "", onChange: (e) => { setPick(e.target.value); setStudyId(""); }, className: "rounded-md border border-slate-700 bg-slate-800 text-[11px] text-slate-200 px-2 py-1 max-w-[12rem]", "aria-label": picker.label }, h("option", { value: "" }, picker.label), picker.options.map((o) => h("option", { key: o.id, value: o.id }, o.name))),
       h("div", { className: "ml-auto flex flex-wrap items-center gap-1.5" }, Btn("Element model", ChevronDown), Btn("Pop out to screen 2", Monitor), Btn("In-page split", Columns), Btn("Teach mode →", GraduationCap), Btn("Line balance →", Scale, () => navigate("/dashboard/ce/line-balancing")), h("button", { onClick: load, className: "p-1.5 rounded-md border border-slate-700 bg-slate-800 text-slate-300 hover:text-white", "aria-label": "Refresh", title: "Refresh" }, h(RefreshCw, { size: 13, className: loading ? "animate-spin" : "" })))
     ),
-    error && h("div", { className: "mb-3 rounded-xl border border-amber-500/40 bg-amber-500/10 text-amber-200 text-sm px-3 py-2" }, error),
+    error && h("div", { className: "mb-3 rounded-xl border border-amber-500/40 bg-amber-500/10 text-amber-200 text-sm px-3 py-2" }, error, " ", h("button", { onClick: load, className: "rounded border border-amber-400/50 px-2 py-0.5 text-xs font-bold hover:bg-amber-500/10" }, "Retry")),
     h(
       "div",
       { className: "grid gap-3 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]" },

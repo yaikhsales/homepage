@@ -2,7 +2,7 @@
 // Machine, Product Costing — 20 sub-modules, every one a screen read from the simulated factory on the M1
 // (sim/view, module "ce"). Cards keep the module's own icons where it has them (/assets/icons/sub-icons),
 // the newer ones use a line icon. Written with React.createElement like the other simulated screens.
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, MessageCircle, Video, BookOpen, ListOrdered, Scale, LayoutGrid, Database, CalendarDays, ClipboardList } from "lucide-react";
 import GeneralAIAgent from "../general-ag";
@@ -74,11 +74,20 @@ const CE = ({ onBack }) => {
   const [isBotOpen, setIsBotOpen] = useState(false);
   const [topRef, topPad] = useScreenTop();
   const back = () => (onBack ? onBack() : navigate(-1));
+  // five columns side by side whenever the content is wide enough (the PA panel open at 1440 still is);
+  // two below ~900 px of content width, one below ~560 px
+  const [cols, setCols] = useState(5);
+  useEffect(() => {
+    const el = topRef.current; if (!el || typeof ResizeObserver === "undefined") return;
+    const ro = new ResizeObserver(() => { const w = el.clientWidth - 48; setCols(w >= 900 ? 5 : w >= 560 ? 2 : 1); });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [topRef]);
 
   return h(
     "div",
     { ref: topRef, style: { paddingTop: topPad }, className: "yai-pa-aware min-h-screen bg-slate-900 text-slate-200 px-4 md:px-6 pb-8 font-sans" },
-    h("style", null, "body.yai-pa-open .yai-pa-aware { padding-right: 436px; }"),
+    h("style", null, "body.yai-pa-open .yai-pa-aware { padding-right: 484px; }"),
     h(NavCover),
     h(
       "div",
@@ -89,7 +98,7 @@ const CE = ({ onBack }) => {
     ),
     h(
       "div",
-      { className: "grid gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5" },
+      { className: "grid gap-3", style: { gridTemplateColumns: cols === 5 ? "repeat(5, minmax(0, 1fr))" : cols === 2 ? "repeat(2, minmax(0, 1fr))" : "1fr" } },
       GROUPS.map((g) =>
         h(
           "section",
@@ -104,10 +113,10 @@ const CE = ({ onBack }) => {
                 { key: m.view, onClick: m.building ? undefined : () => navigate("/dashboard/ce/" + m.view), disabled: !!m.building, title: m.building ? "being built — not open yet" : undefined, className: "w-full text-left flex items-center gap-3 rounded-xl border border-slate-700 bg-slate-900/60 transition-colors px-3 py-2 " + (m.building ? "opacity-70 cursor-default" : "hover:bg-slate-700/60 hover:border-slate-500") },
                 h(
                   "div",
-                  { className: "w-12 h-12 flex-shrink-0 rounded-lg bg-white p-1.5 flex items-center justify-center" },
-                  m.img ? h("img", { src: process.env.PUBLIC_URL + "/assets/icons/sub-icons/" + m.img, alt: "", className: "w-full h-full object-contain" }) : h(m.icon, { size: 26, className: "text-slate-700" })
+                  { className: "w-10 h-10 flex-shrink-0 rounded-lg bg-white p-1 flex items-center justify-center" },
+                  m.img ? h("img", { src: process.env.PUBLIC_URL + "/assets/icons/sub-icons/" + m.img, alt: "", className: "w-full h-full object-contain" }) : h(m.icon, { size: 22, className: "text-slate-700" })
                 ),
-                h("div", { className: "min-w-0" }, h("div", { className: "font-bold text-white text-sm leading-tight flex items-center gap-2" }, translateModuleTitle(m.title), m.building && h("span", { className: "rounded-full border border-amber-500/40 bg-amber-500/15 text-amber-300 text-[10px] font-semibold px-1.5 py-px" }, "building")), h("div", { className: "text-[11px] text-slate-400 leading-tight mt-0.5" }, m.sub))
+                h("div", { className: "min-w-0" }, h("div", { className: "font-bold text-white text-sm leading-tight flex items-center gap-2" }, translateModuleTitle(m.title), m.building && h("span", { className: "rounded-full border border-amber-500/40 bg-amber-500/15 text-amber-300 text-[10px] font-semibold px-1.5 py-px" }, "building")), h("div", { className: "text-[11px] text-slate-400 leading-tight mt-0.5", style: { display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }, title: m.sub }, m.sub))
               )
             )
           )

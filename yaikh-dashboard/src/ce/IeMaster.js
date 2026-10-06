@@ -65,7 +65,7 @@ const IeMaster = ({ onBack }) => {
   return h(
     "div",
     { ref: topRef, style: { paddingTop: topPad }, className: "yai-pa-aware min-h-screen bg-slate-900 text-slate-200 px-3 md:px-5 pb-8 font-sans" },
-    h("style", null, "body.yai-pa-open .yai-pa-aware { padding-right: 436px; }"),
+    h("style", null, "body.yai-pa-open .yai-pa-aware { padding-right: 484px; }"),
     h(NavCover),
     h(
       "div",
@@ -76,7 +76,7 @@ const IeMaster = ({ onBack }) => {
       (d.summary || []).length > 0 && h("div", { className: "ml-auto flex flex-wrap gap-x-3 text-xs text-slate-400" }, d.summary.map((f) => h("span", { key: f.label }, f.label + " ", h("b", { className: "text-white tabular-nums" }, f.value)))),
       h("button", { onClick: load, className: "p-1.5 rounded-md border border-slate-700 bg-slate-800 text-slate-300 hover:text-white", "aria-label": "Refresh", title: "Refresh" }, h(RefreshCw, { size: 13, className: loading ? "animate-spin" : "" }))
     ),
-    error && h("div", { className: "mb-3 rounded-xl border border-amber-500/40 bg-amber-500/10 text-amber-200 text-sm px-3 py-2" }, error),
+    error && h("div", { className: "mb-3 rounded-xl border border-amber-500/40 bg-amber-500/10 text-amber-200 text-sm px-3 py-2" }, error, " ", h("button", { onClick: load, className: "rounded border border-amber-400/50 px-2 py-0.5 text-xs font-bold hover:bg-amber-500/10" }, "Retry")),
     h(
       "div",
       { className: "grid gap-3 lg:grid-cols-[11rem_12rem_minmax(0,1fr)]" },

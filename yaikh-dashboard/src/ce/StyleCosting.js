@@ -9,7 +9,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, RefreshCw, Search } from "lucide-react";
 import { NavCover, useScreenTop } from "../components/ScreenTop";
-import { post, num, usd, CostingNav, Panel, Tile, Chip, TONE, Th } from "./costing";
+import { post, num, usd, CostingNav, Panel, Tile, Chip, TONE, Th, InfoI } from "./costing";
 
 const money = (v) => (typeof v === "number" ? v.toFixed(3) : "—");
 const tone = (r) => (r.tone === "red" || r.result === "loss" ? TONE.red : r.tone === "green" || r.result === "saving" ? TONE.green : r.result === "on plan" ? TONE.amber : TONE.grey);
@@ -83,7 +83,7 @@ const StyleCosting = ({ onBack }) => {
 
   return (
     <div ref={topRef} style={{ paddingTop: topPad }} className="yai-pa-aware min-h-screen bg-slate-900 text-slate-200 px-3 md:px-5 pb-8 font-sans">
-      <style>{`body.yai-pa-open .yai-pa-aware { padding-right: 436px; }`}</style>
+      <style>{`body.yai-pa-open .yai-pa-aware { padding-right: 484px; }`}</style>
       <NavCover />
       <div className="flex flex-wrap items-center gap-2 mb-2">
         <button onClick={back} className="p-1 -ml-1 hover:bg-slate-700 rounded-full transition-colors text-slate-400 hover:text-white" aria-label="Back"><ArrowLeft size={18} /></button>
@@ -96,7 +96,7 @@ const StyleCosting = ({ onBack }) => {
           <button onClick={load} className="p-1.5 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700" aria-label="Refresh"><RefreshCw size={14} className={loading ? "animate-spin" : ""} /></button>
         </div>
       </div>
-      {error && <div className="mb-2 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-200 px-3 py-2 text-sm">{error}</div>}
+      {error && <div className="mb-2 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-200 px-3 py-2 text-sm flex items-center gap-2">{error}<button onClick={load} className="rounded border border-amber-400/50 px-2 py-0.5 text-xs font-bold hover:bg-amber-500/10">Retry</button></div>}
       <div className="flex flex-wrap gap-2 mb-3">
         <Tile label="CPM" value={sum.CPM || (cpm.cpm ? "USD " + cpm.cpm : "—")} sub={cpm.earned_minutes ? `${usd(cpm.factory_cost)} ÷ ${num(cpm.earned_minutes)} min` : undefined} />
         <Tile label="Order parts" value={num(sum["Order parts"])} sub={`${num(sum["Running / done"])} running / done`} />
@@ -131,7 +131,7 @@ const StyleCosting = ({ onBack }) => {
             </tbody>
           </table>
         </div>
-        <div className="mt-1 text-[10px] text-slate-500">plan cost = CPM × SAM (cutting + sewing + finishing + packing) + embroidery / printing / washing / heat transfer from the cost sheet + contingency · actual = the minutes the line really spent a piece × CPM + extras · red = loss, green = saving · {cpm.rule || ""}</div>
+        <div className="mt-1 flex items-center gap-2 text-xs text-slate-500"><InfoI text={`Plan cost = CPM × SAM (cutting + sewing + finishing + packing) + embroidery / printing / washing / heat transfer from the cost sheet + contingency. Actual = the minutes the line really spent a piece × CPM + extras. Red = loss, green = saving. ${cpm.rule || ""}`} /><span>how the plan and actual cost are computed</span></div>
       </Panel>
       <p className="mt-2 text-[10px] text-slate-500">{d.as_of ? `As of ${String(d.as_of).replace("T", " ").slice(0, 16)} · ` : ""}simulated factory — invented figures, no real company</p>
     </div>

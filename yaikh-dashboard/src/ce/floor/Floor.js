@@ -243,7 +243,7 @@ const Floor = ({ lens, label, onBack, renderDetail, renderStation, stationReason
 
   return (
     <div ref={topRef} style={{ paddingTop: topPad }} className="yai-pa-aware min-h-screen bg-slate-900 text-slate-200 px-3 md:px-5 pb-8 font-sans">
-      <style>{`body.yai-pa-open .yai-pa-aware { padding-right: 436px; } ${CSS}`}</style>
+      <style>{`body.yai-pa-open .yai-pa-aware { padding-right: 484px; } ${CSS}`}</style>
       <NavCover />
       <div className="flex flex-wrap items-center gap-2 mb-2">
         <button onClick={back} className="p-1 -ml-1 hover:bg-slate-700 rounded-full transition-colors text-slate-400 hover:text-white" aria-label="Back"><ArrowLeft size={18} /></button>
@@ -253,7 +253,7 @@ const Floor = ({ lens, label, onBack, renderDetail, renderStation, stationReason
         <div className="flex items-center gap-1.5 bg-slate-800 border border-slate-700 rounded-lg px-2 py-1"><Search size={13} className="text-slate-500" /><input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Line, order…" className="bg-transparent outline-none text-xs w-28 text-white placeholder-slate-500" /></div>
         <button onClick={load} className="p-1.5 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700" aria-label="Refresh"><RefreshCw size={14} className={loading ? "animate-spin" : ""} /></button>
       </div>
-      {error && <div className="mb-2 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-200 px-3 py-2 text-sm">{error}</div>}
+      {error && <div className="mb-2 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-200 px-3 py-2 text-sm flex items-center gap-2">{error}<button onClick={load} className="rounded border border-amber-400/50 px-2 py-0.5 text-xs font-bold hover:bg-amber-500/10">Retry</button></div>}
 
       {/* TOP — every line at a glance */}
       <div className="floor-band flex items-start gap-1.5 overflow-x-auto pb-1.5 mb-3">
