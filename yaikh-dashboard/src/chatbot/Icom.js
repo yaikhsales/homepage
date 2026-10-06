@@ -117,6 +117,7 @@ const Icom = ({ dept, onMyChats }) => {
   const [text, setText] = useState("");
   const [showMembers, setShowMembers] = useState(false);
   const [drawer, setDrawer] = useState(false);  // narrow mode: slide-in topic list
+  const [listOpen, setListOpen] = useState(true); // inline list slides away when a topic is picked
   const [narrow, setNarrow] = useState(false);
   const rootRef = useRef(null);
   const endRef = useRef(null);
@@ -181,9 +182,11 @@ const Icom = ({ dept, onMyChats }) => {
   const activeStageLabel = stage ? (QA_STAGES.find(([k]) => k === stage) || [])[1] : null;
   let lastDay = null;
 
-  const pickAll = () => { setTopicId(null); setStage(null); setDrawer(false); };
+  const pickAll = () => { setTopicId(null); setStage(null); setDrawer(false); setListOpen(true); };
   const pickStage = (k) => { setStage(k === stage ? null : k); setTopicId(null); setDrawer(false); };
-  const pickTopic = (id) => { setTopicId(id === topicId ? null : id); setStage(null); setDrawer(false); };
+  /* Picking a topic slides the list away so the thread gets the full width
+     (Gamini 2026-10-06); ☰ in the context bar brings it back. */
+  const pickTopic = (id) => { const next = id === topicId ? null : id; setTopicId(next); setStage(null); setDrawer(false); setListOpen(!next); };
 
   const listEl = (
     <TopicList dept={dept} topics={topics} stages={stages} topicId={topicId} stage={stage}
@@ -228,7 +231,7 @@ const Icom = ({ dept, onMyChats }) => {
       {/* body: left topic list + right thread */}
       <div className="flex-1 flex min-h-0 relative">
         {!narrow && (
-          <div className="w-[38%] min-w-[100px] max-w-[170px] border-r border-gray-200 flex-shrink-0">{listEl}</div>
+          <div className="flex-shrink-0 overflow-hidden" style={{ width: listOpen ? "38%" : 0, minWidth: listOpen ? 100 : 0, maxWidth: 170, transition: "width .25s ease, min-width .25s ease", borderRight: listOpen ? "1px solid #e5e7eb" : "none" }}>{listEl}</div>
         )}
 
         {narrow && drawer && (
@@ -248,6 +251,9 @@ const Icom = ({ dept, onMyChats }) => {
           {/* context bar: which thread is on the right */}
           {(activeTopic || activeStageLabel) && (
             <div className="bg-white/90 border-b border-gray-200 px-2 py-1 flex items-center gap-1.5">
+              {!narrow && !listOpen && (
+                <button onClick={() => setListOpen(true)} className="p-0.5 rounded hover:bg-gray-100 flex-shrink-0" title="Show topics"><Menu size={11} className="text-gray-500" /></button>
+              )}
               <button onClick={pickAll} className="p-0.5 rounded hover:bg-gray-100 flex-shrink-0" title="All chat"><ArrowLeft size={11} className="text-gray-500" /></button>
               {activeTopic && <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${TOPIC_DOT[activeTopic.status] || "bg-gray-300"}`} />}
               <span className="text-[9.5px] font-bold text-gray-700 truncate">{activeTopic ? activeTopic.title : activeStageLabel}</span>
