@@ -49,6 +49,7 @@ import ShippingBill from "./shipping-bill/shipping-bill";
 import CE from "./ce/ce";
 import OperationBreakdown from "./ce/OperationBreakdown";
 import LineBalancing from "./ce/LineBalancing";
+import Avma from "./ce/Avma";
 import ComplianceCertificate from "./digital-audit/compliance-certificate";
 import AuditPlan from "./digital-audit/audit-plan";
 import Checklist6S from "./digital-audit/checklist-6s";
@@ -251,6 +252,9 @@ export default function App() {
           />
           <Route path="ce" element={<CE onBack={handleBack} />} />
           {/* CE sub-modules read the simulated factory (sim/view, module "ce"); two have custom visuals */}
+          <Route path="ce/avma" element={<Avma onBack={handleBack} />} />
+          <Route path="ce/avma/:type" element={<Avma onBack={handleBack} />} />
+          <Route path="ce/operation-video" element={<Navigate to="/dashboard/ce/avma" replace />} />
           <Route path="ce/operation-breakdown" element={<OperationBreakdown onBack={handleBack} />} />
           <Route path="ce/line-balancing" element={<LineBalancing onBack={handleBack} />} />
           <Route path="ce/:view" element={<MrpView module="ce" label="CE" onBack={handleBack} />} />

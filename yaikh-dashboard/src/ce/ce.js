@@ -4,7 +4,7 @@
 // the newer ones use a line icon. Written with React.createElement like the other simulated screens.
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, MessageCircle, Video, BookOpen, Wrench, FlaskConical, Shirt, ListOrdered, Scale, DollarSign, Building2, GitBranch, Activity, Trophy, Users, TrendingUp, AlertTriangle, Boxes, LayoutGrid, Database, CalendarDays, ClipboardList } from "lucide-react";
+import { ArrowLeft, MessageCircle, Video, BookOpen, ListOrdered, Scale, LayoutGrid, Database, CalendarDays, ClipboardList } from "lucide-react";
 import GeneralAIAgent from "../general-ag";
 import { useTranslation } from "../translate/TranslationContext";
 import { NavCover, useScreenTop } from "../components/ScreenTop";
@@ -17,7 +17,7 @@ const GROUPS = [
     title: "Standard Time",
     tone: "border-sky-500/40",
     items: [
-      { view: "operation-video", title: "AI Vision Motion Analysis", sub: "AVMA — IE adds a video of an operation, the AI analyses the motion and gives the SMV", icon: Video },
+      { view: "avma", title: "AI Vision Motion Analysis", sub: "AVMA — IE adds a video of an operation, the AI analyses the motion and gives the SMV", icon: Video },
       { view: "standard-time-library", title: "Operation Library", sub: "Operations by style — T-shirt, jacket, pants — with machine types, grouped by category", img: "standard-time-analysis.png" },
       { view: "ie-master", title: "IE Master", sub: "Garment type → category → operation: standard video, who has done it, best operator, defect history", icon: BookOpen },
     ],

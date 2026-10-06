@@ -279,7 +279,7 @@ const Picture = ({ k }) => {
 // amber = not updated yet, red and pulsing = late).
 const LIGHT = { green: "bg-emerald-400", amber: "bg-amber-400", red: "bg-rose-500 ring-2 ring-rose-500/40 animate-pulse" };
 
-const MrpView = ({ onBack, module = "mrp", label = "MRP", view: fixedView, renderBody }) => {
+const MrpView = ({ onBack, module = "mrp", label = "MRP", view: fixedView, renderBody, extra }) => {
   const params = useParams();
   const view = fixedView || params.view; // a fixed route (e.g. fc/fabric-receiving) names its view; otherwise it comes from the route
   const [data, setData] = useState(null);
@@ -293,6 +293,7 @@ const MrpView = ({ onBack, module = "mrp", label = "MRP", view: fixedView, rende
   const [picked, setPicked] = useState({ scope: "", id: "" });
   const pick = picked.scope === scope ? picked.id : "";
   const [topRef, topPad] = useScreenTop();
+  const extraKey = JSON.stringify(extra || {});
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -301,7 +302,7 @@ const MrpView = ({ onBack, module = "mrp", label = "MRP", view: fixedView, rende
       const r = await fetch(API + "/sim/view", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ module, view, month: MONTHLY.has(view) ? month : undefined, supplier: pick || undefined, pick: pick || undefined }),
+        body: JSON.stringify({ module, view, month: MONTHLY.has(view) ? month : undefined, supplier: pick || undefined, pick: pick || undefined, ...JSON.parse(extraKey) }),
       });
       const j = await r.json();
       if (!r.ok || !j.ok) throw new Error(j.error || j.detail || "unavailable");
@@ -311,7 +312,7 @@ const MrpView = ({ onBack, module = "mrp", label = "MRP", view: fixedView, rende
     } finally {
       setLoading(false);
     }
-  }, [module, label, view, month, pick]);
+  }, [module, label, view, month, pick, extraKey]);
 
   useEffect(() => {
     load();
