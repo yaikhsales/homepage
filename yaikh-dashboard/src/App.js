@@ -53,6 +53,7 @@ import LinePlanning from "./ce/LinePlanning";
 import Avma from "./ce/Avma";
 import GarmentAnalysis from "./ce/GarmentAnalysis";
 import IeMaster from "./ce/IeMaster";
+import MachineFloor from "./ce/MachineFloor";
 import ComplianceCertificate from "./digital-audit/compliance-certificate";
 import AuditPlan from "./digital-audit/audit-plan";
 import Checklist6S from "./digital-audit/checklist-6s";
@@ -260,6 +261,9 @@ export default function App() {
           <Route path="ce/avma/:type" element={<Avma onBack={handleBack} />} />
           <Route path="ce/operation-video" element={<Navigate to="/dashboard/ce/avma" replace />} />
           <Route path="ce/ie-master" element={<IeMaster onBack={handleBack} />} />
+          <Route path="ce/machine-layout" element={<MachineFloor lens="machine" onBack={handleBack} />} />
+          <Route path="ce/line-plan" element={<MachineFloor lens="mechanic" onBack={handleBack} />} />
+          <Route path="ce/machine-requirement" element={<MachineFloor lens="requirement" onBack={handleBack} />} />
           <Route path="ce/standard-time-library" element={<Navigate to="/dashboard/ce/operation-library" replace />} />
           <Route path="ce/garment-analysis" element={<GarmentAnalysis onBack={handleBack} />} />
           <Route path="ce/operation-breakdown" element={<OperationBreakdown onBack={handleBack} />} />
