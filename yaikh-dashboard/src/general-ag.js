@@ -28,6 +28,7 @@ import {
 } from "./chatbot/gemini-api";
 import { DASHBOARD_DATA } from "./data/module";
 import { KHMER_NEW_YEAR } from "./thems";
+import { PA_BY_SUBMENU_TITLE } from "./chatbot/pa-owner";
 
 /* Map a floating-chat moduleContext to the Accounting PA topic that
  * actually owns that data. Any module that funnels into Accounting
@@ -55,7 +56,32 @@ function getAccountingTopic(moduleContext) {
   return ACCOUNTING_TOPIC_MAP[moduleContext] || null;
 }
 
-const GeneralAIAgent = ({ onClose, moduleContext = null }) => {
+/* moduleContext → owning department PA. Every module screen's old orange
+ * assistant hands off to the real docked PA (Gamini 2026-10-06: "fix and
+ * replace all"). Exact submenu titles first, then keyword rules — order
+ * matters ("Shipping Bill" is Accounting, "Shipping Request" is Shipping). */
+const CTX_PA_RULES = [
+  [/salary|payroll|incentive|nssf|resign|bill|claim|\bpr\b|purchase|master list|confirm received|accountant|invoice|iews|permit fee/i, "accounting-bot"],
+  [/yhr|\bhr\b|attendance|recruit|interview|onboard|benefit|speak up|worker|visa|training|org chart/i, "hr-bot"],
+  [/ticket|y shop|gate ?pass|meeting|car booking|fire alarm|cctv|visitor|canteen/i, "admin-bot"],
+  [/water|waste|energy|air|audit|compliance|6s|\bcsr\b|sensor|traffic/i, "csr-bot"],
+  [/shipping|e-?gov/i, "shipping-bot"],
+  [/yqms|quality|call ?out/i, "qa-bot"],
+  [/ytm/i, "ytm-bot"],
+  [/\bce\b|cost.?efficien|machine|line balanc|operation|downtime|productivity|skill|learning curve|style costing|team perf|standard time|garment analysis/i, "ce-bot"],
+  [/pwip|ywip|\bfc\b|fabric|accessor|warehouse/i, "production-bot"],
+  [/4dp|planning/i, "4dp-bot"],
+  [/mrp/i, "mrp-bot"],
+  [/ypi|techpack|sample plan|cut plan|marker|\bbom\b/i, "ypi-bot"],
+];
+export function paForModuleContext(ctx) {
+  if (!ctx || typeof ctx !== "string") return null;
+  if (PA_BY_SUBMENU_TITLE[ctx]) return PA_BY_SUBMENU_TITLE[ctx];
+  const hit = CTX_PA_RULES.find(([re]) => re.test(ctx));
+  return hit ? hit[1] : null;
+}
+
+const GeneralAIAgentLegacy = ({ onClose, moduleContext = null }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -1567,6 +1593,22 @@ RESPONSE FORMATTING RULES:
       </div>
     </div>
   );
+};
+
+/* Thin wrapper: a module context owned by a department PA opens that PA
+ * (AppLayout listens for the event) instead of the legacy Gemini chat.
+ * Unmapped contexts keep the legacy assistant. */
+const GeneralAIAgent = (props) => {
+  const ownerPa = paForModuleContext(props.moduleContext);
+  const closeRef = useRef(props.onClose);
+  closeRef.current = props.onClose;
+  useEffect(() => {
+    if (!ownerPa) return;
+    window.dispatchEvent(new CustomEvent("yai:open-pa", { detail: { bot: ownerPa } }));
+    if (closeRef.current) closeRef.current();
+  }, [ownerPa]);
+  if (ownerPa) return null;
+  return <GeneralAIAgentLegacy {...props} />;
 };
 
 export default GeneralAIAgent;

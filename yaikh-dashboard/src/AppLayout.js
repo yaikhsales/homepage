@@ -209,6 +209,22 @@ const AppLayout = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [routePaPrefix]);
 
+  // A module's old assistant bubble (general-ag wrapper) asks for the real
+  // PA by event. Same bot as the route's → just open; another bot → pin it
+  // so it shows here too.
+  useEffect(() => {
+    const onOpenPa = (e) => {
+      const bot = e.detail && e.detail.bot;
+      if (!bot) return;
+      if (bot !== routePaBot) { setPinnedBot(bot); setRoutePaPinned(true); }
+      setRoutePaOpen(true);
+      persistPaOpen(bot, true);
+    };
+    window.addEventListener("yai:open-pa", onOpenPa);
+    return () => window.removeEventListener("yai:open-pa", onOpenPa);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [routePaBot]);
+
   // Handle initial dragon animation on page load - DISABLED
   // useEffect(() => {
   //     if (location.pathname === '/' && !hasPlayedInitialAnimation) {

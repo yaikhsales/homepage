@@ -109,15 +109,92 @@ export const PA_GRADIENT = {
 };
 
 /* Route prefix → owning PA, for pages that never pass through SubMenuView.
- * First match wins (check longer prefixes first). */
+ * First match wins (check longer prefixes first). Gamini 2026-10-06:
+ * "even no PA" on /dashboard/shipping/request — every module page gets its
+ * owner here so no screen is PA-less. */
 export const PA_BY_ROUTE = [
+  // Pre-production
   ["/dashboard/4dp", "4dp-bot"],
   ["/dashboard/mrp", "mrp-bot"],
-  ["/dashboard/meeting-room", "admin-bot"],
+  ["/dashboard/ypi", "ypi-bot"],
+  ["/dashboard/product-development", "ypi-bot"],
+  // Production
+  ["/dashboard/fc/", "production-bot"],
+  ["/dashboard/ywip", "production-bot"],
+  ["/dashboard/pwip", "production-bot"],
+  ["/dashboard/ce", "ce-bot"],
+  ["/dashboard/cost-centers", "ce-bot"],
+  ["/dashboard/cpm", "ce-bot"],
+  ["/dashboard/downtimes", "ce-bot"],
+  ["/dashboard/garment-analysis", "ce-bot"],
+  ["/dashboard/learning-curve", "ce-bot"],
+  ["/dashboard/machine-allocation", "ce-bot"],
+  ["/dashboard/productivity", "ce-bot"],
+  ["/dashboard/skill-inventory", "ce-bot"],
+  ["/dashboard/standard-time", "ce-bot"],
+  ["/dashboard/style-costing", "ce-bot"],
+  ["/dashboard/team-performance", "ce-bot"],
+  ["/dashboard/ytm", "ytm-bot"],
+  // QA
+  ["/dashboard/yqms", "qa-bot"],
+  ["/dashboard/call-out", "qa-bot"],
+  // Shipping + E-GOV
+  ["/dashboard/shipping/", "shipping-bot"],
+  ["/dashboard/permit-fee", "accounting-bot"], // lives in the Salary Bill pack
+  // Accounting
+  ["/dashboard/accounting", "accounting-bot"],
+  ["/dashboard/verify-pr", "accounting-bot"],
+  ["/dashboard/approval-pr", "accounting-bot"],
+  ["/dashboard/pay-pr", "accounting-bot"],
+  ["/dashboard/purchase-requisition-form", "accounting-bot"],
+  ["/dashboard/show-list-request", "accounting-bot"],
+  ["/dashboard/master-list", "accounting-bot"],
+  ["/dashboard/my-confirm-received", "accounting-bot"],
+  ["/dashboard/bill-claim", "accounting-bot"],
+  ["/dashboard/bill-record", "accounting-bot"],
+  ["/dashboard/money-claim", "accounting-bot"],
+  ["/dashboard/salary-bill", "accounting-bot"],
+  ["/dashboard/monthly-salary", "accounting-bot"],
+  ["/dashboard/payroll", "accounting-bot"],
+  ["/dashboard/nssf", "accounting-bot"],
+  ["/dashboard/resign-payment", "accounting-bot"],
+  ["/dashboard/weekly-incentive", "accounting-bot"],
+  ["/dashboard/shipping-bill", "accounting-bot"],
+  // HR
+  ["/dashboard/hr", "hr-bot"],
+  ["/dashboard/yhr", "hr-bot"],
+  ["/dashboard/org-chart-master", "hr-bot"],
+  ["/dashboard/training", "hr-bot"],
+  ["/dashboard/recruitment", "hr-bot"],
+  ["/dashboard/interview", "hr-bot"],
+  ["/dashboard/onboarding", "hr-bot"],
+  ["/dashboard/benefit-profile", "hr-bot"],
+  ["/dashboard/my-attendance", "hr-bot"],
+  ["/dashboard/checklist-attendance", "hr-bot"],
+  ["/dashboard/speak-up", "hr-bot"],
+  ["/dashboard/temp-worker-request", "hr-bot"],
+  ["/dashboard/visa-work-permit", "hr-bot"],
+  // Admin
+  ["/dashboard/ticket", "admin-bot"],
+  ["/dashboard/y-shop", "admin-bot"],
+  ["/dashboard/meeting", "admin-bot"], // also covers /meeting-room
   ["/dashboard/car-booking", "admin-bot"],
   ["/dashboard/gatepass", "admin-bot"],
   ["/dashboard/fire-alarm", "admin-bot"],
   ["/dashboard/cctv", "admin-bot"],
+  ["/dashboard/canteen", "admin-bot"],
+  // CSR
+  ["/dashboard/csr", "csr-bot"],
+  ["/dashboard/digital-audit-questions", "csr-bot"],
+  ["/dashboard/audit-plan", "csr-bot"],
+  ["/dashboard/compliance-certificate", "csr-bot"],
+  ["/dashboard/checklist-6s", "csr-bot"],
+  ["/dashboard/energy/", "csr-bot"],
+  ["/dashboard/air/", "csr-bot"],
+  ["/dashboard/water", "csr-bot"],
+  ["/dashboard/waste", "csr-bot"],
+  ["/dashboard/sensors", "csr-bot"],
+  ["/dashboard/traffic-light", "csr-bot"],
 ];
 
 export function paForRoute(pathname) {
