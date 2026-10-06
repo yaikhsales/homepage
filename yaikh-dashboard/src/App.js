@@ -13,7 +13,11 @@ import TableView from "./views/TableView";
 // eslint-disable-next-line no-unused-vars
 import SupportTicketView from "./views/SupportTicketView";
 import SupportTicketManagement from "./support-tickets/support-ticket-management";
-import OrgChartView from "./views/OrgChartView";
+import OrgChart from "./hr/OrgChart";
+import Employees from "./hr/Employees";
+import Employee from "./hr/Employee";
+import Headcount from "./hr/Headcount";
+import Sections from "./hr/Sections";
 // eslint-disable-next-line no-unused-vars
 import MeterDeviceListView from "./views/MeterDeviceListView";
 // eslint-disable-next-line no-unused-vars
@@ -330,7 +334,7 @@ export default function App() {
           />
           <Route
             path="org-chart-master"
-            element={<OrgChartView onBack={handleBack} />}
+            element={<OrgChart onBack={handleBack} />}
           />
           <Route
             path="energy/meters"
@@ -401,6 +405,10 @@ export default function App() {
           {/* Admin & Support sub-modules — same simulated factory, one shared
               screen that also draws the trend chart and the extra tables these
               departments send (HR absence trend, CSR area/waste-water tables). */}
+          <Route path="hr/employees" element={<Employees onBack={handleBack} />} />
+          <Route path="hr/employee/:id" element={<Employee onBack={handleBack} />} />
+          <Route path="hr/headcount" element={<Headcount onBack={handleBack} />} />
+          <Route path="hr/sections" element={<Sections onBack={handleBack} />} />
           <Route path="hr/:view" element={<DeptView module="hr" label="HR" onBack={handleBack} />} />
           <Route path="admin/:view" element={<DeptView module="admin" label="Admin" onBack={handleBack} />} />
           <Route path="accounting/:view" element={<DeptView module="accounting" label="Accounting" onBack={handleBack} />} />
