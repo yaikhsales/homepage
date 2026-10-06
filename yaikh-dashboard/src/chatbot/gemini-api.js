@@ -51,6 +51,49 @@ const holdingMessage = () => {
 // (qwen-fallback, missing source) is the degraded path we mask.
 const isClaude = (src) => src === "claude" || src === "claude-haiku-4-5";
 
+/* ─── Big Brain / PA skills: Alerts · Reminders · Forecasts ─────────────
+ * POST /api/m1/pa/skills {pa}. pa:"all" = Big Brain (every dept merged, each
+ * item carries "dept"); pa:"<slug>" = one department. Pure structured data —
+ * NO Claude. Until the M1 route is live it 404s, so we fall back to a sample
+ * (all data is simulated:true anyway) so the UI renders. */
+const SKILLS_STUB = (pa = "all") => ({
+  ok: true, pa, as_of: new Date().toISOString(), simulated: true, badge: 2,
+  alerts: [
+    { id: "4dp-ypi-YAIAA7", dept: "4dp", label: "YAIAA7 — sample rejected, cutting may slip 7 days", count: 1, severity: "red", refs: ["YAIAA7"], link: "/dashboard/4dp/master-plan" },
+    { id: "qa-aql-YAIBB2", dept: "qa", label: "YAIBB2 — AQL 2.5 fail on final, 1 lot held", count: 1, severity: "red", refs: ["YAIBB2"], link: "/dashboard/qa" },
+    { id: "ytm-pm-L12", dept: "ytm", label: "Line 12 — PM overdue 2 days", count: 1, severity: "amber", refs: ["L12"], link: "/dashboard/ytm" },
+  ],
+  reminders: [
+    { id: "4dp-ppm-YAIAA3", dept: "4dp", type: "meeting", title: "PP meeting — YAIAA3", when: "2026-10-08", time: "morning", from: null, refs: ["YAIAA3"], link: "/dashboard/4dp/line-plan-ta" },
+    { id: "hr-train-wrap", dept: "hr", type: "training", title: "WRAP refresher — cutting team", when: "2026-10-09", time: "afternoon", from: null, refs: [], link: "/dashboard/yhr" },
+    { id: "mrp-q-ypi", dept: "mrp", type: "question", title: "YPI asks: fabric ETA for YAICC1?", when: "2026-10-06", time: null, from: "ypi", refs: ["YAICC1"], link: "/dashboard/mrp" },
+  ],
+  forecasts: [
+    { id: "4dp-late-starts", dept: "4dp", metric: "Orders likely to start late", value: 3, unit: "orders", trend: "up", text: "3 orders may start late: YAIAA7 (+7d), YAIAA34 (+4d), YAIAA15 (+1d).", chart: { type: "bar", x: ["YAIAA7", "YAIAA34", "YAIAA15"], y: [7, 4, 1], unit: "days" }, link: "/dashboard/4dp/master-plan" },
+    { id: "ce-eff-week", dept: "ce", metric: "Line efficiency trend", value: 78, unit: "%", trend: "down", text: "Average line efficiency drifting down this week; Line 5 the biggest drag.", chart: { type: "line", x: ["Mon", "Tue", "Wed", "Thu"], y: [82, 80, 79, 78], unit: "%" }, link: "/dashboard/ce" },
+  ],
+});
+
+export const getSkills = async (pa = "all") => {
+  if (!M1_LLM_URL) return SKILLS_STUB(pa);
+  try {
+    const ctl = new AbortController();
+    const timer = setTimeout(() => ctl.abort(), 12000);
+    const r = await fetch(`${M1_LLM_URL.replace(/\/$/, "")}/pa/skills`, {
+      method: "POST",
+      signal: ctl.signal,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ pa }),
+    });
+    clearTimeout(timer);
+    if (!r.ok) return SKILLS_STUB(pa); // route not live yet → sample
+    const data = await r.json();
+    return data && data.ok ? data : SKILLS_STUB(pa);
+  } catch {
+    return SKILLS_STUB(pa);
+  }
+};
+
 /**
  * Call the M1 Mac mini's LM Studio via the FastAPI guard on cloudflared.
  * Returns null on any failure (network, non-200, bad payload) so the caller
