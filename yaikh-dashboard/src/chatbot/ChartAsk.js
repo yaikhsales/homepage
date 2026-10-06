@@ -20,6 +20,8 @@ const EXAMPLES = [
   "Absence rate by department",
   "Overtime hours by section this month",
 ];
+// null / missing = a gap (no run that day), never drawn as 0
+const num = (v) => (v == null || v === "" || Number.isNaN(Number(v)) ? null : Number(v));
 const fmt = (v) => (typeof v === "number" ? (Math.abs(v) >= 1000 ? Math.round(v).toLocaleString() : String(Math.round(v * 100) / 100)) : String(v ?? ""));
 
 /* bar / line / pie, single or multi series, plain SVG */
@@ -28,12 +30,12 @@ export function Chart({ c, dark }) {
   const grid = dark ? "rgba(255,255,255,0.08)" : "#e2e8f0";
   const x = Array.isArray(c.x) ? c.x : [];
   const series = Array.isArray(c.series) && c.series.length
-    ? c.series.map((s, i) => ({ name: s.name, y: (s.y || []).map(Number), color: COLORS[i % COLORS.length] }))
-    : [{ name: c.unit || "", y: (c.y || []).map(Number), color: COLORS[0] }];
-  if (!x.length || !series[0].y.length) return <div className="text-xs opacity-60">No data points.</div>;
+    ? c.series.map((s, i) => ({ name: s.name, y: (s.y || []).map(num), color: COLORS[i % COLORS.length] }))
+    : [{ name: c.unit || "", y: (c.y || []).map(num), color: COLORS[0] }];
+  if (!x.length || !series.some((s) => s.y.some((v) => v != null))) return <div className="text-xs opacity-60">No data points.</div>;
 
   if (c.type === "pie") {
-    const ys = series[0].y, tot = ys.reduce((a, b) => a + Math.max(b, 0), 0) || 1;
+    const ys = series[0].y.map((v) => v || 0), tot = ys.reduce((a, b) => a + Math.max(b, 0), 0) || 1;
     let a0 = -Math.PI / 2;
     const R = 60, C = 70;
     return (
@@ -61,7 +63,7 @@ export function Chart({ c, dark }) {
   }
 
   const W = 520, H = 200, L = 44, B = 40, T = 10;
-  const all = series.flatMap((s) => s.y), max = Math.max(...all, 0), min = Math.min(0, ...all);
+  const all = series.flatMap((s) => s.y).filter((v) => v != null), max = Math.max(...all, 0), min = Math.min(0, ...all);
   const sy = (v) => T + (H - T - B) * (1 - (v - min) / (max - min || 1));
   const cw = (W - L - 6) / x.length;
   const step = Math.ceil(x.length / 12);
@@ -74,18 +76,21 @@ export function Chart({ c, dark }) {
       {c.type === "line"
         ? series.map((s, si) => (
           <g key={si}>
-            <path d={s.y.map((v, i) => `${i ? "L" : "M"}${(L + cw * (i + 0.5)).toFixed(1)},${sy(v).toFixed(1)}`).join(" ")} fill="none" stroke={s.color} strokeWidth="2" />
-            {s.y.map((v, i) => <circle key={i} cx={L + cw * (i + 0.5)} cy={sy(v)} r="2.5" fill={s.color}><title>{`${x[i]}: ${fmt(v)}`}</title></circle>)}
+            <path d={s.y.map((v, i) => (v == null ? "" : `${i && s.y[i - 1] != null ? "L" : "M"}${(L + cw * (i + 0.5)).toFixed(1)},${sy(v).toFixed(1)}`)).join(" ")} fill="none" stroke={s.color} strokeWidth="2" />
+            {s.y.map((v, i) => (v == null ? null : <circle key={i} cx={L + cw * (i + 0.5)} cy={sy(v)} r="2.5" fill={s.color}><title>{`${x[i]}: ${fmt(v)}`}</title></circle>))}
           </g>
         ))
         : series.map((s, si) => {
           const bw = (cw * 0.75) / series.length;
-          return s.y.map((v, i) => (
+          return s.y.map((v, i) => (v == null ? null :
             <rect key={`${si}-${i}`} x={L + cw * i + cw * 0.125 + bw * si} y={Math.min(sy(v), sy(0))} width={Math.max(bw - 1, 1)} height={Math.abs(sy(0) - sy(v))} rx="2" fill={s.color}>
               <title>{`${x[i]}${s.name ? ` · ${s.name}` : ""}: ${fmt(v)}`}</title>
             </rect>
           ));
         })}
+      {series.length > 1 && series.map((s, si) => (
+        <g key={`lg${si}`}><rect x={L + si * 110} y={0} width="8" height="8" rx="2" fill={s.color} /><text x={L + 12 + si * 110} y={8} fontSize="9" fill={ink}>{String(s.name).slice(0, 18)}</text></g>
+      ))}
       {x.map((lab, i) => (i % step === 0 ? (
         <text key={i} x={L + cw * (i + 0.5)} y={H - B + 12} fontSize="9" fill={ink} textAnchor="end" transform={`rotate(-30 ${L + cw * (i + 0.5)} ${H - B + 12})`}>{String(lab).slice(0, 14)}</text>
       ) : null))}
@@ -102,17 +107,21 @@ const ChartAsk = ({ storageKey = "yai-chart-cards", dark = true }) => {
   const [cards, setCards] = useState(() => load(storageKey));
   const [busy, setBusy] = useState(null);
   const [miss, setMiss] = useState(null); // {note, examples}
+  const [catalog, setCatalog] = useState([]); // M1's chart list — "More charts"
+  const [showCat, setShowCat] = useState(false);
+  useEffect(() => { askBossChart({ catalog: true }).then((r) => { if (r && Array.isArray(r.charts)) setCatalog(r.charts); }).catch(() => {}); }, []);
   useEffect(() => save(storageKey, cards.slice(0, 8)), [cards, storageKey]);
 
-  const ask = async (text) => {
+  const ask = async (text, key) => {
     const req = (text || q).trim();
     if (!req || busy) return;
-    setQ(""); setMiss(null); setBusy(req);
-    const r = await askBossChart(req);
+    setQ(""); setMiss(null); setBusy(req); setShowCat(false);
+    const r = await askBossChart(key ? { key } : req);
     if (r.status === "ok") {
       setCards((c) => [{ id: Date.now(), kind: "chart", req, ...r }, ...c].slice(0, 8));
     } else if (r.status === "nofit") {
-      setMiss({ note: r.note || r.error || "No chart for that yet.", examples: Array.isArray(r.examples) ? r.examples : EXAMPLES });
+      const why = r.reason ? `${r.reason[0].toUpperCase()}${r.reason.slice(1)}.` : (r.note || r.error || "No chart for that yet.");
+      setMiss({ note: why, examples: Array.isArray(r.examples) && r.examples.length ? r.examples : EXAMPLES });
     } else {
       const t = await askBossQuery(req, []);
       if (t) setCards((c) => [{ id: Date.now(), kind: "text", req, title: req, answer: t.answer, routed_to: t.routed_to }, ...c].slice(0, 8));
@@ -141,7 +150,22 @@ const ChartAsk = ({ storageKey = "yai-chart-cards", dark = true }) => {
           {EXAMPLES.map((e) => (
             <button key={e} onClick={() => ask(e)} disabled={!!busy} className={`text-[11px] rounded-full px-2 py-0.5 border ${dark ? "border-white/15 text-slate-300 hover:bg-white/10" : "border-slate-300 text-slate-600 hover:bg-slate-100"}`}>{e}</button>
           ))}
+          {catalog.length > 0 && (
+            <button onClick={() => setShowCat((v) => !v)} className="text-[11px] rounded-full px-2 py-0.5 text-emerald-500 font-semibold hover:underline">
+              {showCat ? "Hide" : `More charts (${catalog.length})`}
+            </button>
+          )}
         </div>
+        {showCat && (
+          <div className={`mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-1 max-h-64 overflow-y-auto rounded-lg p-2 ${dark ? "bg-black/20" : "bg-slate-50"}`}>
+            {catalog.map((c) => (
+              <button key={c.key} onClick={() => ask(c.title, c.key)} disabled={!!busy} title={c.description}
+                className={`text-left text-xs rounded px-2 py-1 ${dark ? "hover:bg-white/10 text-slate-200" : "hover:bg-white text-slate-700"}`}>
+                {c.title} <span className={sub}>· {(c.pa || []).map((p) => PA_NAME[p] || p).join(", ")}</span>
+              </button>
+            ))}
+          </div>
+        )}
         {busy && <div className={`text-xs mt-2 italic animate-pulse ${sub}`}>Asking the PAs: “{busy}”…</div>}
         {miss && (
           <div className={`text-xs mt-2 ${sub}`}>

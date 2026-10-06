@@ -315,6 +315,8 @@ export const generateBossBubbles = async (
  * Qwen never writes the numbers. Returns {status:"missing"} when the route
  * is not there, so the caller can fall back to a text answer. */
 export const askBossChart = async (request) => {
+  // request: plain words, or {key, params} to draw a catalog chart, or {catalog:true}
+  const body = typeof request === "object" && request ? request : { request: String(request ?? "") };
   if (!M1_LLM_URL) return { status: "missing" };
   try {
     const ctl = new AbortController();
@@ -323,7 +325,7 @@ export const askBossChart = async (request) => {
       method: "POST",
       signal: ctl.signal,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ request: String(request ?? "") }),
+      body: JSON.stringify(body),
     });
     clearTimeout(timer);
     if (r.status === 404 || r.status === 403 || r.status === 405) return { status: "missing" };
