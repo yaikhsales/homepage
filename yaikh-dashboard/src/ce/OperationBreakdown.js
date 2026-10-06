@@ -6,6 +6,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, RefreshCw, Printer, Search } from "lucide-react";
 import { NavCover, useScreenTop } from "../components/ScreenTop";
+import { SketchSet, garmentsOf } from "./sketches";
 
 const h = React.createElement;
 const API = (process.env.REACT_APP_M1_LLM_URL || "/api/m1").replace(/\/$/, "");
@@ -90,16 +91,26 @@ const OperationBreakdown = ({ onBack }) => {
           { className: "ob-sheet rounded-2xl border border-slate-700 bg-white text-slate-900 p-4 min-w-0" },
           h(
             "div",
-            { className: "flex flex-wrap items-start gap-2 border-b border-slate-300 pb-2 mb-2" },
-            h("div", { className: "min-w-0" }, h("div", { className: "text-[11px] uppercase tracking-wider text-slate-500" }, "Operation breakdown sheet"), h("div", { className: "text-lg font-black leading-tight" }, a ? a.style : id), a && h("div", { className: "text-xs text-slate-600" }, [a.id, a.order ? "order " + a.order : "", a.garment_type, a.date, a.ie ? a.ie + " (" + a.ie_code + ")" : "", a.status].filter(Boolean).join(" · "))),
-            h("button", { type: "button", onClick: () => window.print(), className: "ob-noprint ml-auto inline-flex items-center gap-1 rounded-md bg-slate-900 text-white text-xs font-bold px-2.5 py-1.5" }, h(Printer, { size: 13 }), "Print")
-          ),
-          stages.length > 0 &&
+            { className: "flex items-start gap-3 border-b border-slate-300 pb-2 mb-2" },
             h(
               "div",
-              { className: "flex flex-wrap gap-1.5 mb-2 text-[11px]" },
-              stages.map((r) => h(React.Fragment, { key: r.garment }, h("span", { className: "rounded-full border border-slate-300 px-2 py-0.5", title: r.sam1_status + (r.sam1_date ? " · " + r.sam1_date : "") }, (stages.length > 1 ? r.garment + " · " : "") + "SAM 1 ", h("b", null, num(r.sam1))), h("span", { className: "rounded-full border border-slate-300 px-2 py-0.5", title: r.sam2_status + (r.sam2_date ? " · " + r.sam2_date : "") }, "SAM 2 ", h("b", null, num(r.sam2))), h("span", { className: "rounded-full border border-slate-300 px-2 py-0.5", title: "critical operations" }, "critical ", h("b", null, r.critical)), r.ai_stage && h("span", { className: "rounded-full border border-slate-300 px-2 py-0.5 text-slate-600" }, r.ai_stage + " · " + r.status)))
+              { className: "flex-1 min-w-0" },
+              h(
+                "div",
+                { className: "flex flex-wrap items-start gap-2" },
+            h("div", { className: "min-w-0" }, h("div", { className: "text-[11px] uppercase tracking-wider text-slate-500" }, "Operation breakdown sheet"), h("div", { className: "text-lg font-black leading-tight" }, a ? a.style : id), a && h("div", { className: "text-xs text-slate-600" }, [a.id, a.order ? "order " + a.order : "", a.garment_type, a.date, a.ie ? a.ie + " (" + a.ie_code + ")" : "", a.status].filter(Boolean).join(" · "))),
+                h("button", { type: "button", onClick: () => window.print(), className: "ob-noprint ml-auto inline-flex items-center gap-1 rounded-md bg-slate-900 text-white text-xs font-bold px-2.5 py-1.5" }, h(Printer, { size: 13 }), "Print")
+              ),
+              stages.length > 0 &&
+                h(
+                  "div",
+                  { className: "flex flex-wrap gap-1.5 mt-2 text-[11px]" },
+                  stages.map((r) => h(React.Fragment, { key: r.garment }, h("span", { className: "rounded-full border border-slate-300 px-2 py-0.5", title: r.sam1_status + (r.sam1_date ? " · " + r.sam1_date : "") }, (stages.length > 1 ? r.garment + " · " : "") + "SAM 1 ", h("b", null, num(r.sam1))), h("span", { className: "rounded-full border border-slate-300 px-2 py-0.5", title: r.sam2_status + (r.sam2_date ? " · " + r.sam2_date : "") }, "SAM 2 ", h("b", null, num(r.sam2))), h("span", { className: "rounded-full border border-slate-300 px-2 py-0.5", title: "critical operations" }, "critical ", h("b", null, r.critical)), r.ai_stage && h("span", { className: "rounded-full border border-slate-300 px-2 py-0.5 text-slate-600" }, r.ai_stage + " · " + r.status)))
+                )
             ),
+            // the sketch of the garment (both pieces of a set), printed with the sheet
+            h("div", { className: "flex-shrink-0" }, h(SketchSet, { text: a ? a.garment_type || a.style : d.garment && d.garment.garment, size: garmentsOf(a ? a.garment_type || a.style : "").length > 1 ? 120 : 150 }))
+          ),
           h("div", { className: "grid grid-cols-4 gap-2 text-xs mb-2" }, [["Total SAM", num(t.total_sam) + " min"], ["Operations", num(t.operations, 0)], ["Stations", num(t.stations, 0)], ["Machines", (t.machines || []).reduce((s, m) => s + (m.count || 0), 0) || "—"]].map(([k, v]) => h("div", { key: k, className: "rounded border border-slate-300 p-1.5" }, h("div", { className: "text-[10px] uppercase tracking-wider text-slate-500" }, k), h("div", { className: "font-black tabular-nums" }, v)))),
           h(
             "table",

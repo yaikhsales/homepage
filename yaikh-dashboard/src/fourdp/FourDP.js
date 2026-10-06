@@ -7,9 +7,10 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   LayoutDashboard, Building, ClipboardCheck, Layers, MonitorPlay,
-  ChevronLeft, ChevronRight, RefreshCw, Search, Maximize, Table2, X,
+  ChevronLeft, ChevronRight, RefreshCw, Search, Maximize, Table2, X, Eye,
 } from "lucide-react";
 import LineDiagram, { withSteps } from "./LineDiagram";
+import { SketchPop } from "../ce/sketches";
 
 const API = (process.env.REACT_APP_M1_LLM_URL || "/api/m1").replace(/\/$/, "");
 
@@ -52,6 +53,24 @@ const fmtNum = (v) => (typeof v === "number" ? v.toLocaleString("en-US") : v ===
 const thisMonth = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`; };
 const shiftMonth = (m, by) => { const d = new Date(Number(m.slice(0, 4)), Number(m.slice(5, 7)) - 1 + by, 1); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`; };
 
+// What the garment-sketch pop-over needs from a bar: order, style, garment, qty. A bar's title reads
+// "YAIBB3 · customer BB · Round-neck T-shirt · 26,700 pcs · …" (or "Warehouse (FC): YAIBB3 · Round-neck
+// T-shirt · 26,700 pcs · …"), so the style is the segment before the "pcs" one.
+const sketchOf = (b, extra) => {
+  const seg = String(b.title || "").split(" · ");
+  const i = seg.findIndex((x) => /\bpcs\b/.test(x));
+  const style = i > 0 ? seg[i - 1] : (b.run && b.run.garment) || "";
+  const qty = b.qty != null ? b.qty : i >= 0 ? Number(seg[i].replace(/[^0-9]/g, "")) || undefined : undefined;
+  const order = b.ref || (b.run && b.run.order) || (seg[0] || "").replace(/^.*: /, "");
+  return { order, style, garment: (b.run && b.run.garment) || style, qty, ...(extra || {}) };
+};
+// The eye icon next to an order: opens the sketch pop-over. Stops the click reaching the bar behind it.
+const EyeBtn = ({ onClick, title, className }) => (
+  <button type="button" onClick={(e) => { e.stopPropagation(); onClick(e); }} title={title || "Garment sketch"} aria-label="Garment sketch" className={`inline-flex items-center justify-center rounded-full border border-white/40 bg-slate-900/70 text-white hover:bg-white hover:text-slate-900 flex-shrink-0 ${className || "w-4 h-4"}`}>
+    <Eye size={10} />
+  </button>
+);
+
 const LABEL_W = 210;
 const ROW_H = 26;
 
@@ -67,7 +86,7 @@ const LIGHT_TEXT = { green: "text-emerald-300", amber: "text-amber-300", red: "t
 
 // Mini sewing line: opened from an order bar on the Line Plan. Every order has its own layout (zig-zag line
 // or U-shape hanger line, a few machines off-line); LineDiagram draws it.
-function LinePop({ pop, onClose, onOpen }) {
+function LinePop({ pop, onClose, onOpen, onSketch }) {
   const [d, setD] = useState(null);
   const [failed, setFailed] = useState(false);
   const { line, order, garment } = pop.run;
@@ -103,6 +122,7 @@ function LinePop({ pop, onClose, onOpen }) {
         <div className="flex items-center gap-2 px-3 pt-2.5 pb-2 border-b border-slate-700">
           <span className="font-black text-white whitespace-nowrap">{line} · {order}</span>
           <span className="text-[11px] text-slate-400 truncate">{garment}{d ? ` · ${fmtNum(d.pieces)} pcs · ${d.run}` : ""}</span>
+          {onSketch && <EyeBtn className="w-5 h-5" onClick={(e) => onSketch({ order, style: garment, garment, qty: d && d.pieces }, e)} />}
           <button onClick={onClose} className="ml-auto p-1 rounded-lg hover:bg-slate-700" aria-label="Close"><X size={14} /></button>
         </div>
         {failed && !d && <div className="py-8 text-center text-sm text-amber-200">Line data is unavailable right now.</div>}
@@ -206,7 +226,7 @@ const colourCss = (n) => { const k = String(n || "").toLowerCase(); return COLOU
 
 const hasProblem = (b) => (Array.isArray(b.factors) && b.factors.some((f) => f.tone === "red")) || b.beyond_buffer || (!!b.st && GROUPS.some(([k]) => b.st[k] === "red"));
 
-function Gantt({ g, filter, onLine, picked, onStatus, onlyProblems, corner, onRun }) {
+function Gantt({ g, filter, onLine, picked, onStatus, onlyProblems, corner, onRun, onSketch }) {
   const days = useMemo(() => {
     if (!g) return [];
     const n = dayDiff(g.start, g.end) + 1;
@@ -300,6 +320,7 @@ function Gantt({ g, filter, onLine, picked, onStatus, onlyProblems, corner, onRu
                       )}
                       <div title={ttl} onClick={b.run && onRun ? (e) => onRun(b.run, e) : undefined} className={`absolute top-1 rounded-md text-[10px] font-semibold leading-[18px] shadow transition-opacity flex items-center overflow-hidden ${b.run && onRun ? "cursor-pointer hover:brightness-110 hover:ring-1 hover:ring-white/70" : ""} ${BAR[b.tone] || BAR.slate} ${b.beyond_buffer ? "ring-2 ring-rose-500" : ""} ${dim}`} style={{ left: from * dayW + 1, width: barW, height: ROW_H - 8 }}>
                       <span className="truncate px-1.5 flex-1 min-w-0">{b.label}</span>
+                      {onSketch && (b.ref || b.run || /\bpcs\b/.test(b.title || "")) && barW >= 64 && <EyeBtn className="w-4 h-4 mr-1" onClick={(e) => onSketch(sketchOf(b), e)} />}
                       {barW >= 300 && b.brand_order && (
                         <span className="flex-shrink-0 mr-1 rounded bg-slate-900/70 text-slate-200 text-[9px] leading-[14px] px-1" title={`Brand order ${b.brand_order} · ${(b.qty || 0).toLocaleString()} pcs`}>{b.brand_order}</span>
                       )}
@@ -390,6 +411,9 @@ const FourDP = () => {
   const closePop = useCallback(() => setPop(null), []);
   const [linePop, setLinePop] = useState(null); // mini sewing line opened from a Line Plan bar
   const closeLinePop = useCallback(() => setLinePop(null), []);
+  const [sketch, setSketch] = useState(null); // garment sketch opened from an eye icon next to an order
+  const openSketch = useCallback((info, e) => setSketch({ ...info, x: e.clientX, y: e.clientY }), []);
+  const closeSketch = useCallback(() => setSketch(null), []);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -503,15 +527,16 @@ const FourDP = () => {
           {topic.orders && data && data.orders && (
             <div className="flex gap-1 overflow-x-auto pb-1 mb-1.5">
               {data.orders.map((o) => (
-                <button key={o.ref} onClick={() => setOrder(o.ref)} title={`${o.style} · ${o.status}`} className={`flex-shrink-0 rounded-lg border px-2 py-1 text-xs font-bold whitespace-nowrap ${data.selected === o.ref ? "bg-sky-500/20 border-sky-400 text-white" : "bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700"}`}>
-                  {o.ref} <span className="font-normal text-[10px] text-slate-400">{fmtNum(o.pieces)} · {o.status}</span>
-                </button>
+                <span key={o.ref} className={`flex-shrink-0 flex items-center gap-1 rounded-lg border pl-2 pr-1 py-1 text-xs font-bold whitespace-nowrap ${data.selected === o.ref ? "bg-sky-500/20 border-sky-400 text-white" : "bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700"}`}>
+                  <button onClick={() => setOrder(o.ref)} title={`${o.style} · ${o.status}`}>{o.ref} <span className="font-normal text-[10px] text-slate-400">{fmtNum(o.pieces)} · {o.status}</span></button>
+                  <EyeBtn onClick={(e) => openSketch({ order: o.ref, style: o.style, garment: o.style, qty: o.pieces }, e)} />
+                </span>
               ))}
               {data.orders.length === 0 && <span className="text-sm text-slate-500">No orders for this factory in {month}.</span>}
             </div>
           )}
 
-          {data && data.gantt && !showTable && <Gantt g={data.gantt} filter={q} picked={picked} corner={factoryPick} onlyProblems={onlyProblems} onStatus={openStatus} onRun={(run, e) => setLinePop({ run, x: e.clientX, y: e.clientY })} onLine={(ln) => navigate(`/dashboard/4dp/line/${ln}`)} />}
+          {data && data.gantt && !showTable && <Gantt g={data.gantt} filter={q} picked={picked} corner={factoryPick} onlyProblems={onlyProblems} onStatus={openStatus} onRun={(run, e) => setLinePop({ run, x: e.clientX, y: e.clientY })} onLine={(ln) => navigate(`/dashboard/4dp/line/${ln}`)} onSketch={openSketch} />}
 
           {showTable && data && (
             <div className="rounded-2xl border border-slate-700 bg-slate-800/40 overflow-auto" style={{ maxHeight: "calc(100vh - 205px)" }}>
@@ -527,6 +552,7 @@ const FourDP = () => {
                       {data.columns.map((c) => (
                         <td key={c.key} className={`px-3 py-2 text-sm ${typeof r[c.key] === "number" ? "text-right tabular-nums" : ""} ${c.key === "order" || c.key === "line" ? "font-bold text-white whitespace-nowrap" : ""}`}>
                           {CHIP_COLS.has(c.key) && r[c.key] ? <span className={`inline-block rounded-full border px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap ${chip(r[c.key])}`}>{fmtNum(r[c.key])}</span> : fmtNum(r[c.key])}
+                          {c.key === "order" && (r.style || r.garment) && <EyeBtn className="w-4 h-4 ml-1.5 align-middle" onClick={(e) => openSketch({ order: r.order, style: r.style || r.garment, garment: r.garment || r.style, qty: r.pieces != null ? r.pieces : r.qty }, e)} />}
                         </td>
                       ))}
                     </tr>
@@ -536,7 +562,8 @@ const FourDP = () => {
             </div>
           )}
 
-          {linePop && <LinePop pop={linePop} onClose={closeLinePop} onOpen={(ln) => navigate(`/dashboard/4dp/line/${ln}?order=${encodeURIComponent(linePop.run.order)}&garment=${encodeURIComponent(linePop.run.garment)}`)} />}
+          {linePop && <LinePop pop={linePop} onClose={closeLinePop} onSketch={openSketch} onOpen={(ln) => navigate(`/dashboard/4dp/line/${ln}?order=${encodeURIComponent(linePop.run.order)}&garment=${encodeURIComponent(linePop.run.garment)}`)} />}
+          {sketch && <SketchPop pop={sketch} onClose={closeSketch} />}
           {pop && <StatusPop pop={pop} onTab={(k) => setPop((p) => ({ ...p, group: k }))} onClose={closePop} />}
 
           <p className="mt-1 text-[10px] text-slate-500">{data ? `As of ${String(data.as_of || "").replace("T", " ").slice(0, 16)} · hover a bar or diamond for details · click MRP / YPI / CE on a bar for that order's status · simulated factory data` : loading ? "Loading…" : ""}</p>
