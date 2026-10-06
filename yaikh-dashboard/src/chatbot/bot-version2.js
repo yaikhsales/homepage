@@ -1090,7 +1090,18 @@ const BotVersion2 = ({
     // special subject?" — the real visitor's first words land here.
     // Steps -2..4 = capture answers via chat, then materialise.
     // Step 5 = in-flight materialise, block input. Step 99 = done.
-    if (onboardingStep >= -3 && onboardingStep <= 4) {
+    // A real question at the name / ready steps ("AA-PO-26100010 what is the
+    // issue about this order?") is NOT a name — answer it and skip the
+    // factory-setup funnel (Gamini 2026-10-06).
+    const rawAsk = input.trim();
+    const isRealQuestion = (onboardingStep === -1 || onboardingStep === -2) && (
+      /[?？]/.test(rawAsk)
+      || /^(what|which|why|how|when|where|who|is|are|can|could|do|does|did|tell|show|give|list|check|find|explain)\b/i.test(rawAsk)
+      || /\b[A-Z]{2,}[-\s]?[A-Z]*-?\d{3,}/.test(rawAsk)
+      || rawAsk.split(/\s+/).length > 5
+    );
+    if (isRealQuestion) setOnboardingStep(99);
+    if (!isRealQuestion && onboardingStep >= -3 && onboardingStep <= 4) {
       const raw = input.trim();
       const userMsg = { from: "user", text: raw };
       setMessages(prev => [...prev, userMsg]);

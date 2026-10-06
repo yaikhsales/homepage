@@ -25,6 +25,10 @@ const DEPTS = {
   fc:     { label: "FC · Warehouse",      color: "#a78bfa" },
   ce:     { label: "CE · IE",             color: "#22d3ee" },
   prod:   { label: "Production",          color: "#fb923c" },
+  cut:    { label: "Cutting",             color: "#fdba74" },
+  sew:    { label: "Sewing",              color: "#fb923c" },
+  wash:   { label: "Washing",             color: "#67e8f9" },
+  fin:    { label: "Finishing & packing", color: "#f59e0b" },
   qa:     { label: "QA · QMS",            color: "#fb7185" },
   ytm:    { label: "YTM · Maintenance",   color: "#facc15" },
   ship:   { label: "Shipping",            color: "#2dd4bf" },
@@ -165,11 +169,11 @@ const ORDER = {
       screen: ["FC · Accessories receiving", "/dashboard/fc/accessories-receiving"],
       roles: [R("Accessory clerk", "fc", "Receives into the accessory store"), R("QC inspector", "qa", "Checks on the inspection table"), R("FC", "fc", "Locks branded labels and tags; issues exact quantities only")],
       inputs: "Trims delivery", outputs: "Trims in store", deps: ["track"] },
-    { id: "inspect", lane: "qa", title: "Fabric inspection", d0: 62, d1: 65, by: H("QC inspector", "4-point checks the customer's % of rolls"),
+    { id: "inspect", qms: true, lane: "qa", title: "Fabric inspection", d0: 62, d1: 65, by: H("QC inspector", "4-point checks the customer's % of rolls"),
       screen: ["FC · Fabric inspection", "/dashboard/fc/fabric-inspection"],
       roles: [R("Inspection supervisor", "fc", "Plans the % per lot (5–15 %, 100 % if costly)"), R("Workers", "fc", "Pull the sample rolls, run the machine"), R("QC department", "qa", "Judges holes, slubs, shade, width, selvage"), R("FC clerk", "fc", "Records pass / fail with pictures")],
       inputs: "Rolls in cages", outputs: "Pass / fail list", deps: ["receive"] },
-    { id: "test", lane: "qa", title: "Fabric testing", d0: 62, d1: 66, by: H("Lab technician", "shrinkage, weight, shade, test garment"),
+    { id: "test", qms: true, lane: "qa", title: "Fabric testing", d0: 62, d1: 66, by: H("Lab technician", "shrinkage, weight, shade, test garment"),
       screen: ["FC · Fabric test", "/dashboard/fc/fabric-test"],
       roles: [R("Lab technician", "qa", "Shrinkage (AATCC), weight vs promised gsm, grey-scale shade"), R("Sample sewer", "ypi", "Sews 1–2 test garments"), R("QC manager", "qa", "Pass / fail"), R("Merchandiser", "sales", "Failed lots: negotiates a discount with brand and mill — not returned")],
       inputs: "1 yard per roll", outputs: "Test report", deps: ["receive"] },
@@ -177,7 +181,7 @@ const ORDER = {
       screen: ["YPI · Cut plan", "/dashboard/ypi/cut-plan"],
       roles: [R("Cut planner", "ypi", "Uses inspection and test results"), R("Merchandiser", "sales", "Confirms the lots"), R("Warehouse", "fc", "Follows it: rolls, dye lot, date, morning / afternoon")],
       inputs: "Inspection + test results", outputs: "Cut plan", deps: ["inspect", "test", "unit"] },
-    { id: "pilot", lane: "qa", title: "Pilot run", d0: 67, d1: 69, by: H("QA inspector", "checks 5 pcs per size made from bulk fabric"),
+    { id: "pilot", qms: true, lane: "qa", title: "Pilot run", d0: 67, d1: 69, by: H("QA inspector", "checks 5 pcs per size made from bulk fabric"),
       screen: ["YQMS · Pre-production", "/dashboard/yqms/pre-production-meeting"],
       roles: [R("Cutting", "prod", "Cuts 5 pieces per size with bulk fabric and labels"), R("Sewing line", "prod", "Sews them"), R("QMS", "qa", "Verifies before bulk cutting"), R("IE", "ce", "Times it for the 2nd SAM")],
       inputs: "Cut plan, machines ready", outputs: "Go for bulk", deps: ["cutplan", "mech"] },
@@ -197,7 +201,7 @@ const ORDER = {
       screen: ["YWIP", "/dashboard/ywip"],
       roles: [R("Cutting supervisor", "prod", "Runs the cut plan"), R("Spreaders & cutters", "prod", "Spread by lot, cut one piece per direction"), R("Bundling clerk", "prod", "Bundle tickets in Yai")],
       inputs: "Relaxed fabric", outputs: "Cut bundles", deps: ["relax"] },
-    { id: "panel", lane: "qa", title: "Cut-panel QC", d0: 73, d1: 82, by: H("QC inspector", "checks panels before they go on"),
+    { id: "panel", qms: true, lane: "qa", title: "Cut-panel QC", d0: 73, d1: 82, by: H("QC inspector", "checks panels before they go on"),
       screen: ["YQMS · Cut-panel inspection", "/dashboard/yqms/cut-panel-inspection"],
       roles: [R("QC inspector", "qa", "Checks panels against the pattern"), R("Cutting supervisor", "prod", "Re-cuts rejects")],
       inputs: "Cut bundles", outputs: "Passed panels", deps: ["cut"] },
@@ -217,11 +221,11 @@ const ORDER = {
       screen: ["CE", "/dashboard/ce"],
       roles: [R("CE PA", "sys", "Compares planned vs actual per worker and line"), R("Supervisor / line leader", "prod", "Act on the alert"), R("Production & factory manager", "prod", "Notified when the target is missed")],
       inputs: "Hourly output", outputs: "Alerts", deps: ["sew"] },
-    { id: "roving", lane: "qa", title: "Roving & end-of-line QC", d0: 75, d1: 93, by: H("Roving QC", "checks along the line; 2 end-of-line checkers"),
+    { id: "roving", qms: true, lane: "qa", title: "Roving & end-of-line QC", d0: 75, d1: 93, by: H("Roving QC", "checks along the line; 2 end-of-line checkers"),
       screen: ["YQMS · Rolling QC", "/dashboard/yqms/rolling-qc"],
       roles: [R("Roving QC", "qa", "Checks every operator from a moving table"), R("End-of-line checkers", "qa", "Two per line"), R("Line leader", "prod", "Corrects the operator")],
       inputs: "Line output", outputs: "Defect data", deps: ["sew"] },
-    { id: "finish", lane: "prod", title: "Wash · press · check", d0: 78, d1: 96, by: H("Finishing supervisor", "washing, pressing, checking, humidity"),
+    { id: "finish", qms: true, lane: "prod", title: "Wash · press · check", d0: 78, d1: 96, by: H("Finishing supervisor", "washing, pressing, checking, humidity"),
       screen: ["YQMS · Finishing check", "/dashboard/yqms/fin-check"],
       roles: [R("Finishing supervisor", "prod", "Runs washing and ironing"), R("Ironing workers", "prod", "Press"), R("Checkers", "qa", "Final checking and humidity check")],
       inputs: "Sewn garments", outputs: "Finished garments", deps: ["sew"] },
@@ -233,7 +237,7 @@ const ORDER = {
       screen: ["CE · Style costing", "/dashboard/ce/style-costing"],
       roles: [R("CE PA", "sys", "Actual cost from the learning curve (e.g. $2.00 → $2.50)"), R("Accounting", "acct", "Cost per minute for the month")],
       inputs: "Output, CPM", outputs: "Actual vs planned cost", deps: ["learn"] },
-    { id: "final", lane: "qa", title: "Final inspection vs PP", d0: 97, d1: 98, by: H("QA manager", "AQL with the PP sample as the reference"),
+    { id: "final", qms: true, lane: "qa", title: "Final inspection vs PP", d0: 97, d1: 98, by: H("QA manager", "AQL with the PP sample as the reference"),
       screen: ["YQMS · Final inspection", "/dashboard/yqms/final-inspection"],
       roles: [R("QA manager", "qa", "Inspects to AQL"), R("Brand QC", "buyer", "Inspects or witnesses"), R("Packing supervisor", "prod", "Opens the chosen cartons"), R("Merchandiser", "sales", "Releases the shipment")],
       inputs: "Cartons, PP sample", outputs: "Shipment released", deps: ["pack", "pp"] },
@@ -377,6 +381,82 @@ const YTM_SHOP = {
   ],
 };
 
+/* ---------- Quality Management · QMS (process order, no days) ----------
+ * From the real QMS walked read-only end to end (kb qms-sop, 2026-10-06):
+ * structure only — no names, no figures. One column per step in process
+ * order; parallel steps share a column. */
+const QMS_STEPS = [
+  {"id": "q1", "lane": "fc", "col": 0, "title": "Raise material purchase order", "auto": true, "role": "Merchandising / warehouse clerk", "short": "registers the MPO per fabric and colour", "action": "Register the MPO for each fabric and colour so arrivals can be matched.", "menu": "Sidebar DM Reporting > Receiving > MPO Module", "route": "/dashboard/fc/fabric-receiving", "label": "FC · Fabric receiving", "inputs": ["Buyer", "MPO No", "Supplier", "Fabric Type", "Eng Color", "Material", "Color No", "Prepared By"], "outputs": ["TxnNo details"], "standard": "", "trigger": "Order confirmed", "hands": "GRN on arrival", "stage": "fabric arrival", "deps": []},
+  {"id": "q2", "lane": "fc", "col": 1, "title": "Unload containers and count rolls", "auto": false, "role": "Warehouse team", "short": "unloads, checks container, invoice, lots and rolls", "action": "Physically unload, check container, invoice, lot and roll count against the MPO.", "menu": "", "route": "/dashboard/fc/fabric-receiving", "label": "FC · Fabric receiving", "inputs": [], "outputs": [], "standard": "", "trigger": "Container arrives", "hands": "GRN entry", "stage": "fabric arrival", "deps": ["q1"]},
+  {"id": "q3", "lane": "fc", "col": 2, "title": "Record GRN and print roll barcodes", "auto": true, "role": "Warehouse clerk", "short": "records the GRN and prints a barcode per roll", "action": "Record goods received by container, lot and roll; print a barcode for every roll.", "menu": "DM Reporting > Receiving > GRN Module", "route": "/dashboard/fc/fabric-receiving", "label": "FC · Fabric receiving", "inputs": ["Container", "Warehouse", "Bin", "MPO No", "Supplier", "Invoice", "Lot", "Eng Color", "Total Rolls", "Total Yards", "Gross Kgs", "Net Kgs"], "outputs": ["GRN No details", "Roll barcode", "DM #1 Fabric Arrival KPIs"], "standard": "", "trigger": "Rolls unloaded", "hands": "Fabric inspection and warehouse bins", "stage": "fabric arrival", "deps": ["q2"]},
+  {"id": "q4", "lane": "qa", "col": 3, "title": "Inspect each roll with the 4-point system", "auto": true, "role": "QA Officer (fabric inspector)", "short": "scans each roll, 4-point defects, width, shade band", "action": "Scan the roll barcode, measure width A/B/C, actual yards and weight, log each defect with location and 1-4 points, assign shade band.", "menu": "Material > Testing > Fabric Inspection", "route": "/dashboard/fc/fabric-inspection", "label": "FC · Fabric inspection", "inputs": ["Barcode", "Width A", "Width B", "Width C", "Actual Yards", "Actual GM2/Kgs", "Defect Name", "Defect Location From/To", "Defect Point", "Images", "Shade Band", "Prepared By"], "outputs": ["Total Points", "TP100sq", "Roll Result Pass/Fail", "Replacement Yards", "Lot Final Result Released/Reject/Pending"], "standard": "4-point system; penalty points per 100 sq yd vs roll limit and lot limit; lot inspection standard %", "trigger": "GRN recorded", "hands": "Lab tests; lot release to warehouse/relax; supplier evaluation", "stage": "fabric inspection", "deps": ["q3"]},
+  {"id": "q5", "lane": "qa", "col": 3, "title": "Run fabric lab tests", "auto": true, "role": "QA lab technician", "short": "shrinkage, density, colour separation, crocking", "action": "Test sample rolls per lot for shrinkage (wash/steam), density (g/m2, AW/BW), colour separation and dry/wet crocking.", "menu": "Material > Testing > Shrinkage Test / Density Test / Separation Color / Crocking Test", "route": "/dashboard/fc/fabric-test", "label": "FC · Fabric test", "inputs": ["MPO/GRN mode", "Barcode", "Lot", "Roll #", "Width/Length/Twist before and after", "Actual G/M2", "Dry/Wet crocking grade"], "outputs": ["Diff %", "Avg G/M2", "Grade", "Result"], "standard": "Shrinkage % within buyer tolerance; crocking grade vs requirement", "trigger": "Roll inspected", "hands": "FC Summary Report; lot decision", "stage": "fabric inspection", "deps": ["q4"]},
+  {"id": "q6", "lane": "qa", "col": 4, "title": "Decide the lot and evaluate the supplier", "auto": true, "role": "QA leader", "short": "releases or rejects the lot; rates the supplier", "action": "Review roll and lot results, release or reject the lot, and roll results into the monthly supplier evaluation.", "menu": "Material > Reports > Fabric Inspection Report / Summary Report / Supplier Monthly Reports", "route": "/dashboard/yqms/supplier-evaluation", "label": "YQMS · Supplier evaluation", "inputs": ["Date range", "MPO", "Container", "Lot", "Supplier"], "outputs": ["Final Lot Result", "Waiting Time", "Delay Time", "Supplier evaluation"], "standard": "Lot limit point / roll limit point", "trigger": "Last roll of lot inspected", "hands": "Released lot to relax/cutting; rejected lot to supplier claim", "stage": "fabric inspection", "deps": ["q4", "q5"]},
+  {"id": "q7", "lane": "fc", "col": 3, "title": "Store and move rolls in bins", "auto": true, "role": "Warehouse clerk", "short": "puts rolls in bins, scans every transfer", "action": "Put rolls in racks/bins and record each bin transfer by scanning roll and bin.", "menu": "DM Reporting > Instore > Transfer Module; DM #2 Fabric Warehouse Store", "route": "/dashboard/fc/warehouse-tracking", "label": "FC · Warehouse tracking", "inputs": ["Barcode", "Bin", "Scan Bin"], "outputs": ["Stock by rack/buyer/supplier", "GRN/Return/Released/Reject counts"], "standard": "", "trigger": "GRN recorded", "hands": "Relax bins", "stage": "warehouse", "deps": ["q3"]},
+  {"id": "q8", "lane": "fc", "col": 5, "title": "Relax fabric before cutting", "auto": true, "role": "Warehouse / relax area team", "short": "relax bins: In relaxation / Relaxed / Time-out", "action": "Move released rolls into relax bins, record relax date and bin, and monitor relax time.", "menu": "DM Reporting > Instore > Fabric Relax Module; DM #4 Fabric Relax Store", "route": "/dashboard/fc/warehouse-tracking", "label": "FC · Warehouse tracking", "inputs": ["Relax Bin", "Style", "Barcode", "Relax By"], "outputs": ["In Relaxation", "Relaxed", "Time-Out", "Bin usage"], "standard": "Minimum relax time per fabric", "trigger": "Lot released", "hands": "Fabric issue to cutting", "stage": "relaxing", "deps": ["q6", "q7"]},
+  {"id": "q9", "lane": "cut", "col": 5, "title": "Plan fabric need, marker and spreading", "auto": true, "role": "Cutting planner", "short": "need qty, marker ratio, spreading plan", "action": "Compute need quantity from order quantity and consumption, set marker size ratio and spreading plan; director confirms the spreading plan.", "menu": "DM Reporting > Consumption > Demand Qty List / Marker Ratio / Spreading Plan", "route": "/dashboard/ypi/cut-plan", "label": "YPI · Cut plan", "inputs": ["Order Qty", "Consumption", "Need Qty", "Marker ratio", "Spreading plan"], "outputs": ["Need Qty", "Confirm Dir By"], "standard": "", "trigger": "Order and fabric released", "hands": "Delivery note to cutting", "stage": "cutting planning", "deps": ["q6"]},
+  {"id": "q10", "lane": "fc", "col": 6, "title": "Issue relaxed rolls to cutting", "auto": true, "role": "Warehouse clerk", "short": "issues relaxed rolls on a DN barcode", "action": "Issue relaxed rolls on a delivery note with DN barcode; returns and leftovers come back through the Return Module.", "menu": "DM Reporting > Issuing > DN Module; DM #5 Fabric Cutting Handover", "route": "/dashboard/fc/fabric-issuing", "label": "FC · Fabric issuing", "inputs": ["Department", "Order No", "Barcode", "DN Barcode"], "outputs": ["DN details", "Handover by style"], "standard": "", "trigger": "Rolls relaxed", "hands": "Spreading and cutting", "stage": "cutting planning", "deps": ["q8", "q9"]},
+  {"id": "q11", "lane": "qa", "col": 7, "title": "Spread and record inline cutting check", "auto": true, "role": "Cutting QA", "short": "scans the spread, checks table, K value, lots", "action": "Scan the spreading (SP) barcode to load spreading data and check the spread table, K value and lots inline.", "menu": "Cut Panel > Cutting Inline", "route": "/dashboard/yqms/cutting-inspection", "label": "YQMS · Cutting inspection", "inputs": ["SP Barcode"], "outputs": ["Status", "K Value", "Lots"], "standard": "", "trigger": "DN issued", "hands": "Cut-panel inspection", "stage": "cutting", "deps": ["q10"]},
+  {"id": "q12", "lane": "qa", "col": 8, "title": "Inspect cut panels to AQL", "auto": true, "role": "Cutting QC inspector", "short": "AQL 1.0 on panels, top / middle / bottom layers", "action": "Select MO and table, confirm layers and marker, check bundles, measure panels at top/middle/bottom layers and log fabric and cutting defects.", "menu": "Cut Panel > Cutting (Cutting Form)", "route": "/dashboard/yqms/cut-panel-inspection", "label": "YQMS · Cut-panel inspection", "inputs": ["Date", "MO No", "Table No", "Spread Table", "Plan/Actual Layers", "Marker No", "Cutting by Auto/Manual", "Bundle No", "Bundle Qty", "Measurement points", "Fabric defects", "Cutting defects", "Evidence images"], "outputs": ["Total Inspection Qty", "Pass", "Reject Measurements", "Reject Defects", "Pass Rate"], "standard": "AQL 1.0 (ISO 2859 / ANSI Z1.4 code letters); Double AQL or 100% cut panel check depending on fabric grade", "trigger": "Panels cut", "hands": "Leader decision then SCC or sewing", "stage": "cut-panel inspection", "deps": ["q11"]},
+  {"id": "q13", "lane": "qa", "col": 9, "title": "Leader reviews cutting reports", "auto": true, "role": "QA leader", "short": "decides each cutting report with comments", "action": "Review each cutting report, enter decision and leader comments.", "menu": "Cut Panel > Report > Cutting Reports", "route": "/dashboard/yqms/cutting", "label": "YQMS · Cutting reports", "inputs": ["Results filter"], "outputs": ["Results PASS/Pending", "Decision", "Leader Comments"], "standard": "", "trigger": "Cutting inspection submitted", "hands": "Bundles released downstream", "stage": "cut-panel inspection", "deps": ["q12"]},
+  {"id": "q14", "lane": "qa", "col": 10, "title": "Approve first output for HT and fusing", "auto": true, "role": "SCC QC + machine operator", "short": "first piece at standard temp, time, pressure", "action": "Set standard temperature, time and pressure, run the first piece, capture reference sample and after-wash images, pass or reject.", "menu": "Cut Panel > SCC > First Output HT / First Output FU", "route": "/dashboard/yqms/first-output-print", "label": "YQMS · First output print", "inputs": ["Machine No", "MO No", "Color", "Temp", "Time", "Pressure", "Reference Sample image", "After Wash image"], "outputs": ["Pass/Reject"], "standard": "Machine standard specs with tolerance", "trigger": "Bundles arrive at SCC", "hands": "Bulk HT/FU run", "stage": "printing/embroidery", "deps": ["q13"]},
+  {"id": "q15", "lane": "qa", "col": 11, "title": "Calibrate machines and test daily", "auto": true, "role": "SCC QC", "short": "hourly calibration, stretch & wash tests", "action": "Register machines per time slot, log actual vs standard parameters hourly, run stretch & scratch and washing tests.", "menu": "Cut Panel > SCC > Daily Testing / Daily HT QC / Daily FU QC / Elastic Report", "route": "/dashboard/yqms/first-output-print", "label": "YQMS · First output print", "inputs": ["Time Slot", "Actual Temp/Time/Pressure", "Number of Rejections", "Stretch & Scratch result", "Washing test result"], "outputs": ["Slot result", "SCC Dashboard"], "standard": "Temp/time/pressure tolerance", "trigger": "First output approved", "hands": "HT/EMB inspection", "stage": "printing/embroidery", "deps": ["q14"]},
+  {"id": "q16", "lane": "qa", "col": 12, "title": "Inspect HT, embroidery/printing and kangaroo pockets", "auto": true, "role": "SCC QC", "short": "AQL on HT, embroidery, print, kangaroo pocket", "action": "Inspect the batch by AQL sample from total pieces, record defects and measurements, submit result.", "menu": "Cut Panel > SCC > HT Inspection / EMB Report / Kangoroo Pocket", "route": "/dashboard/yqms/embroidery-inspection", "label": "YQMS · Embroidery inspection", "inputs": ["Batch No", "Table No", "Actual Layers", "Total Bundle", "Total Pcs", "Defects"], "outputs": ["Insp. Qty (AQL)", "Defect Rate", "Result"], "standard": "AQL sampling plan; 100% / fixed first output pass if defect rate <= 5%", "trigger": "Daily tests pass", "hands": "Bundle QR registration and sewing", "stage": "printing/embroidery", "deps": ["q15"]},
+  {"id": "q17", "lane": "cut", "col": 13, "title": "Register bundles and print QR cards", "auto": true, "role": "Bundle registration clerk", "short": "prints a QR card per bundle; blocks over-plan cut", "action": "For each MO, colour and size create bundle QR cards with bundle quantity for the target department.", "menu": "QR Code > Bundle Registration", "route": "/dashboard/ywip", "label": "YWIP", "inputs": ["Type End/Repack", "Department QC1 Endline/Washing/Sub-con", "MO No", "Line No", "Color", "Size", "Count", "Bundle Qty"], "outputs": ["Bundle QR", "Package No"], "standard": "Actual cut qty must not exceed plan cut qty", "trigger": "Cut panels approved", "hands": "Sewing line and QR scan chain", "stage": "sewing inline/roving", "deps": ["q13", "q16"]},
+  {"id": "q18", "lane": "qa", "col": 14, "title": "Roving and pairing checks on operators", "auto": true, "role": "Roving QC inspector", "short": "scans operator QR; SPI, measurement, quality", "action": "Scan operator QR, check pieces per operation (normal or critical), SPI, measurement and quality; reject parts with defects.", "menu": "Production > QC Inline Roving (Roving / Pairing)", "route": "/dashboard/yqms/qc-roving", "label": "YQMS · QC roving", "inputs": ["Line No", "MO No", "Operation No", "Operator QR", "Inspection Type", "SPI", "Measurement", "Defects", "Images"], "outputs": ["Defect Rate", "Defect Ratio", "Pass Rate", "Positive/Negative measurement rejects"], "standard": "Roving schedule; SPI and measurement tolerance", "trigger": "Line running", "hands": "Coaching of operator; DM #15", "stage": "sewing inline/roving", "deps": ["q17"]},
+  {"id": "q19", "lane": "qa", "col": 14, "title": "Check machines for oil stains", "auto": true, "role": "QA inspector", "short": "scans machine QR, photos oil stains", "action": "Scan machine QR codes on the line, photo any oil stain, save the machine-issue report.", "menu": "Production > Machine Issues", "route": "/dashboard/yqms/rolling-qc", "label": "YQMS · Rolling QC", "inputs": ["Order No", "Line No", "Machine No", "Image"], "outputs": ["Total machines with oil stain"], "standard": "", "trigger": "Line running", "hands": "Maintenance; oil-stain report", "stage": "sewing inline/roving", "deps": ["q17"]},
+  {"id": "q20", "lane": "qa", "col": 15, "title": "Inspect garments at end of line (QC1)", "auto": true, "role": "QC1 inspector", "short": "inspects every garment at end of line", "action": "Inspect every garment at end of line, record defects by category, pass good bundles and reject defective garments.", "menu": "Production > QC1 Inspection; QC Output (QC1 data sync)", "route": "/dashboard/yqms/endline-check", "label": "YQMS · End-line check", "inputs": ["MO No", "Line No", "Color", "Size", "Defect category", "Defect name"], "outputs": ["Output", "Defects", "Defect Rate"], "standard": "Defect categories: workmanship, cleanliness, embellishment, measurement, washing, finishing", "trigger": "Garments sewn", "hands": "Washing / QC2; DM #8-#12", "stage": "QC1 end-line", "deps": ["q18"]},
+  {"id": "q21", "lane": "qa", "col": 16, "title": "QA random inspection of QC work", "auto": true, "role": "QA inspector", "short": "re-checks QC's passed goods, grades accuracy", "action": "Scan the QC inspector QR, re-check a sample after QC, classify defects minor/major/critical to grade QC accuracy.", "menu": "Production > QA Random Inspection", "route": "/dashboard/yqms/inline-audit", "label": "YQMS · Inline audit", "inputs": ["Report Type", "QC Inspector QR", "MO No", "Line No", "Total Checked Qty", "Defects"], "outputs": ["Accuracy", "Grade", "Total Defect Points"], "standard": "AQL sampling plan (code letter, sample size, Ac/Re)", "trigger": "QC1 passed goods", "hands": "QC coaching; QA-QC report", "stage": "QC1 end-line", "deps": ["q20"]},
+  {"id": "q22", "lane": "qa", "col": 15, "title": "Subcontract QC1 and output", "auto": true, "role": "Sub-con QC / QA", "short": "checks subcontract output with a QA sample", "action": "Record checked qty and defects at subcontract factories plus QA sample, and daily output per process.", "menu": "Production > Sub Con QC1; Outsource Output Monitoring", "route": "/dashboard/yqms/offline-audit", "label": "YQMS · Offline audit", "inputs": ["Factory", "Line No", "MO", "Color", "Checked Qty", "Defects", "QA Sample"], "outputs": ["QC Defect Rate", "QA Rate", "Output Summary"], "standard": "", "trigger": "Sub-con production", "hands": "Sub-Con QC1 Dashboard", "stage": "QC1 end-line", "deps": ["q17"]},
+  {"id": "q23", "lane": "wash", "col": 16, "title": "Scan bundles through washing", "auto": true, "role": "Washing operator", "short": "scans bundle QR in and out of washing", "action": "Scan the bundle QR in/out of washing.", "menu": "QR Code > Washing", "route": "/dashboard/ywip", "label": "YWIP", "inputs": ["Bundle QR"], "outputs": ["Pass Qty (Wash)"], "standard": "", "trigger": "QC1 passed", "hands": "QC washing inspection", "stage": "washing", "deps": ["q20"]},
+  {"id": "q24", "lane": "qa", "col": 17, "title": "Inspect before and after wash", "auto": true, "role": "Washing QC", "short": "before / after wash vs DT specs, hand feel, pilling", "action": "Select wash type and report type, inspect the sampled garments, measure against DT specs, rate hand feel, fiber and pilling.", "menu": "Washing > QC Washing Inspection; Select DT Specs", "route": "/dashboard/yqms/finishing-inspection", "label": "YQMS · Finishing inspection", "inputs": ["MO No", "Washing Type", "Report Type SOP/First Output/Inline", "Before/After Wash", "Estimate Wash Qty", "Sample %", "Measurements", "Defects", "Hand feel", "Pilling"], "outputs": ["Defect Result", "Measurement result", "Overall Pass/Fail"], "standard": "Sample 20/30/50/100% of wash qty; DT spec tolerances", "trigger": "Garments washed", "hands": "QC2; Washing Dashboard", "stage": "washing", "deps": ["q23"]},
+  {"id": "q25", "lane": "qa", "col": 18, "title": "Lab-test washed garments", "auto": true, "role": "Lab technician / verify clerk", "short": "lab-tests washed garments vs brand max shrinkage", "action": "Create a lab report (garment wash, pulling, HT, printing tests) for style/colour/size and record pass/fail.", "menu": "Washing > Lab Testing", "route": "/dashboard/yqms/report", "label": "YQMS · Reports", "inputs": ["Report Type", "Style", "Color", "Factory", "Size", "Images"], "outputs": ["Pass/Fail", "Lead time"], "standard": "Brand max shrinkage %", "trigger": "Wash first output", "hands": "Lab Testing Dashboard", "stage": "washing", "deps": ["q24"]},
+  {"id": "q26", "lane": "qa", "col": 19, "title": "Inspect garments at QC2", "auto": true, "role": "QC2 inspector", "short": "inspects each garment; prints a defect card", "action": "Scan the bundle QR, inspect each garment, pass good pieces and select defects for rejects; print defect cards.", "menu": "QR Code > QC2 Inspection", "route": "/dashboard/yqms/fin-check", "label": "YQMS · Fin check", "inputs": ["Bundle QR", "Defect selection per garment"], "outputs": ["Task 54 Pass", "Task 84 Reject", "Defect card", "Pass Rate", "Defect Rate"], "standard": "QC2 defect master", "trigger": "Washing done", "hands": "Repair tracking / OPA", "stage": "QC2", "deps": ["q24"]},
+  {"id": "q27", "lane": "sew", "col": 20, "title": "Repair and re-inspect rejects", "auto": true, "role": "Repair team + QC2", "short": "repairs on the defect card, back to QC2", "action": "Scan the defect card, track the repair until completed, return the garment for re-inspection.", "menu": "QR Code > Defect Tracking", "route": "/dashboard/yqms/fin-check", "label": "YQMS · Fin check", "inputs": ["Defect card QR"], "outputs": ["In Progress", "Completed", "Reworking #", "Pass Return / Reject Return"], "standard": "", "trigger": "QC2 reject", "hands": "QC2 re-inspection or B-grade", "stage": "QC2", "deps": ["q26"]},
+  {"id": "q28", "lane": "qa", "col": 21, "title": "Grade unrepairable garments", "auto": true, "role": "QC2 leader", "short": "confirms B-grade stock; records B/C grade", "action": "Confirm B-grade garments into B-grade stock and record B/C grade defects at QC1 or QC2.", "menu": "QR Code > B-Grade Defects / B-Grade Stock; BC Grade Defect Tracking", "route": "/dashboard/yqms/fin-check", "label": "YQMS · Fin check", "inputs": ["Defect card", "Location QC1/QC2", "Line", "Table", "Order", "Color"], "outputs": ["B-Grade Qty", "A/B/C grade qty"], "standard": "A = passed, B = rework/second, C = cut-panel defect", "trigger": "Repair failed", "hands": "B-grade stock; BC dashboard", "stage": "QC2", "deps": ["q27"]},
+  {"id": "q29", "lane": "fin", "col": 21, "title": "Scan through OPA", "auto": true, "role": "OPA operator", "short": "scans bundles through OPA", "action": "Scan bundles through the OPA station.", "menu": "QR Code > OPA", "route": "/dashboard/ywip", "label": "YWIP", "inputs": ["Bundle QR", "OPA Task"], "outputs": ["Pass Qty (OPA)"], "standard": "", "trigger": "QC2 passed", "hands": "Ironing", "stage": "OPA", "deps": ["q26"]},
+  {"id": "q30", "lane": "fin", "col": 22, "title": "Scan through ironing", "auto": true, "role": "Ironing operator", "short": "scans bundles through ironing", "action": "Scan bundles through ironing.", "menu": "QR Code > Ironing", "route": "/dashboard/yqms/ironing-inspection", "label": "YQMS · Ironing inspection", "inputs": ["Bundle QR"], "outputs": ["Pass Qty (Iron)"], "standard": "", "trigger": "OPA done", "hands": "After-ironing inspection", "stage": "ironing", "deps": ["q29"]},
+  {"id": "q31", "lane": "qa", "col": 23, "title": "Inspect after ironing", "auto": true, "role": "Finishing QC", "short": "AQL sample after ironing, measures to spec", "action": "Inspect an AQL sample after ironing and measure after-wash points against spec.", "menu": "Finishing > After Ironing; QC AW Washing", "route": "/dashboard/yqms/ironing-inspection", "label": "YQMS · Ironing inspection", "inputs": ["MO No", "Ironing Type", "Report Type", "Before/After Iron", "Iron Qty", "Measurements", "Defects"], "outputs": ["Checked Qty (AQL)", "Measurement Pass Rate", "Overall Result"], "standard": "AQL sample; measurement tolerance", "trigger": "Ironed", "hands": "Humidity check", "stage": "ironing", "deps": ["q30"]},
+  {"id": "q32", "lane": "qa", "col": 24, "title": "Check garment moisture", "auto": true, "role": "Finishing QC", "short": "Aquaboy % RH top / middle / bottom; leader approves", "action": "Take Aquaboy readings at top, middle and bottom on body and rib before the dry room, photo and save.", "menu": "Finishing > Humidity Inspection", "route": "/dashboard/yqms/aquaboy", "label": "YQMS · Aquaboy", "inputs": ["Factory Style No", "Sub-Con Factory", "Color", "Aquaboy Reading Spec % RH", "Before Dry Room", "Top/Middle/Bottom readings"], "outputs": ["Body/Rib Pass/Fail"], "standard": "Aquaboy reading spec (% RH)", "trigger": "Ironed", "hands": "Leader approval in Humidity Report; packing", "stage": "humidity", "deps": ["q31"]},
+  {"id": "q33", "lane": "fin", "col": 25, "title": "Scan through packing", "auto": true, "role": "Packing team", "short": "scans into packing, loads the packing list", "action": "Scan bundles into packing and load the buyer packing list.", "menu": "QR Code > Packing; Process > Upload Packing List", "route": "/dashboard/yqms/packing-inspection", "label": "YQMS · Packing inspection", "inputs": ["Bundle QR", "Packing Task", "Packing list"], "outputs": ["Pass Qty (Pack)"], "standard": "", "trigger": "Humidity pass", "hands": "Final QA", "stage": "packing", "deps": ["q32"]},
+  {"id": "q34", "lane": "qa", "col": 14, "title": "Inline and first-output QA inspections", "auto": true, "role": "QA inspector", "short": "pilot, first-output, inline QA — fixed sample 5 / 20", "action": "Run pilot-run, first-output and inline QA reports on the order using the template's fixed sample.", "menu": "QAssure > Inspection", "route": "/dashboard/yqms/first-output-sewing", "label": "YQMS · First output sewing", "inputs": ["Order No", "Report type", "Header checks", "Photos", "Measurements", "Defects"], "outputs": ["QA Status", "Summary"], "standard": "Fixed sample (5 or 20) per template", "trigger": "Production started", "hands": "Corrective action on line", "stage": "QAssure/final", "deps": ["q17"]},
+  {"id": "q35", "lane": "qa", "col": 26, "title": "Interim, pre-final and final inspection", "auto": true, "role": "QA inspector", "short": "interim, pre-final, final on the AQL sample", "action": "Inspect the AQL sample of packed goods incl. cartons, record defects by category and severity, conclude.", "menu": "QAssure > Inspection", "route": "/dashboard/yqms/final-inspection", "label": "YQMS · Final inspection", "inputs": ["Order No", "Inspection Type First/Re-Inspection", "Cartons", "Defects (minor/major/critical)", "Measurements", "Photos"], "outputs": ["Sample Size", "Defect Qty", "QA Status", "Resubmission"], "standard": "AQL method per template", "trigger": "Packing complete", "hands": "Leader decision", "stage": "QAssure/final", "deps": ["q33"]},
+  {"id": "q36", "lane": "qa", "col": 27, "title": "Leader decision on QA reports", "auto": true, "role": "QA leader", "short": "Approved / Rejected / Pending; rejects re-inspected", "action": "Review the report and set the leader decision; rejected lots go for rework and re-inspection.", "menu": "QAssure > Reports", "route": "/dashboard/yqms/pre-final", "label": "YQMS · Pre-final", "inputs": ["Leader Decision"], "outputs": ["Approved", "Rejected", "Pending"], "standard": "", "trigger": "QA report submitted", "hands": "Shipment / 3rd-party inspection", "stage": "QAssure/final", "deps": ["q35"]},
+  {"id": "q37", "lane": "qa", "col": 28, "title": "Record 3rd-party and buyer inspections", "auto": true, "role": "QA leader", "short": "records 3rd-party and buyer results vs ours", "action": "Record the external inspector's result and the buyer-format report against the QA report.", "menu": "Audit > 3rd Party Inspection / Buyer Report", "route": "/dashboard/yqms/buyer-final", "label": "YQMS · Buyer final", "inputs": ["Inline/Final/Re-Inspection", "Insp. Qty", "Sample Size", "Reject Qty by 3rd party", "Actual Total Reject", "Defects", "PO No"], "outputs": ["Actual Result", "Conformed / Not conformed / Pending-Hold"], "standard": "Buyer AQL", "trigger": "Final QA approved", "hands": "Shipment release", "stage": "QAssure/final", "deps": ["q36"]},
+  {"id": "q38", "lane": "qa", "col": 29, "title": "Monitor dashboards and QMS TV", "auto": true, "role": "QA manager / leaders", "short": "DM #1–#18 + QMS TV; acts on worst lines", "action": "Review live KPIs on the TV and act on worst lines, top defects and delays.", "menu": "DM Dashboard (DM #1-#18, BC Grade, DM #ALL); Analytics > Live Dashboard", "route": "/dashboard/yqms/dashboard", "label": "YQMS · Dashboard", "inputs": [], "outputs": ["Defect Rate", "Pass Rate", "Worst Line/MO", "Top Issue", "Minor/Major/Critical"], "standard": "", "trigger": "Data from all stages", "hands": "Daily quality meeting", "stage": "consolidation/TV", "deps": ["q37"]},
+  {"id": "q39", "lane": "qa", "col": 30, "title": "Audit, train and test", "auto": true, "role": "QA manager / auditor / trainer", "short": "audits, training and exams for QC staff", "action": "Score factory and subcontractor audits, schedule training and run exams for QC staff.", "menu": "Process > QMS Audit / YQMS Training / YQMS Exam", "route": "/dashboard/yqms/report", "label": "YQMS · Reports", "inputs": ["Audit requirements", "Level 1-4", "Training topics", "Exam questions"], "outputs": ["Total Score Achieved", "Training progress"], "standard": "Must-have items reject the audit if not OK", "trigger": "Periodic", "hands": "Continuous improvement", "stage": "consolidation/TV", "deps": ["q38"]},
+];
+
+const QMS = {
+  kind: "timeline",
+  ruler: false,
+  px: 190,
+  title: "Quality Management · QMS",
+  summary: "Every roll barcoded at GRN, every bundle QR-scanned station to station — from fabric arrival to the buyer's final, in process order. Standards are in each card.",
+  lanes: ["fc", "cut", "qa", "sew", "wash", "fin", "ship"],
+  days: 31,
+  phases: [
+    { d0: 0, d1: 3, label: "Fabric arrival" }, { d0: 3, d1: 5, label: "Inspection & lab" }, { d0: 5, d1: 7, label: "Relax & issue" },
+    { d0: 7, d1: 10, label: "Cutting & cut panels" }, { d0: 10, d1: 13, label: "SCC · HT / print / embroidery" },
+    { d0: 13, d1: 16, label: "Bundles · sewing · QC1" }, { d0: 16, d1: 19, label: "Washing" }, { d0: 19, d1: 22, label: "QC2 · repair · grading" },
+    { d0: 22, d1: 26, label: "Ironing · humidity · packing" }, { d0: 26, d1: 29, label: "QAssure · final · buyer" }, { d0: 29, d1: 31, label: "Dashboards & audits" },
+  ],
+  acts: [
+    ...QMS_STEPS.map((q, i) => ({
+      id: q.id, lane: q.lane, title: q.title, d0: q.col, d1: q.col + 1, step: i + 1, stage: q.stage,
+      by: q.auto ? Y(q.role, q.short) : H(q.role, q.short),
+      screen: [q.label, q.route], menu: q.menu,
+      roles: [R(q.role, q.lane, q.action)],
+      inputs: q.inputs.join(", ") || "—", outputs: q.outputs.join(", ") || "—",
+      standard: q.standard, trigger: q.trigger, hands: q.hands, deps: q.deps,
+    })),
+    { id: "q40", lane: "ship", title: "Shipment release", d0: 29, d1: 30, step: 40, stage: "shipping",
+      by: H("Shipping officer", "takes the approved goods into export"), screen: ["Shipping · Request", "/dashboard/shipping/request"],
+      roles: [R("QA leader", "qa", "Final QA approved; buyer result conformed"), R("Shipping officer", "ship", "Books export and ex-factory — Order → Ship continues")],
+      inputs: "Approved final + buyer result", outputs: "Export & ex-factory", trigger: "Final QA approved", hands: "Order → Ship: Export & ex-factory", deps: ["q37"] },
+  ],
+};
+
 // Order (Gamini 2026-10-06): overview first, production modules in flow
 // sequence, then the support departments, Accounting last.
 const PROCESSES = [
@@ -387,7 +467,7 @@ const PROCESSES = [
   { id: "fc", name: "FC · Fabric Center", flow: ORDER, focus: ["fc"] },
   { id: "ie", name: "CE · IE", flow: ORDER, focus: ["ce"] },
   { id: "prod", name: "Production", sub: "Cut · sew · finish · pack", flow: ORDER, focus: ["prod"] },
-  { id: "qa", name: "Quality Management", flow: ORDER, focus: ["qa"] },
+  { id: "qa", name: "Quality Management", sub: "QMS · 39 steps", flow: QMS },
   { id: "ytm", name: "YTM · Maintenance", flow: ORDER, focus: ["ytm"] },
   { id: "ytmshop", name: "YTM Shop", flow: YTM_SHOP },
   { id: "hr", name: "HR", flow: HR },
@@ -415,13 +495,14 @@ function ByIcon({ auto, size = 14 }) {
 const PX = 14, LABEL_W = 132, HEAD_H = 46, BOX_W = 168, BOX_H = 56, TRACK_H = 64, PAD = 6;
 
 function layoutTimeline(flow) {
+  const px = flow.px || PX;
   const pos = {};
   const lanes = [];
   let y = 0;
   flow.lanes.forEach((lane) => {
     const tracks = [];
     flow.acts.filter((a) => a.lane === lane).sort((a, b) => a.d0 - b.d0).forEach((a) => {
-      const x = a.d0 * PX, dur = Math.max((a.d1 - a.d0) * PX, 6), w = Math.max(dur, BOX_W);
+      const x = a.d0 * px, dur = flow.px ? px - 14 : Math.max((a.d1 - a.d0) * px, 6), w = Math.max(dur, flow.px ? 0 : BOX_W);
       let t = tracks.findIndex((e) => e + 8 <= x);
       if (t < 0) { t = tracks.length; tracks.push(0); }
       tracks[t] = x + w;
@@ -431,7 +512,7 @@ function layoutTimeline(flow) {
     lanes.push({ lane, y, h });
     y += h;
   });
-  return { pos, lanes, height: y, width: flow.days * PX };
+  return { pos, lanes, height: y, width: flow.days * px, px };
 }
 
 function Timeline({ flow, focus, sel, onSel }) {
@@ -474,9 +555,12 @@ function Timeline({ flow, focus, sel, onSel }) {
       <div className="overflow-x-auto flex-1">
         <div className="relative" style={{ width: L.width + BOX_W, height: HEAD_H + L.height }}>
           {flow.phases.map((p) => (
-            <div key={p.label} className="absolute top-0 text-[10px] text-slate-400 border-l border-white/10 px-1 truncate" style={{ left: p.d0 * PX, width: (p.d1 - p.d0) * PX, height: 18 }}>{p.label}</div>
+            <div key={p.label} className="absolute top-0 text-[10px] text-slate-400 border-l border-white/10 px-1 truncate" style={{ left: p.d0 * L.px, width: (p.d1 - p.d0) * L.px, height: 18 }}>{p.label}</div>
           ))}
-          {Array.from({ length: Math.floor(flow.days / 5) + 1 }, (_, i) => i * 5).map((d) => (
+          {flow.ruler === false && flow.phases.map((p) => (
+            <div key={`l${p.label}`} className="absolute border-l border-white/10" style={{ left: p.d0 * L.px, top: 18, height: HEAD_H + L.height - 18 }} />
+          ))}
+          {flow.ruler !== false && Array.from({ length: Math.floor(flow.days / 5) + 1 }, (_, i) => i * 5).map((d) => (
             <div key={d} className="absolute" style={{ left: d * PX, top: 18, height: HEAD_H + L.height - 18 }}>
               <div className={`h-full ${d === 0 ? "border-l-2 border-emerald-400" : d % 10 === 0 ? "border-l border-white/10" : "border-l border-white/[0.04]"}`} />
               {d % 10 === 0 && <div className={`absolute top-1 left-1 text-[10px] whitespace-nowrap ${d === 0 ? "text-emerald-300 font-bold" : "text-slate-500"}`}>{d === 0 ? "DAY 0" : `D${d}`}</div>}
@@ -506,7 +590,7 @@ function Timeline({ flow, focus, sel, onSel }) {
           {flow.acts.map((a) => {
             const p = L.pos[a.id], c = DEPTS[a.lane].color, on = sel === a.id;
             return (
-              <button key={a.id} onClick={() => onSel(a.id)} title={`${a.title} · Day ${a.d0}–${a.d1}`}
+              <button key={a.id} onClick={() => onSel(a.id)} title={flow.ruler === false ? `${a.step}. ${a.title}` : `${a.title} · Day ${a.d0}–${a.d1}`}
                 className={`absolute text-left rounded-lg overflow-hidden transition-opacity ${dim(a.lane) ? "opacity-30" : ""}`}
                 style={{ left: p.x, top: HEAD_H + p.y, width: p.w, height: BOX_H, zIndex: 2, background: on ? "#334155" : "#1e293b", boxShadow: on ? `0 0 0 2px ${c}` : `inset 0 0 0 1px ${c}66` }}>
                 <div className="absolute left-0 top-0 bottom-0 w-[3px]" style={{ background: c }} />
@@ -590,7 +674,7 @@ function Cycle({ flow, sel, onSel, go }) {
   );
 }
 
-function ActivityCard({ flow, act, onSel, go }) {
+function ActivityCard({ flow, act, onSel, go, onProcess }) {
   const c = DEPTS[act.lane].color;
   const i = flow.acts.indexOf(act);
   const next = flow.kind === "timeline"
@@ -609,7 +693,8 @@ function ActivityCard({ flow, act, onSel, go }) {
       <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
         <div className="text-lg font-bold">{act.title}</div>
         <div className="text-xs font-semibold" style={{ color: c }}>{DEPTS[act.lane].label}</div>
-        {flow.kind === "timeline" && <div className="text-xs text-slate-400">Day {act.d0} → Day {act.d1}</div>}
+        {flow.kind === "timeline" && flow.ruler !== false && <div className="text-xs text-slate-400">Day {act.d0} → Day {act.d1}</div>}
+        {act.step && <div className="text-xs text-slate-400">Step {act.step} · {act.stage}</div>}
         <button onClick={() => go(act.screen[1])} className="ml-auto text-xs rounded-lg px-2.5 py-1 bg-white/5 hover:bg-white/15" style={{ color: c }}>↗ {act.screen[0]}</button>
       </div>
       <div className="mt-2 flex items-center gap-2 text-sm">
@@ -631,6 +716,17 @@ function ActivityCard({ flow, act, onSel, go }) {
           </div>
         ))}
       </div>
+      {(act.standard || act.trigger || act.hands || act.menu) && (
+        <div className="mt-3 grid gap-1 text-xs">
+          {act.standard && <div className="rounded-lg bg-rose-500/10 border border-rose-400/20 px-2 py-1"><span className="text-rose-300 font-semibold">Standard:</span> <span className="text-slate-200">{act.standard}</span></div>}
+          {act.trigger && <div><span className="text-slate-500">Starts when:</span> <span className="text-slate-300">{act.trigger}</span></div>}
+          {act.hands && <div><span className="text-slate-500">Hands to:</span> <span className="text-slate-300">{act.hands}</span></div>}
+          {act.menu && <div><span className="text-slate-500">QMS screen:</span> <span className="text-slate-300">{act.menu}</span></div>}
+        </div>
+      )}
+      {act.qms && onProcess && (
+        <button onClick={() => onProcess("qa")} className="mt-3 text-xs rounded-lg px-2.5 py-1 bg-rose-500/15 border border-rose-400/30 text-rose-200 hover:bg-rose-500/25">↗ Open the QMS steps for this (Quality Management)</button>
+      )}
       <div className="mt-3 flex flex-wrap gap-2 text-xs">
         <span className="rounded-lg bg-white/5 px-2 py-1"><span className="text-slate-500">In:</span> {act.inputs}</span>
         <span className="text-slate-500 self-center">→</span>
@@ -698,7 +794,7 @@ const SOPMap = ({ onBack }) => {
 
           <div ref={cardRef}>
             {act
-              ? <ActivityCard flow={flow} act={act} onSel={pick} go={go} />
+              ? <ActivityCard flow={flow} act={act} onSel={pick} go={go} onProcess={setPid} />
               : <div className="mt-4 text-sm text-slate-500">Click any box to see every role involved, what each one does, and where it goes next.</div>}
           </div>
         </main>
