@@ -62,11 +62,11 @@ const Sections = ({ onBack }) => {
   }, [rows]);
   const shown = useMemo(() => { const s = q.trim().toLowerCase(); return cards.filter((c) => (!group || c.group === group) && (!s || `${c.section} ${c.department} ${c.line} ${c.factory}`.toLowerCase().includes(s) || c.people.some((p) => p.emp_no.toLowerCase() === s || String(p.aliases || "").toLowerCase().includes(s)))); }, [cards, q, group]);
   const hit = (c) => (want.line && c.line === want.line) || (want.section && (c.section === want.section || c.department === want.section)) || (!want.line && !want.section && want.department && c.department === want.department);
-  useEffect(() => { if (!rows) return; const c = cards.find(hit); if (c && refs.current[c.key]) setTimeout(() => refs.current[c.key].scrollIntoView({ behavior: "smooth", block: "start" }), 150); }, [rows, cards]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { if (!rows) return; const c = cards.find(hit); if (c && refs.current[c.key]) setTimeout(() => refs.current[c.key].scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" }), 150); }, [rows, cards]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div ref={topRef} style={{ paddingTop: topPad }} className="yai-pa-aware min-h-screen bg-slate-900 text-slate-200 px-3 md:px-5 pb-8 font-sans">
-      <style>{`body.yai-pa-open .yai-pa-aware { padding-right: 436px; }`}</style>
+      <style>{`body.yai-pa-open .yai-pa-aware { padding-right: 436px; } @keyframes hr-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(56,189,248,0); } 50% { box-shadow: 0 0 0 10px rgba(56,189,248,.35); } } .hr-pulse { animation: hr-pulse 1.2s ease-out 3; }`}</style>
       <NavCover />
       <div className="flex flex-wrap items-center gap-2 mb-2">
         <button onClick={back} className="p-1 -ml-1 hover:bg-slate-700 rounded-full transition-colors text-slate-400 hover:text-white" aria-label="Back"><ArrowLeft size={18} /></button>
@@ -85,7 +85,7 @@ const Sections = ({ onBack }) => {
           const on = hit(c);
           const g = GROUP[c.group] || GROUP.operations;
           return (
-            <section key={c.key} ref={(el) => { refs.current[c.key] = el; }} className={`rounded-2xl border bg-slate-800/40 p-3 min-w-0 ${on ? "border-sky-400 ring-2 ring-sky-400/60" : g.box}`}>
+            <section key={c.key} ref={(el) => { refs.current[c.key] = el; }} style={{ scrollMarginTop: 170 }} className={`rounded-2xl border bg-slate-800/40 p-3 min-w-0 ${on ? "border-sky-400 ring-2 ring-sky-400/60 hr-pulse" : g.box}`}>
               <div className="flex flex-wrap items-baseline gap-2 mb-1">
                 <span className="text-base font-black text-white">{c.line ? `Line ${c.line}` : c.section || c.department}</span>
                 {c.line && <span className="text-[11px] text-slate-500">{c.department}</span>}

@@ -58,6 +58,9 @@ import GarmentAnalysis from "./ce/GarmentAnalysis";
 import IeMaster from "./ce/IeMaster";
 import MachineFloor from "./ce/MachineFloor";
 import ProductionFloor from "./ce/ProductionFloor";
+import Cpm from "./ce/Cpm";
+import StyleCosting from "./ce/StyleCosting";
+import CostCentres from "./ce/CostCentres";
 import ComplianceCertificate from "./digital-audit/compliance-certificate";
 import AuditPlan from "./digital-audit/audit-plan";
 import Checklist6S from "./digital-audit/checklist-6s";
@@ -272,6 +275,9 @@ export default function App() {
           <Route path="ce/garment-analysis" element={<GarmentAnalysis onBack={handleBack} />} />
           <Route path="ce/operation-breakdown" element={<OperationBreakdown onBack={handleBack} />} />
           <Route path="ce/line-planning" element={<LinePlanning onBack={handleBack} />} />
+          <Route path="ce/cpm" element={<Cpm onBack={handleBack} />} />
+          <Route path="ce/style-costing" element={<StyleCosting onBack={handleBack} />} />
+          <Route path="ce/cost-centers" element={<CostCentres onBack={handleBack} />} />
           <Route path="ce/line-balancing" element={<ProductionFloor lens="balancing" onBack={handleBack} />} />
           <Route path="ce/productivity" element={<ProductionFloor lens="productivity" onBack={handleBack} />} />
           <Route path="ce/team-performance" element={<ProductionFloor lens="team" onBack={handleBack} />} />
