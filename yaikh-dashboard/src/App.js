@@ -102,6 +102,7 @@ import AutoPost from "./autopost/AutoPost";
 // FC Module Components
 import MrpView from "./mrp/MrpView";
 import DeptView from "./deptview/DeptView";
+import YwipFlow from "./ywip/YwipFlow";
 import FourDP from "./fourdp/FourDP";
 import LineLive from "./fourdp/LineLive";
 import CutPlan from "./ypi/CutPlan";
@@ -382,6 +383,8 @@ export default function App() {
             element={<Training onBack={handleBack} />}
           />
 
+          {/* YWIP — the work-in-progress flow as an isometric infographic */}
+          <Route path="ywip" element={<YwipFlow onBack={handleBack} />} />
           {/* MRP sub-modules — data from the simulated factory on the M1 */}
           <Route path="mrp/:view" element={<MrpView onBack={handleBack} />} />
           {/* Admin & Support sub-modules — same simulated factory, one shared

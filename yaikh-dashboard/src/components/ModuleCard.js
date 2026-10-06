@@ -72,7 +72,8 @@ const ModuleCard = ({ data, onClick, botVersion = 'default', onBotClick, isDropd
     if (data.logo) {
       return (
         <div
-          className={`text-3xl font-black italic ${data.color || "text-green-500"
+          style={{ fontSize: "calc(var(--yai-icon, 80px) * 0.62)", lineHeight: 1 }}
+          className={`font-black italic ${data.color || "text-green-500"
             }`}
         >
           {data.title === "E-Invoicing"
@@ -139,10 +140,13 @@ const ModuleCard = ({ data, onClick, botVersion = 'default', onBotClick, isDropd
         </div>
       );
     }
+    // Lucide icons were fixed at 32 px, about a quarter of a tile. They now
+    // follow --yai-icon like the image tiles, so every tile reads the same.
     const IconComponent = data.icon;
     return (
       <IconComponent
-        size={32}
+        strokeWidth={1.5}
+        style={{ width: "var(--yai-icon, 80px)", height: "var(--yai-icon, 80px)" }}
         className={`${isComingSoon
           ? "text-black"
           : data.color || "text-slate-800"
