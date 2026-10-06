@@ -85,7 +85,15 @@ const measure = (node, open) => {
   return { node, w: Math.max(BW, gw), h: BH + GY + Math.max(...groups.map((g) => g.h)), kids: ms, mode: "wrap", groups };
 };
 const place = (m, x, y, branch, out) => {
-  const cx = x + m.w / 2;                       // the box, centred over its subtree
+  // the box sits centred over its subtree — unless one child's branch dominates (the Factory Manager
+  // under the GM: ~900 of the 1,000 people), then the box sits straight above THAT child, the way a
+  // classic chart puts the GM over the factory line with the departments stretching to the side
+  let cx = x + m.w / 2;
+  if (m.mode === "row") {
+    const total = m.kids.reduce((s, k) => s + k.w, 0) + GX * (m.kids.length - 1);
+    const big = m.kids.reduce((a, k) => (k.w > a.w ? k : a), m.kids[0]);
+    if (big.w > 0.55 * total) { let kx = x + (m.w - total) / 2; for (const k of m.kids) { if (k === big) { cx = kx + k.w / 2; break; } kx += k.w + GX; } }
+  }
   const bx = cx - BW / 2;
   const b = branchOf(m.node, branch);
   out.boxes.push({ node: m.node, x: bx, y, branch: b, open: m.kids.length > 0 });
@@ -184,16 +192,20 @@ const OrgTree = ({ mgmt, onPerson, open, setOpen }) => {
     return { s, x: px - (px - o.x) * (s / o.s), y: py - (py - o.y) * (s / o.s) };
   }), []);
   const zoomCentre = (factor) => { const el = view.current; zoomAt(factor, el ? el.clientWidth / 2 : 0, el ? el.clientHeight / 2 : 0); };
-  // the backbone of the chart is the Factory Manager (≈900 of the 1,000 people under him), so the opening
-  // view and "100%" centre on him with the GM's row at the top; the GM is a short pan to the right
-  const focusX = useCallback(() => { const f = g.boxes.find((b) => b.node.level === "factory_manager") || g.boxes[0]; return f ? f.x + BW / 2 : g.w / 2; }, [g]);
-  const hundred = () => { const el = view.current; if (!el) return; setT({ s: 1, x: el.clientWidth / 2 - focusX(), y: 8 }); };
-
-  // the first view: the top of the chart at a readable size, centred on the Factory Manager
+  // Gamini reads top-down from the GM: the opening view has the GM at the top centre with the whole GM-level
+  // row (Factory Manager, QC, the administrative managers) in view, then he zooms into the supervisors;
+  // "100%" is the GM at actual size
+  const gmX = useCallback(() => { const r = g.boxes[0]; return r ? r.x + BW / 2 : g.w / 2; }, [g]);
+  const hundred = () => { const el = view.current; if (!el) return; setT({ s: 1, x: el.clientWidth / 2 - gmX(), y: 8 }); };
   useLayoutEffect(() => {
     const el = view.current; if (!el) return;
-    const s = Math.max(0.75, Math.min(1, (el.clientWidth - 16) / g.w));
-    setT({ s, x: el.clientWidth / 2 - focusX() * s, y: 8 });
+    const ids = new Set(((mgmt && mgmt.children) || []).map((c) => c.emp_no));
+    const row = g.boxes.filter((b) => ids.has(b.node.emp_no));
+    const x0 = row.length ? Math.min(...row.map((b) => b.x)) : 0, x1 = row.length ? Math.max(...row.map((b) => b.x + BW)) : g.w;
+    // the whole GM level if it fits at a readable size, otherwise 60 % with the GM in the middle
+    const fitS = (el.clientWidth - 32) / (x1 - x0);
+    const s = fitS >= 0.6 ? Math.min(1, fitS) : 0.6;
+    setT({ s, x: el.clientWidth / 2 - (fitS >= 0.6 ? (x0 + x1) / 2 : gmX()) * s, y: 8 });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mgmt]);
 
