@@ -136,21 +136,21 @@ const RelaxMachine = ({ x = 0, y = 0 }) => (
 
 /* ── station list: where each one sits, what it draws, what data it opens ─ */
 const STATIONS = [
-  { key: "fabric-store", label: "Fabric store", at: [90, 150], view: "fabric-receiving",
+  { key: "fabric-store", label: "Fabric store", at: [150, 150], view: "fabric-receiving",
     note: "Received fabric on the racks.", draw: (
       <g><FabricRack x={0} y={0} /><FabricRack x={0} y={13} /></g> ) },
-  { key: "fabric-inspection", label: "Fabric inspection", at: [330, 120], view: "fabric-inspection",
+  { key: "fabric-inspection", label: "Fabric inspection", at: [420, 120], view: "fabric-inspection",
     note: "Four-point inspection on the light table.", draw: <InspectionMachine x={0} y={0} /> },
-  { key: "accessory-store", label: "Accessory store", at: [600, 150], view: "accessories-receiving",
+  { key: "accessory-store", label: "Accessory store", at: [720, 140], view: "accessories-receiving",
     note: "Trims and accessories on the racks.", draw: <BoxRack x={0} y={0} /> },
-  { key: "accessory-inspection", label: "Accessory inspection", at: [840, 120], view: "accessories-inspection",
+  { key: "accessory-inspection", label: "Accessory inspection", at: [1000, 120], view: "accessories-inspection",
     note: "Lot check against the trim card.", draw: <InspectionTable x={0} y={0} /> },
-  { key: "ready", label: "Ready to deliver", at: [250, 420], view: "fabric-issuing",
+  { key: "ready", label: "Ready to deliver", at: [210, 450], view: "fabric-issuing",
     note: "Inspected fabric and trims waiting on the racks.", draw: (
       <g><FabricRack x={0} y={0} /><FabricRack x={0} y={13} /><BoxRack x={26} y={4} rows={2} /><BoxRack x={26} y={17} rows={2} /></g> ) },
-  { key: "delivery", label: "Delivery to cutting", at: [600, 460], view: "material-delivery",
+  { key: "delivery", label: "Delivery to cutting", at: [580, 495], view: "material-delivery",
     note: "Material moves to the cutting section by tuk-tuk.", draw: <TukTuk x={0} y={0} /> },
-  { key: "relaxing", label: "Cutting · fabric relaxing", at: [840, 420], view: "fabric-relaxing",
+  { key: "relaxing", label: "Cutting · fabric relaxing", at: [900, 455], view: "fabric-relaxing",
     note: "First operation in cutting: fabric relaxed, then laid in trays.", draw: <RelaxMachine x={0} y={0} /> },
 ];
 
@@ -245,8 +245,8 @@ const YwipFlow = ({ onBack }) => {
           {STATIONS.map((s, i) => (
             <g key={s.key} transform={`translate(${s.at[0]},${s.at[1]})`} className="cursor-pointer"
                onClick={() => openStation(s)} role="button" aria-label={s.label}>
-              <g transform="translate(0,-14)">{s.draw}</g>
-              <text x="0" y="40" textAnchor="middle" fontSize="11" letterSpacing="2.2" fill="#e2e8f0" style={{ textTransform: "uppercase" }}>
+              <g transform="scale(2.1) translate(0,-14)">{s.draw}</g>
+              <text x="0" y="74" textAnchor="middle" fontSize="11" letterSpacing="2.2" fill="#e2e8f0" style={{ textTransform: "uppercase" }}>
                 {String(i + 1).padStart(2, "0")} · {s.label.toUpperCase()}
               </text>
             </g>
