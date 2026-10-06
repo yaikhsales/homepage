@@ -44,15 +44,15 @@ const PreProductionMeeting = ({ onBack }) => {
     const itemsPerPage = 8;
 
     const initialMeetings = [
-        { id: 'PPM-2024-001', date: '2024-02-18', buyer: 'Aritzia', style: 'AR-701-BLU', attendees: 12, status: 'Scheduled', statusColor: 'text-red-700 bg-red-100 border-red-200', file: 'PPM_Plan.pdf' },
-        { id: 'PPM-2024-002', date: '2024-02-18', buyer: 'Costco', style: 'CS-SILK-TW', attendees: 8, status: 'In-Progress', statusColor: 'text-amber-700 bg-amber-100 border-amber-200', file: 'Pending' },
-        { id: 'PPM-2024-003', date: '2024-02-17', buyer: 'Arizia', style: 'LL-FAST-BLK', attendees: 15, status: 'Finished', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'Meeting_Notes.pdf' },
-        { id: 'PPM-2024-004', date: '2024-02-17', buyer: 'ANF', style: 'NK-TECH-GRY', attendees: 10, status: 'Finished', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'Meeting_Notes.pdf' },
-        { id: 'PPM-2024-005', date: '2024-02-19', buyer: 'Reitmans', style: 'GP-DENIM-99', attendees: 6, status: 'Scheduled', statusColor: 'text-red-700 bg-red-100 border-red-200', file: 'Pending' },
-        { id: 'PPM-2024-006', date: '2024-02-20', buyer: 'Arizia', style: 'UQ-AIR-772', attendees: 14, status: 'Scheduled', statusColor: 'text-red-700 bg-red-100 border-red-200', file: 'Pending' },
-        { id: 'PPM-2024-007', date: '2024-02-16', buyer: 'Arizia', style: 'ZR-COAT-W24', attendees: 20, status: 'Finished', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'Meeting_Notes.pdf' },
-        { id: 'PPM-2024-008', date: '2024-02-15', buyer: 'Costco', style: 'HM-KNIT-PR', attendees: 5, status: 'Cancelled', statusColor: 'text-slate-700 bg-slate-100 border-slate-200', file: 'Pending' },
-        { id: 'PPM-2024-009', date: '2024-02-21', buyer: 'ANF', style: 'AD-PERF-RUN', attendees: 9, status: 'Scheduled', statusColor: 'text-red-700 bg-red-100 border-red-200', file: 'Pending' },
+        { id: 'PPM-2024-001', date: '2024-02-18', buyer: 'Customer CC', style: 'STY-6269', attendees: 12, status: 'Scheduled', statusColor: 'text-red-700 bg-red-100 border-red-200', file: 'PPM_Plan.pdf' },
+        { id: 'PPM-2024-002', date: '2024-02-18', buyer: 'Customer BB', style: 'CS-SILK-TW', attendees: 8, status: 'In-Progress', statusColor: 'text-amber-700 bg-amber-100 border-amber-200', file: 'Pending' },
+        { id: 'PPM-2024-003', date: '2024-02-17', buyer: 'Customer CC', style: 'LL-FAST-BLK', attendees: 15, status: 'Finished', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'Meeting_Notes.pdf' },
+        { id: 'PPM-2024-004', date: '2024-02-17', buyer: 'Customer BB', style: 'NK-TECH-GRY', attendees: 10, status: 'Finished', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'Meeting_Notes.pdf' },
+        { id: 'PPM-2024-005', date: '2024-02-19', buyer: 'Customer DD', style: 'GP-DENIM-99', attendees: 6, status: 'Scheduled', statusColor: 'text-red-700 bg-red-100 border-red-200', file: 'Pending' },
+        { id: 'PPM-2024-006', date: '2024-02-20', buyer: 'Customer CC', style: 'UQ-AIR-772', attendees: 14, status: 'Scheduled', statusColor: 'text-red-700 bg-red-100 border-red-200', file: 'Pending' },
+        { id: 'PPM-2024-007', date: '2024-02-16', buyer: 'Customer CC', style: 'ZR-COAT-W24', attendees: 20, status: 'Finished', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'Meeting_Notes.pdf' },
+        { id: 'PPM-2024-008', date: '2024-02-15', buyer: 'Customer BB', style: 'HM-KNIT-PR', attendees: 5, status: 'Cancelled', statusColor: 'text-slate-700 bg-slate-100 border-slate-200', file: 'Pending' },
+        { id: 'PPM-2024-009', date: '2024-02-21', buyer: 'Customer BB', style: 'AD-PERF-RUN', attendees: 9, status: 'Scheduled', statusColor: 'text-red-700 bg-red-100 border-red-200', file: 'Pending' },
     ];
 
     const [meetings, setMeetings] = useState(() => {

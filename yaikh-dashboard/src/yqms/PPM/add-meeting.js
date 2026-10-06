@@ -253,8 +253,8 @@ const AddMeeting = ({ onCancel, onSave }) => {
                                     <option value="" disabled>Select Buyer</option>
                                     <option value="Customer CC">Customer CC</option>
                                     <option value="Customer BB">Customer BB</option>
-                                    <option value="ANF">ANF</option>
-                                    <option value="Reitmans">Reitmans</option>
+                                    <option value="Customer AA">Customer AA</option>
+                                    <option value="Customer DD">Customer DD</option>
                                 </select>
                             </div>
 
