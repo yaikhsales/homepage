@@ -113,14 +113,9 @@ import LineLive from "./fourdp/LineLive";
 import CutPlan from "./ypi/CutPlan";
 import MaterialPortal from "./ypi/MaterialPortal";
 import TechPack from "./ypi/TechPack";
-import AccessoriesReceiving from "./fc/AccessoriesReceiving";
-import AccessoriesInspection from "./fc/AccessoriesInspection";
 import WarehouseMap from "./fc/WarehouseMap";
 import LocationPlan from "./fc/LocationPlan";
 import Calculator from "./fc/Calculator";
-import AccessoriesIssuing from "./fc/AccessoriesIssuing";
-import DeliveryTracking from "./fc/DeliveryTracking";
-import ReturnAccessories from "./fc/ReturnAccessories";
 import InternalRollingQC from "./yqms/InternalRollingQC";
 import CuttingInspection from "./yqms/CuttingInspection";
 import GarmentCheckOutput from "./yqms/GarmentCheckOutput";
@@ -431,7 +426,7 @@ export default function App() {
           />
           <Route
             path="fc/accessories-receiving"
-            element={<AccessoriesReceiving onBack={handleBack} />}
+            element={<MrpView module="fc" view="accessories-receiving" label="Fabric Control" onBack={handleBack} />}
           />
           <Route
             path="fc/fabric-inspection"
@@ -443,7 +438,7 @@ export default function App() {
           />
           <Route
             path="fc/accessories-inspection"
-            element={<AccessoriesInspection onBack={handleBack} />}
+            element={<MrpView module="fc" view="accessories-inspection" label="Fabric Control" onBack={handleBack} />}
           />
           <Route
             path="fc/warehouse-tracking"
@@ -467,11 +462,11 @@ export default function App() {
           />
           <Route
             path="fc/accessories-issuing"
-            element={<AccessoriesIssuing onBack={handleBack} />}
+            element={<MrpView module="fc" view="accessories-issuing" label="Fabric Control" onBack={handleBack} />}
           />
           <Route
             path="fc/delivery-tracking"
-            element={<DeliveryTracking onBack={handleBack} />}
+            element={<MrpView module="fc" view="delivery-tracking" label="Fabric Control" onBack={handleBack} />}
           />
           <Route
             path="fc/return-fabric"
@@ -479,7 +474,7 @@ export default function App() {
           />
           <Route
             path="fc/return-accessories"
-            element={<ReturnAccessories onBack={handleBack} />}
+            element={<MrpView module="fc" view="return-accessories" label="Fabric Control" onBack={handleBack} />}
           />
           <Route
             path="fc/brand-protection"

@@ -15,10 +15,10 @@ const WALL = new Set(["board", "mrp-tv", "tec-tv"]); // wall screens refresh by 
 
 const tone = (v) => {
   const s = String(v || "").toLowerCase();
-  if (/\bfail\b|on hold|^late\b|unaccounted|under investigation/.test(s)) return "bg-rose-500/20 text-rose-300 border-rose-500/30"; // inspection / test failed, lot on hold; consumption late; branded pieces unaccounted
+  if (/\bfail\b|on hold|\bheld\b|mismatch|incident|^late\b|unaccounted|under investigation/.test(s)) return "bg-rose-500/20 text-rose-300 border-rose-500/30"; // inspection / test failed, lot on hold; consumption late; branded pieces unaccounted
   if (/\bremark\b|to be destroyed/.test(s)) return "bg-amber-500/20 text-amber-300 border-amber-500/30"; // pass with remark; leftover branded items waiting to be destroyed
-  if (/received|complete|correct|uploaded|^updated|filed|handed over|confirmed|ready|shipped|has room|finished|\bpass\b|^issued\b/.test(s)) return "bg-emerald-500/20 text-emerald-300 border-emerald-500/30";
-  if (/at sea|on the road|on the truck|in progress|today|sewing|cutting|on track|busy|running|in the lab|^issuing\b/.test(s)) return "bg-sky-500/20 text-sky-300 border-sky-500/30";
+  if (/received|delivered|complete|correct|uploaded|^updated|filed|handed over|confirmed|ready|shipped|has room|finished|\bpass\b|^issued\b/.test(s)) return "bg-emerald-500/20 text-emerald-300 border-emerald-500/30";
+  if (/at sea|on the road|on the truck|in transit|in progress|today|sewing|cutting|on track|busy|running|in the lab|^issuing\b/.test(s)) return "bg-sky-500/20 text-sky-300 border-sky-500/30";
   if (/customs|pending|check|awaiting|tomorrow|prepare|not yet|waiting|full|preparation/.test(s)) return "bg-amber-500/20 text-amber-300 border-amber-500/30";
   return "bg-slate-500/20 text-slate-300 border-slate-500/30";
 };
