@@ -75,8 +75,9 @@ const Wall = ({ stations, scale, onOpen, onBubble, open, changed, maxBubbles, la
         const on = open === no;
         const acts = [...(s.activities || [])].sort((a, b) => (ORDER[a.status] ?? 9) - (ORDER[b.status] ?? 9));
         // keep the column readable: the newest of each group stays, the rest folds into "+N" at the top
-        const counts = { pending: 0, ongoing: 0, done: 0, blocked: 0 };
-        acts.forEach((a) => { counts[a.status] = (counts[a.status] || 0) + 1; });
+        const counts = { pending: 0, ongoing: 0, done: 0, blocked: 0, upcoming: 0 };
+        acts.forEach((a) => { counts[a.status] = (counts[a.status] || 0) + 1; if (a.upcoming) counts.upcoming += 1; });
+        if (s.activity_summary) Object.assign(counts, { pending: s.activity_summary.pending, ongoing: s.activity_summary.ongoing, done: s.activity_summary.done, blocked: s.activity_summary.blocked, upcoming: s.activity_summary.upcoming || 0 });
         const shown = acts.length > maxBubbles ? acts.filter((a) => a.status !== "done").slice(0, maxBubbles - 1).concat(acts.filter((a) => a.status === "done").slice(0, Math.max(1, maxBubbles - 1 - acts.filter((a) => a.status !== "done").length))).sort((a, b) => (ORDER[a.status] ?? 9) - (ORDER[b.status] ?? 9)) : acts;
         const more = acts.length - shown.length;
         const bandTop = IMG_H * scale + 4 + p.lane * (laneH + 4);
@@ -102,8 +103,8 @@ const Wall = ({ stations, scale, onOpen, onBubble, open, changed, maxBubbles, la
               )}
               <div className="flex flex-col items-center gap-[3px]">
                 {shown.map((a) => (
-                  <button key={bkey(a)} data-flow={bkey(a)} onClick={(e) => onBubble(a, s, e)} title={`${a.order}${a.lot ? " · lot " + a.lot : ""} · ${num(a.qty)} ${a.unit || ""} · ${a.status}${a.status === "blocked" && a.issue ? " — " + a.issue.reason : ""}${a.next_station ? " → " + a.next_station : ""}`} className={`relative rounded-full border px-2 text-[10.5px] font-black shadow-sm whitespace-nowrap ${BUBBLE[a.status] || BUBBLE.pending} ${changed.has(bkey(a)) ? "ywip-pulse" : ""} ${a.status === "blocked" ? "ring-2 ring-rose-300" : ""}`} style={{ lineHeight: BUBBLE_H - 4 + "px" }}>
-                    {a.status === "blocked" && <span className="mr-1" aria-label="blocked">⚠</span>}{a.order}<span className="font-semibold opacity-75"> {short(a.qty)}</span>
+                  <button key={bkey(a)} data-flow={bkey(a)} onClick={(e) => onBubble(a, s, e)} title={`${a.order}${a.lot ? " · lot " + a.lot : ""} · ${num(a.qty)} ${a.unit || ""} · ${a.status}${a.status === "blocked" && a.issue ? " — " + a.issue.reason : ""}${a.next_station ? " → " + a.next_station : ""}`} className={`relative rounded-full border px-2 text-[10.5px] font-black shadow-sm whitespace-nowrap ${BUBBLE[a.status] || BUBBLE.pending} ${changed.has(bkey(a)) ? "ywip-pulse" : ""} ${a.status === "blocked" ? "ring-2 ring-rose-300" : ""} ${a.upcoming ? "border-dashed text-slate-500" : ""}`} style={{ lineHeight: BUBBLE_H - 4 + "px" }}>
+                    {a.status === "blocked" && <span className="mr-1" aria-label="blocked">⚠</span>}{a.order}<span className="font-semibold opacity-75"> {a.upcoming ? (a.start_at || a.date || "planned") : short(a.qty)}</span>
                   </button>
                 ))}
               </div>
@@ -148,7 +149,8 @@ const BubbleCard = ({ a, s, at, onClose }) => {
   const left = Math.max(8, Math.min(at.x - 40, room - W - 12));
   const below = at.y < window.innerHeight / 2;
   const place = below ? { top: at.y + 14 } : { bottom: window.innerHeight - at.y + 14 };
-  const rows = [["Station", `${s.no} ${s.title}`], ["Order", a.order], ["Lot", a.lot], ["Qty", a.qty !== undefined ? `${num(a.qty)} ${a.unit || ""}` : undefined], ["Status", a.status], ["Started", a.started], ["ETA", a.eta], ["Done", a.done_at], ["By", a.by], ["Next", a.next_station ? `station ${a.next_station}${a.arrives_next_at ? " · " + a.arrives_next_at : ""}` : undefined]].filter(([, v]) => v !== undefined && v !== null && v !== "");
+  const ctx = [["Lot", a.lot], ["Trip", a.trip], ["Line", a.line], ["Lays", a.lays], ["Plies", a.plies], ["Rolls", a.rolls], ["Cartons", a.cartons], ["Pieces", a.pcs], ["Vehicle", a.vehicle], ["Destination", a.dest]];
+  const rows = [["Station", `${s.no} ${s.title}`], ["Order", a.order], ["What", a.kind], ["Qty", a.qty !== undefined ? `${num(a.qty)} ${a.unit || ""}` : undefined], ["Status", a.upcoming ? "planned" : a.status], ["Date", a.date], ["Starts", a.upcoming ? a.start_at : undefined], ["Started", a.upcoming ? undefined : a.started], ["ETA", a.eta], ["Done", a.done_at], ["By", a.by], ...ctx, ["Next", a.next_station ? `${String(a.next_station).replace(/_/g, " ")}${a.arrives_next_at ? " · arrives " + a.arrives_next_at : ""}${a.next_starts_at ? " · starts " + a.next_starts_at : ""}` : undefined]].filter(([, v]) => v !== undefined && v !== null && v !== "");
   return (
     <>
       <div className="fixed inset-0 z-40" onClick={onClose} />
@@ -160,7 +162,14 @@ const BubbleCard = ({ a, s, at, onClose }) => {
         </div>
         <div className="px-3 py-2">
           {a.status === "blocked" && <div className="mb-2 rounded-lg border border-rose-500/50 bg-rose-500/15 px-2 py-1.5 text-xs text-rose-200"><b>⚠ Stuck — {(a.issue && a.issue.reason) || "an issue is holding this activity"}</b>{a.issue && (a.issue.since || a.issue.owner) ? <div className="text-[11px] text-rose-300/80 mt-0.5">{a.issue.since ? "since " + a.issue.since : ""}{a.issue.owner ? " · " + a.issue.owner : ""}</div> : null}</div>}
-          {rows.map(([k, v]) => <div key={k} className="flex items-baseline gap-2 py-0.5 border-b border-slate-700/60 last:border-b-0 text-xs"><span className="text-slate-400 w-14 flex-shrink-0">{k}</span><b className={`text-white ${k === "Status" ? "capitalize" : ""}`}>{String(v)}</b></div>)}
+          {rows.map(([k, v]) => <div key={k} className="flex items-baseline gap-2 py-0.5 border-b border-slate-700/60 last:border-b-0 text-xs"><span className="text-slate-400 w-16 flex-shrink-0">{k}</span><b className={`text-white min-w-0 ${k === "Status" ? "capitalize" : ""}`}>{String(v)}</b></div>)}
+          {a.note && <div className="mt-1.5 text-[11px] text-slate-300">{a.note}</div>}
+          {Array.isArray(a.timeline) && a.timeline.length > 0 && (
+            <div className="mt-2">
+              <div className="text-[10px] uppercase tracking-wider text-slate-500 mb-0.5">Timeline</div>
+              <div className="max-h-28 overflow-auto text-[11px] space-y-0.5">{a.timeline.map((t, i) => <div key={i} className="flex gap-2"><span className="text-slate-300 w-32 truncate">{String(t.station).replace(/_/g, " ")}</span><span className="text-slate-500 tabular-nums">{String(t.start || "").slice(5, 16)}{t.end ? " → " + String(t.end).slice(5, 16) : " → …"}</span></div>)}</div>
+            </div>
+          )}
           {s.link && <button onClick={() => navigate(s.link)} className="mt-2 inline-flex items-center gap-1 rounded-lg border border-sky-500/50 text-sky-300 hover:bg-sky-500/10 px-2 py-1 text-xs font-bold"><ExternalLink size={12} />Open the screen</button>}
         </div>
       </div>
@@ -319,7 +328,10 @@ const YwipFlow = ({ onBack }) => {
   const scroller = useRef(null);
   const back = () => (onBack ? onBack() : navigate(-1));
 
+  const inFlight = useRef(false);
   const load = useCallback(async () => {
+    if (inFlight.current) return; // one request at a time — a tick is skipped while the last one is still answering
+    inFlight.current = true;
     setLoading(true);
     setError("");
     try {
@@ -336,6 +348,7 @@ const YwipFlow = ({ onBack }) => {
     } catch (e) {
       setError("YWIP data is unavailable right now. Please try again in a moment.");
     } finally {
+      inFlight.current = false;
       setLoading(false);
     }
   }, [speed]);
@@ -438,7 +451,7 @@ const YwipFlow = ({ onBack }) => {
         </div>
         <div className="inline-flex rounded-lg border border-slate-700 overflow-hidden text-xs" title="demo speed — the activities move through the day this many times faster">
           <span className="px-1.5 py-1 bg-slate-800 text-slate-400 flex items-center"><Gauge size={13} /></span>
-          {SPEEDS.map((x) => <button key={x} onClick={() => { t0.current = new Date().toISOString(); setSpeed(x); }} className={`px-2 py-1 font-bold ${speed === x ? "bg-sky-500/30 text-white" : "bg-slate-800 text-slate-300 hover:bg-slate-700"}`}>{x}×</button>)}
+          {SPEEDS.map((x) => <button key={x} onClick={() => { const n = new Date(); t0.current = String(n.getHours()).padStart(2, "0") + ":" + String(n.getMinutes()).padStart(2, "0"); setSpeed(x); }} className={`px-2 py-1 font-bold ${speed === x ? "bg-sky-500/30 text-white" : "bg-slate-800 text-slate-300 hover:bg-slate-700"}`}>{x}×</button>)}
         </div>
         {!wall && <button onClick={() => setPan((v) => !v)} className={`inline-flex items-center gap-1 px-2 py-1 rounded-lg border text-xs font-semibold ${pan ? "bg-emerald-500/20 border-emerald-500/40 text-white" : "bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700"}`} title="auto-pan the row">{pan ? <Pause size={13} /> : <Play size={13} />}{pan ? "panning" : "pan"}</button>}
         <button onClick={toggleWall} className={`inline-flex items-center gap-1 px-2 py-1 rounded-lg border text-xs font-semibold ${wall ? "bg-sky-500/20 border-sky-500/40 text-white" : "bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700"}`} title="one row across the whole wall (full screen)"><Tv size={13} />{wall ? "leave the wall" : "TV wall"}</button>
@@ -456,6 +469,7 @@ const YwipFlow = ({ onBack }) => {
         <span className="flex items-center gap-1"><span className="inline-block w-5 h-3 rounded-full bg-orange-500" />ongoing</span>
         <span className="flex items-center gap-1"><span className="inline-block w-5 h-3 rounded-full bg-emerald-500" />done</span>
         <span className="flex items-center gap-1"><span className="inline-block w-5 h-3 rounded-full bg-rose-600" />⚠ stuck</span>
+        <span className="flex items-center gap-1"><span className="inline-block w-5 h-3 rounded-full bg-white border border-dashed border-slate-400" />planned (date)</span>
         <span>column reads from the bottom up · bubble = one order's activity at the station · it pulses when it changes colour and slides to the next station when that lot moves on · refreshes every {speed === 1 ? "30 s" : speed === 10 ? "4 s" : "2.5 s"}{speed > 1 ? ` · demo ${speed}×` : ""}</span>
         <span className="flex items-center gap-1 ml-2"><span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />on track</span>
         <span className="flex items-center gap-1"><span className="inline-block w-2 h-2 rounded-full bg-amber-500" />watch</span>
