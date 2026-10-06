@@ -42,6 +42,44 @@ const ClaudeBadge = ({ size = "sm" }) => (
 );
 
 // A new layout component to hold the shared UI (Header, Background)
+// Admin & Support sub-menus → the matching simulated-factory screen on the M1
+// (DeptView). Each of these sub-menus gets one extra "Live data" card; nothing
+// existing is renamed or re-pointed, because the dedicated screens behind the
+// current tiles are the ones Gamini approved.
+const LIVE_DATA_VIEW = {
+  // HR
+  yhr: "hr/attendance",
+  "org-chart": "hr/org-chart",
+  training: "hr/training",
+  "temp-worker": "hr/temp-workers",
+  "speak-up": "hr/speak-up",
+  // Admin
+  "support-ticket": "admin/tickets",
+  ticket: "admin/tickets",
+  "y-shop": "admin/y-shop",
+  "gate-pass": "admin/gate-pass",
+  gatepass: "admin/gate-pass",
+  "meeting-room": "admin/meeting-rooms",
+  meeting: "admin/meeting-rooms",
+  "car-booking": "admin/car-booking",
+  car: "admin/car-booking",
+  "fire-alarm": "admin/fire-alarm",
+  cctv: "admin/cctv",
+  // Accounting
+  "purchase-request": "accounting/purchase-requests",
+  "pr-admin": "accounting/purchase-requests",
+  "bill-claim": "accounting/bill-claims",
+  "salary-bill": "accounting/salary-bills",
+  "shipping-bill": "accounting/shipping-bills",
+  // CSR
+  energy: "csr/energy",
+  water: "csr/water",
+  air: "csr/air",
+  waste: "csr/waste",
+  chemical: "csr/chemical",
+  "digital-audit": "csr/digital-audit",
+};
+
 const AppLayout = () => {
   const { t } = useTranslation();
   const location = useLocation();
@@ -1491,7 +1529,17 @@ const AppLayout = () => {
           return;
         }
 
-        navigate(`/dashboard/submenu/${id}`, { state: { title, cards } });
+        // Admin & Support (HR · Admin · Accounting · CSR): one extra card per
+        // sub-menu that opens the simulated-factory screen for that sub-module
+        // (DeptView, /dashboard/<dept>/<view>, data from the M1). The existing
+        // cards and their titles are left exactly as they are — the PA owner
+        // map keys off those titles.
+        const live = LIVE_DATA_VIEW[id];
+        const cardsWithLive = live
+          ? [...cards, { title: "Live data", icon: "Table2", color: "bg-sky-600 text-white", action: `/dashboard/${live}` }]
+          : cards;
+
+        navigate(`/dashboard/submenu/${id}`, { state: { title, cards: cardsWithLive } });
       } else if (demoType === "VIEW_4DP") navigate("/dashboard/4dp/master-plan"); // topics left, Gantt right
       else if (demoType === "GRID_TRAINING") navigate("/dashboard/training");
       else if (demoType === "VIEW_TICKET_CUSTOM") navigate("/dashboard/ticket");
