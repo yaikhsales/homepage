@@ -243,7 +243,10 @@ const LearningPlanActual = ({ line }) => {
   if (err) return <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-200 px-3 py-2 text-sm">{err}</div>;
   if (!d) return <div className="text-xs text-slate-500">Loading plan vs actual…</div>;
   const rows = d.rows || [];
-  const me = rows.find((r) => r.line === (d.line || line)) || rows.find((r) => r.line === line) || null;
+  // only lines with a new-style run in the window are valid (the picker lists them); when the floor's line is
+  // not one of them, say so rather than showing another line's data (the view falls back to its first line)
+  const valid = new Set(((d.picker && d.picker.options) || rows).map((o) => o.id || o.line));
+  const me = line && !valid.has(line) ? null : rows.find((r) => r.line === line) || rows.find((r) => r.line === d.line) || null;
   const tables = Object.fromEntries((d.tables || []).map((t) => [t.key, t]));
   const workers = (tables.workers && tables.workers.rows) || [];
   const byDay = ((tables.by_day && tables.by_day.rows) || []).filter((r) => !me || r.line === me.line);
@@ -277,14 +280,14 @@ const LearningPlanActual = ({ line }) => {
               </div>
             </div>
           </div>
-        ) : <div className="text-xs text-slate-500">This line is not on a new style — pick one of the {rows.length} lines with a new run below.</div>}
+        ) : <div className="text-xs text-slate-500">No new style on {line || "this line"} in the window — the {rows.length} lines with a new run are listed below{d.picker && d.picker.options ? ": " + d.picker.options.map((o) => o.id || o.name).join(", ") : ""}.</div>}
       </Panel>
       <Panel title="Workers — plan vs actual by day" right={workers.length ? `${workers.length} workers · behind = amber / red with the reason` : undefined}>
-        {workers.length ? (
+        {me && workers.length ? (
           <div className="overflow-x-auto max-h-96 overflow-y-auto">
             <table className="w-full text-xs"><Th cols={["Worker", "Station", "Operation", "Grade", "SMV", "Plan by day", "Actual by day", "Achieved", "Last eff", "Status", "Min lost", "Cost"]} /><tbody>{workers.map((w, i) => <tr key={i} className={`border-t border-slate-700/60 ${w.tone === "red" || /behind/.test(w.status || "") ? "bg-rose-500/10" : ""}`}><td className="px-2 py-1 font-bold text-white whitespace-nowrap">{w.worker || w.operator}</td><td className="px-2 py-1 tabular-nums text-slate-400">{w.station}</td><td className="px-2 py-1 text-slate-300">{w.operation}</td><td className="px-2 py-1"><Grade g={w.grade} /></td><td className="px-2 py-1 tabular-nums text-slate-400">{num(w.smv, 3)}</td><td className="px-2 py-1 tabular-nums text-slate-400 whitespace-nowrap">{w.plan_by_day}</td><td className="px-2 py-1 tabular-nums text-slate-200 whitespace-nowrap">{w.actual_by_day || "—"}</td><td className="px-2 py-1 tabular-nums text-right text-white font-bold">{w.achieved}</td><td className="px-2 py-1 tabular-nums text-right text-slate-300">{w.last_eff}</td><td className="px-2 py-1"><Status v={w.status} tone={w.tone} /></td><td className="px-2 py-1 tabular-nums text-right text-amber-300">{num(w.minutes_lost, 0)}</td><td className="px-2 py-1 tabular-nums text-right text-rose-300">{w.cost_effect ? "USD " + num(w.cost_effect, 2) : "—"}</td></tr>)}</tbody></table>
           </div>
-        ) : <div className="text-xs text-slate-500">{me && !started ? "Per-worker plan vs actual starts with the run on " + me.start + "." : "No worker rows for this line."}</div>}
+        ) : <div className="text-xs text-slate-500">{me && !started ? "Per-worker plan vs actual starts with the run on " + me.start + "." : me ? "No worker rows for this line." : "No new style on this line in the window."}</div>}
       </Panel>
       <Panel title="All lines on a new style" right={`${sum["New runs"] ?? rows.length} new runs · ${sum["Started"] ?? 0} started · ${sum["Behind"] ?? 0} behind · ${sum["Achieving"] ?? 0} achieving · ${sum["Ahead"] ?? 0} ahead · gap cost USD ${sum["Cost of the gap (USD)"] ?? "0.00"}`}>
         <div className="overflow-x-auto max-h-72 overflow-y-auto">
