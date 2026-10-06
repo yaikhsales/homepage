@@ -1,37 +1,45 @@
-// YWIP — the work-in-progress flow of the whole factory on one screen.
+// YWIP — the work-in-progress monitor: one giant row, like a video wall.
 //
-// TOP: Gamini's own isometric floor strip (public/assets/ywip/floor-strip.png — light-grey dotted floor,
-// white platforms, stations 01–32 with the heat-seal branch under 11–15), shown in two rows so every
-// station is on screen with no horizontal scroll: 01–16 on the first row, 17–32 on the second. Each
-// station is a hotspot: a figure chip under its pill (the headline number, coloured by status) and a
-// click opens its status card with every figure and a link to the module screen. Stations with nothing
-// yet (packing onwards until the first ex-factory) are grey and calm.
-// BELOW: the dashboard — WIP by station, throughput today against plan, QC pass by gate, WIP age,
-// the 7-day trend, the branch split and the reconciliation checks. All drawn as SVG, no chart library.
+// TOP: Gamini's own isometric floor strip (public/assets/ywip/floor-strip.png — stations 01–32 with the
+// heat-seal branch under 11–15) as ONE row at a fixed height. Under every station: the headline figure and
+// a stack of ORDER BUBBLES, one per activity — WHITE pending, ORANGE ongoing, GREEN done — that pulse when
+// a status changes; click a bubble for its card (order, lot, qty, started, ETA, by), click a station for
+// its figures and a link to the module screen. "TV wall" fits the whole row to the screen width (three
+// 1920 panels side by side); on a normal screen the row auto-pans smoothly with a mini-map to jump.
+// BELOW: the dashboard — WIP by station, throughput today against plan, QC pass by gate, WIP age, the
+// 7-day trend, the branch split and the reconciliation checks. All SVG, no chart library.
 // Data: the simulated factory on the M1, POST /api/m1/sim/view {module:"fc", view:"ywip-flow"} →
-// stations[32], flows, checks, charts. Invented data — no real company or person.
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+// stations[32]{…, activities[{id, order, lot, qty, unit, status, started, eta, done_at, by}]}, flows,
+// checks, charts; refreshed every 30 s. Invented data — no real company or person.
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, RefreshCw, X, ExternalLink, ChevronDown, ChevronUp } from "lucide-react";
+import { ArrowLeft, RefreshCw, X, ExternalLink, ChevronDown, ChevronUp, Tv, Play, Pause, Gauge } from "lucide-react";
 import { NavCover, useScreenTop } from "../components/ScreenTop";
 
 const API = (process.env.REACT_APP_M1_LLM_URL || "/api/m1").replace(/\/$/, "");
 const STRIP = process.env.PUBLIC_URL + "/assets/ywip/floor-strip.png";
 const IMG_W = 7680; // the strip's pixels
 const IMG_H = 608;
-const SPLIT = 3680; // row 1 = 0 … 3680 (stations 01–16), row 2 = 3680 … 7680 (17–32)
-const CHIP_H = 44; // room under the strip for the figure chips (in strip pixels)
-// Where each station's label pill sits in the strip (x = pill centre, y = pill centre); 14 and 15 are
-// the heat-seal branch on the lower row of the first half.
+const BAND_H = 300; // the bubble band under the strip (strip pixels): two lanes
+const ROW_H = IMG_H + BAND_H;
+const COL_W = 236; // one station's column in the band
+// Where each station's label pill sits in the strip (x = pill centre); 14 and 15 are the heat-seal branch,
+// drawn lower, so their bubbles go in the band's second lane.
 const PILL_X = [144, 384, 624, 864, 1104, 1344, 1584, 1824, 2064, 2355, 2688, 2979, 3312, 3552, 3792, 4082, 4416, 4656, 4896, 5136, 5376, 5616, 5856, 6096, 6336, 6576, 6816, 7056, 7296, 7536];
 const PILLS = {};
-[...Array(13)].forEach((_, i) => { PILLS[String(i + 1).padStart(2, "0")] = { x: PILL_X[i], y: 331, top: 50, bottom: 350 }; });
-PILLS["14"] = { x: 3080, y: 567, top: 375, bottom: 585 };
-PILLS["15"] = { x: 3320, y: 567, top: 375, bottom: 585 };
-[...Array(17)].forEach((_, i) => { PILLS[String(i + 16).padStart(2, "0")] = { x: PILL_X[i + 13], y: 331, top: 50, bottom: 350 }; });
+[...Array(13)].forEach((_, i) => { PILLS[String(i + 1).padStart(2, "0")] = { x: PILL_X[i], y: 331, top: 50, bottom: 350, lane: 0 }; });
+PILLS["14"] = { x: 3080, y: 567, top: 375, bottom: 585, lane: 1 };
+PILLS["15"] = { x: 3320, y: 567, top: 375, bottom: 585, lane: 1 };
+[...Array(17)].forEach((_, i) => { PILLS[String(i + 16).padStart(2, "0")] = { x: PILL_X[i + 13], y: 331, top: 50, bottom: 350, lane: 0 }; });
 
 const TONE = { green: "border-emerald-500 text-emerald-700", amber: "border-amber-500 text-amber-700", red: "border-rose-500 text-rose-700", grey: "border-slate-300 text-slate-400" };
 const DOT = { green: "bg-emerald-500", amber: "bg-amber-500", red: "bg-rose-500", grey: "bg-slate-400" };
+const BUBBLE = { pending: "bg-white border-slate-300 text-slate-700", ongoing: "bg-orange-500 border-orange-600 text-white", done: "bg-emerald-500 border-emerald-600 text-white" };
+const ORDER = { pending: 0, ongoing: 1, done: 2 };
+const MAX_BUBBLES = 8;
+// one activity's identity across stations: the flow (the same lot travelling), else the activity, else the order
+const bkey = (a) => String(a.flow_id || a.id || a.order);
+const SPEEDS = [1, 10, 30];
 const num = (v) => (typeof v === "number" ? v.toLocaleString("en-US", { maximumFractionDigits: 1 }) : v === null || v === undefined ? "—" : String(v));
 const short = (v) => (typeof v !== "number" ? num(v) : Math.abs(v) >= 1e6 ? (v / 1e6).toFixed(1) + "M" : Math.abs(v) >= 1e4 ? Math.round(v / 1e3) + "k" : num(v));
 // the figure chip's text: "5,286 rolls", "79/85 lays" (a unit like "of 85 lays today"), "88 %"
@@ -43,45 +51,112 @@ const chip = (f) => {
   const word = unit.split(" ")[0].replace(/[,.]/g, "");
   return <>{short(f.value)}<span className="font-semibold opacity-70"> {word}</span></>;
 };
-const idle = (s) => (s.figures || []).every((f) => f.value === 0 || f.value === "—" || f.value === null) && Number(s.no) >= 20;
+const idle = (s) => (s.figures || []).every((f) => f.value === 0 || f.value === "—" || f.value === null) && Number(s.no) >= 20 && !(s.activities || []).length;
+const PULSE_CSS = "@keyframes ywip-pulse { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(251,191,36,.9); } 50% { transform: scale(1.18); box-shadow: 0 0 0 8px rgba(251,191,36,0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(251,191,36,0); } } .ywip-pulse { animation: ywip-pulse 1.4s ease-out 2; } .ywip-wall::-webkit-scrollbar { height: 8px; } .ywip-wall::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }";
 
-/* ── the strip with its hotspots ────────────────────────────────────────── */
-const Strip = ({ stations, width, onOpen, open }) => {
-  const scale = width / (IMG_W - SPLIT); // row 2 is the wider half (4000 px) → it fills the width
-  const rowH = (IMG_H + CHIP_H) * scale;
+/* ── the wall: one row, the strip on top, the bubble band under it ──────── */
+const Wall = ({ stations, scale, onOpen, onBubble, open, changed, scroller }) => {
   const byNo = Object.fromEntries(stations.map((s) => [s.no, s]));
-  const row = (from, to) => {
-    const w = (to - from) * scale;
-    return (
-      <div className="relative" style={{ width: w, height: rowH, backgroundImage: `url(${STRIP})`, backgroundSize: `${IMG_W * scale}px ${IMG_H * scale}px`, backgroundPosition: `${-from * scale}px 0`, backgroundRepeat: "no-repeat" }}>
-        {Object.entries(PILLS).filter(([, p]) => p.x >= from && p.x < to).map(([no, p]) => {
-          const s = byNo[no];
-          if (!s) return null;
-          const grey = idle(s);
-          const tone = grey ? "grey" : s.status || "grey";
-          const f = (s.figures || [])[0];
-          const x = (p.x - from) * scale;
-          const on = open === no;
-          return (
-            <React.Fragment key={no}>
-              {/* the hotspot over the platform and its pill */}
-              <button onClick={(e) => onOpen(s, e)} title={`${no} ${s.title}`} aria-label={`${no} ${s.title}`} className={`absolute rounded-xl transition-colors ${on ? "ring-2 ring-sky-400 bg-sky-400/10" : "hover:bg-sky-400/10"}`} style={{ left: x - 112 * scale, top: p.top * scale, width: 224 * scale, height: (p.bottom - p.top) * scale }} />
-              {/* the headline figure under the pill */}
-              <button onClick={(e) => onOpen(s, e)} className={`absolute -translate-x-1/2 whitespace-nowrap rounded-full border-2 bg-white px-2 leading-5 text-[11px] font-black shadow ${TONE[tone]} ${grey ? "opacity-70" : ""}`} style={{ left: x, top: (p.y + 22) * scale + 4 }} title={f ? `${f.label}: ${num(f.value)} ${f.unit || ""}` : s.title}>
-                <span className={`inline-block w-1.5 h-1.5 rounded-full mr-1 align-middle ${DOT[tone]}`} />
-                {chip(f)}
-              </button>
-            </React.Fragment>
-          );
-        })}
-      </div>
-    );
-  };
+  const W = IMG_W * scale;
   return (
-    <div className="rounded-2xl overflow-hidden border border-slate-700" style={{ background: "#eceeea" }}>
-      {row(0, SPLIT)}
-      {row(SPLIT, IMG_W)}
+    <div className="relative" style={{ width: W, height: ROW_H * scale, backgroundImage: `url(${STRIP})`, backgroundSize: `${W}px ${IMG_H * scale}px`, backgroundRepeat: "no-repeat", backgroundColor: "#eceeea" }}>
+      {/* a faint rule between the strip and the band */}
+      <div className="absolute left-0 right-0 border-t border-dashed border-slate-400/50" style={{ top: IMG_H * scale }} />
+      {Object.entries(PILLS).map(([no, p]) => {
+        const s = byNo[no];
+        if (!s) return null;
+        const grey = idle(s);
+        const tone = grey ? "grey" : s.status || "grey";
+        const f = (s.figures || [])[0];
+        const x = p.x * scale;
+        const on = open === no;
+        const acts = [...(s.activities || [])].sort((a, b) => (ORDER[a.status] ?? 9) - (ORDER[b.status] ?? 9));
+        const shown = acts.slice(0, MAX_BUBBLES);
+        const more = acts.length - shown.length;
+        const counts = { pending: 0, ongoing: 0, done: 0 };
+        acts.forEach((a) => { counts[a.status] = (counts[a.status] || 0) + 1; });
+        const bandTop = (IMG_H + 8 + p.lane * (BAND_H / 2)) * scale;
+        return (
+          <React.Fragment key={no}>
+            <button onClick={(e) => onOpen(s, e)} title={`${no} ${s.title}`} aria-label={`${no} ${s.title}`} className={`absolute rounded-xl transition-colors ${on ? "ring-2 ring-sky-400 bg-sky-400/10" : "hover:bg-sky-400/10"}`} style={{ left: x - 112 * scale, top: p.top * scale, width: 224 * scale, height: (p.bottom - p.top) * scale }} />
+            <button onClick={(e) => onOpen(s, e)} className={`absolute -translate-x-1/2 whitespace-nowrap rounded-full border-2 bg-white px-2 leading-5 text-[11px] font-black shadow ${TONE[tone]} ${grey ? "opacity-70" : ""}`} style={{ left: x, top: (p.y + 22) * scale + 4 }} title={f ? `${f.label}: ${num(f.value)} ${f.unit || ""}` : s.title}>
+              <span className={`inline-block w-1.5 h-1.5 rounded-full mr-1 align-middle ${DOT[tone]}`} />
+              {chip(f)}
+            </button>
+            {/* the order bubbles: white pending → orange ongoing → green done */}
+            <div className="absolute flex flex-col items-center" style={{ left: x - (COL_W / 2) * scale, width: COL_W * scale, top: bandTop }}>
+              {acts.length > 0 && (
+                <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-600 mb-0.5 whitespace-nowrap" title={`${counts.pending} pending · ${counts.ongoing} ongoing · ${counts.done} done`}>
+                  <span className="flex items-center gap-0.5"><span className="inline-block w-2 h-2 rounded-full bg-white border border-slate-400" />{counts.pending}</span>
+                  <span className="flex items-center gap-0.5 text-orange-600"><span className="inline-block w-2 h-2 rounded-full bg-orange-500" />{counts.ongoing}</span>
+                  <span className="flex items-center gap-0.5 text-emerald-700"><span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />{counts.done}</span>
+                </div>
+              )}
+              <div className="flex flex-wrap justify-center gap-1">
+                {shown.map((a) => (
+                  <button key={bkey(a)} data-flow={bkey(a)} onClick={(e) => onBubble(a, s, e)} title={`${a.order}${a.lot ? " · lot " + a.lot : ""} · ${num(a.qty)} ${a.unit || ""} · ${a.status}${a.next_station ? " → " + a.next_station : ""}`} className={`relative rounded-full border px-2 leading-[18px] text-[10.5px] font-black shadow-sm whitespace-nowrap ${BUBBLE[a.status] || BUBBLE.pending} ${changed.has(bkey(a)) ? "ywip-pulse" : ""}`}>
+                    {a.order}<span className="font-semibold opacity-75"> {short(a.qty)}</span>
+                  </button>
+                ))}
+                {more > 0 && <span className="rounded-full border border-slate-400 bg-slate-100 text-slate-600 px-2 leading-[18px] text-[10.5px] font-black" title={`${more} more`}>+{more}</span>}
+              </div>
+            </div>
+          </React.Fragment>
+        );
+      })}
     </div>
+  );
+};
+
+// the mini-map: the whole row small, with the window drawn on it; click to jump
+const MiniMap = ({ scroller, total, width = 320 }) => {
+  const [win, setWin] = useState({ l: 0, w: 1 });
+  useEffect(() => {
+    const el = scroller.current;
+    if (!el) return undefined;
+    const on = () => setWin({ l: el.scrollLeft / Math.max(el.scrollWidth, 1), w: el.clientWidth / Math.max(el.scrollWidth, 1) });
+    on();
+    el.addEventListener("scroll", on);
+    const t = setInterval(on, 1000);
+    return () => { el.removeEventListener("scroll", on); clearInterval(t); };
+  }, [scroller, total]);
+  const h = Math.round((width * IMG_H) / IMG_W) + 6;
+  return (
+    <div className="relative rounded-md border border-slate-600 overflow-hidden cursor-pointer" style={{ width, height: h, backgroundImage: `url(${STRIP})`, backgroundSize: `${width}px ${h - 6}px`, backgroundRepeat: "no-repeat", backgroundColor: "#eceeea" }} title="click to jump" onClick={(e) => { const el = scroller.current; if (!el) return; const r = e.currentTarget.getBoundingClientRect(); const f = (e.clientX - r.left) / r.width; el.scrollTo({ left: f * el.scrollWidth - el.clientWidth / 2, behavior: "smooth" }); }}>
+      <div className="absolute top-0 bottom-0 border-2 border-sky-400 bg-sky-400/15 rounded-sm" style={{ left: `${win.l * 100}%`, width: `${Math.max(win.w * 100, 2)}%` }} />
+    </div>
+  );
+};
+
+/* ── the bubble card: one activity ──────────────────────────────────────── */
+const BubbleCard = ({ a, s, at, onClose }) => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const key = (e) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", key);
+    return () => window.removeEventListener("keydown", key);
+  }, [onClose]);
+  const W = 320;
+  const room = window.innerWidth - (document.body.classList.contains("yai-pa-open") ? 436 : 0);
+  const left = Math.max(8, Math.min(at.x - 40, room - W - 12));
+  const below = at.y < window.innerHeight / 2;
+  const place = below ? { top: at.y + 14 } : { bottom: window.innerHeight - at.y + 14 };
+  const rows = [["Station", `${s.no} ${s.title}`], ["Order", a.order], ["Lot", a.lot], ["Qty", a.qty !== undefined ? `${num(a.qty)} ${a.unit || ""}` : undefined], ["Status", a.status], ["Started", a.started], ["ETA", a.eta], ["Done", a.done_at], ["By", a.by]].filter(([, v]) => v !== undefined && v !== null && v !== "");
+  return (
+    <>
+      <div className="fixed inset-0 z-40" onClick={onClose} />
+      <div className="fixed z-50 rounded-2xl border border-slate-600 bg-slate-800 shadow-2xl text-slate-200" style={{ left, width: W, ...place }}>
+        <div className="flex items-center gap-2 px-3 pt-2.5 pb-2 border-b border-slate-700">
+          <span className={`rounded-full border px-2 leading-5 text-[11px] font-black ${BUBBLE[a.status] || BUBBLE.pending}`}>{a.order}</span>
+          <span className="text-xs text-slate-400 truncate">{s.no} {s.title}</span>
+          <button onClick={onClose} className="ml-auto p-1 rounded-lg hover:bg-slate-700" aria-label="Close"><X size={14} /></button>
+        </div>
+        <div className="px-3 py-2">
+          {rows.map(([k, v]) => <div key={k} className="flex items-baseline gap-2 py-0.5 border-b border-slate-700/60 last:border-b-0 text-xs"><span className="text-slate-400 w-14 flex-shrink-0">{k}</span><b className={`text-white ${k === "Status" ? "capitalize" : ""}`}>{String(v)}</b></div>)}
+          {s.link && <button onClick={() => navigate(s.link)} className="mt-2 inline-flex items-center gap-1 rounded-lg border border-sky-500/50 text-sky-300 hover:bg-sky-500/10 px-2 py-1 text-xs font-bold"><ExternalLink size={12} />Open the screen</button>}
+        </div>
+      </div>
+    </>
   );
 };
 
@@ -224,32 +299,72 @@ const YwipFlow = ({ onBack }) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [card, setCard] = useState(null); // { s, x, y }
+  const [bubble, setBubble] = useState(null); // { a, s, x, y }
   const [showChecks, setShowChecks] = useState(false);
-  const [width, setWidth] = useState(0);
-  const stripRef = useCallback((el) => { if (el) setWidth(el.getBoundingClientRect().width); }, []);
+  const [wall, setWall] = useState(false); // TV-wall mode: the whole row fits the screen width
+  const [pan, setPan] = useState(true); // auto-pan on a normal screen
+  const [vw, setVw] = useState(window.innerWidth);
+  const [changed, setChanged] = useState(() => new Set()); // bubbles whose status just changed → pulse
+  const [speed, setSpeed] = useState(1); // demo speed: 1× real time, 10×, 30× (the M1 moves the activities faster)
+  const t0 = useRef(null);
+  const prev = useRef({});
+  const scroller = useRef(null);
   const back = () => (onBack ? onBack() : navigate(-1));
 
   const load = useCallback(async () => {
     setLoading(true);
     setError("");
     try {
-      const r = await fetch(API + "/sim/view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ module: "fc", view: "ywip-flow" }) });
+      const r = await fetch(API + "/sim/view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ module: "fc", view: "ywip-flow", speed: speed > 1 ? speed : undefined, t0: speed > 1 ? t0.current : undefined }) });
       const j = await r.json();
       if (!r.ok || !j.ok) throw new Error(j.error || "unavailable");
+      // which bubbles changed colour since the last load → pulse them for a moment
+      const now = {};
+      const hot = new Set();
+      (j.stations || []).forEach((st) => (st.activities || []).forEach((a) => { const k = bkey(a); now[k] = a.status + "@" + st.no; if (prev.current[k] && prev.current[k] !== now[k]) hot.add(k); }));
+      prev.current = now;
+      if (hot.size) { setChanged(hot); setTimeout(() => setChanged(new Set()), 3200); }
       setData(j);
     } catch (e) {
       setError("YWIP data is unavailable right now. Please try again in a moment.");
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [speed]);
   useEffect(() => { load(); }, [load]);
   useEffect(() => {
-    const onResize = () => { const el = document.getElementById("ywip-strip"); if (el) setWidth(el.getBoundingClientRect().width); };
+    const onResize = () => setVw(window.innerWidth);
     window.addEventListener("resize", onResize);
-    const t = setInterval(load, 60000);
-    return () => { window.removeEventListener("resize", onResize); clearInterval(t); };
-  }, [load]);
+    // real time: every 30 s; demo speed: every few seconds so a visitor sees the work move
+    const t = setInterval(load, speed === 1 ? 30000 : speed === 10 ? 4000 : 2500);
+    const fs = () => { if (!document.fullscreenElement) setWall(false); };
+    document.addEventListener("fullscreenchange", fs);
+    return () => { window.removeEventListener("resize", onResize); clearInterval(t); document.removeEventListener("fullscreenchange", fs); };
+  }, [load, speed]);
+  // auto-pan: glide the row left and right, pause while a card is open or the pointer is over it
+  const hover = useRef(false);
+  useEffect(() => {
+    if (wall || !pan) return undefined;
+    let dir = 1;
+    let raf;
+    let last = performance.now();
+    const step = (t) => {
+      const el = scroller.current;
+      const dt = Math.min(50, t - last);
+      last = t;
+      if (el && !hover.current && !card && !bubble) {
+        const max = el.scrollWidth - el.clientWidth;
+        if (max > 0) {
+          el.scrollLeft += dir * (dt * 0.045);
+          if (el.scrollLeft >= max - 1) dir = -1;
+          if (el.scrollLeft <= 1) dir = 1;
+        }
+      }
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [wall, pan, card, bubble]);
 
   const d = data || {};
   const stations = useMemo(() => (data && data.stations) || [], [data]);
@@ -262,35 +377,79 @@ const YwipFlow = ({ onBack }) => {
   const split = ch.branch_split || {};
   const checks = d.checks || [];
   const checksOk = checks.filter((c) => c.ok).length;
-  const openCard = useCallback((s, e) => setCard({ s, x: e.clientX, y: e.clientY }), []);
+  const openCard = useCallback((s, e) => { setBubble(null); setCard({ s, x: e.clientX, y: e.clientY }); }, []);
   const closeCard = useCallback(() => setCard(null), []);
+  const openBubble = useCallback((a, s, e) => { e.stopPropagation(); setCard(null); setBubble({ a, s, x: e.clientX, y: e.clientY }); }, []);
+  const closeBubble = useCallback(() => setBubble(null), []);
   const live = useMemo(() => stations.filter((s) => !idle(s)).length, [stations]);
+  const acts = useMemo(() => stations.reduce((n, s) => n + ((s.activities || []).length), 0), [stations]);
+  const ongoing = useMemo(() => stations.reduce((n, s) => n + (s.activities || []).filter((a) => a.status === "ongoing").length, 0), [stations]);
+  // the row's scale: on the wall the whole row fits the width (3 × 1920 → 0.75); otherwise a fixed height
+  const panelW = vw - (document.body.classList.contains("yai-pa-open") ? 436 : 0) - 40;
+  const scale = wall ? panelW / IMG_W : Math.max(0.42, Math.min(0.75, 440 / ROW_H));
+  // the travel: when a flow's bubble sits at a new station since the last render, slide it there from where it
+  // was (FLIP — measure before, translate back, let the transform ease to zero); colour changes just pulse
+  const rects = useRef({});
+  useLayoutEffect(() => {
+    const el = scroller.current;
+    if (!el) return;
+    const now = {};
+    el.querySelectorAll("[data-flow]").forEach((b) => { const r = b.getBoundingClientRect(); now[b.dataset.flow] = { x: r.left + el.scrollLeft, y: r.top + window.scrollY, el: b }; });
+    Object.entries(now).forEach(([k, n]) => {
+      const o = rects.current[k];
+      if (!o || (Math.abs(o.x - n.x) < 4 && Math.abs(o.y - n.y) < 4)) return;
+      const b = n.el;
+      b.style.transition = "none";
+      b.style.transform = `translate(${o.x - n.x}px, ${o.y - n.y}px)`;
+      b.style.zIndex = 20;
+      void b.offsetWidth; // flush, then ease into place
+      b.style.transition = "transform 1.6s cubic-bezier(.4,0,.2,1)";
+      b.style.transform = "translate(0,0)";
+      setTimeout(() => { b.style.zIndex = ""; b.style.transition = ""; }, 1800);
+    });
+    rects.current = Object.fromEntries(Object.entries(now).map(([k, v]) => [k, { x: v.x, y: v.y }]));
+  }, [data, scale]);
+  const toggleWall = () => {
+    if (!wall) { const el = document.documentElement; if (el.requestFullscreen) el.requestFullscreen().catch(() => {}); setWall(true); }
+    else { if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(() => {}); setWall(false); }
+  };
 
   return (
-    <div ref={topRef} style={{ paddingTop: topPad }} className="yai-pa-aware min-h-screen bg-slate-900 text-slate-200 px-3 md:px-5 pb-8 font-sans">
-      <style>{`body.yai-pa-open .yai-pa-aware { padding-right: 436px; }`}</style>
-      <NavCover />
+    <div ref={topRef} style={{ paddingTop: wall ? 8 : topPad }} className={`yai-pa-aware min-h-screen bg-slate-900 text-slate-200 px-3 md:px-5 pb-8 font-sans ${wall ? "ywip-is-wall" : ""}`}>
+      <style>{`body.yai-pa-open .yai-pa-aware { padding-right: 436px; } ${PULSE_CSS}`}</style>
+      {!wall && <NavCover />}
       <div className="flex flex-wrap items-center gap-2 mb-2">
-        <button onClick={back} className="p-1 -ml-1 hover:bg-slate-700 rounded-full transition-colors text-slate-400 hover:text-white" aria-label="Back"><ArrowLeft size={18} /></button>
+        {!wall && <button onClick={back} className="p-1 -ml-1 hover:bg-slate-700 rounded-full transition-colors text-slate-400 hover:text-white" aria-label="Back"><ArrowLeft size={18} /></button>}
         <h1 className="text-lg font-black text-white leading-none">YWIP · Work in progress</h1>
-        <span className="text-xs text-slate-400">{d.day || ""} · {stations.length} stations · {live} with work today · click a station</span>
+        <span className="text-xs text-slate-400">{d.day || ""} · {stations.length} stations · {live} with work today{acts ? ` · ${acts} activities, ${ongoing} ongoing` : ""} · click a station or a bubble</span>
         <div className="ml-auto flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-400">
           {(d.summary || []).map((x) => <span key={x.label} className="whitespace-nowrap">{x.label} <b className="text-white tabular-nums text-sm">{num(x.value)}</b></span>)}
         </div>
+        <div className="inline-flex rounded-lg border border-slate-700 overflow-hidden text-xs" title="demo speed — the activities move through the day this many times faster">
+          <span className="px-1.5 py-1 bg-slate-800 text-slate-400 flex items-center"><Gauge size={13} /></span>
+          {SPEEDS.map((x) => <button key={x} onClick={() => { t0.current = new Date().toISOString(); setSpeed(x); }} className={`px-2 py-1 font-bold ${speed === x ? "bg-sky-500/30 text-white" : "bg-slate-800 text-slate-300 hover:bg-slate-700"}`}>{x}×</button>)}
+        </div>
+        {!wall && <button onClick={() => setPan((v) => !v)} className={`inline-flex items-center gap-1 px-2 py-1 rounded-lg border text-xs font-semibold ${pan ? "bg-emerald-500/20 border-emerald-500/40 text-white" : "bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700"}`} title="auto-pan the row">{pan ? <Pause size={13} /> : <Play size={13} />}{pan ? "panning" : "pan"}</button>}
+        <button onClick={toggleWall} className={`inline-flex items-center gap-1 px-2 py-1 rounded-lg border text-xs font-semibold ${wall ? "bg-sky-500/20 border-sky-500/40 text-white" : "bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700"}`} title="one row across the whole wall (full screen)"><Tv size={13} />{wall ? "leave the wall" : "TV wall"}</button>
         <button onClick={load} className="p-1.5 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700" aria-label="Refresh"><RefreshCw size={14} className={loading ? "animate-spin" : ""} /></button>
       </div>
       {error && <div className="mb-2 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-200 px-3 py-2 text-sm">{error}</div>}
 
-      {/* TOP — the floor */}
-      <div id="ywip-strip" ref={stripRef} className="w-full">
-        {width > 0 && <Strip stations={stations} width={width} onOpen={openCard} open={card && card.s.no} />}
+      {/* TOP — the wall: one row */}
+      <div ref={scroller} onMouseEnter={() => { hover.current = true; }} onMouseLeave={() => { hover.current = false; }} className={`ywip-wall rounded-2xl border border-slate-700 ${wall ? "overflow-hidden" : "overflow-x-auto overflow-y-hidden"}`} style={{ background: "#eceeea" }}>
+        {stations.length > 0 && <Wall stations={stations} scale={scale} onOpen={openCard} onBubble={openBubble} open={card && card.s.no} changed={changed} scroller={scroller} />}
+        {stations.length === 0 && <div className="h-40 flex items-center justify-center text-sm text-slate-500">{loading ? "Loading the floor…" : "No stations."}</div>}
       </div>
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-0.5 mt-1 mb-3 text-[11px] text-slate-500">
-        <span className="flex items-center gap-1"><span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />on track</span>
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1 mb-3 text-[11px] text-slate-500">
+        <span className="flex items-center gap-1"><span className="inline-block w-5 h-3 rounded-full bg-white border border-slate-300" />pending</span>
+        <span className="flex items-center gap-1"><span className="inline-block w-5 h-3 rounded-full bg-orange-500" />ongoing</span>
+        <span className="flex items-center gap-1"><span className="inline-block w-5 h-3 rounded-full bg-emerald-500" />done</span>
+        <span>bubble = one order's activity at the station · it pulses when it changes colour and slides to the next station when that lot moves on · refreshes every {speed === 1 ? "30 s" : speed === 10 ? "4 s" : "2.5 s"}{speed > 1 ? ` · demo ${speed}×` : ""}</span>
+        <span className="flex items-center gap-1 ml-2"><span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />on track</span>
         <span className="flex items-center gap-1"><span className="inline-block w-2 h-2 rounded-full bg-amber-500" />watch</span>
         <span className="flex items-center gap-1"><span className="inline-block w-2 h-2 rounded-full bg-rose-500" />behind</span>
         <span className="flex items-center gap-1"><span className="inline-block w-2 h-2 rounded-full bg-slate-400" />nothing yet — first ex-factory 15 Oct</span>
-        <span>figure = today's headline number of the station · the floor is Gamini's isometric strip</span>
+        {!wall && stations.length > 0 && <span className="ml-auto flex items-center gap-2">mini-map <MiniMap scroller={scroller} total={IMG_W * scale} /></span>}
       </div>
 
       {/* BELOW — the dashboard */}
@@ -334,8 +493,9 @@ const YwipFlow = ({ onBack }) => {
           )}
         </Panel>
       </div>
-      <p className="mt-2 text-[10px] text-slate-500">{d.as_of ? `As of ${String(d.as_of).replace("T", " ").slice(0, 16)} · refreshes every minute · ` : ""}simulated factory — invented data, no real company or person</p>
+      <p className="mt-2 text-[10px] text-slate-500">{d.as_of ? `As of ${String(d.as_of).replace("T", " ").slice(0, 16)} · refreshes every 30 s · ` : ""}simulated factory — invented data, no real company or person</p>
       {card && <Card s={card.s} at={card} onClose={closeCard} />}
+      {bubble && <BubbleCard a={bubble.a} s={bubble.s} at={bubble} onClose={closeBubble} />}
     </div>
   );
 };
