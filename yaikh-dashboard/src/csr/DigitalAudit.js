@@ -106,7 +106,7 @@ const Findings = ({ focus }) => {
         <span className="flex gap-1.5">{Object.entries(SEV).map(([k, t]) => <Chip key={k} tone={t} onClick={() => setF({ ...f, severity: f.severity === k ? "" : k })} on={f.severity === k}>{k.replace("_", " ")} {d.by_severity && d.by_severity[k] !== undefined ? "· " + num(d.by_severity[k]) + " open" : ""}</Chip>)}</span>
         <span className="ml-auto text-xs text-slate-500">{loading ? "loading…" : `${rows.length} finding${rows.length === 1 ? "" : "s"} · click a row for root cause, action and closure`}</span>
       </div>
-      <Table columns={d.columns} rows={rows} max={560} empty="No findings match." loading={loading} error={error} onRetry={reload} expand keys={["id", "audit", "standard", "question_code", "factory", "finding", "severity", "owner_role", "target_date", "status"]} widths={{ audit: "14rem", finding: "20rem", owner_role: "13rem" }} render={{
+      <Table columns={d.columns} rows={rows} max={560} empty="No findings match." loading={loading} error={error} onRetry={reload} expand keys={["id", "severity", "status", "target_date", "finding", "owner_role", "factory", "question_code", "standard", "audit"]} widths={{ audit: "14rem", finding: "20rem", owner_role: "13rem" }} render={{
         id: (v, r) => <span className="font-bold text-white">{v}{(r.overdue_60d || r.past_target) && <Chip tone="red" title={r.overdue_60d ? "overdue 60+ days" : "past target date"}> !</Chip>}</span>,
         audit: (v, r) => <Clip v={`${v} · ${r.audit_name}`} />,
         finding: (v) => <Clip v={v} cls="text-slate-100" />,

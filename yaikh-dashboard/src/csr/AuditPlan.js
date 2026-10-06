@@ -81,19 +81,19 @@ const Plans = ({ year, setYear }) => {
       </div>
       <div className="overflow-auto rounded-lg border border-slate-700" style={{ maxHeight: 640 }}>
         <table className="min-w-full text-[13px]">
-          <thead className="text-slate-500 sticky top-0 bg-slate-800 z-10"><tr>{["Plan", "Audit", "Standard · customer", "Handled by", "Audit date", "Activity process flow", "Findings", "Stage"].map((h) => <th key={h} className="text-left font-normal px-2 py-1 leading-tight whitespace-nowrap">{h}</th>)}</tr></thead>
+          <thead className="text-slate-500 sticky top-0 bg-slate-800 z-10"><tr>{["Plan", "Activity process flow", "Stage", "Audit date", "Audit", "Standard · customer", "Findings", "Handled by"].map((h) => <th key={h} className="text-left font-normal px-2 py-1 leading-tight whitespace-nowrap">{h}</th>)}</tr></thead>
           <tbody>
             {rows.map((r) => (
               <React.Fragment key={r.id}>
                 <tr onClick={() => setOpenRow(openRow === r.id ? null : r.id)} className={`border-t border-slate-800 cursor-pointer hover:bg-slate-700/40 ${openRow === r.id ? "bg-slate-700/30" : ""}`}>
                   <td className="px-2 py-1.5 align-top whitespace-nowrap" title={r.location}><span className="font-bold text-white">{r.id}</span>{r.follow_up_of && <Chip tone="sky" title={"follow-up of " + r.follow_up_of}> FU</Chip>}</td>
+                  <td className="px-2 py-1.5 align-top whitespace-nowrap"><Flow stages={r.stages} /></td>
+                  <td className="px-2 py-1.5 align-top whitespace-nowrap"><Status s={r.stage} /></td>
+                  <td className="px-2 py-1.5 align-top whitespace-nowrap text-slate-300" title={`pre-audit ${r.pre_audit_date} · audit ${(r.audit_dates || [r.audit_date]).join(", ")}`}>{r.audit_date} · {r.period_days}d</td>
                   <td className="px-2 py-1.5 align-top truncate" style={{ maxWidth: "16rem", minWidth: "9rem" }} title={`${r.audit_name} · ${r.type} · ${r.audit_form}`}><span className="font-bold text-white">{r.audit_name}</span></td>
                   <td className="px-2 py-1.5 align-top whitespace-nowrap">{r.standard}{r.customer && r.customer !== "—" ? <span className="text-slate-500"> · {r.customer}</span> : null}</td>
-                  <td className="px-2 py-1.5 align-top truncate" style={{ maxWidth: "13rem", minWidth: "8rem" }} title={`${r.handled_by} ${r.handled_by_emp || ""}`}>{r.handled_by}</td>
-                  <td className="px-2 py-1.5 align-top whitespace-nowrap text-slate-300" title={`pre-audit ${r.pre_audit_date} · audit ${(r.audit_dates || [r.audit_date]).join(", ")}`}>{r.audit_date} · {r.period_days}d</td>
-                  <td className="px-2 py-1.5 align-top whitespace-nowrap"><Flow stages={r.stages} /></td>
                   <td className="px-2 py-1.5 align-top whitespace-nowrap tabular-nums">{num(r.findings)}{r.open_findings ? <span className="text-rose-300"> · {num(r.open_findings)} open</span> : null}</td>
-                  <td className="px-2 py-1.5 align-top whitespace-nowrap"><Status s={r.stage} /></td>
+                  <td className="px-2 py-1.5 align-top truncate" style={{ maxWidth: "13rem", minWidth: "8rem" }} title={`${r.handled_by} ${r.handled_by_emp || ""}`}>{r.handled_by}</td>
                 </tr>
                 {openRow === r.id && <tr className="border-t border-slate-800 bg-slate-900/60"><td colSpan={8} className="px-2 py-2"><Details r={r} /></td></tr>}
               </React.Fragment>
