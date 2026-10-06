@@ -227,7 +227,10 @@ const Panel = ({ title, sub, children, className }) => (
   </section>
 );
 
-// vertical bars with a label under each; `tone(d)` colours a bar; `plan` draws a hollow bar behind
+// vertical bars with a label under each; `tone(d)` colours a bar; `plan` draws a hollow bar behind.
+// the bars are an SVG stretched to the panel width, so the station names are drawn as ordinary HTML
+// underneath instead of SVG text — that way they stay crisp and readable at any panel width, and a
+// long process name is set on a slant rather than shrunk to nothing.
 const Bars = ({ data, value, label, tone, plan, height = 150, fmt = short }) => {
   const max = Math.max(1, ...data.map((d) => Math.max(value(d), plan ? plan(d) || 0 : 0)));
   const n = data.length;
@@ -236,26 +239,56 @@ const Bars = ({ data, value, label, tone, plan, height = 150, fmt = short }) => 
   const bw = Math.min(slot * 0.62, 60);
   const H = height;
   const top = 18;
-  const base = H - 30;
+  const base = H - 6;
+  const names = data.map((d) => String(label(d)));
+  const longest = Math.max(0, ...names.map((s) => s.length));
+  const slant = longest > 4; // numbers sit flat under the bar; process names go on a slant
+  const labelH = slant ? Math.min(96, Math.round(longest * 6.4 * 0.72) + 10) : 20;
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ height: H }} preserveAspectRatio="none">
-      {[0.25, 0.5, 0.75, 1].map((g) => <line key={g} x1={0} x2={W} y1={base - (base - top) * g} y2={base - (base - top) * g} stroke="#334155" strokeDasharray="3 4" />)}
-      {data.map((d, i) => {
-        const v = value(d);
-        const p = plan ? plan(d) || 0 : 0;
-        const x = i * slot + (slot - bw) / 2;
-        const h = ((base - top) * v) / max;
-        const ph = ((base - top) * p) / max;
-        return (
-          <g key={i}>
-            {plan && p > 0 && <rect x={x - 3} y={base - ph} width={bw + 6} height={ph} fill="none" stroke="#94a3b8" strokeDasharray="3 3" rx={3} />}
-            <rect x={x} y={base - h} width={bw} height={Math.max(h, v > 0 ? 2 : 0)} fill={tone ? tone(d) : "#38bdf8"} rx={3} />
-            <text x={x + bw / 2} y={base - h - 5} textAnchor="middle" fontSize={11} fill="#e2e8f0" fontWeight={700}>{v ? fmt(v) : ""}</text>
-            <text x={x + bw / 2} y={base + 14} textAnchor="middle" fontSize={10} fill="#94a3b8">{label(d)}</text>
-          </g>
-        );
-      })}
-    </svg>
+    <div className="relative w-full" style={{ paddingBottom: labelH }}>
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ height: H }} preserveAspectRatio="none">
+        {[0.25, 0.5, 0.75, 1].map((g) => <line key={g} x1={0} x2={W} y1={base - (base - top) * g} y2={base - (base - top) * g} stroke="#334155" strokeDasharray="3 4" />)}
+        {data.map((d, i) => {
+          const v = value(d);
+          const p = plan ? plan(d) || 0 : 0;
+          const x = i * slot + (slot - bw) / 2;
+          const h = ((base - top) * v) / max;
+          const ph = ((base - top) * p) / max;
+          return (
+            <g key={i}>
+              {plan && p > 0 && <rect x={x - 3} y={base - ph} width={bw + 6} height={ph} fill="none" stroke="#94a3b8" strokeDasharray="3 3" rx={3} />}
+              <rect x={x} y={base - h} width={bw} height={Math.max(h, v > 0 ? 2 : 0)} fill={tone ? tone(d) : "#38bdf8"} rx={3} />
+            </g>
+          );
+        })}
+      </svg>
+      {/* the figure over each bar */}
+      <div className="absolute inset-x-0 top-0 pointer-events-none" style={{ height: H }}>
+        {data.map((d, i) => {
+          const v = value(d);
+          if (!v) return null;
+          const h = ((base - top) * v) / max;
+          return (
+            <span key={i} className="absolute -translate-x-1/2 text-[13px] font-bold text-slate-100 tabular-nums whitespace-nowrap" style={{ left: `${((i + 0.5) / n) * 100}%`, top: Math.max(0, base - h - 18) }}>{fmt(v)}</span>
+          );
+        })}
+      </div>
+      {/* the station name under each bar */}
+      <div className="absolute inset-x-0" style={{ top: H, height: labelH }}>
+        {names.map((s, i) => (
+          <span
+            key={i}
+            title={s}
+            className={`absolute text-[13px] font-semibold text-slate-300 whitespace-nowrap ${slant ? "" : "-translate-x-1/2"}`}
+            style={slant
+              ? { right: `${(1 - (i + 0.5) / n) * 100}%`, top: 4, transform: "rotate(-45deg)", transformOrigin: "right top" }
+              : { left: `${((i + 0.5) / n) * 100}%`, top: 4 }}
+          >
+            {s}
+          </span>
+        ))}
+      </div>
+    </div>
   );
 };
 
@@ -481,13 +514,13 @@ const YwipFlow = ({ onBack }) => {
       {/* BELOW — the dashboard */}
       <div className="grid gap-3 xl:grid-cols-3">
         <Panel title="WIP by station" sub="pieces / rolls waiting at each station now · red = bottleneck" className="xl:col-span-2">
-          {wip.length ? <Bars data={wip} value={(x) => x.qty || 0} label={(x) => x.no} tone={(x) => (x.bottleneck ? "#f43f5e" : Number(x.no) >= 25 ? "#475569" : "#38bdf8")} height={190} /> : <div className="text-xs text-slate-500">—</div>}
+          {wip.length ? <Bars data={wip} value={(x) => x.qty || 0} label={(x) => `${x.no} ${x.title || ""}`.trim()} tone={(x) => (x.bottleneck ? "#f43f5e" : Number(x.no) >= 25 ? "#475569" : "#38bdf8")} height={190} /> : <div className="text-xs text-slate-500">—</div>}
         </Panel>
         <Panel title="Branch split" sub="panels and garments by route today">
           <Donut parts={[["plain", "Plain panels", "#38bdf8"], ["decorated", "Print / embroidery", "#a78bfa"], ["heat_seal", "Heat seal", "#f59e0b"], ["wash", "Washed", "#14b8a6"], ["no_wash", "No wash", "#64748b"]].map(([k, label, colour]) => ({ label, colour, value: Number(split[k]) || 0 }))} />
         </Panel>
         <Panel title="Throughput today" sub="actual (solid) against plan (dashed)" className="xl:col-span-2">
-          {thr.length ? <Bars data={thr} value={(x) => x.actual || 0} plan={(x) => x.plan} label={(x) => `${x.no} ${x.title}`.slice(0, 22)} tone={(x) => ((x.actual || 0) >= (x.plan || 0) * 0.95 ? "#34d399" : (x.actual || 0) >= (x.plan || 0) * 0.8 ? "#fbbf24" : "#f43f5e")} height={190} /> : <div className="text-xs text-slate-500">—</div>}
+          {thr.length ? <Bars data={thr} value={(x) => x.actual || 0} plan={(x) => x.plan} label={(x) => `${x.no} ${x.title || ""}`.trim()} tone={(x) => ((x.actual || 0) >= (x.plan || 0) * 0.95 ? "#34d399" : (x.actual || 0) >= (x.plan || 0) * 0.8 ? "#fbbf24" : "#f43f5e")} height={190} /> : <div className="text-xs text-slate-500">—</div>}
         </Panel>
         <Panel title="QC pass rate" sub="by inspection gate today">
           <div className="space-y-1.5">
@@ -507,7 +540,7 @@ const YwipFlow = ({ onBack }) => {
           <div className="flex flex-wrap gap-x-3 text-[10px] text-slate-400 mt-1">{[["rolls in", "#38bdf8"], ["pieces cut", "#a78bfa"], ["sewn", "#34d399"], ["packed", "#fbbf24"], ["shipped", "#f472b6"]].map(([l, c]) => <span key={l} className="flex items-center gap-1"><span className="inline-block w-3 h-1 rounded" style={{ background: c }} />{l}</span>)}</div>
         </Panel>
         <Panel title="WIP age" sub="average and oldest days waiting">
-          {age.length ? <Bars data={age} value={(x) => x.avg_days || 0} plan={(x) => x.max_days} label={(x) => x.no} tone={(x) => ((x.max_days || 0) > 20 ? "#f43f5e" : (x.max_days || 0) > 7 ? "#fbbf24" : "#38bdf8")} height={170} fmt={(v) => num(v) + "d"} /> : <div className="text-xs text-slate-500">—</div>}
+          {age.length ? <Bars data={age} value={(x) => x.avg_days || 0} plan={(x) => x.max_days} label={(x) => `${x.no} ${x.title || ""}`.trim()} tone={(x) => ((x.max_days || 0) > 20 ? "#f43f5e" : (x.max_days || 0) > 7 ? "#fbbf24" : "#38bdf8")} height={170} fmt={(v) => num(v) + "d"} /> : <div className="text-xs text-slate-500">—</div>}
           <div className="text-[10px] text-slate-500">solid = average days · dashed = oldest</div>
         </Panel>
         <Panel title="Reconciliation checks" sub={`${checksOk} of ${checks.length} ok · every figure on the floor ties to the next station`} className="xl:col-span-3">
