@@ -75,7 +75,7 @@ const ORDER = {
       inputs: "Rough BOM, CM, extras, logistics", outputs: "Quotation to the brand", deps: ["pkg", "cm", "logi"] },
     { id: "techpack", lane: "ypi", title: "Tech pack · Prod Sheet", d0: 6, d1: 36, by: Y("YPI PA", "issues the tech pack in Khmer, English, Chinese"),
       screen: ["YPI · Tech pack", "/dashboard/ypi/techpack"],
-      roles: [R("Technical team", "ypi", "Fills the 11 pages: spec sheet, sketch, measurement spec, process sheet, thread consumption …"), R("Merchandiser", "sales", "Order details and packing instructions"), R("QC", "qa", "Signs the Quality Control Approval box"), R("YPI PA", "sys", "Publishes it to floor iPads and TVs in 3 languages")],
+      roles: [R("Technical team", "ypi", "Fills the 11 pages: spec sheet, sketch, measurement spec, process sheet, thread consumption …"), R("Merchandiser", "sales", "Order details and packing instructions"), R("QC", "qa", "Approves the Quality Control box in the Prod Sheet (name + date)"), R("YPI PA", "sys", "Publishes it to floor iPads and TVs in 3 languages")],
       inputs: "Colours, sizes, basic measurement chart", outputs: "Tech pack (Prod Sheet)", deps: ["pkg"] },
     { id: "sample1", lane: "ypi", title: "First test sample", d0: 9, d1: 18, by: H("Sample room", "cuts, sews and packs the first sample"),
       screen: ["YPI · Sample plan", "/dashboard/ypi/sample-plan"],
@@ -123,8 +123,8 @@ const ORDER = {
       inputs: "Approved fit", outputs: "Approved PP sample", deps: ["fit"] },
     { id: "contract", lane: "sales", title: "Brand issues PO contract", d0: 54, d1: 56, by: H("Brand", "issues the purchase-order contract"),
       screen: ["YPI · Tech pack", "/dashboard/ypi/techpack"],
-      roles: [R("Brand", "buyer", "Issues the PO contract — material is almost here"), R("Sales manager", "sales", "Signs before production starts"), R("Merchandiser", "sales", "Updates the order")],
-      inputs: "Approved PP sample", outputs: "Signed contract", deps: ["pp"] },
+      roles: [R("Brand", "buyer", "Issues the PO contract — material is almost here"), R("Sales manager", "sales", "Confirms it in Yai before production starts"), R("Merchandiser", "sales", "Updates the order")],
+      inputs: "Approved PP sample", outputs: "Confirmed contract", deps: ["pp"] },
     { id: "sam", lane: "ce", title: "Operations & 1st SAM", d0: 28, d1: 42, by: H("IE engineer", "builds the style from the Operation Library"),
       screen: ["CE · Product development", "/dashboard/ce/product-development"],
       roles: [R("IE engineer", "ce", "Drags operations into Garment Analysis"), R("AI Vision (AVMA)", "sys", "Times operations from video → SMV"), R("IE manager", "ce", "Approves the 1st SAM"), R("CE PA", "sys", "Saves the Operation Breakdown")],
@@ -155,7 +155,7 @@ const ORDER = {
       inputs: "Cleared container", outputs: "Arrival slot", deps: ["track"] },
     { id: "forklift", lane: "ytm", title: "Forklift check", d0: 58, d1: 60, by: H("Forklift driver", "checks and maintains the forklift"),
       screen: ["YTM", "/dashboard/ytm"],
-      roles: [R("Forklift driver", "ytm", "Checks and maintains the forklift before the fabric arrives"), R("YTM mechanic", "ytm", "Fixes any defect"), R("YTM supervisor", "ytm", "Signs readiness")],
+      roles: [R("Forklift driver", "ytm", "Checks and maintains the forklift before the fabric arrives"), R("YTM mechanic", "ytm", "Fixes any defect"), R("YTM supervisor", "ytm", "Confirms readiness in Yai")],
       inputs: "Arrival slot", outputs: "Forklift ready", deps: ["arrive"] },
     { id: "receive", lane: "fc", title: "Fabric receiving", d0: 60, d1: 62, by: H("Warehouse supervisor", "manpower to unload; clerk updates Yai"),
       screen: ["FC · Fabric receiving", "/dashboard/fc/fabric-receiving"],
@@ -256,41 +256,50 @@ const ORDER = {
 const HR = {
   kind: "cycle",
   title: "HR · Hire to pay",
-  summary: "Runs all the time — from the job advert to the worker's phone on payday.",
+  summary: "YHR is fully digital — recruitment, contracts, attendance, leave, resignation, payslips and approvals all happen in Yai and on the phone. No paper files, folders or photocopies.",
   loopTo: "attend", loopLabel: "every day / every month",
   acts: [
-    { id: "ad", lane: "hr", title: "Recruitment advert", by: H("HR clerk", "posts the recruitment advert"), screen: ["Recruitment", "/dashboard/recruitment"],
-      roles: [R("HR clerk", "hr", "Posts the advert"), R("Dept head", "head", "Raises the headcount request"), R("HR manager", "hr", "Approves the headcount")],
+    { id: "ad", lane: "hr", title: "Recruitment advert", by: Y("HR clerk", "posts the recruitment advert in Yai"), screen: ["Recruitment", "/dashboard/recruitment"],
+      roles: [R("Dept head", "head", "Requests the headcount in Yai"), R("HR manager", "hr", "Approves the headcount in Yai"), R("HR clerk", "hr", "Posts the advert online from Yai")],
       inputs: "Headcount request", outputs: "Advert live" },
-    { id: "apply", lane: "worker", title: "Applications online", by: Y("Yai", "receives applications online"), screen: ["Recruitment", "/dashboard/recruitment"],
-      roles: [R("Candidate", "worker", "Applies on the phone"), R("Yai", "sys", "Collects and screens duplicates"), R("HR clerk", "hr", "Monitors the list")],
-      inputs: "Advert", outputs: "Applications" },
-    { id: "review", lane: "hr", title: "Review & interview", by: H("HR clerk", "reviews, shortlists, interviews"), screen: ["Interview", "/dashboard/interview"],
-      roles: [R("HR clerk", "hr", "Shortlists and schedules"), R("Supervisor", "head", "Skill test"), R("HR manager", "hr", "Interview")],
+    { id: "apply", lane: "worker", title: "Applications online", by: Y("Candidate", "applies on the phone; Yai collects the applications"), screen: ["Recruitment", "/dashboard/recruitment"],
+      roles: [R("Candidate", "worker", "Applies on the phone"), R("Yai", "sys", "Collects applications and screens duplicates"), R("HR clerk", "hr", "Watches the list in Yai")],
+      inputs: "Advert", outputs: "Applications in Yai" },
+    { id: "review", lane: "hr", title: "Review & interview", by: Y("HR clerk", "shortlists in Yai and books interviews"), screen: ["Interview", "/dashboard/interview"],
+      roles: [R("HR clerk", "hr", "Shortlists and schedules in Yai"), R("Supervisor", "head", "Skill test; result entered in Yai"), R("HR manager", "hr", "Interview; notes in Yai")],
       inputs: "Applications", outputs: "Shortlist" },
-    { id: "approve", lane: "head", title: "Approve", by: H("HR manager", "approves the candidate"), screen: ["Recruitment", "/dashboard/recruitment"],
-      roles: [R("HR manager", "hr", "Approves the hire"), R("Dept head", "head", "Confirms the position and start date")],
-      inputs: "Shortlist", outputs: "Offer" },
-    { id: "join", lane: "worker", title: "Comes to work", by: H("New worker", "comes to work; HR registers the face"), screen: ["Onboarding", "/dashboard/onboarding"],
-      roles: [R("New worker", "worker", "Reports on day one"), R("HR clerk", "hr", "Employee ID (YAI0001 …), photo, face registration"), R("Supervisor", "head", "Assigns the line"), R("Safety officer", "admin", "Induction")],
-      inputs: "Offer", outputs: "Worker on the org chart" },
-    { id: "contract", lane: "sys", title: "Contract issued", by: Y("Yai", "issues the contract automatically"), screen: ["YHR", "/dashboard/yhr"],
-      roles: [R("Yai", "sys", "Generates the contract from the employee record"), R("HR clerk", "hr", "Prints for signing"), R("Worker", "worker", "Signs / thumbprints")],
-      inputs: "Employee record", outputs: "Signed contract" },
-    { id: "attend", lane: "worker", title: "Attendance on the phone", by: Y("Yai", "checks attendance on the worker's phone daily"), screen: ["My attendance", "/dashboard/my-attendance"],
-      roles: [R("Worker", "worker", "Checks in and out on the phone"), R("Supervisor", "head", "Checks headcount"), R("HR clerk", "hr", "Fixes exceptions")],
+    { id: "approve", lane: "head", title: "Approve", by: Y("HR manager", "approves the hire in Yai"), screen: ["Recruitment", "/dashboard/recruitment"],
+      roles: [R("HR manager", "hr", "Approves the hire in Yai"), R("Dept head", "head", "Confirms position and start date in Yai"), R("Yai", "sys", "Sends the offer to the candidate's phone")],
+      inputs: "Shortlist", outputs: "Offer on the phone" },
+    { id: "contract", lane: "sys", title: "Contract issued", by: Y("Yai", "issues the contract automatically; worker accepts on the phone"), screen: ["YHR", "/dashboard/yhr"],
+      roles: [R("Yai", "sys", "Generates the contract from the employee record"), R("Worker", "worker", "Reads and accepts it on the phone"), R("HR clerk", "hr", "Sees it accepted in Yai")],
+      inputs: "Accepted offer", outputs: "Accepted contract in Yai" },
+    { id: "join", lane: "worker", title: "Orientation day", by: H("New worker", "collects ID card + uniform at orientation"), screen: ["Onboarding", "/dashboard/onboarding"],
+      roles: [R("New worker", "worker", "Collects the ID card and uniform"), R("HR clerk", "hr", "Hands over ID card + uniform; face registered in Yai"), R("Supervisor", "head", "Takes the worker to the line"), R("Safety officer", "admin", "Safety induction")],
+      inputs: "Accepted contract", outputs: "Worker on the org chart (YAI####)" },
+    { id: "attend", lane: "worker", title: "Attendance on the phone", by: Y("Worker", "checks in and out on the phone every day"), screen: ["My attendance", "/dashboard/my-attendance"],
+      roles: [R("Worker", "worker", "Checks in and out on the phone"), R("Supervisor", "head", "Sees the line headcount in Yai"), R("HR clerk", "hr", "Fixes exceptions in Yai")],
       inputs: "Daily shift", outputs: "Attendance record" },
-    { id: "payroll", lane: "acct", title: "Payroll", by: Y("Yai", "calculates payroll; finance approves"), screen: ["Payroll", "/dashboard/payroll"],
-      roles: [R("Payroll officer", "acct", "Runs payroll"), R("HR clerk", "hr", "Confirms OT and leave"), R("Finance manager", "acct", "Approves")],
+    { id: "payroll", lane: "acct", title: "Payroll", by: Y("Yai", "calculates payroll; finance approves in Yai"), screen: ["Payroll", "/dashboard/payroll"],
+      roles: [R("Yai", "sys", "Calculates pay from attendance, OT and leave"), R("Payroll officer", "acct", "Checks the run in Yai"), R("Finance manager", "acct", "Approves in Yai")],
       inputs: "Attendance, OT, leave", outputs: "Approved salaries" },
-    { id: "pay", lane: "worker", title: "Paid via Wing or ABA", by: Y("Yai", "pays via Wing or ABA, payslip on the phone"), screen: ["Salary bill", "/dashboard/salary-bill"],
-      roles: [R("Accountant", "acct", "Sends the bank / Wing file"), R("Wing / ABA", "acct", "Pays out"), R("Worker", "worker", "Gets money and payslip on the phone")],
+    { id: "pay", lane: "worker", title: "Paid via Wing or ABA", by: Y("Yai", "pays via Wing or ABA; payslip on the phone"), screen: ["Salary bill", "/dashboard/salary-bill"],
+      roles: [R("Accountant", "acct", "Releases the bank / Wing file from Yai"), R("Wing / ABA", "acct", "Pays out"), R("Worker", "worker", "Gets money and the payslip on the phone")],
       inputs: "Approved salaries", outputs: "Payday done" },
   ],
   side: [
-    { title: "Leave", body: "Apply on the phone — routed to the supervisor for approval.", screen: ["YHR", "/dashboard/yhr"] },
+    { title: "Leave", body: "Apply on the phone — approved in Yai by the supervisor.", screen: ["YHR", "/dashboard/yhr"] },
     { title: "Resign", body: "Resign on the phone — final pay calculated automatically.", screen: ["Resign payment", "/dashboard/resign-payment"] },
     { title: "Anything else", body: "Chat with the HR PA and get it done.", screen: ["Speak up", "/dashboard/speak-up"] },
+  ],
+  // The only things HR handles by hand are physical items.
+  physical: [
+    { title: "Orientation", body: "New hires collect their ID card and uniform." },
+    { title: "Leaving", body: "Return the ID card, uniform and locker key before the last day." },
+    { title: "Lost ID card", body: "Replaced at the HR desk." },
+    { title: "Clinic", body: "Clinic visits at the factory clinic." },
+    { title: "Fire drill", body: "Headcount at the assembly point." },
+    { title: "Passport", body: "HR never keeps anyone's passport — for a work permit or visa the person takes their own to immigration." },
   ],
 };
 
@@ -302,15 +311,15 @@ const ACCT = {
   acts: [
     { id: "cpm", lane: "acct", title: "Cost per minute", by: H("Accountant", "gives the month's cost; CE divides by earned minutes"), screen: ["CE · CPM", "/dashboard/ce/cpm"],
       roles: [R("Accountant", "acct", "The factory's cost for the month"), R("CE PA", "sys", "CPM = cost ÷ planned earned minutes from 4DP")], inputs: "Monthly cost, 4DP SAM", outputs: "CPM for costing" },
-    { id: "attend", lane: "hr", title: "Attendance closed", by: H("HR clerk", "closes the month's attendance"), screen: ["Checklist attendance", "/dashboard/checklist-attendance"],
+    { id: "attend", lane: "hr", title: "Attendance closed", by: Y("HR clerk", "closes the month's attendance in Yai"), screen: ["Checklist attendance", "/dashboard/checklist-attendance"],
       roles: [R("HR clerk", "hr", "Closes the month"), R("Supervisors", "head", "Confirm overtime")], inputs: "Daily attendance", outputs: "Month attendance" },
     { id: "payroll", lane: "acct", title: "Payroll run", by: Y("Yai", "calculates salary, tax and NSSF"), screen: ["Payroll", "/dashboard/payroll"],
       roles: [R("Payroll officer", "acct", "Checks the run"), R("Finance manager", "acct", "Approves")], inputs: "Month attendance", outputs: "Payroll" },
-    { id: "monthly", lane: "acct", title: "Monthly salary sheet", by: H("Payroll officer", "finalises the sheet; GM signs"), screen: ["Monthly salary", "/dashboard/monthly-salary"],
-      roles: [R("Payroll officer", "acct", "Final sheet per department"), R("General manager", "head", "Signs off")], inputs: "Payroll", outputs: "Signed salary sheet" },
+    { id: "monthly", lane: "acct", title: "Monthly salary sheet", by: Y("Payroll officer", "finalises the sheet; GM approves in Yai"), screen: ["Monthly salary", "/dashboard/monthly-salary"],
+      roles: [R("Payroll officer", "acct", "Final sheet per department"), R("General manager", "head", "Approves in Yai")], inputs: "Payroll", outputs: "Approved salary sheet" },
     { id: "pay", lane: "acct", title: "Pay via Wing / ABA", by: Y("Yai", "sends the Wing / ABA bank file"), screen: ["Salary bill", "/dashboard/salary-bill"],
       roles: [R("Accountant", "acct", "Releases the bank file"), R("Worker", "worker", "Receives on the phone")], inputs: "Salary sheet", outputs: "Salaries paid" },
-    { id: "bill", lane: "acct", title: "Brand invoices", by: H("Accountant", "invoices every shipment, tracks receipts"), screen: ["Shipping bill", "/dashboard/shipping-bill"],
+    { id: "bill", lane: "acct", title: "Brand invoices", by: Y("Accountant", "invoices every shipment in Yai, tracks receipts"), screen: ["Shipping bill", "/dashboard/shipping-bill"],
       roles: [R("Accountant", "acct", "Invoices from the export documents"), R("Shipping officer", "ship", "Sends the documents")], inputs: "Shipments", outputs: "Receivables" },
   ],
 };
@@ -323,8 +332,8 @@ const ADMIN = {
   acts: [
     { id: "req", lane: "worker", title: "Request on the phone", by: H("Any staff", "raises a ticket on the phone"), screen: ["Tickets", "/dashboard/ticket"],
       roles: [R("Any staff", "worker", "Raises the ticket"), R("Yai", "sys", "Routes it to the right team")], inputs: "Need", outputs: "Ticket" },
-    { id: "ok", lane: "head", title: "Approve", by: H("Dept head", "approves; Admin assigns the team"), screen: ["Tickets", "/dashboard/ticket"],
-      roles: [R("Dept head", "head", "Approves"), R("Admin manager", "admin", "Assigns the team")], inputs: "Ticket", outputs: "Approved ticket" },
+    { id: "ok", lane: "head", title: "Approve", by: Y("Dept head", "approves in Yai; Admin assigns the team"), screen: ["Tickets", "/dashboard/ticket"],
+      roles: [R("Dept head", "head", "Approves in Yai"), R("Admin manager", "admin", "Assigns the team in Yai")], inputs: "Ticket", outputs: "Approved ticket" },
     { id: "do", lane: "admin", title: "Do the work", by: H("Admin team", "gate pass, car, room or repair"), screen: ["Tickets", "/dashboard/ticket"],
       roles: [R("Admin team", "admin", "Does the work"), R("Security / driver", "admin", "Executes")], inputs: "Approved ticket", outputs: "Done" },
     { id: "close", lane: "sys", title: "Close & rate", by: Y("Yai", "closes the ticket and asks for a rating"), screen: ["Tickets", "/dashboard/ticket"],
@@ -560,6 +569,19 @@ function Cycle({ flow, sel, onSel, go }) {
                 <div className="text-xs text-slate-400 mt-1">{s.body}</div>
                 <div className="text-[11px] text-emerald-300 mt-1">↗ {s.screen[0]}</div>
               </button>
+            ))}
+          </div>
+        </div>
+      )}
+      {flow.physical && (
+        <div className="mt-4">
+          <div className="text-[10px] uppercase tracking-wider text-slate-500 mb-2">Physical items only — everything else is in Yai</div>
+          <div className="flex flex-wrap gap-2">
+            {flow.physical.map((s) => (
+              <div key={s.title} className="rounded-xl bg-slate-800/60 border border-dashed border-white/15 p-3 w-60">
+                <div className="flex items-center gap-1.5 text-sm font-semibold"><ByIcon auto={false} size={14} /> {s.title}</div>
+                <div className="text-xs text-slate-400 mt-1">{s.body}</div>
+              </div>
             ))}
           </div>
         </div>
