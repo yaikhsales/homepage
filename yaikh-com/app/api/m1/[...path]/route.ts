@@ -49,8 +49,10 @@ export async function POST(req: Request, { params }: { params: { path: string[] 
 
   const ctl = new AbortController();
   // Big Brain's boss/query runs entirely on the local Qwen model (route, answer per PA, merge), which takes
-  // longer than a single PA answer; give it up to 55 s inside the 60 s function limit.
-  const timer = setTimeout(() => ctl.abort(), path === "boss/query" || path === "boss/chart" ? Math.max(TIMEOUT_MS, 55000) : TIMEOUT_MS);
+  // longer than a single PA answer; give it up to 55 s inside the 60 s function limit. pa/query is local Qwen
+  // only since 2026-10-07 (no Claude per question), so it gets the same room.
+  const slow = path === "boss/query" || path === "boss/chart" || path === "pa/query";
+  const timer = setTimeout(() => ctl.abort(), slow ? Math.max(TIMEOUT_MS, 55000) : TIMEOUT_MS);
   try {
     const body = await req.text();
     const upstream = await fetch(`${M1_URL}/${path}`, {
