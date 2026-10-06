@@ -116,6 +116,7 @@ import TechPack from "./ypi/TechPack";
 import AccessoriesReceiving from "./fc/AccessoriesReceiving";
 import AccessoriesInspection from "./fc/AccessoriesInspection";
 import WarehouseMap from "./fc/WarehouseMap";
+import LocationPlan from "./fc/LocationPlan";
 import Calculator from "./fc/Calculator";
 import AccessoriesIssuing from "./fc/AccessoriesIssuing";
 import DeliveryTracking from "./fc/DeliveryTracking";
@@ -447,6 +448,10 @@ export default function App() {
           <Route
             path="fc/warehouse-tracking"
             element={<WarehouseMap onBack={handleBack} />}
+          />
+          <Route
+            path="fc/location-plan"
+            element={<LocationPlan onBack={handleBack} />}
           />
           <Route
             path="fc/consumptions"
