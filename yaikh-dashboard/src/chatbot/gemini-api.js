@@ -308,6 +308,38 @@ export const generateBossBubbles = async (
   }
 };
 
+/* ─── Big Brain asks the PAs: /boss/query with who answered ────────────
+ * Local Qwen routes to at most 2 department PAs and merges (15–40 s; the
+ * site proxy allows 55 s). Returns {answer, routed_to[]} or null. No Claude. */
+export const askBossQuery = async (question, chatHistory = []) => {
+  if (!M1_LLM_URL) return null;
+  try {
+    const ctl = new AbortController();
+    const timer = setTimeout(() => ctl.abort(), 58000);
+    const r = await fetch(`${M1_LLM_URL.replace(/\/$/, "")}/boss/query`, {
+      method: "POST",
+      signal: ctl.signal,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        question: String(question ?? ""),
+        history: (chatHistory || []).slice(-6).map((m) => ({
+          from: m.from === "user" ? "user" : "bot",
+          text: typeof m.text === "string" ? m.text : String(m.text ?? ""),
+        })),
+      }),
+    });
+    clearTimeout(timer);
+    if (!r.ok) return null;
+    const data = await r.json();
+    const answer = typeof data?.answer === "string" ? data.answer.trim() : "";
+    if (!answer) return null;
+    return { answer, routed_to: Array.isArray(data?.routed_to) ? data.routed_to : [] };
+  } catch (err) {
+    console.warn("askBossQuery failed:", err?.message || err);
+    return null;
+  }
+};
+
 /* ─── /boss/query — Big Brain routes to PAs and merges ──────────────── */
 export const generateBossResponse = async (userMessage, chatHistory = [], visitor = "") => {
   if (!M1_LLM_URL) return null;

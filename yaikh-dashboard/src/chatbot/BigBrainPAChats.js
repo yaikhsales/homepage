@@ -31,6 +31,12 @@ const PAS = [
 
 const ME = "Big Brain";
 
+/* Shared with the Big Brain conversation: PA label by slug, and a direct
+ * post into that PA's thread (its auto-reply lands in ~35 s). */
+export const PA_LABEL = Object.fromEntries(PAS.map((p) => [p.slug, p.code]));
+export const postToPA = (slug, text) => icom({ view: "post", topic_id: `bigbrain-dm-${slug}`, text, from_code: ME });
+
+
 const shortTime = (iso) => {
   if (!iso) return "";
   const d = new Date(iso);
@@ -54,7 +60,7 @@ const dmFor = (topics, pa) => topics.find((t) =>
   (t.kind === "dm" && [pa.slug, pa.code].includes(String(t.pa || "").replace(/-bot$/, "")))
 );
 
-const BigBrainPAChats = ({ fontSize = 14, onThreadChange }) => {
+const BigBrainPAChats = ({ fontSize = 14, onThreadChange, openRequest }) => {
   const [topics, setTopics] = useState([]);
   const [open, setOpen] = useState(null); // PA object
   const [rows, setRows] = useState([]);
@@ -84,6 +90,12 @@ const BigBrainPAChats = ({ fontSize = 14, onThreadChange }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [topics]);
 
+  // The conversation's PA chips ask the drawer to open a PA's thread.
+  useEffect(() => {
+    if (!openRequest) return;
+    const pa = PAS.find((p) => p.slug === openRequest.slug);
+    if (pa) { setOpen(pa); loadTopics(); }
+  }, [openRequest]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { setWaiting(0); if (open) loadThread(open); if (onThreadChange) onThreadChange(!!open); }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Every PA answers to Big Brain (the GM). After the GM sends, poll the

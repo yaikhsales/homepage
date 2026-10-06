@@ -18,10 +18,10 @@ import {
   Search,
   ChevronRight,
 } from "lucide-react";
-import { generateGeminiResponse, generateChatResponse, generateBossOrChat, shouldUseGemini } from "./gemini-api";
+import { generateGeminiResponse, generateChatResponse, generateBossOrChat, shouldUseGemini, askBossQuery } from "./gemini-api";
 import { KHMER_NEW_YEAR } from "../thems";
 import { useKhmerTTS } from "./useKhmerTTS";
-import BigBrainPAChats from "./BigBrainPAChats";
+import BigBrainPAChats, { PA_LABEL, postToPA } from "./BigBrainPAChats";
 import { Volume2, VolumeX } from "lucide-react";
 
 // Visitor name is captured on first open and persisted; no default value.
@@ -140,6 +140,8 @@ const BotVersion2 = ({
   const [isHistoryOpen, setIsHistoryOpen] = useState(true);
   const [isHistoryPinned, setIsHistoryPinned] = useState(true);
   const [paThreadOpen, setPaThreadOpen] = useState(false); // a PA thread is open in the drawer
+  const [paOpenReq, setPaOpenReq] = useState(null); // {slug, n} — a PA chip asks the drawer to open that thread
+  const [fontPopover, setFontPopover] = useState(false);
   // Font-size preference for the chat bubbles (12–24px). Persists in localStorage.
   const [chatFontSize, setChatFontSize] = useState(() => {
     try {
@@ -1033,6 +1035,60 @@ const BotVersion2 = ({
     }
   };
 
+  // Which PAs a question is probably for — only for the "Asking …" line and
+  // the fallback; /boss/query does the real routing.
+  const guessPAs = (q) => {
+    const low = q.toLowerCase();
+    const rules = [
+      ["4dp", /\b(plan|schedul|master plan|line plan|start|capacity|ex-factory|tomorrow)/],
+      ["ypi", /\b(sample|tech ?pack|style|merchand|quotation|costing|pp\b)/],
+      ["mrp", /\b(material|supplier|eta|booking|trim|label|thread|container)/],
+      ["fc", /\b(fabric|roll|lot|cage|warehouse|relax)/],
+      ["ce", /\b(cpm|cost per minute|sam\b|efficien|balanc|learning curve|operation)/],
+      ["production", /\b(output|sewing|cutting|finishing|packing|wip)/],
+      ["qa", /\b(quality|defect|aql|inspect|held|hold|reject|qc)/],
+      ["ytm", /\b(machine|downtime|mechanic|spare|forklift)/],
+      ["hr", /\b(worker|attendance|leave|overtime|recruit|headcount|resign)/],
+      ["accounting", /\b(payroll|salary|invoice|payment|cash|bank)/],
+      ["admin", /\b(ticket|gate|car booking|canteen|meeting room)/],
+      ["csr", /\b(audit|energy|water|waste|chemical|complian)/],
+      ["shipping", /\b(export|shipment|vessel|freight|shipping)/],
+      ["social", /\b(facebook|tiktok|social|instagram|youtube)/],
+    ];
+    const hits = rules.filter(([, re]) => re.test(low)).map(([slug]) => slug);
+    if (!hits.length && /\b[A-Z]{2,}[-\s]?[A-Z]*-?\d{3,}/.test(q)) return ["4dp", "ypi"];
+    return hits.slice(0, 2);
+  };
+
+  const askThePAs = async (q) => {
+    const asking = Date.now() + Math.random();
+    const guess = guessPAs(q);
+    const who = guess.length ? guess.map((g) => PA_LABEL[g]).join(" · ") : "the department PAs";
+    setMessages((prev) => [...prev, { from: "user", text: q }, { from: "bot", id: asking, asking: true, text: `Asking ${who}…` }]);
+    setInput("");
+    const res = await askBossQuery(q, messages);
+    if (res) {
+      const chips = (res.routed_to || []).filter((s) => PA_LABEL[s]);
+      setMessages((prev) => prev.map((m) => (m.id === asking ? { from: "bot", text: res.answer, paChips: chips } : m)));
+      return;
+    }
+    const pa = guess[0] || "4dp";
+    let posted = false;
+    try { const j = await postToPA(pa, q); posted = !!(j && j.ok); } catch { /* offline */ }
+    setMessages((prev) => prev.map((m) => (m.id === asking ? {
+      from: "bot",
+      text: posted
+        ? `${PA_LABEL[pa]} is checking this now — the answer lands in your PA chats in about a minute.`
+        : `I couldn't reach the PAs just now — please try again in a moment.`,
+      paChips: posted ? [pa] : [],
+    } : m)));
+  };
+
+  const openPAChat = (slug) => {
+    setIsHistoryOpen(true);
+    setPaOpenReq({ slug, n: Date.now() });
+  };
+
   const handleSend = (e) => {
     e.preventDefault();
     if (demoPlaying) return; // intro script is still handing over
@@ -1471,6 +1527,22 @@ const BotVersion2 = ({
       return;
     }
     if (onboardingStep === 5) return; // materialising — block extra input
+
+    // ── Real factory questions go to the 14 PAs (Gamini 2026-10-06: "this
+    // chat has 14 PAs to get answers; it cannot be stupid any more").
+    // /boss/query = local Qwen, routes to ≤2 PAs (15–40 s). If it fails,
+    // the question goes straight into the best PA's direct thread.
+    // Questions about Yaikh itself (price, demo …) stay on the sales path.
+    const paAsk = input.trim();
+    const salesIntent = /\b(yaikh|yai\b|pric\w*|subscri\w*|demo|licen[cs]e|partner|investor|install\w*|how much (is|does|for) (it|yai))/i.test(paAsk);
+    const looksQuestion = /[?？]/.test(paAsk)
+      || /^(what|which|why|how|when|where|who|is|are|can|could|do|does|did|tell|show|give|list|check|find|explain)\b/i.test(paAsk)
+      || /\b[A-Z]{2,}[-\s]?[A-Z]*-?\d{3,}/.test(paAsk)
+      || paAsk.split(/\s+/).length > 5;
+    if (!uploadedImage && !salesIntent && looksQuestion && (isRealQuestion || onboardingStep === 99)) {
+      askThePAs(paAsk);
+      return;
+    }
 
     // ── "Matters for attention" quick intercept ───────────────────────
     // Boss asks for suggestions / next batch / more matters — fetch fresh
@@ -2172,42 +2244,12 @@ ANSWER RULES
         style={{ top: "220px", bottom: "0", height: "calc(100vh - 220px)" }}
       >
         <div className="flex flex-col h-full w-full">
-          {/* Sidebar Header */}
-          <div className="flex items-center justify-between p-4 border-b border-white/10">
-            <h2 className="text-lg font-semibold">Chat History</h2>
-            <div className="flex items-center gap-1">
-              <button
-                onClick={() => setIsHistoryPinned((p) => !p)}
-                title={isHistoryPinned ? "Unpin (auto-close on click outside)" : "Pin (keep open)"}
-                className={`p-2 rounded-full transition ${
-                  isHistoryPinned
-                    ? "bg-yai-blue/30 text-yai-blue"
-                    : "hover:bg-white/10 text-white/70"
-                }`}
-              >
-                <span style={{ fontSize: "16px", lineHeight: 1 }}>
-                  {isHistoryPinned ? "📌" : "📍"}
-                </span>
-              </button>
-              <button
-                onClick={() => setIsHistoryOpen(false)}
-                className="p-2 rounded-full hover:bg-white/10 transition"
-              >
-                <X size={20} className="text-white/70" />
-              </button>
-            </div>
-          </div>
-
-          {/* Controls hide while a PA thread is open so the chat gets the drawer. */}
-          {!paThreadOpen && (<>
-          {/* New Chat + Restart Demo buttons */}
-          <div className="p-4 border-b border-white/10 space-y-2">
-            <button
-              onClick={handleNewChat}
-              className="w-full flex items-center gap-3 px-4 py-3 rounded-full bg-emerald-500/15 border border-emerald-400/30 hover:bg-emerald-500/25 transition"
-            >
-              <Plus size={18} className="text-emerald-400" />
-              <span className="text-sm text-emerald-300 font-semibold">New Chat</span>
+          {/* Compact header: title + small icon buttons (Gamini 2026-10-06 —
+              the PA list gets the space). */}
+          <div className="relative flex items-center gap-1 px-3 py-2.5 border-b border-white/10">
+            <h2 className="text-base font-semibold flex-1">PA chats</h2>
+            <button onClick={handleNewChat} title="New chat" className="p-1.5 rounded-full hover:bg-white/10 transition">
+              <Plus size={16} className="text-emerald-300" />
             </button>
             <button
               onClick={() => {
@@ -2220,46 +2262,46 @@ ANSWER RULES
                   window.location.reload();
                 }
               }}
-              className="w-full flex items-center gap-3 px-4 py-3 rounded-full bg-orange-500/15 border border-orange-400/30 hover:bg-orange-500/25 transition"
-              title="Wipe your name + factory setup + chat history so Yai greets you as a fresh visitor"
+              title="Reset conversation"
+              className="p-1.5 rounded-full hover:bg-white/10 transition"
             >
-              <RefreshCw size={18} className="text-orange-400" />
-              <span className="text-sm text-orange-300 font-semibold">Reset conversation</span>
+              <RefreshCw size={15} className="text-orange-300" />
             </button>
+            <button onClick={() => setFontPopover((v) => !v)} title="Text size" className={`px-1.5 py-1 rounded-full transition text-xs font-bold ${fontPopover ? "bg-white/15 text-white" : "hover:bg-white/10 text-white/70"}`}>
+              Aa
+            </button>
+            <button
+              onClick={() => setIsHistoryPinned((p) => !p)}
+              title={isHistoryPinned ? "Unpin (auto-close on click outside)" : "Pin (keep open)"}
+              className={`p-1.5 rounded-full transition ${isHistoryPinned ? "bg-yai-blue/30" : "hover:bg-white/10"}`}
+            >
+              <span style={{ fontSize: "13px", lineHeight: 1 }}>{isHistoryPinned ? "📌" : "📍"}</span>
+            </button>
+            <button onClick={() => setIsHistoryOpen(false)} title="Close" className="p-1.5 rounded-full hover:bg-white/10 transition">
+              <X size={16} className="text-white/70" />
+            </button>
+            {fontPopover && (
+              <div className="absolute right-2 top-full mt-1 z-10 w-56 rounded-xl bg-[#1e293b] border border-white/15 shadow-xl p-3">
+                <div className="text-center text-[11px] text-white/60 mb-1.5">{chatFontSize === 15 ? "Default" : `${chatFontSize}px`}</div>
+                <div className="flex items-center gap-2">
+                  <span className="text-white/70" style={{ fontSize: 11 }}>A</span>
+                  <input type="range" min={12} max={24} step={1} value={chatFontSize}
+                    onChange={(e) => setChatFontSize(parseInt(e.target.value, 10))}
+                    className="flex-1 accent-yai-blue cursor-pointer" />
+                  <span className="text-white" style={{ fontSize: 18, fontWeight: 700 }}>A</span>
+                </div>
+              </div>
+            )}
           </div>
-
-          {/* Text size — A slider A */}
-          <div className="px-4 py-3 border-b border-white/10">
-            <div className="text-center text-xs text-white/60 mb-2">
-              {chatFontSize === 15 ? "Default" : `${chatFontSize}px`}
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="text-white/70" style={{ fontSize: 12 }}>A</span>
-              <input
-                type="range"
-                min={12}
-                max={24}
-                step={1}
-                value={chatFontSize}
-                onChange={(e) => setChatFontSize(parseInt(e.target.value, 10))}
-                className="flex-1 accent-yai-blue cursor-pointer"
-              />
-              <span className="text-white" style={{ fontSize: 22, fontWeight: 700 }}>A</span>
-            </div>
-          </div>
-
-          {/* Privacy note — history is memory-only, gone on refresh */}
-          <div className="px-4 py-3 border-t border-white/10 text-xs text-white/60">
-            🔒 Chats clear on refresh — for your privacy. Want to keep one? Ask
-            Yai about emailing you the transcript (from ecom@yaikh.com).
-          </div>
-
-          </>)}
 
           {/* The 14 department PAs — direct threads with each (Gamini
               2026-10-06: the history list becomes Big Brain's PA chats). */}
           <div className="flex-1 min-h-0 overflow-y-auto flex flex-col">
-            <BigBrainPAChats fontSize={chatFontSize} onThreadChange={setPaThreadOpen} />
+            <BigBrainPAChats fontSize={chatFontSize} onThreadChange={setPaThreadOpen} openRequest={paOpenReq} />
+          </div>
+          {/* Privacy note — one muted line at the bottom */}
+          <div className="px-3 py-1.5 border-t border-white/10 text-[10px] text-white/40 truncate" title="Chats clear on refresh — for your privacy. Want to keep one? Ask Yai about emailing you the transcript (from ecom@yaikh.com).">
+            🔒 Chats clear on refresh — ask Yai to email you a transcript.
           </div>
         </div>
       </div>
@@ -2480,7 +2522,9 @@ ANSWER RULES
                               : "bg-white/5 border border-white/10 text-white rounded-bl-none"
                       }`}
                     >
-                      {msg.from === "bot" ? (
+                      {msg.from === "bot" && msg.asking ? (
+                        <div className="italic text-white/60 animate-pulse">{msg.text}</div>
+                      ) : msg.from === "bot" ? (
                         <div className="markdown-content">
                           <div
                             className="prose prose-sm max-w-none"
@@ -2500,6 +2544,17 @@ ANSWER RULES
                         <div className="whitespace-pre-wrap">{msg.text}</div>
                       )}
                     </div>
+                    {msg.from === "bot" && msg.paChips && msg.paChips.length > 0 && (
+                      <div className="flex flex-wrap items-center gap-1.5 px-1">
+                        <span className="text-[10px] text-white/40">Answered by</span>
+                        {msg.paChips.map((slug) => (
+                          <button key={slug} onClick={() => openPAChat(slug)} title={`Open the ${PA_LABEL[slug]} chat`}
+                            className="text-[11px] rounded-full px-2 py-0.5 bg-emerald-500/15 border border-emerald-400/30 text-emerald-200 hover:bg-emerald-500/25">
+                            {PA_LABEL[slug]}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                     {msg.from === "bot" && (
                       <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity px-1">
                         <button
