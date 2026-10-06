@@ -543,6 +543,21 @@ const PhoneFrame = ({
     const [paSkills, paSkillsLoading, reloadPaSkills, paSkillsAct] = usePaSkills(notifSlug);
     const [skillsOpen, setSkillsOpen] = useState(false);
     const [icomOpen, setIcomOpen] = useState(false);
+    // The four-skills and Icom views open BELOW the PA header, so the header
+    // (Icom, blue Yai, title) stays visible and clickable — no trap.
+    const paHeaderRef = useRef(null);
+    const [paOverlayTop, setPaOverlayTop] = useState(96);
+    const measurePaOverlay = (el) => {
+        if (!el || !paHeaderRef.current || !el.offsetParent) return;
+        const t = Math.round(paHeaderRef.current.getBoundingClientRect().bottom - el.offsetParent.getBoundingClientRect().top);
+        if (t > 0 && Math.abs(t - paOverlayTop) > 1) setPaOverlayTop(t);
+    };
+    useEffect(() => {
+        if (!skillsOpen && !icomOpen) return undefined;
+        const onKey = (e) => { if (e.key === 'Escape') { setSkillsOpen(false); setIcomOpen(false); } };
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+    }, [skillsOpen, icomOpen]);
     const icomUnread = useIcomUnread(notifSlug);
 
     const refreshNotifCounts = React.useCallback(() => {
@@ -1449,7 +1464,7 @@ const PhoneFrame = ({
                         )}
 
                         {/* Header with Bot Name and Avatar */}
-                        <div className={`flex-shrink-0 flex items-center justify-between px-4 pt-12 pb-3 border-b ${KHMER_NEW_YEAR.isActive ? 'border-red-400/50 bg-gradient-to-r from-red-600/10 via-orange-500/10 to-yellow-500/10' : bot.borderColor || 'border-gray-200'} relative z-10`}>
+                        <div ref={paHeaderRef} className={`flex-shrink-0 flex items-center justify-between px-4 pt-12 pb-3 border-b ${KHMER_NEW_YEAR.isActive ? 'border-red-400/50 bg-gradient-to-r from-red-600/10 via-orange-500/10 to-yellow-500/10' : bot.borderColor || 'border-gray-200'} relative z-10`}>
                             <div className="flex items-center gap-2">
                                 <button
                                     onClick={() => {
@@ -1482,7 +1497,7 @@ const PhoneFrame = ({
                                             }
                                         } else if (notifSlug) {
                                             // Department PAs: the team chat (Icom)
-                                            setIcomOpen((v) => !v);
+                                            setSkillsOpen(false); setIcomOpen((v) => !v);
                                         } else {
                                             // For other bots, show chat history
                                             setIsHistoryOpen(true);
@@ -1495,7 +1510,7 @@ const PhoneFrame = ({
                                         <span className="relative inline-flex items-center gap-1">
                                             <MessageCircle size={18} className={bot.textColor || 'text-gray-600'} />
                                             <span className={`text-[10px] font-black ${bot.textColor || 'text-gray-600'}`}>Icom</span>
-                                            {icomUnread > 0 && <span className="absolute -top-2 -right-3 min-w-[15px] h-[15px] px-0.5 rounded-full bg-rose-600 text-white text-[8px] font-black leading-[15px] text-center">{icomUnread}</span>}
+                                            {icomUnread > 0 && <span className="absolute -top-2.5 -right-5 min-w-[16px] h-4 px-1 rounded-full bg-rose-600 text-white text-[9px] font-bold leading-4 text-center ring-2 ring-white shadow-sm">{icomUnread > 99 ? '99+' : icomUnread}</span>}
                                         </span>
                                     ) : (
                                         <Menu size={18} className={bot.textColor || 'text-gray-600'} />
@@ -1505,13 +1520,19 @@ const PhoneFrame = ({
                                     approvals first); red badge = alerts + open approvals. */}
                                 {notifSlug && (
                                     <button
-                                        onClick={() => setSkillsOpen((v) => !v)}
-                                        className="relative w-9 h-9 rounded-full overflow-hidden flex items-center justify-center transition-transform hover:scale-105 active:scale-95 flex-shrink-0"
-                                        style={{ background: "radial-gradient(circle at 30% 25%, #93c5fd 0%, #3b82f6 55%, #1d4ed8 100%)", boxShadow: "inset -3px -3px 6px rgba(0,0,0,0.3), inset 2px 2px 5px rgba(255,255,255,0.35)" }}
+                                        onClick={() => { setIcomOpen(false); setSkillsOpen((v) => !v); }}
+                                        className="relative w-9 h-9 flex-shrink-0 transition-transform hover:scale-105 active:scale-95"
                                         title="Yai — tasks, alerts, reminders, forecasts"
                                     >
-                                        <span className="text-white font-black text-[11px] italic">Yai</span>
-                                        {paSkills && paSkills.badge > 0 && <span className="absolute top-0 right-0 min-w-[16px] h-4 px-0.5 rounded-full bg-rose-600 text-white text-[9px] font-black leading-4 text-center">{paSkills.badge}</span>}
+                                        {/* Same blue Yai logo as the Agent Collective button (AppLayout) */}
+                                        <span
+                                            className="block w-9 h-9 rounded-full overflow-hidden"
+                                            style={{ background: "radial-gradient(circle at 30% 25%, #93c5fd 0%, #3b82f6 55%, #1d4ed8 100%)", boxShadow: "inset -3px -3px 6px rgba(0,0,0,0.30), inset 2px 2px 5px rgba(255,255,255,0.35), 0 3px 8px rgba(59,130,246,0.4)" }}
+                                        >
+                                            <img src={process.env.PUBLIC_URL + "/assets/modules-image/yai1.png"} alt="Yai" className="w-full h-full rounded-full object-cover" />
+                                        </span>
+                                        {/* badge sits outside the clipped circle so it is never cut */}
+                                        {paSkills && paSkills.badge > 0 && <span className="absolute -top-1.5 -right-2 min-w-[16px] h-4 px-1 rounded-full bg-rose-600 text-white text-[9px] font-bold leading-4 text-center ring-2 ring-white shadow-sm">{paSkills.badge > 99 ? '99+' : paSkills.badge}</span>}
                                     </button>
                                 )}
                             </div>
@@ -2285,7 +2306,8 @@ const PhoneFrame = ({
             </div>
             {/* Four-skills view — opened by the blue Yai header button. */}
             {skillsOpen && (
-                <div className="absolute inset-x-0 top-16 bottom-0 z-30 overflow-y-auto bg-white px-3 pb-4 rounded-b-3xl">
+                <div ref={measurePaOverlay} style={{ top: paOverlayTop }} className="absolute inset-x-0 bottom-0 z-30 overflow-y-auto bg-white px-3 pb-4 rounded-b-3xl">
+                    <div className="sticky top-0 z-10 -mx-3 mb-2 px-3 py-2 bg-white/95 backdrop-blur border-b border-gray-100"><button onClick={() => setSkillsOpen(false)} className="inline-flex items-center gap-1 text-xs font-semibold text-blue-700 hover:text-blue-900">← Back to PA</button></div>
                     {paSkills ? (
                         <PaSkills data={paSkills} loading={paSkillsLoading} onRefresh={reloadPaSkills} onTaskAction={paSkillsAct} onOpenLink={(l) => { setSkillsOpen(false); if (onClose) onClose(); navigateTo(l); }} />
                     ) : (
@@ -2295,8 +2317,9 @@ const PhoneFrame = ({
             )}
             {/* Icom — the department team chat, from the header's Icom button. */}
             {icomOpen && notifSlug && (
-                <div className="absolute inset-x-0 top-16 bottom-0 z-30 bg-white rounded-b-3xl overflow-hidden">
-                    <Icom dept={notifSlug} onMyChats={() => { setIcomOpen(false); setIsHistoryOpen(true); }} />
+                <div ref={measurePaOverlay} style={{ top: paOverlayTop }} className="absolute inset-x-0 bottom-0 z-30 bg-white rounded-b-3xl overflow-hidden flex flex-col">
+                    <div className="flex-shrink-0 px-3 py-2 border-b border-gray-100"><button onClick={() => setIcomOpen(false)} className="inline-flex items-center gap-1 text-xs font-semibold text-blue-700 hover:text-blue-900">← Back to PA</button></div>
+                    <div className="flex-1 min-h-0"><Icom dept={notifSlug} onMyChats={() => { setIcomOpen(false); setIsHistoryOpen(true); }} /></div>
                 </div>
             )}
             {/* Modal flow superseded by in-chat agentic cards — keeping
