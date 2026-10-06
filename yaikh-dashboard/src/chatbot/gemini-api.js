@@ -308,6 +308,33 @@ export const generateBossBubbles = async (
   }
 };
 
+/* ─── Charts on demand: /boss/chart ───────────────────────────────────
+ * "fabric lots on hold by supplier" → {ok, title, type, x, y | series,
+ * unit, routed_to, note, link}. M1 picks one of its chart builders (keyword
+ * match, then local Qwen) and computes the numbers from the live sim data —
+ * Qwen never writes the numbers. Returns {status:"missing"} when the route
+ * is not there, so the caller can fall back to a text answer. */
+export const askBossChart = async (request) => {
+  if (!M1_LLM_URL) return { status: "missing" };
+  try {
+    const ctl = new AbortController();
+    const timer = setTimeout(() => ctl.abort(), 58000);
+    const r = await fetch(`${M1_LLM_URL.replace(/\/$/, "")}/boss/chart`, {
+      method: "POST",
+      signal: ctl.signal,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ request: String(request ?? "") }),
+    });
+    clearTimeout(timer);
+    if (r.status === 404 || r.status === 403 || r.status === 405) return { status: "missing" };
+    if (!r.ok) return { status: "error" };
+    const data = await r.json();
+    return { status: data && data.ok ? "ok" : "nofit", ...data };
+  } catch (err) {
+    return { status: "error" };
+  }
+};
+
 /* ─── Big Brain asks the PAs: /boss/query with who answered ────────────
  * Local Qwen routes to at most 2 department PAs and merges (15–40 s; the
  * site proxy allows 55 s). Returns {answer, routed_to[]} or null. No Claude. */

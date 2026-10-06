@@ -172,6 +172,7 @@ const AppLayout = () => {
   useEffect(() => {
     if (location.pathname === "/") { setBbBubble(false); setBigBrainOpen(false); }
     else if (location.pathname.startsWith("/dashboard/sop-map")) setBigBrainPage("SOP");
+    else if (location.pathname.startsWith("/dashboard/management-dashboard")) setBigBrainPage("Management Dashboard");
     else if (location.pathname.startsWith("/dashboard/system-analysis")) setBigBrainPage("System Analysis");
   }, [location.pathname]);
   const [routePaOpen, setRoutePaOpen] = useState(false);
@@ -258,9 +259,10 @@ const AppLayout = () => {
       setYaiVersion("yai2");
       setBbBubble(true);
       setBigBrainPage(module.title);
-      // SOP's timeline is full-width — nothing may sit under a panel, so
-      // land there with the bubble only; tap it to open the panel.
-      setBigBrainOpen(module.title !== "SOP");
+      // These pages are full-width (SOP timeline, GM dashboard, System
+      // Analysis charts) — nothing may sit under a panel, so land with the
+      // bubble only; tap it to open the panel.
+      setBigBrainOpen(false);
     }
     if (module.demoType) {
       const { demoType, id, title } = module;
@@ -288,6 +290,8 @@ const AppLayout = () => {
         navigate(`/dashboard/${id}`);
       else if (demoType === "VIEW_SOP_MAP")
         navigate(`/dashboard/sop-map`);
+      else if (demoType === "VIEW_MANAGEMENT_DASHBOARD")
+        navigate(`/dashboard/management-dashboard`);
       else if (demoType === "VIEW_FACTORY_WORKFLOW")
         navigate(`/dashboard/factory-workflow`);
       else if (demoType === "SUBMENU_YHR") {

@@ -22,6 +22,7 @@ import Sections from "./hr/Sections";
 import MeterDeviceListView from "./views/MeterDeviceListView";
 // eslint-disable-next-line no-unused-vars
 import SystemAnalysisView from "./views/SystemAnalysisView";
+import ManagementDashboard from "./views/ManagementDashboard";
 // eslint-disable-next-line no-unused-vars
 import ShopGridView from "./views/ShopGridView";
 import ImageView from "./views/ImageView";
@@ -391,6 +392,10 @@ export default function App() {
           <Route
             path="sop-map"
             element={<SOPMap onBack={handleBack} />}
+          />
+          <Route
+            path="management-dashboard"
+            element={<ManagementDashboard onBack={handleBack} />}
           />
           <Route
             path="factory-workflow"

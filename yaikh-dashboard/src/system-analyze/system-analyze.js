@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Calendar, Download, RotateCcw, BarChart3, Users, FileText, Eye } from 'lucide-react';
 import { useTranslation } from '../translate/TranslationContext';
+import ChartAsk from '../chatbot/ChartAsk';
 
 const SystemAnalyze = ({ onBack }) => {
     const navigate = useNavigate();
@@ -478,6 +479,9 @@ const SystemAnalyze = ({ onBack }) => {
             {/* Main Content */}
             <div className="flex-1 overflow-auto p-6">
                 <div className="max-w-7xl mx-auto space-y-6">
+                    {/* Charts on demand from the 14 PAs (Big Brain · Data Scientist) */}
+                    <ChartAsk storageKey="yai-charts-system-analysis" dark={false} />
+
                     {/* Filter Section */}
                     <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
                         <div className="flex flex-wrap items-center gap-4">

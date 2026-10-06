@@ -131,7 +131,7 @@ export const BIG_BRAIN_TITLES = new Set([
   "SOP",
   "System Analysis",
 ]);
-export const BIG_BRAIN_ROUTES = ["/dashboard/sop-map", "/dashboard/system-analysis"];
+export const BIG_BRAIN_ROUTES = ["/dashboard/sop-map", "/dashboard/system-analysis", "/dashboard/management-dashboard"];
 export const BIG_BRAIN_BUBBLE =
   "radial-gradient(circle at 30% 25%, #a7f3d0 0%, #10b981 55%, #047857 100%)";
 

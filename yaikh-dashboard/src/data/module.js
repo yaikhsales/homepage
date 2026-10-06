@@ -329,6 +329,7 @@ export const DASHBOARD_DATA = [
             title: "Management Dashboard",
             image: "IMG/avatars/agent-28.png",
             status: "active",
+            demoType: "VIEW_MANAGEMENT_DASHBOARD",
             popupTitle: "MANAGEMENT · DASHBOARD",
             description: "I'm the GM's data keeper. Every number in the company runs through me — production, sales, finance, HR, compliance — so the General Manager's single screen knows literally everything, live."
           },
