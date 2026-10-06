@@ -20,9 +20,7 @@ const API = (process.env.REACT_APP_M1_LLM_URL || "/api/m1").replace(/\/$/, "");
 const STRIP = process.env.PUBLIC_URL + "/assets/ywip/floor-strip.png";
 const IMG_W = 7680; // the strip's pixels
 const IMG_H = 608;
-const BAND_H = 300; // the bubble band under the strip (strip pixels): two lanes
-const ROW_H = IMG_H + BAND_H;
-const COL_W = 236; // one station's column in the band
+const COL_W = 236; // one station's column in the band (strip pixels)
 // Where each station's label pill sits in the strip (x = pill centre); 14 and 15 are the heat-seal branch,
 // drawn lower, so their bubbles go in the band's second lane.
 const PILL_X = [144, 384, 624, 864, 1104, 1344, 1584, 1824, 2064, 2355, 2688, 2979, 3312, 3552, 3792, 4082, 4416, 4656, 4896, 5136, 5376, 5616, 5856, 6096, 6336, 6576, 6816, 7056, 7296, 7536];
@@ -34,9 +32,11 @@ PILLS["15"] = { x: 3320, y: 567, top: 375, bottom: 585, lane: 1 };
 
 const TONE = { green: "border-emerald-500 text-emerald-700", amber: "border-amber-500 text-amber-700", red: "border-rose-500 text-rose-700", grey: "border-slate-300 text-slate-400" };
 const DOT = { green: "bg-emerald-500", amber: "bg-amber-500", red: "bg-rose-500", grey: "bg-slate-400" };
-const BUBBLE = { pending: "bg-white border-slate-300 text-slate-700", ongoing: "bg-orange-500 border-orange-600 text-white", done: "bg-emerald-500 border-emerald-600 text-white" };
-const ORDER = { pending: 0, ongoing: 1, done: 2 };
-const MAX_BUBBLES = 8;
+const BUBBLE = { pending: "bg-white border-slate-300 text-slate-700", ongoing: "bg-orange-500 border-orange-600 text-white", done: "bg-emerald-500 border-emerald-600 text-white", blocked: "bg-rose-600 border-rose-700 text-white" };
+// the column reads from the bottom up: white pending at the bottom, orange ongoing (and red blocked, which
+// stays where it is) in the middle, green done at the top — so the top-to-bottom order is done, ongoing, pending
+const ORDER = { done: 0, blocked: 1, ongoing: 1, pending: 2 };
+const BUBBLE_H = 22; // one bubble row in screen pixels (the band is not scaled with the strip)
 // one activity's identity across stations: the flow (the same lot travelling), else the activity, else the order
 const bkey = (a) => String(a.flow_id || a.id || a.order);
 const SPEEDS = [1, 10, 30];
@@ -55,13 +55,16 @@ const idle = (s) => (s.figures || []).every((f) => f.value === 0 || f.value === 
 const PULSE_CSS = "@keyframes ywip-pulse { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(251,191,36,.9); } 50% { transform: scale(1.18); box-shadow: 0 0 0 8px rgba(251,191,36,0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(251,191,36,0); } } .ywip-pulse { animation: ywip-pulse 1.4s ease-out 2; } .ywip-wall::-webkit-scrollbar { height: 8px; } .ywip-wall::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }";
 
 /* ── the wall: one row, the strip on top, the bubble band under it ──────── */
-const Wall = ({ stations, scale, onOpen, onBubble, open, changed, scroller }) => {
+const Wall = ({ stations, scale, onOpen, onBubble, open, changed, maxBubbles, laneH }) => {
   const byNo = Object.fromEntries(stations.map((s) => [s.no, s]));
   const W = IMG_W * scale;
+  const twoLanes = !!(byNo["14"] || byNo["15"]);
+  const bandH = laneH * (twoLanes ? 2 : 1) + 8;
   return (
-    <div className="relative" style={{ width: W, height: ROW_H * scale, backgroundImage: `url(${STRIP})`, backgroundSize: `${W}px ${IMG_H * scale}px`, backgroundRepeat: "no-repeat", backgroundColor: "#eceeea" }}>
+    <div className="relative" style={{ width: W, height: IMG_H * scale + bandH, backgroundImage: `url(${STRIP})`, backgroundSize: `${W}px ${IMG_H * scale}px`, backgroundRepeat: "no-repeat", backgroundColor: "#eceeea" }}>
       {/* a faint rule between the strip and the band */}
       <div className="absolute left-0 right-0 border-t border-dashed border-slate-400/50" style={{ top: IMG_H * scale }} />
+      {twoLanes && <div className="absolute left-0 right-0 border-t border-dotted border-slate-300" style={{ top: IMG_H * scale + laneH + 4 }} />}
       {Object.entries(PILLS).map(([no, p]) => {
         const s = byNo[no];
         if (!s) return null;
@@ -71,11 +74,12 @@ const Wall = ({ stations, scale, onOpen, onBubble, open, changed, scroller }) =>
         const x = p.x * scale;
         const on = open === no;
         const acts = [...(s.activities || [])].sort((a, b) => (ORDER[a.status] ?? 9) - (ORDER[b.status] ?? 9));
-        const shown = acts.slice(0, MAX_BUBBLES);
-        const more = acts.length - shown.length;
-        const counts = { pending: 0, ongoing: 0, done: 0 };
+        // keep the column readable: the newest of each group stays, the rest folds into "+N" at the top
+        const counts = { pending: 0, ongoing: 0, done: 0, blocked: 0 };
         acts.forEach((a) => { counts[a.status] = (counts[a.status] || 0) + 1; });
-        const bandTop = (IMG_H + 8 + p.lane * (BAND_H / 2)) * scale;
+        const shown = acts.length > maxBubbles ? acts.filter((a) => a.status !== "done").slice(0, maxBubbles - 1).concat(acts.filter((a) => a.status === "done").slice(0, Math.max(1, maxBubbles - 1 - acts.filter((a) => a.status !== "done").length))).sort((a, b) => (ORDER[a.status] ?? 9) - (ORDER[b.status] ?? 9)) : acts;
+        const more = acts.length - shown.length;
+        const bandTop = IMG_H * scale + 4 + p.lane * (laneH + 4);
         return (
           <React.Fragment key={no}>
             <button onClick={(e) => onOpen(s, e)} title={`${no} ${s.title}`} aria-label={`${no} ${s.title}`} className={`absolute rounded-xl transition-colors ${on ? "ring-2 ring-sky-400 bg-sky-400/10" : "hover:bg-sky-400/10"}`} style={{ left: x - 112 * scale, top: p.top * scale, width: 224 * scale, height: (p.bottom - p.top) * scale }} />
@@ -83,22 +87,25 @@ const Wall = ({ stations, scale, onOpen, onBubble, open, changed, scroller }) =>
               <span className={`inline-block w-1.5 h-1.5 rounded-full mr-1 align-middle ${DOT[tone]}`} />
               {chip(f)}
             </button>
-            {/* the order bubbles: white pending → orange ongoing → green done */}
-            <div className="absolute flex flex-col items-center" style={{ left: x - (COL_W / 2) * scale, width: COL_W * scale, top: bandTop }}>
+            {/* the order column, read from the bottom up: white pending at the bottom, orange ongoing (red blocked
+                stays put) in the middle, green done at the top; a bubble rises as its work goes on, then leaves
+                for the bottom of the next station */}
+            <div className="absolute flex flex-col items-center justify-end" style={{ left: x - (COL_W / 2) * scale, width: COL_W * scale, top: bandTop, height: laneH }}>
               {acts.length > 0 && (
-                <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-600 mb-0.5 whitespace-nowrap" title={`${counts.pending} pending · ${counts.ongoing} ongoing · ${counts.done} done`}>
-                  <span className="flex items-center gap-0.5"><span className="inline-block w-2 h-2 rounded-full bg-white border border-slate-400" />{counts.pending}</span>
-                  <span className="flex items-center gap-0.5 text-orange-600"><span className="inline-block w-2 h-2 rounded-full bg-orange-500" />{counts.ongoing}</span>
+                <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-600 mb-auto whitespace-nowrap" title={`${counts.pending} pending · ${counts.ongoing} ongoing · ${counts.done} done${counts.blocked ? " · " + counts.blocked + " blocked" : ""}`}>
                   <span className="flex items-center gap-0.5 text-emerald-700"><span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />{counts.done}</span>
+                  <span className="flex items-center gap-0.5 text-orange-600"><span className="inline-block w-2 h-2 rounded-full bg-orange-500" />{counts.ongoing}</span>
+                  <span className="flex items-center gap-0.5"><span className="inline-block w-2 h-2 rounded-full bg-white border border-slate-400" />{counts.pending}</span>
+                  {counts.blocked > 0 && <span className="flex items-center gap-0.5 text-rose-700"><span className="inline-block w-2 h-2 rounded-full bg-rose-600" />{counts.blocked}</span>}
+                  {more > 0 && <span className="rounded-full border border-slate-400 bg-slate-100 text-slate-600 px-1.5 leading-4 text-[10px] font-black" title={`${more} more, folded`}>+{more}</span>}
                 </div>
               )}
-              <div className="flex flex-wrap justify-center gap-1">
+              <div className="flex flex-col items-center gap-[3px]">
                 {shown.map((a) => (
-                  <button key={bkey(a)} data-flow={bkey(a)} onClick={(e) => onBubble(a, s, e)} title={`${a.order}${a.lot ? " · lot " + a.lot : ""} · ${num(a.qty)} ${a.unit || ""} · ${a.status}${a.next_station ? " → " + a.next_station : ""}`} className={`relative rounded-full border px-2 leading-[18px] text-[10.5px] font-black shadow-sm whitespace-nowrap ${BUBBLE[a.status] || BUBBLE.pending} ${changed.has(bkey(a)) ? "ywip-pulse" : ""}`}>
-                    {a.order}<span className="font-semibold opacity-75"> {short(a.qty)}</span>
+                  <button key={bkey(a)} data-flow={bkey(a)} onClick={(e) => onBubble(a, s, e)} title={`${a.order}${a.lot ? " · lot " + a.lot : ""} · ${num(a.qty)} ${a.unit || ""} · ${a.status}${a.status === "blocked" && a.issue ? " — " + a.issue.reason : ""}${a.next_station ? " → " + a.next_station : ""}`} className={`relative rounded-full border px-2 text-[10.5px] font-black shadow-sm whitespace-nowrap ${BUBBLE[a.status] || BUBBLE.pending} ${changed.has(bkey(a)) ? "ywip-pulse" : ""} ${a.status === "blocked" ? "ring-2 ring-rose-300" : ""}`} style={{ lineHeight: BUBBLE_H - 4 + "px" }}>
+                    {a.status === "blocked" && <span className="mr-1" aria-label="blocked">⚠</span>}{a.order}<span className="font-semibold opacity-75"> {short(a.qty)}</span>
                   </button>
                 ))}
-                {more > 0 && <span className="rounded-full border border-slate-400 bg-slate-100 text-slate-600 px-2 leading-[18px] text-[10.5px] font-black" title={`${more} more`}>+{more}</span>}
               </div>
             </div>
           </React.Fragment>
@@ -141,7 +148,7 @@ const BubbleCard = ({ a, s, at, onClose }) => {
   const left = Math.max(8, Math.min(at.x - 40, room - W - 12));
   const below = at.y < window.innerHeight / 2;
   const place = below ? { top: at.y + 14 } : { bottom: window.innerHeight - at.y + 14 };
-  const rows = [["Station", `${s.no} ${s.title}`], ["Order", a.order], ["Lot", a.lot], ["Qty", a.qty !== undefined ? `${num(a.qty)} ${a.unit || ""}` : undefined], ["Status", a.status], ["Started", a.started], ["ETA", a.eta], ["Done", a.done_at], ["By", a.by]].filter(([, v]) => v !== undefined && v !== null && v !== "");
+  const rows = [["Station", `${s.no} ${s.title}`], ["Order", a.order], ["Lot", a.lot], ["Qty", a.qty !== undefined ? `${num(a.qty)} ${a.unit || ""}` : undefined], ["Status", a.status], ["Started", a.started], ["ETA", a.eta], ["Done", a.done_at], ["By", a.by], ["Next", a.next_station ? `station ${a.next_station}${a.arrives_next_at ? " · " + a.arrives_next_at : ""}` : undefined]].filter(([, v]) => v !== undefined && v !== null && v !== "");
   return (
     <>
       <div className="fixed inset-0 z-40" onClick={onClose} />
@@ -152,6 +159,7 @@ const BubbleCard = ({ a, s, at, onClose }) => {
           <button onClick={onClose} className="ml-auto p-1 rounded-lg hover:bg-slate-700" aria-label="Close"><X size={14} /></button>
         </div>
         <div className="px-3 py-2">
+          {a.status === "blocked" && <div className="mb-2 rounded-lg border border-rose-500/50 bg-rose-500/15 px-2 py-1.5 text-xs text-rose-200"><b>⚠ Stuck — {(a.issue && a.issue.reason) || "an issue is holding this activity"}</b>{a.issue && (a.issue.since || a.issue.owner) ? <div className="text-[11px] text-rose-300/80 mt-0.5">{a.issue.since ? "since " + a.issue.since : ""}{a.issue.owner ? " · " + a.issue.owner : ""}</div> : null}</div>}
           {rows.map(([k, v]) => <div key={k} className="flex items-baseline gap-2 py-0.5 border-b border-slate-700/60 last:border-b-0 text-xs"><span className="text-slate-400 w-14 flex-shrink-0">{k}</span><b className={`text-white ${k === "Status" ? "capitalize" : ""}`}>{String(v)}</b></div>)}
           {s.link && <button onClick={() => navigate(s.link)} className="mt-2 inline-flex items-center gap-1 rounded-lg border border-sky-500/50 text-sky-300 hover:bg-sky-500/10 px-2 py-1 text-xs font-bold"><ExternalLink size={12} />Open the screen</button>}
         </div>
@@ -384,9 +392,12 @@ const YwipFlow = ({ onBack }) => {
   const live = useMemo(() => stations.filter((s) => !idle(s)).length, [stations]);
   const acts = useMemo(() => stations.reduce((n, s) => n + ((s.activities || []).length), 0), [stations]);
   const ongoing = useMemo(() => stations.reduce((n, s) => n + (s.activities || []).filter((a) => a.status === "ongoing").length, 0), [stations]);
+  const blocked = useMemo(() => stations.reduce((n, s) => n + (s.activities || []).filter((a) => a.status === "blocked").length, 0), [stations]);
   // the row's scale: on the wall the whole row fits the width (3 × 1920 → 0.75); otherwise a fixed height
   const panelW = vw - (document.body.classList.contains("yai-pa-open") ? 436 : 0) - 40;
-  const scale = wall ? panelW / IMG_W : Math.max(0.42, Math.min(0.75, 440 / ROW_H));
+  const scale = wall ? panelW / IMG_W : 0.48;
+  const maxBubbles = wall ? 8 : 6;
+  const laneH = 22 + maxBubbles * (BUBBLE_H + 3) + 6; // the counts line + the bubbles
   // the travel: when a flow's bubble sits at a new station since the last render, slide it there from where it
   // was (FLIP — measure before, translate back, let the transform ease to zero); colour changes just pulse
   const rects = useRef({});
@@ -421,7 +432,7 @@ const YwipFlow = ({ onBack }) => {
       <div className="flex flex-wrap items-center gap-2 mb-2">
         {!wall && <button onClick={back} className="p-1 -ml-1 hover:bg-slate-700 rounded-full transition-colors text-slate-400 hover:text-white" aria-label="Back"><ArrowLeft size={18} /></button>}
         <h1 className="text-lg font-black text-white leading-none">YWIP · Work in progress</h1>
-        <span className="text-xs text-slate-400">{d.day || ""} · {stations.length} stations · {live} with work today{acts ? ` · ${acts} activities, ${ongoing} ongoing` : ""} · click a station or a bubble</span>
+        <span className="text-xs text-slate-400">{d.day || ""} · {stations.length} stations · {live} with work today{acts ? ` · ${acts} activities, ${ongoing} ongoing${blocked ? ", " + blocked + " stuck" : ""}` : ""} · click a station or a bubble</span>
         <div className="ml-auto flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-400">
           {(d.summary || []).map((x) => <span key={x.label} className="whitespace-nowrap">{x.label} <b className="text-white tabular-nums text-sm">{num(x.value)}</b></span>)}
         </div>
@@ -437,14 +448,15 @@ const YwipFlow = ({ onBack }) => {
 
       {/* TOP — the wall: one row */}
       <div ref={scroller} onMouseEnter={() => { hover.current = true; }} onMouseLeave={() => { hover.current = false; }} className={`ywip-wall rounded-2xl border border-slate-700 ${wall ? "overflow-hidden" : "overflow-x-auto overflow-y-hidden"}`} style={{ background: "#eceeea" }}>
-        {stations.length > 0 && <Wall stations={stations} scale={scale} onOpen={openCard} onBubble={openBubble} open={card && card.s.no} changed={changed} scroller={scroller} />}
+        {stations.length > 0 && <Wall stations={stations} scale={scale} onOpen={openCard} onBubble={openBubble} open={card && card.s.no} changed={changed} maxBubbles={maxBubbles} laneH={laneH} />}
         {stations.length === 0 && <div className="h-40 flex items-center justify-center text-sm text-slate-500">{loading ? "Loading the floor…" : "No stations."}</div>}
       </div>
       <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1 mb-3 text-[11px] text-slate-500">
         <span className="flex items-center gap-1"><span className="inline-block w-5 h-3 rounded-full bg-white border border-slate-300" />pending</span>
         <span className="flex items-center gap-1"><span className="inline-block w-5 h-3 rounded-full bg-orange-500" />ongoing</span>
         <span className="flex items-center gap-1"><span className="inline-block w-5 h-3 rounded-full bg-emerald-500" />done</span>
-        <span>bubble = one order's activity at the station · it pulses when it changes colour and slides to the next station when that lot moves on · refreshes every {speed === 1 ? "30 s" : speed === 10 ? "4 s" : "2.5 s"}{speed > 1 ? ` · demo ${speed}×` : ""}</span>
+        <span className="flex items-center gap-1"><span className="inline-block w-5 h-3 rounded-full bg-rose-600" />⚠ stuck</span>
+        <span>column reads from the bottom up · bubble = one order's activity at the station · it pulses when it changes colour and slides to the next station when that lot moves on · refreshes every {speed === 1 ? "30 s" : speed === 10 ? "4 s" : "2.5 s"}{speed > 1 ? ` · demo ${speed}×` : ""}</span>
         <span className="flex items-center gap-1 ml-2"><span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />on track</span>
         <span className="flex items-center gap-1"><span className="inline-block w-2 h-2 rounded-full bg-amber-500" />watch</span>
         <span className="flex items-center gap-1"><span className="inline-block w-2 h-2 rounded-full bg-rose-500" />behind</span>
