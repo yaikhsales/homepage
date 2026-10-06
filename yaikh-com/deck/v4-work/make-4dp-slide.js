@@ -80,10 +80,10 @@ footer .mid img{width:22px;height:22px;border-radius:50%}
 </style>
 <section class="slide">
   <div class="eyebrow">Operations · 4DP at the centre</div>
-  <div class="sub">4DP — daily production planning — feeds and is fed by every other Operations module.</div>
+  <div class="sub">4DP — 4-Directional Planning — feeds and is fed by every other Operations module.</div>
   <svg class="wires" viewBox="0 0 1280 720">${curves}</svg>
   <div class="hub"><img src="${ic("4dp")}" alt="4DP"></div>
-  <div class="hub-cap"><b>Daily production planning</b>Orders, lines, targets and materials in one plan — the nine modules on the right read from it and write back to it.</div>
+  <div class="hub-cap"><b>4-Directional Planning</b>Capacity plan · factory plan · line plan · sales-situation plan — where the plan meets reality. The nine modules on the right read from it and write back to it.</div>
   ${nodes}
   <footer><span>www.yaikh.com</span><span class="mid"><img src="${logo}" alt="">Yai</span><span>Operations</span></footer>
 </section>
