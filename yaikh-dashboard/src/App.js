@@ -202,7 +202,7 @@ export default function App() {
             path="ticket"
             element={<ModuleFrame><SupportTicketManagement onBack={handleBack} /></ModuleFrame>}
           />
-          <Route path="submenu/:moduleId" element={<SubMenuView />} />
+          <Route path="submenu/:moduleId" element={<ModuleFrame><SubMenuView /></ModuleFrame>} />
           <Route path="image/*" element={<ImageView onBack={handleBack} />} />
           <Route path="iframe" element={<IframeView onBack={handleBack} />} />
           <Route path="verify-pr" element={<ModuleFrame><VerifyPR onBack={handleBack} /></ModuleFrame>} />

@@ -8,6 +8,9 @@ import BotModules from "../chatbot/bot-modules";
 import { PA_BY_SUBMENU_TITLE, PA_TITLE_TO_TOPIC, PA_GRADIENT, PA_NAME } from "../chatbot/pa-owner";
 import VideoViewer from "../components/VideoViewer";
 import { YQMS_CARDS } from "../data/yqmsCards";
+import { FC_CARDS } from "../data/fcCards";
+import { MRP_CARDS } from "../data/mrpCards";
+import { YPI_CARDS } from "../data/ypiCards";
 
 // Sub-menu titles that belong to the Accounting PA. When the user
 // lands on one of these the floating bot bubble wears the PA's
@@ -69,6 +72,9 @@ Object.keys(PA_BY_SUBMENU_TITLE).forEach((t) => {
 const MODULE_ID_TO_CARDS = {
   // YQMS hub (grouped) — the back arrow on every YQMS screen lands here without router state
   "yqms": YQMS_CARDS,
+  "fc": FC_CARDS,
+  "mrp": MRP_CARDS,
+  "ypi": YPI_CARDS,
   "purchase-request": [
     { title: "Purchase Request",   icon: "FileText",    color: "bg-yellow-500 text-black", action: "/dashboard/purchase-requisition-form", isPurchaseRequest: true },
     { title: "Show Lists Request", icon: "Layout",      color: "bg-sky-400 text-black",    image: "assets/icons/sub-icons/show-list-request.png",  isPurchaseRequest: true },
