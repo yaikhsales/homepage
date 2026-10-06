@@ -152,8 +152,11 @@ const Icom = ({ dept, onMyChats }) => {
     if (!t || !me) return;
     setText("");
     try {
-      const j = await icom({ view: "post", dept, text: t, from_code: me, ...(topicId ? { topic_id: topicId } : {}), ...(stage ? { stage } : {}) });
-      if (j && j.ok) setD(j); else load();
+      await icom({ view: "post", dept, text: t, from_code: me, ...(topicId ? { topic_id: topicId } : {}), ...(stage ? { stage } : {}) });
+      // The post response's message shape differs per target (topic thread vs
+      // group chat) — always refetch the chat view so bubbles keep avatars,
+      // name labels and the "mine" green.
+      load();
       loadTopics();
     } catch (e) { load(); }
   };
