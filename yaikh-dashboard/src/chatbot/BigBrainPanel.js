@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import { generateBossOrChat, getSkills } from "./gemini-api";
+import { generateBossResponse, generateBossOrChat, getSkills } from "./gemini-api";
 
 /* Compact green Big Brain panel — drives the dashboard pages (Management
  * Dashboard / System Analysis / SOP) as a pop-up, not a full-screen takeover.
@@ -118,7 +118,11 @@ export default function BigBrainPanel({ page = "this page", pa = "all", onClose,
       const context =
         `You are Yai (Big Brain) driving the "${page}" screen, across all 14 department agents. ` +
         `Answer about this screen and the factory from the reference data; warm, short, direct. Never invent numbers or PAs.`;
-      const reply = await generateBossOrChat(text, "Big Brain", context, history, "");
+      // Ask routes to /boss/query first — local Qwen routes to the right PA(s)
+      // and merges, NO Claude cost. Claude is only the fallback when /boss/query
+      // errors or times out (returns null).
+      let reply = await generateBossResponse(text, history, "");
+      if (reply == null) reply = await generateBossOrChat(text, "Big Brain", context, history, "");
       const parts = String(reply || "").split("\n\n").map((s) => s.trim()).filter(Boolean);
       const bubbles = parts.length ? parts : [String(reply || "").trim()];
       setMessages((prev) => [...prev, ...bubbles.map((x) => ({ from: "bot", text: x }))]);
