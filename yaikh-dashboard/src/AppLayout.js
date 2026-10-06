@@ -13,7 +13,7 @@ import { DASHBOARD_DATA } from "./data/module";
 import YaiDataBot from "./chatbot/YaiDataBot";
 import BotModules from "./chatbot/bot-modules";
 import BigBrainPanel from "./chatbot/BigBrainPanel";
-import { paForRoute, PA_GRADIENT, PA_NAME, BIG_BRAIN_TITLES, BIG_BRAIN_ROUTES, BIG_BRAIN_BUBBLE } from "./chatbot/pa-owner";
+import { paForRoute, PA_GRADIENT, PA_NAME, BIG_BRAIN_TITLES, BIG_BRAIN_ROUTES, BIG_BRAIN_BUBBLE, paOpenPush, paOpenPop } from "./chatbot/pa-owner";
 import DragonAnimation from "./components/DragonAnimation";
 import { useTranslation } from "./translate/TranslationContext";
 import { ThemeBackground } from "./thems";
@@ -171,6 +171,8 @@ const AppLayout = () => {
     else if (location.pathname.startsWith("/dashboard/system-analysis")) setBigBrainPage("System Analysis");
   }, [location.pathname]);
   const [routePaOpen, setRoutePaOpen] = useState(false);
+  // Remember open/closed per PA (survives reloads; storage may be blocked).
+  const persistPaOpen = (bot, open) => { try { localStorage.setItem("yai-pa-open:" + bot, open ? "open" : "closed"); } catch (e) {} };
   // Pinned = the PA stays on screen wherever Gamini navigates, until
   // manually unpinned. Minimize collapses to the PA-coloured bubble.
   const [routePaPinned, setRoutePaPinned] = useState(false);
@@ -181,15 +183,20 @@ const AppLayout = () => {
   // open, body carries .yai-pa-open so those pages can reserve ~424px of
   // right padding (panel = right-6 + w-[400px]).
   useEffect(() => {
-    const on = !!(activeRoutePa && routePaOpen) || bigBrainOpen;
-    document.body.classList.toggle("yai-pa-open", on);
-    return () => document.body.classList.remove("yai-pa-open");
-  }, [activeRoutePa, routePaOpen, bigBrainOpen]);
+    // BotModules adds its own count while mounted; this one covers the
+    // Big Brain compact panel. Ref-counted so writers never clobber.
+    if (!bigBrainOpen) return;
+    paOpenPush();
+    return () => paOpenPop();
+  }, [bigBrainOpen]);
   useEffect(() => {
     // (re)open when ENTERING a PA-owned department; keep state while
     // moving between that department's own pages. A pinned PA never
     // auto-closes on route change.
     if (routePaBot) {
+      let remembered = null;
+      try { remembered = localStorage.getItem("yai-pa-open:" + routePaBot); } catch (e) {}
+      if (remembered === "closed") { setRoutePaOpen(false); return; }
       const t = setTimeout(() => setRoutePaOpen(true), 700);
       return () => clearTimeout(t);
     }
@@ -259,6 +266,8 @@ const AppLayout = () => {
         navigate("/dashboard/gatepass");
       } else if (id === "fire-alarm") {
         navigate("/dashboard/fire-alarm");
+      } else if (id === "ywip") {
+        navigate("/dashboard/ywip");
       } else if (id === "cctv") {
         navigate("/dashboard/cctv");
       } else if (id === "system-analysis" && title === "System Analysis") {
@@ -1755,7 +1764,7 @@ const AppLayout = () => {
       {activeRoutePa && routePaOpen && (
         <>
           <BotModules
-            onClose={() => setRoutePaOpen(false)}
+            onClose={() => { setRoutePaOpen(false); persistPaOpen(activeRoutePa, false); }}
             moduleContext={location.pathname}
             currentVersion="yai1"
             botsFilter={[activeRoutePa]}
@@ -1777,7 +1786,7 @@ const AppLayout = () => {
               </svg>
             </button>
             <button
-              onClick={() => setRoutePaOpen(false)}
+              onClick={() => { setRoutePaOpen(false); persistPaOpen(activeRoutePa, false); }}
               className="w-10 h-10 rounded-full bg-white/90 text-gray-600 hover:bg-gray-200 shadow-lg flex items-center justify-center"
               title="Minimise to bubble"
             >
@@ -1788,7 +1797,7 @@ const AppLayout = () => {
       )}
       {activeRoutePa && !routePaOpen && (
         <button
-          onClick={() => setRoutePaOpen(true)}
+          onClick={() => { setRoutePaOpen(true); persistPaOpen(activeRoutePa, true); }}
           className={`fixed bottom-6 right-6 z-50 h-14 pl-4 pr-5 bg-gradient-to-r ${PA_GRADIENT[activeRoutePa] || "from-orange-500 to-amber-500"} text-white rounded-full shadow-2xl hover:scale-105 transition-all duration-300 flex items-center gap-2`}
           aria-label="Open department PA"
           title="Open department PA"
@@ -1827,7 +1836,7 @@ const AppLayout = () => {
       )}
       {isGMChatOpen && <GMChat onClose={() => setGMChatOpen(false)} />}
       <main
-        className={`flex-1 relative ${isHome ? "p-4 md:p-6" : "p-0"} overflow-x-auto`}
+        className={`yai-main flex-1 relative ${isHome ? "p-4 md:p-6" : "p-0"} overflow-x-auto`}
       >
         {/* === BACKGROUND LAYERS === */}
         {/* Background is now handled by ThemeBackground component in thems.js */}

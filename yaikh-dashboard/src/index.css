@@ -86,3 +86,13 @@ button:has(> svg.lucide-arrow-left:only-child):hover {
   background-color: rgba(255, 255, 255, 0.12);
   box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25), 0 0 14px rgba(255, 255, 255, 0.45);
 }
+
+/* ── Docked department PA: every screen reflows beside the 380px panel ──
+   .yai-pa-aware screens pad themselves (436px rule in the module screens),
+   so the global main rule skips them to avoid double-shifting. On phones
+   the panel is a bottom sheet, so no side padding. */
+main.yai-main { transition: padding-right 0.25s ease; }
+body.yai-pa-open main.yai-main:not(:has(.yai-pa-aware)) { padding-right: 396px; }
+@media (max-width: 767px) {
+  body.yai-pa-open main.yai-main:not(:has(.yai-pa-aware)) { padding-right: 0; }
+}

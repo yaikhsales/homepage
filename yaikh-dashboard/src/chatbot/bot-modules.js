@@ -13,6 +13,8 @@ import { KHMER_NEW_YEAR } from '../thems';
 import { useTranslation } from '../translate/TranslationContext';
 import { useNavigate } from 'react-router-dom';
 import PaSkills, { usePaSkills } from './PaSkills';
+import Icom, { useIcomUnread } from './Icom';
+import { paOpenPush, paOpenPop } from './pa-owner';
 import { useKhmerTTS } from "./useKhmerTTS";
 import { VolumeX } from "lucide-react";
 
@@ -540,6 +542,8 @@ const PhoneFrame = ({
     const navigateTo = useNavigate();
     const [paSkills, paSkillsLoading, reloadPaSkills, paSkillsAct] = usePaSkills(notifSlug);
     const [skillsOpen, setSkillsOpen] = useState(false);
+    const [icomOpen, setIcomOpen] = useState(false);
+    const icomUnread = useIcomUnread(notifSlug);
 
     const refreshNotifCounts = React.useCallback(() => {
         if (!notifSlug) return;
@@ -1476,6 +1480,9 @@ const PhoneFrame = ({
                                             } else {
                                                 setIsHistoryOpen(true);
                                             }
+                                        } else if (notifSlug) {
+                                            // Department PAs: the team chat (Icom)
+                                            setIcomOpen((v) => !v);
                                         } else {
                                             // For other bots, show chat history
                                             setIsHistoryOpen(true);
@@ -1484,7 +1491,15 @@ const PhoneFrame = ({
                                     className={`p-2 rounded-full hover:bg-black/5 transition`}
                                     title={((botId === 'admin-bot' && adminPAModule) || (botId === 'finance-bot' && financePAModule) || (botId === 'hr-bot' && hrPAModule) || (botId === 'csr-bot' && csrPAModule)) ? "Show modules" : "Chat history"}
                                 >
-                                    <Menu size={18} className={bot.textColor || 'text-gray-600'} />
+                                    {notifSlug ? (
+                                        <span className="relative inline-flex items-center gap-1">
+                                            <MessageCircle size={18} className={bot.textColor || 'text-gray-600'} />
+                                            <span className={`text-[10px] font-black ${bot.textColor || 'text-gray-600'}`}>Icom</span>
+                                            {icomUnread > 0 && <span className="absolute -top-2 -right-3 min-w-[15px] h-[15px] px-0.5 rounded-full bg-rose-600 text-white text-[8px] font-black leading-[15px] text-center">{icomUnread}</span>}
+                                        </span>
+                                    ) : (
+                                        <Menu size={18} className={bot.textColor || 'text-gray-600'} />
+                                    )}
                                 </button>
                                 {/* Blue Yai — opens the PA's four-skills view (tasks &
                                     approvals first); red badge = alerts + open approvals. */}
@@ -2276,6 +2291,12 @@ const PhoneFrame = ({
                     ) : (
                         <div className="text-xs text-gray-400 text-center pt-10">Loading the department feed…</div>
                     )}
+                </div>
+            )}
+            {/* Icom — the department team chat, from the header's Icom button. */}
+            {icomOpen && notifSlug && (
+                <div className="absolute inset-x-0 top-16 bottom-0 z-30 bg-white rounded-b-3xl overflow-hidden">
+                    <Icom dept={notifSlug} onMyChats={() => { setIcomOpen(false); setIsHistoryOpen(true); }} />
                 </div>
             )}
             {/* Modal flow superseded by in-chat agentic cards — keeping
@@ -5586,8 +5607,16 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
     // a full-screen modal so the page behind (e.g. the 6 PR tiles) stays
     // visible and interactive — full-screen was eating the entire sub-menu.
     const isCompactMount = botsFilter && botsFilter.length === 1;
+    // Docked panel owns space: body.yai-pa-open makes every screen reflow
+    // beside it (ref-counted — see pa-owner.js).
+    useEffect(() => {
+        if (!isCompactMount) return;
+        paOpenPush();
+        return () => paOpenPop();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isCompactMount]);
     const outerClass = isCompactMount
-        ? `fixed bottom-6 right-6 z-[200] w-[400px] h-[1360px] max-h-[96vh] flex flex-col overflow-hidden rounded-3xl shadow-2xl transition-all duration-300 ease-out ${isClosing ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`
+        ? `fixed top-0 right-0 bottom-0 z-[200] w-[380px] max-md:top-auto max-md:left-0 max-md:right-0 max-md:w-full max-md:h-[70vh] max-md:rounded-t-3xl max-md:rounded-l-none flex flex-col overflow-hidden rounded-l-3xl shadow-2xl transition-all duration-300 ease-out ${isClosing ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`
         : `fixed inset-0 z-[200] flex flex-col overflow-hidden transition-all duration-300 ease-out ${isClosing ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`;
 
     return (

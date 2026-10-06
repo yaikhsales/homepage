@@ -134,3 +134,10 @@ export const BIG_BRAIN_TITLES = new Set([
 export const BIG_BRAIN_ROUTES = ["/dashboard/sop-map", "/dashboard/system-analysis"];
 export const BIG_BRAIN_BUBBLE =
   "radial-gradient(circle at 30% 25%, #a7f3d0 0%, #10b981 55%, #047857 100%)";
+
+/* Ref-counted body.yai-pa-open — several mounts (route PA, sub-menu PA,
+ * Big Brain) may be open at once; the class leaves only when the LAST one
+ * closes. Wide screens reflow off this class. */
+let _paOpenCount = 0;
+export const paOpenPush = () => { _paOpenCount += 1; document.body.classList.add("yai-pa-open"); };
+export const paOpenPop = () => { _paOpenCount = Math.max(0, _paOpenCount - 1); if (_paOpenCount === 0) document.body.classList.remove("yai-pa-open"); };
