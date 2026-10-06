@@ -9,29 +9,29 @@ const BWAWSpecUploadView = () => {
     const [currentPage, setCurrentPage] = React.useState(1);
 
     const page1Data = [
-        { mo: "PTAF0393R", style: "122F0571", qty: "4,202", colors: 1, colorList: "300 ANTIQUE GREEN ACID", sizes: 7 },
-        { mo: "PTAF0384", style: "122F0574", qty: "4,083", colors: 2, colorList: "900 CASUAL BLACK, 200 MOOD INDIGO", sizes: 6 },
-        { mo: "PTAF0395", style: "122F0604", qty: "10,000", colors: 1, colorList: "406 DELICIOSO ACID WASH", sizes: 6 },
-        { mo: "PTAF0394R", style: "122F0604", qty: "3,793", colors: 1, colorList: "108 LIGHT LEAFY CAMO", sizes: 6 },
-        { mo: "PTAF0302", style: "134F0424", qty: "3,000", colors: 2, colorList: "200 SKY CAPTAIN, 122 804B", sizes: 6 },
-        { mo: "PTAF0394T", style: "122F0604", qty: "207", colors: 1, colorList: "108 LIGHT LEAFY CAMO", sizes: 4 },
-        { mo: "PTAF0408", style: "134F0428", qty: "5,996", colors: 2, colorList: "122 BFC07-142, 200 MOOD INDIGO", sizes: 6 },
-        { mo: "PTAF0407", style: "134F0428", qty: "4,326", colors: 2, colorList: "300 SYCAMORE ACID WASH, 400 CHOCOLATE BROWN ACID WASH", sizes: 6 },
-        { mo: "PTAF0305", style: "128A0215", qty: "1,500", colors: 1, colorList: "110 VANILLA ICE", sizes: 6 },
-        { mo: "PTAF0237", style: "128A0215", qty: "4,784", colors: 3, colorList: "320 SEAGRASS, 900 CASUAL BLACK, ...", sizes: 6 },
+        { mo: "YAIAA60", style: "STY-7223", qty: "4,202", colors: 1, colorList: "300 ANTIQUE GREEN ACID", sizes: 7 },
+        { mo: "YAIAA16", style: "STY-7226", qty: "4,083", colors: 2, colorList: "900 CASUAL BLACK, 200 MOOD INDIGO", sizes: 6 },
+        { mo: "YAIAA48", style: "STY-7970", qty: "10,000", colors: 1, colorList: "406 DELICIOSO ACID WASH", sizes: 6 },
+        { mo: "YAIDD91", style: "STY-7970", qty: "3,793", colors: 1, colorList: "108 LIGHT LEAFY CAMO", sizes: 6 },
+        { mo: "YAICC36", style: "STY-2093", qty: "3,000", colors: 2, colorList: "200 SKY CAPTAIN, 122 804B", sizes: 6 },
+        { mo: "YAIBB93", style: "STY-7970", qty: "207", colors: 1, colorList: "108 LIGHT LEAFY CAMO", sizes: 4 },
+        { mo: "YAIBB13", style: "STY-2097", qty: "5,996", colors: 2, colorList: "122 BFC07-142, 200 MOOD INDIGO", sizes: 6 },
+        { mo: "YAIAA12", style: "STY-2097", qty: "4,326", colors: 2, colorList: "300 SYCAMORE ACID WASH, 400 CHOCOLATE BROWN ACID WASH", sizes: 6 },
+        { mo: "YAIBB39", style: "STY-4459", qty: "1,500", colors: 1, colorList: "110 VANILLA ICE", sizes: 6 },
+        { mo: "YAIDD73", style: "STY-4459", qty: "4,784", colors: 3, colorList: "320 SEAGRASS, 900 CASUAL BLACK, ...", sizes: 6 },
     ];
 
     const page2Data = [
-        { mo: "PTAF0305", style: "128A0215", qty: "1,500", colors: 1, colorList: "110 VANILLA ICE", sizes: 40 },
-        { mo: "PTAF0419", style: "122F0575", qty: "3,330", colors: 1, colorList: "108 LIGHT PONY AOP", sizes: 40 },
-        { mo: "PTAF0420", style: "122F0766", qty: "2,267", colors: 1, colorList: "416 CHOCOLATE BROWN ACID WASH", sizes: 40 },
-        { mo: "PTAF0411R", style: "122F0573", qty: "3,753", colors: 1, colorList: "300 DARKEST SPRUCE", sizes: 40 },
-        { mo: "PTAF0421R", style: "122F0604", qty: "3,645", colors: 1, colorList: "906 BBAW", sizes: 40 },
-        { mo: "PTAF0422T", style: "122F0604", qty: "220", colors: 1, colorList: "112 B04B", sizes: 40 },
-        { mo: "PTAF0422R", style: "122F0604", qty: "1,863", colors: 1, colorList: "112 B04B", sizes: 40 },
-        { mo: "PTAF0394R", style: "122F0604", qty: "3,793", colors: 1, colorList: "108 LIGHT LEAFY CAMO", sizes: 40 },
-        { mo: "PTAF0302", style: "134F0424", qty: "3,000", colors: 2, colorList: "200 SKY CAPTAIN, 122 B04B", sizes: 40 },
-        { mo: "PTAF0237", style: "128A0215", qty: "4,784", colors: 3, colorList: "320 SEAGRASS, 900 CASUAL BLACK, ...", sizes: 40 },
+        { mo: "YAIBB39", style: "STY-4459", qty: "1,500", colors: 1, colorList: "110 VANILLA ICE", sizes: 40 },
+        { mo: "YAIBB45", style: "STY-7227", qty: "3,330", colors: 1, colorList: "108 LIGHT PONY AOP", sizes: 40 },
+        { mo: "YAIDD67", style: "STY-9119", qty: "2,267", colors: 1, colorList: "416 CHOCOLATE BROWN ACID WASH", sizes: 40 },
+        { mo: "YAIBB51", style: "STY-7225", qty: "3,753", colors: 1, colorList: "300 DARKEST SPRUCE", sizes: 40 },
+        { mo: "YAICC22", style: "STY-7970", qty: "3,645", colors: 1, colorList: "906 BBAW", sizes: 40 },
+        { mo: "YAIDD55", style: "STY-7970", qty: "220", colors: 1, colorList: "112 B04B", sizes: 40 },
+        { mo: "YAIBB53", style: "STY-7970", qty: "1,863", colors: 1, colorList: "112 B04B", sizes: 40 },
+        { mo: "YAIDD91", style: "STY-7970", qty: "3,793", colors: 1, colorList: "108 LIGHT LEAFY CAMO", sizes: 40 },
+        { mo: "YAICC36", style: "STY-2093", qty: "3,000", colors: 2, colorList: "200 SKY CAPTAIN, 122 B04B", sizes: 40 },
+        { mo: "YAIDD73", style: "STY-4459", qty: "4,784", colors: 3, colorList: "320 SEAGRASS, 900 CASUAL BLACK, ...", sizes: 40 },
     ];
 
     const currentData = currentPage === 1 ? page1Data : page2Data;

@@ -25,8 +25,8 @@ const FinalInspection = ({ onBack }) => {
   const inspections = [
     {
       id: "FIN-3321",
-      style: "Y-7821",
-      buyer: "H&M",
+      style: "STY-1015",
+      buyer: "Customer DD",
       qty: "10,000",
       samples: 200,
       results: "PASS",
@@ -35,8 +35,8 @@ const FinalInspection = ({ onBack }) => {
     },
     {
       id: "FIN-3322",
-      style: "Y-9902",
-      buyer: "ZARA",
+      style: "STY-7497",
+      buyer: "Customer CC",
       qty: "5,000",
       samples: 125,
       results: "FAIL",
@@ -45,8 +45,8 @@ const FinalInspection = ({ onBack }) => {
     },
     {
       id: "FIN-3323",
-      style: "J-0012",
-      buyer: "ADIDAS",
+      style: "STY-7495",
+      buyer: "Customer AA",
       qty: "12,000",
       samples: 315,
       results: "PASS",
@@ -55,8 +55,8 @@ const FinalInspection = ({ onBack }) => {
     },
     {
       id: "FIN-3324",
-      style: "P-5521",
-      buyer: "NIKE",
+      style: "STY-9191",
+      buyer: "Customer BB",
       qty: "8,000",
       samples: 200,
       results: "RE-INSPECT",

@@ -21,8 +21,8 @@ const QCFile = ({ onBack }) => {
   const qcFiles = [
     {
       id: "QC-7821-01",
-      style: "Y-7821",
-      buyer: "H&M",
+      style: "STY-1015",
+      buyer: "Customer DD",
       season: "AW2026",
       version: "v2.4",
       date: "2026-02-10",
@@ -30,8 +30,8 @@ const QCFile = ({ onBack }) => {
     },
     {
       id: "QC-9902-05",
-      style: "Y-9902",
-      buyer: "ZARA",
+      style: "STY-7497",
+      buyer: "Customer CC",
       season: "SS2026",
       version: "v1.1",
       date: "2026-02-12",
@@ -39,8 +39,8 @@ const QCFile = ({ onBack }) => {
     },
     {
       id: "QC-0012-03",
-      style: "J-0012",
-      buyer: "ADIDAS",
+      style: "STY-7495",
+      buyer: "Customer AA",
       season: "CORE",
       version: "v3.0",
       date: "2026-02-13",
@@ -48,8 +48,8 @@ const QCFile = ({ onBack }) => {
     },
     {
       id: "QC-5521-04",
-      style: "P-5521",
-      buyer: "NIKE",
+      style: "STY-9191",
+      buyer: "Customer BB",
       season: "SP2026",
       version: "v1.2",
       date: "2026-02-14",

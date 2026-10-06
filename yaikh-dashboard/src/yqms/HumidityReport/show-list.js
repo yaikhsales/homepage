@@ -57,52 +57,52 @@ const HumidityReportList = ({ onBack }) => {
 
     const reports = [
         {
-            id: 'GPAF6134-1', factoryStyle: 'GPAF6134', buyerStyle: 'S261340014', customer: 'ANF', date: '3/4/2026', item: 1, result: 'Passed', status: 'Pending',
+            id: 'YAICC86', factoryStyle: 'YAICC76', buyerStyle: 'S261340014', customer: 'ANF', date: '3/4/2026', item: 1, result: 'Passed', status: 'Pending',
             fabrication: 'COTTON 100%', color: 'WHITE', beforeDry: '08:00 AM', afterDry: 'N/A', spec: '50%',
             sections: { top: { body: '35', status: 'PASS' }, middle: { body: '36', status: 'PASS' }, bottom: { body: '35', status: 'PASS' } }
         },
         {
-            id: 'GPAR12392-1', factoryStyle: 'GPAR12392', buyerStyle: 'FFS 99-06-60284-R-SU26', customer: 'Aritzia', date: '3/4/2026', item: 1, result: 'Passed', status: 'Pending',
+            id: 'YAIBB79', factoryStyle: 'YAIBB25', buyerStyle: 'STY-9436', customer: 'Aritzia', date: '3/4/2026', item: 1, result: 'Passed', status: 'Pending',
             fabrication: 'LINEN BLEND', color: 'BEIGE', beforeDry: '09:15 AM', afterDry: 'N/A', spec: '45%',
             sections: { top: { body: '32', status: 'PASS' }, middle: { body: '33', status: 'PASS' }, bottom: { body: '32', status: 'PASS' } }
         },
         {
-            id: 'GPAR12246', factoryStyle: 'GPAR12246', buyerStyle: 'SJCY 02-01-48347-SP26(RMG0565)', customer: 'Aritzia', date: '3/4/2026', item: 1, result: 'Passed', status: 'Pending',
+            id: 'YAIBB83', factoryStyle: 'YAIBB83', buyerStyle: 'SJCY 02-01-48347-SP26(RMG0565)', customer: 'Aritzia', date: '3/4/2026', item: 1, result: 'Passed', status: 'Pending',
             fabrication: 'POLYESTER 78%, SPANDEX 22%', color: 'BLACK', beforeDry: '10:30 AM', afterDry: 'N/A', spec: '52%',
             sections: { top: { body: '38', status: 'PASS' }, middle: { body: '39', status: 'PASS' }, bottom: { body: '38', status: 'PASS' } }
         },
         {
-            id: 'GPAR12243', factoryStyle: 'GPAR12243', buyerStyle: 'CPTR 02-01-10080-SU26', customer: 'Aritzia', date: '3/4/2026', item: 1, result: 'Passed', status: 'Pending',
+            id: 'YAICC80', factoryStyle: 'YAICC80', buyerStyle: 'CPTR 02-01-10080-SU26', customer: 'Aritzia', date: '3/4/2026', item: 1, result: 'Passed', status: 'Pending',
             fabrication: 'NYLON 100%', color: 'NAVY', beforeDry: '11:45 AM', afterDry: 'N/A', spec: '48%',
             sections: { top: { body: '34', status: 'PASS' }, middle: { body: '35', status: 'PASS' }, bottom: { body: '34', status: 'PASS' } }
         },
         {
-            id: 'GPAF6133', factoryStyle: 'GPAF6133', buyerStyle: 'S261340014', customer: 'ANF', date: '3/4/2026', item: 1, result: 'Passed', status: 'Pending',
+            id: 'YAIBB75', factoryStyle: 'YAIBB75', buyerStyle: 'S261340014', customer: 'ANF', date: '3/4/2026', item: 1, result: 'Passed', status: 'Pending',
             fabrication: 'COTTON MIX', color: 'GREY', beforeDry: '01:00 PM', afterDry: 'N/A', spec: '50%',
             sections: { top: { body: '36', status: 'PASS' }, middle: { body: '37', status: 'PASS' }, bottom: { body: '36', status: 'PASS' } }
         },
         {
-            id: 'GPAR12397', factoryStyle: 'GPAR12397', buyerStyle: 'FFS 99-06-41367-R-SU26', customer: 'Aritzia', date: '3/4/2026', item: 1, result: 'Passed', status: 'Pending',
+            id: 'YAICC30', factoryStyle: 'YAICC30', buyerStyle: 'STY-9473', customer: 'Aritzia', date: '3/4/2026', item: 1, result: 'Passed', status: 'Pending',
             fabrication: 'SILK 100%', color: 'CREAM', beforeDry: '02:15 PM', afterDry: 'N/A', spec: '55%',
             sections: { top: { body: '42', status: 'PASS' }, middle: { body: '43', status: 'PASS' }, bottom: { body: '42', status: 'PASS' } }
         },
         {
-            id: 'GPAF6134-2', factoryStyle: 'GPAF6134', buyerStyle: 'S261340014', customer: 'ANF', date: '3/4/2026', item: 1, result: 'Passed', status: 'Pending',
+            id: 'YAIDD87', factoryStyle: 'YAICC76', buyerStyle: 'S261340014', customer: 'ANF', date: '3/4/2026', item: 1, result: 'Passed', status: 'Pending',
             fabrication: 'JERSEY', color: 'BLUE', beforeDry: '03:30 PM', afterDry: 'N/A', spec: '50%',
             sections: { top: { body: '37', status: 'PASS' }, middle: { body: '38', status: 'PASS' }, bottom: { body: '37', status: 'PASS' } }
         },
         {
-            id: 'GPAR12392-2', factoryStyle: 'GPAR12392', buyerStyle: 'FFS 99-06-60284-R-SU26', customer: 'Aritzia', date: '3/4/2026', item: 1, result: 'Passed', status: 'Pending',
+            id: 'YAICC80', factoryStyle: 'YAIBB25', buyerStyle: 'STY-9436', customer: 'Aritzia', date: '3/4/2026', item: 1, result: 'Passed', status: 'Pending',
             fabrication: 'LINEN BLEND', color: 'OLIVE', beforeDry: '04:45 PM', afterDry: 'N/A', spec: '45%',
             sections: { top: { body: '33', status: 'PASS' }, middle: { body: '34', status: 'PASS' }, bottom: { body: '33', status: 'PASS' } }
         },
         {
-            id: 'PTCOC406A', factoryStyle: 'PTCOC406A', buyerStyle: 'STCO7191', customer: 'Costco', date: '3/6/2026', item: 2, result: 'Passed', status: 'Pending',
+            id: 'PTCOC406A', factoryStyle: 'PTCOC406A', buyerStyle: 'YAIDD59', customer: 'Costco', date: '3/6/2026', item: 2, result: 'Passed', status: 'Pending',
             fabrication: 'TWILL', color: 'KHAKI', beforeDry: '09:00 AM', afterDry: 'N/A', spec: '40%',
             sections: { top: { body: '30', status: 'PASS' }, middle: { body: '31', status: 'PASS' }, bottom: { body: '30', status: 'PASS' } }
         },
         {
-            id: 'GPAR12395', factoryStyle: 'GPAR12395', buyerStyle: 'FFS 99-03-44503-SU26', customer: 'Aritzia', date: '3/3/2026', item: 1, result: 'Passed', status: 'Pending',
+            id: 'YAIAA28', factoryStyle: 'YAIAA28', buyerStyle: 'STY-2432', customer: 'Aritzia', date: '3/3/2026', item: 1, result: 'Passed', status: 'Pending',
             fabrication: 'SATIN', color: 'MAROON', beforeDry: '11:00 AM', afterDry: 'N/A', spec: '42%',
             sections: { top: { body: '31', status: 'PASS' }, middle: { body: '32', status: 'PASS' }, bottom: { body: '31', status: 'PASS' } }
         }

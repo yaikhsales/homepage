@@ -50,20 +50,20 @@ const QCFile = ({ onBack }) => {
     const [uploadProgress, setUploadProgress] = useState(0);
 
     const initialRecords = [
-        { id: 'GPAR12376NOS', date: '2024-02-14', buyer: 'Aritzia', style: 'FFS 99-06-60284-R-SU26', rolls: 45, qty: '2,250m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_001.pdf', comments: 12 },
-        { id: 'GPAR12261', date: '2024-02-14', buyer: 'Aritzia', style: 'RBCY 02-01-10008-SU26(RMG0546)', rolls: 12, qty: '600m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_002.pdf', comments: 5 },
+        { id: 'YAIDD77', date: '2024-02-14', buyer: 'Aritzia', style: 'STY-9436', rolls: 45, qty: '2,250m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_001.pdf', comments: 12 },
+        { id: 'YAICC50', date: '2024-02-14', buyer: 'Aritzia', style: 'RBCY 02-01-10008-SU26(RMG0546)', rolls: 12, qty: '600m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_002.pdf', comments: 5 },
         { id: 'PTCOC400A', date: '2024-02-13', buyer: 'Costco', style: 'CR1411CC-01', rolls: 88, qty: '4,000m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_003.pdf', comments: 5 },
-        { id: 'GPAF6007RGD', date: '2024-02-11', buyer: 'ANF', style: 'S261220001', rolls: 25, qty: '1,250m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_004.pdf', comments: 8 },
-        { id: 'GPAR12343NOS', date: '2024-02-10', buyer: 'Aritzia', style: 'FFS 99-03-44504-SU26-02', rolls: 30, qty: '1,500m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_005.pdf', comments: 3 },
-        { id: 'GPRT00188A', date: '2024-02-09', buyer: 'Reitmans', style: 'W02-493553', rolls: 50, qty: '2,500m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_006.pdf', comments: 15 },
-        { id: 'PTAF0449', date: '2024-02-08', buyer: 'ANF', style: '134F0410', rolls: 40, qty: '2,000m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_007.pdf', comments: 2 },
-        { id: 'GPRT00174A', date: '2024-02-07', buyer: 'Reitmans', style: 'P21-470072', rolls: 60, qty: '3,000m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_008.pdf', comments: 20 },
-        { id: 'GPAF6137R', date: '2024-02-06', buyer: 'ANF', style: 'S261220058', rolls: 15, qty: '750m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_009.pdf', comments: 4 },
-        { id: 'PTCOC381R', date: '2024-02-05', buyer: 'Costco', style: 'STCO6690', rolls: 35, qty: '1,750m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_010.pdf', comments: 6 },
-        { id: 'GPAR12167GD-2', date: '2024-02-04', buyer: 'Aritzia', style: 'FFS 99-03-32364-SU26(DW1830)', rolls: 20, qty: '1,000m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_011.pdf', comments: 9 },
-        { id: 'GPAR12275-1', date: '2024-02-03', buyer: 'Aritzia', style: 'FFS 99-03-44514-SU26', rolls: 45, qty: '2,250m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_012.pdf', comments: 2 },
-        { id: 'GPAR12220', date: '2024-02-02', buyer: 'Aritzia', style: 'RBC 02-01-52114-SU26(AG2276)', rolls: 55, qty: '2,750m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_013.pdf', comments: 11 },
-        { id: 'GPAR12274-1', date: '2024-02-01', buyer: 'Aritzia', style: 'FFS 99-03-44504-SU26', rolls: 10, qty: '500m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_014.pdf', comments: 7 }
+        { id: 'YAIAA38', date: '2024-02-11', buyer: 'ANF', style: 'S261220001', rolls: 25, qty: '1,250m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_004.pdf', comments: 8 },
+        { id: 'YAIDD71', date: '2024-02-10', buyer: 'Aritzia', style: 'STY-2583-02', rolls: 30, qty: '1,500m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_005.pdf', comments: 3 },
+        { id: 'YAIDD57', date: '2024-02-09', buyer: 'Reitmans', style: 'W02-493553', rolls: 50, qty: '2,500m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_006.pdf', comments: 15 },
+        { id: 'YAICC48', date: '2024-02-08', buyer: 'ANF', style: 'STY-2058', rolls: 40, qty: '2,000m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_007.pdf', comments: 2 },
+        { id: 'YAICC52', date: '2024-02-07', buyer: 'Reitmans', style: 'P21-470072', rolls: 60, qty: '3,000m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_008.pdf', comments: 20 },
+        { id: 'YAIBB47', date: '2024-02-06', buyer: 'ANF', style: 'S261220058', rolls: 15, qty: '750m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_009.pdf', comments: 4 },
+        { id: 'PTCOC381R', date: '2024-02-05', buyer: 'Costco', style: 'YAIAA92', rolls: 35, qty: '1,750m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_010.pdf', comments: 6 },
+        { id: 'YAIBB17', date: '2024-02-04', buyer: 'Aritzia', style: 'STY-7168', rolls: 20, qty: '1,000m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_011.pdf', comments: 9 },
+        { id: 'YAIBB49', date: '2024-02-03', buyer: 'Aritzia', style: 'STY-1968', rolls: 45, qty: '2,250m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_012.pdf', comments: 2 },
+        { id: 'YAIBB15', date: '2024-02-02', buyer: 'Aritzia', style: 'RBC 02-01-52114-SU26(AG2276)', rolls: 55, qty: '2,750m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_013.pdf', comments: 11 },
+        { id: 'YAIAA78', date: '2024-02-01', buyer: 'Aritzia', style: 'STY-2583', rolls: 10, qty: '500m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_014.pdf', comments: 7 }
     ];
 
     const [records, setRecords] = useState(() => {
@@ -141,7 +141,7 @@ const QCFile = ({ onBack }) => {
     };
 
     const handleDownloadPDF = (record) => {
-    const fileName = "GPAR12356 制单 2026-2-2.pdf";
+    const fileName = "YAIBB85 制单 2026-2-2.pdf";
     const fileUrl = `/pdf/${fileName}`;
 
     window.open(fileUrl, "_blank");

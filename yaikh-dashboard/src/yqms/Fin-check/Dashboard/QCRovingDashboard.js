@@ -233,18 +233,18 @@ const QCRovingDashboard = ({ onBack }) => {
     const [selectedReport, setSelectedReport] = useState(null);
 
     const dummyData = [
-        { date: "5/1/2026", line: "1", mo: "GPAR12276-1", count: 1, qty: 15, rejects: 0, defects: 0, rate: "0.00", ratio: "0.00", spiPass: 3, spiReject: 0, measPass: 3, measReject: 0 },
-        { date: "3/7/2026", line: "9", mo: "GPAR12385", count: 1, qty: 255, rejects: 7, defects: 14, rate: "5.49", ratio: "2.75", spiPass: 35, spiReject: 0, measPass: 35, measReject: 0 },
-        { date: "3/7/2026", line: "30", mo: "GPRT00203", count: 1, qty: 140, rejects: 18, defects: 36, rate: "25.71", ratio: "12.86", spiPass: 26, spiReject: 0, measPass: 26, measReject: 0 },
-        { date: "3/7/2026", line: "11", mo: "PTCOC408", count: 1, qty: 100, rejects: 6, defects: 13, rate: "13.00", ratio: "6.00", spiPass: 18, spiReject: 0, measPass: 18, measReject: 0 },
-        { date: "3/7/2026", line: "10", mo: "PTCOC402", count: 1, qty: 130, rejects: 10, defects: 21, rate: "16.15", ratio: "7.69", spiPass: 22, spiReject: 0, measPass: 22, measReject: 0 },
-        { date: "3/7/2026", line: "12", mo: "PTCOC402", count: 1, qty: 120, rejects: 10, defects: 19, rate: "15.83", ratio: "8.33", spiPass: 20, spiReject: 0, measPass: 20, measReject: 0 },
-        { date: "3/7/2026", line: "18", mo: "PTCOC406", count: 1, qty: 180, rejects: 6, defects: 15, rate: "8.89", ratio: "3.33", spiPass: 30, spiReject: 0, measPass: 30, measReject: 0 },
-        { date: "3/7/2026", line: "21", mo: "GPAR12378NOS", count: 1, qty: 60, rejects: 2, defects: 2, rate: "3.33", ratio: "3.33", spiPass: 4, spiReject: 2, measPass: 4, measReject: 2 },
-        { date: "3/7/2026", line: "15", mo: "GPAR12356", count: 1, qty: 150, rejects: 6, defects: 10, rate: "6.67", ratio: "4.00", spiPass: 25, spiReject: 1, measPass: 26, measReject: 0 },
-        { date: "3/7/2026", line: "17", mo: "YMCMT26002", count: 1, qty: 140, rejects: 0, defects: 0, rate: "0.00", ratio: "0.00", spiPass: 20, spiReject: 0, measPass: 20, measReject: 0 },
-        { date: "3/7/2026", line: "25", mo: "GPAR12320", count: 1, qty: 70, rejects: 4, defects: 11, rate: "15.71", ratio: "5.71", spiPass: 8, spiReject: 0, measPass: 8, measReject: 0 },
-        { date: "3/7/2026", line: "16", mo: "PTCOU062", count: 1, qty: 5, rejects: 1, defects: 1, rate: "20.00", ratio: "20.00", spiPass: 1, spiReject: 0, measPass: 1, measReject: 0 },
+        { date: "5/1/2026", line: "1", mo: "YAICC20", count: 1, qty: 15, rejects: 0, defects: 0, rate: "0.00", ratio: "0.00", spiPass: 3, spiReject: 0, measPass: 3, measReject: 0 },
+        { date: "3/7/2026", line: "9", mo: "YAIBB87", count: 1, qty: 255, rejects: 7, defects: 14, rate: "5.49", ratio: "2.75", spiPass: 35, spiReject: 0, measPass: 35, measReject: 0 },
+        { date: "3/7/2026", line: "30", mo: "YAICC28", count: 1, qty: 140, rejects: 18, defects: 36, rate: "25.71", ratio: "12.86", spiPass: 26, spiReject: 0, measPass: 26, measReject: 0 },
+        { date: "3/7/2026", line: "11", mo: "YAIBB73", count: 1, qty: 100, rejects: 6, defects: 13, rate: "13.00", ratio: "6.00", spiPass: 18, spiReject: 0, measPass: 18, measReject: 0 },
+        { date: "3/7/2026", line: "10", mo: "YAIDD67", count: 1, qty: 130, rejects: 10, defects: 21, rate: "16.15", ratio: "7.69", spiPass: 22, spiReject: 0, measPass: 22, measReject: 0 },
+        { date: "3/7/2026", line: "12", mo: "YAIDD67", count: 1, qty: 120, rejects: 10, defects: 19, rate: "15.83", ratio: "8.33", spiPass: 20, spiReject: 0, measPass: 20, measReject: 0 },
+        { date: "3/7/2026", line: "18", mo: "YAIDD71", count: 1, qty: 180, rejects: 6, defects: 15, rate: "8.89", ratio: "3.33", spiPass: 30, spiReject: 0, measPass: 30, measReject: 0 },
+        { date: "3/7/2026", line: "21", mo: "YAIBB79", count: 1, qty: 60, rejects: 2, defects: 2, rate: "3.33", ratio: "3.33", spiPass: 4, spiReject: 2, measPass: 4, measReject: 2 },
+        { date: "3/7/2026", line: "15", mo: "YAIBB85", count: 1, qty: 150, rejects: 6, defects: 10, rate: "6.67", ratio: "4.00", spiPass: 25, spiReject: 1, measPass: 26, measReject: 0 },
+        { date: "3/7/2026", line: "17", mo: "YAIAA18", count: 1, qty: 140, rejects: 0, defects: 0, rate: "0.00", ratio: "0.00", spiPass: 20, spiReject: 0, measPass: 20, measReject: 0 },
+        { date: "3/7/2026", line: "25", mo: "YAICC76", count: 1, qty: 70, rejects: 4, defects: 11, rate: "15.71", ratio: "5.71", spiPass: 8, spiReject: 0, measPass: 8, measReject: 0 },
+        { date: "3/7/2026", line: "16", mo: "YAIDD27", count: 1, qty: 5, rejects: 1, defects: 1, rate: "20.00", ratio: "20.00", spiPass: 1, spiReject: 0, measPass: 1, measReject: 0 },
     ];
 
     const [moFilter, setMoFilter] = useState("All MO Nos");

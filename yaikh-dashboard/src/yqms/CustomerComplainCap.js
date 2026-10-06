@@ -19,7 +19,7 @@ const CustomerComplainCap = ({ onBack }) => {
   const complains = [
     {
       id: "CAP-23001",
-      customer: "Levi Strauss & Co.",
+      customer: "Customer BB",
       date: "2024-05-10",
       type: "Quality Issue",
       subject: "Broken Stitch on Waistband",
@@ -29,7 +29,7 @@ const CustomerComplainCap = ({ onBack }) => {
     },
     {
       id: "CAP-23002",
-      customer: "Nike, Inc.",
+      customer: "Customer BB",
       date: "2024-05-08",
       type: "Late Delivery",
       subject: "Sample set delayed by 3 days",
@@ -39,7 +39,7 @@ const CustomerComplainCap = ({ onBack }) => {
     },
     {
       id: "CAP-23003",
-      customer: "Adidas AG",
+      customer: "Customer CC",
       date: "2024-05-05",
       type: "Labeling Error",
       subject: "Incorrect size labels on batch 402",
@@ -49,7 +49,7 @@ const CustomerComplainCap = ({ onBack }) => {
     },
     {
       id: "CAP-23004",
-      customer: "Uniqlo",
+      customer: "Customer AA",
       date: "2024-05-02",
       type: "Fabric Defect",
       subject: "Pilling issue after first wash",

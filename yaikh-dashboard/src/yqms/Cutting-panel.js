@@ -39,10 +39,10 @@ const CuttingPanel = ({ onBack }) => {
   };
 
   const mockData = [
-        { id: 1, buyer: "A & F", style: "6261340003", date: "03/11/2026", qty: 50, status: "Passed", color: "Blue" },
-        { id: 2, buyer: "Nike", style: "NK-9920", date: "03/10/2026", qty: 120, status: "Passed", color: "Black" },
-        { id: 3, buyer: "Adidas", style: "AD-5512", date: "03/10/2026", qty: 85, status: "Failed", color: "White" },
-        { id: 4, buyer: "GAP", style: "GP-1102", date: "03/09/2026", qty: 200, status: "Passed", color: "Green" },
+        { id: 1, buyer: "Customer BB", style: "STY-2022", date: "03/11/2026", qty: 50, status: "Passed", color: "Blue" },
+        { id: 2, buyer: "Customer BB", style: "STY-5227", date: "03/10/2026", qty: 120, status: "Passed", color: "Black" },
+        { id: 3, buyer: "Customer AA", style: "STY-7168", date: "03/10/2026", qty: 85, status: "Failed", color: "White" },
+        { id: 4, buyer: "Customer CC", style: "STY-7731", date: "03/09/2026", qty: 200, status: "Passed", color: "Green" },
     ];
 
   const tabs = [
@@ -157,7 +157,7 @@ const CuttingPanel = ({ onBack }) => {
                                             <label className="text-sm font-bold text-slate-700 px-1">MO No</label>
                                             <input
                                                 type="text"
-                                                defaultValue="GPAF6003"
+                                                defaultValue="YAIDD11"
                                                 className="w-full bg-white/80 border border-slate-300 rounded-lg px-5 py-3 font-bold text-slate-700 focus:outline-none focus:border-purple-200 focus:bg-white transition-all shadow-sm hover:bg-white"
                                             />
                                         </div>
@@ -191,7 +191,7 @@ const CuttingPanel = ({ onBack }) => {
                                                 </thead>
                                                 <tbody className="divide-y divide-slate-300">
                                                     <tr className="bg-white hover:bg-slate-50/50 transition-colors">
-                                                        <td className="py-5 px-4 font-bold text-slate-700 text-xs border-r border-slate-300 border-b">A & F</td>
+                                                        <td className="py-5 px-4 font-bold text-slate-700 text-xs border-r border-slate-300 border-b">Customer BB</td>
                                                         <td className="py-5 px-4 font-bold text-slate-700 text-xs border-r border-slate-300 border-b">6261340003</td>
                                                         <td className="py-5 px-4 font-bold text-slate-700 text-xs border-r border-slate-300 border-b">220 WINDWARD BLUE ACID WASH</td>
                                                         <td className="py-5 px-4 font-bold text-slate-700 text-xs border-r border-slate-300 border-b">LAT14653A</td>
@@ -662,10 +662,10 @@ const CuttingPanel = ({ onBack }) => {
 
                                             <div className="space-y-10">
                                                 {[
-                                                    { type: "Submission", user: "Proeurng Sokhim", mo: "GPAF6003", time: "10:30 AM Today", badge: "New" },
-                                                    { type: "Modification", user: "Proeurng Sokhim", mo: "NK-9920", time: "09:15 AM Today", badge: "Update" },
-                                                    { type: "Submission", user: "TL Supervisor", mo: "AD-5512", time: "Yesterday", badge: "Reviewed" },
-                                                    { type: "Submission", user: "Proeurng Sokhim", mo: "GP-1102", time: "Yesterday", badge: "Archive" },
+                                                    { type: "Submission", user: "Proeurng Sokhim", mo: "YAIDD11", time: "10:30 AM Today", badge: "New" },
+                                                    { type: "Modification", user: "Proeurng Sokhim", mo: "YAICC74", time: "09:15 AM Today", badge: "Update" },
+                                                    { type: "Submission", user: "TL Supervisor", mo: "YAIDD35", time: "Yesterday", badge: "Reviewed" },
+                                                    { type: "Submission", user: "Proeurng Sokhim", mo: "YAICC72", time: "Yesterday", badge: "Archive" },
                                                 ].map((log, i) => (
                                                     <div key={i} className="relative pl-14 group">
                                                         {/* Dot */}

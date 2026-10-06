@@ -15,11 +15,11 @@ const HumidityReportDetail = ({ onClose, data }) => {
 
     // Default data mapping based on screenshot
     const report = data || {
-        id: "GPAR12394",
-        buyerStyle: "FFS 99-03-44504-SU26",
+        id: "YAIDD27",
+        buyerStyle: "STY-2583",
         spec: "52%",
         date: "3/10/2026",
-        customer: "Aritzia",
+        customer: "Customer CC",
         fabrication: "COTTON 78%, POLYESTER 22%",
         color: "PANORAMA BLUE",
         beforeDry: "7:58 AM",

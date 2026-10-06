@@ -22,8 +22,8 @@ const AuditReport = ({ title, onBack }) => {
   const auditData = [
     {
       id: "AUD-101",
-      style: "Y-7821",
-      auditor: "Sok Samnang",
+      style: "STY-1015",
+      auditor: "YAI0350",
       samples: 20,
       defects: 1,
       status: "PASS",
@@ -31,8 +31,8 @@ const AuditReport = ({ title, onBack }) => {
     },
     {
       id: "AUD-102",
-      style: "Y-9902",
-      auditor: "Keo Leakhena",
+      style: "STY-7497",
+      auditor: "YAI0322",
       samples: 20,
       defects: 4,
       status: "FAIL",
@@ -40,8 +40,8 @@ const AuditReport = ({ title, onBack }) => {
     },
     {
       id: "AUD-103",
-      style: "J-0012",
-      auditor: "Chan Thavy",
+      style: "STY-7495",
+      auditor: "YAI0538",
       samples: 20,
       defects: 0,
       status: "PASS",
@@ -49,8 +49,8 @@ const AuditReport = ({ title, onBack }) => {
     },
     {
       id: "AUD-104",
-      style: "P-5521",
-      auditor: "Touch Borey",
+      style: "STY-9191",
+      auditor: "YAI0960",
       samples: 20,
       defects: 2,
       status: "PASSED WITH CAP",

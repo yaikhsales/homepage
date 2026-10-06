@@ -24,7 +24,7 @@ const GarmentCheckOutput = ({ onBack }) => {
   const lineOutputs = [
     {
       line: "Line 01",
-      style: "Y-7821",
+      style: "STY-1015",
       checked: 450,
       pass: 442,
       fail: 8,
@@ -33,7 +33,7 @@ const GarmentCheckOutput = ({ onBack }) => {
     },
     {
       line: "Line 02",
-      style: "Y-7821",
+      style: "STY-1015",
       checked: 420,
       pass: 418,
       fail: 2,
@@ -42,7 +42,7 @@ const GarmentCheckOutput = ({ onBack }) => {
     },
     {
       line: "Line 03",
-      style: "J-0012",
+      style: "STY-7495",
       checked: 380,
       pass: 350,
       fail: 30,
@@ -51,7 +51,7 @@ const GarmentCheckOutput = ({ onBack }) => {
     },
     {
       line: "Line 05",
-      style: "Y-9902",
+      style: "STY-7497",
       checked: 200,
       pass: 195,
       fail: 5,
@@ -60,7 +60,7 @@ const GarmentCheckOutput = ({ onBack }) => {
     },
     {
       line: "Line 06",
-      style: "Y-7821",
+      style: "STY-1015",
       checked: 440,
       pass: 435,
       fail: 5,

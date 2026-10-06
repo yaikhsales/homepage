@@ -251,8 +251,8 @@ const AddMeeting = ({ onCancel, onSave }) => {
                                     onChange={(e) => setFormData({ ...formData, buyer: e.target.value })}
                                 >
                                     <option value="" disabled>Select Buyer</option>
-                                    <option value="Aritzia">Aritzia</option>
-                                    <option value="Costco">Costco</option>
+                                    <option value="Customer CC">Customer CC</option>
+                                    <option value="Customer BB">Customer BB</option>
                                     <option value="ANF">ANF</option>
                                     <option value="Reitmans">Reitmans</option>
                                 </select>

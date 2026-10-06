@@ -30,8 +30,8 @@ const PreProductionMeeting = ({ onBack }) => {
   const meetings = [
     {
       id: "PPM-7821",
-      style: "Y-7821",
-      buyer: "H&M",
+      style: "STY-1015",
+      buyer: "Customer DD",
       stage: "Bulk Production",
       date: "2026-02-14",
       time: "09:00 AM",
@@ -40,8 +40,8 @@ const PreProductionMeeting = ({ onBack }) => {
     },
     {
       id: "PPM-9902",
-      style: "Y-9902",
-      buyer: "ZARA",
+      style: "STY-7497",
+      buyer: "Customer CC",
       stage: "Pilot Run",
       date: "2026-02-14",
       time: "02:00 PM",
@@ -50,8 +50,8 @@ const PreProductionMeeting = ({ onBack }) => {
     },
     {
       id: "PPM-0012",
-      style: "J-0012",
-      buyer: "ADIDAS",
+      style: "STY-7495",
+      buyer: "Customer AA",
       stage: "Bulk Production",
       date: "2026-02-15",
       time: "10:30 AM",
@@ -60,8 +60,8 @@ const PreProductionMeeting = ({ onBack }) => {
     },
     {
       id: "PPM-5521",
-      style: "P-5521",
-      buyer: "NIKE",
+      style: "STY-9191",
+      buyer: "Customer BB",
       stage: "Initial Setup",
       date: "2026-02-13",
       status: "COMPLETED",

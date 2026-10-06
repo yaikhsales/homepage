@@ -26,7 +26,7 @@ const CuttingInspection = ({ onBack }) => {
   const bundles = [
     {
       id: "BND-501",
-      style: "Y-7821",
+      style: "STY-1015",
       part: "Front Panel",
       size: "M",
       qty: 50,
@@ -37,7 +37,7 @@ const CuttingInspection = ({ onBack }) => {
     },
     {
       id: "BND-502",
-      style: "Y-7821",
+      style: "STY-1015",
       part: "Back Panel",
       size: "M",
       qty: 50,
@@ -48,7 +48,7 @@ const CuttingInspection = ({ onBack }) => {
     },
     {
       id: "BND-503",
-      style: "Y-9902",
+      style: "STY-7497",
       part: "Sleeve",
       size: "L",
       qty: 40,
@@ -59,7 +59,7 @@ const CuttingInspection = ({ onBack }) => {
     },
     {
       id: "BND-504",
-      style: "Y-9902",
+      style: "STY-7497",
       part: "Collar",
       size: "L",
       qty: 40,
@@ -70,7 +70,7 @@ const CuttingInspection = ({ onBack }) => {
     },
     {
       id: "BND-505",
-      style: "J-0012",
+      style: "STY-7495",
       part: "Body",
       size: "S",
       qty: 60,
