@@ -24,14 +24,16 @@ const TONE_CHIP = {
 const APPROVAL_CHIP = { approved: "green", submitted: "blue", waiting: "amber", "not needed": "grey" };
 const PAGE_CHIP = { complete: "green", draft: "amber", "not started": "grey" };
 const SIZE_ORDER = ["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL"];
-const Chip = ({ tone, children, wrap }) => <span className={`inline-block border px-2.5 py-0.5 text-xs font-semibold ${wrap ? "rounded-lg leading-tight max-w-[230px]" : "rounded-full whitespace-nowrap"} ${TONE_CHIP[tone] || TONE_CHIP.grey}`}>{children}</span>;
+export const Chip = ({ tone, children, wrap }) => <span className={`inline-block border px-2.5 py-0.5 text-xs font-semibold ${wrap ? "rounded-lg leading-tight max-w-[230px]" : "rounded-full whitespace-nowrap"} ${TONE_CHIP[tone] || TONE_CHIP.grey}`}>{children}</span>;
 
 // The tabs that connect every YPI screen (also used by the Marker & Cut Plan screen).
 const TABS = [
   ["techpack", "Tech-pack", BookOpen],
+  ["sample-plan", "Sample Plan", CheckCircle2],
   ["cut-plan", "Marker & Cut Plan", Scissors],
   ["markers", "Markers", LayoutGrid],
   ["material-portal", "Material Portal", Package],
+  ["costing", "Costing", ClipboardCheck],
   ["bom-status", "BOM status", ClipboardCheck],
 ];
 export const YpiTabs = ({ view }) => {
@@ -330,7 +332,7 @@ const Table = ({ cols, rows, onRow }) => (
   </div>
 );
 
-const Picker = ({ picker, onPick, legend }) => (
+export const Picker = ({ picker, onPick, legend }) => (
   <aside className="w-full md:w-64 flex-shrink-0 rounded-2xl border border-slate-700 bg-slate-800/60 p-2 md:sticky md:top-28 overflow-y-auto" style={{ maxHeight: "calc(100vh - 8rem)", scrollbarWidth: "thin", scrollbarColor: "#475569 transparent" }}>
     <div className="px-2 pb-1 text-xs uppercase tracking-wider text-slate-400 font-bold">{picker.label} <span className="text-slate-500">({picker.options.length})</span></div>
     <div className="px-2 pb-2 flex flex-wrap gap-x-3 gap-y-0.5 text-[10px] text-slate-400">

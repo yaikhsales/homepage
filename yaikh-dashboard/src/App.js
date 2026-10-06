@@ -114,6 +114,8 @@ import LineLive from "./fourdp/LineLive";
 import CutPlan from "./ypi/CutPlan";
 import MaterialPortal from "./ypi/MaterialPortal";
 import TechPack from "./ypi/TechPack";
+import SamplePlan from "./ypi/SamplePlan";
+import Costing from "./ypi/Costing";
 import WarehouseMap from "./fc/WarehouseMap";
 import LocationPlan from "./fc/LocationPlan";
 import Calculator from "./fc/Calculator";
@@ -424,6 +426,8 @@ export default function App() {
           <Route path="ypi/markers" element={<CutPlan view="markers" onBack={() => navigate("/")} />} />
           {/* YPI: Material Portal (BOM and buying of one order), BOM status (every order), Tech-pack overview */}
           <Route path="ypi/material-portal" element={<MaterialPortal view="material-portal" onBack={() => navigate("/")} />} />
+          <Route path="ypi/sample-plan" element={<SamplePlan />} />
+          <Route path="ypi/costing" element={<Costing />} />
           <Route path="ypi/bom-status" element={<MaterialPortal view="bom-status" onBack={() => navigate("/")} />} />
           <Route path="ypi/techpack" element={<TechPack />} />
 

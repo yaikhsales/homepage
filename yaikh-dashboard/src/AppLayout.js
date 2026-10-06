@@ -1283,6 +1283,17 @@ const AppLayout = () => {
                                                   ],
                                                 },
                                                 {
+                                                  label: "Sample Plan",
+                                                  cards: [
+                                                  {
+                                                    title: "Sample Development Plan",
+                                                    icon: "FlaskConical",
+                                                    color: "bg-amber-500/30 text-white",
+                                                    action: "/dashboard/ypi/sample-plan",
+                                                  },
+                                                  ],
+                                                },
+                                                {
                                                   label: "Marker & Cut Plan",
                                                   cards: [
                                                   {
