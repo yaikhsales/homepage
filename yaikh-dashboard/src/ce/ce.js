@@ -1,5 +1,5 @@
 // CE — Cost & Efficiency hub. The real CE module's menu as columns: AIVM, Product Development, Production,
-// Machine, Product Costing — 21 sub-modules, every one a screen read from the simulated factory on the M1
+// Machine, Product Costing — 20 sub-modules, every one a screen read from the simulated factory on the M1
 // (sim/view, module "ce"). Cards keep the module's own icons where it has them (/assets/icons/sub-icons),
 // the newer ones use a line icon. Written with React.createElement like the other simulated screens.
 import React, { useState } from "react";
@@ -38,7 +38,7 @@ const GROUPS = [
     title: "Production",
     tone: "border-teal-500/40",
     items: [
-      { view: "line-planning", title: "Line Planning", sub: "Construct the line layout — stations, machines and operators for the order", icon: LayoutGrid, building: !HAS_LINE_PLANNING },
+      { view: "line-planning", title: "IE Production Line Plan", sub: "Construct the line layout — stations, machines and operators for the order", icon: LayoutGrid, building: !HAS_LINE_PLANNING },
       { view: "line-balancing", title: "Line Balancing", sub: "Station loads against the pitch — the bottleneck of each line", icon: Scale },
       { view: "productivity", title: "Cut,Sew,Pack Productivity", sub: "Cut, sew and pack against target, line by line, live today", img: "cut-sew-pack-worker-capacity.png" },
       { view: "team-performance", title: "Team Performance", sub: "Lines ranked by achievement, efficiency, DHU and downtime", img: "individual-team-production-record.png" },
@@ -51,11 +51,10 @@ const GROUPS = [
     title: "Machine",
     tone: "border-violet-500/40",
     items: [
-      { view: "machine-allocation", title: "Machine allocation", sub: "Owned, in use, at peak — what to rent or borrow", img: "machine-allocation.png" },
-      { view: "machine-layout", title: "Machine Layout", sub: "The stations of a line in order, with foot, attachment and grade", icon: LayoutGrid },
       { view: "machine-inventory", title: "Machine Inventory", sub: "Every machine: model, line, station, maintenance dates", icon: Database },
-      { view: "line-plan", title: "Line Plan", sub: "What each line runs now and next, loaded days and free days", icon: CalendarDays },
-      { view: "machine-requirement", title: "Machine Requirement", sub: "Machines each order needs against the lines — rent or borrow", icon: ClipboardList },
+      { view: "machine-layout", title: "Machine Layout", sub: "Every line's machines — name, code, attachment, needle, foot, LED, downtime; machine allocation (owned, in use, at peak, rent or borrow) inside", icon: LayoutGrid },
+      { view: "line-plan", title: "Mechanic Line Plan", sub: "What the next style needs on each line — machines in, machines out, rent or purchase, changeover date", icon: CalendarDays },
+      { view: "machine-requirement", title: "Machine Requirement", sub: "Machine types, feet and attachments per line, the next project's new requirements and what's missing", icon: ClipboardList },
     ],
   },
   {
@@ -86,7 +85,7 @@ const CE = ({ onBack }) => {
       { className: "flex items-center gap-3 mb-3" },
       h("button", { onClick: back, className: "p-1 -ml-1 hover:bg-slate-700 rounded-full transition-colors text-slate-400 hover:text-white", "aria-label": "Back" }, h(ArrowLeft, { size: 18 })),
       h("h1", { className: "text-lg font-black text-white leading-none" }, "CE · Cost & Efficiency"),
-      h("span", { className: "text-xs text-slate-400" }, "21 sub-modules in five columns — every screen reads the simulated factory")
+      h("span", { className: "text-xs text-slate-400" }, "20 sub-modules in five columns — every screen reads the simulated factory")
     ),
     h(
       "div",
