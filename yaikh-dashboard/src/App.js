@@ -5,7 +5,6 @@ import { TranslationProvider } from "./translate/TranslationContext";
 
 // Import all view components
 import TrainingGridView from "./views/TrainingGridView";
-import SensorGridView from "./views/SensorGridView";
 import WasteDashboardView from "./views/WasteDashboardView";
 import TimelineView from "./views/TimelineView";
 import SubMenuView from "./views/SubMenuView";
@@ -63,10 +62,12 @@ import ModuleFrame from "./components/ModuleFrame";
 import Cpm from "./ce/Cpm";
 import StyleCosting from "./ce/StyleCosting";
 import CostCentres from "./ce/CostCentres";
-import ComplianceCertificate from "./digital-audit/compliance-certificate";
-import AuditPlan from "./digital-audit/audit-plan";
-import Checklist6S from "./digital-audit/checklist-6s";
-import AuditQuestions from "./digital-audit/audit-questions";
+import Certificates from "./csr/Certificates";
+import AuditPlan from "./csr/AuditPlan";
+import Checklist from "./csr/Checklist";
+import DigitalAudit from "./csr/DigitalAudit";
+import AirSensors from "./csr/AirSensors";
+import AirSeries from "./csr/AirSeries";
 import ShowListRequest from "./purchase-request/show-list-request";
 import MasterList from "./purchase-request/master-list";
 import MyConfirmReceived from "./purchase-request/my-confirm-received";
@@ -76,7 +77,6 @@ import SwitchBoard from "./energy/switch-board";
 import EnergySource from "./energy/energy-source";
 import SolarDashboard from "./energy/solar-dashboard";
 import Temperature from "./air/temperature";
-import Air from "./air/air";
 import RequestWorkerForm from "./temp-worker-request/request-worker-form";
 import RequestWorkerList from "./temp-worker-request/request-worker-list";
 import BillRecord from "./bill-record/bill-record";
@@ -161,10 +161,7 @@ export default function App() {
             path="training"
             element={<ModuleFrame><TrainingGridView onBack={handleBack} /></ModuleFrame>}
           />
-          <Route
-            path="sensors"
-            element={<ModuleFrame><SensorGridView onBack={handleBack} /></ModuleFrame>}
-          />
+          <Route path="sensors" element={<AirSensors onBack={handleBack} />} />
           <Route
             path="waste/analytics"
             element={<ModuleFrame><Waste onBack={handleBack} /></ModuleFrame>}
@@ -308,22 +305,10 @@ export default function App() {
             path="my-attendance"
             element={<ModuleFrame><MyAttendance onBack={handleBack} /></ModuleFrame>}
           />
-          <Route
-            path="compliance-certificate"
-            element={<ModuleFrame><ComplianceCertificate onBack={handleBack} /></ModuleFrame>}
-          />
-          <Route
-            path="audit-plan"
-            element={<ModuleFrame><AuditPlan onBack={handleBack} /></ModuleFrame>}
-          />
-          <Route
-            path="checklist-6s"
-            element={<ModuleFrame><Checklist6S onBack={handleBack} /></ModuleFrame>}
-          />
-          <Route
-            path="digital-audit-questions"
-            element={<ModuleFrame><AuditQuestions onBack={handleBack} /></ModuleFrame>}
-          />
+          <Route path="compliance-certificate" element={<Certificates onBack={handleBack} />} />
+          <Route path="audit-plan" element={<AuditPlan onBack={handleBack} />} />
+          <Route path="checklist-6s" element={<Checklist onBack={handleBack} />} />
+          <Route path="digital-audit-questions" element={<DigitalAudit onBack={handleBack} />} />
           <Route
             path="purchase-requisition-form"
             element={<ModuleFrame><PurchaseRequisitionForm onBack={handleBack} /></ModuleFrame>}
@@ -364,7 +349,8 @@ export default function App() {
             path="air/temperature"
             element={<ModuleFrame><Temperature onBack={handleBack} /></ModuleFrame>}
           />
-          <Route path="air/quality" element={<ModuleFrame><Air onBack={handleBack} /></ModuleFrame>} />
+          <Route path="air/quality" element={<AirSensors onBack={handleBack} />} />
+          <Route path="air/series/:device" element={<AirSeries />} />
           <Route
             path="temp-worker-request/form"
             element={<ModuleFrame><RequestWorkerForm onBack={handleBack} /></ModuleFrame>}
