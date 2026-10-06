@@ -50,6 +50,18 @@ const Roll = ({ x, y, z, len = 16, r = 2.6, tone = "#f8fafc" }) => {
 };
 
 // Stack of accessory cartons.
+// Fabric rolls on a rack — referenced by the Fabric Store and FC scenes.
+// (The site white-paged when this was used undefined; keep it defined
+// above the STATIONS array, which evaluates at module load.)
+const FabricRack = ({ x = 0, y = 0 }) => (
+  <g transform={`translate(${x} ${y})`}>
+    <rect x={0} y={0} width={22} height={10} rx={1} fill="#334155" stroke="#475569" strokeWidth={0.5} />
+    {[2, 9, 16].map((rx) => (
+      <ellipse key={rx} cx={rx + 2.5} cy={5} rx={2.4} ry={3.4} fill="#6b84b0" stroke="#cbd5e1" strokeWidth={0.5} />
+    ))}
+  </g>
+);
+
 const BoxRack = ({ x = 0, y = 0, rows = 3 }) => (
   <g>
     {Array.from({ length: rows }).map((_, i) => (
