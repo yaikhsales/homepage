@@ -168,12 +168,8 @@ const DeptView = ({ onBack, module, label, view: fixedView }) => {
       h(
         "div",
         { className: "mb-3 flex flex-wrap items-center gap-3" },
-        h(
-          "button",
-          { onClick: onBack, className: "flex items-center gap-1.5 rounded-lg bg-white/5 px-3 py-1.5 text-sm text-slate-300 ring-1 ring-white/10 hover:bg-white/10" },
-          h(ArrowLeft, { className: "h-4 w-4" }),
-          "Back"
-        ),
+        // icon-only, so the global round back-button rule in index.css applies
+        h("button", { onClick: onBack, "aria-label": "Back" }, h(ArrowLeft)),
         h("h1", { className: "text-lg font-bold" }, (data && data.title) || label),
         h(Figures, { items: (data && data.summary) || [], fmt }),
         h(

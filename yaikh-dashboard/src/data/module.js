@@ -407,6 +407,9 @@ export const DASHBOARD_DATA = [
             title: "YWIP",
             image: "IMG/avatars/agent-33.png",
             status: "active",
+            // Without a demoType the tile only opened the persona pop-up: the
+            // id === "ywip" branch in AppLayout sits inside if (module.demoType).
+            demoType: "VIEW_YWIP",
             popupTitle: "OPERATIONS · PRODUCTION",
             description: "I'm all about quantities — from your fabric rolls, to the cut panels, to the finished goods, to the cartons ready to export. Ask me how many, anywhere in the flow."
           },

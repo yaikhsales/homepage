@@ -30,29 +30,24 @@ const Box = ({ x = 0, y = 0, z = 0, w = 10, d = 10, h = 6, top = "#60a5fa", left
   </g>
 );
 
-// A fabric roll lying across a rack shelf.
-const Roll = ({ x, y, z, len = 16, r = 2.2, tone = "#f8fafc" }) => (
-  <g>
-    <polygon points={pts([[x, y, z + r], [x + len, y, z + r], [x + len, y + r * 2, z + r], [x, y + r * 2, z + r]])} fill={tone} />
-    <polygon points={pts([[x, y, z + r], [x, y + r * 2, z + r], [x, y + r * 2, z], [x, y, z]])} fill="#cbd5e1" />
-    <polygon points={pts([[x, y + r * 2, z + r], [x + len, y + r * 2, z + r], [x + len, y + r * 2, z], [x, y + r * 2, z]])} fill="#e2e8f0" />
-  </g>
-);
-
-// Rack with three shelves of rolls.
-const FabricRack = ({ x = 0, y = 0 }) => (
-  <g>
-    {[0, 7, 14].map((lz) => (
-      <g key={lz}>
-        <Box x={x} y={y} z={lz} w={20} d={7} h={1} top="#334155" left="#1e293b" right="#273549" />
-        <Roll x={x + 1} y={y + 1} z={lz + 1} len={18} />
-        <Roll x={x + 1} y={y + 3.4} z={lz + 1} len={18} tone="#e2e8f0" />
-      </g>
-    ))}
-    <Box x={x} y={y} z={0} w={1} d={1} h={21} top="#475569" left="#1e293b" right="#334155" />
-    <Box x={x + 19} y={y} z={0} w={1} d={1} h={21} top="#475569" left="#1e293b" right="#334155" />
-  </g>
-);
+// A fabric roll: a cylinder lying along the x axis, drawn with two end caps
+// and a body, in the colours fabric actually comes in.
+const FABRIC = ["#1e3a8a", "#7f1d1d", "#64748b", "#f8fafc", "#0f766e"];
+const Roll = ({ x, y, z, len = 16, r = 2.6, tone = "#f8fafc" }) => {
+  const [ax, ay] = iso(x, y + r, z + r);
+  const [bx, by] = iso(x + len, y + r, z + r);
+  const half = r * 0.95;
+  return (
+    <g>
+      {/* body */}
+      <polygon points={`${ax},${ay - half} ${bx},${by - half} ${bx},${by + half} ${ax},${ay + half}`} fill={tone} />
+      {/* end caps: the lighter one faces us */}
+      <ellipse cx={bx} cy={by} rx={r * 0.55} ry={r} fill={tone} stroke="rgba(15,23,42,0.45)" strokeWidth="0.3" />
+      <ellipse cx={bx} cy={by} rx={r * 0.3} ry={r * 0.55} fill="rgba(15,23,42,0.35)" />
+      <ellipse cx={ax} cy={ay} rx={r * 0.55} ry={r} fill="rgba(15,23,42,0.35)" />
+    </g>
+  );
+};
 
 // Stack of accessory cartons.
 const BoxRack = ({ x = 0, y = 0, rows = 3 }) => (
@@ -67,14 +62,22 @@ const BoxRack = ({ x = 0, y = 0, rows = 3 }) => (
   </g>
 );
 
-// Neutral worker: no face, no logo.
+// Neutral worker: a clear standing figure in a coloured shirt. No face, no logo.
 const Worker = ({ x = 0, y = 0, z = 0, shirt = "#38bdf8" }) => {
-  const [hx, hy] = iso(x, y, z + 13);
+  const [hx, hy] = iso(x, y, z + 17);
   return (
     <g>
-      <Box x={x - 1.4} y={y - 1.4} z={z} w={2.8} d={2.8} h={7} top="#1e293b" left="#0f172a" right="#172033" />
-      <Box x={x - 2} y={y - 2} z={z + 7} w={4} d={4} h={4.5} top={shirt} left="#0369a1" right="#0284c7" />
-      <circle cx={hx} cy={hy} r={2.4} fill="#f1f5f9" />
+      {/* legs */}
+      <Box x={x - 1.8} y={y - 1.4} z={z} w={1.6} d={2.8} h={8} top="#0f172a" left="#020617" right="#0b1220" />
+      <Box x={x + 0.3} y={y - 1.4} z={z} w={1.6} d={2.8} h={8} top="#0f172a" left="#020617" right="#0b1220" />
+      {/* body */}
+      <Box x={x - 2.4} y={y - 2} z={z + 8} w={4.8} d={4} h={6} top={shirt} left="#0c4a6e" right="#0369a1" />
+      {/* arms */}
+      <Box x={x - 3.6} y={y - 1.4} z={z + 9} w={1.2} d={2.6} h={4.5} top={shirt} left="#0c4a6e" right="#0369a1" />
+      <Box x={x + 2.4} y={y - 1.4} z={z + 9} w={1.2} d={2.6} h={4.5} top={shirt} left="#0c4a6e" right="#0369a1" />
+      {/* head */}
+      <circle cx={hx} cy={hy} r={3} fill="#f8fafc" />
+      <circle cx={hx} cy={hy - 1.4} r={2.6} fill="#e2e8f0" />
     </g>
   );
 };
@@ -106,16 +109,25 @@ const InspectionTable = ({ x = 0, y = 0 }) => (
 
 const TukTuk = ({ x = 0, y = 0 }) => (
   <g>
-    {/* cargo bed with a roll and a carton on board */}
-    <Box x={x} y={y} z={2} w={16} d={9} h={5} top="#1e40af" left="#172554" right="#1e3a8a" />
-    <Roll x={x + 1} y={y + 1.5} z={7} len={13} r={2} />
-    <Box x={x + 4} y={y + 4.5} z={7} w={5} d={3.5} h={3} top="#fcd34d" left="#b45309" right="#d97706" />
-    {/* cab */}
-    <Box x={x + 16} y={y + 1.5} z={2} w={6} d={6} h={9} top="#2563eb" left="#172554" right="#1e3a8a" />
-    {/* wheels */}
-    {[[x + 2, y + 0.5], [x + 2, y + 8], [x + 20, y + 4]].map(([wx, wy], i) => {
-      const [cx, cy] = iso(wx, wy, 2);
-      return <ellipse key={i} cx={cx} cy={cy} rx={2.6} ry={1.6} fill="#0f172a" stroke="#334155" />;
+    {/* cargo bed with side walls, carrying rolls and a carton */}
+    <Box x={x} y={y} z={3} w={20} d={12} h={2} top="#1d4ed8" left="#172554" right="#1e3a8a" />
+    <Box x={x} y={y} z={5} w={20} d={1} h={4} top="#2563eb" left="#172554" right="#1e3a8a" />
+    <Box x={x} y={y + 11} z={5} w={20} d={1} h={4} top="#2563eb" left="#172554" right="#1e3a8a" />
+    <Roll x={x + 2} y={y + 2} z={5} len={15} r={2.4} tone="#1e3a8a" />
+    <Roll x={x + 2} y={y + 6.5} z={5} len={15} r={2.4} tone="#7f1d1d" />
+    <Box x={x + 6} y={y + 3} z={10} w={6} d={5} h={4} top="#fcd34d" left="#b45309" right="#d97706" />
+    {/* cab + roof */}
+    <Box x={x + 20} y={y + 2} z={3} w={7} d={8} h={10} top="#3b82f6" left="#172554" right="#1e3a8a" />
+    <Box x={x + 19} y={y + 1} z={13} w={9} d={10} h={1} top="#60a5fa" left="#1e3a8a" right="#2563eb" />
+    {/* three wheels: two at the back, one at the front */}
+    {[[x + 3, y + 0.5], [x + 3, y + 11.5], [x + 25, y + 6]].map(([wx, wy], i) => {
+      const [cx, cy] = iso(wx, wy, 2.4);
+      return (
+        <g key={i}>
+          <ellipse cx={cx} cy={cy} rx={3.2} ry={2} fill="#0f172a" stroke="#475569" strokeWidth="0.6" />
+          <ellipse cx={cx} cy={cy} rx={1.2} ry={0.8} fill="#64748b" />
+        </g>
+      );
     })}
   </g>
 );
@@ -136,25 +148,27 @@ const RelaxMachine = ({ x = 0, y = 0 }) => (
 
 /* ── station list: where each one sits, what it draws, what data it opens ─ */
 const STATIONS = [
-  { key: "fabric-store", label: "Fabric store", at: [150, 150], view: "fabric-receiving",
+  { key: "fabric-store", label: "Fabric store", at: [120, 120], view: "fabric-receiving",
     note: "Received fabric on the racks.", draw: (
       <g><FabricRack x={0} y={0} /><FabricRack x={0} y={13} /></g> ) },
-  { key: "fabric-inspection", label: "Fabric inspection", at: [420, 120], view: "fabric-inspection",
+  { key: "fabric-inspection", label: "Fabric inspection", at: [420, 110], view: "fabric-inspection",
     note: "Four-point inspection on the light table.", draw: <InspectionMachine x={0} y={0} /> },
-  { key: "accessory-store", label: "Accessory store", at: [720, 140], view: "accessories-receiving",
+  { key: "accessory-store", label: "Accessory store", at: [700, 120], view: "accessories-receiving",
     note: "Trims and accessories on the racks.", draw: <BoxRack x={0} y={0} /> },
-  { key: "accessory-inspection", label: "Accessory inspection", at: [1000, 120], view: "accessories-inspection",
+  { key: "accessory-inspection", label: "Accessory inspection", at: [960, 110], view: "accessories-inspection",
     note: "Lot check against the trim card.", draw: <InspectionTable x={0} y={0} /> },
-  { key: "ready", label: "Ready to deliver", at: [210, 450], view: "fabric-issuing",
+  { key: "ready", label: "Ready to deliver", at: [960, 450], view: "fabric-issuing",
     note: "Inspected fabric and trims waiting on the racks.", draw: (
       <g><FabricRack x={0} y={0} /><FabricRack x={0} y={13} /><BoxRack x={26} y={4} rows={2} /><BoxRack x={26} y={17} rows={2} /></g> ) },
-  { key: "delivery", label: "Delivery to cutting", at: [580, 495], view: "material-delivery",
+  { key: "delivery", label: "Delivery to cutting", at: [580, 470], view: "material-delivery",
     note: "Material moves to the cutting section by tuk-tuk.", draw: <TukTuk x={0} y={0} /> },
-  { key: "relaxing", label: "Cutting · fabric relaxing", at: [900, 455], view: "fabric-relaxing",
+  { key: "relaxing", label: "Cutting · fabric relaxing", at: [150, 450], view: "fabric-relaxing",
     note: "First operation in cutting: fabric relaxed, then laid in trays.", draw: <RelaxMachine x={0} y={0} /> },
 ];
 
 // Connector order through the flow.
+// Ring: along the top left→right, down the right-hand side, back along the
+// bottom right→left. Nothing crosses the YWIP title in the middle.
 const LINKS = [["fabric-store", "fabric-inspection"], ["fabric-inspection", "accessory-store"],
   ["accessory-store", "accessory-inspection"], ["accessory-inspection", "ready"],
   ["ready", "delivery"], ["delivery", "relaxing"]];
@@ -200,9 +214,7 @@ const YwipFlow = ({ onBack }) => {
       <NavCover />
       <div className="mx-auto max-w-[1600px] px-4 pb-10">
         <div className="mb-2 flex items-center gap-3">
-          <button onClick={onBack} className="flex items-center gap-1.5 rounded-lg bg-white/5 px-3 py-1.5 text-sm text-slate-300 ring-1 ring-white/10 hover:bg-white/10">
-            <ArrowLeft className="h-4 w-4" /> Back
-          </button>
+          <button onClick={onBack} aria-label="Back"><ArrowLeft /></button>
           <h1 className="text-lg font-bold">YWIP — work in progress, fabric store to cutting</h1>
           <span className="text-xs text-slate-400">Click a station for its status</span>
         </div>
@@ -222,10 +234,10 @@ const YwipFlow = ({ onBack }) => {
 
           {/* the extruded centre title */}
           <g transform="translate(590,300)">
-            <text textAnchor="middle" y="6" fontSize="86" fontWeight="900" fill="#1e40af" transform="translate(6,10)">YWIP</text>
-            <text textAnchor="middle" y="6" fontSize="86" fontWeight="900" fill="#2563eb" transform="translate(3,5)">YWIP</text>
-            <text textAnchor="middle" y="6" fontSize="86" fontWeight="900" fill="#dbeafe">YWIP</text>
-            <text textAnchor="middle" y="34" fontSize="13" letterSpacing="4" fill="#93c5fd">WORK IN PROGRESS</text>
+            <text textAnchor="middle" y="6" fontSize="62" fontWeight="900" fill="#1e40af" transform="translate(6,10)">YWIP</text>
+            <text textAnchor="middle" y="6" fontSize="62" fontWeight="900" fill="#2563eb" transform="translate(3,5)">YWIP</text>
+            <text textAnchor="middle" y="6" fontSize="62" fontWeight="900" fill="#dbeafe">YWIP</text>
+            <text textAnchor="middle" y="26" fontSize="11" letterSpacing="4" fill="#93c5fd">WORK IN PROGRESS</text>
           </g>
 
           {/* connectors: thin white lines with a dot at each end */}
@@ -245,8 +257,8 @@ const YwipFlow = ({ onBack }) => {
           {STATIONS.map((s, i) => (
             <g key={s.key} transform={`translate(${s.at[0]},${s.at[1]})`} className="cursor-pointer"
                onClick={() => openStation(s)} role="button" aria-label={s.label}>
-              <g transform="scale(2.1) translate(0,-14)">{s.draw}</g>
-              <text x="0" y="74" textAnchor="middle" fontSize="11" letterSpacing="2.2" fill="#e2e8f0" style={{ textTransform: "uppercase" }}>
+              <g transform="scale(4) translate(0,-16)">{s.draw}</g>
+              <text x="0" y="104" textAnchor="middle" fontSize="11" letterSpacing="2.2" fill="#e2e8f0" style={{ textTransform: "uppercase" }}>
                 {String(i + 1).padStart(2, "0")} · {s.label.toUpperCase()}
               </text>
             </g>
