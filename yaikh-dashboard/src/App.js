@@ -49,6 +49,7 @@ import ShippingBill from "./shipping-bill/shipping-bill";
 import CE from "./ce/ce";
 import OperationBreakdown from "./ce/OperationBreakdown";
 import LineBalancing from "./ce/LineBalancing";
+import LinePlanning from "./ce/LinePlanning";
 import Avma from "./ce/Avma";
 import GarmentAnalysis from "./ce/GarmentAnalysis";
 import IeMaster from "./ce/IeMaster";
@@ -262,6 +263,7 @@ export default function App() {
           <Route path="ce/standard-time-library" element={<Navigate to="/dashboard/ce/operation-library" replace />} />
           <Route path="ce/garment-analysis" element={<GarmentAnalysis onBack={handleBack} />} />
           <Route path="ce/operation-breakdown" element={<OperationBreakdown onBack={handleBack} />} />
+          <Route path="ce/line-planning" element={<LinePlanning onBack={handleBack} />} />
           <Route path="ce/line-balancing" element={<LineBalancing onBack={handleBack} />} />
           <Route path="ce/:view" element={<MrpView module="ce" label="CE" onBack={handleBack} />} />
           {/* old CE addresses keep working */}

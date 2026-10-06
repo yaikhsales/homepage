@@ -13,7 +13,7 @@ const h = React.createElement;
 
 // The CE menu as Gamini's module shows it. `img` = the module's own icon file, `icon` = a line icon instead.
 // Line Planning's screen is being built elsewhere; until its route is on main the card shows a 'building' tag instead of a dead link.
-const HAS_LINE_PLANNING = false;
+const HAS_LINE_PLANNING = true;  // /dashboard/ce/line-planning is live
 
 const GROUPS = [
   {
