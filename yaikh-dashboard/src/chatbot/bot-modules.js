@@ -546,11 +546,16 @@ const PhoneFrame = ({
     // The four-skills and Icom views open BELOW the PA header, so the header
     // (Icom, blue Yai, title) stays visible and clickable — no trap.
     const paHeaderRef = useRef(null);
-    const [paOverlayTop, setPaOverlayTop] = useState(96);
+    // Box of the PA's own column (below its header), relative to the overlay's
+    // positioned parent — so the overlay never spills outside the phone frame.
+    const [paOverlayBox, setPaOverlayBox] = useState({ top: 96, left: 0, width: undefined, height: undefined });
     const measurePaOverlay = (el) => {
         if (!el || !paHeaderRef.current || !el.offsetParent) return;
-        const t = Math.round(paHeaderRef.current.getBoundingClientRect().bottom - el.offsetParent.getBoundingClientRect().top);
-        if (t > 0 && Math.abs(t - paOverlayTop) > 1) setPaOverlayTop(t);
+        const h = paHeaderRef.current.getBoundingClientRect();
+        const col = (paHeaderRef.current.parentElement || paHeaderRef.current).getBoundingClientRect();
+        const par = el.offsetParent.getBoundingClientRect();
+        const box = { top: Math.round(h.bottom - par.top), left: Math.round(col.left - par.left), width: Math.round(col.width), height: Math.round(col.bottom - h.bottom) };
+        if (box.height > 0 && ['top', 'left', 'width', 'height'].some((k) => Math.abs((paOverlayBox[k] || 0) - box[k]) > 1)) setPaOverlayBox(box);
     };
     useEffect(() => {
         if (!skillsOpen && !icomOpen) return undefined;
@@ -1464,7 +1469,7 @@ const PhoneFrame = ({
                         )}
 
                         {/* Header with Bot Name and Avatar */}
-                        <div ref={paHeaderRef} className={`flex-shrink-0 flex items-center justify-between px-4 pt-12 pb-3 border-b ${KHMER_NEW_YEAR.isActive ? 'border-red-400/50 bg-gradient-to-r from-red-600/10 via-orange-500/10 to-yellow-500/10' : bot.borderColor || 'border-gray-200'} relative z-10`}>
+                        <div ref={paHeaderRef} className={`flex-shrink-0 flex items-center justify-between ${notifSlug ? 'px-3' : 'px-4'} pt-12 pb-3 border-b ${KHMER_NEW_YEAR.isActive ? 'border-red-400/50 bg-gradient-to-r from-red-600/10 via-orange-500/10 to-yellow-500/10' : bot.borderColor || 'border-gray-200'} relative z-10`}>
                             <div className="flex items-center gap-2">
                                 <button
                                     onClick={() => {
@@ -1540,7 +1545,7 @@ const PhoneFrame = ({
                                 identity shifts to the active topic agent so the
                                 user knows "I'm now talking to the Purchase
                                 Request specialist", not the parent PA. */}
-                            <div className="absolute left-1/2 transform -translate-x-1/2">
+                            <div className={notifSlug ? "flex-1 min-w-0 text-center px-1 leading-tight [&>span]:text-[13px]" : "absolute left-1/2 transform -translate-x-1/2"}>
                                 <span className={`text-sm font-semibold ${bot.textColor || 'text-gray-800'}`}>
                                     {botId === 'accounting-bot' && activeTopic
                                         ? `${t(activeTopic)} PA`
@@ -2306,7 +2311,7 @@ const PhoneFrame = ({
             </div>
             {/* Four-skills view — opened by the blue Yai header button. */}
             {skillsOpen && (
-                <div ref={measurePaOverlay} style={{ top: paOverlayTop }} className="absolute inset-x-0 bottom-0 z-30 overflow-y-auto bg-white px-3 pb-4 rounded-b-3xl">
+                <div ref={measurePaOverlay} style={{ top: paOverlayBox.top, left: paOverlayBox.left, width: paOverlayBox.width, height: paOverlayBox.height }} className="absolute z-30 overflow-y-auto bg-white px-3 pb-4 rounded-b-3xl">
                     <div className="sticky top-0 z-10 -mx-3 mb-2 px-3 py-2 bg-white/95 backdrop-blur border-b border-gray-100"><button onClick={() => setSkillsOpen(false)} className="inline-flex items-center gap-1 text-xs font-semibold text-blue-700 hover:text-blue-900">← Back to PA</button></div>
                     {paSkills ? (
                         <PaSkills data={paSkills} loading={paSkillsLoading} onRefresh={reloadPaSkills} onTaskAction={paSkillsAct} onOpenLink={(l) => { setSkillsOpen(false); if (onClose) onClose(); navigateTo(l); }} />
@@ -2317,7 +2322,7 @@ const PhoneFrame = ({
             )}
             {/* Icom — the department team chat, from the header's Icom button. */}
             {icomOpen && notifSlug && (
-                <div ref={measurePaOverlay} style={{ top: paOverlayTop }} className="absolute inset-x-0 bottom-0 z-30 bg-white rounded-b-3xl overflow-hidden flex flex-col">
+                <div ref={measurePaOverlay} style={{ top: paOverlayBox.top, left: paOverlayBox.left, width: paOverlayBox.width, height: paOverlayBox.height }} className="absolute z-30 bg-white rounded-b-3xl overflow-hidden flex flex-col">
                     <div className="flex-shrink-0 px-3 py-2 border-b border-gray-100"><button onClick={() => setIcomOpen(false)} className="inline-flex items-center gap-1 text-xs font-semibold text-blue-700 hover:text-blue-900">← Back to PA</button></div>
                     <div className="flex-1 min-h-0"><Icom dept={notifSlug} onMyChats={() => { setIcomOpen(false); setIsHistoryOpen(true); }} /></div>
                 </div>
