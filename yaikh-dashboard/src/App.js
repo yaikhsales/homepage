@@ -48,12 +48,12 @@ import BillClaim from "./bill-claim/bill-claim";
 import ShippingBill from "./shipping-bill/shipping-bill";
 import CE from "./ce/ce";
 import OperationBreakdown from "./ce/OperationBreakdown";
-import LineBalancing from "./ce/LineBalancing";
 import LinePlanning from "./ce/LinePlanning";
 import Avma from "./ce/Avma";
 import GarmentAnalysis from "./ce/GarmentAnalysis";
 import IeMaster from "./ce/IeMaster";
 import MachineFloor from "./ce/MachineFloor";
+import ProductionFloor from "./ce/ProductionFloor";
 import ComplianceCertificate from "./digital-audit/compliance-certificate";
 import AuditPlan from "./digital-audit/audit-plan";
 import Checklist6S from "./digital-audit/checklist-6s";
@@ -268,7 +268,12 @@ export default function App() {
           <Route path="ce/garment-analysis" element={<GarmentAnalysis onBack={handleBack} />} />
           <Route path="ce/operation-breakdown" element={<OperationBreakdown onBack={handleBack} />} />
           <Route path="ce/line-planning" element={<LinePlanning onBack={handleBack} />} />
-          <Route path="ce/line-balancing" element={<LineBalancing onBack={handleBack} />} />
+          <Route path="ce/line-balancing" element={<ProductionFloor lens="balancing" onBack={handleBack} />} />
+          <Route path="ce/productivity" element={<ProductionFloor lens="productivity" onBack={handleBack} />} />
+          <Route path="ce/team-performance" element={<ProductionFloor lens="team" onBack={handleBack} />} />
+          <Route path="ce/skill-inventory" element={<ProductionFloor lens="skill" onBack={handleBack} />} />
+          <Route path="ce/learning-curve" element={<ProductionFloor lens="learning" onBack={handleBack} />} />
+          <Route path="ce/downtimes" element={<ProductionFloor lens="downtime" onBack={handleBack} />} />
           <Route path="ce/:view" element={<MrpView module="ce" label="CE" onBack={handleBack} />} />
           {/* old CE addresses keep working */}
           <Route path="standard-time" element={<Navigate to="/dashboard/ce/operation-library" replace />} />

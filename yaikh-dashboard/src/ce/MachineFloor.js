@@ -26,6 +26,7 @@ const MachineFloor = ({ lens, onBack }) => {
       onBack={onBack}
       nav={MACHINE_LENSES}
       renderStation={STATION[lens]}
+      stationReason={lens === "mechanic" ? (s) => (s.available === false ? `next machine not available · ${(s.next_machine && s.next_machine.machine_code) || ""}` : "") : undefined}
       renderDetail={(det) => (
         <>
           {Body && <Body detail={det} />}

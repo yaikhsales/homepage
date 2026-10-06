@@ -30,74 +30,105 @@ const FIX = { loading: "LOAD", roving_qc: "QC", eol_checker: "EOL", line_leader:
 const fixTag = (f) => FIX[f.kind] || FIX[String(f.kind || "").replace(/_\d+$/, "")] || String(f.kind || "").slice(0, 4).toUpperCase();
 const CSS = "@keyframes floor-flick { 0%,100% { opacity: 1; } 50% { opacity: .35; } } .floor-live { animation: floor-flick 1.1s ease-in-out infinite; } .floor-band::-webkit-scrollbar { height: 6px; } .floor-band::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }";
 
-/* ── a line in miniature: its machines as dots in the line's shape ──────── */
+/* ── a line in the top band: its machines numbered, in the line's shape, at the same positions as below ── */
 const MiniLine = ({ l, on, onClick }) => {
   const live = /running/i.test(l.state || "");
   const ms = l.machines || [];
-  const maxX = Math.max(30, ...ms.map((m) => m.x)) + 6;
-  const maxY = Math.max(30, ...ms.map((m) => m.y)) + 6;
+  const minX = Math.min(0, ...ms.map((m) => m.x)) - 5;
+  const maxX = Math.max(30, ...ms.map((m) => m.x)) + 5;
+  const maxY = Math.max(30, ...ms.map((m) => m.y)) + 5;
   return (
-    <button onClick={onClick} title={`${l.line} · ${l.order || ""} ${l.garment || ""} · ${l.layout_name || l.layout} · ${l.state}${l.kpi && l.kpi.text ? " · " + l.kpi.text : ""}`} className={`flex-shrink-0 w-[118px] rounded-xl border p-1.5 text-left transition-colors ${on ? "border-sky-400 bg-sky-500/10 ring-1 ring-sky-400" : "border-slate-700 bg-slate-800/60 hover:border-slate-500"}`}>
-      <div className="flex items-center gap-1">
-        <span className="font-black text-white text-xs">{l.line}</span>
-        <span className={`inline-block w-1.5 h-1.5 rounded-full ${l.status === "red" ? "bg-rose-500" : l.status === "orange" || l.status === "amber" ? "bg-amber-400" : l.status === "green" ? "bg-emerald-400" : "bg-slate-500"}`} />
-        <span className="ml-auto text-[9px] text-slate-500 truncate">{live ? "live" : (l.state || "").replace("starts ", "→ ")}</span>
+    <button onClick={onClick} title={`${l.line} · ${l.order || ""} ${l.garment || ""} · ${l.layout_name || l.layout} · ${l.state}${l.kpi && l.kpi.text ? " · " + l.kpi.text : ""}`} className={`flex-shrink-0 w-[232px] rounded-xl border p-2 text-left transition-colors ${on ? "border-sky-400 bg-sky-500/10 ring-1 ring-sky-400" : "border-slate-700 bg-slate-800/60 hover:border-slate-500"}`}>
+      <div className="flex items-center gap-1.5">
+        <span className="font-black text-white text-sm">{l.line}</span>
+        <span className={`inline-block w-2 h-2 rounded-full ${l.status === "red" ? "bg-rose-500" : l.status === "orange" || l.status === "amber" ? "bg-amber-400" : l.status === "green" ? "bg-emerald-400" : "bg-slate-500"}`} />
+        <span className="text-[10px] text-slate-400 truncate">{l.order ? `${l.order} ${l.garment || ""}` : ""}</span>
+        <span className="ml-auto text-[10px] text-slate-500 whitespace-nowrap">{live ? "live" : (l.state || "").replace("starts ", "→ ")}</span>
       </div>
-      <svg viewBox={`-4 -4 ${maxX + 4} ${maxY + 4}`} className="w-full h-12 mt-0.5" preserveAspectRatio="xMidYMid meet">
-        {ms.map((m) => <circle key={m.no} cx={m.x} cy={m.y} r={2.6} fill={DOT[m.status] || DOT.idle} className={live && m.status !== "green" ? "floor-live" : ""} />)}
+      <svg viewBox={`${minX} -5 ${maxX - minX} ${maxY + 5}`} className="w-full mt-1" style={{ height: 150 }} preserveAspectRatio="xMidYMid meet">
+        {ms.map((m) => (
+          <g key={m.no}>
+            <circle cx={m.x} cy={m.y} r={3} fill={DOT[m.status] || DOT.idle} className={live && m.status !== "green" ? "floor-live" : ""} />
+            <text x={m.x} y={m.y + 1.1} textAnchor="middle" fontSize={3.1} fontWeight={800} fill="#0f172a">{m.no}</text>
+          </g>
+        ))}
       </svg>
-      <div className="text-[9.5px] text-slate-400 truncate" title={l.order ? l.order + " " + (l.garment || "") : ""}>{l.order ? `${l.order} ${l.garment || ""}` : l.layout_name || ""}</div>
-      {l.kpi && l.kpi.text && <div className={`mt-0.5 rounded-md border px-1 py-px text-[9.5px] font-bold truncate ${CHIP[l.status] || CHIP.grey}`} title={l.kpi.label + ": " + l.kpi.text}>{l.kpi.text}</div>}
+      <div className="mt-1 flex items-center gap-1.5 text-[10px]">
+        <span className="text-slate-500 truncate">{l.layout_name || l.layout}</span>
+        {l.kpi && l.kpi.text && <span className={`ml-auto rounded-md border px-1.5 py-px font-bold whitespace-nowrap ${CHIP[l.status] || CHIP.grey}`} title={l.kpi.label + ": " + l.kpi.text}>{l.kpi.text}</span>}
+      </div>
     </button>
   );
 };
 
-/* ── the selected line, enlarged ────────────────────────────────────────── */
-const Big = ({ d, renderStation, onPick, picked }) => {
+/* ── the selected line, enlarged: the same shape and positions as the top card, one BOX per machine with
+      everything inside — number, machine code, worker · grade, operation, the lens figure, and the reason
+      when it is orange or red. Off-line (preparation) positions stay inside the frame; they carry a
+      "→ feeds n" tag instead of a long crossing arrow. ─────────────────────────────────────────────── */
+const BW = 19.4; // box width, in the floor's % units (columns are ~21 apart)
+const BH = 6.2; // box height (stations are ~6.8 apart)
+const reasonOf = (s) => {
+  if (s.machine_status === "DOWN") return `down ${num(s.down_min)} min${s.cause ? " · " + s.cause : ""}${s.mechanic ? " · " + s.mechanic : ""}`;
+  if (s.state === "open") return "down now" + ((s.events || []).find((e) => e.status === "open") ? " · " + (s.events || []).find((e) => e.status === "open").cause : "");
+  if (s.machine_status === "IDLE" || s.idle_reason) return "idle" + (s.idle_reason ? " · " + s.idle_reason : " · waiting for work");
+  if (s.status === "red" || s.live === "red") return "breakdown — mechanic called";
+  if (s.status === "orange" || s.live === "orange") return `${num(s.rejects)} rejects · WIP behind ${num(s.wip_behind)}`;
+  return "";
+};
+const Big = ({ d, renderStation, stationReason, onPick, picked }) => {
   const st = d.stations || [];
-  const fx = d.fixtures || [];
+  const stMaxX = Math.max(30, ...st.map((p) => p.x));
+  // fixtures that sit far right of the stations (end-of-line checkers, ironing, packing) are laid in a
+  // column just beside the line, in order, so the canvas stays the size of the line itself
+  let lane = 0;
+  const fx = [...(d.fixtures || [])].sort((a, b) => a.x - b.x || a.y - b.y).map((f) => (f.x >= stMaxX + BW / 2 + 2 ? { ...f, x: stMaxX + BW / 2 + 7, y: 2 + 5.2 * lane++ } : f));
   const all = [...st, ...fx];
-  const maxX = Math.max(40, ...all.map((p) => p.x)) + 10;
-  const maxY = Math.max(40, ...all.map((p) => p.y)) + 10;
+  const minX = Math.min(0, ...all.map((p) => p.x)) - BW / 2 - 2;
+  const maxX = Math.max(40, ...all.map((p) => p.x)) + BW / 2 + 2;
+  const maxY = Math.max(40, ...all.map((p) => p.y)) + BH / 2 + 2;
   const byNo = Object.fromEntries(st.map((s) => [s.no, s]));
-  const R = 3.4;
   const live = !!d.running;
+  const near = (a, b) => Math.abs(a.x - b.x) < BW * 1.3 && Math.abs(a.y - b.y) < BH * 3;
   return (
-    <svg viewBox={`-8 -6 ${maxX + 12} ${maxY + 8}`} className="w-full" style={{ maxHeight: 560 }} preserveAspectRatio="xMidYMid meet">
+    <svg viewBox={`${minX} -6 ${maxX - minX} ${maxY + 8}`} className="w-full" style={{ maxHeight: 900 }} preserveAspectRatio="xMidYMid meet">
       <defs>
         <marker id="floor-arrow" viewBox="0 0 6 6" refX="5.5" refY="3" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0 L6,3 L0,6 Z" fill="#64748b" /></marker>
       </defs>
-      {/* flow: each station to its next */}
+      {/* flow: each in-line station to its next, when the next sits near (no long crossing arrows) */}
       {st.map((s) => {
         const n = byNo[s.next];
-        if (!n) return null;
+        if (!n || s.offline || !near(s, n)) return null;
         const dx = n.x - s.x, dy = n.y - s.y, len = Math.hypot(dx, dy) || 1;
         const ux = dx / len, uy = dy / len;
-        return <line key={"f" + s.no} x1={s.x + ux * (R + 0.6)} y1={s.y + uy * (R + 0.6)} x2={n.x - ux * (R + 1)} y2={n.y - uy * (R + 1)} stroke="#475569" strokeWidth={0.5} markerEnd="url(#floor-arrow)" />;
+        const sx = Math.abs(ux) > Math.abs(uy) ? BW / 2 + 0.4 : BH / 2 + 0.4;
+        return <line key={"f" + s.no} x1={s.x + ux * sx} y1={s.y + uy * sx} x2={n.x - ux * (sx + 0.6)} y2={n.y - uy * (sx + 0.6)} stroke="#475569" strokeWidth={0.45} markerEnd="url(#floor-arrow)" />;
       })}
       {/* fixtures */}
       {fx.map((f, i) => (
         <g key={"x" + i}>
-          <rect x={f.x - 4.2} y={f.y - 2.2} width={8.4} height={4.4} rx={0.9} fill="#1e293b" stroke="#475569" strokeWidth={0.4} />
-          <text x={f.x} y={f.y + 0.9} textAnchor="middle" fontSize={2.3} fontWeight={700} fill="#cbd5e1">{fixTag(f)}</text>
+          <rect x={f.x - 4.4} y={f.y - 2} width={8.8} height={4} rx={0.8} fill="#1e293b" stroke="#475569" strokeWidth={0.35} />
+          <text x={f.x} y={f.y + 0.8} textAnchor="middle" fontSize={2.1} fontWeight={700} fill="#cbd5e1">{fixTag(f)}</text>
           <title>{f.label}{f.staff ? ` · ${f.staff} (${f.staff_grade})` : ""}</title>
         </g>
       ))}
-      {/* stations */}
+      {/* one box per machine */}
       {st.map((s) => {
         const tone = s.status || s.live || "idle";
         const on = picked === s.no;
-        const labelLeft = s.facing === "east";
-        const tx = labelLeft ? s.x - R - 1 : s.x + R + 1;
-        const anchor = labelLeft ? "end" : "start";
-        const sub = renderStation ? renderStation(s) : s.operation;
+        const fig = renderStation ? renderStation(s) : "";
+        const reason = (stationReason && stationReason(s)) || reasonOf(s);
+        const x0 = s.x - BW / 2, y0 = s.y - BH / 2;
+        const warn = tone === "red" || tone === "orange";
         return (
           <g key={s.no} onClick={() => onPick(s)} className="cursor-pointer">
-            <circle cx={s.x} cy={s.y} r={R + (on ? 1 : 0)} fill="#0f172a" stroke={RING[tone] || RING.idle} strokeWidth={on ? 1.1 : 0.8} className={live && (tone === "red" || tone === "orange") ? "floor-live" : ""} />
-            <text x={s.x} y={s.y + 1} textAnchor="middle" fontSize={2.6} fontWeight={800} fill="#fff">{s.no}</text>
-            <text x={tx} y={s.y - 0.6} textAnchor={anchor} fontSize={1.9} fontWeight={700} fill="#e2e8f0">{s.worker}{s.worker_grade ? ` · ${s.worker_grade}` : ""}</text>
-            <text x={tx} y={s.y + 1.9} textAnchor={anchor} fontSize={1.7} fill="#94a3b8">{clip(typeof sub === "string" ? sub : s.operation, 20)}</text>
-            <title>{`${s.no} ${s.operation} · ${s.machine} (${s.machine_id}) · ${s.worker} ${s.worker_grade} · target ${num(s.target_now)} · done ${num(s.done)} · WIP behind ${num(s.wip_behind)} · rejects ${num(s.rejects)} · ${s.colour || ""} ${s.size || ""}`}</title>
+            <rect x={x0} y={y0} width={BW} height={BH} rx={0.9} fill={on ? "#172554" : "#0f172a"} stroke={RING[tone] || RING.idle} strokeWidth={warn || on ? 0.7 : 0.4} className={live && warn ? "floor-live" : ""} />
+            <circle cx={x0 + 1.9} cy={y0 + 1.7} r={1.25} fill={DOT[tone] || DOT.idle} />
+            <text x={x0 + 1.9} y={y0 + 2.15} textAnchor="middle" fontSize={1.35} fontWeight={800} fill="#0f172a">{s.no}</text>
+            <text x={x0 + 3.8} y={y0 + 2.15} fontSize={1.3} fontWeight={800} fill="#fff">{clip(`${s.machine_code || ""} · ${s.worker || ""}${s.worker_grade ? " · " + s.worker_grade : ""}${s.offline ? " · off-line" : ""}`, 24)}</text>
+            <text x={x0 + 0.9} y={y0 + 3.55} fontSize={1.2} fill="#cbd5e1">{clip(s.operation, 28)}</text>
+            <text x={x0 + 0.9} y={y0 + 4.75} fontSize={1.15} fill="#94a3b8">{clip(typeof fig === "string" ? fig : "", 30)}</text>
+            {reason ? <text x={x0 + 0.9} y={y0 + 5.85} fontSize={1.1} fontWeight={700} fill={tone === "red" ? "#fda4af" : "#fcd34d"}>{clip(reason, 32)}</text> : s.offline && s.next ? <text x={x0 + 0.9} y={y0 + 5.85} fontSize={1.05} fill="#64748b">→ feeds station {s.next}</text> : null}
+            <title>{`${s.no} ${s.operation} · ${s.machine} (${s.machine_id}) · ${s.worker} ${s.worker_grade} · target ${num(s.target_now)} · done ${num(s.done)} · WIP behind ${num(s.wip_behind)} · rejects ${num(s.rejects)} · ${s.colour || ""} ${s.size || ""}${reason ? " · " + reason : ""}`}</title>
           </g>
         );
       })}
@@ -134,7 +165,7 @@ const StationCard = ({ s, onClose, extra }) => {
 };
 
 /* ── the screen ─────────────────────────────────────────────────────────── */
-const Floor = ({ lens, label, onBack, renderDetail, renderStation, stationCard, nav, refresh = 60000 }) => {
+const Floor = ({ lens, label, onBack, renderDetail, renderStation, stationReason, stationCard, nav, refresh = 60000 }) => {
   const navigate = useNavigate();
   const [topRef, topPad] = useScreenTop();
   const [line, setLine] = useState("");
@@ -208,13 +239,13 @@ const Floor = ({ lens, label, onBack, renderDetail, renderStation, stationCard, 
               {det.operators !== undefined && <span>operators <b className="text-white">{num(det.operators)}</b>{det.headcount && det.headcount.indirect ? ` + ${Object.values(det.headcount.indirect).reduce((a, b) => a + (b || 0), 0)} indirect` : ""}</span>}
               {det.kpi && det.kpi.text && <span className={`ml-auto inline-block rounded-full border px-2 py-0.5 text-[11px] font-bold ${CHIP[det.status] || CHIP.grey}`} title={det.kpi.label}>{det.kpi.text}</span>}
             </div>
-            <Big d={det} renderStation={renderStation} onPick={setPicked} picked={picked && picked.no} />
+            <Big d={det} renderStation={renderStation} stationReason={stationReason} onPick={setPicked} picked={picked && picked.no} />
             <div className="flex flex-wrap gap-x-3 text-[10px] text-slate-500 mt-1">
-              <span>circle = station (number, worker · grade, operation) · ring = status</span>
+              <span>one box per machine — number, machine code · worker · grade, operation, the lens figure, and why when it is amber or red · same positions as the line card above</span>
               <span className="flex items-center gap-1"><span className="inline-block w-2 h-2 rounded-full bg-emerald-400" />on target</span>
               <span className="flex items-center gap-1"><span className="inline-block w-2 h-2 rounded-full bg-amber-400" />defects / idle</span>
               <span className="flex items-center gap-1"><span className="inline-block w-2 h-2 rounded-full bg-rose-500" />breakdown</span>
-              <span>arrows = flow to the next station · boxes = fixtures (LOAD loading table, QC roving QC, EOL end-of-line checker, LL line leader, IRON, PACK, TRL trolley) · click a station for its card</span>
+              <span>arrows = flow to the next station · small boxes = fixtures (LOAD loading table, QC roving QC, EOL end-of-line checker, LL line leader, IRON, PACK, TRL trolley) · click a machine for its card</span>
             </div>
           </div>
           {renderDetail && renderDetail(det, d)}
