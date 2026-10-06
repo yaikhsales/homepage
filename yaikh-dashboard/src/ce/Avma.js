@@ -1,11 +1,11 @@
 // CE · AI Vision Motion Analysis (AVMA). The hub Gamini's module shows when an IE opens AVMA: three AI
 // vision modules as cards (AI Motion, AI Standing, AI Feeling) with a link to the ST video library.
-// Each card opens its module screen — the generic table over sim/view ce/avma filtered by module_type.
+// Each card opens its module screen — the Station Time Study over sim/view ce/avma filtered by module_type.
 // Written with React.createElement like the other simulated screens.
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, ArrowRight, Hand, PersonStanding, Smile, Video } from "lucide-react";
-import MrpView from "../mrp/MrpView";
+import StationStudy from "./StationStudy";
 import { NavCover, useScreenTop } from "../components/ScreenTop";
 
 const h = React.createElement;
@@ -76,7 +76,7 @@ const Avma = ({ onBack }) => {
   const { type } = useParams();
   const m = MODULES.find((x) => x.type === type);
   if (!m) return h(Hub, { onBack });
-  return h(MrpView, { module: "ce", view: "avma", label: m.title, onBack, extra: { module_type: m.type } });
+  return h(StationStudy, { type: m.type, onBack });
 };
 
 export default Avma;
