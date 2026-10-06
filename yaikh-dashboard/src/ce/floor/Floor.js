@@ -22,6 +22,8 @@ import { NavCover, useScreenTop } from "../../components/ScreenTop";
 
 const API = (process.env.REACT_APP_M1_LLM_URL || "/api/m1").replace(/\/$/, "");
 const clip = (t, n) => { const x = String(t || ""); return x.length > n ? x.slice(0, n - 1) + "…" : x; };
+// up to two lines of n characters, broken at a space; the rest clipped
+const wrap2 = (t, n) => { const x = String(t || ""); if (x.length <= n) return [x]; let i = x.lastIndexOf(" ", n); if (i < n * 0.5) i = n; return [x.slice(0, i), clip(x.slice(i).trim(), n)]; };
 const num = (v) => (typeof v === "number" ? v.toLocaleString("en-US", { maximumFractionDigits: 1 }) : v === null || v === undefined ? "—" : String(v));
 const DOT = { green: "#10b981", orange: "#f59e0b", amber: "#f59e0b", red: "#f43f5e", idle: "#64748b", grey: "#64748b" };
 const RING = { green: "#34d399", orange: "#fbbf24", amber: "#fbbf24", red: "#fb7185", idle: "#94a3b8", grey: "#94a3b8" };
@@ -74,8 +76,8 @@ const MiniLine = ({ l, on, onClick }) => {
       when it is orange or red. The boxes are laid out from the data's positions and then pushed apart until
       none touch (a clear gap around every box), so the canvas grows rather than squeezes; off-line
       (preparation) positions sit right beside the station they feed with a short arrow. ──────────────── */
-const BW = 26; // box width, in canvas units
-const BH = 10; // box height
+const BW = 30; // box width, in canvas units
+const BH = 12; // box height (five text rows: who · operation on two lines · figure · reason)
 const GAP = 3; // clear space around every box
 const SCALE = 2.3; // the data's % positions, stretched before the boxes are separated
 const reasonOf = (s) => {
@@ -164,10 +166,10 @@ const Big = ({ d, renderStation, stationReason, onPick, picked }) => {
             <rect x={x0} y={y0} width={BW} height={BH} rx={1.2} fill={on ? "#172554" : s.offline ? "#111827" : "#0f172a"} stroke={RING[tone] || RING.idle} strokeWidth={warn || on ? 0.8 : 0.45} strokeDasharray={s.offline ? "1.6 1" : undefined} className={live && warn ? "floor-live" : ""} />
             <circle cx={x0 + 2.6} cy={y0 + 2.5} r={1.7} fill={DOT[tone] || DOT.idle} />
             <text x={x0 + 2.6} y={y0 + 3.1} textAnchor="middle" fontSize={1.8} fontWeight={800} fill="#0f172a">{s.no}</text>
-            <text x={x0 + 5.2} y={y0 + 3.15} fontSize={1.75} fontWeight={800} fill="#fff">{clip(`${s.machine_code || ""} · ${s.worker || ""}${s.worker_grade ? " · " + s.worker_grade : ""}${s.offline ? " · off-line" : ""}`, 24)}</text>
-            <text x={x0 + 1.2} y={y0 + 5.5} fontSize={1.6} fill="#cbd5e1">{clip(s.operation, 30)}</text>
-            <text x={x0 + 1.2} y={y0 + 7.4} fontSize={1.5} fill="#94a3b8">{clip(typeof fig === "string" ? fig : "", 32)}</text>
-            {reason ? <text x={x0 + 1.2} y={y0 + 9.2} fontSize={1.45} fontWeight={700} fill={tone === "red" ? "#fda4af" : "#fcd34d"}>{clip(reason, 34)}</text> : s.offline && s.next ? <text x={x0 + 1.2} y={y0 + 9.2} fontSize={1.4} fill="#64748b">off-line → feeds station {s.next}</text> : null}
+            <text x={x0 + 5.2} y={y0 + 3.15} fontSize={1.75} fontWeight={800} fill="#fff">{clip(`${s.machine_code || ""} · ${s.worker || ""}${s.worker_grade ? " · " + s.worker_grade : ""}`, 30)}</text>
+            {wrap2(s.operation, 34).map((ln, i) => <text key={i} x={x0 + 1.2} y={y0 + 5.4 + i * 1.8} fontSize={1.6} fill="#cbd5e1">{ln}</text>)}
+            <text x={x0 + 1.2} y={y0 + 9.1} fontSize={1.5} fill="#94a3b8">{clip(typeof fig === "string" ? fig : "", 38)}</text>
+            {reason ? <text x={x0 + 1.2} y={y0 + 10.9} fontSize={1.45} fontWeight={700} fill={tone === "red" ? "#fda4af" : "#fcd34d"}>{clip(reason, 40)}</text> : s.offline && s.next ? <text x={x0 + 1.2} y={y0 + 10.9} fontSize={1.4} fill="#64748b">off-line → feeds station {s.next}</text> : null}
             <title>{`${s.no} ${s.operation} · ${s.machine} (${s.machine_id}) · ${s.worker} ${s.worker_grade} · target ${num(s.target_now)} · done ${num(s.done)} · WIP behind ${num(s.wip_behind)} · rejects ${num(s.rejects)} · ${s.colour || ""} ${s.size || ""}${reason ? " · " + reason : ""}`}</title>
           </g>
         );

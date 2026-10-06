@@ -77,9 +77,10 @@ const CE = ({ onBack }) => {
   // five columns side by side whenever the content is wide enough (the PA panel open at 1440 still is);
   // two below ~900 px of content width, one below ~560 px
   const [cols, setCols] = useState(5);
+  const [wide, setWide] = useState(false); // a column ≥ 240 px shows the description; narrower columns keep it on hover
   useEffect(() => {
     const el = topRef.current; if (!el || typeof ResizeObserver === "undefined") return;
-    const ro = new ResizeObserver(() => { const w = el.clientWidth - 48; setCols(w >= 900 ? 5 : w >= 560 ? 2 : 1); });
+    const ro = new ResizeObserver(() => { const cs = getComputedStyle(el); const w = el.clientWidth - (parseFloat(cs.paddingLeft) || 0) - (parseFloat(cs.paddingRight) || 0); const c = w >= 900 ? 5 : w >= 560 ? 2 : 1; setCols(c); setWide((w - 12 * (c - 1)) / c >= 240); });
     ro.observe(el);
     return () => ro.disconnect();
   }, [topRef]);
@@ -110,13 +111,13 @@ const CE = ({ onBack }) => {
             g.items.map((m) =>
               h(
                 "button",
-                { key: m.view, onClick: m.building ? undefined : () => navigate("/dashboard/ce/" + m.view), disabled: !!m.building, title: m.building ? "being built — not open yet" : undefined, className: "w-full text-left flex items-center gap-3 rounded-xl border border-slate-700 bg-slate-900/60 transition-colors px-3 py-2 " + (m.building ? "opacity-70 cursor-default" : "hover:bg-slate-700/60 hover:border-slate-500") },
+                { key: m.view, onClick: m.building ? undefined : () => navigate("/dashboard/ce/" + m.view), disabled: !!m.building, title: m.building ? "being built — not open yet" : undefined, className: "w-full text-left flex " + (wide ? "items-center gap-2.5 " : "flex-col items-start gap-1.5 ") + "rounded-xl border border-slate-700 bg-slate-900/60 transition-colors px-2.5 py-2 " + (m.building ? "opacity-70 cursor-default" : "hover:bg-slate-700/60 hover:border-slate-500") },
                 h(
                   "div",
-                  { className: "w-10 h-10 flex-shrink-0 rounded-lg bg-white p-1 flex items-center justify-center" },
-                  m.img ? h("img", { src: process.env.PUBLIC_URL + "/assets/icons/sub-icons/" + m.img, alt: "", className: "w-full h-full object-contain" }) : h(m.icon, { size: 22, className: "text-slate-700" })
+                  { className: "w-9 h-9 flex-shrink-0 rounded-lg bg-white p-1 flex items-center justify-center" },
+                  m.img ? h("img", { src: process.env.PUBLIC_URL + "/assets/icons/sub-icons/" + m.img, alt: "", className: "w-full h-full object-contain" }) : h(m.icon, { size: 20, className: "text-slate-700" })
                 ),
-                h("div", { className: "min-w-0" }, h("div", { className: "font-bold text-white text-sm leading-tight flex items-center gap-2" }, translateModuleTitle(m.title), m.building && h("span", { className: "rounded-full border border-amber-500/40 bg-amber-500/15 text-amber-300 text-[10px] font-semibold px-1.5 py-px" }, "building")), h("div", { className: "text-[11px] text-slate-400 leading-tight mt-0.5", style: { display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }, title: m.sub }, m.sub))
+                h("div", { className: "min-w-0 w-full", title: m.sub }, h("div", { className: "font-bold text-white text-[14px] leading-tight", style: { display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", overflowWrap: "anywhere" } }, translateModuleTitle(m.title), m.building && h("span", { className: "ml-2 rounded-full border border-amber-500/40 bg-amber-500/15 text-amber-300 text-[10px] font-semibold px-1.5 py-px align-middle" }, "building")), wide && h("div", { className: "text-[11px] text-slate-400 leading-tight mt-0.5", style: { display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" } }, m.sub))
               )
             )
           )
