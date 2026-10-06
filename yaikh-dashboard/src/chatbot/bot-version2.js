@@ -2299,10 +2299,13 @@ ANSWER RULES
           <div className="flex-1 min-h-0 overflow-y-auto flex flex-col">
             <BigBrainPAChats fontSize={chatFontSize} onThreadChange={setPaThreadOpen} openRequest={paOpenReq} />
           </div>
-          {/* Privacy note — one muted line at the bottom */}
-          <div className="px-3 py-1.5 border-t border-white/10 text-[10px] text-white/40 truncate" title="Chats clear on refresh — for your privacy. Want to keep one? Ask Yai about emailing you the transcript (from ecom@yaikh.com).">
-            🔒 Chats clear on refresh — ask Yai to email you a transcript.
-          </div>
+          {/* Privacy note — one muted line at the bottom of the PA list (hidden
+              in a PA thread so its composer lines up with the main one). */}
+          {!paThreadOpen && (
+            <div className="px-3 py-1.5 border-t border-white/10 text-[10px] text-white/40 truncate" title="Chats clear on refresh — for your privacy. Want to keep one? Ask Yai about emailing you the transcript (from ecom@yaikh.com).">
+              🔒 Chats clear on refresh — ask Yai to email you a transcript.
+            </div>
+          )}
         </div>
       </div>
 

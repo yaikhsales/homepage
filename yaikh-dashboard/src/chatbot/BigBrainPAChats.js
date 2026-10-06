@@ -167,11 +167,16 @@ const BigBrainPAChats = ({ fontSize = 14, onThreadChange, openRequest }) => {
           )}
           <div ref={endRef} />
         </div>
-        <div className="p-2 border-t border-white/10 flex items-center gap-1.5">
-          <input value={text} onChange={(e) => setText(e.target.value)} onKeyDown={(e) => e.key === "Enter" && send()} maxLength={500}
-            placeholder={`Message ${open.code}…`}
-            className="flex-1 min-w-0 text-sm bg-white/5 border border-white/15 rounded-full px-3 py-2 text-white placeholder-white/40 outline-none focus:border-emerald-400" />
-          <button onClick={send} className="w-9 h-9 rounded-full bg-emerald-500 text-white flex items-center justify-center hover:brightness-110 flex-shrink-0" title="Send"><Send size={15} /></button>
+        {/* Same size and spacing as the main Big Brain composer so the two line up. */}
+        <div className="flex-shrink-0 px-3 py-4 border-t border-white/10 bg-[#0f172a]">
+          <div className="flex items-end gap-2 px-3 py-3 rounded-[1.75rem] border border-white/15 bg-white/5 focus-within:ring-2 focus-within:ring-emerald-500 focus-within:border-transparent transition-all">
+            <textarea rows={6} value={text} onChange={(e) => setText(e.target.value)} maxLength={500}
+              onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } }}
+              placeholder={`Message ${open.code}… (Shift+Enter for new line)`}
+              className="flex-1 min-w-0 bg-transparent border-0 outline-none text-white placeholder:text-white/50 resize-none leading-6 py-2"
+              style={{ minHeight: "8.4rem", maxHeight: "14rem", fontSize: Math.max(14, fontSize - 1) }} />
+            <button onClick={send} className="w-9 h-9 mb-1 rounded-full bg-emerald-500 text-white flex items-center justify-center hover:brightness-110 flex-shrink-0" title="Send"><Send size={15} /></button>
+          </div>
         </div>
       </div>
     );
