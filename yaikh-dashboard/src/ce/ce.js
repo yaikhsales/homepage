@@ -63,7 +63,7 @@ const GROUPS = [
     items: [
       { view: "cpm", title: "CPM", sub: "Cost per minute — month by month, line by line, section by section", img: "cpm.png" },
       { view: "style-costing", title: "Style Costing", sub: "CM a piece from SAM × cost per minute, against FOB", img: "style-costing.png" },
-      { view: "cost-centers", title: "Cost centers ,Direct/Indirect Cost", sub: "Direct and indirect cost centres and the cost per minute", img: "center-direct-indirect-cost.png" },
+      { view: "cost-centers", title: "Cost Centres", sub: "Direct / indirect cost centres and the cost per minute", img: "center-direct-indirect-cost.png" },
     ],
   },
 ];
