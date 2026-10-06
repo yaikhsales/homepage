@@ -314,7 +314,7 @@ export const generateBossResponse = async (userMessage, chatHistory = [], visito
   if (Date.now() < m1SkipUntil) return null;
   try {
     const ctl = new AbortController();
-    const timer = setTimeout(() => ctl.abort(), 20000);  // boss can take longer (routes + merges)
+    const timer = setTimeout(() => ctl.abort(), 60000);  // local Qwen routes+merges slowly; proxy allows 55s, wait past it so we don't abort a valid answer and fall to Claude
     const r = await fetch(`${M1_LLM_URL.replace(/\/$/, "")}/boss/query`, {
       method: "POST",
       signal: ctl.signal,
