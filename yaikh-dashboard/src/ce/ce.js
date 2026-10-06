@@ -96,7 +96,7 @@ const CE = ({ onBack }) => {
                 h(
                   "div",
                   { className: "w-12 h-12 flex-shrink-0 rounded-lg bg-white p-1.5 flex items-center justify-center" },
-                  m.img ? h("img", { src: "/assets/icons/sub-icons/" + m.img, alt: "", className: "w-full h-full object-contain" }) : h(m.icon, { size: 26, className: "text-slate-700" })
+                  m.img ? h("img", { src: process.env.PUBLIC_URL + "/assets/icons/sub-icons/" + m.img, alt: "", className: "w-full h-full object-contain" }) : h(m.icon, { size: 26, className: "text-slate-700" })
                 ),
                 h("div", { className: "min-w-0" }, h("div", { className: "font-bold text-white text-sm leading-tight" }, translateModuleTitle(m.title)), h("div", { className: "text-[11px] text-slate-400 leading-tight mt-0.5" }, m.sub))
               )
