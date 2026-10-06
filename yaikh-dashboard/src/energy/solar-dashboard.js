@@ -10,11 +10,11 @@ const CO2_KG_PER_KWH = 0.55; // stated assumption for the avoided-emissions figu
 
 // stacked day bars: solar (amber) on grid (sky); projected days hatched lighter
 const Bars = ({ rows }) => {
-  const W = 760, H = 180, P = 8, n = rows.length || 1, bw = (W - 2 * P) / n;
+  const W = 760, H = 190, P = 8, AX = 16, n = rows.length || 1, bw = (W - 2 * P) / n;
   const top = Math.max(1, ...rows.map((r) => Number(r.kwh) || 0));
-  const Y = (v) => H - P - (v / top) * (H - 2 * P - 12);
+  const Y = (v) => H - P - AX - (v / top) * (H - 2 * P - AX - 4);
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ height: 180 }}>
+    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ height: 190 }}>
       {rows.map((r, i) => {
         const x = P + i * bw + 1, w = Math.max(2, bw - 2), g = Number(r.grid) || 0, s = Number(r.solar) || 0;
         const proj = r.basis !== "metered";
@@ -22,8 +22,8 @@ const Bars = ({ rows }) => {
           <g key={r.date} opacity={proj ? 0.45 : 1}>
             <title>{`${r.date} · ${num(r.kwh)} kWh · solar ${num(s)} (${pct(r.solar_pct)}) · grid ${num(g)} · ${r.basis}`}</title>
             <rect x={x} y={Y(g + s)} width={w} height={Math.max(0, Y(g) - Y(g + s))} fill="#fbbf24" />
-            <rect x={x} y={Y(g)} width={w} height={Math.max(0, H - P - Y(g))} fill="#38bdf8" />
-            {(i === 0 || i === n - 1 || i % 5 === 4) && <text x={x + w / 2} y={H - 0.5} textAnchor="middle" fontSize={8} fill="#64748b">{String(r.date).slice(0, 2)}</text>}
+            <rect x={x} y={Y(g)} width={w} height={Math.max(0, H - P - AX - Y(g))} fill="#38bdf8" />
+            {(i === 0 || i === n - 1 || (i + 1) % 5 === 0) && <text x={x + w / 2} y={H - P + 2} textAnchor="middle" fontSize={10} fill="#94a3b8">{i + 1}</text>}
           </g>
         );
       })}
@@ -50,7 +50,7 @@ const SolarDashboard = ({ onBack }) => {
   const saving = gridTariff && solarTariff ? m.solarToDate * (gridTariff - solarTariff) : null;
   const summary = [
     { label: "Capacity", value: capacity ? `${capacity} kWp` : "—" },
-    { label: "Solar today", value: m.today ? `${num(m.today.solar)} kWh · ${pct(m.today.solar_pct)}` : "—" },
+    { label: m.today ? `Last metered day (${String(m.today.date).slice(0, 6).trim()})` : "Last metered day", value: m.today ? `${num(m.today.solar)} kWh · ${pct(m.today.solar_pct)}` : "—" },
     { label: "Solar to date", value: `${num(m.solarToDate)} kWh · ${pct(m.shareToDate)}` },
     { label: "Projected month", value: `${num(m.solarMonth)} kWh · ${pct(m.shareMonth)}` },
     { label: "Days metered", value: m.metered.length },

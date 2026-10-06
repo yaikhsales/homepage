@@ -11,6 +11,8 @@ import { YQMS_CARDS } from "../data/yqmsCards";
 import { FC_CARDS } from "../data/fcCards";
 import { MRP_CARDS } from "../data/mrpCards";
 import { YPI_CARDS } from "../data/ypiCards";
+import { DIGITAL_AUDIT_CARDS, ENERGY_CARDS, WASTE_CARDS, AIR_CARDS } from "../data/csrCards";
+import { LIVE_DATA_VIEW } from "../AppLayout";
 
 // Sub-menu titles that belong to the Accounting PA. When the user
 // lands on one of these the floating bot bubble wears the PA's
@@ -75,6 +77,11 @@ const MODULE_ID_TO_CARDS = {
   "fc": FC_CARDS,
   "mrp": MRP_CARDS,
   "ypi": YPI_CARDS,
+  // CSR hubs
+  "digital-audit": DIGITAL_AUDIT_CARDS,
+  "energy": ENERGY_CARDS,
+  "waste": WASTE_CARDS,
+  "air": AIR_CARDS,
   "purchase-request": [
     { title: "Purchase Request",   icon: "FileText",    color: "bg-yellow-500 text-black", action: "/dashboard/purchase-requisition-form", isPurchaseRequest: true },
     { title: "Show Lists Request", icon: "Layout",      color: "bg-sky-400 text-black",    image: "assets/icons/sub-icons/show-list-request.png",  isPurchaseRequest: true },
@@ -759,9 +766,15 @@ const SubMenuView = () => {
   // (direct URL / refresh) so the Accounting PA still wakes up AND the
   // tile grid still shows.
   const title = stateTitle || MODULE_ID_TO_TITLE[moduleId] || "Submenu";
+  // the fallback gets the same "Live data" card the dashboard click adds (the simulated-factory screen)
+  const fallbackCards = (() => {
+    const base = MODULE_ID_TO_CARDS[moduleId] || [];
+    const live = LIVE_DATA_VIEW[moduleId];
+    return live && Array.isArray(base) && base.length && !base.some((c) => c.title === "Live data") ? [...base, { title: "Live data", icon: "Table2", color: "bg-sky-600 text-white", action: `/dashboard/${live}` }] : base;
+  })();
   const cards = (stateCards && (Array.isArray(stateCards) ? stateCards.length : true))
     ? stateCards
-    : (MODULE_ID_TO_CARDS[moduleId] || []);
+    : fallbackCards;
   const theme = "normal"; // Default theme
   const { translateModuleTitle } = useTranslation();
   const [selectedBotModule, setSelectedBotModule] = useState(null);

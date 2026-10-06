@@ -25,6 +25,7 @@ import { YQMS_CARDS } from "./data/yqmsCards";
 import { FC_CARDS } from "./data/fcCards";
 import { MRP_CARDS } from "./data/mrpCards";
 import { YPI_CARDS } from "./data/ypiCards";
+import { DIGITAL_AUDIT_CARDS, ENERGY_CARDS, WASTE_CARDS, AIR_CARDS } from "./data/csrCards";
 
 // Claude attribution badge — Anthropic brand orange sparkle + "Claude" label.
 // Shown next to every Yai mode name in the nav to make the runtime visible.
@@ -50,7 +51,7 @@ const ClaudeBadge = ({ size = "sm" }) => (
 // (DeptView). Each of these sub-menus gets one extra "Live data" card; nothing
 // existing is renamed or re-pointed, because the dedicated screens behind the
 // current tiles are the ones Gamini approved.
-const LIVE_DATA_VIEW = {
+export const LIVE_DATA_VIEW = {
   // HR
   yhr: "hr/attendance",
   "org-chart": "hr/org-chart",
@@ -337,28 +338,7 @@ const AppLayout = () => {
       } else if (demoType?.startsWith("SUBMENU")) {
         const cards =
           id === "digital-audit"
-            ? [
-                {
-                  title: "Audit Plan",
-                  icon: "Layout",
-                  color: "bg-indigo-500 text-white",
-                },
-                {
-                  title: "Compliance Certificate",
-                  icon: "FileCheck",
-                  color: "bg-emerald-500 text-white",
-                },
-                {
-                  title: "Digital Audit",
-                  icon: "MonitorPlay",
-                  color: "bg-blue-500 text-white",
-                },
-                {
-                  title: "Checklist 6s",
-                  icon: "CheckSquare",
-                  color: "bg-cyan-500 text-white",
-                },
-              ]
+            ? DIGITAL_AUDIT_CARDS
             : id === "iews"
               ? [
                   {
@@ -566,67 +546,11 @@ const AppLayout = () => {
                           },
                         ]
                       : demoType === "SUBMENU_ENERGY"
-                        ? [
-                            {
-                              title: "Meters",
-                              icon: "GaugeCircle",
-                              color: "bg-orange-500 text-white",
-                              action: "/dashboard/energy/meters",
-                            },
-                            {
-                              title: "Solar Dashboard",
-                              icon: "Sun",
-                              color: "bg-yellow-500 text-white",
-                              action: "/dashboard/energy/solar-dashboard",
-                            },
-                            {
-                              title: "Switch Board Ampere Load Monitoring",
-                              icon: "Activity",
-                              color: "bg-red-500 text-white",
-                              action: "/dashboard/energy/switch-board",
-                            },
-                            {
-                              title: "Energy Source",
-                              icon: "Power",
-                              color: "bg-green-500 text-white",
-                              action: "/dashboard/energy/energy-source",
-                            },
-                          ]
+                        ? ENERGY_CARDS
                         : demoType === "SUBMENU_WASTE"
-                          ? [
-                              {
-                                title: "Waste",
-                                icon: "Trash2",
-                                color: "bg-purple-500 text-white",
-                                action: "/dashboard/waste/analytics",
-                              },
-                              {
-                                title: "Boiler",
-                                icon: "Flame",
-                                color: "bg-orange-500 text-white",
-                                action: "/dashboard/waste/boiler",
-                              },
-                            ]
+                          ? WASTE_CARDS
                           : demoType === "SUBMENU_AIR"
-                            ? [
-                                {
-                                  title: "Temperature Humidity Sensor",
-                                  icon: "Thermometer",
-                                  color: "bg-red-500 text-white",
-                                  action: "/dashboard/air/temperature",
-                                },
-                                {
-                                  title: "Switch (Fan & Pump)",
-                                  icon: "ToggleRight",
-                                  color: "bg-white text-blue-600",
-                                },
-                                {
-                                  title: "Air Quality Detector",
-                                  icon: "Wind",
-                                  color: "bg-sky-500 text-white",
-                                  action: "/dashboard/air/quality",
-                                },
-                              ]
+                            ? AIR_CARDS
                             : demoType === "SUBMENU_WATER"
                               ? [
                                   {
