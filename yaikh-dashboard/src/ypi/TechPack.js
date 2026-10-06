@@ -6,7 +6,7 @@
 // Data: M1 /sim/view {module:"ypi", view:"techpack", pick} → {picker, order, pages[11], progress} plus the
 // section keys spec_sheet, colour_size_qty, measurement_spec (unit inches|cm, values ready-formatted),
 // buyer_sketch, prod_details, production_instruction, packing, process_sheet, thread_consumption,
-// languages. The construction callouts and the tech-team notes still come from the pages.
+// languages (buyer_sketch carries prepared + callouts). The tech-team notes still come from the pages.
 // Simulated factory, invented names only.
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -198,20 +198,28 @@ const Measure = ({ d, t }) => {
 const Buyer = ({ d, t }) => {
   const o = d.order || {};
   const B = d.buyer_sketch;
-  const sk = block(page(d, "sketch"), "sketch");
-  const cs = (sk && sk.callouts) || [];
   if (!B) return <Empty what="Buyer sketch not received yet." />;
+  const garments = B.garments || o.garments || [];
+  // the numbered construction points: buyer_sketch.callouts first (x / y in % on the front flat, numbered
+  // across both pieces of a set), else the old sketch page's
+  const old = block(page(d, "sketch"), "sketch");
+  const cs = (B.callouts && B.callouts.length ? B.callouts : (old && old.callouts) || []).map((c) => ({ ...c, garment: c.garment || (old && old.part) || garments[0] }));
+  const forGarment = (g) => cs.filter((c) => garments.length < 2 || !c.garment || c.garment === g);
   return (
     <>
-      <Band t={t} order={o.ref} doc="BUYER TECHNICAL SKETCH" date={B.date} />
+      <Band t={t} order={o.ref} doc="BUYER TECHNICAL SKETCH" date={B.prepared && B.prepared.date ? B.prepared.date + (B.prepared.by ? " · " + B.prepared.by : "") : B.date} />
       <div className="p-3 grid grid-cols-[minmax(0,3fr)_minmax(0,2fr)] gap-4">
         <div>
-          <div className="border border-slate-300 p-2 flex justify-center"><SketchSet text={(B.garments || o.garments || []).join(" + ") || o.style} size={(B.garments || o.garments || []).length > 1 ? 200 : 380} /></div>
-          {cs.length > 0 && <><H2>Construction callouts</H2><ol className="text-[11.5px] space-y-0.5 columns-2">{cs.map((c) => <li key={c.no} className="flex gap-2 break-inside-avoid"><span className="w-5 h-5 rounded-full border border-slate-700 text-[10px] font-black flex items-center justify-center flex-shrink-0">{c.no}</span><span><b>{c.part}</b> — {c.text}</span></li>)}</ol></>}
+          <div className="border border-slate-300 p-2 flex flex-wrap justify-center gap-3">
+            {(garments.length ? garments : [o.style]).map((g) => (
+              <div key={g} className="flex flex-col items-center"><Sketch text={g} size={garments.length > 1 ? 300 : 420} callouts={forGarment(g).map((c) => ({ no: c.no, x: c.x, y: c.y }))} />{garments.length > 1 && <div className="text-[11px] font-bold">{g}</div>}</div>
+            ))}
+          </div>
+          {cs.length > 0 && <><H2>Construction callouts</H2><ol className="text-[11.5px] space-y-0.5 columns-2">{cs.map((c) => <li key={c.no} className="flex gap-2 break-inside-avoid"><span className="w-5 h-5 rounded-full border border-slate-700 text-[10px] font-black flex items-center justify-center flex-shrink-0">{c.no}</span><span><b>{(garments.length > 1 && c.garment ? c.garment + " · " : "") + (c.part || "")}</b> — {c.text}</span></li>)}</ol></>}
         </div>
         <div>
           <H2>Style information</H2>
-          <KV items={[["Style ID", B.style_id], ["Description", B.short_desc], ["Department", B.department], ["Season", B.season], ["Size range", B.size_range], ["Retail price", B.retail_price], ["Garments", (B.garments || []).join(", ")]]} cols={1} />
+          <KV items={[["Style ID", B.style_id], ["Description", B.short_desc], ["Department", B.department], ["Season", B.season], ["Size range", B.size_range], ["Retail price", B.retail_price], ["Garments", garments.join(", ")]]} cols={1} />
           {(B.long_desc || []).length > 0 && <><H2>Description</H2><Bullets items={B.long_desc} /></>}
           {(B.colours || []).length > 0 && <><H2>Colours</H2><Tbl small cols={[["name", "Colour"], ["code", "Code"]]} rows={B.colours} /></>}
           {(B.thread_spec || []).length > 0 && <><H2>Thread</H2><Bullets items={B.thread_spec} /></>}
