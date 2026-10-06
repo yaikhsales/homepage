@@ -13,8 +13,10 @@ import { ArrowLeft, RefreshCw, Send, Paperclip, Users, Menu, X } from "lucide-re
 const API = (process.env.REACT_APP_M1_LLM_URL || "/api/m1").replace(/\/$/, "");
 const icom = (body) => fetch(`${API}/sim/view`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ module: "icom", ...body }) }).then((r) => r.json());
 
-/* Departments whose conversation context Gamini has dictated. */
-const ICOM_READY = new Set(["4dp", "fc", "qa", "hr", "ypi", "mrp", "ce"]);
+/* Departments whose conversation context Gamini has dictated.
+   All 14 enabled 2026-10-06 — every dept has topic data on the M1
+   (finance serves the accounting chat server-side). */
+const ICOM_READY = new Set(["4dp", "fc", "qa", "hr", "ypi", "mrp", "ce", "admin", "finance", "csr", "ytm", "shipping", "accounting", "social"]);
 /* PA slug → icom dept (Production PA talks in the FC warehouse chat). */
 export const ICOM_DEPT = { production: "fc" };
 /* QMS stages for the QA department chat (Gamini's YQMS columns). */
