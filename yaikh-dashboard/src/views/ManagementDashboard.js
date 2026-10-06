@@ -32,7 +32,8 @@ const DEPT = Object.fromEntries(DEPTS.map((d) => [d.slug, d]));
 const deptOf = (slug) => DEPT[slug] || { slug, label: String(slug || "").toUpperCase(), color: "#94a3b8", hub: null };
 
 const fmt = (v) => (typeof v === "number" ? (Math.abs(v) >= 1000 ? Math.round(v).toLocaleString() : String(v)) : String(v ?? "—"));
-const todayISO = () => new Date().toISOString().slice(0, 10);
+// Local calendar date (not UTC — at 04:35 in Phnom Penh UTC is still yesterday).
+const localISO = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; };
 
 function MiniChart({ chart, color }) {
   if (!chart || !Array.isArray(chart.y) || chart.y.length < 2) return null;
@@ -63,7 +64,8 @@ const ManagementDashboard = ({ onBack }) => {
   const alerts = useMemo(() => (data?.alerts || []).slice().sort((a, b) => (a.severity === "red" ? 0 : 1) - (b.severity === "red" ? 0 : 1)), [data]);
   const reminders = data?.reminders || [];
   const forecasts = data?.forecasts || [];
-  const today = todayISO();
+  // the factory's own date from the feed (as_of carries +07:00), else this device's local date
+  const today = (data?.as_of && /^\d{4}-\d{2}-\d{2}/.test(data.as_of)) ? data.as_of.slice(0, 10) : localISO();
 
   const byDept = useMemo(() => {
     const m = {};
