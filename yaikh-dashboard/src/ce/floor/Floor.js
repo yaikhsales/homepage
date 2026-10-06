@@ -30,31 +30,35 @@ const FIX = { loading: "LOAD", roving_qc: "QC", eol_checker: "EOL", line_leader:
 const fixTag = (f) => FIX[f.kind] || FIX[String(f.kind || "").replace(/_\d+$/, "")] || String(f.kind || "").slice(0, 4).toUpperCase();
 const CSS = "@keyframes floor-flick { 0%,100% { opacity: 1; } 50% { opacity: .35; } } .floor-live { animation: floor-flick 1.1s ease-in-out infinite; } .floor-band::-webkit-scrollbar { height: 6px; } .floor-band::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }";
 
-/* ── a line in the top band: its machines as big numbered dots, the drawing fitted to the card ────── */
-const CARD_W = 250, DRAW_H = 268, PAD = 12;
+/* ── a line in the top band: its machines as 50 px numbered dots (Gamini: "why so small, make it
+   ×100%" → 50 px, same for every layout; DOT_PX). The card is sized around the dots: the scale comes from
+   the closest pair of machines so no two dots touch, and the card takes whatever width and height
+   the line then needs — the band scrolls sideways across the lines. ───────────────────────────── */
+const CARD_W = 250, PAD = 12, DOT_PX = 50, DOT_GAP = 4;
 const MiniLine = ({ l, on, onClick }) => {
   const live = /running/i.test(l.state || "");
   const ms = l.machines || [];
   const xs = ms.map((m) => m.x), ys = ms.map((m) => m.y);
-  const bx0 = Math.min(...xs, 0), bx1 = Math.max(...xs, 10), by0 = Math.min(...ys, 0), by1 = Math.max(...ys, 10);
+  const bx0 = xs.length ? Math.min(...xs) : 0, bx1 = xs.length ? Math.max(...xs) : 10, by0 = ys.length ? Math.min(...ys) : 0, by1 = ys.length ? Math.max(...ys) : 10; // the machines' own box, no empty margin
   const bw = Math.max(bx1 - bx0, 1), bh = Math.max(by1 - by0, 1);
-  const k = Math.min((CARD_W - 2 * PAD) / bw, (DRAW_H - 2 * PAD) / bh); // px per data unit, fitting the box
-  const ox = (CARD_W - bw * k) / 2 - bx0 * k, oy = (DRAW_H - bh * k) / 2 - by0 * k;
-  // dot size from the closest pair, so dots never overlap: big with the number inside when there is room
+  // closest pair of machines in data units → the scale that puts DOT + DOT_GAP px between them
   let pitch = 1e9;
-  for (let i = 0; i < ms.length; i++) for (let j = i + 1; j < ms.length; j++) { const d = Math.hypot((ms[i].x - ms[j].x) * k, (ms[i].y - ms[j].y) * k); if (d < pitch) pitch = d; }
-  const size = Math.max(8, Math.min(18, Math.floor(pitch) - 2));
+  for (let i = 0; i < ms.length; i++) for (let j = i + 1; j < ms.length; j++) { const d = Math.hypot(ms[i].x - ms[j].x, ms[i].y - ms[j].y); if (d < pitch) pitch = d; }
+  const k = pitch < 1e8 ? (DOT_PX + DOT_GAP) / pitch : 4; // px per data unit
+  const W = Math.max(CARD_W, Math.ceil(bw * k) + 2 * PAD + DOT_PX), H = Math.ceil(bh * k) + 2 * PAD + DOT_PX;
+  const ox = (W - bw * k) / 2 - bx0 * k, oy = (H - bh * k) / 2 - by0 * k;
+  const size = DOT_PX; // off-line dots the same
   return (
-    <button onClick={onClick} title={`${l.line} · ${l.order || ""} ${l.garment || ""} · ${l.layout_name || l.layout} · ${l.state}${l.kpi && l.kpi.text ? " · " + l.kpi.text : ""}`} className={`flex-shrink-0 rounded-xl border p-2 text-left transition-colors ${on ? "border-sky-400 bg-sky-500/10 ring-1 ring-sky-400" : "border-slate-700 bg-slate-800/60 hover:border-slate-500"}`} style={{ width: CARD_W + 18 }}>
+    <button onClick={onClick} title={`${l.line} · ${l.order || ""} ${l.garment || ""} · ${l.layout_name || l.layout} · ${l.state}${l.kpi && l.kpi.text ? " · " + l.kpi.text : ""}`} className={`flex-shrink-0 rounded-xl border p-2 text-left transition-colors ${on ? "border-sky-400 bg-sky-500/10 ring-1 ring-sky-400" : "border-slate-700 bg-slate-800/60 hover:border-slate-500"}`} style={{ width: W + 18 }}>
       <div className="flex items-center gap-1.5">
         <span className="font-black text-white text-sm">{l.line}</span>
         <span className={`inline-block w-2 h-2 rounded-full ${l.status === "red" ? "bg-rose-500" : l.status === "orange" || l.status === "amber" ? "bg-amber-400" : l.status === "green" ? "bg-emerald-400" : "bg-slate-500"}`} />
         <span className="text-[10px] text-slate-400 truncate">{l.order ? `${l.order} ${l.garment || ""}` : ""}</span>
         <span className="ml-auto text-[10px] text-slate-500 whitespace-nowrap">{live ? "live" : (l.state || "").replace("starts ", "→ ")}</span>
       </div>
-      <div className="relative mt-1 rounded-lg bg-slate-900/50" style={{ width: CARD_W, height: DRAW_H }}>
+      <div className="relative mt-1 rounded-lg bg-slate-900/50" style={{ width: W, height: H }}>
         {ms.map((m) => (
-          <div key={m.no} className={`absolute rounded-full flex items-center justify-center font-black text-slate-950 ${live && m.status !== "green" ? "floor-live" : ""}`} style={{ left: m.x * k + ox - size / 2, top: m.y * k + oy - size / 2, width: size, height: size, background: DOT[m.status] || DOT.idle, fontSize: size >= 11 ? Math.round(size * 0.55) : 0 }} title={`machine ${m.no} · ${m.status}`}>{size >= 11 ? m.no : ""}</div>
+          <div key={m.no} className={`absolute rounded-full flex items-center justify-center font-black text-slate-950 ${live && m.status !== "green" ? "floor-live" : ""}`} style={{ left: m.x * k + ox - size / 2, top: m.y * k + oy - size / 2, width: size, height: size, background: DOT[m.status] || DOT.idle, fontSize: Math.round(size * 0.46), lineHeight: 1 }} title={`machine ${m.no} · ${m.status}`}>{m.no}</div>
         ))}
       </div>
       <div className="mt-1 flex items-center gap-1.5 text-[10px]">
@@ -252,7 +256,7 @@ const Floor = ({ lens, label, onBack, renderDetail, renderStation, stationReason
       {error && <div className="mb-2 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-200 px-3 py-2 text-sm">{error}</div>}
 
       {/* TOP — every line at a glance */}
-      <div className="floor-band flex gap-1.5 overflow-x-auto pb-1.5 mb-3">
+      <div className="floor-band flex items-start gap-1.5 overflow-x-auto pb-1.5 mb-3">
         {shown.map((l) => <MiniLine key={l.line} l={l} on={l.line === selected} onClick={() => setLine(l.line)} />)}
         {shown.length === 0 && <div className="text-xs text-slate-500 py-4">{loading ? "Loading the floor…" : "No lines."}</div>}
       </div>
