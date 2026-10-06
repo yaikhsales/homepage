@@ -140,6 +140,18 @@ export default function BigBrainPanel({ page = "this page", pa = "all", onClose,
   const reminders = skills?.reminders || [];
   const forecasts = skills?.forecasts || [];
 
+  // pa="all" aggregates every department, so the lists can be long — keep the
+  // compact panel readable: red alerts first, cap each tab, show "+N more".
+  const MAX = 12;
+  const sevRank = (s) => (s === "red" ? 0 : s === "amber" ? 1 : 2);
+  const alertsSorted = [...alerts].sort((a, b) => sevRank(a.severity) - sevRank(b.severity));
+  const alertsShown = alertsSorted.slice(0, MAX);
+  const remindersShown = reminders.slice(0, MAX);
+  const forecastsShown = forecasts.slice(0, MAX);
+  const more = (n) => (n > MAX ? (
+    <div className="text-slate-500 text-xs text-center pt-1">+ {n - MAX} more</div>
+  ) : null);
+
   const TabBtn = ({ id, label, count }) => (
     <button
       onClick={() => setTab(id)}
@@ -184,17 +196,17 @@ export default function BigBrainPanel({ page = "this page", pa = "all", onClose,
       {/* Body */}
       <div className="flex-1 overflow-y-auto px-3 py-3 space-y-2" style={{ minHeight: 200 }}>
         {tab === "alerts" && (
-          alerts.length ? alerts.map((a) => (
+          alerts.length ? (<>{alertsShown.map((a) => (
             <button key={a.id} onClick={() => go(a.link)} className="w-full text-left flex items-start gap-2 p-2 rounded-xl bg-slate-800 hover:bg-slate-700 transition">
               <span className={`mt-1 w-2.5 h-2.5 rounded-full flex-shrink-0 ${a.severity === "red" ? "bg-rose-500" : "bg-amber-400"}`} />
               <span className="flex-1 text-sm text-slate-100 leading-snug">{a.label}</span>
               {a.dept && <span className="text-[10px] uppercase text-slate-400 mt-0.5">{a.dept}</span>}
             </button>
-          )) : <div className="text-slate-400 text-sm text-center py-6">{t.noAlerts}</div>
+          ))}{more(alerts.length)}</>) : <div className="text-slate-400 text-sm text-center py-6">{t.noAlerts}</div>
         )}
 
         {tab === "reminders" && (
-          reminders.length ? reminders.map((r) => (
+          reminders.length ? (<>{remindersShown.map((r) => (
             <button key={r.id} onClick={() => go(r.link)} className="w-full text-left flex items-start gap-2 p-2 rounded-xl bg-slate-800 hover:bg-slate-700 transition">
               <span className="mt-0.5">{REMINDER_ICON[r.type] || "•"}</span>
               <span className="flex-1 min-w-0">
@@ -204,11 +216,11 @@ export default function BigBrainPanel({ page = "this page", pa = "all", onClose,
                 </span>
               </span>
             </button>
-          )) : <div className="text-slate-400 text-sm text-center py-6">{t.noReminders}</div>
+          ))}{more(reminders.length)}</>) : <div className="text-slate-400 text-sm text-center py-6">{t.noReminders}</div>
         )}
 
         {tab === "forecasts" && (
-          forecasts.length ? forecasts.map((f) => (
+          forecasts.length ? (<>{forecastsShown.map((f) => (
             <button key={f.id} onClick={() => go(f.link)} className="w-full text-left p-2 rounded-xl bg-slate-800 hover:bg-slate-700 transition">
               <div className="flex items-baseline gap-2">
                 <span className="text-sm font-semibold text-slate-100">{f.metric}</span>
@@ -218,7 +230,7 @@ export default function BigBrainPanel({ page = "this page", pa = "all", onClose,
               {f.text && <div className="text-xs text-slate-300 mt-0.5 leading-snug">{f.text}</div>}
               <MiniChart chart={f.chart} />
             </button>
-          )) : <div className="text-slate-400 text-sm text-center py-6">{t.noForecasts}</div>
+          ))}{more(forecasts.length)}</>) : <div className="text-slate-400 text-sm text-center py-6">{t.noForecasts}</div>
         )}
 
         {tab === "answers" && (
