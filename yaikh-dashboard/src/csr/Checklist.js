@@ -33,7 +33,7 @@ const Daily = () => {
             penalty: (v) => v ? <Chip tone="red">{typeof v === "string" ? v : "penalty"}</Chip> : <Chip tone="green">none</Chip>,
           }} />
         </Panel>}
-        <div className="grid gap-3 md:grid-cols-2 items-start">
+        <div className="csr-cols grid gap-3 md:grid-cols-2 items-start">
           <Panel title={`Global factory KPI — ${kpi.month || ""}`}>
             <div className="flex items-end gap-3"><div className="text-3xl font-black text-white tabular-nums">{pct(kpi.global_pct)}</div><div className="text-[11px] text-slate-400 pb-1">last month {pct(kpi.last_month_pct)} · <span className={kpi.change >= 0 ? "text-emerald-300" : "text-rose-300"}>{kpi.change >= 0 ? "+" : ""}{num(kpi.change, 1)}</span></div></div>
             <div className="mt-2"><Bar v={kpi.global_pct} h={8} /></div>
@@ -72,7 +72,7 @@ const EightS = () => {
   return (
     <>
       <div className="mb-2"><Summary items={d.summary} info={d.subtitle} /></div>
-      <div className="grid gap-3 md:grid-cols-2 mb-3">
+      <div className="csr-cols grid gap-3 md:grid-cols-2 mb-3">
         <Panel title="Scoring — 5 criteria, 8 points each (/40)"><div className="flex flex-wrap gap-1.5">{crit.map((c) => <Chip key={c.key} tone="grey">{c.label} /{c.max}</Chip>)}</div><div className="mt-2 text-xs text-slate-400 flex flex-wrap items-center gap-1.5">{["Passed", "Acceptable", "Fixing", "Pending"].map((k) => <Chip key={k} tone={k === "Passed" ? "green" : k === "Acceptable" ? "amber" : k === "Fixing" ? "red" : "grey"} onClick={() => setF({ ...f, status: f.status === k ? "" : k })} on={f.status === k}>{k}{k === "Passed" && PASS !== null ? ` ≥ ${PASS}` : k === "Acceptable" && PASS !== null && FIX !== null ? ` ${FIX}–${PASS - 0.1 > FIX ? (PASS - 0.1).toFixed(1).replace(/\.0$/, "") : FIX}` : k === "Fixing" && FIX !== null ? ` < ${FIX}` : k === "Pending" ? " · not yet scored" : ""}</Chip>)}</div></Panel>
         <Panel title={`Weekly completion — ${d.month || ""}`}>{(d.weekly_completion || []).map((w) => <div key={w.week} className="flex items-center gap-2 text-[11px] mb-1"><span className="w-7 font-bold text-white">{w.week}</span><div className="flex-1"><Bar v={w.completion_pct} /></div><span className="w-24 text-right tabular-nums text-slate-400">{num(w.evaluated)}/{num(w.locations)} · {w.avg_40 === null ? "—" : num(w.avg_40, 1)}</span></div>)}</Panel>
       </div>

@@ -28,7 +28,7 @@ const Flow = ({ stages }) => (
 );
 
 const Details = ({ r }) => (
-  <div className="grid gap-3 md:grid-cols-3 text-xs">
+  <div className="csr-cols grid gap-3 md:grid-cols-3 text-xs">
     <Panel title="The audit">
       <div className="space-y-0.5 text-slate-300">
         <div><span className="text-slate-500">Programme</span> {r.programme}</div>

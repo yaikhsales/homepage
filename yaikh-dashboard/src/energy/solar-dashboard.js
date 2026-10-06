@@ -57,7 +57,7 @@ const SolarDashboard = ({ onBack }) => {
   ];
   return (
     <Screen onBack={onBack} heading="Solar dashboard" sub={d.subtitle} summary={summary} loading={loading} error={error} onReload={reload}>
-      <div className="grid gap-3 lg:grid-cols-[1fr,20rem] items-start mb-3">
+      <div className="csr-cols grid gap-3 lg:grid-cols-[1fr,20rem] items-start mb-3">
         <Panel title={`Solar on grid — every day of the month`} right={<span><Chip tone="amber">solar</Chip> <Chip tone="sky">grid</Chip> <span className="ml-1">faded = projected</span></span>}>
           {rows.length ? <Bars rows={rows} /> : <div className="text-sm text-slate-400 p-3">{error ? <span className="text-amber-200">{error}</span> : loading ? "Loading…" : "No days."}</div>}
         </Panel>

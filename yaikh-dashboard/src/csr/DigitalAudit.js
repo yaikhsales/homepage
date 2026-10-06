@@ -68,7 +68,7 @@ const QuestionBank = ({ goFinding }) => {
         <div className="inline-flex rounded-lg border border-slate-700 overflow-hidden text-xs">{[["", "All"], ["green", "Green"], ["red", "Red"]].map(([k, l]) => <button key={k} onClick={() => setStatus(k)} className={`px-2.5 py-1 font-bold ${status === k ? (k === "red" ? "bg-rose-400 text-slate-900" : k === "green" ? "bg-emerald-400 text-slate-900" : "bg-white text-slate-900") : "bg-slate-800 text-slate-300 hover:bg-slate-700"}`}>{l}</button>)}</div>
         <span className="ml-auto"><Info text={d.subtitle} /></span>
       </div>
-      <div className="grid gap-3 lg:grid-cols-[18rem,1fr] items-start">
+      <div className="csr-cols grid gap-3 lg:grid-cols-[18rem,1fr] items-start">
         <div>
           <Tree tree={d.tree} sel={sel} onSel={setSel} />
           {(d.by_factory || []).length > 0 && <Panel title="Compliance by factory" className="mt-3">

@@ -12,14 +12,14 @@ export const fmt = (k, v) => (v === null || v === undefined ? "—" : k === "ch2
 export const overSet = (over) => new Set(String(over || "").split(/[,;]\s*/).filter(Boolean).map((s) => s.toLowerCase()));
 const isOver = (lim, k, v, over) => (lim && lim[k] && typeof v === "number" && v > lim[k].limit) || overSet(over).has(String((lim && lim[k] && lim[k].name) || k).toLowerCase());
 
-const AirSensors = ({ onBack }) => {
+const AirSensors = ({ onBack, kind }) => {
   const navigate = useNavigate();
-  const [f, setF] = useState({ factory: "", kind: "", status: "" });
+  const [f, setF] = useState({ factory: "", kind: kind || "", status: "" });
   const { d, error, loading, reload } = useView({ view: "air-sensors", factory: f.factory || undefined, kind: f.kind || undefined, status: f.status || undefined });
   const lim = d.limits || {};
   const rows = d.rows || [];
   return (
-    <Screen onBack={onBack} heading="Air sensors" sub={d.subtitle} summary={d.summary} loading={loading} error={error} onReload={reload}>
+    <Screen onBack={onBack} heading={kind === "th" ? "Temperature / humidity sensors" : "Air sensors"} sub={d.subtitle} summary={d.summary} loading={loading} error={error} onReload={reload}>
       <div className="flex flex-wrap items-center gap-2 mb-3">
         <Select label="Factory" value={f.factory} onChange={(v) => setF({ ...f, factory: v })} options={(d.filters || {}).factory} />
         <Select label="Kind" value={f.kind} onChange={(v) => setF({ ...f, kind: v })} options={(d.filters || {}).kind} />

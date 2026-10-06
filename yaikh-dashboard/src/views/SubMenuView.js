@@ -492,6 +492,8 @@ const renderCard = (
                 navigate("/dashboard/air/temperature");
               } else if (card.title === "Air Quality Detector") {
                 navigate("/dashboard/air/quality");
+              } else if (card.title === "Switch (Fan & Pump)") {
+                navigate("/dashboard/air/switch");
               } else if (card.title === "Request Worker Form") {
                 navigate("/dashboard/temp-worker-request/form");
               } else if (card.title === "Request Worker List") {

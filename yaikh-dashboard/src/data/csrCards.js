@@ -73,6 +73,7 @@ export const AIR_CARDS = [
       title: "Switch (Fan & Pump)",
       icon: "ToggleRight",
       color: "bg-white text-blue-600",
+      action: "/dashboard/air/switch",
     },
     {
       title: "Air Quality Detector",

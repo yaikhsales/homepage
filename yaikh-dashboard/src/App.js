@@ -70,21 +70,21 @@ import ShowListRequest from "./purchase-request/show-list-request";
 import MasterList from "./purchase-request/master-list";
 import MyConfirmReceived from "./purchase-request/my-confirm-received";
 import PurchaseRequisitionForm from "./purchase-request/purchase-requisition-form";
-import Meters from "./energy/meters";
-import SwitchBoard from "./energy/switch-board";
-import EnergySource from "./energy/energy-source";
+import EnergyMeters from "./csr/EnergyMeters";
+import SwitchBoards from "./csr/SwitchBoards";
+import EnergySource from "./csr/EnergySource";
+import WaterMeters from "./csr/WaterMeters";
+import WasteDaily from "./csr/WasteDaily";
+import BoilerAsh from "./csr/BoilerAsh";
+import Chemical from "./csr/Chemical";
+import AirSwitches from "./csr/AirSwitches";
 import SolarDashboard from "./energy/solar-dashboard";
-import Temperature from "./air/temperature";
 import RequestWorkerForm from "./temp-worker-request/request-worker-form";
 import RequestWorkerList from "./temp-worker-request/request-worker-list";
 import BillRecord from "./bill-record/bill-record";
 import Water from "./water/index";
-import WaterIn from "./water/in";
-import WaterOut from "./water/out";
 import GatePass from "./gatepass/gatepass";
 import Visitor from "./gatepass/visitor";
-import Waste from "./waste/waste";
-import Boiler from "./waste/boiler";
 import MeetingRoom from "./meeting-room/meeting-room";
 import CarBooking from "./car-booking/car-booking";
 import FaceScan from "./cctv/face-scan";
@@ -160,11 +160,8 @@ export default function App() {
             element={<ModuleFrame><TrainingGridView onBack={handleBack} /></ModuleFrame>}
           />
           <Route path="sensors" element={<AirSensors onBack={handleBack} />} />
-          <Route
-            path="waste/analytics"
-            element={<ModuleFrame><Waste onBack={handleBack} /></ModuleFrame>}
-          />
-          <Route path="waste/boiler" element={<ModuleFrame><Boiler onBack={handleBack} /></ModuleFrame>} />
+          <Route path="waste/analytics" element={<WasteDaily onBack={handleBack} />} />
+          <Route path="waste/boiler" element={<BoilerAsh onBack={handleBack} />} />
           <Route path="ytm-shop" element={<ModuleFrame><YTMShop onBack={handleBack} /></ModuleFrame>} />
           <Route path="ytm" element={<ModuleFrame><YTM onBack={handleBack} /></ModuleFrame>} />
           <Route path="y-shop" element={<ModuleFrame><YShop onBack={handleBack} /></ModuleFrame>} />
@@ -327,23 +324,12 @@ export default function App() {
             path="org-chart-master"
             element={<OrgChart onBack={handleBack} />}
           />
-          <Route
-            path="energy/meters"
-            element={<ModuleFrame><Meters onBack={handleBack} /></ModuleFrame>}
-          />
-          <Route
-            path="energy/switch-board"
-            element={<ModuleFrame><SwitchBoard onBack={handleBack} /></ModuleFrame>}
-          />
-          <Route
-            path="energy/energy-source"
-            element={<ModuleFrame><EnergySource onBack={handleBack} /></ModuleFrame>}
-          />
+          <Route path="energy/meters" element={<EnergyMeters onBack={handleBack} />} />
+          <Route path="energy/switch-board" element={<SwitchBoards onBack={handleBack} />} />
+          <Route path="energy/energy-source" element={<EnergySource onBack={handleBack} />} />
           <Route path="energy/solar-dashboard" element={<SolarDashboard onBack={handleBack} />} />
-          <Route
-            path="air/temperature"
-            element={<ModuleFrame><Temperature onBack={handleBack} /></ModuleFrame>}
-          />
+          <Route path="air/temperature" element={<AirSensors onBack={handleBack} kind="th" />} />
+          <Route path="air/switch" element={<AirSwitches onBack={handleBack} />} />
           <Route path="air/quality" element={<AirSensors onBack={handleBack} />} />
           <Route path="air/series/:device" element={<AirSeries />} />
           <Route
@@ -359,8 +345,9 @@ export default function App() {
             element={<ModuleFrame><BillRecord onBack={handleBack} /></ModuleFrame>}
           />
           <Route path="water" element={<ModuleFrame><Water onBack={handleBack} /></ModuleFrame>} />
-          <Route path="water/in" element={<ModuleFrame><WaterIn onBack={handleBack} /></ModuleFrame>} />
-          <Route path="water/out" element={<ModuleFrame><WaterOut onBack={handleBack} /></ModuleFrame>} />
+          <Route path="water/in" element={<WaterMeters onBack={handleBack} direction="in" />} />
+          <Route path="water/out" element={<WaterMeters onBack={handleBack} direction="out" />} />
+          <Route path="chemical" element={<Chemical onBack={handleBack} />} />
           <Route path="gatepass" element={<ModuleFrame><GatePass onBack={handleBack} /></ModuleFrame>} />
           <Route
             path="gatepass/visitor"

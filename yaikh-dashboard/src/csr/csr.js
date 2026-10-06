@@ -4,7 +4,7 @@
 // Gamini's UI rules: one compact header line carrying the figures (no stat-card rows repeating them), the
 // long explanation behind a small "i", tables that reflow to the width left beside the PA panel, one line
 // per cell, "Loading…" / an error with Retry — never an empty state for a pending or failed call.
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, RefreshCw, Info as InfoIcon } from "lucide-react";
 import { NavCover, useScreenTop } from "../components/ScreenTop";
@@ -67,7 +67,7 @@ export const Tabs = ({ tabs, value, onChange }) => <div className="inline-flex r
 // one line in a cell, the whole text on hover
 export const Clip = ({ v, cls }) => (v === null || v === undefined || v === "" ? <span className="text-slate-600">—</span> : <span className={`block truncate ${cls || ""}`} title={typeof v === "string" ? v : undefined}>{v}</span>);
 // the key figures as one text line (the same look as the header's)
-export const Summary = ({ items, info }) => <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-sm text-slate-400">{(items || []).map((x) => <span key={x.label} className="whitespace-nowrap">{x.label} <b className="text-white tabular-nums">{num(x.value)}</b></span>)}{info && <Info text={info} />}</div>;
+export const Summary = ({ items, info }) => <div className="csr-summary flex flex-wrap items-center gap-x-3 gap-y-0.5 text-sm text-slate-400">{(items || []).map((x) => <span key={x.label} className="whitespace-nowrap">{x.label} <b className="text-white tabular-nums">{num(x.value)}</b></span>)}{info && <Info text={info} />}</div>;
 // the state of a call: pending → "Loading…", failed → the error with Retry; never an empty state for those
 export const State = ({ loading, error, onRetry, empty, colSpan }) => {
   const body = error ? <span className="text-amber-200">{error} {onRetry && <button onClick={onRetry} className="ml-1 rounded border border-amber-400/50 px-2 py-0.5 text-xs font-bold text-amber-200 hover:bg-amber-500/10">Retry</button>}</span> : loading ? <span className="text-slate-400">Loading…</span> : <span className="text-slate-500">{empty || "No rows match."}</span>;
@@ -129,13 +129,33 @@ export const cell = (v, key) => {
 
 // the screen frame every CSR screen uses: below the nav, back arrow, title with the "i", the figures on the
 // same line, refresh; the content keeps clear of the PA panel AND of its pin / minus buttons when it is open
+// below ~900 px of CONTENT width (a narrow window, or the PA panel open) the multi-column grids
+// (.csr-cols) stack full width with the chart first (.csr-first) and the header figures become chips
+const NARROW = 900;
+const useNarrow = () => {
+  const ref = useRef(null);
+  const [narrow, setNarrow] = useState(false);
+  useEffect(() => {
+    const el = ref.current; if (!el || typeof ResizeObserver === "undefined") return;
+    const ro = new ResizeObserver(() => setNarrow(el.clientWidth - 24 < NARROW));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+  return [ref, narrow];
+};
 export const Screen = ({ onBack, heading, sub, summary, loading, error, onReload, children }) => {
   const navigate = useNavigate();
   const [topRef, topPad] = useScreenTop();
+  const [boxRef, narrow] = useNarrow();
   const back = () => (onBack ? onBack() : navigate(-1));
   return (
-    <div ref={topRef} style={{ paddingTop: topPad }} className="yai-pa-aware csr-screen min-h-screen bg-slate-900 text-slate-200 px-3 md:px-5 pb-8 font-sans">
-      <style>{`body.yai-pa-open .yai-pa-aware.csr-screen { padding-right: 484px; }`}</style>
+    <div ref={topRef} style={{ paddingTop: topPad }} className={`yai-pa-aware csr-screen min-h-screen bg-slate-900 text-slate-200 px-3 md:px-5 pb-8 font-sans ${narrow ? "narrow" : ""}`}>
+      <style>{`body.yai-pa-open .yai-pa-aware.csr-screen { padding-right: 484px; }
+.csr-screen.narrow .csr-cols { grid-template-columns: 1fr !important; }
+.csr-screen.narrow .csr-first { order: -1; }
+.csr-screen.narrow .csr-summary > span { border: 1px solid #334155; border-radius: 9999px; padding: 0 7px; font-size: 11px; line-height: 18px; background: rgba(15, 23, 42, 0.6); }
+.csr-screen.narrow .csr-summary { gap: 4px; }`}</style>
+      <div ref={boxRef} className="w-full" />
       <NavCover />
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-2">
         <button onClick={back} className="p-1 -ml-1 hover:bg-slate-700 rounded-full transition-colors text-slate-400 hover:text-white" aria-label="Back"><ArrowLeft size={18} /></button>
