@@ -8,6 +8,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ArrowLeft, RefreshCw, Search, CheckCircle2, XCircle, Scissors, LayoutGrid, Package, ClipboardCheck, BookOpen } from "lucide-react";
+import { NavCover, useScreenTop, Figures } from "../components/ScreenTop";
 
 const API = (process.env.REACT_APP_M1_LLM_URL || "/api/m1").replace(/\/$/, "");
 const h = React.createElement;
@@ -36,10 +37,10 @@ const TABS = [
 export const YpiTabs = ({ view }) => {
   const navigate = useNavigate();
   return (
-    <div className="flex items-center gap-1 bg-slate-800 border border-slate-700 rounded-xl px-1 py-1 flex-wrap">
+    <div className="flex items-center gap-0.5 bg-slate-800 border border-slate-700 rounded-lg p-0.5 flex-wrap">
       {TABS.map(([v, label, Icon]) => (
-        <button key={v} onClick={() => navigate(`/dashboard/ypi/${v}`)} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-bold whitespace-nowrap ${view === v ? "bg-emerald-500/20 text-emerald-300" : "text-slate-400 hover:bg-slate-700 hover:text-white"}`}>
-          <Icon size={15} />{label}
+        <button key={v} onClick={() => navigate(`/dashboard/ypi/${v}`)} className={`flex items-center gap-1 px-2 py-1 rounded-md text-xs font-bold whitespace-nowrap ${view === v ? "bg-emerald-500/20 text-emerald-300" : "text-slate-400 hover:bg-slate-700 hover:text-white"}`}>
+          <Icon size={13} className="hidden 2xl:block" />{label}
         </button>
       ))}
     </div>
@@ -142,16 +143,9 @@ const Picture = ({ k }) => {
   return h("svg", { width: 56, height: 36, viewBox: "0 0 56 36", role: "img", "aria-label": String(k), className: "block rounded" }, h("title", null, String(k)), draw());
 };
 
-const Tiles = ({ items }) => (
-  <div className="flex flex-wrap gap-2 mb-4">
-    {(items || []).map((x) => (
-      <div key={x.label} className="rounded-xl border border-slate-700 bg-slate-800/60 px-3 py-1.5 min-w-[140px]">
-        <div className="text-[10px] uppercase tracking-wider text-slate-400">{x.label}</div>
-        <div className={`text-xl font-black tabular-nums leading-tight ${x.value === "FAIL" ? "text-rose-300" : "text-white"}`}>{num(x.value)}</div>
-      </div>
-    ))}
-  </div>
-);
+// Key figures as inline "label value" spans, for the slim order line (FAIL in red).
+const figTone = (x) => (x.value === "FAIL" ? "text-rose-300" : "text-white");
+const FigSpans = ({ items }) => (items || []).map((x) => <span key={x.label} className="whitespace-nowrap">{x.label} <b className={`tabular-nums text-sm ${figTone(x)}`}>{num(x.value)}</b></span>);
 
 // The six steps as connected dots: done green, in progress blue, late red and pulsing, to come grey.
 const DOT = { done: "bg-emerald-400 border-emerald-300", "in progress": "bg-sky-400 border-sky-300", late: "bg-rose-500 border-rose-300 animate-pulse", "to come": "bg-slate-600 border-slate-500" };
@@ -368,6 +362,7 @@ const MaterialPortal = ({ onBack, view: fixedView = "material-portal" }) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState("");
+  const [topRef, topPad] = useScreenTop();
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -396,32 +391,28 @@ const MaterialPortal = ({ onBack, view: fixedView = "material-portal" }) => {
   const o = mine && mine.order;
 
   return (
-    <div className="yai-pa-aware min-h-screen bg-slate-900 text-slate-200 px-4 md:px-6 pb-6 pt-28 font-sans">
+    <div ref={topRef} style={{ paddingTop: topPad }} className="yai-pa-aware min-h-screen bg-slate-900 text-slate-200 px-4 md:px-6 pb-6 font-sans">
       <style>{`body.yai-pa-open .yai-pa-aware { padding-right: 436px; }`}</style>
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-        <div className="flex items-center gap-3 min-w-0">
-          <button onClick={onBack || (() => navigate("/"))} className="p-2 hover:bg-slate-700 rounded-full text-slate-400 hover:text-white" aria-label="Back"><ArrowLeft size={22} /></button>
-          <div className="min-w-0">
-            <div className="text-xs uppercase tracking-widest text-emerald-400 font-bold">YPI · {KICKER[view]} · simulated factory</div>
-            <h1 className="text-2xl font-black text-white leading-tight">{(mine && mine.title) || KICKER[view]}</h1>
-            <p className="text-sm text-slate-400 max-w-5xl">{(mine && mine.subtitle) || "Loading…"}</p>
+      <NavCover />
+      {/* one toolbar line: back, title, the YPI tabs, the key figures (the Material Portal has them on its order line), search, refresh */}
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 mb-2">
+        <button onClick={onBack || (() => navigate("/"))} className="p-1 -ml-1 hover:bg-slate-700 rounded-full text-slate-400 hover:text-white" aria-label="Back"><ArrowLeft size={18} /></button>
+        <h1 className="text-lg font-black text-white leading-none whitespace-nowrap" title={(mine && mine.subtitle) || undefined}>{(mine && mine.title) || KICKER[view]}</h1>
+        <YpiTabs view={view} />
+        {mine && (view !== "material-portal" || !o) && <Figures items={mine.summary} fmt={num} tone={figTone} />}
+        <div className="flex items-center gap-1.5 ml-auto">
+          <div className="flex items-center gap-1.5 bg-slate-800 border border-slate-700 rounded-lg px-2 py-1">
+            <Search size={14} className="text-slate-500" />
+            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={view === "bom-status" ? "Search order, customer, style…" : view === "techpack" ? "Search page…" : "Search material, colour, PO…"} className="bg-transparent outline-none text-xs w-36 text-white placeholder-slate-500" />
           </div>
-        </div>
-        <div className="flex items-center gap-2 flex-wrap">
-          <YpiTabs view={view} />
-          <div className="flex items-center gap-2 bg-slate-800 border border-slate-700 rounded-xl px-3 py-2">
-            <Search size={16} className="text-slate-500" />
-            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={view === "bom-status" ? "Search order, customer, style…" : view === "techpack" ? "Search page…" : "Search material, colour, PO…"} className="bg-transparent outline-none text-sm w-44 text-white placeholder-slate-500" />
-          </div>
-          <button onClick={load} className="p-2.5 bg-slate-800 border border-slate-700 rounded-xl hover:bg-slate-700" aria-label="Refresh"><RefreshCw size={16} className={loading ? "animate-spin" : ""} /></button>
+          <button onClick={load} className="p-1.5 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700" aria-label="Refresh"><RefreshCw size={14} className={loading ? "animate-spin" : ""} /></button>
         </div>
       </div>
 
-      {error && <div className="mb-3 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-200 px-4 py-3 text-sm">{error}</div>}
+      {error && <div className="mb-2 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-200 px-3 py-2 text-sm">{error}</div>}
 
       {mine && view === "bom-status" && (
         <>
-          <Tiles items={mine.summary} />
           <div className="text-xs text-slate-400 mb-1.5">Click an order to open its Material Portal.</div>
           <Table cols={cols} rows={rows} onRow={(r) => navigate(`/dashboard/ypi/material-portal?order=${encodeURIComponent(r.order)}`)} />
         </>
@@ -432,19 +423,16 @@ const MaterialPortal = ({ onBack, view: fixedView = "material-portal" }) => {
           <Picker picker={mine.picker} onPick={setPick} legend={[["green", "all booked"], ["amber", "in progress"], ["red", "late"]]} />
           {o && (
             <div className="flex-1 min-w-0">
-              <div className="rounded-2xl border border-slate-700 bg-slate-800/40 px-4 py-3 mb-3 flex flex-wrap items-center gap-x-6 gap-y-1">
-                <div>
-                  <div className="text-lg font-black text-white leading-tight flex items-center gap-2">
-                    <span className={`inline-block w-3 h-3 rounded-full ${LIGHT[o.tone] || LIGHT.grey}`} />{o.ref} <span className="text-slate-400 font-bold text-sm">· customer {o.customer}</span>
-                  </div>
-                  <div className="text-sm text-slate-300">{o.style}</div>
-                </div>
-                <div className="text-sm"><span className="text-slate-400">Qty</span> <b className="text-white tabular-nums">{num(o.qty)}</b></div>
-                <div className="text-sm"><span className="text-slate-400">Cutting starts</span> <b className="text-white">{o.cutting}</b>{o.days_to_cut !== null && o.days_to_cut !== undefined ? <span className="text-slate-400"> (in {o.days_to_cut} days)</span> : null}</div>
-                <div className="text-sm"><span className="text-slate-400">Colours</span> <b className="text-white">{Object.entries(o.colours || {}).map(([c, n]) => `${c} ${num(n)}`).join(" · ")}</b></div>
+              {/* the order and its figures, one slim line */}
+              <div className="rounded-xl border border-slate-700 bg-slate-800/40 px-3 py-1.5 mb-3 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-slate-400">
+                <span className="flex items-center gap-1.5 whitespace-nowrap"><span className={`inline-block w-2.5 h-2.5 rounded-full ${LIGHT[o.tone] || LIGHT.grey}`} /><b className="text-sm font-black text-white">{o.ref}</b> · customer <b className="text-white">{o.customer}</b></span>
+                <span className="text-slate-300">{o.style}</span>
+                <span className="whitespace-nowrap">Qty <b className="text-white tabular-nums text-sm">{num(o.qty)}</b></span>
+                <span className="whitespace-nowrap">Cutting starts <b className="text-white">{o.cutting}</b>{o.days_to_cut !== null && o.days_to_cut !== undefined ? ` (in ${o.days_to_cut} days)` : ""}</span>
+                <span>Colours <b className="text-white">{Object.entries(o.colours || {}).map(([c, n]) => `${c} ${num(n)}`).join(" · ")}</b></span>
+                <FigSpans items={mine.summary} />
               </div>
               <Steps steps={mine.steps || []} />
-              <Tiles items={mine.summary} />
               <div className="text-xs uppercase tracking-wider text-slate-400 font-bold mb-1.5">Material POs — MRP follows each one to the factory gate</div>
               <Pos pos={mine.pos} />
               <div className="text-xs uppercase tracking-wider text-slate-400 font-bold mb-1.5">Bill of materials</div>
@@ -461,28 +449,28 @@ const MaterialPortal = ({ onBack, view: fixedView = "material-portal" }) => {
 
       {mine && view === "techpack" && mine.picker && (
         <>
-          <Tiles items={mine.summary} />
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-4">
+          {/* progress by customer, one slim line */}
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-1 mb-3 text-[11px] text-slate-400">
             {(mine.customers || []).map((c) => (
-              <div key={c.customer} className="rounded-2xl border border-slate-700 bg-slate-800/60 px-4 py-3">
-                <div className="flex items-baseline justify-between"><span className="text-lg font-black text-white">Customer {c.customer}</span><span className="text-sm font-bold text-emerald-300 tabular-nums">{c.pct}%</span></div>
-                <div className="h-2 rounded-full bg-slate-700 overflow-hidden my-1.5"><div className="h-full bg-emerald-400" style={{ width: `${c.pct}%` }} /></div>
-                <div className="text-xs text-slate-400">{c.orders} orders · {c.complete} complete · {c.in_progress} in progress · {c.not_started} not started</div>
-              </div>
+              <span key={c.customer} className="flex items-center gap-1.5 whitespace-nowrap">
+                <b className="text-xs text-white">Customer {c.customer}</b>
+                <span className="inline-block w-16 h-1.5 rounded-full bg-slate-700 overflow-hidden"><span className="block h-full bg-emerald-400" style={{ width: `${c.pct}%` }} /></span>
+                <b className="text-emerald-300 tabular-nums">{c.pct}%</b>
+                <span>{c.orders} orders · {c.complete} complete · {c.in_progress} in progress · {c.not_started} not started</span>
+              </span>
             ))}
           </div>
           <div className="flex flex-col md:flex-row gap-4 items-start">
             <Picker picker={mine.picker} onPick={setPick} legend={[["green", "complete"], ["amber", "in progress"], ["grey", "not started"]]} />
             {o && (
               <div className="flex-1 min-w-0">
-                <div className="rounded-2xl border border-slate-700 bg-slate-800/40 px-4 py-3 mb-3 flex flex-wrap items-center gap-x-6 gap-y-1">
-                  <div>
-                    <div className="text-lg font-black text-white leading-tight">{o.ref} <span className="text-slate-400 font-bold text-sm">· customer {o.customer}</span></div>
-                    <div className="text-sm text-slate-300">{o.style}</div>
-                  </div>
-                  <div className="text-sm"><span className="text-slate-400">Qty</span> <b className="text-white tabular-nums">{num(o.qty)}</b></div>
-                  <div className="text-sm"><span className="text-slate-400">Cutting starts</span> <b className="text-white">{o.cutting}</b></div>
-                  <div className="text-sm"><span className="text-slate-400">Pages complete</span> <b className="text-white">{o.complete} of {o.pages}</b></div>
+                {/* the order, one slim line */}
+                <div className="rounded-xl border border-slate-700 bg-slate-800/40 px-3 py-1.5 mb-3 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-slate-400">
+                  <span className="whitespace-nowrap"><b className="text-sm font-black text-white">{o.ref}</b> · customer <b className="text-white">{o.customer}</b></span>
+                  <span className="text-slate-300">{o.style}</span>
+                  <span className="whitespace-nowrap">Qty <b className="text-white tabular-nums text-sm">{num(o.qty)}</b></span>
+                  <span className="whitespace-nowrap">Cutting starts <b className="text-white">{o.cutting}</b></span>
+                  <span className="whitespace-nowrap">Pages complete <b className="text-white">{o.complete} of {o.pages}</b></span>
                 </div>
                 <Table cols={cols} rows={rows} />
               </div>

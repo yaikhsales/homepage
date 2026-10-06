@@ -6,6 +6,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ArrowLeft, Search, RefreshCw, ChevronLeft, ChevronRight, Maximize, Package, Anchor, Ship, Truck, Factory, Flag } from "lucide-react";
+import { NavCover, useScreenTop, Figures } from "../components/ScreenTop";
 
 const h = React.createElement;
 const API = (process.env.REACT_APP_M1_LLM_URL || "/api/m1").replace(/\/$/, "");
@@ -255,6 +256,7 @@ const MrpView = ({ onBack, module = "mrp", label = "MRP", view: fixedView }) => 
   const scope = module + "/" + view;
   const [picked, setPicked] = useState({ scope: "", id: "" });
   const pick = picked.scope === scope ? picked.id : "";
+  const [topRef, topPad] = useScreenTop();
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -295,64 +297,63 @@ const MrpView = ({ onBack, module = "mrp", label = "MRP", view: fixedView }) => 
   const board = Boolean(data && data.board);
   const cell = board ? "px-4 py-3 text-base" : "px-3 py-2 text-sm";
 
+  const subtitle = (data && data.subtitle) || "";
+  const dated = /(\d{1,2} [A-Z][a-z]{2} \d{4})\s*$/.exec(subtitle); // a subtitle ending in a date (the Arrival Board): keep the date on the line
+
   return h(
     "div",
-    { className: "yai-pa-aware min-h-screen bg-slate-900 text-slate-200 px-4 md:px-8 pb-8 pt-28 font-sans" }, // pt-28 clears the fixed 3-mode nav
+    { ref: topRef, style: { paddingTop: topPad }, className: "yai-pa-aware min-h-screen bg-slate-900 text-slate-200 px-4 md:px-6 pb-8 font-sans" }, // top padding clears the fixed 3-mode nav
     h("style", null, "body.yai-pa-open .yai-pa-aware { padding-right: 436px; }"), // room for the PA panel while it is open
+    h(NavCover),
+    // One toolbar line: back, title, month, the key figures (wall boards keep big cards below), search, refresh, full screen.
     h(
       "div",
-      { className: "flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6" },
-      h(
-        "div",
-        { className: "flex items-center gap-4" },
-        h("button", { onClick: onBack, className: "p-2 hover:bg-slate-700 rounded-full transition-colors text-slate-400 hover:text-white", "aria-label": "Back" }, h(ArrowLeft, { size: 24 })),
+      { className: "flex flex-wrap items-center gap-x-3 gap-y-1.5 mb-2" },
+      onBack && h("button", { onClick: onBack, className: "p-1 -ml-1 hover:bg-slate-700 rounded-full transition-colors text-slate-400 hover:text-white", "aria-label": "Back" }, h(ArrowLeft, { size: 18 })),
+      h("h1", { className: (board ? "text-4xl" : "text-lg") + " font-black text-white leading-none whitespace-nowrap", title: subtitle || undefined }, (data && data.title) || label),
+      dated && h("span", { className: (board ? "text-lg" : "text-xs") + " font-bold text-slate-400 whitespace-nowrap" }, dated[1]),
+      MONTHLY.has(view) &&
         h(
           "div",
-          null,
-          h("div", { className: "text-xs uppercase tracking-widest text-emerald-400 font-bold" }, label + " · simulated factory"),
-          h("h1", { className: board ? "text-4xl font-black text-white" : "text-2xl font-black text-white" }, (data && data.title) || label),
-          h("p", { className: "text-sm text-slate-400" }, (data && data.subtitle) || "")
-        )
-      ),
-      h(
-        "div",
-        { className: "flex items-center gap-2 flex-wrap" },
-        MONTHLY.has(view) &&
-          h(
-            "div",
-            { className: "flex items-center gap-1 bg-slate-800 border border-slate-700 rounded-xl px-1 py-1" },
-            h("button", { onClick: () => setMonth(shiftMonth(month, -1)), className: "p-1.5 hover:bg-slate-700 rounded-lg", "aria-label": "Previous month" }, h(ChevronLeft, { size: 18 })),
-            h("span", { className: "px-2 text-sm font-bold text-white tabular-nums" }, month),
-            h("button", { onClick: () => setMonth(shiftMonth(month, 1)), className: "p-1.5 hover:bg-slate-700 rounded-lg", "aria-label": "Next month" }, h(ChevronRight, { size: 18 }))
-          ),
-        h(
-          "div",
-          { className: "flex items-center gap-2 bg-slate-800 border border-slate-700 rounded-xl px-3 py-2" },
-          h(Search, { size: 16, className: "text-slate-500" }),
-          h("input", { value: q, onChange: (e) => setQ(e.target.value), placeholder: "Search order, supplier, status…", className: "bg-transparent outline-none text-sm w-56 text-white placeholder-slate-500" })
+          { className: "flex items-center bg-slate-800 border border-slate-700 rounded-lg" },
+          h("button", { onClick: () => setMonth(shiftMonth(month, -1)), className: "p-1 hover:bg-slate-700 rounded-lg", "aria-label": "Previous month" }, h(ChevronLeft, { size: 16 })),
+          h("span", { className: "px-1.5 text-xs font-bold text-white tabular-nums" }, month),
+          h("button", { onClick: () => setMonth(shiftMonth(month, 1)), className: "p-1 hover:bg-slate-700 rounded-lg", "aria-label": "Next month" }, h(ChevronRight, { size: 16 }))
         ),
-        h("button", { onClick: load, className: "p-2.5 bg-slate-800 border border-slate-700 rounded-xl hover:bg-slate-700", "aria-label": "Refresh" }, h(RefreshCw, { size: 16, className: loading ? "animate-spin" : "" })),
+      !board && h(Figures, { items: data && data.summary, fmt }),
+      h(
+        "div",
+        { className: "flex items-center gap-1.5 ml-auto" },
+        h(
+          "div",
+          { className: "flex items-center gap-1.5 bg-slate-800 border border-slate-700 rounded-lg px-2 py-1" },
+          h(Search, { size: 14, className: "text-slate-500" }),
+          h("input", { value: q, onChange: (e) => setQ(e.target.value), placeholder: "Search order, supplier, status…", className: "bg-transparent outline-none text-xs w-36 text-white placeholder-slate-500" })
+        ),
+        h("button", { onClick: load, className: "p-1.5 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700", "aria-label": "Refresh" }, h(RefreshCw, { size: 14, className: loading ? "animate-spin" : "" })),
         board &&
           h(
             "button",
-            { onClick: () => document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(), className: "p-2.5 bg-slate-800 border border-slate-700 rounded-xl hover:bg-slate-700", "aria-label": "Full screen" },
-            h(Maximize, { size: 16 })
+            { onClick: () => document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(), className: "p-1.5 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700", "aria-label": "Full screen" },
+            h(Maximize, { size: 14 })
           )
       )
     ),
-    error && h("div", { className: "mb-4 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-200 px-4 py-3 text-sm" }, error),
-    h(
-      "div",
-      { className: "grid grid-cols-2 md:grid-cols-4 gap-3 mb-6" },
-      ((data && data.summary) || []).map((s) =>
-        h(
-          "div",
-          { key: s.label, className: "rounded-2xl border border-slate-700 bg-slate-800/60 px-4 py-3" },
-          h("div", { className: "text-xs uppercase tracking-wider text-slate-400" }, s.label),
-          h("div", { className: (board ? "text-4xl" : "text-2xl") + " font-black text-white tabular-nums" }, fmt(s.value))
+    error && h("div", { className: "mb-2 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-200 px-3 py-2 text-sm" }, error),
+    // Wall board (TV): the big figures stay, read from across the room.
+    board &&
+      h(
+        "div",
+        { className: "grid grid-cols-2 md:grid-cols-4 gap-3 mb-3" },
+        ((data && data.summary) || []).map((s) =>
+          h(
+            "div",
+            { key: s.label, className: "rounded-2xl border border-slate-700 bg-slate-800/60 px-4 py-2" },
+            h("div", { className: "text-xs uppercase tracking-wider text-slate-400" }, s.label),
+            h("div", { className: "text-4xl font-black text-white tabular-nums" }, fmt(s.value))
+          )
         )
-      )
-    ),
+      ),
     h(
       "div",
       { className: "flex gap-4 items-start" },

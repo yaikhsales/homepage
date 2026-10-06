@@ -12,6 +12,7 @@
 // Simulated factory — every order, lot and price is invented.
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowLeft, ChevronLeft, ChevronRight, RefreshCw, Search, X } from "lucide-react";
+import { NavCover, useScreenTop, Figures } from "../components/ScreenTop";
 
 const API = (process.env.REACT_APP_M1_LLM_URL || "/api/m1").replace(/\/$/, "");
 const STATE = {
@@ -59,6 +60,7 @@ const WarehouseMap = ({ onBack }) => {
   const [edge, setEdge] = useState({ left: true, right: false, from: "", to: "" }); // what the strip shows now
   const stripBox = useRef(null);
   const strip = useRef(null);
+  const [topRef, topPad] = useScreenTop();
 
   const post = (body) => fetch(`${API}/sim/view`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ module: "fc", view: "warehouse", ...body }) });
 
@@ -281,37 +283,24 @@ const WarehouseMap = ({ onBack }) => {
   ));
 
   return (
-    <div className="yai-pa-aware min-h-screen bg-slate-900 text-slate-200 px-4 md:px-6 pb-6 pt-28 font-sans">
+    <div ref={topRef} style={{ paddingTop: topPad }} className="yai-pa-aware min-h-screen bg-slate-900 text-slate-200 px-4 md:px-6 pb-6 font-sans">
       <style>{`body.yai-pa-open .yai-pa-aware { padding-right: 436px; }`}</style>
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
-        <div className="flex items-center gap-3">
-          <button onClick={onBack} className="p-2 hover:bg-slate-700 rounded-full text-slate-400 hover:text-white" aria-label="Back"><ArrowLeft size={22} /></button>
-          <div>
-            <div className="text-xs uppercase tracking-widest text-emerald-400 font-bold">Fabric Control · Warehouse · simulated factory</div>
-            <h1 className="text-2xl font-black text-white leading-tight">{d ? d.title : "Fabric Warehouse"}{d && d.day ? <span className="ml-2 text-base font-semibold text-slate-400">{d.day}</span> : null}</h1>
-            <p className="text-sm text-slate-400 max-w-5xl">{d ? d.subtitle : "Loading…"}</p>
-          </div>
-        </div>
-        <button onClick={load} className="p-2.5 bg-slate-800 border border-slate-700 rounded-xl hover:bg-slate-700" aria-label="Refresh"><RefreshCw size={16} className={loading ? "animate-spin" : ""} /></button>
+      <NavCover />
+      {/* one toolbar line: back, title and day, the key figures, refresh */}
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 mb-2">
+        {onBack && <button onClick={onBack} className="p-1 -ml-1 hover:bg-slate-700 rounded-full text-slate-400 hover:text-white" aria-label="Back"><ArrowLeft size={18} /></button>}
+        <h1 className="text-lg font-black text-white leading-none whitespace-nowrap" title={d ? d.subtitle : undefined}>{d ? d.title : "Fabric Warehouse"}{d && d.day ? <span className="ml-2 text-xs font-bold text-slate-400">{d.day}</span> : null}</h1>
+        {d && <Figures items={d.summary} fmt={num} tone={(x) => (x.label === "Value on hold" ? "text-rose-300" : x.label.includes("returned") ? "text-violet-300" : x.label.includes("damaged") ? "text-orange-300" : "text-white")} />}
+        <button onClick={load} className="ml-auto p-1.5 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700" aria-label="Refresh"><RefreshCw size={14} className={loading ? "animate-spin" : ""} /></button>
       </div>
 
-      {error && <div className="mb-3 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-200 px-4 py-3 text-sm">{error}</div>}
+      {error && <div className="mb-2 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-200 px-3 py-2 text-sm">{error}</div>}
 
       {d && (
         <>
           <div className="rounded-2xl border border-slate-700 bg-slate-800/40 p-3">
-            {/* figures in one row */}
-            <div className="flex flex-wrap items-stretch gap-2">
-              {d.summary.map((x) => (
-                <div key={x.label} className="rounded-xl border border-slate-700 bg-slate-900/60 px-3 py-1.5 min-w-[120px]">
-                  <div className="text-[10px] uppercase tracking-wider text-slate-400">{x.label}</div>
-                  <div className={`text-xl font-black tabular-nums leading-tight ${x.label === "Value on hold" ? "text-rose-300" : x.label.includes("returned") ? "text-violet-300" : x.label.includes("damaged") ? "text-orange-300" : "text-white"}`}>{num(x.value)}</div>
-                </div>
-              ))}
-            </div>
-
             {/* legend (each entry is a toggle), colour switch, search */}
-            <div className="mt-2 flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               {(d.states || []).map((s) => (
                 <button key={s.key} type="button" title={s.label} onClick={() => setStateOn(stateOn === s.key ? null : s.key)} className={chip(stateOn === s.key)} style={{ opacity: stateOn && stateOn !== s.key ? 0.45 : 1 }}>
                   <span className="inline-block w-3 h-3 rounded-sm" style={s.key === "reserved" ? { boxShadow: `inset 0 0 0 2px ${STATE[s.key].color}` } : { background: (STATE[s.key] || {}).color || "#94a3b8" }} />

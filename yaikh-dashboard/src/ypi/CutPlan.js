@@ -8,6 +8,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ArrowLeft, RefreshCw, Search, CheckCircle2, XCircle } from "lucide-react";
 import { YpiTabs } from "./MaterialPortal";
+import { NavCover, useScreenTop, Figures } from "../components/ScreenTop";
 
 const API = (process.env.REACT_APP_M1_LLM_URL || "/api/m1").replace(/\/$/, "");
 const num = (v) => (typeof v === "number" ? v.toLocaleString("en-US") : v === null || v === undefined ? "" : String(v));
@@ -59,17 +60,6 @@ const MarkerDiagram = ({ m }) => {
     </svg>
   );
 };
-
-const Tiles = ({ items }) => (
-  <div className="flex flex-wrap gap-2 mb-4">
-    {(items || []).map((x) => (
-      <div key={x.label} className="rounded-xl border border-slate-700 bg-slate-800/60 px-3 py-1.5 min-w-[140px]">
-        <div className="text-[10px] uppercase tracking-wider text-slate-400">{x.label}</div>
-        <div className="text-xl font-black tabular-nums leading-tight text-white">{num(x.value)}</div>
-      </div>
-    ))}
-  </div>
-);
 
 const Table = ({ cols, rows, chipKey = "status" }) => (
   <div className="rounded-2xl border border-slate-700 bg-slate-800/40 overflow-x-auto">
@@ -150,6 +140,7 @@ const CutPlan = ({ onBack, view: fixedView = "cut-plan" }) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState("");
+  const [topRef, topPad] = useScreenTop();
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -180,35 +171,27 @@ const CutPlan = ({ onBack, view: fixedView = "cut-plan" }) => {
   const multi = Boolean(o && o.parts && o.parts.length > 1);
 
   return (
-    <div className="yai-pa-aware min-h-screen bg-slate-900 text-slate-200 px-4 md:px-6 pb-6 pt-28 font-sans">
+    <div ref={topRef} style={{ paddingTop: topPad }} className="yai-pa-aware min-h-screen bg-slate-900 text-slate-200 px-4 md:px-6 pb-6 font-sans">
       <style>{`body.yai-pa-open .yai-pa-aware { padding-right: 436px; }`}</style>
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-        <div className="flex items-center gap-3 min-w-0">
-          <button onClick={onBack || (() => navigate("/"))} className="p-2 hover:bg-slate-700 rounded-full text-slate-400 hover:text-white" aria-label="Back"><ArrowLeft size={22} /></button>
-          <div className="min-w-0">
-            <div className="text-xs uppercase tracking-widest text-emerald-400 font-bold">YPI · Marker &amp; Cut Plan · simulated factory</div>
-            <h1 className="text-2xl font-black text-white leading-tight">{(d && d.title) || (view === "markers" ? "Markers" : "Marker & Cut Plan")}</h1>
-            <p className="text-sm text-slate-400 max-w-5xl">{(d && d.subtitle) || "Loading…"}</p>
+      <NavCover />
+      {/* one toolbar line: back, title, the YPI tabs, the key figures (the markers list; the cut plan has them on its order line), search, refresh */}
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 mb-2">
+        <button onClick={onBack || (() => navigate("/"))} className="p-1 -ml-1 hover:bg-slate-700 rounded-full text-slate-400 hover:text-white" aria-label="Back"><ArrowLeft size={18} /></button>
+        <h1 className="text-lg font-black text-white leading-none whitespace-nowrap" title={(d && d.subtitle) || undefined}>{(d && d.title) || (view === "markers" ? "Markers" : "Marker & Cut Plan")}</h1>
+        <YpiTabs view={view} />
+        {d && view === "markers" && d.view === "markers" && <Figures items={d.summary} fmt={num} />}
+        <div className="flex items-center gap-1.5 ml-auto">
+          <div className="flex items-center gap-1.5 bg-slate-800 border border-slate-700 rounded-lg px-2 py-1">
+            <Search size={14} className="text-slate-500" />
+            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={view === "markers" ? "Search order, colour, marker…" : "Search lay, colour, lot…"} className="bg-transparent outline-none text-xs w-36 text-white placeholder-slate-500" />
           </div>
-        </div>
-        <div className="flex items-center gap-2 flex-wrap">
-          <YpiTabs view={view} />
-          <div className="flex items-center gap-2 bg-slate-800 border border-slate-700 rounded-xl px-3 py-2">
-            <Search size={16} className="text-slate-500" />
-            <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={view === "markers" ? "Search order, colour, marker…" : "Search lay, colour, lot…"} className="bg-transparent outline-none text-sm w-48 text-white placeholder-slate-500" />
-          </div>
-          <button onClick={load} className="p-2.5 bg-slate-800 border border-slate-700 rounded-xl hover:bg-slate-700" aria-label="Refresh"><RefreshCw size={16} className={loading ? "animate-spin" : ""} /></button>
+          <button onClick={load} className="p-1.5 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700" aria-label="Refresh"><RefreshCw size={14} className={loading ? "animate-spin" : ""} /></button>
         </div>
       </div>
 
-      {error && <div className="mb-3 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-200 px-4 py-3 text-sm">{error}</div>}
+      {error && <div className="mb-2 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-200 px-3 py-2 text-sm">{error}</div>}
 
-      {d && view === "markers" && d.view === "markers" && (
-        <>
-          <Tiles items={d.summary} />
-          <Table cols={cols} rows={rows} />
-        </>
-      )}
+      {d && view === "markers" && d.view === "markers" && <Table cols={cols} rows={rows} />}
 
       {isPlan && (
         <div className="flex flex-col md:flex-row gap-4 items-start">
@@ -234,18 +217,16 @@ const CutPlan = ({ onBack, view: fixedView = "cut-plan" }) => {
           </aside>
 
           <div className="flex-1 min-w-0">
-            {/* the order */}
-            <div className="rounded-2xl border border-slate-700 bg-slate-800/40 px-4 py-3 mb-3 flex flex-wrap items-center gap-x-6 gap-y-1">
-              <div>
-                <div className="text-lg font-black text-white leading-tight">{o.ref} <span className="text-slate-400 font-bold text-sm">· customer {o.customer}</span></div>
-                <div className="text-sm text-slate-300">{o.style}</div>
-              </div>
-              <div className="text-sm"><span className="text-slate-400">Qty</span> <b className="text-white tabular-nums">{num(o.qty)}</b></div>
-              <div className="text-sm"><span className="text-slate-400">Cutting</span> <b className="text-white">{o.cut_from} → {o.cut_to}</b></div>
-              <div className="text-sm"><span className="text-slate-400">Colours</span> <b className="text-white">{Object.entries(o.colours || {}).map(([c, n]) => `${c} ${num(n)}`).join(" · ")}</b></div>
-              <div className="text-sm"><span className="text-slate-400">Cutting allowance</span> <b className="text-white">{o.allowance}%</b></div>
+            {/* the order and its figures, one slim line */}
+            <div className="rounded-xl border border-slate-700 bg-slate-800/40 px-3 py-1.5 mb-3 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-slate-400">
+              <span className="whitespace-nowrap"><b className="text-sm font-black text-white">{o.ref}</b> · customer <b className="text-white">{o.customer}</b></span>
+              <span className="text-slate-300">{o.style}</span>
+              {!(d.summary || []).some((x) => x.label === "Order qty") && <span className="whitespace-nowrap">Qty <b className="text-white tabular-nums text-sm">{num(o.qty)}</b></span>}
+              <span className="whitespace-nowrap">Cutting <b className="text-white">{o.cut_from} → {o.cut_to}</b></span>
+              <span>Colours <b className="text-white">{Object.entries(o.colours || {}).map(([c, n]) => `${c} ${num(n)}`).join(" · ")}</b></span>
+              <span className="whitespace-nowrap">Cutting allowance <b className="text-white">{o.allowance}%</b></span>
+              {(d.summary || []).map((x) => <span key={x.label} className="whitespace-nowrap">{x.label} <b className="text-white tabular-nums text-sm">{num(x.value)}</b></span>)}
             </div>
-            <Tiles items={d.summary} />
 
             {/* the markers */}
             <div className="text-xs uppercase tracking-wider text-slate-400 font-bold mb-1.5">Markers</div>
