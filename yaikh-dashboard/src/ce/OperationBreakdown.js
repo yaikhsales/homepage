@@ -20,6 +20,7 @@ const OperationBreakdown = ({ onBack }) => {
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+  const [pd, setPd] = useState([]); // the product-development stages (SAM 1 / SAM 2 / critical ops) by order
   const back = () => (onBack ? onBack() : navigate(-1));
 
   const load = useCallback(async () => {
@@ -39,6 +40,12 @@ const OperationBreakdown = ({ onBack }) => {
   useEffect(() => {
     load();
   }, [load]);
+  useEffect(() => {
+    fetch(API + "/sim/view", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ module: "ce", view: "product-development" }) })
+      .then((r) => r.json())
+      .then((j) => setPd((j && j.rows) || []))
+      .catch(() => setPd([]));
+  }, []);
 
   const d = data || {};
   const cols = d.analyses_columns || [["id", "Analysis"], ["date", "Date"], ["style", "Style"], ["order", "Order"], ["garment_type", "Garment"], ["ops", "Operations"], ["total_sam", "Total SAM"], ["ie_code", "IE"], ["status", "Status"]];
@@ -47,6 +54,7 @@ const OperationBreakdown = ({ onBack }) => {
   const a = d.analysis;
   const rows = id ? d.rows || [] : [];
   const t = d.totals || {};
+  const stages = a ? pd.filter((r) => r.order === a.order) : [];
 
   return h(
     "div",
@@ -86,6 +94,12 @@ const OperationBreakdown = ({ onBack }) => {
             h("div", { className: "min-w-0" }, h("div", { className: "text-[11px] uppercase tracking-wider text-slate-500" }, "Operation breakdown sheet"), h("div", { className: "text-lg font-black leading-tight" }, a ? a.style : id), a && h("div", { className: "text-xs text-slate-600" }, [a.id, a.order ? "order " + a.order : "", a.garment_type, a.date, a.ie ? a.ie + " (" + a.ie_code + ")" : "", a.status].filter(Boolean).join(" · "))),
             h("button", { type: "button", onClick: () => window.print(), className: "ob-noprint ml-auto inline-flex items-center gap-1 rounded-md bg-slate-900 text-white text-xs font-bold px-2.5 py-1.5" }, h(Printer, { size: 13 }), "Print")
           ),
+          stages.length > 0 &&
+            h(
+              "div",
+              { className: "flex flex-wrap gap-1.5 mb-2 text-[11px]" },
+              stages.map((r) => h(React.Fragment, { key: r.garment }, h("span", { className: "rounded-full border border-slate-300 px-2 py-0.5", title: r.sam1_status + (r.sam1_date ? " · " + r.sam1_date : "") }, (stages.length > 1 ? r.garment + " · " : "") + "SAM 1 ", h("b", null, num(r.sam1))), h("span", { className: "rounded-full border border-slate-300 px-2 py-0.5", title: r.sam2_status + (r.sam2_date ? " · " + r.sam2_date : "") }, "SAM 2 ", h("b", null, num(r.sam2))), h("span", { className: "rounded-full border border-slate-300 px-2 py-0.5", title: "critical operations" }, "critical ", h("b", null, r.critical)), r.ai_stage && h("span", { className: "rounded-full border border-slate-300 px-2 py-0.5 text-slate-600" }, r.ai_stage + " · " + r.status)))
+            ),
           h("div", { className: "grid grid-cols-4 gap-2 text-xs mb-2" }, [["Total SAM", num(t.total_sam) + " min"], ["Operations", num(t.operations, 0)], ["Stations", num(t.stations, 0)], ["Machines", (t.machines || []).reduce((s, m) => s + (m.count || 0), 0) || "—"]].map(([k, v]) => h("div", { key: k, className: "rounded border border-slate-300 p-1.5" }, h("div", { className: "text-[10px] uppercase tracking-wider text-slate-500" }, k), h("div", { className: "font-black tabular-nums" }, v)))),
           h(
             "table",
