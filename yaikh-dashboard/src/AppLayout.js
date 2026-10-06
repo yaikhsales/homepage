@@ -254,7 +254,9 @@ const AppLayout = () => {
       setYaiVersion("yai2");
       setBbBubble(true);
       setBigBrainPage(module.title);
-      setBigBrainOpen(true);
+      // SOP's timeline is full-width — nothing may sit under a panel, so
+      // land there with the bubble only; tap it to open the panel.
+      setBigBrainOpen(module.title !== "SOP");
     }
     if (module.demoType) {
       const { demoType, id, title } = module;
