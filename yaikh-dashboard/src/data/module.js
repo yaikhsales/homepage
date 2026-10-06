@@ -406,6 +406,10 @@ export const DASHBOARD_DATA = [
             id: "ywip",
             title: "YWIP",
             image: "IMG/avatars/agent-33.png",
+            // One bold isometric rack-and-roll mark instead of the old strip of
+            // three pictograms, and no avatar fading in behind it.
+            iconSrc: "IMG/icons/ywip.svg",
+            noFace: true,
             status: "active",
             // Without a demoType the tile only opened the persona pop-up: the
             // id === "ywip" branch in AppLayout sits inside if (module.demoType).

@@ -1,0 +1,59 @@
+<!-- YWIP tile mark: one isometric rack of fabric rolls, drawn on the same 30°
+     projection as the YWIP flow screen. One bold object that fills the tile,
+     rather than a strip of small pictograms. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" role="img" aria-label="YWIP">
+  <g transform="translate(40,46) scale(1.42)">
+    <!-- shelf 3 (top) -->
+    <g transform="translate(0,-18)">
+      <polygon points="-22,0 0,-11 22,0 0,11" fill="#334155"/>
+      <polygon points="-22,0 0,11 0,14 -22,3" fill="#1e293b"/>
+      <polygon points="22,0 0,11 0,14 22,3" fill="#273549"/>
+      <!-- rolls -->
+      <g>
+        <polygon points="-15,-3 3,-12 9,-9 -9,0" fill="#1e3a8a"/>
+        <ellipse cx="6" cy="-10.5" rx="2.6" ry="3.4" fill="#2b4fa8"/>
+        <ellipse cx="-12" cy="-1.5" rx="2.6" ry="3.4" fill="#16306e"/>
+      </g>
+      <g transform="translate(0,6)">
+        <polygon points="-15,-3 3,-12 9,-9 -9,0" fill="#f8fafc"/>
+        <ellipse cx="6" cy="-10.5" rx="2.6" ry="3.4" fill="#ffffff"/>
+        <ellipse cx="-12" cy="-1.5" rx="2.6" ry="3.4" fill="#cbd5e1"/>
+      </g>
+    </g>
+    <!-- shelf 2 (middle) -->
+    <g transform="translate(0,0)">
+      <polygon points="-22,0 0,-11 22,0 0,11" fill="#334155"/>
+      <polygon points="-22,0 0,11 0,14 -22,3" fill="#1e293b"/>
+      <polygon points="22,0 0,11 0,14 22,3" fill="#273549"/>
+      <g>
+        <polygon points="-15,-3 3,-12 9,-9 -9,0" fill="#7f1d1d"/>
+        <ellipse cx="6" cy="-10.5" rx="2.6" ry="3.4" fill="#9f2626"/>
+        <ellipse cx="-12" cy="-1.5" rx="2.6" ry="3.4" fill="#651616"/>
+      </g>
+      <g transform="translate(0,6)">
+        <polygon points="-15,-3 3,-12 9,-9 -9,0" fill="#64748b"/>
+        <ellipse cx="6" cy="-10.5" rx="2.6" ry="3.4" fill="#7c8da6"/>
+        <ellipse cx="-12" cy="-1.5" rx="2.6" ry="3.4" fill="#4b5767"/>
+      </g>
+    </g>
+    <!-- shelf 1 (bottom) with the orange roll that carries the brand colour -->
+    <g transform="translate(0,18)">
+      <polygon points="-22,0 0,-11 22,0 0,11" fill="#334155"/>
+      <polygon points="-22,0 0,11 0,14 -22,3" fill="#1e293b"/>
+      <polygon points="22,0 0,11 0,14 22,3" fill="#273549"/>
+      <g>
+        <polygon points="-15,-3 3,-12 9,-9 -9,0" fill="#f37021"/>
+        <ellipse cx="6" cy="-10.5" rx="2.6" ry="3.4" fill="#ff8c43"/>
+        <ellipse cx="-12" cy="-1.5" rx="2.6" ry="3.4" fill="#c2541a"/>
+      </g>
+      <g transform="translate(0,6)">
+        <polygon points="-15,-3 3,-12 9,-9 -9,0" fill="#0f766e"/>
+        <ellipse cx="6" cy="-10.5" rx="2.6" ry="3.4" fill="#149289"/>
+        <ellipse cx="-12" cy="-1.5" rx="2.6" ry="3.4" fill="#0b5a54"/>
+      </g>
+    </g>
+    <!-- uprights -->
+    <polygon points="-22,-21 -20,-22 -20,6 -22,5" fill="#475569"/>
+    <polygon points="22,-21 20,-22 20,6 22,5" fill="#475569"/>
+  </g>
+</svg>

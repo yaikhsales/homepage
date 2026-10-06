@@ -100,7 +100,7 @@ const ModuleCard = ({ data, onClick, botVersion = 'default', onBotClick, isDropd
               and fully occludes the face during its phase. */}
           <div className="yai-fade-face yai-fade-icon bg-white">
             <img
-              src={`${process.env.PUBLIC_URL}/IMG/icons/${data.id}.png`}
+              src={`${process.env.PUBLIC_URL}/${data.iconSrc || `IMG/icons/${data.id}.png`}`}
               alt=""
               className="w-full h-full object-contain"
               onError={(e) => {
@@ -117,8 +117,10 @@ const ModuleCard = ({ data, onClick, botVersion = 'default', onBotClick, isDropd
           </div>
 
           {/* FACE — the Ai agent, crisp. White backing fills the object-
-              contain margins so the icon can never bleed through/tint it. */}
-          <div className="yai-fade-face yai-fade-back bg-white">
+              contain margins so the icon can never bleed through/tint it.
+              A module with its own single mark (data.noFace) skips this layer,
+              so nothing fades in behind the icon. */}
+          {!data.noFace && <div className="yai-fade-face yai-fade-back bg-white">
             <img
               src={`${process.env.PUBLIC_URL}/${data.image}`}
               alt={data.title}
@@ -136,7 +138,7 @@ const ModuleCard = ({ data, onClick, botVersion = 'default', onBotClick, isDropd
                   );
               }}
             />
-          </div>
+          </div>}
         </div>
       );
     }
