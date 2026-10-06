@@ -149,7 +149,7 @@ const LinePlanning = ({ onBack }) => {
       const j = await r.json();
       if (r.ok && j.ok) {
         setSaved(confirmIt
-          ? "Confirmed — the 4DP line pop-up and YTM machine availability read this layout."
+          ? "Confirmed — sent to the 4DP line plan and the mechanic line plan."
           : "Draft saved.");
       } else {
         setSaved((j && (j.error || j.detail)) || "Not saved.");
