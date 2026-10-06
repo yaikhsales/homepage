@@ -21,6 +21,7 @@ import {
 import { generateGeminiResponse, generateChatResponse, generateBossOrChat, shouldUseGemini } from "./gemini-api";
 import { KHMER_NEW_YEAR } from "../thems";
 import { useKhmerTTS } from "./useKhmerTTS";
+import BigBrainPAChats from "./BigBrainPAChats";
 import { Volume2, VolumeX } from "lucide-react";
 
 // Visitor name is captured on first open and persisted; no default value.
@@ -2239,40 +2240,10 @@ ANSWER RULES
             Yai about emailing you the transcript (from ecom@yaikh.com).
           </div>
 
-          {/* Chat List */}
-          <div className="flex-1 overflow-y-auto">
-            {chatHistory.length === 0 ? (
-              <div className="p-4 text-center text-white/50 text-sm">
-                No chat history yet
-              </div>
-            ) : (
-              <div className="p-2">
-                {chatHistory.map((chat) => (
-                  <div
-                    key={chat.id}
-                    onClick={() => loadChat(chat.id)}
-                    className={`group relative flex items-center gap-3 p-3 rounded-lg cursor-pointer hover:bg-white/5 transition ${
-                      currentChatId === chat.id ? "bg-white/10" : ""
-                    }`}
-                  >
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm text-white/90 truncate">
-                        {chat.title}
-                      </p>
-                      <p className="text-xs text-white/50 mt-1">
-                        {new Date(chat.updatedAt).toLocaleDateString()}
-                      </p>
-                    </div>
-                    <button
-                      onClick={(e) => deleteChat(chat.id, e)}
-                      className="opacity-0 group-hover:opacity-100 p-1.5 rounded-full hover:bg-white/10 transition"
-                    >
-                      <Trash2 size={14} className="text-white/50" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
+          {/* The 14 department PAs — direct threads with each (Gamini
+              2026-10-06: the history list becomes Big Brain's PA chats). */}
+          <div className="flex-1 min-h-0 overflow-y-auto flex flex-col">
+            <BigBrainPAChats fontSize={chatFontSize} />
           </div>
         </div>
       </div>
