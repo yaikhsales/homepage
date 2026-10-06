@@ -5,7 +5,6 @@ import { TranslationProvider } from "./translate/TranslationContext";
 
 // Import all view components
 import TrainingGridView from "./views/TrainingGridView";
-import WasteDashboardView from "./views/WasteDashboardView";
 import TimelineView from "./views/TimelineView";
 import SubMenuView from "./views/SubMenuView";
 import TableView from "./views/TableView";
@@ -18,7 +17,6 @@ import Employee from "./hr/Employee";
 import Headcount from "./hr/Headcount";
 import Sections from "./hr/Sections";
 // eslint-disable-next-line no-unused-vars
-import MeterDeviceListView from "./views/MeterDeviceListView";
 // eslint-disable-next-line no-unused-vars
 import SystemAnalysisView from "./views/SystemAnalysisView";
 import ManagementDashboard from "./views/ManagementDashboard";
@@ -341,10 +339,7 @@ export default function App() {
             path="energy/energy-source"
             element={<ModuleFrame><EnergySource onBack={handleBack} /></ModuleFrame>}
           />
-          <Route
-            path="energy/solar-dashboard"
-            element={<ModuleFrame><SolarDashboard onBack={handleBack} /></ModuleFrame>}
-          />
+          <Route path="energy/solar-dashboard" element={<SolarDashboard onBack={handleBack} />} />
           <Route
             path="air/temperature"
             element={<ModuleFrame><Temperature onBack={handleBack} /></ModuleFrame>}
@@ -386,10 +381,6 @@ export default function App() {
           <Route
             path="factory-workflow"
             element={<FactoryWorkflow onBack={handleBack} />}
-          />
-          <Route
-            path="waste"
-            element={<ModuleFrame><WasteDashboardView onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="training/:department"

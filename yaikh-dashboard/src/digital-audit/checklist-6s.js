@@ -411,17 +411,7 @@ const Checklist6S = ({ onBack }) => {
         >
             <Video size={20} className="text-blue-600" />
         </button>
-            <button
-              onClick={() =>
-                setSelectedDocument(
-                  "/assets/report-training/Checklist-6s-report.pdf",
-                )
-              }
-              className="p-2 hover:bg-slate-100 rounded-lg transition-colors flex items-center justify-center shrink-0"
-              title="Report Training"
-            >
-              <FileText size={20} className="text-blue-600" />
-            </button>
+            {/* the Report Training button is hidden: Checklist-6s-report.pdf is not in the repo */}
           </div>
         </div>
 

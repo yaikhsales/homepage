@@ -27,7 +27,7 @@ import AddMeeting from './add-meeting';
 import VideoViewer from '../../components/VideoViewer';
 import ModuleBotButton from '../../components/ModuleBotButton';
 
-const PPM_VIDEO_PATH = '/assets/short-video-training/Ppm.mp4';
+const PPM_VIDEO_PATH = '/assets/short-video-training/PPM.mp4';
 
 const PreProductionMeeting = ({ onBack }) => {
     const navigate = useNavigate();
