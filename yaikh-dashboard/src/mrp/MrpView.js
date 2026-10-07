@@ -341,7 +341,7 @@ const MrpView = ({ onBack, module = "mrp", label = "MRP", view: fixedView, rende
   return h(
     "div",
     { ref: topRef, style: { paddingTop: topPad }, className: "yai-pa-aware min-h-screen bg-slate-900 text-slate-200 px-4 md:px-6 pb-8 font-sans" }, // top padding clears the fixed 3-mode nav
-    h("style", null, "body.yai-pa-open .yai-pa-aware { padding-right: 436px; }"), // room for the PA panel while it is open
+    h("style", null, "body.yai-pa-open .yai-pa-aware { padding-right: 484px; }"), // room for the PA panel while it is open
     h(NavCover),
     // One toolbar line: back, title, month, the key figures (wall boards keep big cards below), search, refresh, full screen.
     h(
