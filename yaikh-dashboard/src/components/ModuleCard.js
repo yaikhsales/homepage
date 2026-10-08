@@ -91,6 +91,10 @@ const ModuleCard = ({ data, onClick, botVersion = 'default', onBotClick, isDropd
       // Big topic emoji (no background tile); falls back to a bold initial.
       const emoji = MODULE_EMOJI[data.id] || null;
       const initial = (data.title || '?').charAt(0).toUpperCase();
+      // Lock every tile to the wall clock: a tile that mounts later (hub
+      // re-render, image load, scroll) starts mid-cycle instead of at 0, so
+      // all icons and faces switch at the same moment.
+      const fadeSync = { animationDelay: `-${(Date.now() % 10600) / 1000}s` };
 
       return (
         // Large media area that fills the card so it's easy to read.
@@ -98,7 +102,7 @@ const ModuleCard = ({ data, onClick, botVersion = 'default', onBotClick, isDropd
           {/* ICON — AI-generated, transparent PNG that fills the tile.
               White backing so it's a clean plate (the card is white too)
               and fully occludes the face during its phase. */}
-          <div className="yai-fade-face yai-fade-icon bg-white">
+          <div className="yai-fade-face yai-fade-icon bg-white" style={fadeSync}>
             <img
               src={`${process.env.PUBLIC_URL}/${data.iconSrc || `IMG/icons/${data.id}.png`}`}
               alt=""
@@ -120,7 +124,7 @@ const ModuleCard = ({ data, onClick, botVersion = 'default', onBotClick, isDropd
               contain margins so the icon can never bleed through/tint it.
               A module with its own single mark (data.noFace) skips this layer,
               so nothing fades in behind the icon. */}
-          {!data.noFace && <div className="yai-fade-face yai-fade-back bg-white">
+          {!data.noFace && <div className="yai-fade-face yai-fade-back bg-white" style={fadeSync}>
             <img
               src={`${process.env.PUBLIC_URL}/${data.image}`}
               alt={data.title}
