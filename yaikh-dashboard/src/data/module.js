@@ -409,9 +409,10 @@ export const DASHBOARD_DATA = [
             title: "YWIP",
             image: "IMG/avatars/agent-33.png",
             // One bold isometric rack-and-roll mark instead of the old strip of
-            // three pictograms, and no avatar fading in behind it.
+            // three pictograms. It fades to its agent face on the same shared
+            // timeline as every other tile (with noFace it faded to a blank tile
+            // while the others showed faces, so it looked out of sync).
             iconSrc: "IMG/icons/ywip.svg",
-            noFace: true,
             status: "active",
             // Without a demoType the tile only opened the persona pop-up: the
             // id === "ywip" branch in AppLayout sits inside if (module.demoType).
