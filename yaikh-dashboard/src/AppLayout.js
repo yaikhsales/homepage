@@ -95,6 +95,31 @@ const AppLayout = () => {
   // both standalone (V2 dev :3002) and embedded under yaikh-com. The
   // constellation renders when pathname is exactly "/".
   const isHome = location.pathname === "/";
+  // The module grid (all department columns) is zoomed down to the screen width so
+  // every column is visible at once; no column sits off-screen or behind a scroll.
+  const gridRowRef = useRef(null);
+  useEffect(() => {
+    const el = gridRowRef.current;
+    if (!isHome || !el) return undefined;
+    const main = el.closest(".yai-main");
+    const fit = () => {
+      el.style.zoom = 1;
+      const cs = main ? getComputedStyle(main) : null;
+      const avail = main ? main.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) : window.innerWidth - 48;
+      const natural = el.scrollWidth;
+      const z = natural > avail ? Math.max(0.55, avail / natural) : 1;
+      el.style.zoom = z;
+      // When the grid fits, hide the sideways scrollbar the off-screen hover cards
+      // of the last column would otherwise add.
+      if (main) main.style.overflowX = natural * z <= avail + 1 ? "hidden" : "";
+    };
+    fit();
+    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(fit) : null;
+    if (ro && main) ro.observe(main);
+    window.addEventListener("resize", fit);
+    const t = setTimeout(fit, 600);
+    return () => { if (ro) ro.disconnect(); window.removeEventListener("resize", fit); clearTimeout(t); if (main) main.style.overflowX = ""; };
+  }, [isHome]);
 
   // ── Draggable Yai Data panel ──────────────────────────────────────
   // The whole chatbot icon + dropdown can be dragged anywhere. The
@@ -1281,7 +1306,9 @@ const AppLayout = () => {
               </div>
             </div>
             <div className="relative z-10 min-w-[1200px] max-w-[1800px] mx-auto flex flex-col gap-6">
-              <div className="flex justify-center items-start gap-6">
+              {/* w-max + mx-auto + the width-fit zoom above: the whole grid always fits the
+                  screen (justify-center used to push the first columns off the left edge). */}
+              <div ref={gridRowRef} className="flex items-start gap-6 w-max mx-auto">
                 <SectionContainer
                   section={DASHBOARD_DATA[0]}
                   onModuleClick={handleModuleClick}

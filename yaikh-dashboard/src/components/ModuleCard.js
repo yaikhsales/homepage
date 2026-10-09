@@ -164,7 +164,22 @@ const ModuleCard = ({ data, onClick, botVersion = 'default', onBotClick, isDropd
   // Tile height follows the window height (--yai-tile-h, set in AppLayout) so all
   // eight rows of the My Task Agent grid fit on one screen.
   return (
-    <div className="relative group w-full hover:z-[100]" style={{ height: "var(--yai-tile-h, 144px)" }}>
+    <div
+      className="relative group w-full hover:z-[100]"
+      style={{ height: "var(--yai-tile-h, 144px)" }}
+      onMouseEnter={(e) => {
+        // Keep the 400px hover card inside the screen: tiles in the first and last
+        // columns used to push it past the window edge, where it was cut off.
+        const card = e.currentTarget.querySelector("[data-yai-hovercard]");
+        if (!card) return;
+        const r = e.currentTarget.getBoundingClientRect();
+        const zoom = e.currentTarget.offsetWidth ? r.width / e.currentTarget.offsetWidth : 1;
+        const half = 200 * zoom, margin = 12;
+        const centre = r.left + r.width / 2;
+        const shift = Math.min(0, window.innerWidth - margin - (centre + half)) + Math.max(0, margin - (centre - half));
+        card.style.marginLeft = `${shift / zoom}px`;
+      }}
+    >
       <div
         onClick={handleCardClick}
         className={`
@@ -186,7 +201,7 @@ const ModuleCard = ({ data, onClick, botVersion = 'default', onBotClick, isDropd
 
       {/* Hover Popup Tooltip */}
       {data.description && !isComingSoon && (
-        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-[400px] bg-white rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.3)] border border-gray-100 z-50 p-6 flex gap-5 opacity-0 invisible scale-95 transition-all duration-300 group-hover:opacity-100 group-hover:visible group-hover:scale-100 pointer-events-none group-hover:pointer-events-auto">
+        <div data-yai-hovercard className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-[400px] bg-white rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.3)] border border-gray-100 z-50 p-6 flex gap-5 opacity-0 invisible scale-95 transition-all duration-300 group-hover:opacity-100 group-hover:visible group-hover:scale-100 pointer-events-none group-hover:pointer-events-auto">
           
           {/* Avatar Side */}
           <div className="shrink-0 flex items-start">
@@ -210,9 +225,6 @@ const ModuleCard = ({ data, onClick, botVersion = 'default', onBotClick, isDropd
             </h3>
             <p className="text-gray-600 text-sm leading-relaxed mb-4">
               "{t(`desc_${data.id.replace(/-/g, '_')}`) !== `desc_${data.id.replace(/-/g, '_')}` ? t(`desc_${data.id.replace(/-/g, '_')}`) : data.description}"
-            </p>
-            <p className="text-gray-400 text-xs italic">
-              {t('draftRoleNote')}
             </p>
           </div>
         </div>
