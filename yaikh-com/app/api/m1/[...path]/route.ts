@@ -47,6 +47,15 @@ export async function POST(req: Request, { params }: { params: { path: string[] 
     );
   }
 
+  // One silent retry on a failed read. The screens that draw the simulated
+  // factory (YWIP, FC, HR, 4DP …) render whatever comes back, so a single
+  // blip — a guard restart, a dropped tunnel — used to paint a page of zeros
+  // in front of whoever was watching. Reads are idempotent, so trying again
+  // after a short pause costs nothing and removes almost all of them.
+  // Anything that generates an answer is NOT retried: it is slow, it costs
+  // model time, and a second identical question is not free.
+  const RETRYABLE = path === "sim/view" || path === "pa/skills";
+
   const ctl = new AbortController();
   // Big Brain's boss/query runs entirely on the local Qwen model (route, answer per PA, merge), which takes
   // longer than a single PA answer; give it up to 55 s inside the 60 s function limit. pa/query is local Qwen
@@ -55,17 +64,27 @@ export async function POST(req: Request, { params }: { params: { path: string[] 
   const timer = setTimeout(() => ctl.abort(), slow ? Math.max(TIMEOUT_MS, 55000) : TIMEOUT_MS);
   try {
     const body = await req.text();
-    const upstream = await fetch(`${M1_URL}/${path}`, {
-      method: "POST",
-      signal: ctl.signal,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${M1_TOKEN}`,
-      },
-      body,
-    });
+    const call = () =>
+      fetch(`${M1_URL}/${path}`, {
+        method: "POST",
+        signal: ctl.signal,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${M1_TOKEN}`,
+        },
+        body,
+      });
 
-    const text = await upstream.text();
+    let upstream = await call();
+    let text = await upstream.text();
+
+    if (!upstream.ok && RETRYABLE) {
+      console.error(`[api/m1/${path}] upstream ${upstream.status}, retrying once: ${text.slice(0, 200)}`);
+      await new Promise((r) => setTimeout(r, 1200));
+      upstream = await call();
+      text = await upstream.text();
+    }
+
     if (!upstream.ok) {
       // Upstream detail is for us, not for the visitor.
       console.error(`[api/m1/${path}] upstream ${upstream.status}: ${text.slice(0, 300)}`);

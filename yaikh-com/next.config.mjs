@@ -77,6 +77,20 @@ const nextConfig = {
   // assets prefixed with /experience (set via homepage in
   // yaikh-dashboard/package.json) so URLs like /experience/static/...
   // resolve to the real files in public/experience/.
+  // /experience/index.html is a real file, so it is served before any rewrite
+  // and the browser URL stays on it. The dashboard's router has basename
+  // /experience, which leaves "/index.html" — no route matches and the page
+  // comes up blank. Send that URL to the entry the router does understand.
+  async redirects() {
+    return [
+      {
+        source: "/experience/index.html",
+        destination: "/experience",
+        permanent: false,
+      },
+    ];
+  },
+
   async rewrites() {
     return {
       afterFiles: [
