@@ -257,8 +257,7 @@ footer{max-width:1000px;margin:28px auto 0;border-top:1px solid var(--rule);padd
         <div class="node"><span class="chip"><b>Yorkmars</b><u>$2,000/mo</u></span><button class="reach" type="button" data-k="Yorkmars" data-fallback="→ ≈100 suppliers">→ ≈100 suppliers</button></div>
         <div class="node"><span class="chip"><b>Caswell</b><u>Yorkwell group</u></span></div>
         <div class="node"><span class="chip"><b>BICNZ</b><u>$120 paid</u></span><button class="reach" type="button" data-k="BICNZ" data-fallback="→ ≈50 suppliers">→ ≈50 suppliers</button></div>
-        <div class="node"><span class="chip"><b>3SGS</b><u>$750 setting</u></span><button class="reach" type="button" data-k="3SGS" data-fallback="→ ≈100 suppliers">→ ≈100 suppliers</button></div>
-        <div class="node"><span class="chip"><b>3SGS+</b><u>$3,000 · Oct</u></span></div>
+        <div class="node"><span class="chip"><b>3SGS</b><u>$3,750 setting</u></span><button class="reach" type="button" data-k="3SGS" data-fallback="→ ≈100 suppliers">→ ≈100 suppliers</button></div>
         <div class="node"><span class="chip"><b>ES Packing</b><u>$750 · Oct</u></span><button class="reach" type="button" data-k="ES Packing" data-fallback="→ ≈100 suppliers">→ ≈100 suppliers</button></div>
         <div class="node"><span class="chip"><b>USDS</b></span><button class="reach" type="button" data-k="USDS" data-fallback="→ ≈100 clients">→ ≈100 clients</button></div>
       </div>
@@ -591,12 +590,14 @@ const dr=document.getElementById("drawer"), sc=document.getElementById("scrim"),
       dl=document.getElementById("dlist"), ds=document.getElementById("dsearch"),
       dh=dr.querySelector("h3"), dp=dr.querySelector("p");
 let cur=[];
+/* Names are pasted in from outside, so never trust them as markup. */
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function draw(q){
   q=(q||"").trim().toLowerCase();
   const rows=cur.map((e,i)=>[e,i]).filter(([e])=>!q||String(e[0]).toLowerCase().includes(q)||String(e[1]||"").toLowerCase().includes(q));
   if(!cur.length){dl.innerHTML='<div id="dempty">No names loaded yet. Add them to the <code>NAMES</code> block at the foot of this page — one line each, and the count on the board updates itself.</div>';return;}
   if(!rows.length){dl.innerHTML='<div id="dempty">Nothing matches that.</div>';return;}
-  dl.innerHTML=rows.map(([e,i])=>"<div class=\"r\"><i>"+(i+1)+"</i><span>"+e[0]+"</span>"+(e[1]?"<em>"+e[1]+"</em>":"")+"</div>").join("");
+  dl.innerHTML=rows.map(([e,i])=>"<div class=\"r\"><i>"+(i+1)+"</i><span>"+esc(e[0])+"</span>"+(e[1]?"<em>"+esc(e[1])+"</em>":"")+"</div>").join("");
 }
 function open(k,el){
   cur=NAMES[k]||[];
