@@ -94,6 +94,10 @@ const nextConfig = {
   async rewrites() {
     return {
       afterFiles: [
+        // public/strategy/index.html is a standalone page (own fonts, inline
+        // CSS, no JS). Next does not resolve a folder to its index.html, so
+        // /strategy needs this or it 404s.
+        { source: "/strategy", destination: "/strategy/index.html" },
         {
           source: "/experience",
           destination: "/experience/index.html",

@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<title>Yai Funding Plan</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;800&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap">
+
+<style>
+/* Strategy board. Map on top; everything else lives in one tower per arm,
+   lined up left to right under its own dot. Wide screens scroll the row
+   sideways; phones stack the towers. */
+:root{
+  --bg:#F1F4F7; --card:#FFFFFF; --ink:#101820; --muted:#5A6672; --rule:#CFD9E2;
+  --hub:#0E4F6E;
+  --d1:#C2541F; --d2:#7A3E9D; --d3:#15655A; --d4:#A8790B; --d5:#13629F; --d6:#A33B5B; --d7:#0E7C86;
+  --ok:#137A52; --warn:#8A6A12; --stop:#B3341F;
+  --display:'Archivo','Helvetica Neue',Arial,sans-serif;
+  --body:'Source Sans 3','Helvetica Neue',Arial,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0A1016; --card:#141F29; --ink:#E6EDF3; --muted:#92A1AD; --rule:#243442; --hub:#5FB8DE;
+    --d1:#FF8A4C; --d2:#C79AE3; --d3:#5FC9A8; --d4:#E8C25C; --d5:#6FB6EE; --d6:#E88AA5; --d7:#4FD1DC;
+    --ok:#4DC48C; --warn:#D9B44A; --stop:#FF7A63; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0A1016; --card:#141F29; --ink:#E6EDF3; --muted:#92A1AD; --rule:#243442; --hub:#5FB8DE;
+  --d1:#FF8A4C; --d2:#C79AE3; --d3:#5FC9A8; --d4:#E8C25C; --d5:#6FB6EE; --d6:#E88AA5; --d7:#4FD1DC;
+  --ok:#4DC48C; --warn:#D9B44A; --stop:#FF7A63;
+}
+*{box-sizing:border-box}
+html,body{max-width:100%;overflow-x:hidden}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16.5px;line-height:1.6;
+     margin:0;padding:0 18px 48px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto}
+h1{font-family:var(--display);margin:0;font-size:clamp(25px,6vw,38px);font-weight:800;
+   letter-spacing:-.022em;line-height:1.08;text-wrap:balance}
+p{margin:0}
+.kicker{font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
+header{padding-block:24px 12px;display:flex;flex-direction:column;gap:7px}
+header p{color:var(--muted);font-size:15.5px}
+
+.map{background:var(--card);border:1px solid var(--rule);padding:8px;margin-top:4px;max-width:560px;margin-inline:auto}
+svg{display:block;width:100%;height:auto}
+svg a{cursor:pointer}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:10px;font-size:13px;color:var(--muted)}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:99px;margin-right:5px}
+
+.boardnote{max-width:1000px;margin:12px auto 0;font-size:14px;color:var(--muted)}
+.boardnote b{color:var(--ink);font-weight:600}
+
+/* ---- the board ---- */
+.towers{margin-top:14px;display:flex;flex-direction:column;gap:14px}
+.tower{scroll-margin:12px;background:var(--card);border:1px solid var(--rule);border-top:3px solid var(--c);
+       padding:14px 15px 12px;display:flex;flex-direction:column;min-width:0}
+.hd{display:flex;justify-content:space-between;align-items:center;min-height:24px}
+.hd b{font-family:var(--display);font-weight:800;font-size:26px;color:var(--c);line-height:1}
+.dot{width:10px;height:10px;border-radius:99px;display:inline-block;flex:none}
+.nm{font-family:var(--display);font-weight:800;font-size:19px;line-height:1.16;margin-top:5px;letter-spacing:-.01em}
+.rt{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--c);margin-top:4px}
+.st{font-size:13.5px;color:var(--muted);line-height:1.34;margin-top:5px;padding-bottom:10px;border-bottom:1px solid var(--rule)}
+.lede{font-size:14.5px;line-height:1.46;margin-top:10px}
+.grp{margin-top:12px}
+.grp > h4{margin:0 0 5px;font-family:var(--mono);font-size:9.5px;font-weight:500;letter-spacing:.13em;
+          text-transform:uppercase;color:var(--c);opacity:.9}
+.grp p{font-size:14px;line-height:1.45;color:var(--muted)}
+.grp p + p{margin-top:8px}
+.grp p b{color:var(--ink);font-weight:600}
+.w{color:var(--ok);font-weight:600} .x{color:var(--stop);font-weight:600}
+ul.t{list-style:none;margin:0;padding:0}
+ul.t li{font-size:13.5px;line-height:1.4;color:var(--muted);padding:5px 0;border-bottom:1px solid var(--rule)}
+ul.t li:last-child{border-bottom:0}
+ul.t li b{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.06em;
+          color:var(--c);opacity:.9;font-weight:500;margin-right:5px}
+ul.t li em{font-style:normal;color:var(--ink);font-weight:600}
+.feed{margin-top:14px;padding-top:9px;border-top:1px dashed var(--rule);
+      font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+
+footer{max-width:1000px;margin:28px auto 0;border-top:1px solid var(--rule);padding-top:14px;
+       font-size:13px;color:var(--muted)}
+
+/* ---- wide: one row, sideways ---- */
+@media (min-width:980px){
+  body{padding-inline:0}
+  .wrap{padding-inline:20px}
+  .towers{flex-direction:row;gap:0;margin-top:16px;overflow-x:auto;overflow-y:hidden;
+          scroll-snap-type:x proximity;padding:0 20px 14px;align-items:stretch;
+          -webkit-overflow-scrolling:touch}
+  .tower{flex:0 0 352px;height:78vh;overflow-y:auto;scroll-snap-align:start;
+         margin-right:-1px;padding-bottom:16px}
+  .boardnote{padding-inline:20px}
+  footer{padding-inline:20px}
+}
+@media (min-width:1700px){
+  body{font-size:19px}
+  .wrap,.boardnote,footer{max-width:1240px}
+  .map{max-width:620px}
+  header h1{font-size:46px}
+  .towers{padding-inline:40px}
+  .tower{flex:0 0 440px;height:80vh;padding:20px 22px 20px}
+  .hd b{font-size:34px}
+  .dot{width:14px;height:14px}
+  .nm{font-size:24px}
+  .rt{font-size:12.5px}
+  .st{font-size:16px}
+  .lede{font-size:17px}
+  .grp > h4{font-size:11.5px}
+  .grp p{font-size:16px}
+  ul.t li{font-size:15.5px}
+  ul.t li b{font-size:11.5px}
+  .feed{font-size:12.5px}
+}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+<header>
+  <span class="kicker">Internal · strategy board · 10 October 2026</span>
+  <h1>Funding the expansion beyond Yorkwell</h1>
+  <p>Seven arms on the map. One tower each underneath, holding everything about it — who the targets are, where the door is, who carries us in, and what the next move is.</p>
+</header>
+
+<div class="map">
+  <svg viewBox="0 0 400 400" role="img" aria-label="Seven funding arms around Yai, GK SMART and Texlink">
+    <g stroke="var(--rule)" stroke-width="1.5">
+      <line x1="200.0" y1="153.0" x2="200" y2="62"/>
+      <line x1="236.9" y1="170.9" x2="308" y2="115"/>
+      <line x1="245.7" y1="210.9" x2="334" y2="232"/>
+      <line x1="220.9" y1="242.1" x2="262" y2="325"/>
+      <line x1="179.1" y1="242.1" x2="138" y2="325"/>
+      <line x1="154.3" y1="210.9" x2="66" y2="232"/>
+      <line x1="163.1" y1="170.9" x2="92" y2="115"/>
+    </g>
+    <polygon points="200,62 308,115 334,232 262,325 138,325 66,232 92,115"
+             fill="none" stroke="var(--rule)" stroke-width="1.2" stroke-dasharray="4 5"/>
+    <circle cx="200" cy="200" r="42" fill="none" stroke="var(--hub)" stroke-width="2" stroke-dasharray="3 4" opacity=".6"/>
+    <text x="200" y="195" text-anchor="middle" font-family="Archivo" font-weight="800" font-size="17" fill="var(--ink)">YAI</text>
+    <text x="200" y="211" text-anchor="middle" font-family="Archivo" font-weight="800" font-size="10" fill="var(--ink)">GK SMART</text>
+    <text x="200" y="225" text-anchor="middle" font-family="IBM Plex Mono" font-size="7.5" letter-spacing="1.5" fill="var(--muted)">TEXLINK</text>
+
+    <g font-family="Archivo" font-weight="800" font-size="15" fill="#fff" text-anchor="middle">
+      <a href="#a1"><circle cx="200" cy="62" r="24" fill="transparent"/><circle cx="200" cy="62" r="21" fill="var(--d1)"/><text x="200" y="68">1</text></a>
+      <a href="#a2"><circle cx="308" cy="115" r="24" fill="transparent"/><circle cx="308" cy="115" r="21" fill="var(--d2)"/><text x="308" y="121">2</text></a>
+      <a href="#a3"><circle cx="334" cy="232" r="24" fill="transparent"/><circle cx="334" cy="232" r="21" fill="var(--d3)"/><text x="334" y="238">3</text></a>
+      <a href="#a4"><circle cx="262" cy="325" r="24" fill="transparent"/><circle cx="262" cy="325" r="21" fill="var(--d4)"/><text x="262" y="331">4</text></a>
+      <a href="#a5"><circle cx="138" cy="325" r="24" fill="transparent"/><circle cx="138" cy="325" r="21" fill="var(--d5)"/><text x="138" y="331">5</text></a>
+      <a href="#a6"><circle cx="66" cy="232" r="24" fill="transparent"/><circle cx="66" cy="232" r="21" fill="var(--d6)"/><text x="66" y="238">6</text></a>
+      <a href="#a7"><circle cx="92" cy="115" r="24" fill="transparent"/><circle cx="92" cy="115" r="21" fill="var(--d7)"/><text x="92" y="121">7</text></a>
+    </g>
+    <g font-family="IBM Plex Mono" font-size="9" letter-spacing=".5" fill="var(--muted)" text-anchor="middle">
+      <a href="#a1"><text x="200" y="30">YAI’S OWN CLIENTS</text></a>
+      <a href="#a2"><text x="318" y="84">BRANDS</text></a>
+      <a href="#a3"><text x="330" y="272">ORGANISATIONS</text></a>
+      <a href="#a4"><text x="268" y="362">SOVEREIGN</text></a>
+      <a href="#a5"><text x="132" y="362">GOVERNMENT</text></a>
+      <a href="#a6"><text x="68"  y="272">VC</text></a>
+      <a href="#a7"><text x="86"  y="84">APP MARKET</text></a>
+    </g>
+    <g>
+      <circle cx="200" cy="40" r="4" fill="var(--ok)"/>
+      <circle cx="318" cy="94" r="4" fill="var(--ok)"/>
+      <circle cx="330" cy="282" r="4" fill="var(--ok)"/>
+      <circle cx="268" cy="372" r="4" fill="var(--warn)"/>
+      <circle cx="132" cy="372" r="4" fill="var(--ok)"/>
+      <circle cx="68"  cy="282" r="4" fill="var(--warn)"/>
+      <circle cx="86"  cy="94" r="4" fill="var(--stop)"/>
+    </g>
+  </svg>
+  <div class="legend">
+    <span><i style="background:var(--ok)"></i>Open now</span>
+    <span><i style="background:var(--warn)"></i>Needs customer two</span>
+    <span><i style="background:var(--stop)"></i>Blocked on a document</span>
+  </div>
+</div>
+</div>
+
+<div class="towers">
+  <div class="tower" id="a1" style="--c:var(--d1)">
+    <div class="hd"><b>1</b><i class="dot" style="background:var(--warn)"></i></div>
+    <div class="nm">Yai’s own clients</div>
+    <div class="rt">Borrow</div>
+    <div class="st">Gated — Yorkwell contract still unread</div>
+    <p class="lede">Yorkwell Hong Kong funded 2.5 years of development so Yai runs across its own 23 units. No equity, no dilution, the customer pays for the build. The only question is whether it can be sold a second time.</p>
+    <div class="grp"><h4>Targets · the other vendor groups</h4>
+      <ul class="t">
+        <li><b>1.1</b>Crystal International — Hong Kong</li>
+        <li><b>1.2</b>TAL Apparel — Hong Kong</li>
+        <li><b>1.3</b>Youngone — Korea</li>
+        <li><b>1.4</b>Hansae — Korea</li>
+        <li><b>1.5</b>Shenzhou International — China</li>
+        <li><b>1.6</b>Eclat and Makalot — Taiwan</li>
+        <li><b>1.7</b>Pou Chen and Feng Tay — Taiwan, footwear</li>
+      </ul>
+    </div>
+    <div class="grp"><h4>Step one is a contract, not a phone call</h4>
+      <p>Yorkwell’s development agreement decides whether this arm exists. Get it to <b>Koem Phanny</b> with one question: <i>may Texlink sell Yai to a factory outside the Yorkwell group?</i></p>
+      <p><span class="x">Do not sound out a single vendor group before that answer.</span> If a competitor hears it and mentions it back to Yorkwell, the relationship that funds the build is the thing at risk.</p>
+    </div>
+    <div class="grp"><h4>The door</h4>
+      <p><b>Yorkwell’s group IT or operations head in Hong Kong.</b> One person who can name their counterpart at all nine groups above. These groups are not strangers — they share buyers, sit in the same vendor summits and benchmark against each other constantly.</p>
+    </div>
+    <div class="grp"><h4>The bridge</h4>
+      <p>Frame it as <b>their</b> win. A vendor group running Yai looks better to its brands, and Yorkwell introducing it to a peer is Yorkwell leading the vendor community. A referral fee or reseller margin makes it their revenue too.</p>
+      <p><span class="w">That framing survives an exclusivity clause far better than “let us sell to your competitors” does.</span></p>
+    </div>
+    <div class="grp"><h4>The route that bypasses the contract</h4>
+      <p>Track people, not companies. Plant managers, IE heads and compliance managers move between these groups constantly, and someone who ran Yai at Yorkmars asks for it at the next job. Nothing in any contract stops us staying in touch with alumni.</p>
+    </div>
+    <div class="feed">No updates</div>
+  </div>
+  <div class="tower" id="a2" style="--c:var(--d2)">
+    <div class="hd"><b>2</b><i class="dot" style="background:var(--ok)"></i></div>
+    <div class="nm">Brands &amp; trading offices</div>
+    <div class="rt">Triangulate</div>
+    <div class="st">Open — no approach made yet</div>
+    <p class="lede">They buy rather than invest — which is why this arm creates customer two instead of waiting for one.</p>
+    <div class="grp"><h4>Targets</h4>
+      <ul class="t">
+        <li><b>2.1</b><em>ASICS</em> — Global Sustainability Department, Kobe HQ. No lead named publicly.</li>
+        <li><b>2.2</b><em>VF Corporation</em> — Responsible Sourcing. Vans, The North Face, Timberland, Dickies.</li>
+        <li><b>2.3</b><em>Their Asia trading offices</em> — Hong Kong and Vietnam. Start here, not at HQ.</li>
+        <li><b>2.4</b><em>Standards bodies</em> — Cascale (Higg) · Textile Exchange · SLCP · amfori · Sedex.</li>
+      </ul>
+    </div>
+    <div class="grp"><h4>Never HQ first — the trading office first</h4>
+      <p>Those offices <b>already audit our plants.</b> They know Yorkmars by name. They have never heard of Yai. That gap is the whole opening, and it sits with people who already have us in their calendar.</p>
+    </div>
+    <div class="grp"><h4>The warm human we already own</h4>
+      <p><b>Yorkmars’ own compliance manager emails these brand auditors every week.</b> Ask for the names of the ASICS and VF auditors who physically visit — a real relationship, held by our own customer, costing nothing.</p>
+      <p><span class="w">Then invite the auditor to the plant to watch the video feed run.</span> Demo on the floor, never in a deck.</p>
+    </div>
+    <div class="grp"><h4>Triangulating the ASICS lead</h4>
+      <p>No name is published. Three ways to it, run in parallel:</p>
+      <p><b>(a)</b> the governance section of the 2025 Sustainability Report lists committee members by role.</p>
+      <p><b>(b)</b> LinkedIn — ASICS + sustainability + Kobe, then check who our Yorkmars and Caswell compliance staff are connected to at one remove.</p>
+      <p><b>(c)</b> <b>Cascale, Textile Exchange and SLCP working groups</b> publish attendee and member lists, and brand sustainability staff sit on them under their own names.</p>
+    </div>
+    <div class="grp"><h4>Buy a seat at the standards bodies</h4>
+      <p>Associate or solution-provider membership of <b>Cascale</b> or <b>amfori</b> is a paid listing and, more importantly, a speaking slot — where brand sustainability staff actually gather. CDMS already implements all 36 of these standards, so the credential is real before we pay for the seat.</p>
+    </div>
+    <div class="grp"><h4>What we open with</h4>
+      <p>ASICS publishes “100% supplier compliance with ASICS standards.” The question is not a pitch — it is <b>“how is that evidenced today?”</b> Then show a Khmer safety notice with a completion list against it.</p>
+      <p><span class="w">Brands pay auditors for weaker evidence than that.</span></p>
+    </div>
+    <div class="feed">No updates</div>
+  </div>
+  <div class="tower" id="a3" style="--c:var(--d3)">
+    <div class="hd"><b>3</b><i class="dot" style="background:var(--ok)"></i></div>
+    <div class="nm">Organisations</div>
+    <div class="rt">Climb</div>
+    <div class="st">Warm — ILO already a partner in-app</div>
+    <p class="lede">Twelve to eighteen months from first contact to money — which is exactly why to start now.</p>
+    <div class="grp"><h4>Targets</h4>
+      <ul class="t">
+        <li><b>3.1</b><em>ILO</em> — Gilbert Houngbo, Director-General, Geneva. <span class="x">Never cold into Geneva.</span></li>
+        <li><b>3.2</b><em>Better Work</em> — ILO and IFC jointly. Management Group: Manuela Tomei, Kaori Nakamura-Osaka (ILO), Larissa Luy, Iffath Sharif (World Bank Group).</li>
+        <li><b>3.3</b><em>IFC</em> — Makhtar Diop, Managing Director, Washington.</li>
+        <li><b>3.4</b><em>UNIDO</em> — Gerd Müller, Director General, Vienna.</li>
+        <li><b>3.5</b><em>UNDP</em> — Alexander De Croo, Administrator, New York.</li>
+        <li><b>3.6</b><em>ADB</em> — Masato Kanda, President, Manila. Second term from 24 Nov 2026.</li>
+        <li><b>3.7</b><em>The other DFIs</em> — BII · DFC · Proparco · FMO.</li>
+      </ul>
+    </div>
+    <div class="grp"><h4>Rung one is a walk-in, in Phnom Penh</h4>
+      <p><b>Better Work Cambodia’s office.</b> ILO is already a partner organisation inside the app — a standing, factual reason to ask for a meeting, not a cold pitch. Target the Programme Manager.</p>
+    </div>
+    <div class="grp"><h4>Rungs two and three</h4>
+      <p>Better Work Cambodia → Better Work regional in <b>Bangkok</b> → the <b>Management Group</b>. Each rung is a referral carried upward by the rung below. <span class="x">Skipping a rung does not speed it up, it ends it.</span></p>
+    </div>
+    <div class="grp"><h4>The committee shortcut</h4>
+      <p>Better Work Cambodia runs a <b>Project Advisory Committee</b> with TAFTAC, the unions and the Ministry of Labour on it. <b>TAFTAC already posts into Yai’s video feed.</b></p>
+      <p>A TAFTAC member raising Yai inside that committee is the cheapest introduction anywhere on this board — and it is one conversation away.</p>
+    </div>
+    <div class="grp"><h4>ADB and World Bank are procurement, not relationship</h4>
+      <p>Register as a vendor and consultant on <b>ADB’s CMS</b> and the <b>World Bank supplier portal</b>, then watch the published pipelines. ADB BRIDGE is being shaped now for 2027 approval — <span class="w">position while the scope is still being written.</span></p>
+    </div>
+    <div class="grp"><h4>What we say, exactly</h4>
+      <p>Not “fund us.” It is: <b>your notices already reach these workers, and we can show you who completed them.</b> An organisation whose entire problem is the last mile to the worker is being told we already hold it.</p>
+    </div>
+    <div class="feed">No updates</div>
+  </div>
+  <div class="tower" id="a4" style="--c:var(--d4)">
+    <div class="hd"><b>4</b><i class="dot" style="background:var(--warn)"></i></div>
+    <div class="nm">Sovereign funds</div>
+    <div class="rt">Hold</div>
+    <div class="st">Holding — relationship only, no ask</div>
+    <p class="lede">Tickets start around $10m and they buy scale. The arm is real; we are not ready.</p>
+    <div class="grp"><h4>Targets</h4>
+      <ul class="t">
+        <li><b>4.1</b>UAE National Program for Artificial Intelligence — Abu Dhabi</li>
+        <li><b>4.2</b>Mubadala and ADQ ecosystem</li>
+        <li><b>4.3</b>Hong Kong and Singapore family offices with manufacturing or trading roots</li>
+      </ul>
+    </div>
+    <div class="grp"><h4>Why holding is the strategy</h4>
+      <p>Approaching with one customer does not get a polite later — <b>it spends the introduction and returns a no that stays on file.</b> The same introduction is worth several times more once the gates clear.</p>
+    </div>
+    <div class="grp"><h4>What to do in the meantime</h4>
+      <p>Attend the Gulf AI events — the Global AI Show lead came from exactly that. Meet people. Collect names and roles. <span class="w">Make no ask at all</span>, which is also the most memorable thing anyone does in those rooms.</p>
+    </div>
+    <div class="grp"><h4>The triangulation to set up now</h4>
+      <p><b>Yorkwell’s own owners sit in precisely that family-office community.</b> The owner of a 23-unit garment group introducing Yai to his peers at that level outranks any fund’s inbound form. Build the goodwill now; use it after customer two.</p>
+    </div>
+    <div class="grp"><h4>Opening trigger</h4>
+      <p>A second named customer <b>and</b> cost-to-deploy plus revenue-per-plant on paper. Until both exist, this tower stays a contact list.</p>
+    </div>
+    <div class="feed">No updates</div>
+  </div>
+  <div class="tower" id="a5" style="--c:var(--d5)">
+    <div class="hd"><b>5</b><i class="dot" style="background:var(--ok)"></i></div>
+    <div class="nm">Government programmes</div>
+    <div class="rt">Portal</div>
+    <div class="st">Eligible — 4 applications ready to file</div>
+    <p class="lede">The one arm that is a form rather than a person — mostly. An officer scores it against written criteria.</p>
+    <div class="grp"><h4>Singapore — through GGMT</h4>
+      <ul class="t">
+        <li><b>5.1</b><em>MRA</em> — 70% of costs back, cap S$100,000, to 31 Mar 2029. <span class="w">GGMT passes the 30% local-equity test.</span></li>
+        <li><b>5.2</b><em>EDG</em> — up to 50% of project cost. The AI servers fit here.</li>
+        <li><b>5.3</b><em>EDGE</em> — the new scheme merging MRA, PSG and EDG. Apply under today’s schemes rather than wait.</li>
+      </ul>
+    </div>
+    <div class="grp"><h4>Cambodia — eight institutions under MEF</h4>
+      <ul class="t">
+        <li><b>5.4</b><em>EDF EcoBoost 2026–2028</em> — seed funding for digital-marketplace startups. That is tower 7, word for word.</li>
+        <li><b>5.5</b><em>Khmer Enterprise</em> — ~$17m invested plus $33m mobilised, nearly 600 projects.</li>
+        <li><b>5.6</b><em>SDF</em> — co-funds workforce training. <span class="w">Yai’s video feed already delivers it and proves completion.</span></li>
+        <li><b>5.7</b><em>Techo Startup Center</em> — grants, tax incentives, Startup Cambodia platform.</li>
+        <li><b>5.8</b><em>SME Bank</em> — $242m direct to 880 businesses. <b>Debt, not grants.</b></li>
+        <li><b>5.9</b><em>CGCC</em> — guarantees bank lending without collateral. Pairs with 5.8.</li>
+        <li><b>5.10</b><em>ARDB · DEBC</em> — agriculture and digital-economy credit.</li>
+        <li><b>5.11</b><em>MISTI</em> — recognised the Model Green Factory Program.</li>
+        <li><b>5.12</b><em>Smart Axiata Digital Innovation Fund</em> — $5m, telco rather than state.</li>
+      </ul>
+    </div>
+    <div class="grp"><h4>Germany and the EU</h4>
+      <ul class="t">
+        <li><b>5.13</b><em>GIZ FABRIC Cambodia II</em> — garment, footwear, travel goods. <span class="w">The closest fit of any foreign programme.</span></li>
+        <li><b>5.14</b><em>develoPPP</em> — BMZ via GIZ and DEG. <b>You must fund at least half.</b></li>
+        <li><b>5.15</b><em>KfW · DEG</em> — German development bank and private-sector arm.</li>
+        <li><b>5.16</b><em>SWITCH-Asia</em> — EU grants, new calls still opening.</li>
+        <li><b>5.17</b><em>EU Delegation to Cambodia</em> — its own calls. Local, often overlooked.</li>
+        <li><b>5.18</b><em>Global Gateway · EFSD+ · EIB Global</em> — slower, state-level.</li>
+        <li><b>5.19</b><em>Other European agencies</em> — AFD · Proparco · SIDA · Swedfund · Danida · IFU · RVO · FMO · Norfund · Finnfund · SECO · SIFEM.</li>
+      </ul>
+    </div>
+    <div class="grp"><h4>UK, US, Asia-Pacific, multilateral</h4>
+      <ul class="t">
+        <li><b>5.20</b><em>United Kingdom</em> — BII · FCDO. <span class="x">Innovate UK needs a UK entity.</span></li>
+        <li><b>5.21</b><em>DFC</em> — debt and equity. Overlaps tower 3; one relationship.</li>
+        <li><b>5.22</b><em>USTDA</em> — feasibility grants. <b>US aid structures changed in 2025 — verify.</b></li>
+        <li><b>5.23</b><em>Japan</em> — JICA · METI · JETRO · JBIC · NEDO · AOTS.</li>
+        <li><b>5.24</b><em>Korea</em> — KOTRA · KOICA · Knowledge Sharing Programme.</li>
+        <li><b>5.25</b><em>Australia</em> — DFAT and the Aus4 programmes.</li>
+        <li><b>5.26</b><em>Taiwan ICDF</em> — Taiwanese groups dominate footwear.</li>
+        <li><b>5.27</b><em>Mekong funds</em> — Japan · ROK · Lancang-Mekong · US Partnership.</li>
+        <li><b>5.28</b><em>ASEAN</em> — SME Academy · Digital Masterplan.</li>
+        <li><b>5.29</b><em>ADB Ventures</em> — $50m impact-tech. <b>Invests like a VC</b>, so the gates apply.</li>
+        <li><b>5.30</b><em>ADB BRIDGE</em> — Cambodia digital, approval expected 2027.</li>
+        <li><b>5.31</b><em>World Bank</em> — digital economy and skills projects.</li>
+        <li><b>5.32</b><em>UNCDF</em> — Challenge Fund, Inclusive Digital Economies Score.</li>
+        <li><b>5.33</b><em>UNDP with the National Bank of Cambodia</em> — digital payments, the riel.</li>
+        <li><b>5.34</b><em>ITC · WIPO · GCF · GEF</em> — thinner fit. Park unless a call opens.</li>
+      </ul>
+    </div>
+    <div class="grp"><h4>Singapore is pure paperwork</h4>
+      <p><b>Business Grants Portal, Corppass login, GGMT files.</b> Nobody to persuade. One decision blocks it and it is ours: <span class="x">MRA is claimed per target market — pick the market first.</span></p>
+    </div>
+    <div class="grp"><h4>Cambodia: register once, be seen by all eight</h4>
+      <p><b>Startup Cambodia</b> registration is free and is how all eight MEF institutions see us. The <b>National Business Financing Forum</b> then puts all eight in one room — 600 attended in July 2026.</p>
+    </div>
+    <div class="grp"><h4>Where this arm is secretly a person</h4>
+      <p>GIZ FABRIC and the EU Delegation do not reward cold proposals. <b>TAFTAC implements their work</b> and holds the Model Green Factory Program — and already posts into Yai’s feed.</p>
+      <p><span class="w">Go in as something TAFTAC already uses</span>, not as an applicant. Being named in TAFTAC’s own programme documentation is what makes GIZ answer an email.</p>
+    </div>
+    <div class="grp"><h4>Be honest about the size</h4>
+      <p>Cambodian grants are small against offices, AI servers and recruitment. <b>Singapore and Germany are where the real money is.</b> Cambodia buys credibility — which is what towers 2, 3 and 4 read as validation.</p>
+    </div>
+    <div class="feed">No updates</div>
+  </div>
+  <div class="tower" id="a6" style="--c:var(--d6)">
+    <div class="hd"><b>6</b><i class="dot" style="background:var(--warn)"></i></div>
+    <div class="nm">VC &amp; strategic</div>
+    <div class="rt">Hold</div>
+    <div class="st">Holding — deck written, story missing</div>
+    <p class="lede">The $3M seed deck is written. What is missing is the second customer, not the document.</p>
+    <div class="grp"><h4>Targets</h4>
+      <ul class="t">
+        <li><b>6.1</b>South-east Asia industrial-tech funds</li>
+        <li><b>6.2</b>Korean and Japanese funds with manufacturing ties</li>
+        <li><b>6.3</b><em>Corporate VC of the brand groups</em> — the one exception worth testing early</li>
+      </ul>
+    </div>
+    <div class="grp"><h4>The exception</h4>
+      <p>Brand corporate VC buys a strategic position in its own supply chain, not a growth curve. <b>“22 deployments, one customer” reads differently to them</b> than to a financial fund.</p>
+    </div>
+    <div class="grp"><h4>And it is the same person as tower 2</h4>
+      <p>The brand’s sustainability lead introduces us to the brand’s ventures arm. <b>One relationship, two arms.</b> <span class="w">Another reason tower 2 is the first thing to work on.</span></p>
+    </div>
+    <div class="grp"><h4>Why financial VC stays shut</h4>
+      <p>They ask cost-per-plant and revenue-per-plant inside the first ten minutes. Without those numbers an unanswerable first meeting is what gets remembered.</p>
+    </div>
+    <div class="feed">No updates</div>
+  </div>
+  <div class="tower" id="a7" style="--c:var(--d7)">
+    <div class="hd"><b>7</b><i class="dot" style="background:var(--stop)"></i></div>
+    <div class="nm">App marketplace</div>
+    <div class="rt">Ours</div>
+    <div class="st">Blocked — MoC licence · launches November</div>
+    <p class="lede">Three markets in one app — Phsar, Service and Factory Supply. The only arm where nobody has to say yes except a ministry.</p>
+    <div class="grp"><h4>Targets and rails</h4>
+      <ul class="t">
+        <li><b>7.1</b><em>Ministry of Commerce</em> — the e-commerce licence. Owner: <b>Koem Phanny</b>, Texlink legal. <span class="x">Submitted, in review, or being prepared?</span></li>
+        <li><b>7.2</b><em>ABA</em> — integrated. Nothing further needed.</li>
+        <li><b>7.3</b><em>Wing</em> — integrated. Nothing further needed.</li>
+        <li><b>7.4</b><em>Google Play and the App Store</em> — YaiKH iOS v4.0.4, Android 1k+ installs at 3.6★ from 7 reviews. Yai Shop iOS v1.0 only.</li>
+      </ul>
+    </div>
+    <div class="grp"><h4>No one to persuade but one ministry</h4>
+      <p>Payment rails integrated. Both apps published. Marketplace built. <b>Everything waits on the licence.</b></p>
+    </div>
+    <div class="grp"><h4>Then it is marketing, not relationships</h4>
+      <p>Facebook, WhatsApp and Instagram, straight at Cambodian consumers. <b>No triangulation, no committee, no referral chain.</b> Budget and creative — which is why this one can start in November while the other six are still being set up.</p>
+    </div>
+    <div class="grp"><h4>The order matters</h4>
+      <p>Licence → <b>fix G4 authentication</b> → clean the store listings → then spend.</p>
+      <p><span class="x">Phsar Market users are consumers, not employees with assigned accounts</span> — username and password alone is the wrong front door to run a paid campaign at.</p>
+    </div>
+    <div class="grp"><h4>Fix the shopfront before paying for traffic</h4>
+      <p>Developer name shows as <b>“Yai01”</b> on Android against GGMT PTE. LTD. on iOS. Yai Shop’s listing still describes IoT devices. A typo is burned into a screenshot. 3.6★ from 7 reviews moves either way on very little — so it moves before the spend.</p>
+    </div>
+    <div class="grp"><h4>It also unlocks tower 5</h4>
+      <p>A live marketplace is what makes <b>5.4 EDF EcoBoost</b> a real application instead of a plan. <span class="w">This is the one arm that pays for another arm by simply shipping.</span></p>
+    </div>
+    <div class="feed">No updates</div>
+  </div>
+  <div class="tower" id="first" style="--c:var(--hub)">
+    <div class="hd"><b>★</b></div>
+    <div class="nm">Do these four first</div>
+    <div class="rt">This month</div>
+    <div class="st">Nothing filed yet</div>
+    <p class="lede">Four that need no permission from anyone, and one fix that is pure engineering.</p>
+    <div class="grp"><h4>File now</h4>
+      <ul class="t">
+        <li><b>5.4</b><em>EDF EcoBoost</em> — it names seed funding for digital-marketplace startups. That is Yai Shop, described by a government fund. Apply the moment the licence lands.</li>
+        <li><b>5.6</b><em>Skills Development Fund</em> — Yai’s video feed already delivers training and proves who finished it. That is the fund’s entire remit.</li>
+        <li><b>3.2</b><em>Better Work Cambodia</em> — ILO is already a partner organisation inside the app. Warm today, and it costs nothing.</li>
+        <li><b>5.1</b><em>Singapore MRA</em> — up to S$70,000 back. GGMT already qualifies: a Singapore citizen and a PR on the shareholding.</li>
+      </ul>
+    </div>
+    <div class="grp"><h4>And fix G4</h4>
+      <p>It unblocks the Anthropic partner review and the public app launch at the same time, and it is engineering you control — <b>no counterparty, no permission, no waiting.</b></p>
+    </div>
+    <div class="feed">4 to file</div>
+  </div>
+  <div class="tower" style="--c:var(--hub)">
+    <div class="hd"><b>G</b></div>
+    <div class="nm">The five gates</div>
+    <div class="rt">Blockers</div>
+    <div class="st">Three of five still unknown</div>
+    <p class="lede">Every one of these is asked in the first ten minutes of a conversation on this board.</p>
+    <div class="grp"><h4>Open</h4>
+      <ul class="t">
+        <li><b>G1</b><em>Yorkwell’s terms.</em> Does the development agreement carry exclusivity, IP ownership, or a consent right over new investors? <b>Unknown — and it decides whether tower 1 can be used at all.</b></li>
+        <li><b>G2</b><em>Unit economics.</em> Cost to deploy one plant. Revenue per plant per year. <b>Both still blank.</b></li>
+        <li><b>G3</b><em>Customer number two.</em> Yorkwell owns Yorkmars, Caswell and the other 21. That is <b>22 deployments and one customer.</b> Towers 4 and 6 stay shut until a second name exists.</li>
+        <li><b>G4</b><em>Authentication.</em> Anthropic’s first partner review failed on access alone — username and password, no second factor. <b>Due before end of October.</b></li>
+        <li><b>G5</b><em>E-commerce licence.</em> Ministry of Commerce, with Koem Phanny. Everything else on tower 7 is built and waiting.</li>
+      </ul>
+    </div>
+    <div class="feed">3 unknown</div>
+  </div>
+  <div class="tower" style="--c:var(--hub)">
+    <div class="hd"><b>F</b></div>
+    <div class="nm">Findings</div>
+    <div class="rt">10 Oct 2026</div>
+    <div class="st">What was settled this week</div>
+    <p class="lede"></p>
+    <div class="grp"><h4>On the record</h4>
+      <ul class="t">
+        <li><b>Claude Startups</b>Both filed. GK SMART from gamini@ggmt.sg, Texlink from gamini@yaikh.com. GGMT could not file separately — one application per Console org.</li>
+        <li><b>Customer stories</b>Yorkmars <b>declined</b>: no measurable result the customer achieved. GK SMART <b>not eligible</b>: the link was not a public page. CDMS filled but never submitted — it needs a number from 3SGS.</li>
+        <li><b>yaikh.com/about</b>The technologies list shows Anthropic Claude beside Google Gemini and DeepSeek. Brands and ILO will read that page, and DeepSeek raises data-residency questions with them.</li>
+        <li><b>Incorporation</b>Texlink October 2025 · GK SMART 13 April 2021 (MOC 50015732) · GGMT 1 September 2011 (UEN 201120577C).</li>
+        <li><b>A UK or US entity</b>Worth doing for a <b>named</b> programme or customer, not in advance. Germany or the Netherlands would be the stronger European choice, since develoPPP, DEG and FMO prefer a European partner. <b>You already hold the two entities that matter.</b></li>
+      </ul>
+    </div>
+    <div class="feed">—</div>
+  </div>
+</div>
+
+<p class="boardnote">Scroll the row sideways. The last line of every tower is where the live feed lands — <b>mail sent, forms filed, LinkedIn replies, Facebook mentions</b> — so the board shows what moved without opening anything. <span class="x">Nothing is wired to it yet; today those lines are placeholders.</span></p>
+
+<footer>
+  Yorkwell Hong Kong funds development for its own 23 units; this board is about everything beyond them. Figures from public reporting on 10 October 2026 — confirm current terms with each body before applying, since several run in rounds. Where no person is named, none could be confirmed; the role is given instead. Do not guess a name.
+</footer>
+
+</body>
+</html>

@@ -20,5 +20,8 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/plan/:path*"],
+  // /strategy is the internal funding board — same access code as /plan, never
+  // public. It names real people and how to reach them, so it must never be
+  // reachable without the cookie.
+  matcher: ["/plan/:path*", "/strategy", "/strategy/:path*"],
 };

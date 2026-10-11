@@ -13,7 +13,8 @@ export type NavItem = {
   label: string;
   labelKey?: string;
   /** Optional sub-items, rendered indented under the parent (e.g. 08.1, 08.2). */
-  children?: Array<{ id: string; label: string; labelKey?: string }>;
+  /** A child with `href` is a link to another page, not an in-page anchor. */
+  children?: Array<{ id: string; label: string; labelKey?: string; href?: string }>;
 };
 
 export function Sidebar({
@@ -205,7 +206,8 @@ export function Sidebar({
             const isActive = it.id === active;
             const num = String(i + 1).padStart(2, "0");
             const childActive = !!it.children?.some((c) => c.id === active);
-            const showChildren = !!it.children && (isActive || childActive);
+            const showChildren =
+      !!it.children && (isActive || childActive || it.children.some((c) => c.href));
             return (
               <div key={it.id}>
                 <a
@@ -231,6 +233,25 @@ export function Sidebar({
                   <div className="mt-0.5 mb-1.5 space-y-0.5">
                     {it.children!.map((c, ci) => {
                       const cActive = c.id === active;
+                      // A link out of the plan: no scroll-spy, no jump handler,
+                      // opens in its own tab, marked with an arrow.
+                      if (c.href) {
+                        return (
+                          <a
+                            key={c.id}
+                            href={c.href}
+                            target="_blank"
+                            rel="noopener"
+                            className="flex items-center py-1.5 pl-10 pr-2 rounded text-[13px] text-white/50 hover:text-white/90 transition-all duration-200"
+                          >
+                            <span className="text-yai-orange/80 font-bold mr-2">
+                              {num}.{ci + 1}
+                            </span>
+                            <span className="flex-1">{c.labelKey ? t(c.labelKey, c.label) : c.label}</span>
+                            <span aria-hidden className="text-white/35 ml-1">↗</span>
+                          </a>
+                        );
+                      }
                       return (
                         <a
                           key={c.id}

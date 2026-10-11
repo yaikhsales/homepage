@@ -74,7 +74,14 @@ const NAV: NavItem[] = [
       { id: "customer-yhr",            label: "YHR" },
     ],
   },
-  { id: "gtm",               label: "Go-to-Market Milestones", labelKey: "nav.gtm" },
+  {
+    id: "gtm",
+    label: "Go-to-Market Milestones",
+    labelKey: "nav.gtm",
+    // Internal funding board, behind the same access code. Linked here only —
+    // never from a page that is reachable without the code.
+    children: [{ id: "gtm-funding", label: "Funding Strategy", labelKey: "nav.gtm_funding", href: "/strategy" }],
+  },
   { id: "team",              label: "Team",                   labelKey: "nav.team" },
   { id: "oc-budget",         label: "OC & Live Budget Update", labelKey: "nav.oc_budget" },
   { id: "capital",           label: "Capital Efficiency",     labelKey: "nav.capital" },
