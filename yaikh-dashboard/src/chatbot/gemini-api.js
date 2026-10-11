@@ -50,6 +50,12 @@ const holdingMessage = () => {
 // A response is "premium" only when Claude itself answered. Anything else
 // (qwen-fallback, missing source) is the degraded path we mask.
 const isClaude = (src) => src === "claude" || src === "claude-haiku-4-5";
+// Since 2026-10-07 the PAs and Big Brain answer with local Qwen + exact records, never Claude per question
+// (Gamini: runtime Claude is for real clients only). These are the guard's real answer sources; requiring
+// "claude" here made every PA chat say "unavailable". Only an empty or failed answer is masked now.
+const ANSWER_SOURCES = new Set(["claude", "claude-haiku-4-5", "qwen", "direct", "direct+qwen", "qwen+claude",
+  "claude-backup", "qwen-fallback", "records-only"]);
+const isAnswerSource = (src) => !src || ANSWER_SOURCES.has(String(src));
 
 /* ─── Big Brain / PA skills: Alerts · Reminders · Forecasts ─────────────
  * POST /api/m1/pa/skills {pa}. pa:"all" = Big Brain (every dept merged, each
@@ -198,8 +204,8 @@ export const generatePAResponse = async (pa, userMessage, chatHistory = [], visi
     clearTimeout(timer);
     if (!r.ok) { m1SkipUntil = Date.now() + M1_COOLDOWN_MS; return holdingMessage(); }
     const data = await r.json();
-    // Mask the degraded Qwen fallback — only a Claude-grounded answer ships.
-    if (!isClaude(data?.source)) return holdingMessage();
+    // Any real answer from the guard ships (exact records, or Qwen worded and number-checked).
+    if (!isAnswerSource(data?.source)) return holdingMessage();
     return typeof data?.answer === "string" ? data.answer.trim() : holdingMessage();
   } catch (err) {
     console.warn("PA query error:", err?.message || err);
@@ -259,7 +265,9 @@ export const generateBossOrChat = async (
  * REACT_APP_YAI_BACKEND=qwen disables this path (falls straight through to
  * legacy /boss/query). Any failure returns null so caller falls through.
  */
-const YAI_BACKEND = (process.env.REACT_APP_YAI_BACKEND || "claude").toLowerCase();
+// Default "qwen": Big Brain goes straight to /boss/query (exact records + local Qwen). The Claude-bubble path
+// (/v1/chat/claude) has no Claude behind it since 2026-10-07, so it only ever produced the "busy" message.
+const YAI_BACKEND = (process.env.REACT_APP_YAI_BACKEND || "qwen").toLowerCase();
 
 export const generateBossBubbles = async (
   userMessage,
