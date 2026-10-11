@@ -40,22 +40,19 @@
 *{box-sizing:border-box}
 html,body{max-width:100%;overflow-x:hidden}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16.5px;line-height:1.6;
-     margin:0;padding:0 18px 48px;-webkit-font-smoothing:antialiased}
+     margin:0;padding:0 18px 40px;-webkit-font-smoothing:antialiased}
 .wrap{max-width:1000px;margin:0 auto}
-h1{font-family:var(--display);margin:0;font-size:clamp(25px,6vw,38px);font-weight:800;
-   letter-spacing:-.022em;line-height:1.08;text-wrap:balance}
 p{margin:0}
-.kicker{font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
-header{padding-block:24px 12px;display:flex;flex-direction:column;gap:7px}
-header p{color:var(--muted);font-size:15.5px}
 
-.hub{display:flex;flex-direction:column;align-items:center;margin-top:18px}
+.hub{display:flex;flex-direction:column;align-items:center;margin-top:14px}
 .hubcard{background:var(--card);border:2px solid var(--hub);border-radius:999px;
-         padding:13px 32px;text-align:center;line-height:1.12}
-.hubcard b{display:block;font-family:var(--display);font-weight:800;font-size:28px;letter-spacing:-.015em}
-.hubcard span{display:block;font-family:var(--display);font-weight:800;font-size:15.5px;margin-top:1px}
-.hubcard i{display:block;font-style:normal;font-family:var(--mono);font-size:9.5px;
-           letter-spacing:.3em;color:var(--hub);margin-top:4px}
+         padding:13px 30px;text-align:center;line-height:1.12}
+.brands{display:flex;align-items:center;justify-content:center;gap:26px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand img{width:36px;height:36px;border-radius:9px;display:block;flex:none}
+.brand b{font-family:var(--display);font-weight:800;font-size:25px;letter-spacing:-.015em;line-height:1;white-space:nowrap}
+.hubcard i{display:block;font-style:normal;font-family:var(--mono);font-size:10px;
+           letter-spacing:.22em;color:var(--hub);margin-top:8px;white-space:nowrap}
 .stem{width:2px;height:22px;background:var(--hub);opacity:.55}
 .legend{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-top:12px;font-size:13px;color:var(--muted)}
 .legend i{display:inline-block;width:9px;height:9px;border-radius:99px;margin-right:5px}
@@ -107,7 +104,7 @@ footer{max-width:1000px;margin:28px auto 0;border-top:1px solid var(--rule);padd
   .towers{flex-direction:row;gap:0;margin-top:16px;overflow-x:auto;overflow-y:hidden;
           scroll-snap-type:x proximity;padding:0 20px 14px;align-items:stretch;
           -webkit-overflow-scrolling:touch}
-  .tower{flex:0 0 352px;height:78vh;overflow-y:auto;scroll-snap-align:start;
+  .tower{flex:0 0 352px;height:84vh;overflow-y:auto;scroll-snap-align:start;
          margin-right:-1px;padding-bottom:16px}
   .boardnote{padding-inline:20px}
   footer{padding-inline:20px}
@@ -115,13 +112,13 @@ footer{max-width:1000px;margin:28px auto 0;border-top:1px solid var(--rule);padd
 @media (min-width:1700px){
   body{font-size:19px}
   .wrap,.boardnote,footer{max-width:1240px}
-  header h1{font-size:46px}
   .towers{padding-inline:40px}
-  .tower{flex:0 0 440px;height:80vh;padding:0 22px 20px}
+  .tower{flex:0 0 440px;height:86vh;padding:0 22px 20px}
   .orb{width:196px;height:196px;font-size:21px;padding:18px}
   .orb .dot{width:14px;height:14px;top:12px;right:18px}
-  .hubcard b{font-size:34px}
-  .hubcard span{font-size:19px}
+  .brand img{width:48px;height:48px;border-radius:12px}
+  .brand b{font-size:33px}
+  .hubcard i{font-size:13px}
   .hd b{font-size:34px}
   .dot{width:14px;height:14px}
   .nm{font-size:24px}
@@ -140,14 +137,8 @@ footer{max-width:1000px;margin:28px auto 0;border-top:1px solid var(--rule);padd
 
 
 <div class="wrap">
-<header>
-  <span class="kicker">Internal · strategy board · week of 12 Oct 2026</span>
-  <h1>Funding the expansion beyond Yorkwell</h1>
-  <p>One tower per arm, side by side under the hub, each holding everything about it — who the targets are, where the door is, who carries us in, and what the next move is.</p>
-</header>
-
   <div class="hub">
-    <div class="hubcard"><b>YAI</b><span>GK SMART</span><i>TEXLINK</i></div>
+    <div class="hubcard"><div class="brands"><span class="brand"><img alt="" src="data:image/jpeg;base64,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"><b>YAI</b></span><span class="brand"><img alt="" src="data:image/png;base64,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"><b>GK SMART Ai</b></span></div><i>TEXLINK · GK SMART · GGMT</i></div>
     <div class="stem"></div>
   </div>
   <div class="legend"><span><i style="background:var(--ok)"></i>Open now</span><span><i style="background:var(--warn)"></i>Needs customer two</span><span><i style="background:var(--stop)"></i>Blocked on a document</span></div>
@@ -157,304 +148,387 @@ footer{max-width:1000px;margin:28px auto 0;border-top:1px solid var(--rule);padd
   <div class="tower" style="--c:var(--hub);--o:var(--o0)">
     <div class="cap"><div class="orb">This week</div></div>
     <div class="rt">Mon 12 — Sun 18 Oct</div>
-    <div class="st">13 moves across six arms</div>
-    <p class="lede">What has to happen with your feet and your phone this week. Sovereign funds and financial VC are deliberately absent — there is nothing to do there until a second customer exists.</p>
-    <div class="grp"><h4>Mon 12 Oct</h4>
-      <p><b>Own clients.</b> Pull the Yorkwell development agreement out of the file and put it in front of <b>Koem Phanny</b>, with one question written on top: <i>may Texlink sell Yai to a factory outside the Yorkwell group?</i> Nothing on that tower moves until it is answered.</p>
-      <p><b>App marketplace.</b> Same sitting, second question: where is the Ministry of Commerce e-commerce licence — submitted, in review, or being prepared? <b>Ask for a date, not a status.</b> EDF EcoBoost cannot be filed until it lands.</p>
+    <div class="st">13 moves · six arms</div>
+    <div class="grp"><h4>Mon 12</h4>
+      <ul class="t">
+        <li><b>Own clients</b>Yorkwell contract → <b>Koem Phanny</b>. One question: may we sell outside the group?</li>
+        <li><b>App market</b>Same sitting — e-commerce licence. <b>Ask for a date, not a status.</b></li>
+      </ul>
     </div>
-    <div class="grp"><h4>Tue 13 Oct</h4>
-      <p><b>Brands.</b> Call the Yorkmars compliance manager. Ask for the <b>names and email addresses of the ASICS and VF auditors who physically visit the plant.</b> Write them down. This is the warmest contact on the board and it has never been used.</p>
-      <p><b>Government.</b> Thirty minutes at a desk: register on <b>Startup Cambodia</b>. Free, and it is how all eight Ministry of Economy and Finance institutions see us.</p>
+    <div class="grp"><h4>Tue 13</h4>
+      <ul class="t">
+        <li><b>Brands</b>Call Yorkmars compliance. Get the <b>ASICS + VF auditor names</b>.</li>
+        <li><b>Government</b>Register on <b>Startup Cambodia</b>. 30 minutes, free.</li>
+      </ul>
     </div>
-    <div class="grp"><h4>Wed 14 Oct</h4>
-      <p><b>Organisations.</b> Walk into <b>Better Work Cambodia</b> in Phnom Penh and ask for the Programme Manager. Take a phone. Show the video feed with ILO already a partner organisation inside the app. <span class="w">That is a fact, not a pitch, and it is why they will see you.</span></p>
-      <p><b>Government.</b> File the <b>Skills Development Fund</b> application. The training-completion evidence already exists in the system; it only needs exporting.</p>
+    <div class="grp"><h4>Wed 14</h4>
+      <ul class="t">
+        <li><b>Organisations</b>Walk into <b>Better Work Cambodia</b>. Ask for the Programme Manager.</li>
+        <li><b>Government</b>File the <b>Skills Development Fund</b> application.</li>
+      </ul>
     </div>
-    <div class="grp"><h4>Thu 15 Oct</h4>
-      <p><b>Government · Singapore.</b> Decide the <b>MRA target market</b>. Nobody else can make that call and it blocks the application. Then open the Business Grants Portal on GGMT’s Corppass and start the form.</p>
-      <p><b>Organisations + Government.</b> Call <b>TAFTAC</b> and ask for a sit-down. Two things out of one meeting: their seat on the Better Work advisory committee, and their line into GIZ FABRIC and the EU Delegation.</p>
+    <div class="grp"><h4>Thu 15</h4>
+      <ul class="t">
+        <li><b>Government</b>Decide the <b>MRA market</b>. Then open the Corppass form.</li>
+        <li><b>Orgs + Gov</b>Call <b>TAFTAC</b>. One meeting, two doors.</li>
+      </ul>
     </div>
-    <div class="grp"><h4>Fri 16 Oct</h4>
-      <p><b>App marketplace.</b> Sit with whoever owns the store listings and fix three things: the developer name shows <b>“Yai01”</b> on Android, Yai Shop still describes IoT devices, and a typo is burned into a screenshot.</p>
-      <p><b>App marketplace.</b> Brief the dev side on the <b>second factor for sign-in</b>. End of October, and it blocks the Anthropic partner review and the public launch at the same time.</p>
+    <div class="grp"><h4>Fri 16</h4>
+      <ul class="t">
+        <li><b>App market</b>Fix the listings: Yai01 · IoT text · screenshot typo.</li>
+        <li><b>App market</b>Brief dev on the <b>second factor</b>. Due end of October.</li>
+      </ul>
     </div>
-    <div class="grp"><h4>Sat 17 Oct</h4>
-      <p><b>Brands.</b> Build the one-page evidence sheet: a Khmer safety notice, and the list of who completed it. <b>That single page is what you put in front of an auditor, ILO and a brand.</b> No meeting needed to make it.</p>
-      <p><b>VC &amp; strategic.</b> Ask 3SGS for <b>one number CDMS achieved for them</b>. Without it the customer story cannot be filed.</p>
+    <div class="grp"><h4>Sat 17</h4>
+      <ul class="t">
+        <li><b>Brands</b>Build the <b>one-page evidence sheet</b>.</li>
+        <li><b>VC</b>Ask 3SGS for <b>one number</b>.</li>
+      </ul>
     </div>
-    <div class="grp"><h4>Sun 18 Oct</h4>
-      <p>Review. What came back, what did not, what is still unknown. Update the towers, then pick next week’s moves from them.</p>
+    <div class="grp"><h4>Sun 18</h4>
+      <ul class="t">
+        <li><b>Review</b>What landed, what did not. Pick next week.</li>
+      </ul>
+    </div>
+    <div class="grp"><h4>Not this week</h4>
+      <ul class="t">
+        <li><b>Sovereign · VC</b>Nothing to do until a second customer at real size.</li>
+      </ul>
     </div>
     <div class="feed">13 moves</div>
   </div>
   <div class="tower" style="--c:var(--d1);--o:var(--o1)">
     <div class="cap"><div class="orb">Own clients<i class="dot" style="background:var(--warn)"></i></div></div>
     <div class="rt">Borrow</div>
-    <div class="st">Gated — Yorkwell contract still unread</div>
-    <p class="lede">Yorkwell Hong Kong funded 2.5 years of development so Yai runs across its own 23 units. No equity, no dilution, the customer pays for the build. The only question is whether it can be sold a second time.</p>
-    <div class="grp"><h4>Targets · the other vendor groups</h4>
+    <div class="st">6 signed · contract still unread</div>
+    <div class="grp"><h4>Signed · to Dec 2027</h4>
       <ul class="t">
-        <li><b>1.1</b>Crystal International — Hong Kong</li>
-        <li><b>1.2</b>TAL Apparel — Hong Kong</li>
-        <li><b>1.3</b>Youngone — Korea</li>
-        <li><b>1.4</b>Hansae — Korea</li>
-        <li><b>1.5</b>Shenzhou International — China</li>
-        <li><b>1.6</b>Eclat and Makalot — Taiwan</li>
-        <li><b>1.7</b>Pou Chen and Feng Tay — Taiwan, footwear</li>
+        <li><b>Yorkmars</b>Admin, Production · <b>$2,000/month</b> · $34,000 committed</li>
+        <li><b>Caswell</b>Fini Check, YTM · in the Yorkwell group · no revenue line</li>
+        <li><b>BICNZ</b>Calibration QR · $120 · <span class="w">paid</span></li>
+        <li><b>3SGS</b>Digital Audit · $750 · setting since Sep</li>
+        <li><b>3SGS+</b>Ai Audit review · $3,000 · setting · <b>dated October</b></li>
+        <li><b>ES Packing</b>YHR, Gate Pass, Car Booking · $750 · setting · <b>October</b></li>
       </ul>
     </div>
-    <div class="grp"><h4>The blocker</h4>
-      <p>Does the development agreement carry exclusivity, IP ownership, or a consent right over new investors? <b>Unknown — and it decides whether this arm can be used at all.</b></p>
-    </div>
-    <div class="grp"><h4>Step one is a contract, not a phone call</h4>
-      <p>Yorkwell’s development agreement decides whether this arm exists. Get it to <b>Koem Phanny</b> with one question: <i>may Texlink sell Yai to a factory outside the Yorkwell group?</i></p>
-      <p><span class="x">Do not sound out a single vendor group before that answer.</span> If a competitor hears it and mentions it back to Yorkwell, the relationship that funds the build is the thing at risk.</p>
-    </div>
-    <div class="grp"><h4>The door</h4>
-      <p><b>Yorkwell’s group IT or operations head in Hong Kong.</b> One person who can name their counterpart at all nine groups above. These groups are not strangers — they share buyers, sit in the same vendor summits and benchmark against each other constantly.</p>
-    </div>
-    <div class="grp"><h4>The bridge</h4>
-      <p>Frame it as <b>their</b> win. A vendor group running Yai looks better to its brands, and Yorkwell introducing it to a peer is Yorkwell leading the vendor community. A referral fee or reseller margin makes it their revenue too.</p>
-      <p><span class="w">That framing survives an exclusivity clause far better than “let us sell to your competitors” does.</span></p>
-    </div>
-    <div class="grp"><h4>The route that bypasses the contract</h4>
-      <p>Track people, not companies. Plant managers, IE heads and compliance managers move between these groups constantly, and someone who ran Yai at Yorkmars asks for it at the next job. Nothing in any contract stops us staying in touch with alumni.</p>
-    </div>
-    <div class="feed">No updates</div>
-  </div>
-  <div class="tower" style="--c:var(--d2);--o:var(--o2)">
-    <div class="cap"><div class="orb">Brands<i class="dot" style="background:var(--ok)"></i></div></div>
-    <div class="rt">Triangulate</div>
-    <div class="st">Open — no approach made yet</div>
-    <p class="lede">They buy rather than invest — which is why this arm creates customer two instead of waiting for one.</p>
-    <div class="grp"><h4>Targets</h4>
+    <div class="grp"><h4>The shape</h4>
       <ul class="t">
-        <li><b>2.1</b><em>ASICS</em> — Global Sustainability Department, Kobe HQ. No lead named publicly.</li>
-        <li><b>2.2</b><em>VF Corporation</em> — Responsible Sourcing. Vans, The North Face, Timberland, Dickies.</li>
-        <li><b>2.3</b><em>Their Asia trading offices</em> — Hong Kong and Vietnam. Start here, not at HQ.</li>
-        <li><b>2.4</b><em>Standards bodies</em> — Cascale (Higg) · Textile Exchange · SLCP · amfori · Sedex.</li>
+        <li><b>$40,240</b>committed to Dec 2027</li>
+        <li><b>85%</b>of it is Yorkmars</li>
+        <li><b>3 of 5</b>still in setup — two dated this month</li>
+        <li><b>Cheapest money</b>get those three live. Already signed.</li>
       </ul>
     </div>
-    <div class="grp"><h4>Never HQ first — the trading office first</h4>
-      <p>Those offices <b>already audit our plants.</b> They know Yorkmars by name. They have never heard of Yai. That gap is the whole opening, and it sits with people who already have us in their calendar.</p>
-    </div>
-    <div class="grp"><h4>The warm human we already own</h4>
-      <p><b>Yorkmars’ own compliance manager emails these brand auditors every week.</b> Ask for the names of the ASICS and VF auditors who physically visit — a real relationship, held by our own customer, costing nothing.</p>
-      <p><span class="w">Then invite the auditor to the plant to watch the video feed run.</span> Demo on the floor, never in a deck.</p>
-    </div>
-    <div class="grp"><h4>Triangulating the ASICS lead</h4>
-      <p>No name is published. Three ways to it, run in parallel:</p>
-      <p><b>(a)</b> the governance section of the 2025 Sustainability Report lists committee members by role.</p>
-      <p><b>(b)</b> LinkedIn — ASICS + sustainability + Kobe, then check who our Yorkmars and Caswell compliance staff are connected to at one remove.</p>
-      <p><b>(c)</b> <b>Cascale, Textile Exchange and SLCP working groups</b> publish attendee and member lists, and brand sustainability staff sit on them under their own names.</p>
-    </div>
-    <div class="grp"><h4>Buy a seat at the standards bodies</h4>
-      <p>Associate or solution-provider membership of <b>Cascale</b> or <b>amfori</b> is a paid listing and, more importantly, a speaking slot — where brand sustainability staff actually gather. CDMS already implements all 36 of these standards, so the credential is real before we pay for the seat.</p>
-    </div>
-    <div class="grp"><h4>Fix this before any of it</h4>
-      <p><b>yaikh.com/about</b> lists Anthropic Claude beside Google Gemini and <b>DeepSeek</b>. A brand’s sustainability lead will read that page before the meeting, and DeepSeek raises data-residency questions with them and with ILO. <span class="x">Still unresolved: whether DeepSeek is genuinely in production or only listed.</span></p>
-    </div>
-    <div class="grp"><h4>What we open with</h4>
-      <p>ASICS publishes “100% supplier compliance with ASICS standards.” The question is not a pitch — it is <b>“how is that evidenced today?”</b> Then show a Khmer safety notice with a completion list against it.</p>
-      <p><span class="w">Brands pay auditors for weaker evidence than that.</span></p>
-    </div>
-    <div class="feed">No updates</div>
-  </div>
-  <div class="tower" style="--c:var(--d3);--o:var(--o3)">
-    <div class="cap"><div class="orb">Organisations<i class="dot" style="background:var(--ok)"></i></div></div>
-    <div class="rt">Climb</div>
-    <div class="st">Warm — ILO already a partner in-app</div>
-    <p class="lede">Twelve to eighteen months from first contact to money — which is exactly why to start now.</p>
-    <div class="grp"><h4>Targets</h4>
+    <div class="grp"><h4>Pipeline</h4>
       <ul class="t">
-        <li><b>3.1</b><em>ILO</em> — Gilbert Houngbo, Director-General, Geneva. <span class="x">Never cold into Geneva.</span></li>
-        <li><b>3.2</b><em>Better Work</em> — ILO and IFC jointly. Management Group: Manuela Tomei, Kaori Nakamura-Osaka (ILO), Larissa Luy, Iffath Sharif (World Bank Group).</li>
-        <li><b>3.3</b><em>IFC</em> — Makhtar Diop, Managing Director, Washington.</li>
-        <li><b>3.4</b><em>UNIDO</em> — Gerd Müller, Director General, Vienna.</li>
-        <li><b>3.5</b><em>UNDP</em> — Alexander De Croo, Administrator, New York.</li>
-        <li><b>3.6</b><em>ADB</em> — Masato Kanda, President, Manila. Second term from 24 Nov 2026.</li>
-        <li><b>3.7</b><em>The other DFIs</em> — BII · DFC · Proparco · FMO.</li>
+        <li><b>13 names</b>in presentation · all off the EXPO, via TAFTAC</li>
+        <li><b>2 names</b><b>finalising</b> · Elegant Garment, Trax Intertrade · via Saman</li>
       </ul>
     </div>
-    <div class="grp"><h4>Rung one is a walk-in, in Phnom Penh</h4>
-      <p><b>Better Work Cambodia’s office.</b> ILO is already a partner organisation inside the app — a standing, factual reason to ask for a meeting, not a cold pitch. Target the Programme Manager.</p>
-    </div>
-    <div class="grp"><h4>Rungs two and three</h4>
-      <p>Better Work Cambodia → Better Work regional in <b>Bangkok</b> → the <b>Management Group</b>. Each rung is a referral carried upward by the rung below. <span class="x">Skipping a rung does not speed it up, it ends it.</span></p>
-    </div>
-    <div class="grp"><h4>The committee shortcut</h4>
-      <p>Better Work Cambodia runs a <b>Project Advisory Committee</b> with TAFTAC, the unions and the Ministry of Labour on it. <b>TAFTAC already posts into Yai’s video feed.</b></p>
-      <p>A TAFTAC member raising Yai inside that committee is the cheapest introduction anywhere on this board — and it is one conversation away.</p>
-    </div>
-    <div class="grp"><h4>ADB and World Bank are procurement, not relationship</h4>
-      <p>Register as a vendor and consultant on <b>ADB’s CMS</b> and the <b>World Bank supplier portal</b>, then watch the published pipelines. ADB BRIDGE is being shaped now for 2027 approval — <span class="w">position while the scope is still being written.</span></p>
-    </div>
-    <div class="grp"><h4>What we say, exactly</h4>
-      <p>Not “fund us.” It is: <b>your notices already reach these workers, and we can show you who completed them.</b> An organisation whose entire problem is the last mile to the worker is being told we already hold it.</p>
-    </div>
-    <div class="feed">No updates</div>
-  </div>
-  <div class="tower" style="--c:var(--d4);--o:var(--o4)">
-    <div class="cap"><div class="orb">Sovereign funds<i class="dot" style="background:var(--warn)"></i></div></div>
-    <div class="rt">Hold</div>
-    <div class="st">Holding — relationship only, no ask</div>
-    <p class="lede">Tickets start around $10m and they buy scale. The arm is real; we are not ready.</p>
-    <div class="grp"><h4>Targets</h4>
+    <div class="grp"><h4>Yorkwell · client list approval</h4>
       <ul class="t">
-        <li><b>4.1</b>UAE National Program for Artificial Intelligence — Abu Dhabi</li>
-        <li><b>4.2</b>Mubadala and ADQ ecosystem</li>
-        <li><b>4.3</b>Hong Kong and Singapore family offices with manufacturing or trading roots</li>
+        <li><b>Blocked on</b>the development agreement. <span class="x">Unread.</span></li>
+        <li><b>One question</b>may Texlink sell Yai outside the Yorkwell group?</li>
+        <li><b>Who</b>Koem Phanny, Texlink legal</li>
+        <li><b>Until then</b><span class="x">sound out nobody.</span> A leak risks the contract that funds the build.</li>
+        <li><b>Their list</b>Crystal · TAL · Youngone · Hansae · Shenzhou · Eclat · Makalot · Pou Chen · Feng Tay</li>
+        <li><b>Door</b>Yorkwell group IT, Hong Kong — one person names all nine</li>
+        <li><b>Frame</b>Their win, with a referral margin. Survives an exclusivity clause.</li>
+        <li><b>Bypass</b>Track people, not companies. Alumni move between these groups.</li>
       </ul>
     </div>
-    <div class="grp"><h4>Why holding is the strategy</h4>
-      <p>Approaching with one customer does not get a polite later — <b>it spends the introduction and returns a no that stays on file.</b> The same introduction is worth several times more once the gates clear.</p>
+    <div class="grp"><h4>TAFTAC / CGTI event</h4>
+      <ul class="t">
+        <li><b>Do</b>Meet staff and managers. Introduce. Invite to a presentation.</li>
+        <li><b>Why</b>They adopt or they do not — <b>the influence lands either way</b>.</li>
+        <li><b>Proof</b>All 13 pipeline names came off one EXPO floor.</li>
+        <li><b>Members</b>981 on the site · ~740 quoted 2024 · <b>Gamini says ~2,000</b> · <span class="x">confirm</span></li>
+        <li><b>Workers</b>733,391 · 524,417 women</li>
+        <li><b>Directory</b>taftac-cambodia.org/our-members/search — map, list, filters</li>
+        <li><b>Best filter</b><b>export destination</b> — who already ships to ASICS and VF</li>
+        <li><b>Built by</b>GIZ FABRIC + CADT · data last updated 2023</li>
+        <li><b>Call</b>+855 12 563 082 · +855 16 821 822 · +855 70 555 641 (CH)</li>
+        <li><b>Email</b>memberservice@ · info@taftac-cambodia.org · PPSEZ, Khan Kambol</li>
+        <li><b>Social</b><span class="x">No official FB or Telegram found.</span> Ask them, do not guess.</li>
+      </ul>
     </div>
-    <div class="grp"><h4>What to do in the meantime</h4>
-      <p>Attend the Gulf AI events — the Global AI Show lead came from exactly that. Meet people. Collect names and roles. <span class="w">Make no ask at all</span>, which is also the most memorable thing anyone does in those rooms.</p>
+    <div class="grp"><h4>CGTI learning</h4>
+      <ul class="t">
+        <li><b>The play</b>Get Yai <b>into the curriculum</b>. Every graduate carries it home.</li>
+        <li><b>Why</b>That is how you reach the whole membership without meeting it.</li>
+        <li><b>Reach</b>3,036 staff trained in 2025 · 2,123 women</li>
+        <li><b>Courses</b>Supervisor Upskills · Sewing Supervisor · Lean · Problem Solving</li>
+        <li><b>Also</b>60+ factory professionals a year · built with an AFD soft loan</li>
+        <li><b>Overlap</b><span class="w">CGTI is co-funded by the SDF</span> — same fund as tower 5, same room</li>
+      </ul>
     </div>
-    <div class="grp"><h4>The triangulation to set up now</h4>
-      <p><b>Yorkwell’s own owners sit in precisely that family-office community.</b> The owner of a 23-unit garment group introducing Yai to his peers at that level outranks any fund’s inbound form. Build the goodwill now; use it after customer two.</p>
-    </div>
-    <div class="grp"><h4>The blockers</h4>
-      <p><b>Customer two.</b> Yorkwell owns Yorkmars, Caswell and the other 21 — that is 22 deployments and <b>one</b> customer.</p>
-      <p><b>Unit economics.</b> Cost to deploy one plant, revenue per plant per year. <b>Both still blank.</b></p>
-      <p>Until both exist, this tower stays a contact list.</p>
+    <div class="grp"><h4>Cambodia external events</h4>
+      <ul class="t">
+        <li><b>Where</b>Cambodia Industry Expo · Chamber of Commerce · ministry events</li>
+        <li><b>Why</b>Be seen. Cheapest standing we buy.</li>
+        <li><b>Carry</b>Not a brochure. The evidence sheet + a phone running the feed.</li>
+      </ul>
     </div>
     <div class="feed">No updates</div>
   </div>
   <div class="tower" style="--c:var(--d5);--o:var(--o5)">
     <div class="cap"><div class="orb">Government<i class="dot" style="background:var(--ok)"></i></div></div>
     <div class="rt">Portal</div>
-    <div class="st">Eligible — 4 applications ready to file</div>
-    <p class="lede">The one arm that is a form rather than a person — mostly. An officer scores it against written criteria.</p>
-    <div class="grp"><h4>Singapore — through GGMT</h4>
+    <div class="st">Eligible · 4 ready to file</div>
+    <div class="grp"><h4>Singapore · GGMT</h4>
       <ul class="t">
-        <li><b>5.1</b><em>MRA</em> — 70% of costs back, cap S$100,000, to 31 Mar 2029. <span class="w">GGMT passes the 30% local-equity test.</span></li>
-        <li><b>5.2</b><em>EDG</em> — up to 50% of project cost. The AI servers fit here.</li>
-        <li><b>5.3</b><em>EDGE</em> — the new scheme merging MRA, PSG and EDG. Apply under today’s schemes rather than wait.</li>
+        <li><b>5.1 MRA</b>70% back, cap S$100,000, to Mar 2029 · <span class="w">GGMT qualifies</span></li>
+        <li><b>5.2 EDG</b>up to 50% · the AI servers fit here</li>
+        <li><b>5.3 EDGE</b>merges MRA + PSG + EDG · apply under today’s schemes</li>
+        <li><b>Blocker</b><span class="x">Pick the market.</span> MRA is claimed per market.</li>
       </ul>
     </div>
-    <div class="grp"><h4>Cambodia — eight institutions under MEF</h4>
+    <div class="grp"><h4>Cambodia · MEF</h4>
       <ul class="t">
-        <li><b>5.4</b><em>EDF EcoBoost 2026–2028</em> — seed funding for digital-marketplace startups. That is tower 7, word for word.</li>
-        <li><b>5.5</b><em>Khmer Enterprise</em> — ~$17m invested plus $33m mobilised, nearly 600 projects.</li>
-        <li><b>5.6</b><em>SDF</em> — co-funds workforce training. <span class="w">Yai’s video feed already delivers it and proves completion.</span></li>
-        <li><b>5.7</b><em>Techo Startup Center</em> — grants, tax incentives, Startup Cambodia platform.</li>
-        <li><b>5.8</b><em>SME Bank</em> — $242m direct to 880 businesses. <b>Debt, not grants.</b></li>
-        <li><b>5.9</b><em>CGCC</em> — guarantees bank lending without collateral. Pairs with 5.8.</li>
-        <li><b>5.10</b><em>ARDB · DEBC</em> — agriculture and digital-economy credit.</li>
-        <li><b>5.11</b><em>MISTI</em> — recognised the Model Green Factory Program.</li>
-        <li><b>5.12</b><em>Smart Axiata Digital Innovation Fund</em> — $5m, telco rather than state.</li>
+        <li><b>5.4 EDF EcoBoost</b>seed for digital marketplaces — that is tower 7, word for word</li>
+        <li><b>5.5 Khmer Enterprise</b>~$17m invested · 600 projects · the most active</li>
+        <li><b>5.6 SDF</b>co-funds training · <span class="w">our feed already proves completion</span></li>
+        <li><b>5.7 Techo</b>grants + tax incentives · runs Startup Cambodia</li>
+        <li><b>5.8 SME Bank</b>$242m to 880 businesses · <b>debt, not grants</b></li>
+        <li><b>5.9 CGCC</b>guarantees lending without collateral · pairs with 5.8</li>
+        <li><b>5.10–5.12</b>ARDB · DEBC · MISTI · Smart Axiata fund ($5m)</li>
+        <li><b>First move</b><b>Register on Startup Cambodia.</b> Free. All eight see you.</li>
       </ul>
     </div>
-    <div class="grp"><h4>Germany and the EU</h4>
+    <div class="grp"><h4>Germany + EU</h4>
       <ul class="t">
-        <li><b>5.13</b><em>GIZ FABRIC Cambodia II</em> — garment, footwear, travel goods. <span class="w">The closest fit of any foreign programme.</span></li>
-        <li><b>5.14</b><em>develoPPP</em> — BMZ via GIZ and DEG. <b>You must fund at least half.</b></li>
-        <li><b>5.15</b><em>KfW · DEG</em> — German development bank and private-sector arm.</li>
-        <li><b>5.16</b><em>SWITCH-Asia</em> — EU grants, new calls still opening.</li>
-        <li><b>5.17</b><em>EU Delegation to Cambodia</em> — its own calls. Local, often overlooked.</li>
-        <li><b>5.18</b><em>Global Gateway · EFSD+ · EIB Global</em> — slower, state-level.</li>
-        <li><b>5.19</b><em>Other European agencies</em> — AFD · Proparco · SIDA · Swedfund · Danida · IFU · RVO · FMO · Norfund · Finnfund · SECO · SIFEM.</li>
+        <li><b>5.13 GIZ FABRIC</b>garment, footwear, travel goods · <span class="w">closest fit of any</span></li>
+        <li><b>5.14 develoPPP</b>BMZ via GIZ and DEG · <b>we fund half</b></li>
+        <li><b>5.15–5.18</b>KfW · DEG · SWITCH-Asia · EU Delegation · Global Gateway</li>
+        <li><b>5.19</b>AFD · Proparco · SIDA · Danida · FMO · Norfund · Finnfund · SECO</li>
+        <li><b>Route in</b><b>TAFTAC</b> implements their work. Go in as something they use.</li>
       </ul>
     </div>
-    <div class="grp"><h4>UK, US, Asia-Pacific, multilateral</h4>
+    <div class="grp"><h4>Rest of the world</h4>
       <ul class="t">
-        <li><b>5.20</b><em>United Kingdom</em> — BII · FCDO. <span class="x">Innovate UK needs a UK entity.</span></li>
-        <li><b>5.21</b><em>DFC</em> — debt and equity. Overlaps tower 3; one relationship.</li>
-        <li><b>5.22</b><em>USTDA</em> — feasibility grants. <b>US aid structures changed in 2025 — verify.</b></li>
-        <li><b>5.23</b><em>Japan</em> — JICA · METI · JETRO · JBIC · NEDO · AOTS.</li>
-        <li><b>5.24</b><em>Korea</em> — KOTRA · KOICA · Knowledge Sharing Programme.</li>
-        <li><b>5.25</b><em>Australia</em> — DFAT and the Aus4 programmes.</li>
-        <li><b>5.26</b><em>Taiwan ICDF</em> — Taiwanese groups dominate footwear.</li>
-        <li><b>5.27</b><em>Mekong funds</em> — Japan · ROK · Lancang-Mekong · US Partnership.</li>
-        <li><b>5.28</b><em>ASEAN</em> — SME Academy · Digital Masterplan.</li>
-        <li><b>5.29</b><em>ADB Ventures</em> — $50m impact-tech. <b>Invests like a VC</b>, so the gates apply.</li>
-        <li><b>5.30</b><em>ADB BRIDGE</em> — Cambodia digital, approval expected 2027.</li>
-        <li><b>5.31</b><em>World Bank</em> — digital economy and skills projects.</li>
-        <li><b>5.32</b><em>UNCDF</em> — Challenge Fund, Inclusive Digital Economies Score.</li>
-        <li><b>5.33</b><em>UNDP with the National Bank of Cambodia</em> — digital payments, the riel.</li>
-        <li><b>5.34</b><em>ITC · WIPO · GCF · GEF</em> — thinner fit. Park unless a call opens.</li>
+        <li><b>UK</b>BII · FCDO · <span class="x">Innovate UK needs a UK entity</span></li>
+        <li><b>US</b>DFC · USTDA · <b>aid structures changed 2025 — verify</b></li>
+        <li><b>Japan</b>JICA · METI · JETRO · JBIC · NEDO · AOTS</li>
+        <li><b>Korea · AU · TW</b>KOTRA · KOICA · DFAT · Taiwan ICDF</li>
+        <li><b>Multilateral</b>ADB Ventures ($50m) · ADB BRIDGE (2027) · World Bank · UNCDF</li>
       </ul>
     </div>
-    <div class="grp"><h4>Singapore is pure paperwork</h4>
-      <p><b>Business Grants Portal, Corppass login, GGMT files.</b> Nobody to persuade. One decision blocks it and it is ours: <span class="x">MRA is claimed per target market — pick the market first.</span></p>
+    <div class="grp"><h4>Paperwork they all ask for</h4>
+      <ul class="t">
+        <li><b>Texlink</b>October 2025</li>
+        <li><b>GK SMART</b>13 April 2021 · MOC 50015732</li>
+        <li><b>GGMT</b>1 September 2011 · UEN 201120577C</li>
+      </ul>
     </div>
-    <div class="grp"><h4>Cambodia: register once, be seen by all eight</h4>
-      <p><b>Startup Cambodia</b> registration is free and is how all eight MEF institutions see us. The <b>National Business Financing Forum</b> then puts all eight in one room — 600 attended in July 2026.</p>
+    <div class="grp"><h4>Honest sizing</h4>
+      <ul class="t">
+        <li><b>Real money</b>Singapore and Germany</li>
+        <li><b>Cambodia</b>credibility — which towers 2, 3 and 4 read as validation</li>
+        <li><b>UK/US entity</b>only for a <b>named</b> programme. Germany or NL is the stronger one.</li>
+      </ul>
     </div>
-    <div class="grp"><h4>Where this arm is secretly a person</h4>
-      <p>GIZ FABRIC and the EU Delegation do not reward cold proposals. <b>TAFTAC implements their work</b> and holds the Model Green Factory Program — and already posts into Yai’s feed.</p>
-      <p><span class="w">Go in as something TAFTAC already uses</span>, not as an applicant. Being named in TAFTAC’s own programme documentation is what makes GIZ answer an email.</p>
+    <div class="feed">No updates</div>
+  </div>
+  <div class="tower" style="--c:var(--d3);--o:var(--o3)">
+    <div class="cap"><div class="orb">Organisations<i class="dot" style="background:var(--ok)"></i></div></div>
+    <div class="rt">Climb</div>
+    <div class="st">Warm · ILO already in the app</div>
+    <div class="grp"><h4>Targets</h4>
+      <ul class="t">
+        <li><b>3.1 ILO</b>Gilbert Houngbo, DG, Geneva · <span class="x">never cold</span></li>
+        <li><b>3.2 Better Work</b>Tomei · Nakamura-Osaka (ILO) · Luy · Sharif (WBG)</li>
+        <li><b>3.3 IFC</b>Makhtar Diop, Washington</li>
+        <li><b>3.4 UNIDO</b>Gerd Müller, Vienna</li>
+        <li><b>3.5 UNDP</b>Alexander De Croo, New York</li>
+        <li><b>3.6 ADB</b>Masato Kanda, Manila · 2nd term from 24 Nov 2026</li>
+        <li><b>3.7 DFIs</b>BII · DFC · Proparco · FMO</li>
+      </ul>
     </div>
-    <div class="grp"><h4>Paperwork every application asks for</h4>
-      <p><b>Texlink</b> October 2025 · <b>GK SMART</b> 13 April 2021, MOC 50015732 · <b>GGMT</b> 1 September 2011, UEN 201120577C.</p>
+    <div class="grp"><h4>The climb</h4>
+      <ul class="t">
+        <li><b>Rung 1</b>Better Work Cambodia, Phnom Penh — walk in</li>
+        <li><b>Rung 2</b>Better Work regional, Bangkok</li>
+        <li><b>Rung 3</b>The Management Group</li>
+        <li><b>Rule</b>Each rung is a referral. <span class="x">Skipping one ends it.</span></li>
+      </ul>
     </div>
-    <div class="grp"><h4>On opening a UK or US entity</h4>
-      <p>Worth doing for a <b>named</b> programme or customer, not in advance. Germany or the Netherlands would be the stronger European choice, since develoPPP, DEG and FMO prefer a European partner. <b>You already hold the two entities that matter</b> — GGMT for Singapore, Texlink for Cambodia.</p>
+    <div class="grp"><h4>Shortcut</h4>
+      <ul class="t">
+        <li><b>Committee</b>Better Work Cambodia’s Project Advisory Committee</li>
+        <li><b>Who is on it</b>TAFTAC · unions · Ministry of Labour</li>
+        <li><b>Why it works</b><b>TAFTAC already posts into Yai’s feed.</b> One conversation.</li>
+      </ul>
     </div>
-    <div class="grp"><h4>Be honest about the size</h4>
-      <p>Cambodian grants are small against offices, AI servers and recruitment. <b>Singapore and Germany are where the real money is.</b> Cambodia buys credibility — which is what towers 2, 3 and 4 read as validation.</p>
+    <div class="grp"><h4>ADB + World Bank</h4>
+      <ul class="t">
+        <li><b>Different</b>procurement, not relationship</li>
+        <li><b>Do</b>Register on ADB CMS and the World Bank supplier portal</li>
+        <li><b>Timing</b><span class="w">ADB BRIDGE is being scoped now</span> for 2027</li>
+      </ul>
+    </div>
+    <div class="grp"><h4>The line</h4>
+      <ul class="t">
+        <li><b>Not</b>“fund us”</li>
+        <li><b>But</b>your notices already reach these workers — we show who completed them</li>
+      </ul>
+    </div>
+    <div class="feed">No updates</div>
+  </div>
+  <div class="tower" style="--c:var(--d2);--o:var(--o2)">
+    <div class="cap"><div class="orb">Brands<i class="dot" style="background:var(--ok)"></i></div></div>
+    <div class="rt">Triangulate</div>
+    <div class="st">Open · no approach made yet</div>
+    <div class="grp"><h4>Targets</h4>
+      <ul class="t">
+        <li><b>2.1 ASICS</b>Global Sustainability, Kobe · no lead named publicly</li>
+        <li><b>2.2 VF Corp</b>Responsible Sourcing · Vans, TNF, Timberland, Dickies</li>
+        <li><b>2.3 Trading offices</b>Hong Kong + Vietnam · <b>start here, not HQ</b></li>
+        <li><b>2.4 Standards</b>Cascale · Textile Exchange · SLCP · amfori · Sedex</li>
+      </ul>
+    </div>
+    <div class="grp"><h4>The warm human</h4>
+      <ul class="t">
+        <li><b>Who</b>Yorkmars’ compliance manager</li>
+        <li><b>What</b>Emails the ASICS and VF auditors <b>weekly</b></li>
+        <li><b>Ask</b>Their names and emails. Then invite them to the plant.</li>
+        <li><b>Status</b><span class="x">Never used.</span> Cheapest door on the board.</li>
+      </ul>
+    </div>
+    <div class="grp"><h4>Finding the ASICS lead</h4>
+      <ul class="t">
+        <li><b>a</b>2025 Sustainability Report — governance section lists roles</li>
+        <li><b>b</b>LinkedIn — second degree out of our own compliance staff</li>
+        <li><b>c</b>Cascale / SLCP working groups publish attendee names</li>
+      </ul>
+    </div>
+    <div class="grp"><h4>Buy a seat</h4>
+      <ul class="t">
+        <li><b>Where</b>Cascale or amfori, solution-provider membership</li>
+        <li><b>Buys</b>A listing and a speaking slot — where those staff actually are</li>
+        <li><b>Credential</b>CDMS already implements all 36 standards</li>
+      </ul>
+    </div>
+    <div class="grp"><h4>The opener</h4>
+      <ul class="t">
+        <li><b>Their claim</b>“100% supplier compliance with ASICS standards”</li>
+        <li><b>Our question</b><b>How is that evidenced today?</b></li>
+        <li><b>Then</b>Khmer safety notice + completion list. Demo on the floor.</li>
+      </ul>
+    </div>
+    <div class="grp"><h4>Fix first</h4>
+      <ul class="t">
+        <li><b>yaikh.com/about</b>lists Claude beside Gemini and <b>DeepSeek</b></li>
+        <li><b>Why it matters</b>Brands and ILO read it — DeepSeek raises data residency</li>
+        <li><b>Unknown</b><span class="x">Is DeepSeek in production, or only listed?</span></li>
+      </ul>
+    </div>
+    <div class="feed">No updates</div>
+  </div>
+  <div class="tower" style="--c:var(--d4);--o:var(--o4)">
+    <div class="cap"><div class="orb">Sovereign funds<i class="dot" style="background:var(--warn)"></i></div></div>
+    <div class="rt">Hold</div>
+    <div class="st">Relationship only · no ask</div>
+    <div class="grp"><h4>Targets</h4>
+      <ul class="t">
+        <li><b>4.1</b>UAE National AI Program · Abu Dhabi</li>
+        <li><b>4.2</b>Mubadala · ADQ</li>
+        <li><b>4.3</b>HK + Singapore family offices with manufacturing roots</li>
+      </ul>
+    </div>
+    <div class="grp"><h4>Why hold</h4>
+      <ul class="t">
+        <li><b>Ticket size</b>$10m+ · they buy scale</li>
+        <li><b>Risk</b>An early ask <b>spends the introduction</b> and returns a filed no</li>
+      </ul>
+    </div>
+    <div class="grp"><h4>The blockers</h4>
+      <ul class="t">
+        <li><b>Concentration</b>6 signed, but Yorkmars is <b>85%</b> · 3 still in setup</li>
+        <li><b>Unit economics</b>Cost per plant, revenue per plant · <b>both blank</b></li>
+      </ul>
+    </div>
+    <div class="grp"><h4>Meanwhile</h4>
+      <ul class="t">
+        <li><b>Go</b>Gulf AI events — the Global AI Show lead came from one</li>
+        <li><b>Do</b>Collect names. <span class="w">Make no ask.</span></li>
+        <li><b>Set up</b>Yorkwell’s owners sit in that family-office community</li>
+      </ul>
     </div>
     <div class="feed">No updates</div>
   </div>
   <div class="tower" style="--c:var(--d6);--o:var(--o6)">
     <div class="cap"><div class="orb">VC &amp; strategic<i class="dot" style="background:var(--warn)"></i></div></div>
     <div class="rt">Hold</div>
-    <div class="st">Holding — deck written, story missing</div>
-    <p class="lede">The $3M seed deck is written. What is missing is the second customer, not the document.</p>
+    <div class="st">Deck written · revenue concentrated</div>
     <div class="grp"><h4>Targets</h4>
       <ul class="t">
-        <li><b>6.1</b>South-east Asia industrial-tech funds</li>
+        <li><b>6.1</b>SEA industrial-tech funds</li>
         <li><b>6.2</b>Korean and Japanese funds with manufacturing ties</li>
-        <li><b>6.3</b><em>Corporate VC of the brand groups</em> — the one exception worth testing early</li>
+        <li><b>6.3</b><b>Brand corporate VC</b> — the one exception</li>
       </ul>
     </div>
     <div class="grp"><h4>The exception</h4>
-      <p>Brand corporate VC buys a strategic position in its own supply chain, not a growth curve. <b>“22 deployments, one customer” reads differently to them</b> than to a financial fund.</p>
-    </div>
-    <div class="grp"><h4>And it is the same person as tower 2</h4>
-      <p>The brand’s sustainability lead introduces us to the brand’s ventures arm. <b>One relationship, two arms.</b> <span class="w">Another reason tower 2 is the first thing to work on.</span></p>
-    </div>
-    <div class="grp"><h4>The Anthropic track, where it stands</h4>
-      <p><b>Claude Startups — both filed.</b> GK SMART from gamini@ggmt.sg, Texlink from gamini@yaikh.com. GGMT could not file separately; the platform allows one application per Console org.</p>
-      <p><b>Customer stories — two knocked back.</b> Yorkmars <span class="x">declined</span>: no measurable result the customer achieved. GK SMART <span class="x">not eligible</span>: the link was not a public page. CDMS is filled but never submitted — it needs a number from 3SGS.</p>
+      <ul class="t">
+        <li><b>Why</b>They buy a supply-chain position, not a growth curve</li>
+        <li><b>Door</b>Same person as tower 2 — <b>one relationship, two arms</b></li>
+      </ul>
     </div>
     <div class="grp"><h4>Why financial VC stays shut</h4>
-      <p>They ask cost-per-plant and revenue-per-plant inside the first ten minutes, and <b>both are still blank.</b> An unanswerable first meeting is the one that gets remembered.</p>
+      <ul class="t">
+        <li><b>They ask</b>cost per plant, revenue per plant — in ten minutes</li>
+        <li><b>We have</b><b>neither</b></li>
+        <li><b>Missing</b>the second customer, not the document</li>
+      </ul>
+    </div>
+    <div class="grp"><h4>Anthropic track</h4>
+      <ul class="t">
+        <li><b>Startups</b>Both filed · one application per Console org</li>
+        <li><b>Yorkmars story</b><span class="x">declined</span> — no measurable customer result</li>
+        <li><b>GK SMART story</b><span class="x">not eligible</span> — link was not a public page</li>
+        <li><b>CDMS story</b>filled, never submitted — <b>needs a number from 3SGS</b></li>
+      </ul>
     </div>
     <div class="feed">No updates</div>
   </div>
   <div class="tower" style="--c:var(--d7);--o:var(--o7)">
     <div class="cap"><div class="orb">App marketplace<i class="dot" style="background:var(--stop)"></i></div></div>
     <div class="rt">Ours</div>
-    <div class="st">Blocked — MoC licence · launches November</div>
-    <p class="lede">Three markets in one app — Phsar, Service and Factory Supply. The only arm where nobody has to say yes except a ministry.</p>
+    <div class="st">Blocked · licence · launches November</div>
     <div class="grp"><h4>Targets and rails</h4>
       <ul class="t">
-        <li><b>7.1</b><em>Ministry of Commerce</em> — the e-commerce licence. Owner: <b>Koem Phanny</b>, Texlink legal. <span class="x">Submitted, in review, or being prepared?</span></li>
-        <li><b>7.2</b><em>ABA</em> — integrated. Nothing further needed.</li>
-        <li><b>7.3</b><em>Wing</em> — integrated. Nothing further needed.</li>
-        <li><b>7.4</b><em>Google Play and the App Store</em> — YaiKH iOS v4.0.4, Android 1k+ installs at 3.6★ from 7 reviews. Yai Shop iOS v1.0 only.</li>
+        <li><b>7.1 MoC</b>e-commerce licence · <b>Koem Phanny</b> · <span class="x">status unknown</span></li>
+        <li><b>7.2 ABA</b>integrated · nothing further</li>
+        <li><b>7.3 Wing</b>integrated · nothing further</li>
+        <li><b>7.4 Stores</b>YaiKH iOS 4.0.4 · Android 1k+ installs, 3.6★ from 7</li>
       </ul>
     </div>
-    <div class="grp"><h4>No one to persuade but one ministry</h4>
-      <p>Payment rails integrated. Both apps published. Marketplace built. <b>Everything waits on the licence.</b></p>
+    <div class="grp"><h4>The order</h4>
+      <ul class="t">
+        <li><b>1</b>Licence</li>
+        <li><b>2</b>Fix the sign-in · second factor · <b>due end of October</b></li>
+        <li><b>3</b>Clean the listings</li>
+        <li><b>4</b>Then spend</li>
+      </ul>
     </div>
-    <div class="grp"><h4>Then it is marketing, not relationships</h4>
-      <p>Facebook, WhatsApp and Instagram, straight at Cambodian consumers. <b>No triangulation, no committee, no referral chain.</b> Budget and creative — which is why this one can start in November while the other six are still being set up.</p>
+    <div class="grp"><h4>Listings to fix</h4>
+      <ul class="t">
+        <li><b>Developer</b>shows <b>Yai01</b> on Android, GGMT PTE. LTD. on iOS</li>
+        <li><b>Yai Shop</b>still describes IoT devices</li>
+        <li><b>Screenshot</b>typo burned into the image</li>
+      </ul>
     </div>
-    <div class="grp"><h4>The order matters</h4>
-      <p>Licence → <b>fix the sign-in</b> → clean the store listings → then spend.</p>
-      <p>Anthropic’s first partner review failed on access alone — username and password, no second factor. <b>Due before end of October</b>, and it blocks the partner review and the public launch at the same time.</p>
-      <p><span class="x">Phsar Market users are consumers, not employees with assigned accounts</span> — username and password alone is the wrong front door to run a paid campaign at.</p>
+    <div class="grp"><h4>Why it matters</h4>
+      <ul class="t">
+        <li><b>Users</b>consumers, not employees with assigned accounts</li>
+        <li><b>So</b>password-only is the wrong front door for a paid campaign</li>
+        <li><b>Blocks</b>the Anthropic review and the public launch, together</li>
+      </ul>
     </div>
-    <div class="grp"><h4>Fix the shopfront before paying for traffic</h4>
-      <p>Developer name shows as <b>“Yai01”</b> on Android against GGMT PTE. LTD. on iOS. Yai Shop’s listing still describes IoT devices. A typo is burned into a screenshot. 3.6★ from 7 reviews moves either way on very little — so it moves before the spend.</p>
-    </div>
-    <div class="grp"><h4>It also unlocks tower 5</h4>
-      <p>A live marketplace is what makes <b>5.4 EDF EcoBoost</b> a real application instead of a plan. <span class="w">This is the one arm that pays for another arm by simply shipping.</span></p>
+    <div class="grp"><h4>It pays for tower 5</h4>
+      <ul class="t">
+        <li><b>5.4 EcoBoost</b>names digital-marketplace seed funding</li>
+        <li><b>Meaning</b><span class="w">shipping this makes that application real</span></li>
+      </ul>
     </div>
     <div class="feed">No updates</div>
   </div>
