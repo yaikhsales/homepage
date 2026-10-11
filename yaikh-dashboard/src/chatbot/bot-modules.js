@@ -9,6 +9,13 @@ import {
     Menu, Trash2, ChevronRight, ChevronDown, Volume2
 } from 'lucide-react';
 import { generateGeminiResponse, generateDirectGeminiResponse, generateChatResponse, generatePAOrChat, shouldUseGemini } from './gemini-api';
+
+// Bot id → department PA on the guard (/pa/query). Module-level so every handler in this file can use it.
+const PA_SLUG_BY_BOT = {
+    'accounting-bot': 'accounting', 'finance-bot': 'accounting', 'hr-bot': 'hr', 'admin-bot': 'admin', 'csr-bot': 'csr',
+    'shipping-bot': 'shipping', 'mrp-bot': 'mrp', 'qa-bot': 'qa', 'production-bot': 'production', 'ce-bot': 'ce',
+    'ytm-bot': 'ytm', '4dp-bot': '4dp', 'ypi-bot': 'ypi', 'social-bot': 'social',
+};
 import { KHMER_NEW_YEAR } from '../thems';
 import { useTranslation } from '../translate/TranslationContext';
 import { useNavigate } from 'react-router-dom';
@@ -5355,7 +5362,7 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                     // A department PA answers from its own records on the guard (/pa/query: exact figures,
                     // local Qwen wording). The Gemini functions below were retired on 2026-09-29 and only
                     // return "unavailable", which is what every PA chat showed for a typed question.
-                    const paSlug = NOTIF_SLUG[botId];
+                    const paSlug = PA_SLUG_BY_BOT[botId];
                     if (paSlug && !message.includes("[IMAGE_DATA:")) {
                         aiResponse = await generatePAOrChat(paSlug, message, bot.name, bot.description, chatHistoryForGemini || []);
                     } else if (isGeneralQuestion || message.includes("[IMAGE_DATA:")) {
