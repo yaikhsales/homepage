@@ -5352,7 +5352,13 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                         (botId === 'csr-bot' && !csrPAModule);
                     
                     let aiResponse;
-                    if (isGeneralQuestion || message.includes("[IMAGE_DATA:")) {
+                    // A department PA answers from its own records on the guard (/pa/query: exact figures,
+                    // local Qwen wording). The Gemini functions below were retired on 2026-09-29 and only
+                    // return "unavailable", which is what every PA chat showed for a typed question.
+                    const paSlug = NOTIF_SLUG[botId];
+                    if (paSlug && !message.includes("[IMAGE_DATA:")) {
+                        aiResponse = await generatePAOrChat(paSlug, message, bot.name, bot.description, chatHistoryForGemini || []);
+                    } else if (isGeneralQuestion || message.includes("[IMAGE_DATA:")) {
                         aiResponse = await generateDirectGeminiResponse(
                             message,
                             bot.name,
