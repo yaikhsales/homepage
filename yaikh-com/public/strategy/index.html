@@ -73,6 +73,36 @@ p{margin:0}
                border-bottom-left-radius:7px;opacity:.45}
 .treefoot{margin-top:4px;font-size:12.5px;color:var(--muted);line-height:1.38}
 .treefoot b{color:var(--ink);font-weight:600}
+/* Name lists. 100+ names never go on the board — they live in a drawer
+   you open from the node, with a search box. The board keeps the count. */
+button.reach{border:0;cursor:pointer;font:inherit;font-family:var(--display);font-weight:700}
+button.reach:hover{filter:brightness(1.08)}
+button.reach::after{content:" ›";font-weight:800}
+
+#scrim{position:fixed;inset:0;background:rgba(2,8,14,.62);opacity:0;pointer-events:none;
+       transition:opacity .16s;z-index:40}
+#scrim.on{opacity:1;pointer-events:auto}
+#drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,92vw);background:var(--card);
+        border-left:1px solid var(--rule);z-index:41;transform:translateX(102%);
+        transition:transform .2s ease;display:flex;flex-direction:column}
+#drawer.on{transform:none}
+#dhead{padding:16px 18px 12px;border-bottom:1px solid var(--rule);border-top:4px solid var(--dc)}
+#dhead h3{margin:0;font-family:var(--display);font-weight:800;font-size:21px;letter-spacing:-.015em}
+#dhead p{margin-top:3px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;
+         text-transform:uppercase;color:var(--muted)}
+#dclose{position:absolute;top:13px;right:14px;width:30px;height:30px;border-radius:99px;
+        border:1px solid var(--rule);background:var(--bg);color:var(--ink);font-size:16px;cursor:pointer;line-height:1}
+#dsearch{margin:12px 18px 0;padding:9px 12px;border:1px solid var(--rule);border-radius:8px;
+         background:var(--bg);color:var(--ink);font:inherit;font-size:15px;width:calc(100% - 36px)}
+#dsearch::placeholder{color:var(--muted)}
+#dlist{flex:1;overflow-y:auto;padding:10px 18px 24px;margin-top:8px}
+#dlist .r{display:flex;gap:9px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--rule);font-size:15px}
+#dlist .r i{font-style:normal;font-family:var(--mono);font-size:10.5px;color:var(--muted);min-width:30px}
+#dlist .r em{font-style:normal;font-family:var(--mono);font-size:10px;letter-spacing:.07em;
+             text-transform:uppercase;color:var(--dc);margin-left:auto;white-space:nowrap}
+#dempty{padding:14px 0;color:var(--muted);font-size:14.5px;line-height:1.45}
+#dempty code{font-family:var(--mono);font-size:12.5px;color:var(--ink)}
+
 .boardnote{max-width:1000px;margin:12px auto 0;font-size:14px;color:var(--muted)}
 .boardnote b{color:var(--ink);font-weight:600}
 
@@ -174,48 +204,48 @@ footer{max-width:1000px;margin:28px auto 0;border-top:1px solid var(--rule);padd
     <div class="cap"><div class="orb">This week</div></div>
     <div class="grp"><h4>Mon 12</h4>
       <ul class="t">
-        <li><b>Own clients</b>Yorkwell contract → <b>Koem Phanny</b>. One question: may we sell outside the group?</li>
-        <li><b>App market</b>Same sitting — e-commerce licence. <b>Ask for a date, not a status.</b></li>
+        <li><b>Own clients</b> Yorkwell contract → <b>Koem Phanny</b>. One question: may we sell outside the group?</li>
+        <li><b>App market</b> Same sitting — e-commerce licence. <b>Ask for a date, not a status.</b></li>
       </ul>
     </div>
     <div class="grp"><h4>Tue 13</h4>
       <ul class="t">
-        <li><b>Brands</b>Call Yorkmars compliance. Get the <b>ASICS + VF auditor names</b>.</li>
-        <li><b>Government</b>Register on <b>Startup Cambodia</b>. 30 minutes, free.</li>
+        <li><b>Brands</b> Call Yorkmars compliance. Get the <b>ASICS + VF auditor names</b>.</li>
+        <li><b>Government</b> Register on <b>Startup Cambodia</b>. 30 minutes, free.</li>
       </ul>
     </div>
     <div class="grp"><h4>Wed 14</h4>
       <ul class="t">
-        <li><b>Organisations</b>Walk into <b>Better Work Cambodia</b>. Ask for the Programme Manager.</li>
-        <li><b>Government</b>File the <b>Skills Development Fund</b> application.</li>
+        <li><b>Organisations</b> Walk into <b>Better Work Cambodia</b>. Ask for the Programme Manager.</li>
+        <li><b>Government</b> File the <b>Skills Development Fund</b> application.</li>
       </ul>
     </div>
     <div class="grp"><h4>Thu 15</h4>
       <ul class="t">
-        <li><b>Government</b>Decide the <b>MRA market</b>. Then open the Corppass form.</li>
-        <li><b>Orgs + Gov</b>Call <b>TAFTAC</b>. One meeting, two doors.</li>
+        <li><b>Government</b> Decide the <b>MRA market</b>. Then open the Corppass form.</li>
+        <li><b>Orgs + Gov</b> Call <b>TAFTAC</b>. One meeting, two doors.</li>
       </ul>
     </div>
     <div class="grp"><h4>Fri 16</h4>
       <ul class="t">
-        <li><b>App market</b>Fix the listings: Yai01 · IoT text · screenshot typo.</li>
-        <li><b>App market</b>Brief dev on the <b>second factor</b>. Due end of October.</li>
+        <li><b>App market</b> Fix the listings: Yai01 · IoT text · screenshot typo.</li>
+        <li><b>App market</b> Brief dev on the <b>second factor</b>. Due end of October.</li>
       </ul>
     </div>
     <div class="grp"><h4>Sat 17</h4>
       <ul class="t">
-        <li><b>Brands</b>Build the <b>one-page evidence sheet</b>.</li>
-        <li><b>VC</b>Ask 3SGS for <b>one number</b>.</li>
+        <li><b>Brands</b> Build the <b>one-page evidence sheet</b>.</li>
+        <li><b>VC</b> Ask 3SGS for <b>one number</b>.</li>
       </ul>
     </div>
     <div class="grp"><h4>Sun 18</h4>
       <ul class="t">
-        <li><b>Review</b>What landed, what did not. Pick next week.</li>
+        <li><b>Review</b> What landed, what did not. Pick next week.</li>
       </ul>
     </div>
     <div class="grp"><h4>Not this week</h4>
       <ul class="t">
-        <li><b>Sovereign · VC</b>Nothing to do until a second customer at real size.</li>
+        <li><b>Sovereign · VC</b> Nothing to do until a second customer at real size.</li>
       </ul>
     </div>
     <div class="feed">13 moves</div>
@@ -224,57 +254,57 @@ footer{max-width:1000px;margin:28px auto 0;border-top:1px solid var(--rule);padd
     <div class="cap"><div class="orb">Own clients<i class="dot" style="background:var(--warn)"></i></div></div>
     <div class="grp"><h4>Clients today</h4>
       <div class="tree">
-        <div class="node"><span class="chip"><b>Yorkmars</b><u>$2,000/mo</u></span><span class="reach">→ ≈100 suppliers</span></div>
+        <div class="node"><span class="chip"><b>Yorkmars</b><u>$2,000/mo</u></span><button class="reach" type="button" data-k="Yorkmars" data-fallback="→ ≈100 suppliers">→ ≈100 suppliers</button></div>
         <div class="node"><span class="chip"><b>Caswell</b><u>Yorkwell group</u></span></div>
-        <div class="node"><span class="chip"><b>BICNZ</b><u>$120 paid</u></span><span class="reach">→ ≈50 suppliers</span></div>
-        <div class="node"><span class="chip"><b>3SGS</b><u>$750 setting</u></span><span class="reach">→ ≈100 suppliers</span></div>
+        <div class="node"><span class="chip"><b>BICNZ</b><u>$120 paid</u></span><button class="reach" type="button" data-k="BICNZ" data-fallback="→ ≈50 suppliers">→ ≈50 suppliers</button></div>
+        <div class="node"><span class="chip"><b>3SGS</b><u>$750 setting</u></span><button class="reach" type="button" data-k="3SGS" data-fallback="→ ≈100 suppliers">→ ≈100 suppliers</button></div>
         <div class="node"><span class="chip"><b>3SGS+</b><u>$3,000 · Oct</u></span></div>
-        <div class="node"><span class="chip"><b>ES Packing</b><u>$750 · Oct</u></span><span class="reach">→ ≈100 suppliers</span></div>
-        <div class="node"><span class="chip"><b>USDS</b></span><span class="reach">→ ≈100 clients</span></div>
+        <div class="node"><span class="chip"><b>ES Packing</b><u>$750 · Oct</u></span><button class="reach" type="button" data-k="ES Packing" data-fallback="→ ≈100 suppliers">→ ≈100 suppliers</button></div>
+        <div class="node"><span class="chip"><b>USDS</b></span><button class="reach" type="button" data-k="USDS" data-fallback="→ ≈100 clients">→ ≈100 clients</button></div>
       </div>
     </div>
     <div class="grp"><h4>Yorkwell · client list approval</h4>
       <ul class="t">
-        <li><b>Blocked on</b>the development agreement. <span class="x">Unread.</span></li>
-        <li><b>One question</b>may Texlink sell Yai outside the Yorkwell group?</li>
-        <li><b>Who</b>Koem Phanny, Texlink legal</li>
-        <li><b>Until then</b><span class="x">sound out nobody</span> — a leak risks the contract that funds the build</li>
-        <li><b>Their list</b>Crystal · TAL · Youngone · Hansae · Shenzhou · Eclat · Makalot · Pou Chen · Feng Tay</li>
-        <li><b>Door</b>Yorkwell group IT, Hong Kong — one person names all nine</li>
-        <li><b>Frame</b>Their win, with a referral margin</li>
-        <li><b>Bypass</b>Track people, not companies. Alumni move between groups.</li>
+        <li><b>Blocked on</b> the development agreement. <span class="x">Unread.</span></li>
+        <li><b>One question</b> may Texlink sell Yai outside the Yorkwell group?</li>
+        <li><b>Who</b> Koem Phanny, Texlink legal</li>
+        <li><b>Until then</b> <span class="x">sound out nobody</span> — a leak risks the contract that funds the build</li>
+        <li><b>Their list</b> Crystal · TAL · Youngone · Hansae · Shenzhou · Eclat · Makalot · Pou Chen · Feng Tay</li>
+        <li><b>Door</b> Yorkwell group IT, Hong Kong — one person names all nine</li>
+        <li><b>Frame</b> Their win, with a referral margin</li>
+        <li><b>Bypass</b> Track people, not companies. Alumni move between groups.</li>
       </ul>
     </div>
     <div class="grp"><h4>TAFTAC / CGTI event</h4>
       <ul class="t">
-        <li><b>Do</b>Meet staff and managers. Introduce. Invite to a presentation.</li>
-        <li><b>Why</b>They adopt or not — <b>the influence lands either way</b></li>
-        <li><b>Proof</b>All 13 pipeline names came off one EXPO floor</li>
-        <li><b>Members</b>981 on the site · ~740 quoted 2024 · <b>Gamini ~2,000</b> · <span class="x">confirm</span></li>
-        <li><b>Workers</b>733,391 · 524,417 women</li>
-        <li><b>Directory</b>taftac-cambodia.org/our-members/search</li>
-        <li><b>Best filter</b><b>export destination</b> — who already ships to ASICS and VF</li>
-        <li><b>Built by</b>GIZ FABRIC + CADT · data from 2023</li>
-        <li><b>Call</b>+855 12 563 082 · 16 821 822 · 70 555 641 (CH)</li>
-        <li><b>Email</b>memberservice@ · info@taftac-cambodia.org</li>
-        <li><b>Social</b><span class="x">No official FB or Telegram found.</span> Ask them.</li>
+        <li><b>Do</b> Meet staff and managers. Introduce. Invite to a presentation.</li>
+        <li><b>Why</b> They adopt or not — <b>the influence lands either way</b></li>
+        <li><b>Proof</b> All 13 pipeline names came off one EXPO floor</li>
+        <li><b>Members</b> 981 on the site · ~740 quoted 2024 · <b>Gamini ~2,000</b> · <span class="x">confirm</span></li>
+        <li><b>Workers</b> 733,391 · 524,417 women</li>
+        <li><b>Directory</b> taftac-cambodia.org/our-members/search</li>
+        <li><b>Best filter</b> <b>export destination</b> — who already ships to ASICS and VF</li>
+        <li><b>Built by</b> GIZ FABRIC + CADT · data from 2023</li>
+        <li><b>Call</b> +855 12 563 082 · 16 821 822 · 70 555 641 (CH)</li>
+        <li><b>Email</b> memberservice@ · info@taftac-cambodia.org</li>
+        <li><b>Social</b> <span class="x">No official FB or Telegram found.</span> Ask them.</li>
       </ul>
     </div>
     <div class="grp"><h4>CGTI learning</h4>
       <ul class="t">
-        <li><b>The play</b>Get Yai <b>into the curriculum</b></li>
-        <li><b>Why</b>Every graduate carries it home — reaches the membership without meeting it</li>
-        <li><b>Reach</b>3,036 staff trained in 2025 · 2,123 women</li>
-        <li><b>Courses</b>Supervisor Upskills · Sewing Supervisor · Lean · Problem Solving</li>
-        <li><b>Also</b>60+ factory professionals a year · built on an AFD soft loan</li>
-        <li><b>Overlap</b><span class="w">co-funded by the SDF</span> — same fund as Government, same room</li>
+        <li><b>The play</b> Get Yai <b>into the curriculum</b></li>
+        <li><b>Why</b> Every graduate carries it home — reaches the membership without meeting it</li>
+        <li><b>Reach</b> 3,036 staff trained in 2025 · 2,123 women</li>
+        <li><b>Courses</b> Supervisor Upskills · Sewing Supervisor · Lean · Problem Solving</li>
+        <li><b>Also</b> 60+ factory professionals a year · built on an AFD soft loan</li>
+        <li><b>Overlap</b> <span class="w">co-funded by the SDF</span> — same fund as Government, same room</li>
       </ul>
     </div>
     <div class="grp"><h4>Cambodia external events</h4>
       <ul class="t">
-        <li><b>Where</b>Cambodia Industry Expo · Chamber of Commerce · ministry events</li>
-        <li><b>Why</b>Be seen. Cheapest standing we buy.</li>
-        <li><b>Carry</b>Not a brochure — the evidence sheet and a phone running the feed</li>
+        <li><b>Where</b> Cambodia Industry Expo · Chamber of Commerce · ministry events</li>
+        <li><b>Why</b> Be seen. Cheapest standing we buy.</li>
+        <li><b>Carry</b> Not a brochure — the evidence sheet and a phone running the feed</li>
       </ul>
     </div>
     <div class="feed">No updates</div>
@@ -283,54 +313,54 @@ footer{max-width:1000px;margin:28px auto 0;border-top:1px solid var(--rule);padd
     <div class="cap"><div class="orb">Government<i class="dot" style="background:var(--ok)"></i></div></div>
     <div class="grp"><h4>Singapore · GGMT</h4>
       <ul class="t">
-        <li><b>5.1 MRA</b>70% back, cap S$100,000, to Mar 2029 · <span class="w">GGMT qualifies</span></li>
-        <li><b>5.2 EDG</b>up to 50% · the AI servers fit here</li>
-        <li><b>5.3 EDGE</b>merges MRA + PSG + EDG · apply under today’s schemes</li>
-        <li><b>Blocker</b><span class="x">Pick the market.</span> MRA is claimed per market.</li>
+        <li><b>5.1 MRA</b> 70% back, cap S$100,000, to Mar 2029 · <span class="w">GGMT qualifies</span></li>
+        <li><b>5.2 EDG</b> up to 50% · the AI servers fit here</li>
+        <li><b>5.3 EDGE</b> merges MRA + PSG + EDG · apply under today’s schemes</li>
+        <li><b>Blocker</b> <span class="x">Pick the market.</span> MRA is claimed per market.</li>
       </ul>
     </div>
     <div class="grp"><h4>Cambodia · MEF</h4>
       <ul class="t">
-        <li><b>5.4 EDF EcoBoost</b>seed for digital marketplaces — that is tower 7, word for word</li>
-        <li><b>5.5 Khmer Enterprise</b>~$17m invested · 600 projects · the most active</li>
-        <li><b>5.6 SDF</b>co-funds training · <span class="w">our feed already proves completion</span></li>
-        <li><b>5.7 Techo</b>grants + tax incentives · runs Startup Cambodia</li>
-        <li><b>5.8 SME Bank</b>$242m to 880 businesses · <b>debt, not grants</b></li>
-        <li><b>5.9 CGCC</b>guarantees lending without collateral · pairs with 5.8</li>
-        <li><b>5.10–5.12</b>ARDB · DEBC · MISTI · Smart Axiata fund ($5m)</li>
-        <li><b>First move</b><b>Register on Startup Cambodia.</b> Free. All eight see you.</li>
+        <li><b>5.4 EDF EcoBoost</b> seed for digital marketplaces — that is tower 7, word for word</li>
+        <li><b>5.5 Khmer Enterprise</b> ~$17m invested · 600 projects · the most active</li>
+        <li><b>5.6 SDF</b> co-funds training · <span class="w">our feed already proves completion</span></li>
+        <li><b>5.7 Techo</b> grants + tax incentives · runs Startup Cambodia</li>
+        <li><b>5.8 SME Bank</b> $242m to 880 businesses · <b>debt, not grants</b></li>
+        <li><b>5.9 CGCC</b> guarantees lending without collateral · pairs with 5.8</li>
+        <li><b>5.10–5.12</b> ARDB · DEBC · MISTI · Smart Axiata fund ($5m)</li>
+        <li><b>First move</b> <b>Register on Startup Cambodia.</b> Free. All eight see you.</li>
       </ul>
     </div>
     <div class="grp"><h4>Germany + EU</h4>
       <ul class="t">
-        <li><b>5.13 GIZ FABRIC</b>garment, footwear, travel goods · <span class="w">closest fit of any</span></li>
-        <li><b>5.14 develoPPP</b>BMZ via GIZ and DEG · <b>we fund half</b></li>
-        <li><b>5.15–5.18</b>KfW · DEG · SWITCH-Asia · EU Delegation · Global Gateway</li>
-        <li><b>5.19</b>AFD · Proparco · SIDA · Danida · FMO · Norfund · Finnfund · SECO</li>
-        <li><b>Route in</b><b>TAFTAC</b> implements their work. Go in as something they use.</li>
+        <li><b>5.13 GIZ FABRIC</b> garment, footwear, travel goods · <span class="w">closest fit of any</span></li>
+        <li><b>5.14 develoPPP</b> BMZ via GIZ and DEG · <b>we fund half</b></li>
+        <li><b>5.15–5.18</b> KfW · DEG · SWITCH-Asia · EU Delegation · Global Gateway</li>
+        <li><b>5.19</b> AFD · Proparco · SIDA · Danida · FMO · Norfund · Finnfund · SECO</li>
+        <li><b>Route in</b> <b>TAFTAC</b> implements their work. Go in as something they use.</li>
       </ul>
     </div>
     <div class="grp"><h4>Rest of the world</h4>
       <ul class="t">
-        <li><b>UK</b>BII · FCDO · <span class="x">Innovate UK needs a UK entity</span></li>
-        <li><b>US</b>DFC · USTDA · <b>aid structures changed 2025 — verify</b></li>
-        <li><b>Japan</b>JICA · METI · JETRO · JBIC · NEDO · AOTS</li>
-        <li><b>Korea · AU · TW</b>KOTRA · KOICA · DFAT · Taiwan ICDF</li>
-        <li><b>Multilateral</b>ADB Ventures ($50m) · ADB BRIDGE (2027) · World Bank · UNCDF</li>
+        <li><b>UK</b> BII · FCDO · <span class="x">Innovate UK needs a UK entity</span></li>
+        <li><b>US</b> DFC · USTDA · <b>aid structures changed 2025 — verify</b></li>
+        <li><b>Japan</b> JICA · METI · JETRO · JBIC · NEDO · AOTS</li>
+        <li><b>Korea · AU · TW</b> KOTRA · KOICA · DFAT · Taiwan ICDF</li>
+        <li><b>Multilateral</b> ADB Ventures ($50m) · ADB BRIDGE (2027) · World Bank · UNCDF</li>
       </ul>
     </div>
     <div class="grp"><h4>Paperwork they all ask for</h4>
       <ul class="t">
-        <li><b>Texlink</b>October 2025</li>
-        <li><b>GK SMART</b>13 April 2021 · MOC 50015732</li>
-        <li><b>GGMT</b>1 September 2011 · UEN 201120577C</li>
+        <li><b>Texlink</b> October 2025</li>
+        <li><b>GK SMART</b> 13 April 2021 · MOC 50015732</li>
+        <li><b>GGMT</b> 1 September 2011 · UEN 201120577C</li>
       </ul>
     </div>
     <div class="grp"><h4>Honest sizing</h4>
       <ul class="t">
-        <li><b>Real money</b>Singapore and Germany</li>
-        <li><b>Cambodia</b>credibility — which towers 2, 3 and 4 read as validation</li>
-        <li><b>UK/US entity</b>only for a <b>named</b> programme. Germany or NL is the stronger one.</li>
+        <li><b>Real money</b> Singapore and Germany</li>
+        <li><b>Cambodia</b> credibility — which towers 2, 3 and 4 read as validation</li>
+        <li><b>UK/US entity</b> only for a <b>named</b> programme. Germany or NL is the stronger one.</li>
       </ul>
     </div>
     <div class="feed">No updates</div>
@@ -339,41 +369,41 @@ footer{max-width:1000px;margin:28px auto 0;border-top:1px solid var(--rule);padd
     <div class="cap"><div class="orb">Organisations<i class="dot" style="background:var(--ok)"></i></div></div>
     <div class="grp"><h4>Targets</h4>
       <ul class="t">
-        <li><b>3.1 ILO</b>Gilbert Houngbo, DG, Geneva · <span class="x">never cold</span></li>
-        <li><b>3.2 Better Work</b>Tomei · Nakamura-Osaka (ILO) · Luy · Sharif (WBG)</li>
-        <li><b>3.3 IFC</b>Makhtar Diop, Washington</li>
-        <li><b>3.4 UNIDO</b>Gerd Müller, Vienna</li>
-        <li><b>3.5 UNDP</b>Alexander De Croo, New York</li>
-        <li><b>3.6 ADB</b>Masato Kanda, Manila · 2nd term from 24 Nov 2026</li>
-        <li><b>3.7 DFIs</b>BII · DFC · Proparco · FMO</li>
+        <li><b>3.1 ILO</b> Gilbert Houngbo, DG, Geneva · <span class="x">never cold</span></li>
+        <li><b>3.2 Better Work</b> Tomei · Nakamura-Osaka (ILO) · Luy · Sharif (WBG)</li>
+        <li><b>3.3 IFC</b> Makhtar Diop, Washington</li>
+        <li><b>3.4 UNIDO</b> Gerd Müller, Vienna</li>
+        <li><b>3.5 UNDP</b> Alexander De Croo, New York</li>
+        <li><b>3.6 ADB</b> Masato Kanda, Manila · 2nd term from 24 Nov 2026</li>
+        <li><b>3.7 DFIs</b> BII · DFC · Proparco · FMO</li>
       </ul>
     </div>
     <div class="grp"><h4>The climb</h4>
       <ul class="t">
-        <li><b>Rung 1</b>Better Work Cambodia, Phnom Penh — walk in</li>
-        <li><b>Rung 2</b>Better Work regional, Bangkok</li>
-        <li><b>Rung 3</b>The Management Group</li>
-        <li><b>Rule</b>Each rung is a referral. <span class="x">Skipping one ends it.</span></li>
+        <li><b>Rung 1</b> Better Work Cambodia, Phnom Penh — walk in</li>
+        <li><b>Rung 2</b> Better Work regional, Bangkok</li>
+        <li><b>Rung 3</b> The Management Group</li>
+        <li><b>Rule</b> Each rung is a referral. <span class="x">Skipping one ends it.</span></li>
       </ul>
     </div>
     <div class="grp"><h4>Shortcut</h4>
       <ul class="t">
-        <li><b>Committee</b>Better Work Cambodia’s Project Advisory Committee</li>
-        <li><b>Who is on it</b>TAFTAC · unions · Ministry of Labour</li>
-        <li><b>Why it works</b><b>TAFTAC already posts into Yai’s feed.</b> One conversation.</li>
+        <li><b>Committee</b> Better Work Cambodia’s Project Advisory Committee</li>
+        <li><b>Who is on it</b> TAFTAC · unions · Ministry of Labour</li>
+        <li><b>Why it works</b> <b>TAFTAC already posts into Yai’s feed.</b> One conversation.</li>
       </ul>
     </div>
     <div class="grp"><h4>ADB + World Bank</h4>
       <ul class="t">
-        <li><b>Different</b>procurement, not relationship</li>
-        <li><b>Do</b>Register on ADB CMS and the World Bank supplier portal</li>
-        <li><b>Timing</b><span class="w">ADB BRIDGE is being scoped now</span> for 2027</li>
+        <li><b>Different</b> procurement, not relationship</li>
+        <li><b>Do</b> Register on ADB CMS and the World Bank supplier portal</li>
+        <li><b>Timing</b> <span class="w">ADB BRIDGE is being scoped now</span> for 2027</li>
       </ul>
     </div>
     <div class="grp"><h4>The line</h4>
       <ul class="t">
-        <li><b>Not</b>“fund us”</li>
-        <li><b>But</b>your notices already reach these workers — we show who completed them</li>
+        <li><b>Not</b> “fund us”</li>
+        <li><b>But</b> your notices already reach these workers — we show who completed them</li>
       </ul>
     </div>
     <div class="feed">No updates</div>
@@ -382,46 +412,46 @@ footer{max-width:1000px;margin:28px auto 0;border-top:1px solid var(--rule);padd
     <div class="cap"><div class="orb">Brands<i class="dot" style="background:var(--ok)"></i></div></div>
     <div class="grp"><h4>Targets</h4>
       <ul class="t">
-        <li><b>2.1 ASICS</b>Global Sustainability, Kobe · no lead named publicly</li>
-        <li><b>2.2 VF Corp</b>Responsible Sourcing · Vans, TNF, Timberland, Dickies</li>
-        <li><b>2.3 Trading offices</b>Hong Kong + Vietnam · <b>start here, not HQ</b></li>
-        <li><b>2.4 Standards</b>Cascale · Textile Exchange · SLCP · amfori · Sedex</li>
+        <li><b>2.1 ASICS</b> Global Sustainability, Kobe · no lead named publicly</li>
+        <li><b>2.2 VF Corp</b> Responsible Sourcing · Vans, TNF, Timberland, Dickies</li>
+        <li><b>2.3 Trading offices</b> Hong Kong + Vietnam · <b>start here, not HQ</b></li>
+        <li><b>2.4 Standards</b> Cascale · Textile Exchange · SLCP · amfori · Sedex</li>
       </ul>
     </div>
     <div class="grp"><h4>The warm human</h4>
       <ul class="t">
-        <li><b>Who</b>Yorkmars’ compliance manager</li>
-        <li><b>What</b>Emails the ASICS and VF auditors <b>weekly</b></li>
-        <li><b>Ask</b>Their names and emails. Then invite them to the plant.</li>
-        <li><b>Status</b><span class="x">Never used.</span> Cheapest door on the board.</li>
+        <li><b>Who</b> Yorkmars’ compliance manager</li>
+        <li><b>What</b> Emails the ASICS and VF auditors <b>weekly</b></li>
+        <li><b>Ask</b> Their names and emails. Then invite them to the plant.</li>
+        <li><b>Status</b> <span class="x">Never used.</span> Cheapest door on the board.</li>
       </ul>
     </div>
     <div class="grp"><h4>Finding the ASICS lead</h4>
       <ul class="t">
-        <li><b>a</b>2025 Sustainability Report — governance section lists roles</li>
-        <li><b>b</b>LinkedIn — second degree out of our own compliance staff</li>
-        <li><b>c</b>Cascale / SLCP working groups publish attendee names</li>
+        <li><b>a</b> 2025 Sustainability Report — governance section lists roles</li>
+        <li><b>b</b> LinkedIn — second degree out of our own compliance staff</li>
+        <li><b>c</b> Cascale / SLCP working groups publish attendee names</li>
       </ul>
     </div>
     <div class="grp"><h4>Buy a seat</h4>
       <ul class="t">
-        <li><b>Where</b>Cascale or amfori, solution-provider membership</li>
-        <li><b>Buys</b>A listing and a speaking slot — where those staff actually are</li>
-        <li><b>Credential</b>CDMS already implements all 36 standards</li>
+        <li><b>Where</b> Cascale or amfori, solution-provider membership</li>
+        <li><b>Buys</b> A listing and a speaking slot — where those staff actually are</li>
+        <li><b>Credential</b> CDMS already implements all 36 standards</li>
       </ul>
     </div>
     <div class="grp"><h4>The opener</h4>
       <ul class="t">
-        <li><b>Their claim</b>“100% supplier compliance with ASICS standards”</li>
-        <li><b>Our question</b><b>How is that evidenced today?</b></li>
-        <li><b>Then</b>Khmer safety notice + completion list. Demo on the floor.</li>
+        <li><b>Their claim</b> “100% supplier compliance with ASICS standards”</li>
+        <li><b>Our question</b> <b>How is that evidenced today?</b></li>
+        <li><b>Then</b> Khmer safety notice + completion list. Demo on the floor.</li>
       </ul>
     </div>
     <div class="grp"><h4>Fix first</h4>
       <ul class="t">
-        <li><b>yaikh.com/about</b>lists Claude beside Gemini and <b>DeepSeek</b></li>
-        <li><b>Why it matters</b>Brands and ILO read it — DeepSeek raises data residency</li>
-        <li><b>Unknown</b><span class="x">Is DeepSeek in production, or only listed?</span></li>
+        <li><b>yaikh.com/about</b> lists Claude beside Gemini and <b>DeepSeek</b></li>
+        <li><b>Why it matters</b> Brands and ILO read it — DeepSeek raises data residency</li>
+        <li><b>Unknown</b> <span class="x">Is DeepSeek in production, or only listed?</span></li>
       </ul>
     </div>
     <div class="feed">No updates</div>
@@ -430,28 +460,28 @@ footer{max-width:1000px;margin:28px auto 0;border-top:1px solid var(--rule);padd
     <div class="cap"><div class="orb">Sovereign funds<i class="dot" style="background:var(--warn)"></i></div></div>
     <div class="grp"><h4>Targets</h4>
       <ul class="t">
-        <li><b>4.1</b>UAE National AI Program · Abu Dhabi</li>
-        <li><b>4.2</b>Mubadala · ADQ</li>
-        <li><b>4.3</b>HK + Singapore family offices with manufacturing roots</li>
+        <li><b>4.1</b> UAE National AI Program · Abu Dhabi</li>
+        <li><b>4.2</b> Mubadala · ADQ</li>
+        <li><b>4.3</b> HK + Singapore family offices with manufacturing roots</li>
       </ul>
     </div>
     <div class="grp"><h4>Why hold</h4>
       <ul class="t">
-        <li><b>Ticket size</b>$10m+ · they buy scale</li>
-        <li><b>Risk</b>An early ask <b>spends the introduction</b> and returns a filed no</li>
+        <li><b>Ticket size</b> $10m+ · they buy scale</li>
+        <li><b>Risk</b> An early ask <b>spends the introduction</b> and returns a filed no</li>
       </ul>
     </div>
     <div class="grp"><h4>The blockers</h4>
       <ul class="t">
-        <li><b>Concentration</b>6 signed, but Yorkmars is <b>85%</b> · 3 still in setup</li>
-        <li><b>Unit economics</b>Cost per plant, revenue per plant · <b>both blank</b></li>
+        <li><b>Concentration</b> 6 signed, but Yorkmars is <b>85%</b> · 3 still in setup</li>
+        <li><b>Unit economics</b> Cost per plant, revenue per plant · <b>both blank</b></li>
       </ul>
     </div>
     <div class="grp"><h4>Meanwhile</h4>
       <ul class="t">
-        <li><b>Go</b>Gulf AI events — the Global AI Show lead came from one</li>
-        <li><b>Do</b>Collect names. <span class="w">Make no ask.</span></li>
-        <li><b>Set up</b>Yorkwell’s owners sit in that family-office community</li>
+        <li><b>Go</b> Gulf AI events — the Global AI Show lead came from one</li>
+        <li><b>Do</b> Collect names. <span class="w">Make no ask.</span></li>
+        <li><b>Set up</b> Yorkwell’s owners sit in that family-office community</li>
       </ul>
     </div>
     <div class="feed">No updates</div>
@@ -460,30 +490,30 @@ footer{max-width:1000px;margin:28px auto 0;border-top:1px solid var(--rule);padd
     <div class="cap"><div class="orb">VC &amp; strategic<i class="dot" style="background:var(--warn)"></i></div></div>
     <div class="grp"><h4>Targets</h4>
       <ul class="t">
-        <li><b>6.1</b>SEA industrial-tech funds</li>
-        <li><b>6.2</b>Korean and Japanese funds with manufacturing ties</li>
-        <li><b>6.3</b><b>Brand corporate VC</b> — the one exception</li>
+        <li><b>6.1</b> SEA industrial-tech funds</li>
+        <li><b>6.2</b> Korean and Japanese funds with manufacturing ties</li>
+        <li><b>6.3</b> <b>Brand corporate VC</b> — the one exception</li>
       </ul>
     </div>
     <div class="grp"><h4>The exception</h4>
       <ul class="t">
-        <li><b>Why</b>They buy a supply-chain position, not a growth curve</li>
-        <li><b>Door</b>Same person as tower 2 — <b>one relationship, two arms</b></li>
+        <li><b>Why</b> They buy a supply-chain position, not a growth curve</li>
+        <li><b>Door</b> Same person as tower 2 — <b>one relationship, two arms</b></li>
       </ul>
     </div>
     <div class="grp"><h4>Why financial VC stays shut</h4>
       <ul class="t">
-        <li><b>They ask</b>cost per plant, revenue per plant — in ten minutes</li>
-        <li><b>We have</b><b>neither</b></li>
-        <li><b>Missing</b>the second customer, not the document</li>
+        <li><b>They ask</b> cost per plant, revenue per plant — in ten minutes</li>
+        <li><b>We have</b> <b>neither</b></li>
+        <li><b>Missing</b> the second customer, not the document</li>
       </ul>
     </div>
     <div class="grp"><h4>Anthropic track</h4>
       <ul class="t">
-        <li><b>Startups</b>Both filed · one application per Console org</li>
-        <li><b>Yorkmars story</b><span class="x">declined</span> — no measurable customer result</li>
-        <li><b>GK SMART story</b><span class="x">not eligible</span> — link was not a public page</li>
-        <li><b>CDMS story</b>filled, never submitted — <b>needs a number from 3SGS</b></li>
+        <li><b>Startups</b> Both filed · one application per Console org</li>
+        <li><b>Yorkmars story</b> <span class="x">declined</span> — no measurable customer result</li>
+        <li><b>GK SMART story</b> <span class="x">not eligible</span> — link was not a public page</li>
+        <li><b>CDMS story</b> filled, never submitted — <b>needs a number from 3SGS</b></li>
       </ul>
     </div>
     <div class="feed">No updates</div>
@@ -492,38 +522,38 @@ footer{max-width:1000px;margin:28px auto 0;border-top:1px solid var(--rule);padd
     <div class="cap"><div class="orb">App marketplace<i class="dot" style="background:var(--stop)"></i></div></div>
     <div class="grp"><h4>Targets and rails</h4>
       <ul class="t">
-        <li><b>7.1 MoC</b>e-commerce licence · <b>Koem Phanny</b> · <span class="x">status unknown</span></li>
-        <li><b>7.2 ABA</b>integrated · nothing further</li>
-        <li><b>7.3 Wing</b>integrated · nothing further</li>
-        <li><b>7.4 Stores</b>YaiKH iOS 4.0.4 · Android 1k+ installs, 3.6★ from 7</li>
+        <li><b>7.1 MoC</b> e-commerce licence · <b>Koem Phanny</b> · <span class="x">status unknown</span></li>
+        <li><b>7.2 ABA</b> integrated · nothing further</li>
+        <li><b>7.3 Wing</b> integrated · nothing further</li>
+        <li><b>7.4 Stores</b> YaiKH iOS 4.0.4 · Android 1k+ installs, 3.6★ from 7</li>
       </ul>
     </div>
     <div class="grp"><h4>The order</h4>
       <ul class="t">
-        <li><b>1</b>Licence</li>
-        <li><b>2</b>Fix the sign-in · second factor · <b>due end of October</b></li>
-        <li><b>3</b>Clean the listings</li>
-        <li><b>4</b>Then spend</li>
+        <li><b>1</b> Licence</li>
+        <li><b>2</b> Fix the sign-in · second factor · <b>due end of October</b></li>
+        <li><b>3</b> Clean the listings</li>
+        <li><b>4</b> Then spend</li>
       </ul>
     </div>
     <div class="grp"><h4>Listings to fix</h4>
       <ul class="t">
-        <li><b>Developer</b>shows <b>Yai01</b> on Android, GGMT PTE. LTD. on iOS</li>
-        <li><b>Yai Shop</b>still describes IoT devices</li>
-        <li><b>Screenshot</b>typo burned into the image</li>
+        <li><b>Developer</b> shows <b>Yai01</b> on Android, GGMT PTE. LTD. on iOS</li>
+        <li><b>Yai Shop</b> still describes IoT devices</li>
+        <li><b>Screenshot</b> typo burned into the image</li>
       </ul>
     </div>
     <div class="grp"><h4>Why it matters</h4>
       <ul class="t">
-        <li><b>Users</b>consumers, not employees with assigned accounts</li>
-        <li><b>So</b>password-only is the wrong front door for a paid campaign</li>
-        <li><b>Blocks</b>the Anthropic review and the public launch, together</li>
+        <li><b>Users</b> consumers, not employees with assigned accounts</li>
+        <li><b>So</b> password-only is the wrong front door for a paid campaign</li>
+        <li><b>Blocks</b> the Anthropic review and the public launch, together</li>
       </ul>
     </div>
     <div class="grp"><h4>It pays for tower 5</h4>
       <ul class="t">
-        <li><b>5.4 EcoBoost</b>names digital-marketplace seed funding</li>
-        <li><b>Meaning</b><span class="w">shipping this makes that application real</span></li>
+        <li><b>5.4 EcoBoost</b> names digital-marketplace seed funding</li>
+        <li><b>Meaning</b> <span class="w">shipping this makes that application real</span></li>
       </ul>
     </div>
     <div class="feed">No updates</div>
@@ -535,6 +565,54 @@ footer{max-width:1000px;margin:28px auto 0;border-top:1px solid var(--rule);padd
 <footer>
   Yorkwell Hong Kong funds development for its own 23 units; this board is about everything beyond them. Figures from public reporting on 10 October 2026 — confirm current terms with each body before applying, since several run in rounds. Where no person is named, none could be confirmed; the role is given instead. Do not guess a name.
 </footer>
+<div id="scrim"></div>
+<aside id="drawer" aria-hidden="true">
+  <div id="dhead"><h3></h3><p></p><button id="dclose" type="button" aria-label="Close">×</button></div>
+  <input id="dsearch" type="search" placeholder="Filter these names…" autocomplete="off">
+  <div id="dlist"></div>
+</aside>
+<script>
+/* NAMES GO HERE. One key per client, matching the node label exactly.
+   Each entry: ["Name"] or ["Name","tag"]. The board shows the count and
+   the drawer shows the list — nothing long is ever printed on the board. */
+const NAMES = {
+  "Yorkmars":   [],
+  "BICNZ":      [],
+  "3SGS":       [],
+  "ES Packing": [],
+  "USDS":       [],
+};
+const noun = {"USDS":"clients"};
+document.querySelectorAll("button.reach").forEach(b=>{
+  const k=b.dataset.k, n=(NAMES[k]||[]).length;
+  if(n) b.textContent="→ "+n+" "+(noun[k]||"suppliers");
+});
+const dr=document.getElementById("drawer"), sc=document.getElementById("scrim"),
+      dl=document.getElementById("dlist"), ds=document.getElementById("dsearch"),
+      dh=dr.querySelector("h3"), dp=dr.querySelector("p");
+let cur=[];
+function draw(q){
+  q=(q||"").trim().toLowerCase();
+  const rows=cur.map((e,i)=>[e,i]).filter(([e])=>!q||String(e[0]).toLowerCase().includes(q)||String(e[1]||"").toLowerCase().includes(q));
+  if(!cur.length){dl.innerHTML='<div id="dempty">No names loaded yet. Add them to the <code>NAMES</code> block at the foot of this page — one line each, and the count on the board updates itself.</div>';return;}
+  if(!rows.length){dl.innerHTML='<div id="dempty">Nothing matches that.</div>';return;}
+  dl.innerHTML=rows.map(([e,i])=>"<div class=\"r\"><i>"+(i+1)+"</i><span>"+e[0]+"</span>"+(e[1]?"<em>"+e[1]+"</em>":"")+"</div>").join("");
+}
+function open(k,el){
+  cur=NAMES[k]||[];
+  dh.textContent=k;
+  dp.textContent=cur.length?cur.length+" "+(noun[k]||"suppliers"):"no names loaded";
+  dr.style.setProperty("--dc",getComputedStyle(el.closest(".tower")).getPropertyValue("--c"));
+  ds.value=""; draw(""); dr.classList.add("on"); sc.classList.add("on");
+  dr.setAttribute("aria-hidden","false"); setTimeout(()=>ds.focus(),60);
+}
+function shut(){dr.classList.remove("on");sc.classList.remove("on");dr.setAttribute("aria-hidden","true");}
+document.querySelectorAll("button.reach").forEach(b=>b.addEventListener("click",()=>open(b.dataset.k,b)));
+document.getElementById("dclose").addEventListener("click",shut);
+sc.addEventListener("click",shut);
+ds.addEventListener("input",()=>draw(ds.value));
+document.addEventListener("keydown",e=>{if(e.key==="Escape")shut();});
+</script>
 
 </body>
 </html>
