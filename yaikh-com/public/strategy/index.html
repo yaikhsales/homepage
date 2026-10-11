@@ -57,6 +57,22 @@ p{margin:0}
 .legend{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-top:12px;font-size:13px;color:var(--muted)}
 .legend i{display:inline-block;width:9px;height:9px;border-radius:99px;margin-right:5px}
 
+.tree{position:relative;margin-top:4px;padding-left:15px}
+.tree::before{content:"";position:absolute;left:3px;top:12px;bottom:20px;width:2px;background:var(--c);opacity:.45}
+.node{position:relative;margin-bottom:11px}
+.node::before{content:"";position:absolute;left:-12px;top:14px;width:10px;height:2px;background:var(--c);opacity:.45}
+.chip{display:inline-flex;align-items:baseline;gap:8px;flex-wrap:wrap;
+      border:1.5px solid var(--c);border-radius:999px;padding:4px 13px}
+.chip b{font-family:var(--display);font-weight:800;font-size:14.5px;letter-spacing:-.01em;color:var(--ink)}
+.chip u{text-decoration:none;font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+.reach{position:relative;margin:7px 0 0 24px;display:table;
+       background:var(--o);color:#07121A;border-radius:8px;padding:4px 11px;
+       font-family:var(--display);font-weight:700;font-size:12.5px;line-height:1.15}
+.reach::before{content:"";position:absolute;left:-14px;top:-9px;width:12px;height:17px;
+               border-left:2px solid var(--c);border-bottom:2px solid var(--c);
+               border-bottom-left-radius:7px;opacity:.45}
+.treefoot{margin-top:4px;font-size:12.5px;color:var(--muted);line-height:1.38}
+.treefoot b{color:var(--ink);font-weight:600}
 .boardnote{max-width:1000px;margin:12px auto 0;font-size:14px;color:var(--muted)}
 .boardnote b{color:var(--ink);font-weight:600}
 
@@ -79,7 +95,7 @@ p{margin:0}
     border-bottom:1px solid var(--rule);text-align:center}
 .lede{font-size:14.5px;line-height:1.46;margin-top:10px}
 .grp{margin-top:16px;padding-top:13px;border-top:2px solid var(--c)}
-.grp:first-of-type{margin-top:12px}
+.grp:first-of-type{margin-top:15px}
 .grp > h4{margin:0 0 8px;font-family:var(--display);font-size:15.5px;font-weight:800;
           letter-spacing:-.012em;color:var(--c)}
 .grp p{font-size:14px;line-height:1.45;color:var(--muted)}
@@ -127,6 +143,14 @@ footer{max-width:1000px;margin:28px auto 0;border-top:1px solid var(--rule);padd
   .st{font-size:16px}
   .lede{font-size:17px}
   .grp > h4{font-size:20px}
+  .chip b{font-size:18px}
+  .chip u{font-size:13px}
+  .reach{font-size:15.5px;padding:5px 13px}
+  .treefoot{font-size:15px}
+  .chip b{font-size:18px}
+  .chip s{font-size:13.5px}
+  .reach{font-size:15.5px;padding:5px 13px}
+  .treefoot{font-size:15px}
   .grp p{font-size:16px}
   ul.t li{font-size:15.5px}
   ul.t li b{font-size:11.5px}
@@ -148,8 +172,6 @@ footer{max-width:1000px;margin:28px auto 0;border-top:1px solid var(--rule);padd
 <div class="towers">
   <div class="tower" style="--c:var(--hub);--o:var(--o0)">
     <div class="cap"><div class="orb">This week</div></div>
-    <div class="rt">Mon 12 — Sun 18 Oct</div>
-    <div class="st">13 moves · six arms</div>
     <div class="grp"><h4>Mon 12</h4>
       <ul class="t">
         <li><b>Own clients</b>Yorkwell contract → <b>Koem Phanny</b>. One question: may we sell outside the group?</li>
@@ -200,20 +222,17 @@ footer{max-width:1000px;margin:28px auto 0;border-top:1px solid var(--rule);padd
   </div>
   <div class="tower" style="--c:var(--d1);--o:var(--o1)">
     <div class="cap"><div class="orb">Own clients<i class="dot" style="background:var(--warn)"></i></div></div>
-    <div class="rt">Borrow</div>
-    <div class="st">6 signed · contract still unread</div>
     <div class="grp"><h4>Clients today</h4>
-      <ul class="t">
-        <li><b>Yorkmars</b>Admin, Production · <b>$2,000/month</b> · $34,000 committed</li>
-        <li><b>Caswell</b>Fini Check, YTM · Yorkwell group · no revenue line</li>
-        <li><b>BICNZ</b>Calibration QR · $120 · <span class="w">paid</span></li>
-        <li><b>3SGS</b>Digital Audit · $750 · setting</li>
-        <li><b>3SGS+</b>Ai Audit review · $3,000 · setting · <b>October</b></li>
-        <li><b>ES Packing</b>YHR, Gate Pass, Car Booking · $750 · setting · <b>October</b></li>
-        <li><b>Committed</b>$40,240 to Dec 2027 · <b>85% is Yorkmars</b></li>
-        <li><b>Cheapest money</b>3 of 5 still in setup. Already signed. Get them live.</li>
-        <li><b>Pipeline</b>13 in presentation (EXPO) · 2 finalising (Saman)</li>
-      </ul>
+      <div class="tree">
+        <div class="node"><span class="chip"><b>Yorkmars</b><u>$2,000/mo</u></span><span class="reach">→ ≈100 suppliers</span></div>
+        <div class="node"><span class="chip"><b>Caswell</b><u>Yorkwell group</u></span></div>
+        <div class="node"><span class="chip"><b>BICNZ</b><u>$120 paid</u></span><span class="reach">→ ≈50 suppliers</span></div>
+        <div class="node"><span class="chip"><b>3SGS</b><u>$750 setting</u></span><span class="reach">→ ≈100 suppliers</span></div>
+        <div class="node"><span class="chip"><b>3SGS+</b><u>$3,000 · Oct</u></span></div>
+        <div class="node"><span class="chip"><b>ES Packing</b><u>$750 · Oct</u></span><span class="reach">→ ≈100 suppliers</span></div>
+        <div class="node"><span class="chip"><b>USDS</b></span><span class="reach">→ ≈100 clients</span></div>
+      </div>
+      <p class="treefoot"><b>5 doors ≈ 450 companies behind them.</b> Counts are Gamini’s estimates, not verified. $40,240 committed to Dec 2027, <b>85% of it Yorkmars</b>. 3 of 5 still in setup — already signed, so getting them live is the cheapest money here. Pipeline: 13 in presentation (EXPO) · 2 finalising (Saman). <span class="x">USDS is not on the September sales sheet</span> — add it there or the two sets of numbers will keep disagreeing.</p>
     </div>
     <div class="grp"><h4>Yorkwell · client list approval</h4>
       <ul class="t">
@@ -263,8 +282,6 @@ footer{max-width:1000px;margin:28px auto 0;border-top:1px solid var(--rule);padd
   </div>
   <div class="tower" style="--c:var(--d5);--o:var(--o5)">
     <div class="cap"><div class="orb">Government<i class="dot" style="background:var(--ok)"></i></div></div>
-    <div class="rt">Portal</div>
-    <div class="st">Eligible · 4 ready to file</div>
     <div class="grp"><h4>Singapore · GGMT</h4>
       <ul class="t">
         <li><b>5.1 MRA</b>70% back, cap S$100,000, to Mar 2029 · <span class="w">GGMT qualifies</span></li>
@@ -321,8 +338,6 @@ footer{max-width:1000px;margin:28px auto 0;border-top:1px solid var(--rule);padd
   </div>
   <div class="tower" style="--c:var(--d3);--o:var(--o3)">
     <div class="cap"><div class="orb">Organisations<i class="dot" style="background:var(--ok)"></i></div></div>
-    <div class="rt">Climb</div>
-    <div class="st">Warm · ILO already in the app</div>
     <div class="grp"><h4>Targets</h4>
       <ul class="t">
         <li><b>3.1 ILO</b>Gilbert Houngbo, DG, Geneva · <span class="x">never cold</span></li>
@@ -366,8 +381,6 @@ footer{max-width:1000px;margin:28px auto 0;border-top:1px solid var(--rule);padd
   </div>
   <div class="tower" style="--c:var(--d2);--o:var(--o2)">
     <div class="cap"><div class="orb">Brands<i class="dot" style="background:var(--ok)"></i></div></div>
-    <div class="rt">Triangulate</div>
-    <div class="st">Open · no approach made yet</div>
     <div class="grp"><h4>Targets</h4>
       <ul class="t">
         <li><b>2.1 ASICS</b>Global Sustainability, Kobe · no lead named publicly</li>
@@ -416,8 +429,6 @@ footer{max-width:1000px;margin:28px auto 0;border-top:1px solid var(--rule);padd
   </div>
   <div class="tower" style="--c:var(--d4);--o:var(--o4)">
     <div class="cap"><div class="orb">Sovereign funds<i class="dot" style="background:var(--warn)"></i></div></div>
-    <div class="rt">Hold</div>
-    <div class="st">Relationship only · no ask</div>
     <div class="grp"><h4>Targets</h4>
       <ul class="t">
         <li><b>4.1</b>UAE National AI Program · Abu Dhabi</li>
@@ -448,8 +459,6 @@ footer{max-width:1000px;margin:28px auto 0;border-top:1px solid var(--rule);padd
   </div>
   <div class="tower" style="--c:var(--d6);--o:var(--o6)">
     <div class="cap"><div class="orb">VC &amp; strategic<i class="dot" style="background:var(--warn)"></i></div></div>
-    <div class="rt">Hold</div>
-    <div class="st">Deck written · revenue concentrated</div>
     <div class="grp"><h4>Targets</h4>
       <ul class="t">
         <li><b>6.1</b>SEA industrial-tech funds</li>
@@ -482,8 +491,6 @@ footer{max-width:1000px;margin:28px auto 0;border-top:1px solid var(--rule);padd
   </div>
   <div class="tower" style="--c:var(--d7);--o:var(--o7)">
     <div class="cap"><div class="orb">App marketplace<i class="dot" style="background:var(--stop)"></i></div></div>
-    <div class="rt">Ours</div>
-    <div class="st">Blocked · licence · launches November</div>
     <div class="grp"><h4>Targets and rails</h4>
       <ul class="t">
         <li><b>7.1 MoC</b>e-commerce licence · <b>Koem Phanny</b> · <span class="x">status unknown</span></li>
