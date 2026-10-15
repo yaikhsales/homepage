@@ -195,6 +195,9 @@ export default function App() {
             path="ticket"
             element={<ModuleFrame><SupportTicketManagement onBack={handleBack} /></ModuleFrame>}
           />
+          {/* YWIP is a full screen, not a sub-menu hub: /submenu/ywip (the URL pattern every other module uses)
+              said "No modules available", so send it to the real screen. */}
+          <Route path="submenu/ywip" element={<Navigate to="/dashboard/ywip" replace />} />
           <Route path="submenu/:moduleId" element={<ModuleFrame><SubMenuView /></ModuleFrame>} />
           <Route path="image/*" element={<ImageView onBack={handleBack} />} />
           <Route path="iframe" element={<IframeView onBack={handleBack} />} />
