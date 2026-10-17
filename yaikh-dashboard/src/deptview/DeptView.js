@@ -110,6 +110,15 @@ const Line = ({ chart }) => {
   );
 };
 
+// Screens the SOP Map already links to but the simulated factory does not serve yet: show a
+// "coming soon" note instead of asking the M1 and printing "data is unavailable".
+const SOON = {
+  "csr/law": {
+    title: "CSR Law AI",
+    text: "Upload a policy or invoice and the agent checks it against Cambodian labour law, Prakas and buyer codes of conduct, flags what does not comply and returns a corrected draft.",
+  },
+};
+
 const DeptView = ({ onBack, module, label, view: fixedView }) => {
   const params = useParams();
   const view = fixedView || params.view;
@@ -118,8 +127,10 @@ const DeptView = ({ onBack, module, label, view: fixedView }) => {
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState("");
   const [topRef, topPad] = useScreenTop();
+  const soon = SOON[module + "/" + view];
 
   const load = useCallback(async () => {
+    if (soon) return;
     setLoading(true);
     setError("");
     try {
@@ -136,7 +147,7 @@ const DeptView = ({ onBack, module, label, view: fixedView }) => {
     } finally {
       setLoading(false);
     }
-  }, [module, label, view]);
+  }, [module, label, view, soon]);
 
   useEffect(() => {
     load();
@@ -156,6 +167,29 @@ const DeptView = ({ onBack, module, label, view: fixedView }) => {
     columns: (t.columns || []).map(([key, lab]) => ({ key, label: lab })),
     rows: t.rows || [],
   }));
+
+  if (soon)
+    return h(
+      "div",
+      { ref: topRef, className: "min-h-screen bg-slate-900 text-white", style: { paddingTop: topPad } },
+      h(NavCover),
+      h(
+        "div",
+        { className: "mx-auto max-w-[1600px] px-4 pb-10" },
+        h(
+          "div",
+          { className: "mb-3 flex flex-wrap items-center gap-3" },
+          h("button", { onClick: onBack, "aria-label": "Back" }, h(ArrowLeft)),
+          h("h1", { className: "text-lg font-bold" }, soon.title)
+        ),
+        h(
+          "div",
+          { className: "max-w-2xl rounded-xl bg-sky-500/10 px-4 py-3 ring-1 ring-sky-500/30" },
+          h("p", { className: "text-sm font-semibold text-sky-300" }, "Coming soon"),
+          h("p", { className: "mt-1 text-sm text-slate-300" }, soon.text)
+        )
+      )
+    );
 
   return h(
     "div",
