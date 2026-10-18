@@ -50,20 +50,136 @@ const QCFile = ({ onBack }) => {
     const [uploadProgress, setUploadProgress] = useState(0);
 
     const initialRecords = [
-        { id: 'YAIDD77', date: '2024-02-14', buyer: 'Customer CC', style: 'STY-9436', rolls: 45, qty: '2,250m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_001.pdf', comments: 12 },
-        { id: 'YAICC50', date: '2024-02-14', buyer: 'Customer CC', style: 'STY-1860', rolls: 12, qty: '600m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_002.pdf', comments: 5 },
-        { id: 'YAIAA92', date: '2024-02-13', buyer: 'Customer BB', style: 'STY-5737', rolls: 88, qty: '4,000m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_003.pdf', comments: 5 },
-        { id: 'YAIAA38', date: '2024-02-11', buyer: 'Customer BB', style: 'STY-3478', rolls: 25, qty: '1,250m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_004.pdf', comments: 8 },
-        { id: 'YAIDD71', date: '2024-02-10', buyer: 'Customer CC', style: 'STY-2583-02', rolls: 30, qty: '1,500m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_005.pdf', comments: 3 },
-        { id: 'YAIDD57', date: '2024-02-09', buyer: 'Customer DD', style: 'STY-1196', rolls: 50, qty: '2,500m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_006.pdf', comments: 15 },
-        { id: 'YAICC48', date: '2024-02-08', buyer: 'Customer BB', style: 'STY-2058', rolls: 40, qty: '2,000m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_007.pdf', comments: 2 },
-        { id: 'YAICC52', date: '2024-02-07', buyer: 'Customer DD', style: 'P21-470072', rolls: 60, qty: '3,000m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_008.pdf', comments: 20 },
-        { id: 'YAIBB47', date: '2024-02-06', buyer: 'Customer BB', style: 'STY-3640', rolls: 15, qty: '750m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_009.pdf', comments: 4 },
-        { id: 'YAIBB87', date: '2024-02-05', buyer: 'Customer BB', style: 'YAIAA92', rolls: 35, qty: '1,750m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_010.pdf', comments: 6 },
-        { id: 'YAIBB17', date: '2024-02-04', buyer: 'Customer CC', style: 'STY-7168', rolls: 20, qty: '1,000m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_011.pdf', comments: 9 },
-        { id: 'YAIBB49', date: '2024-02-03', buyer: 'Customer CC', style: 'STY-1968', rolls: 45, qty: '2,250m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_012.pdf', comments: 2 },
-        { id: 'YAIBB15', date: '2024-02-02', buyer: 'Customer CC', style: 'STY-6233', rolls: 55, qty: '2,750m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_013.pdf', comments: 11 },
-        { id: 'YAIAA78', date: '2024-02-01', buyer: 'Customer CC', style: 'STY-2583', rolls: 10, qty: '500m', status: 'Completed', statusColor: 'text-emerald-700 bg-emerald-100 border-emerald-200', file: 'QC_Report_014.pdf', comments: 7 }
+            {
+                    "id": "YAIAA16",
+                    "date": "2026-02-01",
+                    "buyer": "Customer AA",
+                    "style": "AA-WT26-818",
+                    "rolls": 0,
+                    "qty": "16,600 pcs",
+                    "status": "Completed",
+                    "statusColor": "text-emerald-700 bg-emerald-100 border-emerald-200",
+                    "file": "YPI_YAIAA16_Tech-Pack.pdf",
+                    "fileUrl": "/experience/pdf/YPI_YAIAA16_Tech-Pack.pdf",
+                    "comments": 0
+            },
+            {
+                    "id": "YAIAA8",
+                    "date": "2026-02-02",
+                    "buyer": "Customer AA",
+                    "style": "AA-HS26-675",
+                    "rolls": 0,
+                    "qty": "14,000 pcs",
+                    "status": "Completed",
+                    "statusColor": "text-emerald-700 bg-emerald-100 border-emerald-200",
+                    "file": "YPI_YAIAA8_Tech-Pack.pdf",
+                    "fileUrl": "/experience/pdf/YPI_YAIAA8_Tech-Pack.pdf",
+                    "comments": 0
+            },
+            {
+                    "id": "YAICC12",
+                    "date": "2026-02-03",
+                    "buyer": "Customer CC",
+                    "style": "CC-YS26-147",
+                    "rolls": 0,
+                    "qty": "13,600 pcs",
+                    "status": "Completed",
+                    "statusColor": "text-emerald-700 bg-emerald-100 border-emerald-200",
+                    "file": "YPI_YAICC12_Tech-Pack.pdf",
+                    "fileUrl": "/experience/pdf/YPI_YAICC12_Tech-Pack.pdf",
+                    "comments": 0
+            },
+            {
+                    "id": "YAIAA19",
+                    "date": "2026-02-04",
+                    "buyer": "Customer AA",
+                    "style": "AA-WT26-631",
+                    "rolls": 0,
+                    "qty": "8,800 pcs",
+                    "status": "Completed",
+                    "statusColor": "text-emerald-700 bg-emerald-100 border-emerald-200",
+                    "file": "YPI_YAIAA19_Tech-Pack.pdf",
+                    "fileUrl": "/experience/pdf/YPI_YAIAA19_Tech-Pack.pdf",
+                    "comments": 0
+            },
+            {
+                    "id": "YAIAA9",
+                    "date": "2026-02-05",
+                    "buyer": "Customer AA",
+                    "style": "AA-HS26-444",
+                    "rolls": 0,
+                    "qty": "16,800 pcs",
+                    "status": "Completed",
+                    "statusColor": "text-emerald-700 bg-emerald-100 border-emerald-200",
+                    "file": "YPI_YAIAA9_Tech-Pack.pdf",
+                    "fileUrl": "/experience/pdf/YPI_YAIAA9_Tech-Pack.pdf",
+                    "comments": 0
+            },
+            {
+                    "id": "YAICC11",
+                    "date": "2026-02-06",
+                    "buyer": "Customer CC",
+                    "style": "CC-TS26-544",
+                    "rolls": 0,
+                    "qty": "12,000 pcs",
+                    "status": "Completed",
+                    "statusColor": "text-emerald-700 bg-emerald-100 border-emerald-200",
+                    "file": "YPI_YAICC11_Tech-Pack.pdf",
+                    "fileUrl": "/experience/pdf/YPI_YAICC11_Tech-Pack.pdf",
+                    "comments": 0
+            },
+            {
+                    "id": "YAIAA21",
+                    "date": "2026-02-07",
+                    "buyer": "Customer AA",
+                    "style": "AA-TS26-256",
+                    "rolls": 0,
+                    "qty": "13,000 pcs",
+                    "status": "Completed",
+                    "statusColor": "text-emerald-700 bg-emerald-100 border-emerald-200",
+                    "file": "YPI_YAIAA21_Tech-Pack.pdf",
+                    "fileUrl": "/experience/pdf/YPI_YAIAA21_Tech-Pack.pdf",
+                    "comments": 0
+            },
+            {
+                    "id": "YAIAA5",
+                    "date": "2026-02-08",
+                    "buyer": "Customer AA",
+                    "style": "AA-TS26-473",
+                    "rolls": 0,
+                    "qty": "17,900 pcs",
+                    "status": "Completed",
+                    "statusColor": "text-emerald-700 bg-emerald-100 border-emerald-200",
+                    "file": "YPI_YAIAA5_Tech-Pack.pdf",
+                    "fileUrl": "/experience/pdf/YPI_YAIAA5_Tech-Pack.pdf",
+                    "comments": 0
+            },
+            {
+                    "id": "YAIAA23",
+                    "date": "2026-02-09",
+                    "buyer": "Customer AA",
+                    "style": "AA-PO26-992",
+                    "rolls": 0,
+                    "qty": "22,800 pcs",
+                    "status": "Completed",
+                    "statusColor": "text-emerald-700 bg-emerald-100 border-emerald-200",
+                    "file": "YPI_YAIAA23_Tech-Pack.pdf",
+                    "fileUrl": "/experience/pdf/YPI_YAIAA23_Tech-Pack.pdf",
+                    "comments": 0
+            },
+            {
+                    "id": "YAIBB12",
+                    "date": "2026-02-10",
+                    "buyer": "Customer BB",
+                    "style": "BB-YS26-878",
+                    "rolls": 0,
+                    "qty": "22,200 pcs",
+                    "status": "Completed",
+                    "statusColor": "text-emerald-700 bg-emerald-100 border-emerald-200",
+                    "file": "YPI_YAIBB12_Tech-Pack.pdf",
+                    "fileUrl": "/experience/pdf/YPI_YAIBB12_Tech-Pack.pdf",
+                    "comments": 0
+            }
     ];
 
     const [records, setRecords] = useState(() => {
@@ -141,11 +257,9 @@ const QCFile = ({ onBack }) => {
     };
 
     const handleDownloadPDF = (record) => {
-    const fileName = "YAIBB85 制单 2026-2-2.pdf";
-    const fileUrl = `/pdf/${fileName}`;
-
-    window.open(fileUrl, "_blank");
-};
+        if (!record?.fileUrl) return;
+        window.open(record.fileUrl, '_blank', 'noopener,noreferrer');
+    };
 
     return (
         <div className="flex flex-col h-screen bg-slate-50 text-slate-900 font-sans overflow-hidden">
