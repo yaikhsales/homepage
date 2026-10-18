@@ -1,7 +1,6 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { COOKIE_NAME, verifySession } from "@/lib/auth";
-import { getNewsroomDb } from "@/lib/newsroom-mongo";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -16,8 +15,18 @@ type NewsItem = {
   label: string;
 };
 
+type SourceItem = {
+  title?: unknown;
+  url?: unknown;
+  source?: unknown;
+  publishedAt?: unknown;
+  category?: unknown;
+  detail?: unknown;
+  topic?: unknown;
+};
+
 function dayInPhnomPenh(value: unknown): string | null {
-  const date = value instanceof Date ? value : new Date(Number(value));
+  const date = value instanceof Date ? value : new Date(value as string | number);
   if (!Number.isFinite(date.getTime())) return null;
   const parts = new Intl.DateTimeFormat("en-CA", {
     timeZone: "Asia/Phnom_Penh", year: "numeric", month: "2-digit", day: "2-digit",
@@ -42,39 +51,35 @@ export async function GET() {
     return NextResponse.json({ ok: false, error: "unauthorised" }, { status: 401 });
   }
 
-  if (!process.env.NEWSROOM_MONGO_URL) {
+  const feedUrl = process.env.NEWSROOM_FEED_URL;
+  const feedToken = process.env.NEWSROOM_FEED_TOKEN;
+  if (!feedUrl || !feedToken) {
     return NextResponse.json({ ok: false, error: "Newsroom source is not connected." }, { status: 503 });
   }
 
   try {
-    const db = await getNewsroomDb();
-    const [funding, brands, garments] = await Promise.all([
-      db.collection("ai_country_items")
-        .find({ relevant: { $ne: false } }, { projection: { title: 1, country: 1, topic: 1, source: 1, url: 1, publishedAt: 1, createdAt: 1 } })
-        .sort({ publishedAt: -1 }).limit(300).toArray(),
-      db.collection("brand_signals")
-        .find({ signal: true }, { projection: { title: 1, brand: 1, source: 1, url: 1, publishedAt: 1, createdAt: 1 } })
-        .sort({ publishedAt: -1 }).limit(300).toArray(),
-      db.collection("garment_press_items")
-        .find({}, { projection: { title: 1, source: 1, url: 1, publishedAt: 1, createdAt: 1 } })
-        .sort({ publishedAt: -1 }).limit(300).toArray(),
-    ]);
+    const response = await fetch(feedUrl, {
+      headers: { Authorization: `Bearer ${feedToken}` },
+      cache: "no-store",
+      signal: AbortSignal.timeout(10_000),
+    });
+    if (!response.ok) throw new Error(`Newsroom feed returned ${response.status}`);
+    const payload = await response.json() as { ok?: boolean; items?: SourceItem[] };
+    if (!payload.ok || !Array.isArray(payload.items)) throw new Error("Newsroom feed response was invalid");
 
-    const toItem = (doc: Record<string, unknown>, category: string, label: string): NewsItem | null => {
+    const items = payload.items.map((doc): NewsItem | null => {
       const title = String(doc.title ?? "").trim();
       const url = validStoryUrl(doc.url);
-      // Place stories on the day they were published, not the day the daily
-      // Newsroom job first archived or refreshed them.
-      const date = dayInPhnomPenh(doc.publishedAt ?? doc.createdAt ?? doc.seenAt);
+      // Use the original publish time; a later archive/refresh must not move
+      // the story to a different calendar day.
+      const date = dayInPhnomPenh(doc.publishedAt);
+      const category = String(doc.category ?? "Newsroom").trim();
+      const detail = String(doc.detail ?? "").trim();
+      const topic = String(doc.topic ?? "").trim();
+      const label = category === "AI FUNDING" ? `AI ${topic || "NEWS"}` : category;
       if (!title || !url || !date) return null;
-      return { title, category, source: String(doc.source ?? "").trim(), url, start: date, end: nextDay(date), label };
-    };
-
-    const items = [
-      ...funding.map((doc) => toItem(doc, `AI FUNDING · ${String(doc.country ?? "AI news")}`, `AI ${String(doc.topic ?? "NEWS").toUpperCase()}`)),
-      ...brands.map((doc) => toItem(doc, `BRAND AI · ${String(doc.brand ?? "Brand signal")}`, "BRAND AI")),
-      ...garments.map((doc) => toItem(doc, `GARMENTS · ${String(doc.source ?? "Trade press")}`, "GARMENTS")),
-    ].filter((item): item is NewsItem => item !== null)
+      return { title, category: detail ? `${category} · ${detail}` : category, source: String(doc.source ?? "").trim(), url, start: date, end: nextDay(date), label };
+    }).filter((item): item is NewsItem => item !== null)
       .filter((item, index, all) => all.findIndex((candidate) => candidate.url === item.url) === index)
       .sort((a, b) => b.start.localeCompare(a.start) || a.title.localeCompare(b.title));
 
