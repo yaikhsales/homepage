@@ -47,7 +47,10 @@ export async function GET() {
   }
 
   try {
-    const db = await getDb();
+    // GK-Newsroom's Railway worker and public trackers use this DB on the
+    // shared Atlas cluster. The marketing site's default `yaikh` DB does not
+    // contain these three collections.
+    const db = await getDb("gk_newsroom");
     const [funding, brands, garments] = await Promise.all([
       db.collection("ai_country_items")
         .find({ relevant: { $ne: false } }, { projection: { title: 1, country: 1, topic: 1, source: 1, url: 1, createdAt: 1 } })
@@ -63,7 +66,9 @@ export async function GET() {
     const toItem = (doc: Record<string, unknown>, category: string, label: string): NewsItem | null => {
       const title = String(doc.title ?? "").trim();
       const url = validStoryUrl(doc.url);
-      const date = dayInPhnomPenh(doc.createdAt ?? doc.seenAt ?? doc.publishedAt);
+      // Place stories on the day they were published, not the day the daily
+      // Newsroom job first archived or refreshed them.
+      const date = dayInPhnomPenh(doc.publishedAt ?? doc.createdAt ?? doc.seenAt);
       if (!title || !url || !date) return null;
       return { title, category, source: String(doc.source ?? "").trim(), url, start: date, end: nextDay(date), label };
     };
