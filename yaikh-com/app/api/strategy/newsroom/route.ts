@@ -53,14 +53,14 @@ export async function GET() {
     const db = await getDb("gk_newsroom");
     const [funding, brands, garments] = await Promise.all([
       db.collection("ai_country_items")
-        .find({ relevant: { $ne: false } }, { projection: { title: 1, country: 1, topic: 1, source: 1, url: 1, createdAt: 1 } })
-        .sort({ createdAt: -1 }).limit(300).toArray(),
+        .find({ relevant: { $ne: false } }, { projection: { title: 1, country: 1, topic: 1, source: 1, url: 1, publishedAt: 1, createdAt: 1 } })
+        .sort({ publishedAt: -1 }).limit(300).toArray(),
       db.collection("brand_signals")
-        .find({ signal: true }, { projection: { title: 1, brand: 1, source: 1, url: 1, createdAt: 1 } })
-        .sort({ createdAt: -1 }).limit(300).toArray(),
+        .find({ signal: true }, { projection: { title: 1, brand: 1, source: 1, url: 1, publishedAt: 1, createdAt: 1 } })
+        .sort({ publishedAt: -1 }).limit(300).toArray(),
       db.collection("garment_press_items")
-        .find({}, { projection: { title: 1, source: 1, url: 1, createdAt: 1 } })
-        .sort({ createdAt: -1 }).limit(300).toArray(),
+        .find({}, { projection: { title: 1, source: 1, url: 1, publishedAt: 1, createdAt: 1 } })
+        .sort({ publishedAt: -1 }).limit(300).toArray(),
     ]);
 
     const toItem = (doc: Record<string, unknown>, category: string, label: string): NewsItem | null => {
