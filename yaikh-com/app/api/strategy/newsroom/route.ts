@@ -47,21 +47,34 @@ export async function GET() {
   }
 
   try {
-    // GK-Newsroom's Railway worker and public trackers use this DB on the
-    // shared Atlas cluster. The marketing site's default `yaikh` DB does not
-    // contain these three collections.
-    const db = await getDb("gk_newsroom");
-    const [funding, brands, garments] = await Promise.all([
-      db.collection("ai_country_items")
-        .find({ relevant: { $ne: false } }, { projection: { title: 1, country: 1, topic: 1, source: 1, url: 1, publishedAt: 1, createdAt: 1 } })
-        .sort({ publishedAt: -1 }).limit(300).toArray(),
-      db.collection("brand_signals")
-        .find({ signal: true }, { projection: { title: 1, brand: 1, source: 1, url: 1, publishedAt: 1, createdAt: 1 } })
-        .sort({ publishedAt: -1 }).limit(300).toArray(),
-      db.collection("garment_press_items")
-        .find({}, { projection: { title: 1, source: 1, url: 1, publishedAt: 1, createdAt: 1 } })
-        .sort({ publishedAt: -1 }).limit(300).toArray(),
-    ]);
+    // The Newsroom worker is configured for `gk_newsroom`, while older
+    // deployments used the shared cluster's default `yaikh` database. Read
+    // both so the calendar follows the live writer configuration without
+    // requiring a manual data migration.
+    const readDatabase = async (name: string) => {
+      try {
+        const db = await getDb(name);
+        const [funding, brands, garments] = await Promise.all([
+          db.collection("ai_country_items")
+            .find({ relevant: { $ne: false } }, { projection: { title: 1, country: 1, topic: 1, source: 1, url: 1, publishedAt: 1, createdAt: 1 } })
+            .sort({ publishedAt: -1 }).limit(300).toArray(),
+          db.collection("brand_signals")
+            .find({ signal: true }, { projection: { title: 1, brand: 1, source: 1, url: 1, publishedAt: 1, createdAt: 1 } })
+            .sort({ publishedAt: -1 }).limit(300).toArray(),
+          db.collection("garment_press_items")
+            .find({}, { projection: { title: 1, source: 1, url: 1, publishedAt: 1, createdAt: 1 } })
+            .sort({ publishedAt: -1 }).limit(300).toArray(),
+        ]);
+        return { funding, brands, garments };
+      } catch (error) {
+        console.warn(`strategy newsroom could not read ${name}`, error);
+        return { funding: [], brands: [], garments: [] };
+      }
+    };
+    const databases = await Promise.all([readDatabase("gk_newsroom"), readDatabase("yaikh")]);
+    const funding = databases.flatMap((database) => database.funding);
+    const brands = databases.flatMap((database) => database.brands);
+    const garments = databases.flatMap((database) => database.garments);
 
     const toItem = (doc: Record<string, unknown>, category: string, label: string): NewsItem | null => {
       const title = String(doc.title ?? "").trim();
@@ -78,6 +91,7 @@ export async function GET() {
       ...brands.map((doc) => toItem(doc, `BRAND AI · ${String(doc.brand ?? "Brand signal")}`, "BRAND AI")),
       ...garments.map((doc) => toItem(doc, `GARMENTS · ${String(doc.source ?? "Trade press")}`, "GARMENTS")),
     ].filter((item): item is NewsItem => item !== null)
+      .filter((item, index, all) => all.findIndex((candidate) => candidate.url === item.url) === index)
       .sort((a, b) => b.start.localeCompare(a.start) || a.title.localeCompare(b.title));
 
     return NextResponse.json({ ok: true, items }, {
