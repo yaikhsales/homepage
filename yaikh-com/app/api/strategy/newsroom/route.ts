@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { COOKIE_NAME, verifySession } from "@/lib/auth";
-import { getDb } from "@/lib/mongo";
+import { getNewsroomDb } from "@/lib/newsroom-mongo";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -42,39 +42,23 @@ export async function GET() {
     return NextResponse.json({ ok: false, error: "unauthorised" }, { status: 401 });
   }
 
-  if (!process.env.MONGO_URL) {
-    return NextResponse.json({ ok: false, error: "Newsroom feed is not configured." }, { status: 503 });
+  if (!process.env.NEWSROOM_MONGO_URL) {
+    return NextResponse.json({ ok: false, error: "Newsroom source is not connected." }, { status: 503 });
   }
 
   try {
-    // The Newsroom worker is configured for `gk_newsroom`, while older
-    // deployments used the shared cluster's default `yaikh` database. Read
-    // both so the calendar follows the live writer configuration without
-    // requiring a manual data migration.
-    const readDatabase = async (name: string) => {
-      try {
-        const db = await getDb(name);
-        const [funding, brands, garments] = await Promise.all([
-          db.collection("ai_country_items")
-            .find({ relevant: { $ne: false } }, { projection: { title: 1, country: 1, topic: 1, source: 1, url: 1, publishedAt: 1, createdAt: 1 } })
-            .sort({ publishedAt: -1 }).limit(300).toArray(),
-          db.collection("brand_signals")
-            .find({ signal: true }, { projection: { title: 1, brand: 1, source: 1, url: 1, publishedAt: 1, createdAt: 1 } })
-            .sort({ publishedAt: -1 }).limit(300).toArray(),
-          db.collection("garment_press_items")
-            .find({}, { projection: { title: 1, source: 1, url: 1, publishedAt: 1, createdAt: 1 } })
-            .sort({ publishedAt: -1 }).limit(300).toArray(),
-        ]);
-        return { funding, brands, garments };
-      } catch (error) {
-        console.warn(`strategy newsroom could not read ${name}`, error);
-        return { funding: [], brands: [], garments: [] };
-      }
-    };
-    const databases = await Promise.all([readDatabase("gk_newsroom"), readDatabase("yaikh")]);
-    const funding = databases.flatMap((database) => database.funding);
-    const brands = databases.flatMap((database) => database.brands);
-    const garments = databases.flatMap((database) => database.garments);
+    const db = await getNewsroomDb();
+    const [funding, brands, garments] = await Promise.all([
+      db.collection("ai_country_items")
+        .find({ relevant: { $ne: false } }, { projection: { title: 1, country: 1, topic: 1, source: 1, url: 1, publishedAt: 1, createdAt: 1 } })
+        .sort({ publishedAt: -1 }).limit(300).toArray(),
+      db.collection("brand_signals")
+        .find({ signal: true }, { projection: { title: 1, brand: 1, source: 1, url: 1, publishedAt: 1, createdAt: 1 } })
+        .sort({ publishedAt: -1 }).limit(300).toArray(),
+      db.collection("garment_press_items")
+        .find({}, { projection: { title: 1, source: 1, url: 1, publishedAt: 1, createdAt: 1 } })
+        .sort({ publishedAt: -1 }).limit(300).toArray(),
+    ]);
 
     const toItem = (doc: Record<string, unknown>, category: string, label: string): NewsItem | null => {
       const title = String(doc.title ?? "").trim();
