@@ -1,3 +1,4 @@
+import CuttingFormTablet from "./CuttingFormTablet";
 import React, { useState } from "react";
 import {
   ArrowLeft,
@@ -124,9 +125,10 @@ const CuttingInspection = ({ onBack }) => {
 
       {/* Main Content */}
       <div className="flex-1 overflow-auto p-8 bg-slate-50/50">
+        <CuttingFormTablet label="Bundle Inspection">
         <div className="max-w-7xl mx-auto space-y-8">
           {/* Header Stats */}
-          <div className="flex flex-col md:flex-row gap-6">
+          <div className="flex flex-col gap-6">
             <div className="flex-1 bg-gradient-to-br from-slate-900 to-slate-800 p-8 rounded-[32px] shadow-2xl relative overflow-hidden group">
               <div className="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-700">
                 <Scissors size={180} className="text-white" />
@@ -155,7 +157,7 @@ const CuttingInspection = ({ onBack }) => {
               </div>
             </div>
 
-            <div className="w-full md:w-80 grid gap-6">
+            <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
                 <div className="flex items-center justify-between mb-4">
                   <div className="p-2.5 bg-rose-50 rounded-xl text-rose-600 shadow-sm border border-rose-100">
@@ -197,7 +199,7 @@ const CuttingInspection = ({ onBack }) => {
 
           {/* Bundle Grid/List Toggle */}
           <div className="bg-white rounded-[32px] shadow-sm border border-slate-200 overflow-hidden">
-            <div className="px-8 py-6 border-b border-slate-100 flex items-center justify-between">
+            <div className="px-5 py-5 border-b border-slate-100 flex flex-wrap gap-4 items-center justify-between">
               <div className="flex items-center gap-4">
                 <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest">
                   Bundle Inspector
@@ -237,7 +239,7 @@ const CuttingInspection = ({ onBack }) => {
 
             <div className="p-8">
               {viewMode === "grid" ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   {bundles.map((bundle) => (
                     <div
                       key={bundle.id}
@@ -344,6 +346,7 @@ const CuttingInspection = ({ onBack }) => {
             </div>
           </div>
         </div>
+        </CuttingFormTablet>
       </div>
     </div>
   );
