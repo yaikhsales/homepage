@@ -21,6 +21,8 @@ import {
 import VideoViewer from "../components/VideoViewer";
 import DocumentViewer from "../components/DocumentViewer";
 import ModuleBotButton from "../components/ModuleBotButton";
+import CuttingOrderDashboard from "./CuttingOrderDashboard";
+import { CUTTING_ORDERS } from "./cutting-order-data";
 
 const CUTTING_PANEL_VIDEO_PATH =
   "/assets/short-video-training/Cutting-panel.mp4";
@@ -29,11 +31,42 @@ const CUTTING_PANEL_REPORT_PATH =
 
 const CuttingPanel = ({ onBack }) => {
   const [activeTab, setActiveTab] = useState("form");
+  const [selectedMO, setSelectedMO] = useState(CUTTING_ORDERS[0].mo);
+  const [orders, setOrders] = useState(CUTTING_ORDERS);
+  const order = orders.find(item => item.mo === selectedMO);
+  const formRef = React.useRef(null);
+  const contentRef = React.useRef(null);
+  React.useEffect(() => { contentRef.current?.scrollTo(0, 0); }, [activeTab, selectedMO]);
+  const [formError, setFormError] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [selectedDocument, setSelectedDocument] = useState(null);
 
   const handleSubmit = () => {
+    const form = formRef.current;
+    const inspectedText = form.querySelector('[name="inspectionQty"]').value.trim();
+    const rejectedText = form.querySelector('[name="rejectedQty"]').value.trim();
+    const inspected = Number(inspectedText);
+    const rejected = Number(rejectedText);
+    if (!inspectedText || !rejectedText || !Number.isInteger(inspected) || !Number.isInteger(rejected) || rejected < 0 || inspected < rejected || inspected > order.numbered) {
+      setFormError(`Enter whole numbers: rejected cannot exceed inspected; inspected cannot exceed ${order.numbered} numbered pieces.`);
+      return;
+    }
+    const date = form.querySelector('[name="inspectionDate"]').value.trim();
+    const table = form.querySelector('[name="cuttingTable"]').value.trim();
+    if (!date || !table) { setFormError("Date and cutting table are required."); return; }
+    setOrders(previous => previous.map(item => item.mo !== selectedMO ? item : {
+      ...item, date, table, inspected, rejected, pass: inspected - rejected,
+      stages: item.stages.map(stage => stage.key !== "qc" ? stage : {
+        ...stage, status: !item.numbered ? "BLOCKED" : rejected ? "RECHECK" : inspected === item.numbered ? "COMPLETE" : "IN PROGRESS",
+        summary: `${inspected} checked; ${inspected - rejected} passed, ${rejected} held for correction; ${item.numbered - inspected} numbered pieces not yet checked.`,
+      }),
+      actions: [
+        ...item.actions.filter(action => action.issue.includes("allocation")),
+        ...(rejected ? [{issue: `${rejected} rejected panels pending reinspection`, owner: "Cutting Supervisor / QC", next: "Contain, correct and reinspect the affected panels before release.", state: "OPEN", due: "Next QC review"}] : inspected < item.numbered ? [{issue: "Complete remaining panel-QC checks", owner: "Cutting QC", next: "Inspect remaining numbered output and obtain the QA decision.", state: "OPEN", due: "Next QC review"}] : []),
+      ],
+    }));
+    setFormError("");
     setIsSubmitted(true);
     setTimeout(() => setIsSubmitted(false), 3000);
   };
@@ -47,7 +80,7 @@ const CuttingPanel = ({ onBack }) => {
 
   const tabs = [
         { id: "form", label: "Cutting Form", icon: ClipboardList },
-        { id: "data", label: "Data", icon: BarChart3 },
+        { id: "data", label: "Dashboard", icon: BarChart3 },
         { id: "report", label: "Report", icon: FileText },
         { id: "modify", label: "Modify", icon: Settings },
         { id: "adding", label: "Adding", icon: Layout },
@@ -134,40 +167,38 @@ const CuttingPanel = ({ onBack }) => {
       </div>
 
             {/* Main Content Area */}
-            <div className="flex-1 overflow-auto p-8 bg-slate-50/50">
-                <div className="max-w-6xl mx-auto">
+            <div ref={contentRef} className="flex-1 overflow-auto p-8 bg-slate-50/50">
+                <div className={`${["form", "data"].includes(activeTab) ? "max-w-[1600px]" : "max-w-6xl"} mx-auto`}>
                     <div className="bg-white rounded-2xl shadow border border-slate-100 overflow-hidden">
                         <div className="p-10 space-y-10">
                             {activeTab === "form" ? (
-                                <>
+                                <div ref={formRef} key={order.mo} className="cutting-inspection-form space-y-10 text-[24px] leading-relaxed">
                                     {/* Header Inputs Section */}
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                                         <div className="space-y-2">
-                                            <label className="text-sm font-bold text-slate-700 px-1">Date</label>
+                                            <label className="text-[21px] font-bold text-slate-700 px-1">Date</label>
                                             <div className="relative group">
                                                 <input
                                                     type="text"
-                                                    defaultValue="03/11/2026"
+                                                    name="inspectionDate" defaultValue={order.date}
                                                     className="w-full bg-white/80 border border-slate-300 rounded-lg px-5 py-3 font-bold text-slate-700 focus:outline-none focus:border-purple-200 focus:bg-white transition-all group-hover:bg-white"
                                                 />
                                                 <Calendar className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 group-hover:text-purple-400" size={18} />
                                             </div>
                                         </div>
                                         <div className="space-y-2">
-                                            <label className="text-sm font-bold text-slate-700 px-1">MO No</label>
-                                            <input
-                                                type="text"
-                                                defaultValue="YAIDD11"
-                                                className="w-full bg-white/80 border border-slate-300 rounded-lg px-5 py-3 font-bold text-slate-700 focus:outline-none focus:border-purple-200 focus:bg-white transition-all shadow-sm hover:bg-white"
-                                            />
+                                            <label className="text-[21px] font-bold text-slate-700 px-1">MO No</label>
+                                            <select aria-label="Cutting form MO" value={selectedMO} onChange={e => setSelectedMO(e.target.value)} className="w-full bg-white border border-slate-300 rounded-lg px-5 py-3 font-bold text-slate-700 focus:outline-none focus:border-purple-400">
+                                                {CUTTING_ORDERS.map(item => <option key={item.mo} value={item.mo}>{item.mo}</option>)}
+                                            </select>
                                         </div>
                                         <div className="space-y-2">
-                                            <label className="text-sm font-bold text-slate-700 px-1">Table No</label>
+                                            <label className="text-[21px] font-bold text-slate-700 px-1">Table No</label>
                                             <div className="flex items-center bg-white/80 border border-slate-300 rounded-lg px-5 py-3 hover:bg-white transition-all">
                                                 <span className="mr-3 text-slate-300"><Layers size={18} /></span>
                                                 <input
                                                     type="text"
-                                                    defaultValue="T 4"
+                                                    name="cuttingTable" defaultValue={order.table}
                                                     className="w-full bg-transparent font-bold text-slate-700 focus:outline-none"
                                                 />
                                             </div>
@@ -176,28 +207,28 @@ const CuttingPanel = ({ onBack }) => {
 
                                     {/* Order Details Table */}
                                     <div className="space-y-4">
-                                        <h3 className="text-sm font-bold text-slate-700 flex items-center gap-3">
+                                        <h3 className="text-[21px] font-bold text-slate-700 flex items-center gap-3">
                                             <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
                                             Order Details
                                         </h3>
-                                        <div className="overflow-hidden rounded-lg border border-slate-300 ">
+                                        <div className="overflow-x-auto rounded-lg border border-slate-300 ">
                                             <table className="w-full text-center">
                                                 <thead className="bg-slate-50">
                                                     <tr>
                                                         {["Buyer", "Style No", "Color / Style Names", "PO No", "Quantity"].map((h, i, arr) => (
-                                                            <th key={h} className={`py-4 px-4 text-sm font-bold text-slate-700 border-b border-slate-300 ${i !== arr.length - 1 ? 'border-r' : ''}`}>{h}</th>
+                                                            <th key={h} className={`py-4 px-4 text-[21px] font-bold text-slate-700 border-b border-slate-300 ${i !== arr.length - 1 ? 'border-r' : ''}`}>{h}</th>
                                                         ))}
                                                     </tr>
                                                 </thead>
                                                 <tbody className="divide-y divide-slate-300">
                                                     <tr className="bg-white hover:bg-slate-50/50 transition-colors">
-                                                        <td className="py-5 px-4 font-bold text-slate-700 text-xs border-r border-slate-300 border-b">Customer BB</td>
-                                                        <td className="py-5 px-4 font-bold text-slate-700 text-xs border-r border-slate-300 border-b">6261340003</td>
-                                                        <td className="py-5 px-4 font-bold text-slate-700 text-xs border-r border-slate-300 border-b">220 WINDWARD BLUE ACID WASH</td>
-                                                        <td className="py-5 px-4 font-bold text-slate-700 text-xs border-r border-slate-300 border-b">LAT14653A</td>
-                                                        <td className="py-5 px-4 border-b border-slate-300 text-xs">
-                                                            <p className="font-bold text-slate-700">50</p>
-                                                            <p className="text-[10px] font-black text-emerald-500 uppercase mt-0.5">Total: 150</p>
+                                                        <td className="py-5 px-4 font-bold text-slate-700 text-[18px] border-r border-slate-300 border-b">{order.buyer}</td>
+                                                        <td className="py-5 px-4 font-bold text-slate-700 text-[18px] border-r border-slate-300 border-b">{order.style}</td>
+                                                        <td className="py-5 px-4 font-bold text-slate-700 text-[18px] border-r border-slate-300 border-b">{order.colour}</td>
+                                                        <td className="py-5 px-4 font-bold text-slate-700 text-[18px] border-r border-slate-300 border-b">{order.po}</td>
+                                                        <td className="py-5 px-4 border-b border-slate-300 text-[18px]">
+                                                            <p className="font-bold text-slate-700">{order.allocation}</p>
+                                                            <p className="text-[15px] font-black text-emerald-500 uppercase mt-0.5">Total: {order.orderQty}</p>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -207,29 +238,29 @@ const CuttingPanel = ({ onBack }) => {
 
                                     {/* Fabric Details Table */}
                                     <div className="space-y-4">
-                                        <h3 className="text-sm font-bold text-slate-800 flex items-center gap-3">
+                                        <h3 className="text-[21px] font-bold text-slate-800 flex items-center gap-3">
                                             <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
                                             Fabric Details
                                         </h3>
-                                        <div className="overflow-hidden rounded-lg border border-slate-300">
+                                        <div className="overflow-x-auto rounded-lg border border-slate-300">
                                             <table className="w-full text-center">
                                                 <thead className="bg-slate-50">
                                                     <tr>
                                                         {["Fabric Type", "Material", "Roll Quantity", "Spread Yards", "Unit", "Gross Kgs", "Net Kgs", "Total TTL Roll"].map((h, i, arr) => (
-                                                            <th key={h} className={`py-4 px-4 text-sm font-bold text-slate-700 tracking-wider border-b border-slate-300 ${i !== arr.length - 1 ? 'border-r' : ''}`}>{h}</th>
+                                                            <th key={h} className={`py-4 px-4 text-[21px] font-bold text-slate-700 tracking-wider border-b border-slate-300 ${i !== arr.length - 1 ? 'border-r' : ''}`}>{h}</th>
                                                         ))}
                                                     </tr>
                                                 </thead>
                                                 <tbody className="divide-y divide-slate-300">
                                                     <tr className="bg-white">
-                                                        <td className="py-5 px-4 font-bold text-slate-700 text-xs border-r border-slate-300 border-b">A</td>
-                                                        <td className="py-5 px-4 font-bold text-slate-700 text-xs border-r border-slate-300 border-b">AF=MK1500 RP(FS-Solid)</td>
-                                                        <td className="py-5 px-4 font-bold text-slate-700 text-xs border-r border-slate-300 border-b">4</td>
-                                                        <td className="py-5 px-4 font-bold text-slate-700 text-xs border-r border-slate-300 border-b">74.59</td>
-                                                        <td className="py-5 px-4 font-bold text-slate-700 text-xs uppercase border-r border-slate-300 border-b">YDS</td>
-                                                        <td className="py-5 px-4 font-bold text-slate-700 text-xs border-r border-slate-300 border-b">38.43</td>
-                                                        <td className="py-5 px-4 font-bold text-slate-700 text-xs border-r border-slate-300 border-b">37.75</td>
-                                                        <td className="py-5 px-4 font-bold text-slate-700 text-xs border-b border-slate-300">-</td>
+                                                        <td className="py-5 px-4 font-bold text-slate-700 text-[18px] border-r border-slate-300 border-b">A</td>
+                                                        <td className="py-5 px-4 font-bold text-slate-700 text-[18px] border-r border-slate-300 border-b">{order.fabric}</td>
+                                                        <td className="py-5 px-4 font-bold text-slate-700 text-[18px] border-r border-slate-300 border-b">{order.rolls.length}</td>
+                                                        <td className="py-5 px-4 font-bold text-slate-700 text-[18px] border-r border-slate-300 border-b">{order.spreadYards}</td>
+                                                        <td className="py-5 px-4 font-bold text-slate-700 text-[18px] uppercase border-r border-slate-300 border-b">YDS</td>
+                                                        <td className="py-5 px-4 font-bold text-slate-700 text-[18px] border-r border-slate-300 border-b">{order.gross}</td>
+                                                        <td className="py-5 px-4 font-bold text-slate-700 text-[18px] border-r border-slate-300 border-b">{order.net}</td>
+                                                        <td className="py-5 px-4 font-bold text-slate-700 text-[18px] border-b border-slate-300">-</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -238,28 +269,28 @@ const CuttingPanel = ({ onBack }) => {
 
                                     {/* Cutting Table Details */}
                                     <div className="space-y-4">
-                                        <h3 className="text-sm font-bold text-slate-800 flex items-center gap-3">
+                                        <h3 className="text-[21px] font-bold text-slate-800 flex items-center gap-3">
                                             <span className="w-2 h-2 bg-amber-500 rounded-full"></span>
                                             Cutting Table Details
                                         </h3>
-                                        <div className="overflow-hidden rounded-lg border border-slate-300">
+                                        <div className="overflow-x-auto rounded-lg border border-slate-300">
                                             <table className="w-full text-center">
                                                 <thead className="bg-slate-50">
                                                     <tr>
                                                         {["Spread Table", "Spread Table No", "Plan Layers", "Actual Layers", "Total Pcs:", "Marker No", "Marker Length"].map((h, i, arr) => (
-                                                            <th key={h} className={`py-4 px-4 text-sm font-bold text-slate-700 border-b border-slate-300 ${i !== arr.length - 1 ? 'border-r' : ''}`}>{h}</th>
+                                                            <th key={h} className={`py-4 px-4 text-[21px] font-bold text-slate-700 border-b border-slate-300 ${i !== arr.length - 1 ? 'border-r' : ''}`}>{h}</th>
                                                         ))}
                                                     </tr>
                                                 </thead>
                                                 <tbody className="divide-y divide-slate-300">
                                                     <tr className="bg-white">
-                                                        <td className="py-5 px-4 font-bold text-slate-700 text-xs border-r border-slate-300 border-b">F</td>
-                                                        <td className="py-5 px-4 font-bold text-slate-700 text-xs border-r border-slate-300 border-b">4</td>
-                                                        <td className="py-5 px-4 font-bold text-blue-600 text-xs border-r border-slate-300 border-b">11</td>
-                                                        <td className="py-5 px-4 font-bold text-blue-600 text-xs border-r border-slate-300 border-b">11</td>
-                                                        <td className="py-5 px-4 font-bold text-slate-700 text-xs border-r border-slate-300 border-b">55</td>
-                                                        <td className="py-5 px-4 font-bold text-indigo-600 text-xs border-r border-slate-300 border-b">K3</td>
-                                                        <td className="py-5 px-4 font-bold text-slate-700 text-xs border-b border-slate-300">5.48</td>
+                                                        <td className="py-5 px-4 font-bold text-slate-700 text-[18px] border-r border-slate-300 border-b">F</td>
+                                                        <td className="py-5 px-4 font-bold text-slate-700 text-[18px] border-r border-slate-300 border-b">{order.table.replace("T ", "")}</td>
+                                                        <td className="py-5 px-4 font-bold text-blue-600 text-[18px] border-r border-slate-300 border-b">{order.planLayers}</td>
+                                                        <td className="py-5 px-4 font-bold text-blue-600 text-[18px] border-r border-slate-300 border-b">{order.actualLayers}</td>
+                                                        <td className="py-5 px-4 font-bold text-slate-700 text-[18px] border-r border-slate-300 border-b">{order.cutQty}</td>
+                                                        <td className="py-5 px-4 font-bold text-indigo-600 text-[18px] border-r border-slate-300 border-b">{order.marker}</td>
+                                                        <td className="py-5 px-4 font-bold text-slate-700 text-[18px] border-b border-slate-300">{order.markerLength}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -268,25 +299,25 @@ const CuttingPanel = ({ onBack }) => {
 
                                     {/* Marker Ratio Table */}
                                     <div className="space-y-4">
-                                        <h3 className="text-sm font-bold text-slate-800 flex items-center gap-3">
+                                        <h3 className="text-[21px] font-bold text-slate-800 flex items-center gap-3">
                                             <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
                                             Marker Ratio
                                         </h3>
-                                        <div className="overflow-hidden rounded-lg border border-slate-300">
+                                        <div className="overflow-x-auto rounded-lg border border-slate-300">
                                             <table className="w-full text-center">
                                                 <thead className="bg-slate-50">
                                                     <tr>
                                                         {["S", "M", "L", "XL"].map((h, i, arr) => (
-                                                            <th key={h} className={`py-4 px-4 text-sm font-bold text-slate-700 uppercase tracking-wider border-b border-slate-300 ${i !== arr.length - 1 ? 'border-r' : ''}`}>{h}</th>
+                                                            <th key={h} className={`py-4 px-4 text-[21px] font-bold text-slate-700 uppercase tracking-wider border-b border-slate-300 ${i !== arr.length - 1 ? 'border-r' : ''}`}>{h}</th>
                                                         ))}
                                                     </tr>
                                                 </thead>
                                                 <tbody className="divide-y divide-slate-300">
                                                     <tr className="bg-white">
-                                                        <td className="py-5 px-4 font-bold text-slate-700 text-xs border-r border-slate-300 border-b">1</td>
-                                                        <td className="py-5 px-4 font-bold text-slate-700 text-xs border-r border-slate-300 border-b">2</td>
-                                                        <td className="py-5 px-4 font-bold text-slate-700 text-xs border-r border-slate-300 border-b">1</td>
-                                                        <td className="py-5 px-4 font-bold text-slate-700 text-xs border-b border-slate-300">1</td>
+                                                        <td className="py-5 px-4 font-bold text-slate-700 text-[18px] border-r border-slate-300 border-b">1</td>
+                                                        <td className="py-5 px-4 font-bold text-slate-700 text-[18px] border-r border-slate-300 border-b">2</td>
+                                                        <td className="py-5 px-4 font-bold text-slate-700 text-[18px] border-r border-slate-300 border-b">1</td>
+                                                        <td className="py-5 px-4 font-bold text-slate-700 text-[18px] border-b border-slate-300">1</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -296,12 +327,12 @@ const CuttingPanel = ({ onBack }) => {
                                     {/* Bundle Check & Total Inspection */}
                                     <div className="grid grid-cols-1 md:grid-cols-4 gap-6 pt-4 border border-slate-300 rounded-lg p-6">
                                         <div className="space-y-2 col-span-1">
-                                            <label className="text-sm font-bold text-slate-700 px-1">Total Bundle Qty</label>
+                                            <label className="text-[21px] font-bold text-slate-700 px-1">Total Bundle Qty</label>
                                             <div className="relative group">
                                                 <input
                                                     type="text"
-                                                    placeholder="Enter Total Bundle Qty"
-                                                    className="w-full bg-white/80 text-xs border border-slate-300 rounded-lg px-5 py-3.5 font-bold text-slate-700 focus:outline-none focus:border-purple-200 focus:bg-white transition-all"
+                                                    defaultValue={order.bundles} placeholder="Enter Total Bundle Qty"
+                                                    className="w-full bg-white/80 text-[18px] border border-slate-300 rounded-lg px-5 py-3.5 font-bold text-slate-700 focus:outline-none focus:border-purple-200 focus:bg-white transition-all"
                                                 />
                                                 <div className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 bg-slate-100 rounded-lg group-hover:bg-purple-100 transition-colors">
                                                     <Layout size={14} className="text-slate-500 group-hover:text-purple-500"/>
@@ -309,12 +340,12 @@ const CuttingPanel = ({ onBack }) => {
                                             </div>
                                         </div>
                                         <div className="space-y-2 col-span-1">
-                                            <label className="text-sm font-bold text-slate-700 px-1">Bundle Qty Check</label>
+                                            <label className="text-[21px] font-bold text-slate-700 px-1">Bundle Qty Check</label>
                                             <div className="relative group">
                                                 <input
                                                     type="text"
-                                                    placeholder="Enter Bundle Qty Check"
-                                                    className="w-full bg-white/80 text-xs border border-slate-300 rounded-lg px-5 py-3.5 font-bold text-slate-700 focus:outline-none focus:border-purple-200 focus:bg-white transition-all"
+                                                    defaultValue={order.bundles} placeholder="Enter Bundle Qty Check"
+                                                    className="w-full bg-white/80 text-[18px] border border-slate-300 rounded-lg px-5 py-3.5 font-bold text-slate-700 focus:outline-none focus:border-purple-200 focus:bg-white transition-all"
                                                 />
                                                 <div className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 bg-slate-100 rounded-lg group-hover:bg-purple-100 transition-colors">
                                                     <CheckCircle2 size={14} className="text-slate-500 group-hover:text-purple-500" />
@@ -322,12 +353,12 @@ const CuttingPanel = ({ onBack }) => {
                                             </div>
                                         </div>
                                         <div className="space-y-2 col-span-1">
-                                            <label className="text-sm font-bold text-slate-700 px-1">Total Inspection Qty</label>
+                                            <label className="text-[21px] font-bold text-slate-700 px-1">Total Inspection Qty</label>
                                             <div className="relative group">
                                                 <input
                                                     type="text"
-                                                    defaultValue="0"
-                                                    className="w-full bg-white/80 text-xs border border-slate-300 rounded-lg px-5 py-3.5 font-bold text-slate-700 focus:outline-none focus:border-purple-200 focus:bg-white transition-all"
+                                                    name="inspectionQty" defaultValue={order.inspected}
+                                                    className="w-full bg-white/80 text-[18px] border border-slate-300 rounded-lg px-5 py-3.5 font-bold text-slate-700 focus:outline-none focus:border-purple-200 focus:bg-white transition-all"
                                                 />
                                                 <div className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 bg-slate-100 rounded-lg group-hover:bg-purple-100 transition-colors">
                                                     <ClipboardList size={14} className="text-slate-500 group-hover:text-purple-500" />
@@ -335,7 +366,7 @@ const CuttingPanel = ({ onBack }) => {
                                             </div>
                                         </div>
                                         <div className="space-y-2 col-span-1">
-                                            <label className="text-sm font-bold text-slate-700 px-1">Cutting by</label>
+                                            <label className="text-[21px] font-bold text-slate-700 px-1">Cutting by</label>
                                             <div className="flex items-center gap-6 py-4">
                                                 <label className="flex items-center gap-3 cursor-pointer group">
                                                     <div className="relative flex items-center justify-center">
@@ -343,7 +374,7 @@ const CuttingPanel = ({ onBack }) => {
                                                         <div className="w-5 h-5 bg-slate-50 border-2 border-slate-200 rounded-md peer-checked:bg-blue-500 peer-checked:border-blue-500 transition-all"></div>
                                                         <CheckCircle2 className="absolute text-white transition-transform scale-0 peer-checked:scale-100" size={14} strokeWidth={3} />
                                                     </div>
-                                                    <span className="text-xs font-bold text-slate-600 group-hover:text-blue-600">Auto</span>
+                                                    <span className="text-[18px] font-bold text-slate-600 group-hover:text-blue-600">Auto</span>
                                                 </label>
                                                 <label className="flex items-center gap-3 cursor-pointer group">
                                                     <div className="relative flex items-center justify-center">
@@ -351,22 +382,22 @@ const CuttingPanel = ({ onBack }) => {
                                                         <div className="w-5 h-5 bg-slate-50 border-2 border-slate-200 rounded-md peer-checked:bg-blue-500 peer-checked:border-blue-500 transition-all"></div>
                                                         <CheckCircle2 className="absolute text-white transition-transform scale-0 peer-checked:scale-100" size={14} strokeWidth={3} />
                                                     </div>
-                                                    <span className="text-xs font-bold text-slate-600 group-hover:text-blue-600">Manual</span>
+                                                    <span className="text-[18px] font-bold text-slate-600 group-hover:text-blue-600">Manual</span>
                                                 </label>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className="text-sm font-bold text-slate-700 px-1">
+                                    <div className="text-[21px] font-bold text-slate-700 px-1">
                                         Sampling standard: AQL 1.0
                                     </div>
 
                                     {/* Form Selects Section */}
                                     <div className="grid grid-cols-1 md:grid-cols-4 gap-6 border border-slate-300 rounded-lg p-6">
                                         <div className="space-y-2">
-                                            <label className="text-sm font-bold text-slate-700 px-1">Garment Type</label>
+                                            <label className="text-[21px] font-bold text-slate-700 px-1">Garment Type</label>
                                             <div className="relative">
-                                                <select className="w-full bg-white/80 text-xs border border-slate-300 rounded-lg px-5 py-3.5 font-bold text-slate-700 focus:outline-none focus:border-purple-200 focus:bg-white appearance-none cursor-pointer transition-all">
+                                                <select className="w-full bg-white/80 text-[18px] border border-slate-300 rounded-lg px-5 py-3.5 font-bold text-slate-700 focus:outline-none focus:border-purple-200 focus:bg-white appearance-none cursor-pointer transition-all">
                                                     <option>Select Panel</option>
                                                     <option>Front Panel</option>
                                                     <option>Back Panel</option>
@@ -375,9 +406,9 @@ const CuttingPanel = ({ onBack }) => {
                                             </div>
                                         </div>
                                         <div className="space-y-2">
-                                            <label className="text-sm font-bold text-slate-700 px-1">Size</label>
+                                            <label className="text-[21px] font-bold text-slate-700 px-1">Size</label>
                                             <div className="relative">
-                                                <select className="w-full bg-white/80 text-xs border border-slate-300 rounded-lg px-5 py-3.5 font-bold text-slate-700 focus:outline-none focus:border-purple-200 focus:bg-white appearance-none cursor-pointer transition-all">
+                                                <select className="w-full bg-white/80 text-[18px] border border-slate-300 rounded-lg px-5 py-3.5 font-bold text-slate-700 focus:outline-none focus:border-purple-200 focus:bg-white appearance-none cursor-pointer transition-all">
                                                     <option>Select Size</option>
                                                     <option>S</option>
                                                     <option>M</option>
@@ -388,9 +419,9 @@ const CuttingPanel = ({ onBack }) => {
                                             </div>
                                         </div>
                                         <div className="space-y-2">
-                                            <label className="text-sm font-bold text-slate-700 px-1">Bundle Qty</label>
+                                            <label className="text-[21px] font-bold text-slate-700 px-1">Bundle Qty</label>
                                             <div className="relative">
-                                                <select className="w-full bg-white/80 text-xs border border-slate-300 rounded-lg px-5 py-3.5 font-bold text-slate-700 focus:outline-none focus:border-purple-200 focus:bg-white appearance-none cursor-pointer transition-all">
+                                                <select className="w-full bg-white/80 text-[18px] border border-slate-300 rounded-lg px-5 py-3.5 font-bold text-slate-700 focus:outline-none focus:border-purple-200 focus:bg-white appearance-none cursor-pointer transition-all">
                                                     <option>Select Bundle Qty</option>
                                                     <option>10</option>
                                                     <option>20</option>
@@ -400,9 +431,9 @@ const CuttingPanel = ({ onBack }) => {
                                             </div>
                                         </div>
                                         <div className="space-y-2">
-                                            <label className="text-sm font-bold text-slate-700 px-1">Tolerance</label>
+                                            <label className="text-[21px] font-bold text-slate-700 px-1">Tolerance</label>
                                             <div className="relative">
-                                                <select className="w-full bg-white/80 text-xs border border-slate-300 rounded-lg px-5 py-3.5 font-bold text-slate-700 focus:outline-none focus:border-purple-200 focus:bg-white appearance-none cursor-pointer transition-all">
+                                                <select className="w-full bg-white/80 text-[18px] border border-slate-300 rounded-lg px-5 py-3.5 font-bold text-slate-700 focus:outline-none focus:border-purple-200 focus:bg-white appearance-none cursor-pointer transition-all">
                                                     <option>-1/8, 1/8</option>
                                                     <option>-1/4, 1/4</option>
                                                 </select>
@@ -411,70 +442,26 @@ const CuttingPanel = ({ onBack }) => {
                                         </div>
                                     </div>
 
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border border-slate-300 rounded-lg p-6">
+                                        <label className="text-[21px] font-bold text-slate-700">Rejected panels
+                                            <input aria-label="Rejected panels" name="rejectedQty" type="number" min="0" max={order.numbered} defaultValue={order.rejected} className="block w-full mt-2 text-[18px] border border-slate-300 rounded-lg px-5 py-3" />
+                                        </label>
+                                        <div className="text-[18px] self-center">Passed = inspected minus rejected. Submit the check to update this MO's dashboard; rejected panels remain held for reinspection.</div>
+                                    </div>
+                                    {formError && <p role="alert" className="text-[18px] text-red-700 bg-red-50 rounded-xl p-4">{formError}</p>}
                                     {/* Submit Button */}
                                     <div className="flex justify-center pt-4">
                                         <button
                                             onClick={handleSubmit}
-                                            className={`${isSubmitted ? 'bg-green-500' : 'bg-green-600 hover:bg-green-500'} text-white font-black text-sm uppercase px-6 py-4 rounded-xl transition-all hover:-translate-y-1 flex items-center gap-4 group active:translate-y-0 active:shadow-lg`}
+                                            className={`${isSubmitted ? 'bg-green-500' : 'bg-green-600 hover:bg-green-500'} text-white font-black text-[21px] uppercase px-6 py-4 rounded-xl transition-all hover:-translate-y-1 flex items-center gap-4 group active:translate-y-0 active:shadow-lg`}
                                         >
                                             {isSubmitted ? "Data Submitted!" : "Submit Data"}
                                             {isSubmitted ? <CheckCircle2 size={18} /> : <Send size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />}
                                         </button>
                                     </div>
-                                </>
-                            ) : activeTab === "data" ? (
-                                <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                                    <div className="flex items-center justify-between">
-                                        <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">Inspection Records</h3>
-                                        <div className="flex bg-slate-100 p-1 rounded-xl">
-                                            <button className="px-4 py-2 bg-white text-indigo-600 rounded-lg shadow-sm text-[11px] font-black uppercase transition-all">Today</button>
-                                            <button className="px-4 py-2 text-slate-400 text-[11px] font-black uppercase hover:text-slate-600 transition-all">Weekly</button>
-                                        </div>
-                                    </div>
-                                    <div className="overflow-hidden rounded-2xl border border-slate-200 shadow-xl bg-white">
-                                        <table className="w-full text-left">
-                                            <thead className="bg-slate-50">
-                                                <tr className="border-b border-slate-200">
-                                                    {["Buyer / Style", "Color / Size", "Date", "Quantity", "Status", "Action"].map(h => (
-                                                        <th key={h} className="px-8 py-5 text-[11px] font-black text-slate-500 uppercase tracking-wider">{h}</th>
-                                                    ))}
-                                                </tr>
-                                            </thead>
-                                            <tbody className="divide-y divide-slate-50">
-                                                {mockData.map(item => (
-                                                    <tr key={item.id} className="group hover:bg-slate-50/50 transition-colors">
-                                                        <td className="px-8 py-6">
-                                                            <p className="font-black text-slate-800 text-sm">{item.buyer}</p>
-                                                            <p className="text-[10px] font-bold text-slate-400 mt-0.5">{item.style}</p>
-                                                        </td>
-                                                        <td className="px-8 py-6">
-                                                            <p className="font-bold text-slate-600 text-xs">{item.color}</p>
-                                                            <span className="text-[10px] font-black text-indigo-500 bg-indigo-50 px-2 py-0.5 rounded-full uppercase mt-1 inline-block">M</span>
-                                                        </td>
-                                                        <td className="px-8 py-6">
-                                                            <div className="flex items-center gap-2 text-slate-500">
-                                                                <Calendar size={14} />
-                                                                <span className="text-xs font-bold">{item.date}</span>
-                                                            </div>
-                                                        </td>
-                                                        <td className="px-8 py-6 font-black text-slate-800">{item.qty} <span className="text-[10px] text-slate-400">Pcs</span></td>
-                                                        <td className="px-8 py-6">
-                                                            <span className={`px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider ${item.status === 'Passed' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-rose-50 text-rose-600 border border-rose-100'
-                                                                }`}>
-                                                                {item.status}
-                                                            </span>
-                                                        </td>
-                                                        <td className="px-8 py-6">
-                                                            <button className="p-2 text-slate-300 hover:text-blue-600 hover:bg-white rounded-lg transition-all border border-transparent hover:border-slate-100">
-                                                                <MoreVertical size={18} />
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
                                 </div>
+                            ) : activeTab === "data" ? (
+                                <CuttingOrderDashboard orders={orders} order={order} onSelectOrder={setSelectedMO} onViewForm={() => setActiveTab("form")} />
                             ) : activeTab === "report" ? (
                                 <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
                                     {/* Stats Overview */}
