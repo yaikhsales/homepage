@@ -14,15 +14,12 @@ import {
   History,
   ChevronRight,
 } from "lucide-react";
-import CuttingAuditDetails, { cuttingAudits } from "./CuttingAuditDetails";
 import { useTranslation } from "../translate/TranslationContext";
 
 const AuditReport = ({ title, onBack }) => {
   const { t } = useTranslation();
 
-  const isCutting = title === "First Output Cutting" || title === "QA Cutting";
-  const [selectedAudit, setSelectedAudit] = useState(null);
-  const defaultAuditData = [
+  const auditData = [
     {
       id: "AUD-101",
       style: "STY-1015",
@@ -61,8 +58,6 @@ const AuditReport = ({ title, onBack }) => {
     },
   ];
 
-  const auditData = isCutting ? cuttingAudits(title === "First Output Cutting") : defaultAuditData;
-
   return (
     <div className="fixed inset-0 bg-slate-50 flex flex-col z-[50] animate-in fade-in duration-500 overflow-hidden font-sans">
       {/* Header */}
@@ -99,29 +94,28 @@ const AuditReport = ({ title, onBack }) => {
               <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
                 Total Audits
               </p>
-              <p className="text-2xl font-black text-slate-800 mt-1">{isCutting ? auditData.length : 45}</p>
+              <p className="text-2xl font-black text-slate-800 mt-1">45</p>
             </div>
             <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
               <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
-                {isCutting ? "Unconditional pass" : "Pass Rate"}
+                Pass Rate
               </p>
-              <p className="text-2xl font-black text-emerald-600 mt-1">{isCutting ? "50.0%" : "92.4%"}</p>
+              <p className="text-2xl font-black text-emerald-600 mt-1">92.4%</p>
             </div>
             <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
               <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
-                {isCutting ? "Audits on hold" : "Reject Rate"}
+                Reject Rate
               </p>
-              <p className="text-2xl font-black text-rose-600 mt-1">{isCutting ? "25.0%" : "4.2%"}</p>
+              <p className="text-2xl font-black text-rose-600 mt-1">4.2%</p>
             </div>
             <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
               <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
                 Pending CAP
               </p>
-              <p className="text-2xl font-black text-orange-600 mt-1">{isCutting ? "02" : "08"}</p>
+              <p className="text-2xl font-black text-orange-600 mt-1">08</p>
             </div>
           </div>
 
-          {isCutting && <p className="text-sm text-slate-600">Training demo · Four audit records. Two passed, one held and one conditionally released after product correction. Details show findings, measurements and QA disposition.</p>}
           {/* Records Table */}
           <div className="bg-white rounded-3xl border border-slate-200 shadow-xl shadow-slate-200/50 overflow-hidden">
             <div className="p-6 border-b border-slate-50 flex items-center justify-between">
@@ -182,8 +176,8 @@ const AuditReport = ({ title, onBack }) => {
                         </span>
                       </td>
                       <td className="px-8 py-5 text-right">
-                        <button onClick={isCutting ? () => setSelectedAudit(audit) : undefined} aria-label={`View details for ${audit.id}`} className={isCutting ? "inline-flex min-w-[68px] min-h-[68px] items-center justify-center bg-blue-100 hover:bg-blue-200 rounded-2xl text-blue-700 border-2 border-blue-300 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all" : "p-2 hover:bg-white rounded-lg text-slate-300 hover:text-blue-600 shadow-sm border border-transparent hover:border-slate-100 transition-all"}>
-                          <ChevronRight size={isCutting ? 36 : 18} strokeWidth={isCutting ? 3 : 2} />
+                        <button className="p-2 hover:bg-white rounded-lg text-slate-300 hover:text-blue-600 shadow-sm border border-transparent hover:border-slate-100 transition-all">
+                          <ChevronRight size={18} />
                         </button>
                       </td>
                     </tr>
@@ -194,7 +188,6 @@ const AuditReport = ({ title, onBack }) => {
           </div>
         </div>
       </div>
-      {selectedAudit && <CuttingAuditDetails audit={selectedAudit} title={title} onClose={() => setSelectedAudit(null)} />}
     </div>
   );
 };
