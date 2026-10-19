@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ArrowLeft, Scissors, CheckCircle2 } from "lucide-react";
+import { ChevronLeft, Scissors, CheckCircle2 } from "lucide-react";
 import "./cutting-pad-ui.css";
 export default function BundlePadInspector({ initialBundles }) {
   const [bundles,setBundles]=useState(initialBundles);
@@ -16,7 +16,7 @@ export default function BundlePadInspector({ initialBundles }) {
   function save(){const count=Number(rejected);if(!rejected.trim()||!Number.isInteger(count)||count<0||count>selected.qty){setError(`Enter a whole number from 0 to ${selected.qty}.`);return;}setBundles(items=>items.map(b=>b.id===selected.id?{...b,defects:count,status:count?"HOLD":"CLEAR",note,checked:true}:b));setSaved(`${selected.id} check saved`);setSelected(null);}
   if(selected)return <div className="cut-pad-app">
     <div className="cut-pad-heading"><div><p>Bundle inspection</p><h2>{selected.part}</h2></div><Scissors size={28}/></div>
-    <button className="cut-pad-button" onClick={()=>setSelected(null)}><ArrowLeft size={20}/>Back to bundles</button>
+    <button className="cut-pad-button" onClick={()=>setSelected(null)}><ChevronLeft size={20}/>Back to bundles</button>
     <div className="cut-pad-info-grid" style={{marginTop:20}}>{[["Bundle",selected.id],["Style",selected.style],["Table",selected.table],["Marker",selected.marker],["Size",selected.size],["Bundle quantity",`${selected.qty} pieces`]].map(([label,value])=><div className="cut-pad-info" key={label}><span>{label}</span><strong>{value}</strong></div>)}</div>
     <h3>Check the panels</h3><p className="cut-pad-help">Review shape and dimensions, notches, fabric defects, shade and matching panel numbers. This demo records a full-bundle check.</p>
     <div className="cut-pad-fields"><label>Pieces checked<input aria-label="Bundle pieces checked" value={selected.qty} readOnly/></label><label>Rejected pieces<input aria-label="Bundle rejected pieces" type="number" inputMode="numeric" min="0" max={selected.qty} value={rejected} onChange={e=>setRejected(e.target.value)}/></label></div>

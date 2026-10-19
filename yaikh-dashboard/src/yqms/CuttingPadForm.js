@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ArrowLeft, ArrowRight, CheckCircle2, ClipboardCheck } from "lucide-react";
+import { ChevronLeft, ArrowRight, CheckCircle2, ClipboardCheck } from "lucide-react";
 import "./cutting-pad-ui.css";
 
 const Steps = ["Order", "Fabric & cutting", "Inspection"];
@@ -37,6 +37,6 @@ export default function CuttingPadForm({order,orders,onSelectOrder,onSubmit,erro
         {error && <p role="alert" className="cut-pad-error">{error}</p>}{submitted && <p role="status" className="cut-pad-success">Inspection saved. View updated totals in Dashboard.</p>}
       </section>
     </div>
-    <footer className="cut-pad-footer"><button onClick={()=>setStep(Math.max(0,step-1))} disabled={step===0}><ArrowLeft size={20}/>Back</button><span>{step+1} of 3</span>{step<2?<button className="cut-pad-primary" onClick={()=>setStep(step+1)}>Next<ArrowRight size={20}/></button>:<button className="cut-pad-primary" onClick={onSubmit}>{submitted?"Saved":"Submit inspection"}<CheckCircle2 size={20}/></button>}</footer>
+    <footer className="cut-pad-footer"><button onClick={()=>setStep(Math.max(0,step-1))} disabled={step===0}><ChevronLeft size={20}/>Back</button><span>{step+1} of 3</span>{step<2?<button className="cut-pad-primary" onClick={()=>setStep(step+1)}>Next<ArrowRight size={20}/></button>:<button className="cut-pad-primary" onClick={onSubmit}>{submitted?"Saved":"Submit inspection"}<CheckCircle2 size={20}/></button>}</footer>
   </div>;
 }
