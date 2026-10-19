@@ -1,0 +1,8 @@
+.cutting-form-tablet-view{width:100%;max-width:1100px;margin:0 auto}
+.cutting-form-tablet-label{margin:0 0 12px;color:#334155;font-size:14px;font-weight:700;text-align:center}
+.cutting-form-tablet-device{position:relative;display:flex;flex-direction:column;aspect-ratio:210 / 297;width:100%;padding:34px 20px 44px;border:3px solid #94a3b8;border-radius:42px;background:linear-gradient(120deg,#334155,#0f172a 25%,#020617 75%,#334155);box-shadow:0 20px 40px #0f172a30,inset 0 0 0 2px #475569}
+.cutting-form-tablet-camera{position:absolute;top:12px;left:calc(50% - 5px);width:10px;height:10px;border-radius:50%;background:#020617;border:2px solid #475569}
+.cutting-form-tablet-screen{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:28px;background:white;border-radius:12px;border:1px solid #020617}
+.cutting-form-tablet-home{position:absolute;bottom:9px;left:calc(50% - 13px);height:26px;width:26px;border:2px solid #64748b;border-radius:50%;background:#0f172a}
+.cutting-form-tablet-screen input,.cutting-form-tablet-screen select,.cutting-form-tablet-screen button{min-height:44px;touch-action:manipulation}
+@media(max-width:700px){.cutting-form-tablet-device{padding:28px 9px 38px;border-radius:28px;aspect-ratio:auto;height:1100px;max-height:85dvh;min-height:500px}.cutting-form-tablet-screen{padding:16px}.cutting-form-tablet-screen .grid{grid-template-columns:1fr}.cutting-form-tablet-screen table{min-width:680px}}

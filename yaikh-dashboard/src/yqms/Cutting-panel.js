@@ -1,3 +1,4 @@
+import CuttingFormTablet from "./CuttingFormTablet";
 import React, { useState } from "react";
 import {
   ArrowLeft,
@@ -174,6 +175,7 @@ const CuttingPanel = ({ onBack }) => {
                     <div className="bg-white rounded-2xl shadow border border-slate-100 overflow-hidden">
                         <div className="p-10 space-y-10">
                             {activeTab === "form" ? (
+                                <CuttingFormTablet>
                                 <div ref={formRef} key={order.mo} className="cutting-inspection-form space-y-10 text-[24px] leading-relaxed">
                                     {/* Header Inputs Section */}
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -462,6 +464,7 @@ const CuttingPanel = ({ onBack }) => {
                                         </button>
                                     </div>
                                 </div>
+                                </CuttingFormTablet>
                             ) : activeTab === "data" ? (
                                 <CuttingOrderDashboard orders={orders} order={order} onSelectOrder={setSelectedMO} onViewForm={() => setActiveTab("form")} />
                             ) : activeTab === "report" ? (
