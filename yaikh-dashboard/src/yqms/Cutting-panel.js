@@ -1,3 +1,4 @@
+import TabletWorkspace from "./components/TabletWorkspace";
 import React, { useState } from "react";
 import {
   ArrowLeft,
@@ -88,9 +89,10 @@ const CuttingPanel = ({ onBack }) => {
     ];
 
   return (
-    <div className="fixed inset-0 bg-slate-50 flex flex-col z-[50] animate-in fade-in duration-500 overflow-hidden font-sans">
+    <TabletWorkspace>
+    <div className="flex flex-col flex-1 min-w-0 min-h-0 bg-slate-50 font-sans">
       {/* Premium Header */}
-      <div className="bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 px-6 py-4 flex items-center justify-between shrink-0 shadow-lg border-b border-white/10">
+      <div className="cutting-tablet-header bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 px-6 py-4 flex items-center justify-between shrink-0 shadow-lg border-b border-white/10">
         <div className="flex items-center gap-4">
           <button
             onClick={onBack}
@@ -115,7 +117,7 @@ const CuttingPanel = ({ onBack }) => {
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex items-center gap-1 bg-white/10 p-1.5 rounded-2xl backdrop-blur-sm border border-white/40">
+        <div className="cutting-tablet-nav flex items-center gap-1 bg-white/10 p-1.5 rounded-2xl backdrop-blur-sm border border-white/40">
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -169,14 +171,14 @@ const CuttingPanel = ({ onBack }) => {
       </div>
 
             {/* Main Content Area */}
-            <div ref={contentRef} className="flex-1 overflow-auto p-8 bg-slate-50/50">
+            <div ref={contentRef} className="cutting-tablet-content flex-1 overflow-auto p-8 bg-slate-50/50">
                 <div className={`${["form", "data"].includes(activeTab) ? "max-w-[1600px]" : "max-w-6xl"} mx-auto`}>
                     <div className="bg-white rounded-2xl shadow border border-slate-100 overflow-hidden">
-                        <div className="p-10 space-y-10">
+                        <div className="cutting-form-card p-10 space-y-10">
                             {activeTab === "form" ? (
                                 <div ref={formRef} key={order.mo} className="cutting-inspection-form space-y-10 text-[24px] leading-relaxed">
                                     {/* Header Inputs Section */}
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                    <div className="cutting-form-fields grid grid-cols-1 md:grid-cols-3 gap-8">
                                         <div className="space-y-2">
                                             <label className="text-[21px] font-bold text-slate-700 px-1">Date</label>
                                             <div className="relative group">
@@ -327,7 +329,7 @@ const CuttingPanel = ({ onBack }) => {
                                     </div>
 
                                     {/* Bundle Check & Total Inspection */}
-                                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 pt-4 border border-slate-300 rounded-lg p-6">
+                                    <div className="cutting-form-fields grid grid-cols-1 md:grid-cols-4 gap-6 pt-4 border border-slate-300 rounded-lg p-6">
                                         <div className="space-y-2 col-span-1">
                                             <label className="text-[21px] font-bold text-slate-700 px-1">Total Bundle Qty</label>
                                             <div className="relative group">
@@ -395,7 +397,7 @@ const CuttingPanel = ({ onBack }) => {
                                     </div>
 
                                     {/* Form Selects Section */}
-                                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 border border-slate-300 rounded-lg p-6">
+                                    <div className="cutting-form-fields grid grid-cols-1 md:grid-cols-4 gap-6 border border-slate-300 rounded-lg p-6">
                                         <div className="space-y-2">
                                             <label className="text-[21px] font-bold text-slate-700 px-1">Garment Type</label>
                                             <div className="relative">
@@ -716,6 +718,7 @@ const CuttingPanel = ({ onBack }) => {
 
             <ModuleBotButton moduleName="YQMS - Cutting Panel" />
         </div>
+        </TabletWorkspace>
     );
 };
 
