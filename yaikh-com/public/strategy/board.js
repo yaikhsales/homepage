@@ -4,16 +4,16 @@ const DATA=window.YAI_BOARD_DATA;
 const PATHS=[{id:'meet',n:1,title:'Meet prospects',desc:'Expo events, TAFTAC training, and other in-person networking events.',next:'Confirm the physical venue and register. Attend, meet factory and non-factory prospects, exchange business cards, and ask for a time to present Yai.'},{id:'brands',n:2,title:'Brands seeking AI',desc:'Garments, bags, footwear, home textiles and automotive upholstery brands actively hiring or seeking AI partners.',next:'Read the hiring or partner request, identify the decision maker, and offer Yai integration or a presentation matched to the stated need.'},{id:'funding',n:3,title:'Startup funding',desc:'Cambodia government, other governments, and private venture funding worldwide.',next:'Verify the open intake, eligibility, location and deadline before applying or pitching.'}];
 const VIEWS={overview:['Your sales and funding opportunities.','Your sales towers, organized around the actions that bring Yai customers and funding.'],meet:['1 · Meet prospects','Attend in person, exchange business cards, and book a Yai presentation with potential factory and non-factory customers.'],brands:['2 · Brands seeking AI','AI hiring, integration partners and technology needs across sewn-product brands, compliance/audit companies and factory head offices.'],funding:['3 · Startup funding worldwide','Cambodia government startup funds, other governments’ startup funds, and private venture funding around the world.'],needs:['4 · Solve technology needs','Targets across brands, compliance and audit companies, and factory head offices.'],news:['AI news desk','Relevant AI developments from GK Newsroom, with original story links.'],saved:['Your shortlist','Keep the opportunities you want to act on, with your progress and notes.']};
 const MEET_GROUPS=['All in-person events','1 Expo events','2 TAFTAC training','3 Other events'];
-function meetGroup(x){const t=x.title+' '+(x.summary||'');if(/\bzoom\b|webinar|online.only|virtual event/i.test(t))return 0;if(/taftac|cgti/i.test(t))return 2;if(/expo|exhibition|festival|francotech|code-c/i.test(t))return 1;return 3}
+function meetGroup(x){const t=x.title+' '+(x.summary||'');if(/application window|classic window|call for proposals|application deadline/i.test(x.title))return 0;if(/\bzoom\b|webinar|online.only|virtual event/i.test(t))return 0;if(/taftac|cgti/i.test(t))return 2;if(/expo|exhibition|festival|francotech|code-c/i.test(t))return 1;return 3}
 const FUNDING_GROUPS=['All startup funding','1 Cambodia government','2 Other governments','3 Private venture worldwide'];
 function fundingGroup(x){
  if(x.origin==='calendar')return 0;
  const t=x.title+' '+(x.origin==='research'?x.summary||'':'');
- if(/procurement|consultancy tender|data collection|baseline evaluation/i.test(t))return 0;
+ if(/procurement|consultancy tender|data collection|baseline evaluation|foundation/i.test(x.title))return 0;
  const startup=/startup|start-up|venture|seed|series [a-f]|entrepreneur|accelerator|incubat|innovation|early.stage|investment fund/i.test(t);
  if(!startup&&x.origin!=='research')return 0;
  if(/\bEDF\b|Khmer Enterprise|Techo Startup/i.test(t))return 1;
- if(/government|ministry|state.backed|public fund|sovereign|national .{0,20}fund|\bADB Ventures\b|development bank/i.test(t))return x.region==='Cambodia'?1:2;
+ if(/government|ministry|state.backed|public fund|sovereign|national .{0,20}fund|Khazanah|KWAP|Ireland Sets Aside|\bADB Ventures\b|development bank/i.test(t))return x.region==='Cambodia'?1:2;
  if(/venture|\bvc\b|capital|private|investor|seed|series [a-f]|Smart Axiata|Working Capital|East Ventures|Integra/i.test(t))return 3;
  return 0;
 }
@@ -24,7 +24,7 @@ try{saved=JSON.parse(localStorage.getItem('yai-opportunity-shortlist-v1')||'{}')
 const todayKey=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Phnom_Penh',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
 const dayLabel=d=>new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'}).format(new Date(d+'T12:00:00Z'));
 const hash=s=>{let h=0;for(const c of s)h=Math.imul(31,h)+c.charCodeAt(0)|0;return (h>>>0).toString(36)};
-const safeUrl=u=>{try{const x=new URL(u,location.href);return ['https:','http:'].includes(x.protocol)?x.href:'#'}catch{return '#'}};
+const safeUrl=u=>{try{const x=new URL(u,document.baseURI||location.href);return ['https:','http:'].includes(x.protocol)?x.href:'#'}catch{return '#'}};
 const hasAI=t=>/\bai\b|artificial intelligence|machine learning|agentic|automation|digitali[sz]|robotic|technology|software/i.test(t);
 function brandDemand(title){
  const sewn=/garment|apparel|fashion|textile|footwear|shoe|handbag|luggage|leather|homewear|home wear|home textile|bedding|upholster|car seat|automotive interior|sewing|\b(?:nike|adidas|puma|uniqlo|zara|h&m|gap|levi|lululemon|decathlon|shein|inditex|kering|lvmh|burberry|primark|patagonia|ikea|wayfair|tapestry|samsonite)\b/i.test(title);
