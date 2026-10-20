@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import StationPad from "./StationPad";
 
 type Form = Record<string, string>;
 const blank = (): Form => ({ mo: "", line: "", style: "", color: "", size: "", shift: "Day", inspector: "", employeeId: "", sample: "20", failed: "0", sampleRef: "", machineIds: "", operatorIds: "", machineCheck: "pass", skillCheck: "pass", measurementCheck: "pass", measurementNotes: "", pieceId: "", result: "pass", severity: "major", defectLocation: "", operation: "", machine: "", defects: "", notes: "" });
 
-export default function FloorPad({ params }: { params: { mode: string } }) {
+function LegacyFloorPad({ params }: { params: { mode: string } }) {
   const mode = params.mode;
   const first = mode === "first-output";
   const valid = first || mode === "endline";
@@ -70,3 +71,8 @@ export default function FloorPad({ params }: { params: { mode: string } }) {
 }
 
 const styles = `.fp-page{min-height:100vh;background:#eef3f8;color:#15243b;font-family:Arial,sans-serif;padding:24px}.fp-wrap{max-width:900px;margin:auto}.fp-header{background:linear-gradient(115deg,#1166a2,#0896c2);color:white;border-radius:20px;padding:25px 30px;margin-bottom:18px;display:flex;justify-content:space-between;gap:18px;align-items:center}.fp-header small{font-weight:800;letter-spacing:.14em}.fp-header h1{font-size:29px;font-weight:800;margin:6px 0}.fp-header p{margin:0;color:#d6f6ff}.fp-card{background:white;border:1px solid #d9e5ef;border-radius:20px;padding:28px;box-shadow:0 12px 36px #15385212}.fp-card h2{font-size:24px;font-weight:800;margin:0 0 8px}.fp-card h3{font-size:18px;font-weight:800;margin:25px 0 14px;border-top:1px solid #e4edf3;padding-top:22px}.fp-intro,.fp-login p{color:#577089;margin-bottom:22px}.fp-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.fp-field{display:flex;flex-direction:column;gap:7px;font-weight:700;font-size:14px;color:#334b66}.fp-field input,.fp-field select,.fp-field textarea{width:100%;border:1px solid #b9cbdb;border-radius:11px;padding:13px 14px;font:inherit;font-weight:500;color:#172943;background:white;min-height:49px}.fp-field input:focus,.fp-field select:focus,.fp-field textarea:focus{outline:3px solid #8adcf7;border-color:#0787b8}.fp-notes{margin:18px 0}.fp-primary{background:#0868a7;color:white;border:0;border-radius:11px;font-size:17px;font-weight:800;padding:14px 24px;min-height:51px;margin-top:20px;cursor:pointer}.fp-primary:disabled{opacity:.6;cursor:wait}.fp-login{max-width:460px;margin:50px auto;text-align:center;padding:40px}.fp-login .fp-field{text-align:left}.fp-login .fp-field input{text-align:center;font-size:28px;letter-spacing:.32em}.fp-login .fp-primary{width:100%}.fp-lock{width:70px;height:70px;border-radius:18px;margin:0 auto 20px;background:#dcf3fb;color:#0868a7;font-size:44px;line-height:65px}.fp-logout{background:#ffffff28;color:white;border:1px solid #ffffff80;border-radius:10px;padding:10px 16px;font-weight:700;white-space:nowrap}.fp-success,.fp-error{padding:15px 20px;border-radius:12px;margin-top:16px;font-weight:700}.fp-success{background:#daf6eb;color:#076044}.fp-error{background:#ffe7e0;color:#9f2718}@media(max-width:650px){.fp-page{padding:12px}.fp-header{padding:21px;align-items:flex-start}.fp-header h1{font-size:23px}.fp-grid{grid-template-columns:1fr}.fp-card{padding:20px}.fp-login{margin:25px auto}}`;
+
+export default function FloorPad({ params }: { params: { mode: string } }) {
+  if (["inline", "roaming", "checkout", "qa20"].includes(params.mode)) return <StationPad mode={params.mode} />;
+  return <LegacyFloorPad params={params} />;
+}

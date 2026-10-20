@@ -134,7 +134,7 @@ export const YQMS_CARDS = {
             "assets/yqms/qc-end-line-checking.jpg",
         },
         {
-          title: "Inline Audit Rolling",
+          title: "Inline Auditor",
           action: "/dashboard/yqms/inline-audit",
           icon: "GaugeCircle",
           color:
@@ -143,7 +143,7 @@ export const YQMS_CARDS = {
             "assets/yqms/inline-audit-rolling.jpg",
         },
         {
-          title: "Internal Rolling QC",
+          title: "Internal Roaming QC (IRQC)",
           action: "/dashboard/yqms/rolling-qc",
           icon: "FileCheck",
           color:
@@ -155,7 +155,7 @@ export const YQMS_CARDS = {
           ],
         },
         {
-          title: "Garment Check Output",
+          title: "Garment Check Out",
           action: "/dashboard/yqms/sewing-output",
           icon: "Shirt",
           color:
@@ -164,7 +164,7 @@ export const YQMS_CARDS = {
             "assets/fc/garment-check-output.jpg",
         },
         {
-          title: "QA 20pcs Audit",
+          title: "20pcs QA Audit",
           action: "/dashboard/yqms/20pcs-audit",
           icon: "ClipboardCheck",
           color:

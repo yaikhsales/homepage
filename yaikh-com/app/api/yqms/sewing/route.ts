@@ -92,7 +92,7 @@ export async function POST(request: Request) {
   };
   try {
     const db = await getDb();
-    const coll = db.collection(collectionName);
+    const coll = db.collection<any>(collectionName);
     if (mode === "endline") {
       const startup = await coll.findOne({ mode: "first-output", mo, line, style }, { sort: { createdAt: -1 } });
       if (!startup || startup.decision !== "approved") return bad("This MO, line and style need an approved first-output sewing check before end-line records can be saved.", 409);
@@ -115,9 +115,9 @@ export async function PATCH(request: Request) {
   try { body = await request.json(); } catch { return bad("Invalid update data."); }
   if (!ObjectId.isValid(str(body.id))) return bad("Invalid record ID.");
   const action = str(body.action), employeeId = str(body.employeeId), actor = str(body.actor);
-  if (!employeeId || !actor) return bad("Reviewer name and YHR employee ID are required.");
+  if (!employeeId || !actor) return bad("QA Supervisor name and YHR employee ID are required.");
   const db = await getDb();
-  const coll = db.collection(collectionName);
+  const coll = db.collection<any>(collectionName);
   const existing = await coll.findOne({ _id: new ObjectId(str(body.id)) });
   if (!existing) return bad("Inspection not found.", 404);
   const now = new Date();
@@ -134,6 +134,9 @@ export async function PATCH(request: Request) {
   } else if (action === "acknowledge" && existing.mode === "endline" && existing.result !== "pass") {
     update = { alertAcknowledgedBy: actor, alertAcknowledgedEmployeeId: employeeId, alertAcknowledgedAt: now };
   } else return bad("This update is not available for the record.");
-  await coll.updateOne({ _id: existing._id }, { $set: { ...update, updatedAt: now, updatedBySession: session } });
+  await coll.updateOne({ _id: existing._id }, {
+    $set: { ...update, qaSupervisorName: actor, qaSupervisorEmployeeId: employeeId, reviewedByRole: "QA Supervisor", updatedAt: now, updatedBySession: session },
+    $push: { reviewHistory: { action, actor, employeeId, note: str(body.note, 500), at: now } },
+  } as any);
   return NextResponse.json({ ok: true }, { headers: noStore });
 }

@@ -10,7 +10,7 @@ const COOKIE = "yqms_floor_session";
 const TTL = 60 * 60 * 8;
 const noStore = { "Cache-Control": "private, no-store" };
 const attempts = new Map<string, { count: number; until: number }>();
-const validMode = (mode: unknown) => mode === "first-output" || mode === "endline";
+const validMode = (mode: unknown) => ["first-output", "endline", "inline", "roaming", "checkout", "qa20"].includes(String(mode));
 
 function sameOrigin() {
   const origin = headers().get("origin");
