@@ -3,6 +3,7 @@ import { ArrowLeft, ClipboardCheck, LayoutDashboard, BookOpen, RefreshCw, Extern
 import { QRCodeSVG } from "qrcode.react";
 import SewingReports from "./SewingReports";
 import SewingDecisionRegister from "./SewingDecisionRegister";
+import YQMSProcessIcon from "../components/YQMSProcessIcon";
 import "./SewingQuality.css";
 
 const API = "/api/yqms/sewing";
@@ -35,7 +36,6 @@ export default function SewingQuality({ mode, onBack }) {
   const [recheck, setRecheck] = useState("pass");
   const [decision, setDecision] = useState("approved");
   const title = first ? "First Output Sewing" : "QC End Line Checking";
-  const logo = first ? "/assets/yqms/first-output-sewing.jpg" : "/assets/yqms/qc-end-line-checking.jpg";
   const floorUrl = `https://yaikh.com/yqms-pad/${mode}`;
 
   const reload = useCallback(async () => {
@@ -99,7 +99,7 @@ export default function SewingQuality({ mode, onBack }) {
   }
   const nav = [["pad", "QC pad", ClipboardCheck], ["dashboard", "Dashboard", LayoutDashboard], ["report", "Report", FileText], ["modify", "Modify", Settings], ["adding", "Adding", Plus], ["dr", "DR", History]];
   return <div className={`sq-page ${first ? "sq-first" : "sq-endline"}`}>
-    <header className="sq-header"><div className="sq-header-title"><button className="sq-back" onClick={onBack} aria-label="Go back"><ArrowLeft size={18} /></button><img className="sq-logo" src={logo} alt="" /><div><div className="sq-eyebrow">YQMS · SEWING</div><h1>{title}</h1><p>{first ? "Startup trial · machine and skill check · QA release" : "100% garment check · defect, repair and reinspection"}</p></div></div>
+    <header className="sq-header"><div className="sq-header-title"><button className="sq-back" onClick={onBack} aria-label="Go back"><ArrowLeft size={18} /></button><span className="sq-process-logo"><YQMSProcessIcon title={title} /></span><div><div className="sq-eyebrow">YQMS · SEWING</div><h1>{title}</h1><p>{first ? "Startup trial · machine and skill check · QA release" : "100% garment check · defect, repair and reinspection"}</p></div></div>
       <nav className="sq-nav" aria-label="Sewing quality views">{nav.map(([key, text, Icon]) => <button key={key} className={tab === key ? "active" : ""} onClick={() => setTab(key)}><Icon size={17} />{text}</button>)}</nav>
       <div className="sq-header-side"><button className="sq-training" disabled title="A module-specific video has not been assigned yet"><Video size={16} />Video</button><button className="sq-training" onClick={() => setTab("sop")} title="Open SOP training and role guidance"><BookOpen size={16} />SOP</button><div className="sq-operator" title="Yai access-session viewer. The inspector entered on the pad is separate and not verified as a YHR login."><span className="sq-avatar">{viewer ? viewer.slice(0, 2).toUpperCase() : "?"}</span><span><strong>{viewer || "Sign in required"}</strong><small>{form.employeeId.trim() ? `Pad inspector ${form.employeeId.trim()} · unverified` : "Yai access session"}</small></span></div><button className="sq-refresh" onClick={reload} disabled={loading} aria-label="Refresh inspections"><RefreshCw size={15} /></button></div>
     </header>
