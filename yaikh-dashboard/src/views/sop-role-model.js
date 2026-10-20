@@ -34,6 +34,12 @@ export const FABRIC_INSPECTION_ROLES = [
     "does": "Review the completed report against the agreed buyer criteria. Record release, hold or rejection with reasons. Arrange additional inspection or supplier follow-up when required.",
     "evidence": "Named decision, date, evidence and clear warehouse disposition instruction.",
     "dept": "qa"
+  },
+  {
+    "role": "📷 AI Vision Material Inspection",
+    "does": "Planned integration: detect and locate fabric defects from inspection-camera images. Match findings to the same supplier, contract / PO, fabric lot and roll in MRP supplier inspection submissions. Analyse contract quality requirements against supplier declarations and inspection evidence; flag mismatches or missing references for QA review.",
+    "evidence": "Defect image and location, linked supplier submission and contract requirement, NC (non-conformance) reason, and alert to the responsible merchandiser for supplier follow-up / corrective action. Authorized QA retains hold and release decisions.",
+    "dept": "sys"
   }
 ];
 

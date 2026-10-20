@@ -610,7 +610,7 @@ function layoutTimeline(flow) {
     const tracks = [], items = flow.acts.filter(a => a.lane === lane).sort((a,b) => a.d0-b.d0);
     items.forEach(a => {
       const x = a.d0 * px, dur = flow.px ? px-14 : Math.max((a.d1-a.d0)*px,6);
-      const w = isFabricInspection(a) ? 1140 : Math.max(dur,flow.px ? 0 : BOX_W), h = isFabricInspection(a) ? 1110 : BOX_H;
+      const w = isFabricInspection(a) ? 1140 : Math.max(dur,flow.px ? 0 : BOX_W), h = isFabricInspection(a) ? 1390 : BOX_H;
       let t = tracks.findIndex(track => track.end+8 <= x);
       if(t<0){t=tracks.length;tracks.push({end:0,height:BOX_H});}
       tracks[t].end=x+w; tracks[t].height=Math.max(tracks[t].height,h);
