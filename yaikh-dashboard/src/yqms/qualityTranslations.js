@@ -3,12 +3,14 @@ import autoRows from './qualityAutoTranslations.json';
 import exampleRows from './qualityExampleTranslations.json';
 import moreRows from './qualityMoreTranslations.json';
 import longRows from './qualityLongTranslations.json';
+import sewingExampleRows from './qualitySewingExampleTranslations.json';
 // Order in each row: Khmer, Chinese, Vietnamese, Tagalog, Malay.
 const rows = {
   ...autoRows,
   ...exampleRows,
   ...moreRows,
   ...longRows,
+  ...sewingExampleRows,
   'QC pad': ['ផ្ទាំង QC', '质检平板', 'Bảng QC', 'QC pad', 'Pad QC'],
   'Dashboard': ['ផ្ទាំងគ្រប់គ្រង', '仪表板', 'Bảng điều khiển', 'Dashboard', 'Papan pemuka'],
   'Report': ['របាយការណ៍', '报告', 'Báo cáo', 'Ulat', 'Laporan'],
@@ -268,6 +270,10 @@ const rows = {
   'Checked against spec · pass': ['ពិនិត្យតាមស្តង់ដារ · ជាប់', '按规格检查 · 通过', 'Đã kiểm theo thông số · đạt', 'Nasuri ayon sa espesipikasyon · pumasa', 'Disemak mengikut spesifikasi · lulus'],
   'Issue · hold': ['មានបញ្ហា · ផ្អាក', '存在问题 · 暂扣', 'Có vấn đề · tạm giữ', 'May isyu · pigilan', 'Ada isu · tahan'],
   'Out of tolerance · hold': ['លើសកម្រិតអនុញ្ញាត · ផ្អាក', '超出公差 · 暂扣', 'Vượt dung sai · tạm giữ', 'Labas sa toleransiya · pigilan', 'Luar toleransi · tahan'],
+  'Translating report notes…': ['កំពុងបកប្រែកំណត់ចំណាំរបាយការណ៍…', '正在翻译报告备注…', 'Đang dịch ghi chú báo cáo…', 'Isinasalin ang mga tala sa ulat…', 'Menterjemah nota laporan…'],
+  'Note translation unavailable; original notes are shown.': ['មិនអាចបកប្រែកំណត់ចំណាំបាន។ កំពុងបង្ហាញអត្ថបទដើម។', '备注翻译不可用；显示原文。', 'Không thể dịch ghi chú; đang hiển thị bản gốc.', 'Hindi available ang pagsasalin; ipinapakita ang orihinal na tala.', 'Terjemahan nota tidak tersedia; nota asal dipaparkan.'],
+  'Original': ['អត្ថបទដើម', '原文', 'Bản gốc', 'Orihinal', 'Asal'],
+  'Original:': ['ដើម:', '原文：', 'Bản gốc:', 'Orihinal:', 'Asal:'],
   'Approved sample / tech pack ref *': ['លេខយោងគំរូអនុម័ត / ឯកសារបច្ចេកទេស *', '批准样／技术文件编号 *', 'Mã mẫu duyệt / tài liệu kỹ thuật *', 'Aprubadong sampol / tech pack ref *', 'Rujukan sampel diluluskan / pek teknikal *'],
   'Machine IDs checked *': ['លេខម៉ាស៊ីនបានត្រួតពិនិត្យ *', '已检机器编号 *', 'Mã máy đã kiểm *', 'Mga ID ng makinang nasuri *', 'ID mesin diperiksa *'],
   'Operator IDs checked *': ['លេខបុគ្គលិកប្រតិបត្តិបានត្រួតពិនិត្យ *', '已检操作员编号 *', 'Mã công nhân đã kiểm *', 'Mga ID ng operator na nasuri *', 'ID operator diperiksa *'],

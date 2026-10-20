@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { useTranslation } from "../translate/TranslationContext";
+import { useNarrativeTranslation } from './useNarrativeTranslation';
 
 const csvCell = value => { let text = String(value ?? ""); if (typeof value !== 'number' && /^[=+\-@\t\r]/.test(text)) text = "'" + text; return `"${text.replaceAll('"', '""')}"`; };
 const day = value => value ? new Date(value).toISOString().slice(0, 10) : "—";
@@ -47,14 +48,17 @@ export default function SewingReports({ records, mode, loading, exampleMode = fa
   const [selected, setSelected] = useState(0);
   const reports = useMemo(() => buildReports(records, mode), [records, mode]);
   const report = reports[selected];
+  const notes = useMemo(() => records.map(row => row.notes).filter(Boolean), [records]);
+  const narrative = useNarrativeTranslation(selected === 4 ? notes : [], !exampleMode);
   function download() {
-    const csv = [report.columns, ...report.rows].map(row => row.map(value => csvCell(t(value))).join(",")).join("\r\n");
+    const csv = [report.columns, ...report.rows].map((row, rowIndex) => row.map((value, cell) =>
+      csvCell(rowIndex > 0 && selected === 4 && cell === 11 ? narrative.csv(value) : t(value))).join(",")).join("\r\n");
     const url = URL.createObjectURL(new Blob(["\uFEFF", csv], { type: "text/csv;charset=utf-8" }));
     const anchor = document.createElement("a"); anchor.href = url; anchor.download = `yqms-${mode}-${exampleMode ? "DEMO-" : ""}${report.name.toLowerCase().replaceAll(" ", "-")}.csv`; anchor.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
   return <section className="sq-reports"><div className="sq-toolbar"><div><h2>Quality reports</h2><p className="sq-muted">{exampleMode ? "Five reports calculated from eight fictional training records across eight dates. DEMO figures only." : "Five views calculated from saved inspections."}</p></div><button className="sq-secondary" onClick={download} disabled={!report.rows.length}>Download this CSV</button></div>
     <div className="sq-report-tabs">{reports.map((item, index) => <button key={item.name} className={selected === index ? "active" : ""} onClick={() => setSelected(index)}>{index + 1}. {item.name}</button>)}</div>
-    <div className="sq-panel"><h3>{report.name}</h3>{loading ? <p>Loading records…</p> : !report.rows.length ? <div className="sq-empty">No saved records for this report yet.</div> : <div className="sq-report-scroll"><table><thead><tr>{report.columns.map(column => <th key={column}>{column}</th>)}</tr></thead><tbody>{report.rows.map((row, index) => <tr key={index}>{row.map((value, cell) => <td key={cell}>{text(value)}</td>)}</tr>)}</tbody></table></div>}</div>
+    <div className="sq-panel"><h3>{report.name}</h3>{narrative.state === 'loading' && <p>Translating report notes…</p>}{narrative.state === 'unavailable' && <p>Note translation unavailable; original notes are shown.</p>}{loading ? <p>Loading records…</p> : !report.rows.length ? <div className="sq-empty">No saved records for this report yet.</div> : <div className="sq-report-scroll"><table><thead><tr>{report.columns.map(column => <th key={column}>{column}</th>)}</tr></thead><tbody>{report.rows.map((row, index) => <tr key={index}>{row.map((value, cell) => <td key={cell}>{selected === 4 && cell === 11 ? narrative.render(value) : text(value)}</td>)}</tr>)}</tbody></table></div>}</div>
   </section>;
 }

@@ -1,0 +1,107 @@
+{
+  "DEMO: Checked against approved sample; no defect found.": [
+    "DEMO៖ បានពិនិត្យលើគំរូដែលបានអនុម័ត។ មិនបានរកឃើញពិការភាពទេ។",
+    "演示：对照批准的样品进行检查；没有发现缺陷。",
+    "DEMO: Đã kiểm tra so với mẫu đã được phê duyệt; không tìm thấy khiếm khuyết.",
+    "DEMO: Sinuri laban sa aprubadong sample; walang nakitang depekto.",
+    "DEMO: Disemak terhadap sampel yang diluluskan; tiada kecacatan ditemui."
+  ],
+  "DEMO: Passed end-line QC and handed to finishing.": [
+    "DEMO៖ បានឆ្លងកាត់ QC បន្ទាត់ចុងក្រោយ ហើយបានប្រគល់ទៅឱ្យការបញ្ចប់។",
+    "演示：通过了最终线质量控制并移交给精加工。",
+    "DEMO: Đã vượt qua QC cuối tuyến và bàn giao cho khâu hoàn thiện.",
+    "DEMO: Pumasa sa end-line QC at ipinasa sa pagtatapos.",
+    "DEMO: Lulus QC baris akhir dan diserahkan kepada penamat."
+  ],
+  "DEMO: Correct operation and repeat quality check.": [
+    "DEMO៖ ប្រតិបត្តិការត្រឹមត្រូវ និងពិនិត្យគុណភាពម្តងទៀត។",
+    "演示：正确操作并重复质量检查。",
+    "DEMO: Vận hành đúng và lặp lại kiểm tra chất lượng.",
+    "DEMO: Tamang operasyon at ulitin ang pagsusuri sa kalidad.",
+    "DEMO: Operasi yang betul dan ulangi semakan kualiti."
+  ],
+  "DEMO: Repeat first output after correction.": [
+    "DEMO៖ ធ្វើម្តងទៀតនូវលទ្ធផលដំបូងបន្ទាប់ពីការកែតម្រូវ។",
+    "演示：校正后重复第一个输出。",
+    "DEMO: Lặp lại đầu ra đầu tiên sau khi sửa.",
+    "DEMO: Ulitin ang unang output pagkatapos ng pagwawasto.",
+    "DEMO: Ulang output pertama selepas pembetulan."
+  ],
+  "DEMO: Sample acceptable.": [
+    "DEMO៖ គំរូអាចទទួលយកបាន។",
+    "演示：可接受样品。",
+    "DEMO: Mẫu chấp nhận được.",
+    "DEMO: Katanggap-tanggap ang sample.",
+    "DEMO: Sampel boleh diterima."
+  ],
+  "DEMO: Hold the affected bundle and review the defect trend.": [
+    "DEMO៖ កាន់បណ្តុំដែលរងផលប៉ះពាល់ ហើយពិនិត្យមើលទំនោរនៃបញ្ហា។",
+    "演示：握住受影响的捆绑包并查看缺陷趋势。",
+    "DEMO: Giữ gói bị ảnh hưởng và xem xét xu hướng lỗi.",
+    "DEMO: Hawakan ang apektadong bundle at suriin ang trend ng depekto.",
+    "DEMO: Pegang berkas yang terjejas dan semak arah aliran kecacatan."
+  ],
+  "DEMO: QA Supervisor checks the correction before release.": [
+    "DEMO៖ អ្នកគ្រប់គ្រង QA ពិនិត្យមើលការកែតម្រូវមុនពេលចេញផ្សាយ។",
+    "演示：QA 主管在发布前检查修正情况。",
+    "DEMO: Giám sát QA kiểm tra bản sửa lỗi trước khi phát hành.",
+    "DEMO: Sinusuri ng QA Supervisor ang pagwawasto bago ilabas.",
+    "DEMO: Penyelia QA menyemak pembetulan sebelum dikeluarkan."
+  ],
+  "DEMO: Repeated sewing defect notice for line S03.": [
+    "DEMO: ការជូនដំណឹងអំពីពិការភាពនៃការដេរម្តងហើយម្តងទៀតសម្រាប់ខ្សែ S03 ។",
+    "演示：S03 行重复缝纫缺陷通知。",
+    "DEMO: Thông báo lỗi may lặp đi lặp lại cho dòng S03.",
+    "DEMO: Paulit-ulit na paunawa ng depekto sa pananahi para sa linyang S03.",
+    "DEMO: Notis kecacatan jahitan berulang untuk talian S03."
+  ],
+  "DEMO: Assign owner and due time before the next line review.": [
+    "DEMO៖ កំណត់ម្ចាស់ និងដល់ពេលកំណត់មុនពេលពិនិត្យលើបន្ទាត់បន្ទាប់។",
+    "演示：在下一次生产线审核之前分配所有者和到期时间。",
+    "DEMO: Chỉ định chủ sở hữu và thời gian đến hạn trước khi xem xét dòng tiếp theo.",
+    "DEMO: Magtalaga ng may-ari at takdang oras bago ang susunod na pagsusuri sa linya.",
+    "DEMO: Tetapkan pemilik dan masa yang ditetapkan sebelum semakan baris seterusnya."
+  ],
+  "DEMO question: What caused the open seam? Reply: Check machine tension and operator method.": [
+    "សំណួរ DEMO: តើអ្វីបណ្តាលឱ្យថ្នេរបើកចំហ? ឆ្លើយតប៖ ពិនិត្យមើលភាពតានតឹងម៉ាស៊ីន និងវិធីសាស្ត្រប្រតិបត្តិករ។",
+    "演示问题： 是什么导致了开缝？答复：检查机器张力和操作方法。",
+    "Câu hỏi DEMO: Nguyên nhân gây ra đường nối hở? Trả lời: Kiểm tra độ căng của máy và cách vận hành.",
+    "Tanong ng DEMO: Ano ang sanhi ng bukas na tahi? Sagot: Suriin ang tensyon ng makina at pamamaraan ng operator.",
+    "Soalan DEMO: Apa yang menyebabkan jahitan terbuka? Balas: Periksa ketegangan mesin dan kaedah pengendali."
+  ],
+  "DEMO: Mechanic verifies tension; QA repeats the sample check.": [
+    "DEMO: មេកានិចផ្ទៀងផ្ទាត់ភាពតានតឹង; QA ធ្វើការត្រួតពិនិត្យគំរូម្តងទៀត។",
+    "演示：机械师验证张力； QA 重复样品检查。",
+    "DEMO: Cơ khí xác minh độ căng; QA lặp lại việc kiểm tra mẫu.",
+    "DEMO: Bine-verify ng mekaniko ang tensyon; Inuulit ng QA ang sample check.",
+    "DEMO: Mekanik mengesahkan ketegangan; QA mengulangi pemeriksaan sampel."
+  ],
+  "DEMO: Hold affected pieces; correct shoulder join and reinspect.": [
+    "DEMO: កាន់បំណែកដែលរងផលប៉ះពាល់; ការភ្ជាប់ស្មាត្រឹមត្រូវ និងត្រួតពិនិត្យឡើងវិញ។",
+    "演示：持有受影响的棋子；正确的肩部连接并重新检查。",
+    "DEMO: Giữ quân bị ảnh hưởng; nối vai chính xác và kiểm tra lại.",
+    "DEMO: Hawakan ang mga apektadong piraso; tamang pagsali sa balikat at suriing muli.",
+    "DEMO: Pegang kepingan terjejas; cantuman bahu yang betul dan periksa semula."
+  ],
+  "DEMO: Hold affected pieces; correct sleeve attach and reinspect.": [
+    "DEMO: កាន់បំណែកដែលរងផលប៉ះពាល់; ភ្ជាប់ដៃអាវត្រឹមត្រូវ និងពិនិត្យមើលឡើងវិញ។",
+    "演示：持有受影响的棋子；正确连接套筒并重新检查。",
+    "DEMO: Giữ quân bị ảnh hưởng; gắn tay áo chính xác và kiểm tra lại.",
+    "DEMO: Hawakan ang mga apektadong piraso; tamang attachment ng manggas at suriing muli.",
+    "DEMO: Pegang kepingan terjejas; pasang lengan yang betul dan periksa semula."
+  ],
+  "DEMO: Hold affected pieces; correct placket and reinspect.": [
+    "DEMO: កាន់បំណែកដែលរងផលប៉ះពាល់; ស្រោមដៃត្រឹមត្រូវ និងពិនិត្យឡើងវិញ។",
+    "演示：持有受影响的棋子；纠正门襟并重新检查。",
+    "DEMO: Giữ quân bị ảnh hưởng; sửa túi và kiểm tra lại.",
+    "DEMO: Hawakan ang mga apektadong piraso; tamang placket at muling suriin.",
+    "DEMO: Pegang kepingan terjejas; plaket yang betul dan periksa semula."
+  ],
+  "DEMO: Hold affected pieces; correct collar attach and reinspect.": [
+    "DEMO: កាន់បំណែកដែលរងផលប៉ះពាល់; ភ្ជាប់កអាវត្រឹមត្រូវ និងត្រួតពិនិត្យឡើងវិញ។",
+    "演示：持有受影响的棋子；正确安装衣领并重新检查。",
+    "DEMO: Giữ quân bị ảnh hưởng; gắn cổ áo chính xác và kiểm tra lại.",
+    "DEMO: Hawakan ang mga apektadong piraso; tamang kwelyo ikabit at muling suriin.",
+    "DEMO: Pegang kepingan terjejas; pasang kolar yang betul dan periksa semula."
+  ]
+}
