@@ -133,7 +133,6 @@ import CustomerComplainCap from "./yqms/CustomerComplainCap";
 import YQMSReport from "./yqms/YQMSReport";
 // eslint-disable-next-line no-unused-vars
 import YQMSGlobalDashboard from "./yqms/YQMSGlobalDashboard";
-import { YQMSDashboard } from "./yqms/Fin-check/Dashboard/YQMSDashboard";
 import HumidityReportList from "./yqms/HumidityReport/show-list";
 import QCRovingDashboard from "./yqms/Fin-check/Dashboard/QCRovingDashboard";
 import CuttingDashboard from "./yqms/Fin-check/Dashboard/CuttingDashboard";
@@ -593,7 +592,7 @@ export default function App() {
 
           <Route
             path="yqms/dashboard"
-            element={<ModuleFrame><YQMSDashboard onBack={handleBack} /></ModuleFrame>}
+            element={<YwipFlow processOnly title="Master Dashboard" onBack={handleBack} />}
           />
           <Route
             path="yqms/qc-roving"
