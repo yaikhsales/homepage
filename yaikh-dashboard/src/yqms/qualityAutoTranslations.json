@@ -1,0 +1,5539 @@
+{
+  "1 · Order & inspection identity": [
+    "1 · បញ្ជាទិញ និងត្រួតពិនិត្យអត្តសញ្ញាណ",
+    "1 · 订单及检验身份",
+    "1 · Nhận dạng đơn hàng & kiểm tra",
+    "1 · Pagkakasunod-sunod at inspeksyon pagkakakilanlan",
+    "1 · Identiti pesanan & pemeriksaan"
+  ],
+  "1 · Order information": [
+    "1 · បញ្ជាទិញព័ត៌មាន",
+    "1·订单信息",
+    "1 · Thông tin đặt hàng",
+    "1 · Impormasyon ng order",
+    "1 · Maklumat pesanan"
+  ],
+  "10 · Management review & report amendment history": [
+    "10 · ការគ្រប់គ្រង ពិនិត្យ និងរាយការណ៍អំពីប្រវត្តិវិសោធនកម្ម",
+    "10·管理评审及报告修改历史",
+    "10 · Lịch sử xem xét và sửa đổi báo cáo của lãnh đạo",
+    "10 · Pagsusuri ng pamamahala at kasaysayan ng pagbabago sa ulat",
+    "10 · Semakan pengurusan & sejarah pindaan laporan"
+  ],
+  "100% end-line check": [
+    "100% ពិនិត្យបន្ទាត់បញ្ចប់",
+    "100% 终端检查",
+    "Kiểm tra cuối dòng 100%",
+    "100% end-line check",
+    "Semakan talian akhir 100%."
+  ],
+  "100% garment check · defect, repair and reinspection": [
+    "ការត្រួតពិនិត្យសម្លៀកបំពាក់ 100% · ពិការភាព ជួសជុល និងត្រួតពិនិត្យឡើងវិញ",
+    "100% 服装检查·缺陷、修补和复验",
+    "Kiểm tra hàng may mặc 100% · lỗi, sửa chữa và kiểm tra lại",
+    "100% pagsusuri sa damit · depekto, pagkumpuni at muling pagsisiyasat",
+    "100% pemeriksaan pakaian · kecacatan, pembaikan dan pemeriksaan semula"
+  ],
+  "2 · PO lines & carton breakdown": [
+    "2 · បន្ទាត់ PO & ការបំបែកប្រអប់",
+    "2 · 订单行和纸箱明细",
+    "2 · Dây chuyền PO & phân loại thùng carton",
+    "2 · Mga linya ng PO at pagkasira ng karton",
+    "2 · Talian PO & pecahan kadbod"
+  ],
+  "2 · PO, carton, SKU & colour / size scope": [
+    "2 · PO, carton, SKU & color/size",
+    "2 · PO、纸箱、SKU 和颜色/尺寸范围",
+    "2 · PO, thùng carton, SKU & phạm vi màu sắc/kích thước",
+    "2 · PO, karton, SKU at saklaw ng kulay / laki",
+    "2 · PO, karton, SKU & skop warna / saiz"
+  ],
+  "20-piece QA sample": [
+    "គំរូ QA ចំនួន 20 ដុំ",
+    "20 件 QA 样品",
+    "Mẫu QA 20 mẫu",
+    "20 pirasong sample ng QA",
+    "20 keping sampel QA"
+  ],
+  "3 · Colour / size breakdown & SKU details": [
+    "3 · ការបំបែកពណ៌ / ទំហំ & ព័ត៌មានលម្អិត SKU",
+    "3·颜色/尺码细目及SKU详细信息",
+    "3 · Phân tích màu sắc/kích thước & chi tiết SKU",
+    "3 · Pagkasira ng kulay / laki at mga detalye ng SKU",
+    "3 · Pecahan warna / saiz & butiran SKU"
+  ],
+  "3 · Sampling plan & actual inspection": [
+    "3 · ផែនការគំរូ និងការត្រួតពិនិត្យជាក់ស្តែង",
+    "3·抽样计划及实际检验",
+    "3 · Kế hoạch lấy mẫu & kiểm tra thực tế",
+    "3 · Sampling plan at aktwal na inspeksyon",
+    "3 · Pelan persampelan & pemeriksaan sebenar"
+  ],
+  "4 · Defect summary & garment locations": [
+    "4 · សង្ខេបអំពីពិការភាព និងទីតាំងកាត់ដេរ",
+    "4 · 缺陷汇总及服装位置",
+    "4 · Tổng hợp lỗi & vị trí may",
+    "4 · Buod ng depekto at mga lokasyon ng damit",
+    "4 · Ringkasan kecacatan & lokasi pakaian"
+  ],
+  "4 · Defects, severity & garment location": [
+    "4 · ពិការភាព ភាពធ្ងន់ធ្ងរ និងទីតាំងកាត់ដេរ",
+    "4 · 缺陷、严重程度和服装位置",
+    "4 · Khiếm khuyết, mức độ nghiêm trọng & vị trí may",
+    "4 · Mga depekto, kalubhaan at lokasyon ng damit",
+    "4 · Kecacatan, keterukan & lokasi pakaian"
+  ],
+  "5 · Buyer measurements — every size, piece & point": [
+    "5 · ការវាស់វែងរបស់អ្នកទិញ — គ្រប់ទំហំ ដុំ និងចំណុច",
+    "5 · 买家测量 — 每个尺寸、件数和点",
+    "5 · Số đo của người mua - mọi kích thước, sản phẩm và điểm",
+    "5 · Mga sukat ng mamimili — bawat laki, piraso at punto",
+    "5 · Ukuran pembeli — setiap saiz, bahagian & mata"
+  ],
+  "5 · Sampling & AQL result": [
+    "5 · គំរូ & លទ្ធផល AQL",
+    "5·抽样及AQL结果",
+    "5 · Lấy mẫu & kết quả AQL",
+    "5 · Sampling at resulta ng AQL",
+    "5 · Persampelan & keputusan AQL"
+  ],
+  "6 · Buyer checklist & supporting evidence": [
+    "6 · បញ្ជីត្រួតពិនិត្យអ្នកទិញ និងភស្តុតាងគាំទ្រ",
+    "6 · 买家清单及支持证据",
+    "6 · Danh sách kiểm tra của người mua và bằng chứng hỗ trợ",
+    "6 · Checklist ng mamimili at sumusuportang ebidensya",
+    "6 · Senarai semak pembeli & bukti sokongan"
+  ],
+  "6 · Buyer-spec measurement summary": [
+    "6 · សង្ខេបការវាស់វែងជាក់លាក់របស់អ្នកទិញ",
+    "6·买家规格测量总结",
+    "6 · Tóm tắt đo lường thông số kỹ thuật của người mua",
+    "6 · Buod ng pagsukat ng spec ng mamimili",
+    "6 · Ringkasan ukuran spesifikasi pembeli"
+  ],
+  "7 · Buyer checklist": [
+    "7 · បញ្ជីត្រួតពិនិត្យអ្នកទិញ",
+    "7·买家清单",
+    "7 · Danh sách kiểm tra của người mua",
+    "7 · Checklist ng mamimili",
+    "7 · Senarai semak pembeli"
+  ],
+  "7 · Photos, labels, packing & lab documents": [
+    "7 · រូបថត ស្លាក ការវេចខ្ចប់ និងឯកសារមន្ទីរពិសោធន៍",
+    "7 · 照片、标签、包装和实验室文件",
+    "7 · Hình ảnh, nhãn mác, bao bì & tài liệu phòng thí nghiệm",
+    "7 · Mga larawan, label, packing at lab na mga dokumento",
+    "7 · Foto, label, pembungkusan & dokumen makmal"
+  ],
+  "8 · Containment, correction & submission": [
+    "8 · ការទប់ស្កាត់ ការកែតម្រូវ និងការដាក់ស្នើ",
+    "8·遏制、纠正和提交",
+    "8 · Ngăn chặn, sửa chữa và phục tùng",
+    "8 · Pagpigil, pagwawasto at pagsusumite",
+    "8 · Penahanan, pembetulan & penyerahan"
+  ],
+  "8 · Visual evidence, photos & supporting documents": [
+    "8 · ភស្តុតាងដែលមើលឃើញ រូបថត និងឯកសារគាំទ្រ",
+    "8 · 视觉证据、照片和证明文件",
+    "8 · Bằng chứng trực quan, hình ảnh và tài liệu hỗ trợ",
+    "8 · Visual na ebidensya, mga larawan at mga sumusuportang dokumento",
+    "8 · Bukti visual, gambar & dokumen sokongan"
+  ],
+  "9 · Containment, correction & linked reinspection": [
+    "9 · ការទប់ស្កាត់ ការកែតម្រូវ និងការត្រួតពិនិត្យឡើងវិញដែលភ្ជាប់",
+    "9·遏制、纠正和相关的重新检查",
+    "9 · Ngăn chặn, điều chỉnh và tái kiểm tra liên kết",
+    "9 · Containment, pagwawasto, at naka-link na muling pagsisiyasat",
+    "9 · Penahanan, pembetulan & pemeriksaan semula berpaut"
+  ],
+  "A module-specific video has not been assigned yet": [
+    "វីដេអូ​ជាក់លាក់​នៃ​ម៉ូឌុល​មិន​ទាន់​ត្រូវ​បាន​កំណត់​នៅ​ឡើយ​ទេ។",
+    "尚未分配特定于模块的视频",
+    "Một video dành riêng cho mô-đun chưa được chỉ định",
+    "Ang isang video na tukoy sa module ay hindi pa naitalaga",
+    "Video khusus modul belum diberikan lagi"
+  ],
+  "A named higher-level manager can amend report values in Modify, with their YHR ID and reason. The original feeder evidence stays unchanged.": [
+    "អ្នកគ្រប់គ្រងកម្រិតខ្ពស់ដែលមានឈ្មោះអាចកែប្រែតម្លៃរបាយការណ៍នៅក្នុង Modify ដោយមានលេខសម្គាល់ YHR និងហេតុផលរបស់ពួកគេ។ ភស្តុតាងដើមរបស់ feeder នៅតែមិនផ្លាស់ប្តូរ។",
+    "指定的更高级别经理可以使用其 YHR ID 和原因修改“修改”中的报告值。原始馈线证据保持不变。",
+    "Người quản lý cấp cao hơn được chỉ định có thể sửa đổi giá trị báo cáo trong Sửa đổi, với ID YHR và lý do của họ. Bằng chứng trung chuyển ban đầu không thay đổi.",
+    "Maaaring baguhin ng isang pinangalanang manager sa mas mataas na antas ang mga halaga ng ulat sa Modify, kasama ang kanilang YHR ID at dahilan. Ang orihinal na ebidensya ng feeder ay nananatiling hindi nagbabago.",
+    "Pengurus peringkat tinggi yang dinamakan boleh meminda nilai laporan dalam Ubah Suai, dengan ID dan alasan YHR mereka. Bukti penyuap asal kekal tidak berubah."
+  ],
+  "A4 portrait · inspector training": [
+    "A4 portrait · ការបណ្តុះបណ្តាលអធិការ",
+    "A4肖像·检验员培训",
+    "Chân dung A4 · đào tạo thanh tra",
+    "A4 portrait · pagsasanay sa inspektor",
+    "Potret A4 · latihan inspektor"
+  ],
+  "AQL / policy label": [
+    "AQL / ស្លាកគោលនយោបាយ",
+    "AQL/政策标签",
+    "AQL/nhãn chính sách",
+    "AQL / label ng patakaran",
+    "Label AQL / polisi"
+  ],
+  "AQL label": [
+    "ស្លាក AQL",
+    "进货质量标签",
+    "Nhãn AQL",
+    "AQL label",
+    "Label AQL"
+  ],
+  "Ac / Re": [
+    "Ac/Re",
+    "交流/再电",
+    "Ac / Re",
+    "Ac / Re",
+    "Ac / Re"
+  ],
+  "Accept (Ac)": [
+    "យល់ព្រម (Ac)",
+    "接受（Ac）",
+    "Chấp nhận (Ac)",
+    "Tanggapin (Ac)",
+    "Terima (Ac)"
+  ],
+  "Acceptance reference": [
+    "ឯកសារយោងទទួលយក",
+    "验收参考",
+    "Tham chiếu chấp nhận",
+    "Sanggunian sa pagtanggap",
+    "Rujukan penerimaan"
+  ],
+  "Acknowledge / recheck": [
+    "ទទួលស្គាល់ / ពិនិត្យឡើងវិញ",
+    "确认/复核",
+    "Xác nhận/kiểm tra lại",
+    "Kilalanin / suriin muli",
+    "Akui / semak semula"
+  ],
+  "Acknowledge call-out": [
+    "ទទួលស្គាល់ការហៅចេញ",
+    "确认呼出",
+    "Xác nhận lời kêu gọi",
+    "Kilalanin ang call-out",
+    "Akui panggilan keluar"
+  ],
+  "Act on machine setting, needle, tension or oil issues.": [
+    "ធ្វើសកម្មភាពលើការកំណត់ម៉ាស៊ីន ម្ជុល ភាពតានតឹង ឬបញ្ហាប្រេង។",
+    "针对机器设置、针、张力或油问题采取行动。",
+    "Xử lý các vấn đề về cài đặt máy, kim, độ căng hoặc dầu.",
+    "Kumilos sa machine setting, karayom, tensyon o mga isyu sa langis.",
+    "Bertindak atas isu tetapan mesin, jarum, ketegangan atau minyak."
+  ],
+  "Action / owner:": [
+    "សកម្មភាព / ម្ចាស់៖",
+    "行动/所有者：",
+    "Hành động/chủ sở hữu:",
+    "Aksyon / may-ari:",
+    "Tindakan / pemilik:"
+  ],
+  "Action due": [
+    "សកម្មភាពដល់ពេលកំណត់",
+    "到期行动",
+    "Hành động đến hạn",
+    "Nakatakdang aksyon",
+    "Tindakan wajar"
+  ],
+  "Action owner · YHR ID": [
+    "ម្ចាស់សកម្មភាព · YHR ID",
+    "操作所有者 · YHR ID",
+    "Chủ sở hữu hành động · ID YHR",
+    "May-ari ng aksyon · YHR ID",
+    "Pemilik tindakan · ID YHR"
+  ],
+  "Action type *": [
+    "ប្រភេទ​សកម្មភាព *",
+    "动作类型 *",
+    "Loại hành động *",
+    "Uri ng pagkilos *",
+    "Jenis tindakan *"
+  ],
+  "Actual / spec": [
+    "ជាក់ស្តែង / spec",
+    "实际/规格",
+    "Thực tế/thông số",
+    "Aktwal / spec",
+    "Sebenar / spec"
+  ],
+  "Actual defective pieces": [
+    "បំណែកដែលខូចពិតប្រាកដ",
+    "实际缺陷件",
+    "Các mảnh bị lỗi thực tế",
+    "Aktwal na may sira na mga piraso",
+    "Kepingan rosak sebenar"
+  ],
+  "Actual mm": [
+    "ម.ម",
+    "实际毫米",
+    "mm thực tế",
+    "Aktwal na mm",
+    "mm sebenar"
+  ],
+  "Actual observation / grade": [
+    "ការសង្កេតជាក់ស្តែង / ថ្នាក់",
+    "实际观察/等级",
+    "Quan sát thực tế/điểm",
+    "Aktwal na pagmamasid / grado",
+    "Pemerhatian / gred sebenar"
+  ],
+  "Add finding": [
+    "បន្ថែមការស្វែងរក",
+    "添加发现",
+    "Thêm phát hiện",
+    "Magdagdag ng paghahanap",
+    "Tambah penemuan"
+  ],
+  "All machine IDs": [
+    "លេខសម្គាល់ម៉ាស៊ីនទាំងអស់។",
+    "所有机器 ID",
+    "Tất cả ID máy",
+    "Lahat ng machine ID",
+    "Semua ID mesin"
+  ],
+  "All numeric windows here are simulated approved recipes, not generic supplier settings.": [
+    "បង្អួចលេខទាំងអស់នៅទីនេះត្រូវបានក្លែងធ្វើរូបមន្តដែលបានអនុម័ត មិនមែនជាការកំណត់អ្នកផ្គត់ផ្គង់ទូទៅទេ។",
+    "这里的所有数字窗口都是模拟的批准配方，而不是通用的供应商设置。",
+    "Tất cả các cửa sổ số ở đây là các công thức mô phỏng đã được phê duyệt, không phải cài đặt chung của nhà cung cấp.",
+    "Ang lahat ng mga numerong window dito ay kunwa ng mga aprubadong recipe, hindi mga generic na setting ng supplier.",
+    "Semua tetingkap berangka di sini adalah simulasi resipi yang diluluskan, bukan tetapan pembekal generik."
+  ],
+  "All operator IDs": [
+    "លេខសម្គាល់ប្រតិបត្តិករទាំងអស់។",
+    "所有操作员 ID",
+    "Tất cả ID nhà điều hành",
+    "Lahat ng operator ID",
+    "Semua ID operator"
+  ],
+  "All required demo checks, evidence and prerequisite approvals passed for this recorded scope.": [
+    "ការត្រួតពិនិត្យសាកល្បង ភស្តុតាង និងការយល់ព្រមជាចាំបាច់ទាំងអស់បានឆ្លងកាត់សម្រាប់វិសាលភាពដែលបានកត់ត្រានេះ។",
+    "该记录范围的所有必需的演示检查、证据和先决条件批准均已通过。",
+    "Tất cả các bước kiểm tra demo bắt buộc, bằng chứng và phê duyệt tiên quyết đều được thông qua cho phạm vi được ghi lại này.",
+    "Ang lahat ng kinakailangang demo check, ebidensya at mga kinakailangang pag-apruba ay naipasa para sa naitalang saklaw na ito.",
+    "Semua semakan demo yang diperlukan, bukti dan kelulusan prasyarat diluluskan untuk skop yang direkodkan ini."
+  ],
+  "Amended by": [
+    "កែប្រែដោយ",
+    "修订者",
+    "Được sửa đổi bởi",
+    "Sinusog ng",
+    "Dipinda oleh"
+  ],
+  "Any failed piece or failed setup holds the line. Supervisor and mechanic correct the cause; QC repeats a new trial.": [
+    "រាល់​ការ​ដំឡើង​ដែល​បរាជ័យ ឬ​ការ​ដំឡើង​មិន​បាន​សម្រេច​ត្រូវ​បាន​រក្សា​នូវ​បន្ទាត់។ អ្នកត្រួតពិនិត្យ និងមេកានិក កែតម្រូវមូលហេតុ; QC ធ្វើការសាកល្បងម្តងទៀត។",
+    "任何失败的作品或失败的设置都会保持领先。主管和机械师纠正原因； QC 重复新的试验。",
+    "Bất kỳ phần nào bị lỗi hoặc thiết lập không thành công đều giữ nguyên đường dây. Giám sát và thợ sửa chữa nguyên nhân; QC lặp lại thử nghiệm mới.",
+    "Ang anumang nabigong piraso o nabigong setup ay humahawak sa linya. Itama ng superbisor at mekaniko ang dahilan; Inuulit ng QC ang isang bagong pagsubok.",
+    "Mana-mana bahagian yang gagal atau persediaan yang gagal memegang baris. Penyelia dan mekanik membetulkan punca; QC mengulangi percubaan baharu."
+  ],
+  "Appearance / stains": [
+    "រូបរាង / ស្នាមប្រឡាក់",
+    "外观/污渍",
+    "Ngoại hình/vết bẩn",
+    "Hitsura / mantsa",
+    "Penampilan / noda"
+  ],
+  "Approve startup": [
+    "អនុម័តការចាប់ផ្តើម",
+    "批准启动",
+    "Phê duyệt khởi động",
+    "Aprubahan ang pagsisimula",
+    "Luluskan permulaan"
+  ],
+  "Approved appearance and measured placement tolerance": [
+    "រូបរាងដែលបានអនុម័ត និងការវាស់វែងភាពអត់ធ្មត់នៃទីតាំង",
+    "批准的外观和测量的放置公差",
+    "Hình thức đã được phê duyệt và dung sai vị trí đo được",
+    "Naaprubahan ang hitsura at nasusukat na tolerance sa pagkakalagay",
+    "Penampilan yang diluluskan dan toleransi penempatan yang diukur"
+  ],
+  "Approved buyer rub method and grade limits": [
+    "វិធីសាស្ត្រជូតអ្នកទិញដែលបានអនុម័ត និងកម្រិតថ្នាក់",
+    "批准的买家摩擦方法和等级限制",
+    "Phương pháp chà của người mua đã được phê duyệt và giới hạn cấp độ",
+    "Inaprubahang paraan ng buyer rub at mga limitasyon sa grado",
+    "Kaedah gosok pembeli yang diluluskan dan had gred"
+  ],
+  "Approved buyer wash protocol, cycles and appearance/grade limits": [
+    "ពិធីការលាងសម្អាតរបស់អ្នកទិញដែលបានអនុម័ត វដ្ត និងរូបរាង/កម្រិតកម្រិត",
+    "经批准的买方清洗方案、周期和外观/等级限制",
+    "Quy trình giặt, chu kỳ và hình thức/cấp độ được người mua phê duyệt",
+    "Inaprubahang buyer wash protocol, mga cycle at mga limitasyon sa hitsura/grado",
+    "Protokol cucian pembeli yang diluluskan, kitaran dan had penampilan/gred"
+  ],
+  "Approved module video is not assigned. Use the current SOP and buyer instructions.": [
+    "វីដេអូម៉ូឌុលដែលបានអនុម័តមិនត្រូវបានចាត់តាំងទេ។ ប្រើ SOP បច្ចុប្បន្ន និងការណែនាំអ្នកទិញ។",
+    "未分配批准的模块视频。使用当前的 SOP 和买家说明。",
+    "Video mô-đun đã được phê duyệt không được chỉ định. Sử dụng SOP hiện hành và hướng dẫn dành cho người mua.",
+    "Ang naaprubahang module na video ay hindi itinalaga. Gamitin ang kasalukuyang SOP at mga tagubilin ng mamimili.",
+    "Video modul yang diluluskan tidak diberikan. Gunakan SOP semasa dan arahan pembeli."
+  ],
+  "Approved pattern / marker": [
+    "គំរូ / សញ្ញាសម្គាល់ដែលបានអនុម័ត",
+    "批准的图案/标记",
+    "Mẫu/điểm đánh dấu đã được phê duyệt",
+    "Inaprubahang pattern / marker",
+    "Corak / penanda yang diluluskan"
+  ],
+  "Approved sample / tech pack ref *": [
+    "គំរូដែលបានអនុម័ត / កញ្ចប់បច្ចេកទេសយោង *",
+    "批准的样品/技术包参考*",
+    "Mẫu đã được phê duyệt / giới thiệu gói công nghệ *",
+    "Inaprubahang sample / tech pack ref *",
+    "Rujukan sampel / pek teknologi yang diluluskan *"
+  ],
+  "Approved sample reference": [
+    "ឯកសារយោងគំរូដែលបានអនុម័ត",
+    "批准的样品参考",
+    "Tài liệu tham khảo mẫu đã được phê duyệt",
+    "Inaprubahang sample reference",
+    "Rujukan sampel yang diluluskan"
+  ],
+  "Approved sample:": [
+    "គំរូដែលបានអនុម័ត៖",
+    "批准样品：",
+    "Mẫu đã được phê duyệt:",
+    "Naaprubahang sample:",
+    "Sampel yang diluluskan:"
+  ],
+  "Art / reference:": [
+    "សិល្បៈ/ឯកសារយោង៖",
+    "艺术/参考：",
+    "Nghệ thuật/tham khảo:",
+    "Sining / sanggunian:",
+    "Seni / rujukan:"
+  ],
+  "Artwork / placement mismatch": [
+    "ការងារសិល្បៈ / ការដាក់មិនត្រូវគ្នា។",
+    "图稿/位置不匹配",
+    "Tác phẩm nghệ thuật/vị trí không khớp",
+    "Hindi tugma ang likhang sining / pagkakalagay",
+    "Karya seni / peletakan tidak padan"
+  ],
+  "At the station": [
+    "នៅស្ថានីយ៍",
+    "在车站",
+    "Tại nhà ga",
+    "Sa istasyon",
+    "Di stesen"
+  ],
+  "Attach defect / location photo": [
+    "ភ្ជាប់ពិការភាព / រូបថតទីតាំង",
+    "附上缺陷/位置照片",
+    "Đính kèm ảnh lỗi/vị trí",
+    "Maglakip ng depekto / larawan ng lokasyon",
+    "Lampirkan foto kecacatan / lokasi"
+  ],
+  "Audit a sewing line during production.": [
+    "ធ្វើសវនកម្មខ្សែសង្វាក់ដេរកំឡុងពេលផលិត។",
+    "在生产过程中审核缝纫线。",
+    "Kiểm tra dây chuyền may trong quá trình sản xuất.",
+    "I-audit ang isang linya ng pananahi sa panahon ng paggawa.",
+    "Audit talian jahitan semasa pengeluaran."
+  ],
+  "Audit area / line": [
+    "តំបន់សវនកម្ម / បន្ទាត់",
+    "审核区/线",
+    "Khu vực/tuyến kiểm tra",
+    "Lugar / linya ng pag-audit",
+    "Kawasan / talian audit"
+  ],
+  "Audit sampled garments and operations on one sewing line. Record defects and immediate correction.": [
+    "សវនកម្មបានយកគំរូសម្លៀកបំពាក់ និងប្រតិបត្តិការលើខ្សែកាត់ដេរមួយ។ កត់ត្រាពិការភាព និងការកែតម្រូវភ្លាមៗ។",
+    "对一条缝纫线上的服装抽样和操作进行审核。记录缺陷并立即纠正。",
+    "Kiểm tra hàng may mặc lấy mẫu và các hoạt động trên một dây chuyền may. Ghi lại những khiếm khuyết và sửa chữa ngay lập tức.",
+    "I-audit ang mga sample na kasuotan at operasyon sa isang linya ng pananahi. Magtala ng mga depekto at agarang pagwawasto.",
+    "Audit sampel pakaian dan operasi pada satu talian jahitan. Rekod kecacatan dan pembetulan segera."
+  ],
+  "Audit scope": [
+    "វិសាលភាពសវនកម្ម",
+    "审核范围",
+    "Phạm vi kiểm toán",
+    "Saklaw ng pag-audit",
+    "Skop audit"
+  ],
+  "Authorise scope release": [
+    "អនុញ្ញាតការចេញផ្សាយវិសាលភាព",
+    "授权范围发布",
+    "Cho phép phát hành phạm vi",
+    "Pahintulutan ang paglabas ng saklaw",
+    "Benarkan pelepasan skop"
+  ],
+  "Authorised floor connection": [
+    "ការតភ្ជាប់ជាន់ដែលមានការអនុញ្ញាត",
+    "授权楼层连接",
+    "Kết nối sàn được ủy quyền",
+    "Awtorisadong koneksyon sa sahig",
+    "Sambungan lantai yang dibenarkan"
+  ],
+  "Awaiting QA leader / manager": [
+    "កំពុងរង់ចាំអ្នកដឹកនាំ/អ្នកគ្រប់គ្រង QA",
+    "等待 QA 领导/经理",
+    "Đang chờ trưởng nhóm/quản lý QA",
+    "Naghihintay ng pinuno / tagapamahala ng QA",
+    "Menunggu ketua / pengurus QA"
+  ],
+  "Awaiting verification": [
+    "កំពុងរង់ចាំការផ្ទៀងផ្ទាត់",
+    "等待验证",
+    "Đang chờ xác minh",
+    "Naghihintay ng pagpapatunay",
+    "Menunggu pengesahan"
+  ],
+  "Back to YQMS": [
+    "ត្រឡប់ទៅ YQMS វិញ",
+    "返回YQMS",
+    "Quay lại YQMS",
+    "Bumalik sa YQMS",
+    "Kembali ke YQMS"
+  ],
+  "Barcode / SKU": [
+    "បាកូដ / SKU",
+    "条形码/SKU",
+    "Mã vạch / SKU",
+    "Barcode / SKU",
+    "Kod Bar / SKU"
+  ],
+  "Before dry room (% RH)": [
+    "មុនពេលបន្ទប់ស្ងួត (% RH)",
+    "干燥室前（%RH）",
+    "Trước phòng khô (%RH)",
+    "Bago ang tuyong silid (% RH)",
+    "Sebelum bilik kering (% RH)"
+  ],
+  "Before release": [
+    "មុនពេលចេញផ្សាយ",
+    "发布前",
+    "Trước khi phát hành",
+    "Bago ilabas",
+    "Sebelum dikeluarkan"
+  ],
+  "Bottom reading (% RH)": [
+    "ការអានបាត (% RH)",
+    "底部读数 (% RH)",
+    "Số đọc đáy (% RH)",
+    "Ibabang pagbabasa (% RH)",
+    "Bacaan bawah (% RH)"
+  ],
+  "Browser storage unavailable: changes are retained only until this page closes.": [
+    "ការផ្ទុកកម្មវិធីរុករកមិនអាចប្រើបានទេ៖ ការផ្លាស់ប្តូរត្រូវបានរក្សាទុករហូតដល់ទំព័រនេះបិទ។",
+    "浏览器存储不可用：更改仅保留到此页面关闭为止。",
+    "Không có bộ nhớ trình duyệt: các thay đổi chỉ được giữ lại cho đến khi trang này đóng lại.",
+    "Hindi available ang imbakan ng browser: ang mga pagbabago ay pananatilihin lamang hanggang sa magsara ang pahinang ito.",
+    "Storan penyemak imbas tidak tersedia: perubahan hanya dikekalkan sehingga halaman ini ditutup."
+  ],
+  "Bundle / lot scope": [
+    "កញ្ចប់ / វិសាលភាពច្រើន។",
+    "捆绑/批次范围",
+    "Phạm vi gói/lô",
+    "Saklaw ng bundle / lot",
+    "Skop bundle / lot"
+  ],
+  "Bundle / scope": [
+    "កញ្ចប់ / វិសាលភាព",
+    "捆绑/范围",
+    "Gói/phạm vi",
+    "Bundle / saklaw",
+    "Ikatan / skop"
+  ],
+  "Bundle ID": [
+    "លេខសម្គាល់កញ្ចប់",
+    "捆绑包 ID",
+    "ID gói",
+    "Bundle ID",
+    "ID Himpunan"
+  ],
+  "Buyer / brand *": [
+    "អ្នកទិញ / ម៉ាក *",
+    "买家/品牌 *",
+    "Người mua/thương hiệu *",
+    "Mamimili / tatak *",
+    "Pembeli / jenama *"
+  ],
+  "Buyer / inspection agency": [
+    "អ្នកទិញ / ភ្នាក់ងារត្រួតពិនិត្យ",
+    "买家/检验机构",
+    "Người mua/cơ quan kiểm tra",
+    "Mamimili / ahensya ng inspeksyon",
+    "Pembeli / agensi pemeriksaan"
+  ],
+  "Buyer / third-party inspector with factory QA coordinator; confirm actual YHR assignment": [
+    "អ្នកទិញ / អធិការភាគីទីបីជាមួយអ្នកសម្របសម្រួល QA រោងចក្រ; បញ្ជាក់ការចាត់តាំង YHR ពិតប្រាកដ",
+    "买家/第三方检验员与工厂 QA 协调员；确认实际的 YHR 分配",
+    "Người mua / thanh tra bên thứ ba với điều phối viên QA của nhà máy; xác nhận phân công YHR thực tế",
+    "Mamimili / third-party na inspektor na may factory QA coordinator; kumpirmahin ang aktwal na pagtatalaga ng YHR",
+    "Pembeli / pemeriksa pihak ketiga dengan penyelaras QA kilang; mengesahkan tugasan YHR sebenar"
+  ],
+  "Buyer delivery": [
+    "ការដឹកជញ្ជូនអ្នកទិញ",
+    "买家发货",
+    "người mua giao hàng",
+    "Paghahatid ng mamimili",
+    "Penghantaran pembeli"
+  ],
+  "Buyer final inspection": [
+    "ការត្រួតពិនិត្យចុងក្រោយរបស់អ្នកទិញ",
+    "买家最终检验",
+    "Người mua kiểm tra lần cuối",
+    "Panghuling inspeksyon ng mamimili",
+    "Pemeriksaan akhir pembeli"
+  ],
+  "Buyer point": [
+    "ចំណុចអ្នកទិញ",
+    "买家点",
+    "điểm người mua",
+    "Puntos ng mamimili",
+    "Titik pembeli"
+  ],
+  "Buyer report": [
+    "របាយការណ៍អ្នកទិញ",
+    "买家报告",
+    "Báo cáo người mua",
+    "Ulat ng mamimili",
+    "Laporan pembeli"
+  ],
+  "Buyer report reference": [
+    "ឯកសារយោងរបាយការណ៍អ្នកទិញ",
+    "买家报告参考",
+    "Tham chiếu báo cáo người mua",
+    "Sanggunian ng ulat ng mamimili",
+    "Rujukan laporan pembeli"
+  ],
+  "Buyer requirement": [
+    "តម្រូវការរបស់អ្នកទិញ",
+    "买家要求",
+    "Yêu cầu của người mua",
+    "Kinakailangan ng mamimili",
+    "Keperluan pembeli"
+  ],
+  "Buyer style no": [
+    "រចនាប័ទ្មអ្នកទិញលេខ",
+    "买家款式无",
+    "Phong cách người mua không",
+    "Estilo ng mamimili no",
+    "Gaya pembeli no"
+  ],
+  "CAP decision": [
+    "ការសម្រេចចិត្ត CAP",
+    "CAP 决定",
+    "Quyết định CAP",
+    "desisyon ng CAP",
+    "keputusan CAP"
+  ],
+  "CAP decisions": [
+    "ការសម្រេចចិត្តរបស់ CAP",
+    "CAP 决策",
+    "quyết định CAP",
+    "Mga desisyon ng CAP",
+    "keputusan CAP"
+  ],
+  "Call the line leader, supervisor and mechanic when relevant.": [
+    "ហៅទូរស័ព្ទទៅអ្នកដឹកនាំ អ្នកគ្រប់គ្រង និងមេកានិក នៅពេលពាក់ព័ន្ធ។",
+    "相关时致电生产线领导、主管和机械师。",
+    "Gọi cho trưởng dây chuyền, người giám sát và thợ máy khi có liên quan.",
+    "Tawagan ang pinuno ng linya, superbisor at mekaniko kapag may kaugnayan.",
+    "Hubungi ketua barisan, penyelia dan mekanik apabila berkaitan."
+  ],
+  "Call-out:": [
+    "ការហៅចេញ៖",
+    "呼出：",
+    "Lời kêu gọi:",
+    "Call-out:",
+    "Panggilan keluar:"
+  ],
+  "Carton dimensions (cm)": [
+    "ទំហំប្រអប់ (សង់ទីម៉ែត្រ)",
+    "纸箱尺寸（厘米）",
+    "Kích thước thùng carton (cm)",
+    "Mga sukat ng karton (cm)",
+    "Dimensi kadbod (cm)"
+  ],
+  "Carton dimensions / unit": [
+    "ទំហំប្រអប់ / ឯកតា",
+    "纸箱尺寸/单位",
+    "Kích thước/đơn vị thùng carton",
+    "Mga sukat / yunit ng karton",
+    "Dimensi / unit kadbod"
+  ],
+  "Carton dimensions:": [
+    "ទំហំប្រអប់៖",
+    "纸箱尺寸：",
+    "Kích thước thùng carton:",
+    "Mga sukat ng karton:",
+    "Dimensi kadbod:"
+  ],
+  "Carton marks": [
+    "សញ្ញាសម្គាល់កេស",
+    "纸箱标记",
+    "Nhãn thùng carton",
+    "Mga marka ng karton",
+    "Tanda kadbod"
+  ],
+  "Carton number": [
+    "លេខកេស",
+    "箱数",
+    "Số thùng carton",
+    "Numero ng karton",
+    "Nombor kadbod"
+  ],
+  "Cause, correction, photo reference or instructions": [
+    "មូលហេតុ ការកែតម្រូវ ឯកសារយោងរូបថត ឬការណែនាំ",
+    "原因、更正、照片参考或说明",
+    "Nguyên nhân, cách khắc phục, tham khảo hình ảnh hoặc hướng dẫn",
+    "Sanhi, pagwawasto, sanggunian sa larawan o mga tagubilin",
+    "Punca, pembetulan, rujukan foto atau arahan"
+  ],
+  "Centimetres": [
+    "សង់ទីម៉ែត្រ",
+    "厘米",
+    "centimét",
+    "sentimetro",
+    "Sentimeter"
+  ],
+  "Check / acceptance reference": [
+    "ពិនិត្យ / ឯកសារយោង",
+    "检查/验收参考",
+    "Tham chiếu kiểm tra/chấp nhận",
+    "Suriin / sanggunian sa pagtanggap",
+    "Rujukan semak / penerimaan"
+  ],
+  "Check every completed sewn garment before it moves to finishing.": [
+    "ពិនិត្យមើលរាល់សម្លៀកបំពាក់ដែលបានដេររួចរាល់មុនពេលវាផ្លាស់ទីទៅការបញ្ចប់។",
+    "在进行整理之前检查每件已完成的缝制服装。",
+    "Kiểm tra từng sản phẩm may đã hoàn thiện trước khi chuyển sang khâu hoàn thiện.",
+    "Suriin ang bawat nakumpletong tinahi na damit bago ito lumipat sa pagtatapos.",
+    "Periksa setiap pakaian yang telah dijahit sebelum ia bergerak ke kemasan."
+  ],
+  "Check machine settings and each critical operator’s skill. Hold and correct defects.": [
+    "ពិនិត្យការកំណត់ម៉ាស៊ីន និងជំនាញរបស់ប្រតិបត្តិករសំខាន់ៗនីមួយៗ។ សង្កត់និងកែកំហុស។",
+    "检查机器设置和每个关键操作员的技能。保留并纠正缺陷。",
+    "Kiểm tra cài đặt máy và kỹ năng của từng người vận hành quan trọng. Giữ và sửa lỗi.",
+    "Suriin ang mga setting ng makina at ang bawat kritikal na kasanayan ng operator. Hawakan at itama ang mga depekto.",
+    "Semak tetapan mesin dan setiap kemahiran pengendali kritikal. Tahan dan betulkan kecacatan."
+  ],
+  "Check one finished garment": [
+    "ពិនិត្យមើលសម្លៀកបំពាក់ដែលបានបញ្ចប់",
+    "检查一件成品服装",
+    "Kiểm tra một bộ quần áo đã hoàn thành",
+    "Suriin ang isang tapos na damit",
+    "Periksa satu pakaian yang telah siap"
+  ],
+  "Check out garments": [
+    "ពិនិត្យមើលសម្លៀកបំពាក់",
+    "检查服装",
+    "Kiểm tra quần áo",
+    "Tingnan ang mga kasuotan",
+    "Semak pakaian"
+  ],
+  "Check out only garments with a passed end-line or passed reinspection record before handing them to finishing.": [
+    "សូមពិនិត្យមើលតែសម្លៀកបំពាក់ដែលមានខ្សែចុង ឬឆ្លងកាត់ការត្រួតពិនិត្យឡើងវិញ មុនពេលប្រគល់ឱ្យពួកគេបញ្ចប់។",
+    "仅检查已通过终点线或通过复检记录的服装，然后再进行整理。",
+    "Chỉ kiểm tra những sản phẩm may mặc đã qua khâu cuối hoặc đã qua hồ sơ kiểm tra lại trước khi bàn giao cho công đoạn hoàn thiện.",
+    "Tingnan lamang ang mga kasuotan na may nakapasa na end-line o nakapasa sa reinspection record bago ibigay ang mga ito sa pagtatapos.",
+    "Semak hanya pakaian dengan garis akhir yang diluluskan atau rekod pemeriksaan semula yang diluluskan sebelum menyerahkannya kepada kemasan."
+  ],
+  "Check the first 10–20 pieces with the line team. Record the approved sample, machine setup, skill check and defects. A failed trial stays on hold.": [
+    "ពិនិត្យមើល 10-20 បំណែកដំបូងជាមួយក្រុមបន្ទាត់។ កត់ត្រាគំរូដែលបានអនុម័ត ការដំឡើងម៉ាស៊ីន ការត្រួតពិនិត្យជំនាញ និងពិការភាព។ ការសាកល្បងដែលបរាជ័យត្រូវរង់ចាំ។",
+    "与生产线团队一起检查前 10-20 件作品。记录批准的样品、机器设置、技能检查和缺陷。失败的审判被搁置。",
+    "Kiểm tra 10–20 miếng đầu tiên với đội xếp hàng. Ghi lại mẫu đã được phê duyệt, thiết lập máy, kiểm tra kỹ năng và lỗi. Một thử nghiệm thất bại vẫn được giữ lại.",
+    "Tingnan ang unang 10–20 piraso sa line team. Itala ang inaprubahang sample, setup ng makina, pagsusuri sa kasanayan at mga depekto. Ang isang nabigong pagsubok ay nananatiling naka-hold.",
+    "Semak 10–20 keping pertama dengan pasukan barisan. Rekodkan sampel yang diluluskan, persediaan mesin, semakan kemahiran dan kecacatan. Percubaan yang gagal kekal ditahan."
+  ],
+  "Checked / defective": [
+    "បានពិនិត្យ / ខូច",
+    "检查/有缺陷",
+    "Đã kiểm tra/bị lỗi",
+    "Nasuri / may sira",
+    "Disemak / rosak"
+  ],
+  "Checked against spec · pass": [
+    "បាន​ពិនិត្យ​មើល​លក្ខណៈ​ពិសេស · ឆ្លង",
+    "根据规格检查·通过",
+    "Đã kiểm tra thông số kỹ thuật · đạt",
+    "Sinuri laban sa spec · pass",
+    "Disemak terhadap spesifikasi · lulus"
+  ],
+  "Checked pcs": [
+    "បានពិនិត្យ pcs",
+    "检查件数",
+    "chiếc đã kiểm tra",
+    "Sinuri ang mga PC",
+    "Buah yang disemak"
+  ],
+  "Checked pieces": [
+    "បំណែកដែលបានត្រួតពិនិត្យ",
+    "格纹件",
+    "quân cờ được kiểm tra",
+    "Mga naka-check na piraso",
+    "Kepingan diperiksa"
+  ],
+  "Checked · pass": [
+    "បានពិនិត្យ · ឆ្លងកាត់",
+    "已检查·通过",
+    "Đã kiểm tra · vượt qua",
+    "Sinuri · pass",
+    "Disemak · lulus"
+  ],
+  "Checking pad authorisation…": [
+    "កំពុង​ពិនិត្យ​ការ​អនុញ្ញាត​បន្ទះ...",
+    "检查垫授权...",
+    "Đang kiểm tra giấy phép pad…",
+    "Sinusuri ang pahintulot ng pad...",
+    "Menyemak kebenaran pad…"
+  ],
+  "Choose a positive sample piece within the checked quantity before entering measurements.": [
+    "ជ្រើសរើសដុំគំរូវិជ្ជមានក្នុងបរិមាណដែលបានពិនិត្យមុនពេលបញ្ចូលការវាស់វែង។",
+    "在输入测量之前，在检查的数量内选择一个阳性样品。",
+    "Chọn một mẫu dương tính trong số lượng đã kiểm tra trước khi nhập số đo.",
+    "Pumili ng positibong sample na piraso sa loob ng nasuri na dami bago ipasok ang mga sukat.",
+    "Pilih sekeping sampel positif dalam kuantiti yang diperiksa sebelum memasukkan ukuran."
+  ],
+  "Choose an independent leader, supervisor or manager in this inspector’s YHR reporting chain.": [
+    "ជ្រើសរើសអ្នកដឹកនាំឯករាជ្យ អ្នកគ្រប់គ្រង ឬអ្នកគ្រប់គ្រងនៅក្នុងខ្សែសង្វាក់រាយការណ៍ YHR របស់អធិការនេះ។",
+    "在该检查员的 YHR 报告链中选择一名独立领导者、主管或经理。",
+    "Chọn một người lãnh đạo, người giám sát hoặc người quản lý độc lập trong chuỗi báo cáo YHR của thanh tra viên này.",
+    "Pumili ng independiyenteng pinuno, superbisor o tagapamahala sa chain ng pag-uulat ng YHR ng inspektor na ito.",
+    "Pilih pemimpin, penyelia atau pengurus bebas dalam rantaian pelaporan YHR pemeriksa ini."
+  ],
+  "Choose an inspector from the YHR QA directory before submitting.": [
+    "ជ្រើសរើសអ្នកត្រួតពិនិត្យពីថត YHR QA មុនពេលបញ្ជូន។",
+    "提交前从 YHR QA 目录中选择一名检查员。",
+    "Chọn một thanh tra viên từ thư mục YHR QA trước khi gửi.",
+    "Pumili ng inspektor mula sa direktoryo ng YHR QA bago isumite.",
+    "Pilih pemeriksa daripada direktori QA YHR sebelum menyerahkan."
+  ],
+  "Choose photo or PDF · up to 8 MB": [
+    "ជ្រើសរើសរូបថត ឬ PDF · រហូតដល់ 8 MB",
+    "选择照片或 PDF · 最大 8 MB",
+    "Chọn ảnh hoặc PDF · tối đa 8 MB",
+    "Pumili ng larawan o PDF · hanggang 8 MB",
+    "Pilih foto atau PDF · sehingga 8 MB"
+  ],
+  "Classify defective pieces with defect events; event count can exceed defective pieces, not fall below them.": [
+    "ចាត់ថ្នាក់បំណែកដែលមានបញ្ហាជាមួយនឹងព្រឹត្តិការណ៍ពិការភាព; ចំនួនព្រឹត្តិការណ៍អាចលើសពីបំណែកដែលខូច មិនត្រូវធ្លាក់នៅក្រោមពួកវាឡើយ។",
+    "根据缺陷事件对缺陷件进行分类；事件计数可以超过缺陷件数，而不是低于缺陷件数。",
+    "Phân loại các sản phẩm bị lỗi với các sự kiện lỗi; số lượng sự kiện có thể vượt quá các phần bị lỗi, không giảm xuống dưới chúng.",
+    "Pag-uri-uriin ang mga may sira na piraso na may mga kaganapang depekto; Ang bilang ng kaganapan ay maaaring lumampas sa mga may sira na piraso, hindi bababa sa kanila.",
+    "Kelaskan kepingan yang rosak dengan kejadian kecacatan; kiraan acara boleh melebihi kepingan yang rosak, tidak jatuh di bawahnya."
+  ],
+  "Clear the existing readings before changing units, to keep the report consistent.": [
+    "សម្អាតការអានដែលមានស្រាប់មុនពេលផ្លាស់ប្តូរឯកតា ដើម្បីរក្សារបាយការណ៍ឱ្យជាប់លាប់។",
+    "在更改单位之前清除现有读数，以保持报告一致。",
+    "Xóa các số đọc hiện có trước khi thay đổi đơn vị để giữ cho báo cáo nhất quán.",
+    "I-clear ang mga kasalukuyang pagbabasa bago magpalit ng mga unit, para panatilihing pare-pareho ang ulat.",
+    "Kosongkan bacaan sedia ada sebelum menukar unit, untuk memastikan laporan konsisten."
+  ],
+  "Close decoration details": [
+    "បិទព័ត៌មានលម្អិតនៃការតុបតែង",
+    "关闭装修细节",
+    "Đóng chi tiết trang trí",
+    "Isara ang mga detalye ng dekorasyon",
+    "Tutup butiran hiasan"
+  ],
+  "Close module dialog": [
+    "បិទប្រអប់ម៉ូឌុល",
+    "关闭模块对话框",
+    "Đóng hộp thoại mô-đun",
+    "Isara ang dialog ng module",
+    "Tutup dialog modul"
+  ],
+  "Close review": [
+    "បិទការពិនិត្យ",
+    "关闭审查",
+    "Đóng đánh giá",
+    "Isara ang pagsusuri",
+    "Tutup ulasan"
+  ],
+  "Colour *": [
+    "ពណ៌ *",
+    "颜色 *",
+    "Màu sắc *",
+    "Kulay *",
+    "Warna *"
+  ],
+  "Colour / dates": [
+    "ពណ៌ / កាលបរិច្ឆេទ",
+    "颜色/日期",
+    "Màu sắc/ngày tháng",
+    "Kulay / petsa",
+    "Warna / tarikh"
+  ],
+  "Comment": [
+    "មតិយោបល់",
+    "评论",
+    "Bình luận",
+    "Magkomento",
+    "Komen"
+  ],
+  "Compare the identified lay and panels with the approved pattern. Demo dimensions ±2 mm; the buyer plan applies.": [
+    "ប្រៀបធៀបស្រទាប់ និងបន្ទះដែលបានកំណត់ជាមួយនឹងលំនាំដែលបានអនុម័ត។ វិមាត្រសាកល្បង ± 2 មម; ផែនការអ្នកទិញត្រូវបានអនុវត្ត។",
+    "将确定的布局和面板与批准的图案进行比较。演示尺寸±2毫米；买方计划适用。",
+    "So sánh lớp và tấm đã được xác định với mẫu đã được phê duyệt. Kích thước demo ±2 mm; kế hoạch của người mua được áp dụng.",
+    "Ihambing ang natukoy na lay at mga panel sa naaprubahang pattern. Mga dimensyon ng demo ±2 mm; naaangkop ang plano ng mamimili.",
+    "Bandingkan lay dan panel yang dikenal pasti dengan corak yang diluluskan. Dimensi demo ±2 mm; pelan pembeli terpakai."
+  ],
+  "Complete every topic-specific check before submitting.": [
+    "បំពេញរាល់ការត្រួតពិនិត្យប្រធានបទជាក់លាក់មុនពេលដាក់ស្នើ។",
+    "提交前完成每项特定主题的检查。",
+    "Hoàn thành mọi kiểm tra theo chủ đề cụ thể trước khi gửi.",
+    "Kumpletuhin ang bawat pagsusuri na tukoy sa paksa bago isumite.",
+    "Lengkapkan setiap semakan khusus topik sebelum menyerahkan."
+  ],
+  "Complete meeting ID, date, style, buyer and minutes.": [
+    "បំពេញលេខសម្គាល់ការប្រជុំ កាលបរិច្ឆេទ រចនាប័ទ្ម អ្នកទិញ និងនាទី។",
+    "完整的会议 ID、日期、风格、买家和会议记录。",
+    "Hoàn thành ID cuộc họp, ngày, phong cách, người mua và biên bản.",
+    "Kumpletuhin ang ID ng pulong, petsa, istilo, mamimili at minuto.",
+    "Lengkapkan ID mesyuarat, tarikh, gaya, pembeli dan minit mesyuarat."
+  ],
+  "Confidential photos and personal details from the supplied reports are not published. Example reference cards do not claim that a file exists.": [
+    "រូបថតសម្ងាត់ និងព័ត៌មានលម្អិតផ្ទាល់ខ្លួនពីរបាយការណ៍ដែលបានផ្តល់មិនត្រូវបានបោះពុម្ពផ្សាយទេ។ ឧទាហរណ៍កាតយោងមិនអះអាងថាមានឯកសារទេ។",
+    "所提供报告中的机密照片和个人详细信息不会被公开。示例参考卡不声明文件存在。",
+    "Hình ảnh bí mật và thông tin cá nhân từ các báo cáo được cung cấp không được công bố. Thẻ tham chiếu mẫu không khẳng định rằng một tập tin tồn tại.",
+    "Ang mga kumpidensyal na larawan at mga personal na detalye mula sa mga ibinigay na ulat ay hindi nai-publish. Ang mga halimbawang reference card ay hindi inaangkin na mayroong file.",
+    "Foto sulit dan butiran peribadi daripada laporan yang dibekalkan tidak diterbitkan. Contoh kad rujukan tidak mendakwa bahawa fail wujud."
+  ],
+  "Configuration / size": [
+    "ការកំណត់រចនាសម្ព័ន្ធ / ទំហំ",
+    "配置/尺寸",
+    "Cấu hình/kích thước",
+    "Configuration / laki",
+    "Konfigurasi / saiz"
+  ],
+  "Confirm every piece passed end-line QC or reinspection.": [
+    "បញ្ជាក់រាល់បំណែកដែលបានឆ្លងកាត់ QC ឬការត្រួតពិនិត្យឡើងវិញ។",
+    "确认每件产品都通过了终端质量控制或重新检验。",
+    "Xác nhận mọi sản phẩm đều đã vượt qua QC cuối tuyến hoặc kiểm tra lại.",
+    "Kumpirmahin ang bawat pirasong pumasa sa end-line QC o muling pagsisiyasat.",
+    "Sahkan setiap bahagian yang lulus QC talian akhir atau pemeriksaan semula."
+  ],
+  "Confirm order, style, material / lot and the approved reference.": [
+    "បញ្ជាក់ការបញ្ជាទិញ រចនាប័ទ្ម សម្ភារៈ/ច្រើន និងឯកសារយោងដែលបានអនុម័ត។",
+    "确认订单、款式、材料/批次和批准的参考。",
+    "Xác nhận đơn hàng, kiểu dáng, chất liệu/lô và tài liệu tham khảo đã được phê duyệt.",
+    "Kumpirmahin ang pagkakasunud-sunod, estilo, materyal / lot at ang naaprubahang sanggunian.",
+    "Sahkan pesanan, gaya, bahan / lot dan rujukan yang diluluskan."
+  ],
+  "Connected PA / Big Brain": [
+    "បានភ្ជាប់ PA / Big Brain",
+    "互联 PA / 大大脑",
+    "PA được kết nối / Bộ não lớn",
+    "Konektado ang PA / Malaking Utak",
+    "Bersambung PA / Otak Besar"
+  ],
+  "Contain defects and tell the line leader and sewing supervisor.": [
+    "មានពិការភាព ហើយប្រាប់អ្នកដឹកនាំជួរ និងអ្នកគ្រប់គ្រងផ្នែកដេរ។",
+    "遏制缺陷并告知生产线领导和缝纫主管。",
+    "Kiểm soát các khuyết tật và thông báo cho trưởng dây chuyền và giám sát may.",
+    "Maglaman ng mga depekto at sabihin sa pinuno ng linya at superbisor sa pananahi.",
+    "Mengandungi kecacatan dan beritahu ketua barisan dan penyelia jahitan."
+  ],
+  "Contain defects. Line leader and supervisor arrange correction; mechanic handles machine causes; QA leader reviews recurrence.": [
+    "មានគុណវិបត្តិ។ អ្នកដឹកនាំជួរ និងអ្នកគ្រប់គ្រងរៀបចំការកែតម្រូវ; មេកានិចដោះស្រាយមូលហេតុម៉ាស៊ីន; អ្នកដឹកនាំ QA ពិនិត្យមើលការកើតឡើងវិញ។",
+    "含有缺陷。线长和主管安排纠正；机械师处理机器原因； QA 负责人审查复发情况。",
+    "Chứa khuyết điểm. Trưởng tuyến, giám sát viên sắp xếp khắc phục; thợ xử lý nguyên nhân máy móc; Lãnh đạo QA đánh giá tình trạng tái phát.",
+    "Naglalaman ng mga depekto. Ang pinuno ng linya at superbisor ay nag-aayos ng pagwawasto; pinangangasiwaan ng mekaniko ang mga sanhi ng makina; Sinusuri ng pinuno ng QA ang pag-ulit.",
+    "Mengandungi kecacatan. Ketua barisan dan penyelia mengatur pembetulan; mekanik mengendalikan punca mesin; Pemimpin QA menyemak berulang."
+  ],
+  "Contain failed pieces and inform the line leader or sewing supervisor.": [
+    "ផ្ទុកបំណែកដែលបរាជ័យ ហើយជូនដំណឹងដល់អ្នកដឹកនាំខ្សែ ឬអ្នកគ្រប់គ្រងផ្នែកដេរ។",
+    "控制不合格件并通知生产线领导或缝纫主管。",
+    "Chứa các mảnh bị lỗi và thông báo cho trưởng dây chuyền hoặc người giám sát may.",
+    "Maglaman ng mga nabigong piraso at ipaalam sa pinuno ng linya o superbisor sa pananahi.",
+    "Mengandungi kepingan yang gagal dan maklumkan kepada ketua barisan atau penyelia jahitan."
+  ],
+  "Contain failed work and arrange correction.": [
+    "ផ្ទុកការងារដែលបរាជ័យ និងរៀបចំការកែតម្រូវ។",
+    "遏制失败的工作并安排纠正。",
+    "Chứa công việc thất bại và sắp xếp sửa chữa.",
+    "Maglaman ng nabigong trabaho at ayusin ang pagwawasto.",
+    "Mengandungi kerja yang gagal dan mengatur pembetulan."
+  ],
+  "Contained pieces": [
+    "បំណែកដែលមាន",
+    "包含的碎片",
+    "mảnh chứa",
+    "May mga piraso",
+    "Kepingan yang terkandung"
+  ],
+  "Contained quantity / location:": [
+    "បរិមាណ / ទីតាំងដែលមានផ្ទុក៖",
+    "所含数量/地点：",
+    "Số lượng/vị trí chứa:",
+    "Nilalaman na dami / lokasyon:",
+    "Kuantiti / lokasi yang terkandung:"
+  ],
+  "Contained quantity must be a whole number within the job lot.": [
+    "បរិមាណដែលមានត្រូវតែជាចំនួនទាំងមូលនៅក្នុងចំនួនការងារ។",
+    "包含的数量必须是工作批次内的整数。",
+    "Số lượng chứa phải là số nguyên trong lô công việc.",
+    "Ang nilalamang dami ay dapat na isang buong numero sa loob ng lote ng trabaho.",
+    "Kuantiti yang terkandung mestilah nombor bulat dalam lot kerja."
+  ],
+  "Correct operation, retrain or rebalance the line; arrange repair.": [
+    "ប្រតិបត្តិការត្រឹមត្រូវ ហ្វឹកហាត់ឡើងវិញ ឬធ្វើឱ្យបន្ទាត់មានតុល្យភាពឡើងវិញ; រៀបចំការជួសជុល។",
+    "正确操作，重新训练或重新平衡生产线；安排维修。",
+    "Vận hành đúng, đào tạo lại hoặc cân bằng lại dây chuyền; sắp xếp sửa chữa.",
+    "Tamang operasyon, muling sanayin o muling balansehin ang linya; ayusin ang pagkukumpuni.",
+    "Operasi yang betul, latih semula atau imbangkan semula talian; mengatur pembaikan."
+  ],
+  "Corrective action": [
+    "សកម្មភាពកែតម្រូវ",
+    "纠正措施",
+    "Hành động khắc phục",
+    "Aksyon sa pagwawasto",
+    "Tindakan pembetulan"
+  ],
+  "Corrective action / what next": [
+    "សកម្មភាពកែតម្រូវ / អ្វីបន្ទាប់",
+    "纠正措施/下一步做什么",
+    "Hành động khắc phục/điều gì tiếp theo",
+    "Pagwawasto / ano ang susunod",
+    "Tindakan pembetulan / apa seterusnya"
+  ],
+  "Corrective action and next step *": [
+    "សកម្មភាពកែតម្រូវ និងជំហានបន្ទាប់ *",
+    "纠正措施和下一步*",
+    "Hành động khắc phục và bước tiếp theo *",
+    "Pagwawasto at susunod na hakbang *",
+    "Tindakan pembetulan dan langkah seterusnya *"
+  ],
+  "Could not check pad authorisation.": [
+    "មិនអាចពិនិត្យការអនុញ្ញាតបន្ទះបានទេ។",
+    "无法检查 pad 授权。",
+    "Không thể kiểm tra ủy quyền pad.",
+    "Hindi masuri ang awtorisasyon ng pad.",
+    "Tidak dapat menyemak kebenaran pad."
+  ],
+  "Could not complete this operation.": [
+    "មិនអាចបញ្ចប់ប្រតិបត្តិការនេះបានទេ។",
+    "无法完成此操作。",
+    "Không thể hoàn thành thao tác này.",
+    "Hindi makumpleto ang operasyong ito.",
+    "Tidak dapat menyelesaikan operasi ini."
+  ],
+  "Could not load decision events.": [
+    "មិនអាចផ្ទុកព្រឹត្តិការណ៍សម្រេចចិត្តបានទេ។",
+    "无法加载决策事件。",
+    "Không thể tải các sự kiện quyết định.",
+    "Hindi ma-load ang mga event ng desisyon.",
+    "Tidak dapat memuatkan peristiwa keputusan."
+  ],
+  "Could not load inspections.": [
+    "មិនអាចផ្ទុកការត្រួតពិនិត្យបានទេ។",
+    "无法加载检查。",
+    "Không thể tải kiểm tra.",
+    "Hindi ma-load ang mga inspeksyon.",
+    "Tidak dapat memuatkan pemeriksaan."
+  ],
+  "Could not load quality records.": [
+    "មិនអាចផ្ទុកកំណត់ត្រាគុណភាពបានទេ។",
+    "无法加载质量记录。",
+    "Không thể tải bản ghi chất lượng.",
+    "Hindi ma-load ang mga tala ng kalidad.",
+    "Tidak dapat memuatkan rekod kualiti."
+  ],
+  "Could not save decision.": [
+    "មិនអាចរក្សាទុកការសម្រេចចិត្តបានទេ។",
+    "无法保存决定。",
+    "Không thể lưu quyết định.",
+    "Hindi ma-save ang desisyon.",
+    "Tidak dapat menyimpan keputusan."
+  ],
+  "Could not save inspection.": [
+    "មិនអាចរក្សាទុកការត្រួតពិនិត្យបានទេ។",
+    "无法保存检查。",
+    "Không thể lưu kiểm tra.",
+    "Hindi ma-save ang inspeksyon.",
+    "Tidak dapat menyimpan pemeriksaan."
+  ],
+  "Could not save quality record.": [
+    "មិនអាចរក្សាទុកកំណត់ត្រាគុណភាពបានទេ។",
+    "无法保存质量记录。",
+    "Không thể lưu bản ghi chất lượng.",
+    "Hindi ma-save ang record ng kalidad.",
+    "Tidak dapat menyimpan rekod kualiti."
+  ],
+  "Could not save review.": [
+    "មិនអាចរក្សាទុកការវាយតម្លៃបានទេ។",
+    "无法保存评论。",
+    "Không thể lưu bài đánh giá.",
+    "Hindi ma-save ang review.",
+    "Tidak dapat menyimpan ulasan."
+  ],
+  "Could not save the record.": [
+    "មិនអាចរក្សាទុកកំណត់ត្រាបានទេ។",
+    "无法保存记录。",
+    "Không thể lưu bản ghi.",
+    "Hindi ma-save ang record.",
+    "Tidak dapat menyimpan rekod."
+  ],
+  "Could not save this floor check.": [
+    "មិនអាចរក្សាទុកការត្រួតពិនិត្យជាន់នេះបានទេ។",
+    "无法保存此楼层检查。",
+    "Không thể lưu lần kiểm tra sàn này.",
+    "Hindi ma-save ang floor check na ito.",
+    "Tidak dapat menyimpan cek lantai ini."
+  ],
+  "Could not update inspection.": [
+    "មិនអាចធ្វើបច្ចុប្បន្នភាពការត្រួតពិនិត្យបានទេ។",
+    "无法更新检查。",
+    "Không thể cập nhật kiểm tra.",
+    "Hindi ma-update ang inspeksyon.",
+    "Tidak dapat mengemas kini pemeriksaan."
+  ],
+  "Counts come from saved records in this module. A missing record is not treated as a pass.": [
+    "ចំនួនបានមកពីកំណត់ត្រាដែលបានរក្សាទុកនៅក្នុងម៉ូឌុលនេះ។ កំណត់ត្រាដែលបាត់មិនត្រូវបានចាត់ទុកជាការឆ្លងកាត់ទេ។",
+    "计数来自该模块中保存的记录。缺失的记录不被视为通过。",
+    "Số lượng đến từ các bản ghi đã lưu trong mô-đun này. Một bản ghi bị thiếu không được coi là đạt.",
+    "Ang mga bilang ay nagmumula sa mga naka-save na tala sa modyul na ito. Ang isang nawawalang rekord ay hindi itinuturing bilang isang pass.",
+    "Kiraan datang daripada rekod yang disimpan dalam modul ini. Rekod yang hilang tidak dianggap sebagai pas."
+  ],
+  "Covered fabric lot, colour, size and time window": [
+    "ក្រណាត់គ្របដណ្តប់ច្រើនពណ៌ ទំហំ និងបង្អួចពេលវេលា",
+    "覆盖面料批次、颜色、尺寸和时间窗口",
+    "Lô vải, màu sắc, kích thước và thời gian bọc vải",
+    "May takip na tela, kulay, laki at window ng oras",
+    "Lot kain bertutup, warna, saiz dan tingkap masa"
+  ],
+  "Crease and shape": [
+    "ផ្នត់និងរាង",
+    "折痕和形状",
+    "Nhàu và hình dạng",
+    "Lukot at hugis",
+    "Lipatan dan bentuk"
+  ],
+  "Create linked reinspection": [
+    "បង្កើតការត្រួតពិនិត្យឡើងវិញដែលភ្ជាប់",
+    "创建链接的重新检查",
+    "Tạo liên kết kiểm tra lại",
+    "Gumawa ng naka-link na muling pagsisiyasat",
+    "Buat pemeriksaan semula terpaut"
+  ],
+  "Current Yai session": [
+    "សម័យ​យ៉ៃ​បច្ចុប្បន្ន",
+    "当前 Yai 会话",
+    "Phiên Yai hiện tại",
+    "Kasalukuyang session ng Yai",
+    "Sesi Yai semasa"
+  ],
+  "Current follow-up": [
+    "ការតាមដានបច្ចុប្បន្ន",
+    "目前跟进情况",
+    "Theo dõi hiện tại",
+    "Kasalukuyang follow-up",
+    "Susulan semasa"
+  ],
+  "Current module user": [
+    "អ្នកប្រើប្រាស់ម៉ូឌុលបច្ចុប្បន្ន",
+    "当前模块用户",
+    "Người dùng mô-đun hiện tại",
+    "Kasalukuyang gumagamit ng module",
+    "Pengguna modul semasa"
+  ],
+  "Current session identity": [
+    "អត្តសញ្ញាណសម័យបច្ចុប្បន្ន",
+    "当前会话身份",
+    "Nhận dạng phiên hiện tại",
+    "Kasalukuyang pagkakakilanlan ng session",
+    "Identiti sesi semasa"
+  ],
+  "Custom order entered below": [
+    "ការបញ្ជាទិញផ្ទាល់ខ្លួនបានបញ្ចូលខាងក្រោម",
+    "下面输入的自定义订单",
+    "Thứ tự tùy chỉnh được nhập bên dưới",
+    "Pasadyang order na ipinasok sa ibaba",
+    "Pesanan tersuai dimasukkan di bawah"
+  ],
+  "Cut shape / dimensions": [
+    "កាត់រាង / វិមាត្រ",
+    "切割形状/尺寸",
+    "Cắt hình dạng/kích thước",
+    "Gupitin ang hugis / sukat",
+    "Potong bentuk / dimensi"
+  ],
+  "Cut-panel inspection and bundling process reference ↗": [
+    "ការត្រួតពិនិត្យបន្ទះកាត់ និងឯកសារយោងដំណើរការបណ្តុំ ↗",
+    "裁板检验及捆扎流程参考↗",
+    "Tham khảo quy trình đóng gói và kiểm tra tấm cắt ↗",
+    "Cut-panel inspection at sanggunian sa proseso ng pag-bundle ↗",
+    "Rujukan pemeriksaan panel potong dan proses penggabungan ↗"
+  ],
+  "Cutting quality checker / quality leader": [
+    "កាត់អ្នកត្រួតពិនិត្យគុណភាព / អ្នកដឹកនាំគុណភាព",
+    "切割质量检查员/质量负责人",
+    "Người kiểm tra chất lượng cắt/người lãnh đạo chất lượng",
+    "Pagputol ng checker ng kalidad / pinuno ng kalidad",
+    "Pemeriksa kualiti pemotongan / peneraju kualiti"
+  ],
+  "Cutting quality leader / delegated supervisor": [
+    "កាត់គុណភាព អ្នកដឹកនាំ/អ្នកមើលការខុសត្រូវ",
+    "切割质量负责人/委派主管",
+    "Trưởng nhóm cắt giảm chất lượng/giám sát được ủy quyền",
+    "Pinuno ng kalidad ng pagputol / itinalagang superbisor",
+    "Pemimpin kualiti pemotongan / penyelia yang diwakilkan"
+  ],
+  "DEMO: Hold the affected bundle and review the defect trend.": [
+    "DEMO៖ កាន់បណ្តុំដែលរងផលប៉ះពាល់ ហើយពិនិត្យមើលទំនោរនៃបញ្ហា។",
+    "演示：握住受影响的捆绑包并查看缺陷趋势。",
+    "DEMO: Giữ gói bị ảnh hưởng và xem xét xu hướng lỗi.",
+    "DEMO: Hawakan ang apektadong bundle at suriin ang trend ng depekto.",
+    "DEMO: Pegang berkas yang terjejas dan semak arah aliran kecacatan."
+  ],
+  "DEMO: QA Supervisor checks the correction before release.": [
+    "DEMO៖ អ្នកគ្រប់គ្រង QA ពិនិត្យមើលការកែតម្រូវមុនពេលចេញផ្សាយ។",
+    "演示：QA 主管在发布前检查修正情况。",
+    "DEMO: Giám sát QA kiểm tra bản sửa lỗi trước khi phát hành.",
+    "DEMO: Sinusuri ng QA Supervisor ang pagwawasto bago ilabas.",
+    "DEMO: Penyelia QA menyemak pembetulan sebelum dikeluarkan."
+  ],
+  "DR · Decision Register / root cause & CAP": [
+    "DR · ការចុះឈ្មោះការសម្រេចចិត្ត / មូលហេតុដើម & CAP",
+    "DR·决策登记册/根本原因和 CAP",
+    "DR · Đăng ký quyết định / nguyên nhân gốc rễ & CAP",
+    "DR · Rehistro ng Desisyon / ugat na sanhi at CAP",
+    "DR · Daftar Keputusan / punca & CAP"
+  ],
+  "Decision": [
+    "ការសម្រេចចិត្ត",
+    "决定",
+    "Quyết định",
+    "Desisyon",
+    "Keputusan"
+  ],
+  "Decision / CAP saved in chronological history.": [
+    "សេចក្តីសម្រេច / CAP បានរក្សាទុកក្នុងប្រវត្តិកាលប្បវត្តិ។",
+    "决策/CAP 保存在时间历史记录中。",
+    "Quyết định/CAP được lưu theo lịch sử thời gian.",
+    "Desisyon / CAP na na-save sa kronolohikal na kasaysayan.",
+    "Keputusan / CAP disimpan dalam sejarah kronologi."
+  ],
+  "Decision / reason": [
+    "ការសម្រេចចិត្ត / ហេតុផល",
+    "决定/原因",
+    "Quyết định/lý do",
+    "Desisyon / dahilan",
+    "Keputusan / alasan"
+  ],
+  "Decision and reason": [
+    "ការសម្រេចចិត្តនិងហេតុផល",
+    "决定及理由",
+    "Quyết định và lý do",
+    "Desisyon at dahilan",
+    "Keputusan dan alasan"
+  ],
+  "Decision or issue handled *": [
+    "ការសម្រេចចិត្ត ឬបញ្ហាត្រូវបានដោះស្រាយ *",
+    "处理的决定或问题 *",
+    "Quyết định hoặc vấn đề được xử lý *",
+    "Ang desisyon o isyu ay pinangangasiwaan *",
+    "Keputusan atau isu dikendalikan *"
+  ],
+  "Decision register": [
+    "ការចុះឈ្មោះការសម្រេចចិត្ត",
+    "决定登记册",
+    "Sổ quyết định",
+    "Rehistro ng desisyon",
+    "Daftar keputusan"
+  ],
+  "Decision state": [
+    "ស្ថានភាពការសម្រេចចិត្ត",
+    "决策状态",
+    "Trạng thái quyết định",
+    "Estado ng desisyon",
+    "Keadaan keputusan"
+  ],
+  "Decoration corrective action": [
+    "សកម្មភាពកែតម្រូវការតុបតែង",
+    "装修整改措施",
+    "Hành động khắc phục trang trí",
+    "Dekorasyon na pagkilos ng pagwawasto",
+    "Tindakan pembetulan hiasan"
+  ],
+  "Decoration defective pieces": [
+    "គ្រឿងតុបតែងលំអ",
+    "装修缺陷件",
+    "Phần trang trí bị lỗi",
+    "Dekorasyon na may sira na mga piraso",
+    "Potongan yang rosak hiasan"
+  ],
+  "Decoration evidence references": [
+    "ឯកសារយោងភស្តុតាងនៃការតុបតែង",
+    "装修证据参考",
+    "Tài liệu tham khảo bằng chứng trang trí",
+    "Mga sanggunian ng katibayan ng dekorasyon",
+    "Rujukan bukti hiasan"
+  ],
+  "Decoration inspector": [
+    "អ្នកត្រួតពិនិត្យការតុបតែង",
+    "装修检验员",
+    "Thanh tra trang trí",
+    "Inspektor ng dekorasyon",
+    "Pemeriksa hiasan"
+  ],
+  "Decoration order": [
+    "លំដាប់តុបតែង",
+    "装修订单",
+    "Thứ tự trang trí",
+    "Order ng dekorasyon",
+    "Pesanan hiasan"
+  ],
+  "Decoration pieces checked": [
+    "បំណែកនៃការតុបតែងត្រូវបានពិនិត្យ",
+    "装饰件已检查",
+    "Đã kiểm tra phần trang trí",
+    "Nasuri ang mga piraso ng dekorasyon",
+    "Potongan hiasan diperiksa"
+  ],
+  "Decoration workflow": [
+    "ដំណើរការតុបតែង",
+    "装修工作流程",
+    "Quy trình trang trí",
+    "Dekorasyon na daloy ng trabaho",
+    "Aliran kerja hiasan"
+  ],
+  "Defect / issue": [
+    "ពិការភាព / បញ្ហា",
+    "缺陷/问题",
+    "Khiếm khuyết/vấn đề",
+    "Depekto / isyu",
+    "Kecacatan / isu"
+  ],
+  "Defect / location": [
+    "គុណវិបត្តិ / ទីតាំង",
+    "缺陷/位置",
+    "Khiếm khuyết/vị trí",
+    "Depekto / lokasyon",
+    "Kecacatan / lokasi"
+  ],
+  "Defect codes / names (comma separated)": [
+    "លេខកូដ/ឈ្មោះដែលមានបញ្ហា (បំបែកដោយក្បៀស)",
+    "缺陷代码/名称（逗号分隔）",
+    "Mã/tên lỗi (được phân tách bằng dấu phẩy)",
+    "Mga depektong code / pangalan (pinaghihiwalay ng kuwit)",
+    "Kod / nama kecacatan (dipisahkan koma)"
+  ],
+  "Defect events": [
+    "ព្រឹត្តិការណ៍ពិការភាព",
+    "缺陷事件",
+    "Sự kiện khiếm khuyết",
+    "Mga kaganapang depekto",
+    "Peristiwa kecacatan"
+  ],
+  "Defect events may exceed defective pieces.": [
+    "ព្រឹត្តិការណ៍ដែលមានបញ្ហាអាចលើសពីបំណែកដែលខូច។",
+    "缺陷事件可能超过缺陷件数。",
+    "Sự kiện khiếm khuyết có thể vượt quá các mảnh bị lỗi.",
+    "Maaaring lumampas sa mga may sira ang mga kaganapang may depekto.",
+    "Kejadian kecacatan mungkin melebihi kepingan yang rosak."
+  ],
+  "Defect families": [
+    "គ្រួសារខូច",
+    "缺陷家庭",
+    "Gia đình khiếm khuyết",
+    "Mga pamilyang may depekto",
+    "Keluarga yang cacat"
+  ],
+  "Defect location": [
+    "ទីតាំងខូច",
+    "缺陷位置",
+    "Vị trí khiếm khuyết",
+    "Depekto sa lokasyon",
+    "Lokasi kecacatan"
+  ],
+  "Defect severity": [
+    "ភាពធ្ងន់ធ្ងរនៃពិការភាព",
+    "缺陷严重程度",
+    "Mức độ nghiêm trọng của lỗi",
+    "Kalubhaan ng depekto",
+    "Keterukan kecacatan"
+  ],
+  "Defective pcs": [
+    "កុំព្យូទ័រខូច",
+    "不良品",
+    "chiếc bị lỗi",
+    "may sira na mga pcs",
+    "pcs rosak"
+  ],
+  "Defective pieces / cartons *": [
+    "បំណែក / កេស *",
+    "有缺陷的件/纸箱 *",
+    "Miếng/thùng carton bị lỗi *",
+    "Mga may sira na piraso / karton *",
+    "Kepingan / karton yang rosak *"
+  ],
+  "Defective pieces · classification pending": [
+    "បំណែកដែលមានបញ្ហា · ការចាត់ថ្នាក់កំពុងរង់ចាំ",
+    "缺陷件 · 分类待定",
+    "Các mảnh bị lỗi · đang chờ phân loại",
+    "Mga may sira na piraso · nakabinbin ang pag-uuri",
+    "Kepingan rosak · pengelasan belum selesai"
+  ],
+  "Defects, comma separated": [
+    "ពិការភាព, សញ្ញាក្បៀសបំបែក",
+    "缺陷，逗号分隔",
+    "Khiếm khuyết, được phân tách bằng dấu phẩy",
+    "Mga depekto, pinaghihiwalay ng kuwit",
+    "Kecacatan, dipisahkan koma"
+  ],
+  "Defects:": [
+    "ពិការភាព៖",
+    "缺陷：",
+    "Khiếm khuyết:",
+    "Mga depekto:",
+    "Kecacatan:"
+  ],
+  "Demo Quality Manager": [
+    "កម្មវិធីគ្រប់គ្រងគុណភាពបង្ហាញ",
+    "演示质量经理",
+    "Trình quản lý chất lượng bản demo",
+    "Demo Quality Manager",
+    "Pengurus Kualiti Demo"
+  ],
+  "Demo approved range": [
+    "ជួរដែលបានអនុម័តសាកល្បង",
+    "演示批准范围",
+    "Phạm vi được phê duyệt demo",
+    "Inaprubahan ng demo ang hanay",
+    "Julat yang diluluskan demo"
+  ],
+  "Demo lot": [
+    "ការបង្ហាញច្រើន។",
+    "演示批次",
+    "Lô demo",
+    "Demo lot",
+    "Banyak demo"
+  ],
+  "Demo session": [
+    "វគ្គសាកល្បង",
+    "演示会议",
+    "Phiên demo",
+    "Demo session",
+    "Sesi demo"
+  ],
+  "Desktop review and authorised release": [
+    "ការពិនិត្យឡើងវិញលើកុំព្យូទ័រ និងការចេញផ្សាយដែលមានការអនុញ្ញាត",
+    "桌面审查和授权发布",
+    "Đánh giá trên máy tính để bàn và phát hành được ủy quyền",
+    "Pagsusuri sa desktop at awtorisadong paglabas",
+    "Semakan desktop dan keluaran dibenarkan"
+  ],
+  "Destination *": [
+    "គោលដៅ *",
+    "目的地 *",
+    "Điểm đến *",
+    "Patutunguhan *",
+    "Destinasi *"
+  ],
+  "Destinations and receivers": [
+    "ទិសដៅនិងអ្នកទទួល",
+    "目的地和接收者",
+    "Điểm đến và người nhận",
+    "Mga destinasyon at receiver",
+    "Destinasi dan penerima"
+  ],
+  "Deviation / result": [
+    "គម្លាត / លទ្ធផល",
+    "偏差/结果",
+    "Độ lệch/kết quả",
+    "Paglihis / resulta",
+    "Penyimpangan / keputusan"
+  ],
+  "Dismiss module notice": [
+    "ច្រានចោលការជូនដំណឹងអំពីម៉ូឌុល",
+    "关闭模块通知",
+    "Thông báo loại bỏ mô-đun",
+    "I-dismiss ang module notice",
+    "Tolak notis modul"
+  ],
+  "Document Training": [
+    "ការបណ្តុះបណ្តាលឯកសារ",
+    "文档培训",
+    "Đào tạo tài liệu",
+    "Pagsasanay sa Dokumento",
+    "Latihan Dokumen"
+  ],
+  "Document Training · inspection knowledge": [
+    "ការបណ្តុះបណ្តាលឯកសារ · ចំណេះដឹងផ្នែកអធិការកិច្ច",
+    "文件培训·检验知识",
+    "Đào tạo tài liệu · Kiến thức kiểm tra",
+    "Pagsasanay sa Dokumento · kaalaman sa inspeksyon",
+    "Latihan Dokumen · pengetahuan pemeriksaan"
+  ],
+  "Download CSV": [
+    "ទាញយក CSV",
+    "下载 CSV 文件",
+    "Tải xuống CSV",
+    "I-download ang CSV",
+    "Muat turun CSV"
+  ],
+  "Due date": [
+    "កាលបរិច្ឆេទផុតកំណត់",
+    "截止日期",
+    "Ngày đến hạn",
+    "takdang petsa",
+    "tarikh tamat tempoh"
+  ],
+  "Due date / time": [
+    "កាលបរិច្ឆេទ / ពេលវេលា",
+    "截止日期/时间",
+    "Ngày/giờ đến hạn",
+    "Takdang petsa / oras",
+    "Tarikh / masa tamat tempoh"
+  ],
+  "Due:": [
+    "ដល់កំណត់៖",
+    "由于：",
+    "Đến hạn:",
+    "Dahil:",
+    "tarikh akhir:"
+  ],
+  "Each ID must have a passed end-line or passed reinspection record. The same ID cannot be checked out twice.": [
+    "លេខសម្គាល់នីមួយៗត្រូវតែមានកំណត់ត្រាត្រួតពិនិត្យឡើងវិញដែលបានឆ្លងកាត់ ឬឆ្លងកាត់ការត្រួតពិនិត្យឡើងវិញ។ លេខសម្គាល់ដូចគ្នាមិនអាចចេញពីរដងបានទេ។",
+    "每个 ID 必须有通过的下线或通过的复检记录。同一ID不能被检出两次。",
+    "Mỗi ID phải có bản ghi cuối cùng hoặc bản ghi kiểm tra lại đã được thông qua. Cùng một ID không thể được kiểm tra hai lần.",
+    "Ang bawat ID ay dapat may nakapasa na end-line o nakapasa sa reinspection record. Ang parehong ID ay hindi maaaring suriin nang dalawang beses.",
+    "Setiap ID mesti mempunyai garis akhir yang diluluskan atau rekod pemeriksaan semula yang diluluskan. ID yang sama tidak boleh didaftar keluar dua kali."
+  ],
+  "Each finding needs a defect code and a positive whole event count.": [
+    "ការរកឃើញនីមួយៗត្រូវការលេខកូដពិការ និងចំនួនព្រឹត្តិការណ៍ទាំងមូលវិជ្ជមាន។",
+    "每个发现都需要一个缺陷代码和一个正的整体事件计数。",
+    "Mỗi phát hiện cần có một mã lỗi và tổng số sự kiện dương.",
+    "Ang bawat paghahanap ay nangangailangan ng isang defect code at isang positibong bilang ng buong kaganapan.",
+    "Setiap penemuan memerlukan kod kecacatan dan kiraan keseluruhan peristiwa yang positif."
+  ],
+  "Edges / fabric defects": [
+    "គែម / ពិការភាពក្រណាត់",
+    "边缘/织物缺陷",
+    "Các cạnh/lỗi vải",
+    "Mga gilid / depekto sa tela",
+    "Kecacatan tepi / kain"
+  ],
+  "Effective SOP and approved sampling plan": [
+    "SOP ដែលមានប្រសិទ្ធភាព និងផែនការគំរូដែលបានអនុម័ត",
+    "有效的SOP和批准的抽样计划",
+    "SOP hiệu quả và kế hoạch lấy mẫu được phê duyệt",
+    "Mabisang SOP at inaprubahang sampling plan",
+    "SOP yang berkesan dan pelan persampelan yang diluluskan"
+  ],
+  "Effective artwork revision, approved colour and retained reference": [
+    "ការកែសម្រួលស្នាដៃសិល្បៈដែលមានប្រសិទ្ធភាព ពណ៌ដែលបានអនុម័ត និងឯកសារយោងដែលរក្សាទុក",
+    "有效的图稿修改、批准的颜色和保留的参考",
+    "Sửa đổi tác phẩm nghệ thuật hiệu quả, màu sắc được phê duyệt và tài liệu tham khảo được giữ lại",
+    "Epektibong rebisyon ng likhang sining, naaprubahang kulay at napanatili na sanggunian",
+    "Semakan karya seni yang berkesan, warna yang diluluskan dan rujukan yang dikekalkan"
+  ],
+  "Effective supplier recipe and measured process window": [
+    "រូបមន្តអ្នកផ្គត់ផ្គង់ប្រកបដោយប្រសិទ្ធភាព និងបង្អួចដំណើរការវាស់វែង",
+    "有效的供应商配方和测量的工艺窗口",
+    "Công thức nhà cung cấp hiệu quả và cửa sổ quy trình được đo lường",
+    "Mabisang recipe ng supplier at sinusukat na window ng proseso",
+    "Resipi pembekal yang berkesan dan tetingkap proses yang diukur"
+  ],
+  "Embroidery quality checker / quality leader": [
+    "អ្នកត្រួតពិនិត្យគុណភាពប៉ាក់ / អ្នកដឹកនាំគុណភាព",
+    "刺绣质检员/质量组长",
+    "Người kiểm tra chất lượng thêu/người quản lý chất lượng",
+    "Pagsusuri ng kalidad ng burda / pinuno ng kalidad",
+    "Penyemak kualiti sulaman / peneraju kualiti"
+  ],
+  "Enter QA Supervisor name, YHR ID and review note.": [
+    "បញ្ចូលឈ្មោះអ្នកគ្រប់គ្រង QA លេខសម្គាល់ YHR និងកំណត់ចំណាំពិនិត្យ។",
+    "输入 QA 主管姓名、YHR ID 和审核注释。",
+    "Nhập tên Người giám sát QA, ID YHR và ghi chú đánh giá.",
+    "Ilagay ang pangalan ng QA Supervisor, YHR ID at review note.",
+    "Masukkan nama Penyelia QA, ID YHR dan nota semakan."
+  ],
+  "Enter a unique buyer measurement point.": [
+    "បញ្ចូលចំណុចវាស់វែងអ្នកទិញតែមួយគត់។",
+    "输入唯一的买家测量点。",
+    "Nhập điểm đo lường người mua duy nhất.",
+    "Maglagay ng natatanging punto ng pagsukat ng mamimili.",
+    "Masukkan titik ukuran pembeli unik."
+  ],
+  "Enter actual ground-level data on the pad; retain traceable evidence.": [
+    "បញ្ចូលទិន្នន័យកម្រិតដីពិតប្រាកដនៅលើបន្ទះ; រក្សា​ទុក​ភស្តុតាង​ដែល​អាច​ចាប់​បាន​។",
+    "在焊盘上输入实际地面数据；保留可追溯的证据。",
+    "Nhập dữ liệu thực tế trên mặt đất vào bảng; giữ lại bằng chứng có thể theo dõi được.",
+    "Ipasok ang aktwal na data sa antas ng lupa sa pad; panatilihin ang mga bakas na ebidensya.",
+    "Masukkan data aras tanah sebenar pada pad; mengekalkan bukti yang boleh dikesan."
+  ],
+  "Enter actual readings below. Change size / piece to add another sample; previous readings stay in this inspection.": [
+    "បញ្ចូលការអានជាក់ស្តែងខាងក្រោម។ ផ្លាស់ប្តូរទំហំ / ដុំដើម្បីបន្ថែមគំរូផ្សេងទៀត; ការអានពីមុនស្ថិតនៅក្នុងការត្រួតពិនិត្យនេះ។",
+    "在下面输入实际读数。更改尺寸/件以添加另一个样品；以前的读数保留在本次检查中。",
+    "Nhập số đọc thực tế dưới đây. Thay đổi kích thước/mảnh để thêm mẫu khác; các bài đọc trước vẫn ở trong lần kiểm tra này.",
+    "Ilagay ang mga aktwal na pagbabasa sa ibaba. Baguhin ang laki / piraso upang magdagdag ng isa pang sample; nananatili ang mga nakaraang pagbabasa sa inspeksyon na ito.",
+    "Masukkan bacaan sebenar di bawah. Tukar saiz / sekeping untuk menambah sampel lain; bacaan sebelumnya kekal dalam pemeriksaan ini."
+  ],
+  "Enter checked pieces and select a piece inside that sample.": [
+    "បញ្ចូលបំណែកដែលបានពិនិត្យ ហើយជ្រើសរើសបំណែកមួយនៅក្នុងគំរូនោះ។",
+    "输入选中的片段并选择该样本中的片段。",
+    "Nhập các mảnh đã kiểm tra và chọn một mảnh bên trong mẫu đó.",
+    "Ipasok ang mga naka-check na piraso at pumili ng isang piraso sa loob ng sample na iyon.",
+    "Masukkan kepingan bertanda dan pilih sekeping di dalam sampel itu."
+  ],
+  "Enter the QA Supervisor name and YHR employee ID.": [
+    "បញ្ចូលឈ្មោះអ្នកគ្រប់គ្រង QA និងលេខសម្គាល់បុគ្គលិក YHR ។",
+    "输入 QA 主管姓名和 YHR 员工 ID。",
+    "Nhập tên Giám sát viên QA và ID nhân viên YHR.",
+    "Ilagay ang pangalan ng Supervisor ng QA at ID ng empleyado ng YHR.",
+    "Masukkan nama Penyelia QA dan ID pekerja YHR."
+  ],
+  "Enter the inspection on the pad and contain failed pieces.": [
+    "បញ្ចូលការត្រួតពិនិត្យនៅលើបន្ទះហើយមានបំណែកដែលបរាជ័យ។",
+    "输入焊盘上的检查并包含不合格件。",
+    "Nhập phần kiểm tra vào bảng và chứa các phần bị lỗi.",
+    "Ipasok ang inspeksyon sa pad at maglaman ng mga nabigong piraso.",
+    "Masukkan pemeriksaan pada pad dan masukkan kepingan yang gagal."
+  ],
+  "Enter the six-digit floor code to open this module's inspection form.": [
+    "បញ្ចូលលេខកូដជាន់ប្រាំមួយខ្ទង់ ដើម្បីបើកទម្រង់អធិការកិច្ចនៃម៉ូឌុលនេះ។",
+    "输入六位楼层代码以打开该模块的检查表。",
+    "Nhập mã sàn gồm sáu chữ số để mở biểu mẫu kiểm tra mô-đun này.",
+    "Ilagay ang anim na digit na floor code upang buksan ang form ng inspeksyon ng module na ito.",
+    "Masukkan kod lantai enam digit untuk membuka borang pemeriksaan modul ini."
+  ],
+  "Enter valid checked and defective quantities.": [
+    "បញ្ចូលបរិមាណដែលបានពិនិត្យ និងខូចគុណភាព។",
+    "输入有效的检查数量和缺陷数量。",
+    "Nhập số lượng hợp lệ đã được kiểm tra và bị lỗi.",
+    "Ipasok ang wastong mga dami ng nasuri at may sira.",
+    "Masukkan kuantiti diperiksa dan rosak yang sah."
+  ],
+  "Evidence / note": [
+    "ភស្តុតាង / កំណត់ចំណាំ",
+    "证据/注释",
+    "Bằng chứng/ghi chú",
+    "Katibayan / tala",
+    "Bukti / nota"
+  ],
+  "Evidence pending": [
+    "ភស្តុតាងកំពុងរង់ចាំ",
+    "证据待决",
+    "Bằng chứng đang chờ xử lý",
+    "Nakabinbin ang ebidensya",
+    "Bukti belum selesai"
+  ],
+  "Evidence reference / photo URL": [
+    "ឯកសារយោងភស្តុតាង / URL រូបថត",
+    "证据参考/照片网址",
+    "URL ảnh/tham chiếu bằng chứng",
+    "Sanggunian ng ebidensya / URL ng larawan",
+    "Rujukan bukti / URL foto"
+  ],
+  "Evidence references:": [
+    "ឯកសារយោងភស្តុតាង៖",
+    "证据参考：",
+    "Tài liệu tham khảo bằng chứng:",
+    "Mga sanggunian sa ebidensya:",
+    "Rujukan bukti:"
+  ],
+  "Evidence upload failed.": [
+    "ការបង្ហោះភ័ស្តុតាងបានបរាជ័យ។",
+    "证据上传失败。",
+    "Tải lên bằng chứng không thành công.",
+    "Nabigo ang pag-upload ng ebidensya.",
+    "Muat naik bukti gagal."
+  ],
+  "Evidence:": [
+    "ភស្តុតាង៖",
+    "证据：",
+    "Bằng chứng:",
+    "Katibayan:",
+    "bukti:"
+  ],
+  "Ex-factory": [
+    "អតីតរោងចក្រ",
+    "出厂时",
+    "Xuất xưởng",
+    "Dating pabrika",
+    "Bekas kilang"
+  ],
+  "Example factory / recorded site": [
+    "ឧទាហរណ៍រោងចក្រ / គេហទំព័រដែលបានកត់ត្រា",
+    "示例工厂/记录站点",
+    "Ví dụ về nhà máy/địa điểm được ghi lại",
+    "Halimbawa ng pabrika / naitala na site",
+    "Contoh kilang / tapak rekod"
+  ],
+  "Example only · switch to live entry": [
+    "ឧទាហរណ៍តែប៉ុណ្ណោះ · ប្តូរទៅការចូលផ្ទាល់",
+    "仅作为示例 · 切换到实时输入",
+    "Chỉ ví dụ · chuyển sang mục nhập trực tiếp",
+    "Halimbawa lang · lumipat sa live entry",
+    "Contoh sahaja · tukar kepada kemasukan langsung"
+  ],
+  "Existing CAP · append a follow-up": [
+    "CAP ដែលមានស្រាប់ · បន្ថែមការតាមដាន",
+    "现有 CAP · 追加后续行动",
+    "CAP hiện tại · nối thêm phần tiếp theo",
+    "Umiiral na CAP · magdagdag ng follow-up",
+    "CAP sedia ada · tambahkan susulan"
+  ],
+  "External inspector name": [
+    "ឈ្មោះអ្នកត្រួតពិនិត្យខាងក្រៅ",
+    "外部检查员姓名",
+    "Tên thanh tra bên ngoài",
+    "Pangalan ng panlabas na inspektor",
+    "Nama pemeriksa luar"
+  ],
+  "FINALISED": [
+    "បានបញ្ចប់",
+    "最终确定",
+    "HOÀN THÀNH",
+    "FINALISED",
+    "TAMAT"
+  ],
+  "FINISHING & PACKING": [
+    "ការបញ្ចប់ និងការវេចខ្ចប់",
+    "整理和包装",
+    "HOÀN THIỆN & ĐÓNG GÓI",
+    "PAGTATAPOS AT PAG-IUMPAK",
+    "MENYELESAIKAN & MEMBUNGKUS"
+  ],
+  "Fabric release / shade": [
+    "ការចេញផ្សាយក្រណាត់ / ម្លប់",
+    "织物释放/遮光",
+    "Nhả vải/bóng râm",
+    "Paglabas ng tela / lilim",
+    "Pelepasan fabrik / teduh"
+  ],
+  "Factory Manager": [
+    "អ្នកគ្រប់គ្រងរោងចក្រ",
+    "厂长",
+    "Giám đốc nhà máy",
+    "Tagapamahala ng Pabrika",
+    "Pengurus Kilang"
+  ],
+  "Factory Manager, Quality Manager, Senior Supervisor or QA Supervisor records the decision under their own name.": [
+    "អ្នកគ្រប់គ្រងរោងចក្រ អ្នកគ្រប់គ្រងគុណភាព អ្នកគ្រប់គ្រងជាន់ខ្ពស់ ឬអ្នកគ្រប់គ្រង QA កត់ត្រាការសម្រេចចិត្តក្រោមឈ្មោះរបស់ពួកគេផ្ទាល់។",
+    "工厂经理、质量经理、高级主管或质量保证主管将决定记录在自己的名下。",
+    "Giám đốc nhà máy, Giám đốc chất lượng, Giám sát cấp cao hoặc Giám sát viên QA ghi lại quyết định dưới tên riêng của họ.",
+    "Ang Factory Manager, Quality Manager, Senior Supervisor o QA Supervisor ay nagtatala ng desisyon sa ilalim ng kanilang sariling pangalan.",
+    "Pengurus Kilang, Pengurus Kualiti, Penyelia Kanan atau Penyelia QA merekodkan keputusan di bawah nama mereka sendiri."
+  ],
+  "Factory style no": [
+    "រចនាប័ទ្មរោងចក្រ No",
+    "工厂款式无",
+    "Phong cách nhà máy không",
+    "Estilo ng pabrika no",
+    "Gaya kilang no"
+  ],
+  "Failed pieces": [
+    "បំណែកដែលបរាជ័យ",
+    "失败的作品",
+    "Những mảnh thất bại",
+    "Mga nabigong piraso",
+    "Potongan gagal"
+  ],
+  "Fictional names, IDs and orders. Nothing shown here is a factory inspection or release.": [
+    "ឈ្មោះប្រឌិត លេខសម្គាល់ និងការបញ្ជាទិញ។ គ្មានអ្វីបង្ហាញនៅទីនេះជាការត្រួតពិនិត្យ ឬដោះលែងពីរោងចក្រទេ។",
+    "虚构的姓名、ID 和订单。这里显示的任何内容都不是工厂检查或放行。",
+    "Tên hư cấu, ID và đơn đặt hàng. Không có gì hiển thị ở đây là kiểm tra hoặc phát hành tại nhà máy.",
+    "Mga kathang-isip na pangalan, ID at order. Walang ipinapakita dito ay isang factory inspection o release.",
+    "Nama fiksyen, ID dan pesanan. Tiada apa-apa yang ditunjukkan di sini adalah pemeriksaan atau keluaran kilang."
+  ],
+  "Fictional training inspection": [
+    "ការត្រួតពិនិត្យការបណ្តុះបណ្តាលប្រឌិត",
+    "虚构训练检查",
+    "Kiểm tra đào tạo hư cấu",
+    "Fictional na pagsasanay inspeksyon",
+    "Pemeriksaan latihan fiksyen"
+  ],
+  "Filter MO, line, style or inspector": [
+    "តម្រង MO បន្ទាត់ រចនាប័ទ្ម ឬអធិការ",
+    "过滤 MO、线路、样式或检查员",
+    "Lọc MO, dòng, kiểu hoặc thanh tra",
+    "I-filter ang MO, linya, istilo o inspektor",
+    "Tapis MO, garisan, gaya atau pemeriksa"
+  ],
+  "Filter MO, line, style or piece ID": [
+    "ត្រង MO បន្ទាត់ រចនាប័ទ្ម ឬលេខសម្គាល់ដុំ",
+    "过滤 MO、系列、样式或单品 ID",
+    "Lọc MO, dòng, kiểu hoặc ID mảnh",
+    "I-filter ang MO, line, style o piece ID",
+    "Tapis MO, baris, gaya atau ID bahagian"
+  ],
+  "Filter decoration status": [
+    "តម្រងស្ថានភាពតុបតែង",
+    "筛选装修状态",
+    "Lọc trạng thái trang trí",
+    "I-filter ang katayuan ng dekorasyon",
+    "Status hiasan penapis"
+  ],
+  "Fin Check": [
+    "ពិនិត្យ Fin",
+    "鳍检查",
+    "Kiểm tra vây",
+    "Pagsusuri ng Palikpik",
+    "Semak Sirip"
+  ],
+  "Final QA / brand QO with delegated supervisor review": [
+    "QA / ម៉ាក QO ចុងក្រោយជាមួយនឹងការត្រួតពិនិត្យពីអ្នកគ្រប់គ្រងដែលបានផ្ទេរសិទ្ធិ",
+    "最终 QA/品牌 QO 以及委托主管审核",
+    "QA cuối cùng / QO thương hiệu với sự đánh giá của người giám sát được ủy quyền",
+    "Panghuling QA / brand QO na may itinalagang pagsusuri ng superbisor",
+    "QA akhir / QO jenama dengan semakan penyelia yang diwakilkan"
+  ],
+  "Final QA auditor / delegated quality supervisor": [
+    "សវនករ QA ចុងក្រោយ / អ្នកគ្រប់គ្រងគុណភាពដែលបានផ្ទេរសិទ្ធិ",
+    "最终 QA 审核员/委派质量主管",
+    "Kiểm toán viên QA cuối cùng/người giám sát chất lượng được ủy quyền",
+    "Panghuling QA auditor / itinalagang superbisor ng kalidad",
+    "Juruaudit QA akhir / penyelia kualiti yang diwakilkan"
+  ],
+  "Final and inline report structure: order / PO / SKU, defects, AQL, measurements by size and piece, checklist, photo / lab references, containment and review.": [
+    "រចនាសម្ព័ន្ធរបាយការណ៍ចុងក្រោយ និងក្នុងបន្ទាត់៖ ការបញ្ជាទិញ / PO / SKU, ពិការភាព, AQL, ការវាស់វែងតាមទំហំ និងដុំ, បញ្ជីត្រួតពិនិត្យ, ឯកសារយោងរូបថត / មន្ទីរពិសោធន៍, ការទប់ស្កាត់ និងការពិនិត្យឡើងវិញ។",
+    "最终和内嵌报告结构：订单/PO/SKU、缺陷、AQL、尺寸和件数测量、清单、照片/实验室参考、遏制和审查。",
+    "Cấu trúc báo cáo cuối cùng và nội tuyến: đơn hàng / PO / SKU, lỗi, AQL, số đo theo kích thước và sản phẩm, danh sách kiểm tra, tài liệu tham khảo ảnh / phòng thí nghiệm, ngăn chặn và đánh giá.",
+    "Pangwakas at inline na istraktura ng ulat: order / PO / SKU, mga depekto, AQL, mga sukat ayon sa laki at piraso, checklist, mga sanggunian sa larawan / lab, pagpigil at pagsusuri.",
+    "Struktur laporan akhir dan sebaris: pesanan / PO / SKU, kecacatan, AQL, ukuran mengikut saiz dan bahagian, senarai semak, rujukan foto / makmal, pembendungan dan semakan."
+  ],
+  "Finalising a CAP records the management decision. It does not overwrite the original inspection or automatically authorise product shipment.": [
+    "ការបញ្ចប់ CAP កត់ត្រាការសម្រេចចិត្តគ្រប់គ្រង។ វាមិនសរសេរជាន់លើការត្រួតពិនិត្យដើម ឬអនុញ្ញាតដោយស្វ័យប្រវត្តិនូវការដឹកជញ្ជូនផលិតផលនោះទេ។",
+    "最终确定 CAP 记录了管理决策。它不会覆盖原始检查或自动授权产品装运。",
+    "Hoàn tất CAP ghi lại quyết định quản lý. Nó không ghi đè việc kiểm tra ban đầu hoặc tự động cho phép vận chuyển sản phẩm.",
+    "Ang pag-finalize ng isang CAP ay nagtatala ng desisyon ng pamamahala. Hindi nito pinatungan ang orihinal na inspeksyon o awtomatikong pinahihintulutan ang pagpapadala ng produkto.",
+    "Memuktamadkan CAP merekodkan keputusan pengurusan. Ia tidak menimpa pemeriksaan asal atau membenarkan penghantaran produk secara automatik."
+  ],
+  "Finding / containment / evidence": [
+    "ការស្វែងរក / ការឃុំឃាំង / ភស្តុតាង",
+    "寻找/收容/证据",
+    "Tìm kiếm/ngăn chặn/bằng chứng",
+    "Paghahanap / pagpigil / ebidensya",
+    "Penemuan / pembendungan / bukti"
+  ],
+  "Findings and containment": [
+    "ការរកឃើញនិងការទប់ស្កាត់",
+    "调查结果和遏制",
+    "Những phát hiện và ngăn chặn",
+    "Mga natuklasan at pagpigil",
+    "Penemuan dan pembendungan"
+  ],
+  "Findings, containment and next action": [
+    "ការរកឃើញ ការទប់ស្កាត់ និងសកម្មភាពបន្ទាប់",
+    "调查结果、遏制和下一步行动",
+    "Các phát hiện, ngăn chặn và hành động tiếp theo",
+    "Mga natuklasan, pagpigil at susunod na pagkilos",
+    "Penemuan, pembendungan dan tindakan seterusnya"
+  ],
+  "Findings, correction and follow-up / N/A explanations": [
+    "ការរកឃើញ ការកែតម្រូវ និងការតាមដាន / N/A ការពន្យល់",
+    "调查结果、更正和后续行动/不适用的解释",
+    "Các phát hiện, chỉnh sửa và theo dõi/Giải thích không áp dụng",
+    "Mga natuklasan, pagwawasto at follow-up / N/A na mga paliwanag",
+    "Penemuan, pembetulan dan penjelasan susulan / N/A"
+  ],
+  "Finishing / packing line": [
+    "ការបញ្ចប់ / បន្ទាត់វេចខ្ចប់",
+    "整理/包装线",
+    "Dây chuyền hoàn thiện/đóng gói",
+    "Linya ng pagtatapos / pag-iimpake",
+    "Finishing / packing line"
+  ],
+  "Finishing and packing QA audit": [
+    "ការបញ្ចប់ និងការវេចខ្ចប់សវនកម្ម QA",
+    "整理和包装 QA 审核",
+    "Hoàn thiện và đóng gói kiểm tra QA",
+    "Pagtatapos at pag-iimpake ng QA audit",
+    "Menyelesaikan dan membungkus audit QA"
+  ],
+  "Finishing line": [
+    "បន្ទាត់បញ្ចប់",
+    "终点线",
+    "Dây chuyền hoàn thiện",
+    "linya ng pagtatapos",
+    "Finishing line"
+  ],
+  "Finishing quality checker / quality leader": [
+    "ការបញ្ចប់អ្នកត្រួតពិនិត្យគុណភាព / អ្នកដឹកនាំគុណភាព",
+    "精加工质检员/质量组长",
+    "Người kiểm tra chất lượng hoàn thiện/ Trưởng nhóm chất lượng",
+    "Tinatapos ang checker ng kalidad / pinuno ng kalidad",
+    "Penamat penyemak kualiti / peneraju kualiti"
+  ],
+  "Finishing receiver name": [
+    "បញ្ចប់ឈ្មោះអ្នកទទួល",
+    "整理接收者姓名",
+    "Kết thúc tên người nhận",
+    "Tinatapos ang pangalan ng tatanggap",
+    "Finishing receiver name"
+  ],
+  "Finishing result": [
+    "លទ្ធផលបញ្ចប់",
+    "整理结果",
+    "Kết quả hoàn thiện",
+    "Resulta ng pagtatapos",
+    "Finishing result"
+  ],
+  "First inspection": [
+    "ការត្រួតពិនិត្យដំបូង",
+    "首次检查",
+    "Kiểm tra lần đầu",
+    "Unang inspeksyon",
+    "First inspection"
+  ],
+  "First pass rate counts unique first checks. DHU counts defect instances per 100 first-checked garments; repairs and rechecks do not increase the denominator.": [
+    "អត្រាឆ្លងកាត់ដំបូងរាប់ការត្រួតពិនិត្យដំបូងតែមួយគត់។ DHU រាប់ករណីពិការភាពក្នុង 100 សម្លៀកបំពាក់ដែលបានពិនិត្យដំបូង។ ការជួសជុល និងការត្រួតពិនិត្យឡើងវិញមិនបង្កើនភាគបែងទេ។",
+    "首次通过率计算唯一的首次检查。 DHU 统计每 100 件首次检查的服装中的缺陷实例；修理和重新检查不会增加分母。",
+    "Tỷ lệ vượt qua đầu tiên tính lần kiểm tra đầu tiên duy nhất. DHU đếm số trường hợp lỗi trên 100 sản phẩm may mặc được kiểm tra lần đầu; việc sửa chữa và kiểm tra lại không làm tăng mẫu số.",
+    "Ang unang pass rate ay nagbibilang ng mga natatanging unang tseke. Ang DHU ay nagbibilang ng mga kaso ng depekto sa bawat 100 unang sinuri na kasuotan; Ang mga pag-aayos at muling pagsusuri ay hindi nagpapataas ng denominator.",
+    "Kadar lulus pertama mengira cek pertama yang unik. DHU mengira kejadian kecacatan setiap 100 pakaian yang pertama diperiksa; pembaikan dan penyemakan semula tidak meningkatkan penyebut."
+  ],
+  "First result": [
+    "លទ្ធផលដំបូង",
+    "第一个结果",
+    "Kết quả đầu tiên",
+    "Unang resulta",
+    "First result"
+  ],
+  "First-output gate; no upstream approval.": [
+    "ច្រកចេញដំបូង; គ្មានការយល់ព្រមលើចរន្ត។",
+    "第一输出门；没有上游批准。",
+    "Cổng ra đầu tiên; không có sự chấp thuận ngược dòng.",
+    "Unang-output gate; walang upstream approval.",
+    "First-output gate; tiada kelulusan huluan."
+  ],
+  "Five different views of saved pad records and CAP decisions. Amendments are applied to report values; ground records stay intact.": [
+    "ទិដ្ឋភាពប្រាំផ្សេងគ្នានៃកំណត់ត្រាបន្ទះដែលបានរក្សាទុក និងការសម្រេចចិត្ត CAP ។ វិសោធនកម្មត្រូវបានអនុវត្តចំពោះតម្លៃរបាយការណ៍; កំណត់ត្រាដីនៅដដែល។",
+    "已保存的 pad 记录和 CAP 决策的五个不同视图。修正应用于报告值；地面记录完好无损。",
+    "Năm chế độ xem khác nhau về bản ghi bảng đã lưu và quyết định CAP. Các sửa đổi được áp dụng cho các giá trị báo cáo; hồ sơ mặt bằng vẫn còn nguyên.",
+    "Limang magkakaibang view ng mga naka-save na pad record at mga desisyon ng CAP. Inilapat ang mga pagbabago sa mga halaga ng ulat; mananatiling buo ang mga rekord sa lupa.",
+    "Lima pandangan berbeza rekod pad yang disimpan dan keputusan CAP. Pindaan digunakan untuk melaporkan nilai; rekod tanah kekal utuh."
+  ],
+  "Floor pad": [
+    "កម្រាលឥដ្ឋ",
+    "地垫",
+    "Tấm lót sàn",
+    "Floor pad",
+    "Alas lantai"
+  ],
+  "Floor pad ·": [
+    "កម្រាលឥដ្ឋ ·",
+    "地垫·",
+    "Tấm lót sàn ·",
+    "Floor pad ·",
+    "Floor pad ·"
+  ],
+  "Full inspection report": [
+    "របាយការណ៍ត្រួតពិនិត្យពេញលេញ",
+    "完整检验报告",
+    "Báo cáo kiểm tra đầy đủ",
+    "Buong ulat ng inspeksyon",
+    "Laporan pemeriksaan penuh"
+  ],
+  "Full name": [
+    "ឈ្មោះពេញ",
+    "全名",
+    "Tên đầy đủ",
+    "Buong pangalan",
+    "Nama penuh"
+  ],
+  "Garment IDs *": [
+    "លេខសម្គាល់សម្លៀកបំពាក់ *",
+    "服装 ID *",
+    "Mã hàng may mặc *",
+    "Mga Garment ID *",
+    "Garment IDs *"
+  ],
+  "Garment check saved. Any failed piece stays in the repair and reinspection queue.": [
+    "ការត្រួតពិនិត្យសម្លៀកបំពាក់ត្រូវបានរក្សាទុក។ រាល់បំណែកដែលបរាជ័យស្ថិតនៅក្នុងជួរជួសជុល និងត្រួតពិនិត្យឡើងវិញ។",
+    "服装检查已保存。任何不合格的部件都会保留在维修和重新检查队列中。",
+    "Đã lưu kiểm tra hàng may mặc. Bất kỳ phần nào bị lỗi vẫn nằm trong hàng đợi sửa chữa và kiểm tra lại.",
+    "Na-save ang tseke ng damit. Ang anumang nabigong piraso ay mananatili sa pila sa pag-aayos at muling pagsisiyasat.",
+    "Cek pakaian disimpan. Mana-mana bahagian yang gagal kekal dalam baris gilir pembaikan dan pemeriksaan semula."
+  ],
+  "Garments checked out to finishing. Handoff saved.": [
+    "សម្លៀកបំពាក់បានពិនិត្យមើលការបញ្ចប់។ Handoff ត្រូវបានរក្សាទុក។",
+    "服装检查完毕。切换已保存。",
+    "Hàng may mặc được kiểm tra để hoàn thiện. Đã lưu chuyển giao.",
+    "Naka-check out ang mga damit hanggang matapos. Nai-save ang handoff.",
+    "Pakaian diperiksa sehingga selesai. Handoff disimpan."
+  ],
+  "Gather line leader, supervisor, operators, mechanic if needed and QC.": [
+    "ប្រមូលផ្តុំអ្នកដឹកនាំ អ្នកគ្រប់គ្រង ប្រតិបត្តិករ មេកានិក ប្រសិនបើចាំបាច់ និង QC ។",
+    "召集生产线领导、主管、操作员、机械师（如果需要）和质量控制人员。",
+    "Tập hợp trưởng chuyền, giám sát, vận hành, thợ cơ khí nếu cần và QC.",
+    "Ipunin ang pinuno ng linya, superbisor, operator, mekaniko kung kinakailangan at QC.",
+    "Kumpulkan ketua barisan, penyelia, operator, mekanik jika perlu dan QC."
+  ],
+  "Go back": [
+    "ត្រឡប់ទៅវិញ។",
+    "返回",
+    "Quay lại",
+    "Bumalik ka",
+    "pergi balik"
+  ],
+  "Grain / direction": [
+    "គ្រាប់ធញ្ញជាតិ / ទិសដៅ",
+    "颗粒/方向",
+    "Hạt / hướng",
+    "Butil / direksyon",
+    "Bijirin / arah"
+  ],
+  "Gross carton weight kg": [
+    "ទំងន់ប្រអប់សរុបគីឡូក្រាម",
+    "纸箱毛重 kg",
+    "Tổng trọng lượng thùng kg",
+    "Kabuuang timbang ng karton kg",
+    "Berat karton kasar kg"
+  ],
+  "Gross weight (kg)": [
+    "ទំងន់សរុប (គីឡូក្រាម)",
+    "毛重（公斤）",
+    "Tổng trọng lượng (kg)",
+    "Kabuuang timbang (kg)",
+    "Berat kasar (kg)"
+  ],
+  "Ground-level data dashboard": [
+    "ផ្ទាំងគ្រប់គ្រងទិន្នន័យកម្រិតដី",
+    "地面数据仪表板",
+    "Bảng điều khiển dữ liệu cấp mặt đất",
+    "Dashboard ng data sa antas ng lupa",
+    "Papan pemuka data aras tanah"
+  ],
+  "Guest session": [
+    "វគ្គភ្ញៀវ",
+    "嘉宾专场",
+    "Phiên khách",
+    "Sesyon ng panauhin",
+    "Sesi tetamu"
+  ],
+  "Handoff:": [
+    "ការផ្តល់ជូន៖",
+    "交接：",
+    "Bàn giao:",
+    "Handoff:",
+    "Handoff:"
+  ],
+  "Held output is not released by changing its label. Create a linked reinspection after correction; the original result remains in history.": [
+    "លទ្ធផលដែលបានរក្សាទុកមិនត្រូវបានបញ្ចេញដោយការផ្លាស់ប្តូរស្លាករបស់វា។ បង្កើតការត្រួតពិនិត្យឡើងវិញដែលបានភ្ជាប់បន្ទាប់ពីការកែតម្រូវ; លទ្ធផលដើមនៅតែមាននៅក្នុងប្រវត្តិសាស្ត្រ។",
+    "保留的输出不会通过更改其标签来释放。纠正后创建联动复检；最初的结果留在了历史中。",
+    "Đầu ra bị giữ không được giải phóng bằng cách thay đổi nhãn của nó. Tạo liên kết kiểm tra lại sau khi sửa; kết quả ban đầu vẫn còn trong lịch sử.",
+    "Hindi inilalabas ang hawak na output sa pamamagitan ng pagpapalit ng label nito. Gumawa ng naka-link na muling pagsisiyasat pagkatapos ng pagwawasto; ang orihinal na resulta ay nananatili sa kasaysayan.",
+    "Output yang dipegang tidak dikeluarkan dengan menukar labelnya. Buat pemeriksaan semula terpaut selepas pembetulan; hasil asal kekal dalam sejarah."
+  ],
+  "Held pcs": [
+    "បានកាន់ pcs",
+    "持有电脑数",
+    "chiếc được giữ",
+    "Hinawakan ang mga pcs",
+    "Dipegang pcs"
+  ],
+  "Hold / submit": [
+    "សង្កត់ / ដាក់ស្នើ",
+    "保留/提交",
+    "Giữ/gửi",
+    "Hawakan / isumite",
+    "Tahan / serahkan"
+  ],
+  "Hold and correct quality issues before release.": [
+    "សង្កត់ និងកែបញ្ហាគុណភាពមុនពេលចេញផ្សាយ។",
+    "在发布前保留并纠正质量问题。",
+    "Giữ và khắc phục các vấn đề về chất lượng trước khi phát hành.",
+    "I-hold at itama ang mga isyu sa kalidad bago ilabas.",
+    "Tahan dan betulkan isu kualiti sebelum dikeluarkan."
+  ],
+  "Hold line": [
+    "កាន់បន្ទាត់",
+    "保持线路",
+    "Giữ dòng",
+    "Pindutin ang linya",
+    "Tahan baris"
+  ],
+  "Humidity Aquaboy Checking": [
+    "ការត្រួតពិនិត្យសំណើម Aquaboy",
+    "Aquaboy 湿度检查",
+    "Kiểm tra độ ẩm Aquaboy",
+    "Pagsusuri ng Humidity Aquaboy",
+    "Pemeriksaan Aquaboy Kelembapan"
+  ],
+  "Humidity result": [
+    "លទ្ធផលសំណើម",
+    "湿度结果",
+    "Kết quả độ ẩm",
+    "Resulta ng kahalumigmigan",
+    "Hasil kelembapan"
+  ],
+  "Humidity specification (% RH)": [
+    "ការបញ្ជាក់អំពីសំណើម (% RH)",
+    "湿度规格（%RH）",
+    "Thông số độ ẩm (%RH)",
+    "Detalye ng halumigmig (% RH)",
+    "Spesifikasi kelembapan (% RH)"
+  ],
+  "I checked this single-sample plan against the approved buyer instruction.": [
+    "ខ្ញុំបានពិនិត្យគម្រោងគំរូតែមួយនេះប្រឆាំងនឹងការណែនាំអ្នកទិញដែលបានអនុម័ត។",
+    "我根据批准的买家说明检查了这个单一样品计划。",
+    "Tôi đã kiểm tra kế hoạch một mẫu này theo hướng dẫn đã được phê duyệt của người mua.",
+    "Sinuri ko ang single-sample na plan na ito laban sa inaprubahang tagubilin ng mamimili.",
+    "Saya menyemak pelan sampel tunggal ini terhadap arahan pembeli yang diluluskan."
+  ],
+  "ID if issue found": [
+    "លេខសម្គាល់ប្រសិនបើបញ្ហាត្រូវបានរកឃើញ",
+    "如果发现问题，则提供 ID",
+    "ID nếu tìm thấy vấn đề",
+    "ID kung may nakitang isyu",
+    "ID jika isu ditemui"
+  ],
+  "ILO garment checking guide": [
+    "ការណែនាំអំពីការត្រួតពិនិត្យសម្លៀកបំពាក់របស់ ILO",
+    "国际劳工组织服装检查指南",
+    "Hướng dẫn kiểm tra hàng may mặc của ILO",
+    "Gabay sa pagsusuri ng damit ng ILO",
+    "Panduan menyemak pakaian ILO"
+  ],
+  "ILO quality indicators": [
+    "សូចនាករគុណភាពរបស់ ILO",
+    "国际劳工组织质量指标",
+    "Chỉ số chất lượng của ILO",
+    "Mga tagapagpahiwatig ng kalidad ng ILO",
+    "Penunjuk kualiti ILO"
+  ],
+  "ISO 2859-1 sampling-plan overview ↗": [
+    "ទិដ្ឋភាពទូទៅនៃផែនការគំរូ ISO 2859-1 ↗",
+    "ISO 2859-1 抽样计划概述 ↗",
+    "Tổng quan về kế hoạch lấy mẫu ISO 2859-1 ↗",
+    "Pangkalahatang-ideya ng ISO 2859-1 sampling-plan ↗",
+    "Gambaran keseluruhan pelan pensampelan ISO 2859-1 ↗"
+  ],
+  "If known": [
+    "បើស្គាល់",
+    "如果知道的话",
+    "Nếu biết",
+    "Kung kilala",
+    "Jika diketahui"
+  ],
+  "Immediate correction / corrective action": [
+    "ការកែតម្រូវ / សកម្មភាពកែតម្រូវភ្លាមៗ",
+    "立即纠正/纠正措施",
+    "Sửa chữa/hành động khắc phục ngay lập tức",
+    "Agarang pagwawasto / pagwawasto ng aksyon",
+    "Pembetulan segera / tindakan pembetulan"
+  ],
+  "Inches": [
+    "អុិនឈ៍",
+    "英寸",
+    "Inch",
+    "pulgada",
+    "inci"
+  ],
+  "Independent 20-piece quality audit": [
+    "សវនកម្មគុណភាព 20 ដុំដោយឯករាជ្យ",
+    "独立20件质量审核",
+    "Kiểm toán chất lượng 20 phần độc lập",
+    "Independiyenteng 20 pirasong pag-audit sa kalidad",
+    "Audit kualiti 20 keping bebas"
+  ],
+  "Independent QA auditor / senior quality supervisor": [
+    "សវនករ QA ឯករាជ្យ / អ្នកគ្រប់គ្រងគុណភាពជាន់ខ្ពស់",
+    "独立质量保证审核员/高级质量主管",
+    "Kiểm toán viên QA độc lập/giám sát chất lượng cấp cao",
+    "Independent QA auditor / senior quality supervisor",
+    "Juruaudit QA bebas / penyelia kualiti kanan"
+  ],
+  "Independent decoration QA / quality supervisor": [
+    "ការតុបតែងឯករាជ្យ QA / អ្នកគ្រប់គ្រងគុណភាព",
+    "Independent decoration QA / quality supervisor",
+    "Giám sát chất lượng / QA trang trí độc lập",
+    "Independiyenteng dekorasyon ng QA / superbisor ng kalidad",
+    "QA hiasan bebas / penyelia kualiti"
+  ],
+  "Independent release review has not been recorded.": [
+    "ការត្រួតពិនិត្យការចេញផ្សាយឯករាជ្យមិនត្រូវបានកត់ត្រាទេ។",
+    "独立发布审查尚未记录。",
+    "Đánh giá phát hành độc lập chưa được ghi lại.",
+    "Ang pagsusuri sa independiyenteng release ay hindi naitala.",
+    "Semakan keluaran bebas belum direkodkan."
+  ],
+  "Inline inspection · sewing": [
+    "ការត្រួតពិនិត្យក្នុងបណ្តាញ · ដេរ",
+    "Inline inspection · sewing",
+    "Kiểm tra nội tuyến · may",
+    "Inline na inspeksyon · pananahi",
+    "Pemeriksaan sebaris · jahitan"
+  ],
+  "Inspection Form": [
+    "ទម្រង់អធិការកិច្ច",
+    "检验表",
+    "Mẫu kiểm tra",
+    "Form ng Inspeksyon",
+    "Borang Pemeriksaan"
+  ],
+  "Inspection YHR person": [
+    "អធិការកិច្ច YHR បុគ្គល",
+    "检查YHR人",
+    "Người kiểm tra YHR",
+    "Inspeksyon ng taong YHR",
+    "Orang YHR pemeriksaan"
+  ],
+  "Inspection correction notes": [
+    "កំណត់ចំណាំការកែតម្រូវអធិការកិច្ច",
+    "Inspection correction notes",
+    "Ghi chú chỉnh sửa kiểm tra",
+    "Mga tala sa pagwawasto ng inspeksyon",
+    "Nota pembetulan pemeriksaan"
+  ],
+  "Inspection form sections": [
+    "ផ្នែកនៃទម្រង់អធិការកិច្ច",
+    "检查表部分",
+    "Phần biểu mẫu kiểm tra",
+    "Mga seksyon ng form ng inspeksyon",
+    "Bahagian borang pemeriksaan"
+  ],
+  "Inspection notes": [
+    "កំណត់ចំណាំអធិការកិច្ច",
+    "检查注意事项",
+    "Ghi chú kiểm tra",
+    "Mga tala sa inspeksyon",
+    "Nota pemeriksaan"
+  ],
+  "Inspection records": [
+    "កំណត់ត្រាអធិការកិច្ច",
+    "检验记录",
+    "Biên bản kiểm tra",
+    "Mga talaan ng inspeksyon",
+    "Rekod pemeriksaan"
+  ],
+  "Inspection reference and findings": [
+    "ឯកសារយោង និងលទ្ធផលត្រួតពិនិត្យ",
+    "Inspection reference and findings",
+    "Tài liệu tham khảo và kết quả kiểm tra",
+    "Sanggunian sa inspeksyon at mga natuklasan",
+    "Rujukan dan penemuan pemeriksaan"
+  ],
+  "Inspection result *": [
+    "លទ្ធផលអធិការកិច្ច *",
+    "检查结果*",
+    "Kết quả kiểm tra *",
+    "Resulta ng inspeksyon *",
+    "Keputusan pemeriksaan *"
+  ],
+  "Inspector / session": [
+    "អធិការ / សម័យ",
+    "督察/会议",
+    "Thanh tra/phiên",
+    "Inspektor / sesyon",
+    "Inspektor / sesi"
+  ],
+  "Inspector competence evidence": [
+    "ភស្តុតាងសមត្ថកិច្ច",
+    "Inspector competence evidence",
+    "Bằng chứng về năng lực của thanh tra viên",
+    "Katibayan ng kakayahan ng inspektor",
+    "Bukti kecekapan inspektor"
+  ],
+  "Inspector pad": [
+    "បន្ទះត្រួតពិនិត្យ",
+    "检查垫",
+    "Bảng thanh tra",
+    "Inspector pad",
+    "Pad inspektor"
+  ],
+  "Inspector training / assignment evidence": [
+    "ការបណ្តុះបណ្តាលអធិការ / ភស្តុតាងនៃការចាត់តាំង",
+    "Inspector training / assignment evidence",
+    "Bằng chứng đào tạo / phân công thanh tra",
+    "Katibayan ng pagsasanay sa inspektor / pagtatalaga",
+    "Bukti latihan/tugasan pemeriksa"
+  ],
+  "Inspector, scope, machine and bundle are required.": [
+    "អធិការកិច្ច វិសាលភាព ម៉ាស៊ីន និងបាច់ត្រូវបានទាមទារ។",
+    "需要检查员、范围、机器和捆绑包。",
+    "Cần có thanh tra, phạm vi, máy và gói.",
+    "Kinakailangan ang inspektor, saklaw, makina at bundle.",
+    "Pemeriksa, skop, mesin dan berkas diperlukan."
+  ],
+  "Inspector:": [
+    "អធិការ៖",
+    "检查员：",
+    "Thanh tra:",
+    "Inspektor:",
+    "Inspektor:"
+  ],
+  "Instrument:": [
+    "ឧបករណ៍៖",
+    "仪器：",
+    "Nhạc cụ:",
+    "Instrumento:",
+    "Instrumen:"
+  ],
+  "Iron / steam setting": [
+    "ការកំណត់ដែក / ចំហាយ",
+    "熨斗/蒸汽设置",
+    "Cài đặt bàn ủi/hơi nước",
+    "Setting ng bakal / singaw",
+    "Tetapan seterika / wap"
+  ],
+  "Ironing line": [
+    "បន្ទាត់ដែក",
+    "熨烫线",
+    "Dây chuyền ủi",
+    "Linya ng pamamalantsa",
+    "Talian menyeterika"
+  ],
+  "Ironing result": [
+    "លទ្ធផលដែក",
+    "熨烫效果",
+    "Kết quả ủi",
+    "Resulta ng pamamalantsa",
+    "Hasil menyeterika"
+  ],
+  "Issue / status": [
+    "បញ្ហា / ស្ថានភាព",
+    "问题/状态",
+    "Vấn đề/trạng thái",
+    "Isyu / katayuan",
+    "Isu / status"
+  ],
+  "Issue · hold": [
+    "បញ្ហា · កាន់",
+    "发行·保留",
+    "Vấn đề · giữ",
+    "Isyu · hawakan",
+    "Isu · tahan"
+  ],
+  "Item / sample": [
+    "ធាតុ / គំរូ",
+    "项目/样品",
+    "Mặt hàng/mẫu",
+    "Item / sample",
+    "Item / sampel"
+  ],
+  "Keep failed or uninspected pieces in sewing or repair.": [
+    "រក្សាបំណែកដែលបរាជ័យ ឬមិនបានត្រួតពិនិត្យនៅក្នុងការដេរ ឬជួសជុល។",
+    "将失败或未经检查的部件保留在缝纫或修理中。",
+    "Giữ các mảnh bị lỗi hoặc chưa được kiểm tra trong quá trình may hoặc sửa chữa.",
+    "Panatilihin ang mga nabigo o hindi nasuri na mga piraso sa pananahi o pagkukumpuni.",
+    "Simpan kepingan yang gagal atau tidak diperiksa dalam jahitan atau pembaikan."
+  ],
+  "Keep open / hold": [
+    "បើក/សង្កត់",
+    "保持打开/按住",
+    "Giữ mở/giữ",
+    "Panatilihing bukas / hawakan",
+    "Terus buka / tahan"
+  ],
+  "Lay setup": [
+    "ការរៀបចំដាក់",
+    "铺设设置",
+    "Đặt thiết lập",
+    "Pag-setup ng lay",
+    "Persediaan letak"
+  ],
+  "Legacy demo record": [
+    "កំណត់​ត្រា​ការ​សាកល្បង​កេរ្តិ៍ដំណែល",
+    "旧版演示记录",
+    "Bản ghi demo kế thừa",
+    "Legacy na demo record",
+    "Rekod demo warisan"
+  ],
+  "Level not recorded": [
+    "កម្រិតមិនត្រូវបានកត់ត្រាទេ។",
+    "未记录级别",
+    "Mức độ không được ghi lại",
+    "Hindi naitala ang antas",
+    "Tahap tidak direkodkan"
+  ],
+  "Limits belong to this saved buyer plan. Example plans are illustrative and do not replace an approved buyer sampling table.": [
+    "ដែនកំណត់ជាកម្មសិទ្ធិរបស់គម្រោងអ្នកទិញដែលបានរក្សាទុកនេះ។ គម្រោងគំរូគឺមានលក្ខណៈជាឧទាហរណ៍ ហើយមិនជំនួសតារាងគំរូរបស់អ្នកទិញដែលបានអនុម័តនោះទេ។",
+    "限制属于此已保存的买家计划。示例计划仅供参考，不能取代经批准的买方抽样表。",
+    "Giới hạn thuộc về gói người mua đã lưu này. Các kế hoạch mẫu chỉ mang tính minh họa và không thay thế bảng lấy mẫu của người mua đã được phê duyệt.",
+    "Ang mga limitasyon ay nabibilang sa naka-save na plano ng mamimili na ito. Ang mga halimbawang plano ay naglalarawan at hindi pinapalitan ang isang aprubadong talahanayan ng sampling ng mamimili.",
+    "Had adalah milik pelan pembeli yang disimpan ini. Pelan contoh adalah ilustrasi dan tidak menggantikan jadual pensampelan pembeli yang diluluskan."
+  ],
+  "Line *": [
+    "បន្ទាត់ *",
+    "线路 *",
+    "Dòng *",
+    "Linya *",
+    "Talian *"
+  ],
+  "Line / inspector": [
+    "បន្ទាត់ / អធិការ",
+    "线/检验员",
+    "Đường dây/thanh tra",
+    "Linya / inspektor",
+    "Talian / pemeriksa"
+  ],
+  "Line / team": [
+    "ជួរ / ក្រុម",
+    "线路/团队",
+    "Dòng/đội",
+    "Linya / pangkat",
+    "Barisan / pasukan"
+  ],
+  "Line ID": [
+    "លេខសម្គាល់បន្ទាត់",
+    "线路编号",
+    "ID dòng",
+    "Line ID",
+    "ID baris"
+  ],
+  "Line activity": [
+    "សកម្មភាពបន្ទាត់",
+    "线路活动",
+    "Hoạt động dòng",
+    "Aktibidad sa linya",
+    "Aktiviti garisan"
+  ],
+  "Line leader + sewing supervisor": [
+    "អ្នកដឹកនាំជួរ + អ្នកគ្រប់គ្រងដេរ",
+    "线长+缝纫主管",
+    "Trưởng chuyền + giám sát may",
+    "Pinuno ng linya + superbisor sa pananahi",
+    "Ketua barisan + penyelia jahitan"
+  ],
+  "Line leader prepares the approved sample, tech pack, MO, operators and machines.": [
+    "អ្នកដឹកនាំជួររៀបចំគំរូដែលបានអនុម័ត កញ្ចប់បច្ចេកវិទ្យា MO ប្រតិបត្តិករ និងម៉ាស៊ីន។",
+    "生产线领导准备批准的样品、技术包、MO、操作员和机器。",
+    "Trưởng dây chuyền chuẩn bị mẫu, gói công nghệ, MO, người vận hành và máy móc đã được phê duyệt.",
+    "Inihahanda ng pinuno ng linya ang naaprubahang sample, tech pack, MO, mga operator at makina.",
+    "Pemimpin barisan menyediakan sampel yang diluluskan, pek teknologi, MO, pengendali dan mesin."
+  ],
+  "Line sample": [
+    "គំរូបន្ទាត់",
+    "线样",
+    "Mẫu dòng",
+    "Sampol ng linya",
+    "Sampel garisan"
+  ],
+  "Line view": [
+    "ទិដ្ឋភាពបន្ទាត់",
+    "线视图",
+    "Chế độ xem dòng",
+    "Line view",
+    "Pandangan garisan"
+  ],
+  "Loading ground records…": [
+    "កំពុងផ្ទុកកំណត់ត្រាដី...",
+    "正在加载地面记录...",
+    "Đang tải hồ sơ mặt đất…",
+    "Nilo-load ang mga tala sa lupa...",
+    "Memuatkan rekod tanah…"
+  ],
+  "Loading the YHR directory. A current named inspector is required for submission.": [
+    "កំពុងផ្ទុកបញ្ជី YHR ។ អធិការដែលមានឈ្មោះបច្ចុប្បន្នត្រូវបានទាមទារសម្រាប់ការបញ្ជូន។",
+    "加载 YHR 目录。提交时需要现任指定检查员。",
+    "Đang tải thư mục YHR. Cần phải có một thanh tra viên có tên hiện tại để nộp hồ sơ.",
+    "Nilo-load ang direktoryo ng YHR. Ang kasalukuyang pinangalanang inspektor ay kinakailangan para sa pagsusumite.",
+    "Memuatkan direktori YHR. Pemeriksa bernama semasa diperlukan untuk penyerahan."
+  ],
+  "Lock floor pad": [
+    "ចាក់សោកម្រាលឥដ្ឋ",
+    "锁地板垫",
+    "Khóa đệm sàn",
+    "I-lock ang floor pad",
+    "Kunci pad lantai"
+  ],
+  "MO / order *": [
+    "MO / បញ្ជាទិញ *",
+    "采购订单/订单 *",
+    "MO / đơn hàng *",
+    "MO / order *",
+    "MO / pesanan *"
+  ],
+  "MO / style": [
+    "MO / រចនាប័ទ្ម",
+    "模式/风格",
+    "MO / phong cách",
+    "MO / istilo",
+    "MO / gaya"
+  ],
+  "MO number": [
+    "លេខ MO",
+    "莫号",
+    "số MO",
+    "MO number",
+    "Nombor MO"
+  ],
+  "Machine / bundle:": [
+    "ម៉ាស៊ីន / កញ្ចប់៖",
+    "机器/捆绑：",
+    "Máy/bó:",
+    "Machine / bundle:",
+    "Mesin / berkas:"
+  ],
+  "Machine / head": [
+    "ម៉ាស៊ីន / ក្បាល",
+    "机器/机头",
+    "Máy/đầu",
+    "Makina / ulo",
+    "Mesin / kepala"
+  ],
+  "Machine ID": [
+    "លេខសម្គាល់ម៉ាស៊ីន",
+    "机器ID",
+    "ID máy",
+    "ID ng makina",
+    "ID mesin"
+  ],
+  "Machine IDs checked *": [
+    "បានពិនិត្យលេខសម្គាល់ម៉ាស៊ីន *",
+    "检查机器 ID *",
+    "ID máy đã được kiểm tra *",
+    "Sinuri ang mga machine ID *",
+    "ID mesin diperiksa *"
+  ],
+  "Machines / settings *": [
+    "ម៉ាស៊ីន / ការកំណត់ *",
+    "机器/设置 *",
+    "Máy móc/cài đặt *",
+    "Mga makina / setting *",
+    "Mesin / tetapan *"
+  ],
+  "Management decision": [
+    "ការសម្រេចចិត្តគ្រប់គ្រង",
+    "管理决策",
+    "Quyết định quản lý",
+    "Desisyon ng pamamahala",
+    "Keputusan pengurusan"
+  ],
+  "Management decisions and PA / Big Brain events appear in DR when actually recorded.": [
+    "ការសម្រេចចិត្តគ្រប់គ្រង និងព្រឹត្តិការណ៍ PA/Big Brain បង្ហាញនៅក្នុង DR នៅពេលថតពិតប្រាកដ។",
+    "实际记录时，管理决策和 PA/Big Brain 事件会出现在 DR 中。",
+    "Các quyết định quản lý và sự kiện PA/Big Brain xuất hiện trong DR khi được ghi lại thực tế.",
+    "Ang mga desisyon sa pamamahala at mga kaganapan sa PA / Big Brain ay lumalabas sa DR kapag aktwal na naitala.",
+    "Keputusan pengurusan dan peristiwa PA / Big Brain muncul dalam DR apabila sebenarnya direkodkan."
+  ],
+  "Management report amendment saved. Original feeder evidence retained; DR updated.": [
+    "ការកែប្រែរបាយការណ៍គ្រប់គ្រងត្រូវបានរក្សាទុក។ ភស្តុតាង feeder ដើមត្រូវបានរក្សាទុក; DR បានធ្វើបច្ចុប្បន្នភាព។",
+    "已保存管理报告修订。保留原始馈线证据；博士已更新。",
+    "Đã lưu sửa đổi báo cáo quản lý. Bằng chứng trung chuyển ban đầu được giữ lại; Đã cập nhật DR.",
+    "Na-save ang pag-amyenda sa ulat ng pamamahala. Napanatili ang orihinal na ebidensya ng feeder; Nag-update si DR.",
+    "Pindaan laporan pengurusan disimpan. Bukti penyuap asal dikekalkan; DR dikemas kini."
+  ],
+  "Management report amendments": [
+    "ការកែប្រែរបាយការណ៍គ្រប់គ្រង",
+    "管理报告修订",
+    "Sửa đổi báo cáo quản lý",
+    "Mga pagbabago sa ulat ng pamamahala",
+    "Pindaan laporan pengurusan"
+  ],
+  "Master data added": [
+    "ទិន្នន័យមេបានបន្ថែម",
+    "添加了主数据",
+    "Đã thêm dữ liệu chính",
+    "Idinagdag ang master data",
+    "Data induk ditambah"
+  ],
+  "Matches approved process sheet / first-output reference": [
+    "ផ្គូផ្គងសន្លឹកដំណើរការដែលបានអនុម័ត / សេចក្តីយោងលទ្ធផលដំបូង",
+    "与批准的流程表/首次输出参考相匹配",
+    "Phù hợp với bảng quy trình đã được phê duyệt / tham chiếu đầu ra đầu tiên",
+    "Tumutugma sa aprubadong sheet ng proseso / sanggunian sa unang output",
+    "Memadankan helaian proses / rujukan keluaran pertama yang diluluskan"
+  ],
+  "Material / ink / thread / transfer lots": [
+    "សម្ភារៈ / ទឹកថ្នាំ / ខ្សែស្រឡាយ / ផ្ទេរច្រើន។",
+    "材料/墨水/线/转印批次",
+    "Vật liệu/mực/sợi/lô chuyển giao",
+    "Materyal / tinta / sinulid / mga lote ng paglilipat",
+    "Bahan / dakwat / benang / lot pindahan"
+  ],
+  "Materials:": [
+    "សម្ភារ:",
+    "材料：",
+    "Vật liệu:",
+    "Mga materyales:",
+    "Bahan:"
+  ],
+  "Measured process conditions": [
+    "លក្ខខណ្ឌដំណើរការវាស់វែង",
+    "测量的工艺条件",
+    "Điều kiện quá trình đo",
+    "Sinusukat ang mga kondisyon ng proseso",
+    "Keadaan proses yang diukur"
+  ],
+  "Measurement matrix · actual value / deviation": [
+    "ម៉ាទ្រីសរង្វាស់ · តម្លៃពិត / គម្លាត",
+    "测量矩阵·实际值/偏差",
+    "Ma trận đo · giá trị thực/độ lệch",
+    "Measurement matrix · aktwal na halaga / deviation",
+    "Matriks ukuran · nilai sebenar / sisihan"
+  ],
+  "Measurement notes": [
+    "កំណត់ចំណាំការវាស់វែង",
+    "测量笔记",
+    "ghi chú đo lường",
+    "Mga tala sa pagsukat",
+    "Nota ukuran"
+  ],
+  "Measurement:": [
+    "ការវាស់វែង៖",
+    "测量：",
+    "Đo lường:",
+    "Pagsukat:",
+    "Pengukuran:"
+  ],
+  "Measurements *": [
+    "ការវាស់វែង *",
+    "测量值 *",
+    "Số đo *",
+    "Mga sukat *",
+    "Ukuran *"
+  ],
+  "Measurements and process readings must be numeric or left pending.": [
+    "ការវាស់វែង និងការអានដំណើរការត្រូវតែជាលេខ ឬទុកចោល។",
+    "测量值和过程读数必须是数字或悬而未决。",
+    "Các phép đo và số đọc quá trình phải ở dạng số hoặc đang chờ xử lý.",
+    "Ang mga sukat at pagbabasa ng proseso ay dapat na numero o naiwang nakabinbin.",
+    "Pengukuran dan bacaan proses mestilah berangka atau dibiarkan belum selesai."
+  ],
+  "Measurements · approved demo tolerance ±": [
+    "ការវាស់វែង · ភាពអត់ឱនការបង្ហាញដែលបានអនុម័ត ±",
+    "测量值 · 经批准的演示公差 ±",
+    "Các phép đo · dung sai demo đã được phê duyệt ±",
+    "Mga sukat · inaprubahang demo tolerance ±",
+    "Pengukuran · toleransi demo yang diluluskan ±"
+  ],
+  "Measurements · mm": [
+    "ការវាស់វែង · ម។",
+    "尺寸·毫米",
+    "Số đo · mm",
+    "Mga sukat · mm",
+    "Ukuran · mm"
+  ],
+  "Measuring instrument / calibration reference": [
+    "ឧបករណ៍វាស់ស្ទង់ / យោងការក្រិតតាមខ្នាត",
+    "测量仪器/校准参考",
+    "Dụng cụ đo lường/tài liệu tham khảo hiệu chuẩn",
+    "Instrumento sa pagsukat / sanggunian sa pagkakalibrate",
+    "Rujukan alat pengukur / penentukuran"
+  ],
+  "Metal detection record": [
+    "កំណត់ត្រារកឃើញលោហៈ",
+    "金属检测记录",
+    "Hồ sơ phát hiện kim loại",
+    "Talaan ng pagtuklas ng metal",
+    "Rekod pengesanan logam"
+  ],
+  "Method / machine": [
+    "វិធីសាស្រ្ត / ម៉ាស៊ីន",
+    "方法/机器",
+    "Phương pháp/máy",
+    "Paraan / makina",
+    "Kaedah / mesin"
+  ],
+  "Method-specific setup and defect library": [
+    "ការរៀបចំវិធីសាស្រ្តជាក់លាក់ និងបណ្ណាល័យដែលមានបញ្ហា",
+    "特定于方法的设置和缺陷库",
+    "Thư viện lỗi và thiết lập theo phương pháp cụ thể",
+    "Pag-setup na partikular sa pamamaraan at depektong library",
+    "Persediaan khusus kaedah dan perpustakaan kecacatan"
+  ],
+  "Middle reading (% RH)": [
+    "ការអានកណ្តាល (% RH)",
+    "中间读数（% RH）",
+    "Số đọc trung bình (%RH)",
+    "Gitnang pagbabasa (% RH)",
+    "Bacaan pertengahan (% RH)"
+  ],
+  "Millimetres": [
+    "មីលីម៉ែត្រ",
+    "毫米",
+    "Milimet",
+    "millimeters",
+    "milimeter"
+  ],
+  "Modify · management report amendments": [
+    "កែប្រែ · ការកែប្រែរបាយការណ៍គ្រប់គ្រង",
+    "修改·管理报告修订",
+    "Sửa đổi · sửa đổi báo cáo quản lý",
+    "Baguhin · mga pagbabago sa ulat ng pamamahala",
+    "Ubah suai · pindaan laporan pengurusan"
+  ],
+  "Module setup saved. Change recorded in DR.": [
+    "ការ​ដំឡើង​ម៉ូឌុល​ត្រូវ​បាន​រក្សា​ទុក។ ការផ្លាស់ប្តូរដែលបានកត់ត្រានៅក្នុង DR.",
+    "模块设置已保存。更改记录在 DR 中。",
+    "Đã lưu thiết lập mô-đun. Thay đổi được ghi trong DR.",
+    "Na-save ang setup ng module. Naitala ang pagbabago sa DR.",
+    "Persediaan modul disimpan. Perubahan direkodkan dalam DR."
+  ],
+  "Module user / YHR responsibility": [
+    "អ្នកប្រើប្រាស់ម៉ូឌុល / ការទទួលខុសត្រូវ YHR",
+    "模块用户/YHR 责任",
+    "Người dùng mô-đun / trách nhiệm YHR",
+    "User ng module / responsibilidad ng YHR",
+    "Pengguna modul / tanggungjawab YHR"
+  ],
+  "Module-wide issue": [
+    "បញ្ហានៃម៉ូឌុល",
+    "模块范围的问题",
+    "Vấn đề trên toàn mô-đun",
+    "Isyu sa buong module",
+    "Isu keseluruhan modul"
+  ],
+  "Move between active sewing lines.": [
+    "ផ្លាស់ទីរវាងបន្ទាត់ដេរសកម្ម។",
+    "在活动缝纫线之间移动。",
+    "Di chuyển giữa các đường may đang hoạt động.",
+    "Lumipat sa pagitan ng mga aktibong linya ng pananahi.",
+    "Bergerak antara garisan jahitan yang aktif."
+  ],
+  "Move between sewing lines · find and follow up quality issues": [
+    "ផ្លាស់ទីរវាងបន្ទាត់ដេរ · ស្វែងរក និងតាមដានបញ្ហាគុណភាព",
+    "在缝纫线之间移动·查找并跟踪质量问题",
+    "Di chuyển giữa các dây chuyền may · tìm và theo dõi các vấn đề về chất lượng",
+    "Lumipat sa pagitan ng mga linya ng pananahi · maghanap at mag-follow up ng mga isyu sa kalidad",
+    "Bergerak antara garisan jahitan · cari dan susulan isu kualiti"
+  ],
+  "N/A explanation / observations:": [
+    "ការពន្យល់/ការសង្កេត៖",
+    "不适用 解释/观察：",
+    "Không áp dụng giải thích/quan sát:",
+    "N/A paliwanag / obserbasyon:",
+    "N/A penjelasan / pemerhatian:"
+  ],
+  "NOT APPLICABLE": [
+    "មិនអាចអនុវត្តបាន។",
+    "不适用",
+    "KHÔNG ÁP DỤNG",
+    "HINDI APPLICABLE",
+    "TIDAK BERKENAAN"
+  ],
+  "Name *": [
+    "ឈ្មោះ *",
+    "姓名 *",
+    "Tên *",
+    "Pangalan *",
+    "Nama *"
+  ],
+  "Named decision added to the register.": [
+    "ការសម្រេចចិត្តដែលមានឈ្មោះត្រូវបានបន្ថែមទៅការចុះឈ្មោះ។",
+    "已命名的决定已添加到登记册中。",
+    "Quyết định được đặt tên được thêm vào sổ đăng ký.",
+    "Ang pinangalanang desisyon ay idinagdag sa rehistro.",
+    "Keputusan dinamakan ditambahkan pada daftar."
+  ],
+  "Needs acknowledgement": [
+    "ត្រូវការការទទួលស្គាល់",
+    "需要确认",
+    "Cần sự thừa nhận",
+    "Kailangan ng pagkilala",
+    "Perlu pengakuan"
+  ],
+  "New decoration inspection": [
+    "ការត្រួតពិនិត្យការតុបតែងថ្មី។",
+    "新装修检验",
+    "Kiểm tra trang trí mới",
+    "Bagong inspeksyon ng dekorasyon",
+    "Pemeriksaan hiasan baru"
+  ],
+  "New floor inspection": [
+    "ការត្រួតពិនិត្យជាន់ថ្មី។",
+    "新地板检查",
+    "Kiểm tra sàn mới",
+    "Bagong inspeksyon sa sahig",
+    "Pemeriksaan lantai baru"
+  ],
+  "New inspection": [
+    "ការត្រួតពិនិត្យថ្មី។",
+    "新检查",
+    "Kiểm tra mới",
+    "Bagong inspeksyon",
+    "Pemeriksaan baru"
+  ],
+  "New issue / decision": [
+    "បញ្ហាថ្មី / ការសម្រេចចិត្ត",
+    "新问题/决定",
+    "Quyết định/vấn đề mới",
+    "Bagong isyu / desisyon",
+    "Isu / keputusan baru"
+  ],
+  "Next action": [
+    "សកម្មភាពបន្ទាប់",
+    "下一步行动",
+    "Hành động tiếp theo",
+    "Susunod na aksyon",
+    "Tindakan seterusnya"
+  ],
+  "Next action:": [
+    "សកម្មភាពបន្ទាប់៖",
+    "下一步行动：",
+    "Hành động tiếp theo:",
+    "Susunod na aksyon:",
+    "Tindakan seterusnya:"
+  ],
+  "Next:": [
+    "បន្ទាប់៖",
+    "下一篇：",
+    "Tiếp theo:",
+    "Susunod:",
+    "Seterusnya:"
+  ],
+  "Night": [
+    "យប់",
+    "夜晚",
+    "Đêm",
+    "Gabi",
+    "Malam"
+  ],
+  "No amendments. Original pad values are in use.": [
+    "គ្មានការកែប្រែទេ។ តម្លៃបន្ទះដើមកំពុងប្រើប្រាស់។",
+    "没有修改。正在使用原始焊盘值。",
+    "Không có sửa đổi. Giá trị pad ban đầu đang được sử dụng.",
+    "Walang mga pagbabago. Ginagamit ang mga orihinal na halaga ng pad.",
+    "Tiada pindaan. Nilai pad asal sedang digunakan."
+  ],
+  "No decisions or quality events recorded yet.": [
+    "មិនទាន់មានការសម្រេចចិត្ត ឬព្រឹត្តិការណ៍គុណភាពត្រូវបានកត់ត្រានៅឡើយទេ។",
+    "尚未记录任何决定或质量事件。",
+    "Chưa có quyết định hoặc sự kiện chất lượng nào được ghi nhận.",
+    "Wala pang naitalang mga desisyon o may kalidad na kaganapan.",
+    "Tiada keputusan atau peristiwa kualiti direkodkan."
+  ],
+  "No defect events recorded.": [
+    "មិនមានការកត់ត្រាព្រឹត្តិការណ៍ដែលមានបញ្ហាទេ។",
+    "没有记录缺陷事件。",
+    "Không có sự kiện lỗi nào được ghi lại.",
+    "Walang naitala na mga kaganapan sa depekto.",
+    "Tiada peristiwa kecacatan direkodkan."
+  ],
+  "No entries recorded for this section.": [
+    "មិនមានការកត់ត្រាសម្រាប់ផ្នែកនេះទេ។",
+    "本节没有记录任何条目。",
+    "Không có mục nào được ghi lại cho phần này.",
+    "Walang naitala na mga entry para sa seksyong ito.",
+    "Tiada entri direkodkan untuk bahagian ini."
+  ],
+  "No evidence reference recorded": [
+    "មិនមានឯកសារយោងភស្តុតាងទេ។",
+    "没有记录参考证据",
+    "Không có tài liệu tham khảo bằng chứng được ghi lại",
+    "Walang naitala na sanggunian ng ebidensya",
+    "Tiada rujukan bukti direkodkan"
+  ],
+  "No matching records.": [
+    "មិនមានកំណត់ត្រាដែលត្រូវគ្នាទេ។",
+    "没有匹配记录。",
+    "Không có hồ sơ phù hợp.",
+    "Walang katugmang mga tala.",
+    "Tiada rekod yang sepadan."
+  ],
+  "No needle damage; needle-control evidence clear": [
+    "គ្មានការខូចខាតម្ជុល; ភស្តុតាងគ្រប់គ្រងម្ជុលច្បាស់លាស់",
+    "无针头损伤；针控证据明确",
+    "Không bị hư kim; bằng chứng kiểm soát kim rõ ràng",
+    "Walang pinsala sa karayom; malinaw ang ebidensyang kontrolado ng karayom",
+    "Tiada kerosakan jarum; bukti kawalan jarum jelas"
+  ],
+  "No product correction recorded.": [
+    "មិនបានកត់ត្រាការកែតម្រូវផលិតផលទេ។",
+    "没有产品修正记录。",
+    "Không có chỉnh sửa sản phẩm được ghi lại.",
+    "Walang naitala na pagwawasto ng produkto.",
+    "Tiada pembetulan produk direkodkan."
+  ],
+  "No quality events or decisions recorded yet.": [
+    "មិន​ទាន់​មាន​ព្រឹត្តិការណ៍​គុណភាព​ឬ​ការ​សម្រេច​ចិត្ត​នៅ​ឡើយ​ទេ​។",
+    "尚未记录质量事件或决策。",
+    "Chưa có sự kiện hoặc quyết định chất lượng nào được ghi lại.",
+    "Wala pang kalidad na kaganapan o desisyon ang naitala.",
+    "Tiada peristiwa atau keputusan yang berkualiti direkodkan."
+  ],
+  "No saved ground records for this view yet.": [
+    "មិនមានកំណត់ត្រាមូលដ្ឋានដែលបានរក្សាទុកសម្រាប់ទិដ្ឋភាពនេះនៅឡើយទេ។",
+    "尚未保存此视图的地面记录。",
+    "Chưa có hồ sơ mặt bằng nào được lưu cho chế độ xem này.",
+    "Wala pang naka-save na ground record para sa view na ito.",
+    "Tiada rekod tanah yang disimpan untuk paparan ini lagi."
+  ],
+  "No saved inspection is available yet.": [
+    "មិនមានការត្រួតពិនិត្យដែលបានរក្សាទុកនៅឡើយទេ។",
+    "尚无可用的已保存检查。",
+    "Chưa có kiểm tra đã lưu nào.",
+    "Wala pang naka-save na inspeksyon.",
+    "Tiada pemeriksaan disimpan lagi tersedia."
+  ],
+  "No signed-in Yai user": [
+    "គ្មាន​អ្នក​ប្រើ​យ៉ៃ​ចូល​ទេ។",
+    "没有登录 Yai 用户",
+    "Không có người dùng Yai đăng nhập",
+    "Walang naka-sign-in na Yai user",
+    "Tiada pengguna Yai yang dilog masuk"
+  ],
+  "No size allocation recorded": [
+    "មិនបានកត់ត្រាការបែងចែកទំហំទេ។",
+    "没有记录大小分配",
+    "Không có phân bổ kích thước được ghi lại",
+    "Walang naitala na paglalaan ng laki",
+    "Tiada peruntukan saiz direkodkan"
+  ],
+  "Not signed in": [
+    "មិន​បាន​ចូល",
+    "未登录",
+    "Chưa đăng nhập",
+    "Hindi naka-sign in",
+    "Tidak dilog masuk"
+  ],
+  "Not specified": [
+    "មិនបានបញ្ជាក់",
+    "未指定",
+    "Không được chỉ định",
+    "Hindi tinukoy",
+    "Tidak dinyatakan"
+  ],
+  "Notches / drill marks": [
+    "ស្នាមរន្ធ / សញ្ញាខួង",
+    "凹口/钻孔痕迹",
+    "Vết khía/vết khoan",
+    "Notches / marka ng drill",
+    "Takik / tanda gerudi"
+  ],
+  "Notes / correction": [
+    "កំណត់ចំណាំ / ការកែតម្រូវ",
+    "注释/更正",
+    "Ghi chú/sửa chữa",
+    "Mga tala / pagwawasto",
+    "Nota / pembetulan"
+  ],
+  "Notes / corrective action": [
+    "កំណត់ចំណាំ / សកម្មភាពកែតម្រូវ",
+    "注释/纠正措施",
+    "Lưu ý/hành động khắc phục",
+    "Mga tala / pagkilos sa pagwawasto",
+    "Nota / tindakan pembetulan"
+  ],
+  "Notes / immediate correction": [
+    "កំណត់ចំណាំ / ការកែតម្រូវភ្លាមៗ",
+    "注释/立即更正",
+    "Ghi chú/sửa ngay",
+    "Mga Tala / agarang pagwawasto",
+    "Nota / pembetulan segera"
+  ],
+  "Notes:": [
+    "កំណត់ចំណាំ៖",
+    "注意事项：",
+    "Ghi chú:",
+    "Mga Tala:",
+    "Nota:"
+  ],
+  "Numbering / bundle identity": [
+    "លេខរៀង/អត្តសញ្ញាណបាច់",
+    "编号/捆绑标识",
+    "Đánh số/nhận dạng gói",
+    "Pagnunumero / pagkakakilanlan ng bundle",
+    "Penomboran / identiti berkas"
+  ],
+  "OPEN": [
+    "បើក",
+    "开放",
+    "MỞ",
+    "BUKAS",
+    "TERBUKA"
+  ],
+  "Observation / N/A reason": [
+    "ការសង្កេត / គ្មានហេតុផល",
+    "观察/不适用原因",
+    "Quan sát / Lý do không áp dụng",
+    "Obserbasyon / N/A dahilan",
+    "Pemerhatian / N/A sebab"
+  ],
+  "Observed / evidence": [
+    "ការសង្កេត / ភស្តុតាង",
+    "观察/证据",
+    "Quan sát/bằng chứng",
+    "Naobserbahan / ebidensya",
+    "Diperhati / bukti"
+  ],
+  "Offline audit": [
+    "សវនកម្មក្រៅបណ្តាញ",
+    "离线审核",
+    "Kiểm tra ngoại tuyến",
+    "Offline na pag-audit",
+    "Audit luar talian"
+  ],
+  "On hold": [
+    "រង់ចាំ",
+    "暂停",
+    "Đang chờ",
+    "Naka-hold",
+    "Di tahan"
+  ],
+  "Open SOP Director ↗": [
+    "បើកនាយក SOP ↗",
+    "开放 SOP 总监 ↗",
+    "Mở Giám đốc SOP ↗",
+    "Buksan ang SOP Director ↗",
+    "Pengarah SOP Terbuka ↗"
+  ],
+  "Open SOP training and role guidance": [
+    "បើកវគ្គបណ្តុះបណ្តាល SOP និងការណែនាំអំពីតួនាទី",
+    "开放式SOP培训和角色指导",
+    "Đào tạo SOP mở và hướng dẫn vai trò",
+    "Buksan ang pagsasanay sa SOP at gabay sa tungkulin",
+    "Latihan SOP terbuka dan bimbingan peranan"
+  ],
+  "Open YHR organization chart": [
+    "បើកតារាងអង្គការ YHR",
+    "打开 YHR 组织结构图",
+    "Mở sơ đồ tổ chức YHR",
+    "Buksan ang tsart ng organisasyon ng YHR",
+    "Buka carta organisasi YHR"
+  ],
+  "Open Yai access page": [
+    "បើកទំព័រចូលប្រើយ៉ៃ",
+    "打开Yai访问页面",
+    "Mở trang truy cập Yai",
+    "Buksan ang pahina ng pag-access sa Yai",
+    "Buka halaman akses Yai"
+  ],
+  "Open authorised pad": [
+    "បើកបន្ទះដែលមានការអនុញ្ញាត",
+    "打开授权垫",
+    "Mở bảng ủy quyền",
+    "Buksan ang awtorisadong pad",
+    "Buka pad yang dibenarkan"
+  ],
+  "Operation": [
+    "ប្រតិបត្តិការ",
+    "操作",
+    "hoạt động",
+    "Operasyon",
+    "Operasi"
+  ],
+  "Operation audits · sewing line follow-up": [
+    "សវនកម្មប្រតិបត្តិការ · ការតាមដានខ្សែបន្ទាត់ដេរ",
+    "运营审核·缝制线跟踪",
+    "Kiểm tra hoạt động · theo dõi dây chuyền may",
+    "Mga pag-audit sa operasyon · follow-up sa linya ng pananahi",
+    "Audit operasi · susulan talian jahitan"
+  ],
+  "Operator ID": [
+    "លេខសម្គាល់ប្រតិបត្តិករ",
+    "操作员 ID",
+    "ID nhà điều hành",
+    "Operator ID",
+    "ID Operator"
+  ],
+  "Operator IDs checked *": [
+    "បានពិនិត្យលេខសម្គាល់ប្រតិបត្តិករ *",
+    "检查操作员 ID *",
+    "ID nhà điều hành đã được kiểm tra *",
+    "Sinuri ang mga operator ID *",
+    "ID Operator disemak *"
+  ],
+  "Operator skill / operation *": [
+    "ជំនាញប្រតិបត្តិករ / ប្រតិបត្តិការ *",
+    "操作员技能/操作*",
+    "Kỹ năng vận hành/thao tác *",
+    "Kakayahan / operasyon ng operator *",
+    "Kemahiran / operasi operator *"
+  ],
+  "Operators sew the agreed first output, normally 10–20 pieces; record actual sample count.": [
+    "ប្រតិបត្តិករដេរទិន្នផលដំបូងដែលបានព្រមព្រៀងគ្នាជាធម្មតា 10-20 បំណែក; កត់ត្រាចំនួនគំរូជាក់ស្តែង។",
+    "操作员缝制约定的第一批产量，通常为 10-20 件；记录实际样本数。",
+    "Người thợ may đầu ra đầu tiên đã thỏa thuận, thường là 10–20 chiếc; ghi lại số lượng mẫu thực tế.",
+    "Tinatahi ng mga operator ang napagkasunduang unang output, karaniwang 10–20 piraso; itala ang aktwal na bilang ng sample.",
+    "Operator menjahit keluaran pertama yang dipersetujui, biasanya 10–20 keping; merekodkan bilangan sampel sebenar."
+  ],
+  "Order / decoration method": [
+    "លំដាប់ / វិធីសាស្រ្តតុបតែង",
+    "订购/装修方式",
+    "Cách thức đặt hàng/trang trí",
+    "Paraan ng pagkakasunud-sunod / dekorasyon",
+    "Kaedah pesanan / hiasan"
+  ],
+  "Order / method": [
+    "លំដាប់ / វិធីសាស្រ្ត",
+    "订单/方法",
+    "Thứ tự/phương thức",
+    "Order / paraan",
+    "Pesanan / kaedah"
+  ],
+  "Order / owner": [
+    "បញ្ជាទិញ / ម្ចាស់",
+    "订单/所有者",
+    "Đặt hàng/chủ sở hữu",
+    "Order / may-ari",
+    "Pesanan / pemilik"
+  ],
+  "Order and traceability": [
+    "ការបញ្ជាទិញនិងតាមដាន",
+    "订单和可追溯性",
+    "Đặt hàng và truy xuất nguồn gốc",
+    "Order at traceability",
+    "Perintah dan kebolehkesanan"
+  ],
+  "Order quality summary": [
+    "សេចក្តីសង្ខេបអំពីគុណភាពនៃការបញ្ជាទិញ",
+    "订单质量汇总",
+    "Tóm tắt chất lượng đơn hàng",
+    "Buod ng kalidad ng order",
+    "Ringkasan kualiti pesanan"
+  ],
+  "Order type:": [
+    "ប្រភេទបញ្ជាទិញ៖",
+    "订单类型：",
+    "Loại lệnh:",
+    "Uri ng order:",
+    "Jenis pesanan:"
+  ],
+  "Order, report, style or result": [
+    "លំដាប់ របាយការណ៍ រចនាប័ទ្ម ឬលទ្ធផល",
+    "订单、报告、样式或结果",
+    "Đặt hàng, báo cáo, phong cách hoặc kết quả",
+    "Order, ulat, istilo o resulta",
+    "Perintah, laporan, gaya atau hasil"
+  ],
+  "Order, style, buyer or inspector": [
+    "បញ្ជាទិញរចនាប័ទ្មអ្នកទិញឬអធិការ",
+    "订单、款式、买家或检验员",
+    "Đặt hàng, phong cách, người mua hoặc thanh tra",
+    "Order, istilo, mamimili o inspektor",
+    "Pesanan, gaya, pembeli atau pemeriksa"
+  ],
+  "Original check": [
+    "ការត្រួតពិនិត្យដើម",
+    "原始支票",
+    "Séc gốc",
+    "Orihinal na tseke",
+    "Cek asal"
+  ],
+  "Original feeder values, before management report amendments.": [
+    "តម្លៃដើម feeder មុនពេលធ្វើវិសោធនកម្មរបាយការណ៍គ្រប់គ្រង។",
+    "管理报告修订前的原始馈线值。",
+    "Giá trị trung chuyển ban đầu, trước khi sửa đổi báo cáo quản lý.",
+    "Mga orihinal na halaga ng feeder, bago ang mga pagbabago sa ulat ng pamamahala.",
+    "Nilai penyuap asal, sebelum pindaan laporan pengurusan."
+  ],
+  "Original ground record": [
+    "កំណត់ត្រាដីដើម",
+    "原始地面记录",
+    "Hồ sơ mặt bằng gốc",
+    "Orihinal na rekord sa lupa",
+    "Rekod tanah asal"
+  ],
+  "Original inspection": [
+    "ការត្រួតពិនិត្យដើម",
+    "原件检验",
+    "Kiểm tra ban đầu",
+    "Orihinal na inspeksyon",
+    "Pemeriksaan asal"
+  ],
+  "Original record": [
+    "កំណត់ត្រាដើម",
+    "原始记录",
+    "Bản ghi gốc",
+    "Orihinal na rekord",
+    "Rekod asal"
+  ],
+  "Original record and report history": [
+    "កំណត់ត្រាដើម និងប្រវត្តិរបាយការណ៍",
+    "原始记录和报告历史",
+    "Hồ sơ gốc và lịch sử báo cáo",
+    "Orihinal na talaan at kasaysayan ng ulat",
+    "Rekod asal dan sejarah laporan"
+  ],
+  "Original status": [
+    "ស្ថានភាពដើម",
+    "原始状态",
+    "Trạng thái ban đầu",
+    "Orihinal na katayuan",
+    "Status asal"
+  ],
+  "Other retained photo / laboratory / packing references": [
+    "រូបថត / មន្ទីរពិសោធន៍ / ឯកសារយោងដែលបានរក្សាទុកផ្សេងទៀត។",
+    "其他保留的照片/实验室/包装参考资料",
+    "Các tài liệu tham khảo về hình ảnh/phòng thí nghiệm/đóng gói được giữ lại khác",
+    "Iba pang mga napanatili na larawan / laboratoryo / mga sanggunian sa pag-iimpake",
+    "Rujukan foto / makmal / pembungkusan lain yang disimpan"
+  ],
+  "Out of tolerance · hold": [
+    "អស់ការអត់ធ្មត់ · កាន់",
+    "超出公差·保持",
+    "Hết sức chịu đựng · giữ lại",
+    "Out of tolerance · humawak",
+    "Di luar toleransi · tahan"
+  ],
+  "Owner / due": [
+    "ម្ចាស់ / ដល់ពេលកំណត់",
+    "业主/到期",
+    "Chủ sở hữu/đến hạn",
+    "May-ari / dapat bayaran",
+    "Pemilik / kena dibayar"
+  ],
+  "PENDING REVIEW": [
+    "កំពុងរង់ចាំការវាយតម្លៃ",
+    "待审核",
+    "ĐANG XEM XÉT",
+    "NAKAKABINTANG REVIEW",
+    "SEMAKAN TERTUNDA"
+  ],
+  "PO / SKU": [
+    "PO / SKU",
+    "采购订单/库存单位",
+    "ĐƠN HÀNG / SKU",
+    "PO / SKU",
+    "PO / SKU"
+  ],
+  "PO / sizes": [
+    "PO / ទំហំ",
+    "订单/尺寸",
+    "PO/kích thước",
+    "PO / laki",
+    "PO / saiz"
+  ],
+  "PO number": [
+    "លេខ PO",
+    "采购订单号",
+    "số PO",
+    "Numero ng PO",
+    "Nombor PO"
+  ],
+  "PP meeting public process reference ↗": [
+    "កិច្ចប្រជុំ PP ឯកសារយោងដំណើរការសាធារណៈ ↗",
+    "PP会议公开流程参考↗",
+    "Tham chiếu quy trình công khai của cuộc họp PP ↗",
+    "Sanggunian sa pampublikong proseso ng pagpupulong ng PP ↗",
+    "PP mesyuarat rujukan proses awam ↗"
+  ],
+  "PRE PRODUCTION": [
+    "ផលិតកម្មមុន",
+    "前期制作",
+    "TRƯỚC SẢN XUẤT",
+    "PRE PRODUCTION",
+    "PRA PENGELUARAN"
+  ],
+  "Packing check": [
+    "ការត្រួតពិនិត្យការវេចខ្ចប់",
+    "包装检查",
+    "Kiểm tra đóng gói",
+    "Pag-iimpake ng check",
+    "Cek pembungkusan"
+  ],
+  "Packing complete %": [
+    "ការវេចខ្ចប់ពេញលេញ %",
+    "包装完成%",
+    "Đóng gói hoàn thành %",
+    "Kumpletong pag-pack %",
+    "Pembungkusan lengkap %"
+  ],
+  "Packing line": [
+    "បន្ទាត់វេចខ្ចប់",
+    "包装线",
+    "Dây chuyền đóng gói",
+    "Linya ng pag-iimpake",
+    "Talian pembungkusan"
+  ],
+  "Packing list reference": [
+    "ឯកសារយោងបញ្ជីវេចខ្ចប់",
+    "装箱单参考",
+    "Tham khảo danh sách đóng gói",
+    "Sanggunian sa listahan ng pag-iimpake",
+    "Rujukan senarai pembungkusan"
+  ],
+  "Packing quality checker / packaging quality leader": [
+    "អ្នកត្រួតពិនិត្យគុណភាពវេចខ្ចប់ / អ្នកដឹកនាំគុណភាពវេចខ្ចប់",
+    "包装质量检查员/包装质量领导者",
+    "Người kiểm tra chất lượng đóng gói / Trưởng nhóm chất lượng đóng gói",
+    "Checker ng kalidad ng packaging / pinuno ng kalidad ng packaging",
+    "Penyemak kualiti pembungkusan / peneraju kualiti pembungkusan"
+  ],
+  "Packing result": [
+    "លទ្ធផលវេចខ្ចប់",
+    "包装结果",
+    "Kết quả đóng gói",
+    "Resulta ng pag-iimpake",
+    "Hasil pembungkusan"
+  ],
+  "Pad submission": [
+    "ការដាក់ស្នើបន្ទះ",
+    "垫提交",
+    "Gửi pad",
+    "Pagsusumite ng pad",
+    "Penyerahan pad"
+  ],
+  "Parameter": [
+    "ប៉ារ៉ាម៉ែត្រ",
+    "参数",
+    "tham số",
+    "Parameter",
+    "Parameter"
+  ],
+  "Parent reinspection:": [
+    "ការត្រួតពិនិត្យមាតាបិតា៖",
+    "家长复查：",
+    "Phụ huynh tái kiểm tra:",
+    "Muling pagsusuri ng magulang:",
+    "Pemeriksaan semula ibu bapa:"
+  ],
+  "Pass": [
+    "ឆ្លងកាត់",
+    "通行证",
+    "Vượt qua",
+    "Pass",
+    "lulus"
+  ],
+  "Pending evidence": [
+    "ភស្តុតាងមិនទាន់សម្រេច",
+    "待定证据",
+    "Đang chờ bằng chứng",
+    "Nakabinbing ebidensya",
+    "Bukti menunggu"
+  ],
+  "Photos / files": [
+    "រូបថត / ឯកសារ",
+    "照片/文件",
+    "Ảnh / tập tin",
+    "Mga larawan / file",
+    "Foto / fail"
+  ],
+  "Piece ID": [
+    "លេខសម្គាល់បំណែក",
+    "件数",
+    "Mã mảnh",
+    "ID ng piraso",
+    "ID sekeping"
+  ],
+  "Pieces / cartons checked *": [
+    "បានពិនិត្យបំណែក/កេស *",
+    "检查的件数/纸箱 *",
+    "Đã kiểm tra số miếng/thùng carton *",
+    "Nasuri ang mga piraso / karton *",
+    "Kepingan / karton diperiksa *"
+  ],
+  "Pieces checked": [
+    "បានពិនិត្យបំណែក",
+    "检查件数",
+    "Các phần đã được kiểm tra",
+    "Sinuri ang mga piraso",
+    "Kepingan diperiksa"
+  ],
+  "Pieces checked *": [
+    "បំណែកដែលបានត្រួតពិនិត្យ *",
+    "已检查件数 *",
+    "Các phần đã được kiểm tra *",
+    "Sinuri ang mga piraso *",
+    "Kepingan diperiksa *"
+  ],
+  "Pieces failed *": [
+    "បំណែកមិនបានជោគជ័យ *",
+    "失败的作品 *",
+    "Các mảnh không thành công *",
+    "Nabigo ang mga piraso *",
+    "Potongan gagal *"
+  ],
+  "Pieces passing all readings": [
+    "បំណែកឆ្លងកាត់ការអានទាំងអស់។",
+    "通过所有读数的作品",
+    "Các mảnh vượt qua tất cả các bài đọc",
+    "Mga pirasong pumasa sa lahat ng pagbabasa",
+    "Potongan melepasi semua bacaan"
+  ],
+  "Pilot quality workflow · Record actual findings on the pad. Management review and evidence are required before release.": [
+    "លំហូរការងារគុណភាពសាកល្បង · កត់ត្រាការរកឃើញជាក់ស្តែងនៅលើបន្ទះ។ ការត្រួតពិនិត្យ និងភស្តុតាងនៃការគ្រប់គ្រងត្រូវបានទាមទារមុនពេលចេញផ្សាយ។",
+    "试点质量工作流程 · 在便签本上记录实际发现结果。发布前需要管理审查和证据。",
+    "Quy trình làm việc chất lượng thí điểm · Ghi lại những phát hiện thực tế vào sổ. Cần có sự xem xét và bằng chứng của ban quản lý trước khi phát hành.",
+    "Pilot quality workflow · Itala ang mga aktwal na natuklasan sa pad. Kinakailangan ang pagsusuri at ebidensya ng pamamahala bago ilabas.",
+    "Aliran kerja kualiti perintis · Catatkan penemuan sebenar pada pad. Semakan dan bukti pengurusan diperlukan sebelum dikeluarkan."
+  ],
+  "Plan not recorded": [
+    "ផែនការមិនត្រូវបានកត់ត្រាទេ។",
+    "计划未记录",
+    "Kế hoạch không được ghi lại",
+    "Hindi naitala ang plano",
+    "Pelan tidak direkodkan"
+  ],
+  "Plan:": [
+    "ផែនការ៖",
+    "计划：",
+    "Kế hoạch:",
+    "Plano:",
+    "Pelan:"
+  ],
+  "Point": [
+    "ចំណុច",
+    "点",
+    "điểm",
+    "Punto",
+    "titik"
+  ],
+  "Points and actual values": [
+    "ពិន្ទុនិងតម្លៃជាក់ស្តែង",
+    "积分和实际值",
+    "Điểm và giá trị thực tế",
+    "Mga puntos at aktwal na halaga",
+    "Mata dan nilai sebenar"
+  ],
+  "Pre-final inspection": [
+    "ការត្រួតពិនិត្យមុនចុងក្រោយ",
+    "预最终检验",
+    "Kiểm tra trước cuối cùng",
+    "Pre-final inspection",
+    "Pemeriksaan pra-akhir"
+  ],
+  "Prerequisite records:": [
+    "កំណត់ត្រាតម្រូវការជាមុន៖",
+    "前提记录：",
+    "Hồ sơ tiên quyết:",
+    "Mga kinakailangang rekord:",
+    "Rekod prasyarat:"
+  ],
+  "Preventive action": [
+    "សកម្មភាពបង្ការ",
+    "预防措施",
+    "hành động phòng ngừa",
+    "Aksyon sa pag-iwas",
+    "Tindakan pencegahan"
+  ],
+  "Preventive action / next step": [
+    "វិធានការបង្ការ / ជំហានបន្ទាប់",
+    "预防措施/下一步",
+    "Hành động phòng ngừa/bước tiếp theo",
+    "Aksyon sa pag-iwas / susunod na hakbang",
+    "Tindakan pencegahan / langkah seterusnya"
+  ],
+  "Printing / embroidery quality leader": [
+    "អ្នកដឹកនាំគុណភាពបោះពុម្ព / ប៉ាក់",
+    "印花/绣花品质领先者",
+    "Dẫn đầu về chất lượng in/thêu",
+    "Pinuno ng kalidad ng pag-print / pagbuburda",
+    "Peneraju kualiti percetakan / sulaman"
+  ],
+  "Printing quality checker / quality leader": [
+    "អ្នកត្រួតពិនិត្យគុណភាពបោះពុម្ព / អ្នកដឹកនាំគុណភាព",
+    "印刷质量检查员/质量负责人",
+    "Người kiểm tra chất lượng in ấn/người quản lý chất lượng",
+    "Tagasuri ng kalidad ng pag-print / pinuno ng kalidad",
+    "Penyemak kualiti percetakan / peneraju kualiti"
+  ],
+  "Process readings · demo recipe": [
+    "ការអានដំណើរការ · រូបមន្តបង្ហាញ",
+    "过程读数·演示配方",
+    "Quá trình đọc · công thức demo",
+    "Proseso ng mga pagbasa · demo recipe",
+    "Bacaan proses · resipi demo"
+  ],
+  "Production complete %": [
+    "ផលិតកម្ម​បាន​បញ្ចប់ %",
+    "生产完成%",
+    "Sản xuất hoàn thành %",
+    "% ng kumpleto ng produksyon",
+    "Pengeluaran selesai %"
+  ],
+  "Production line / area *": [
+    "ខ្សែសង្វាក់ផលិតកម្ម / តំបន់ *",
+    "生产线/面积*",
+    "Dây chuyền/khu vực sản xuất *",
+    "Linya ng produksyon / lugar *",
+    "Barisan pengeluaran / kawasan *"
+  ],
+  "Production supervisor sewing handbook": [
+    "សៀវភៅណែនាំដេរ អ្នកគ្រប់គ្រងផលិតកម្ម",
+    "生产主管缝纫手册",
+    "Sổ tay may giám đốc sản xuất",
+    "Handbook sa pananahi ng superbisor ng produksyon",
+    "Buku panduan jahitan penyelia pengeluaran"
+  ],
+  "Public reference library": [
+    "បណ្ណាល័យឯកសារយោងសាធារណៈ",
+    "公共参考图书馆",
+    "Thư viện tham khảo công cộng",
+    "Pampublikong sangguniang aklatan",
+    "Perpustakaan rujukan awam"
+  ],
+  "Public references": [
+    "ឯកសារយោងសាធារណៈ",
+    "公共参考文献",
+    "Tài liệu tham khảo công khai",
+    "Mga pampublikong sanggunian",
+    "Rujukan awam"
+  ],
+  "QA Audit Finishing Packing": [
+    "ការវេចខ្ចប់បញ្ចប់ការធ្វើសវនកម្ម QA",
+    "QA审核整理包装",
+    "Kiểm toán QA Hoàn thiện Đóng gói",
+    "QA Audit Finishing Packing",
+    "Pembungkusan Kemasan Audit QA"
+  ],
+  "QA Supervisor": [
+    "អ្នកគ្រប់គ្រង QA",
+    "质检主管",
+    "Giám sát viên QA",
+    "QA Supervisor",
+    "Penyelia QA"
+  ],
+  "QA Supervisor YHR ID": [
+    "លេខសម្គាល់អ្នកគ្រប់គ្រង QA YHR",
+    "QA 主管 YHR ID",
+    "ID YHR của Giám sát viên QA",
+    "QA Supervisor YHR ID",
+    "ID YHR Penyelia QA"
+  ],
+  "QA Supervisor YHR ID *": [
+    "លេខសម្គាល់អ្នកគ្រប់គ្រង QA YHR *",
+    "QA 主管 YHR ID *",
+    "ID YHR của Giám sát viên QA *",
+    "QA Supervisor YHR ID *",
+    "ID YHR Penyelia QA *"
+  ],
+  "QA Supervisor name": [
+    "ឈ្មោះអ្នកគ្រប់គ្រង QA",
+    "质量检查主管姓名",
+    "Tên người giám sát QA",
+    "Pangalan ng QA Supervisor",
+    "Nama Penyelia QA"
+  ],
+  "QA Supervisor name *": [
+    "ឈ្មោះអ្នកគ្រប់គ្រង QA *",
+    "质量检查主管姓名 *",
+    "Tên người giám sát QA *",
+    "Pangalan ng QA Supervisor *",
+    "Nama Penyelia QA *"
+  ],
+  "QA Supervisor records the corrective action and follow-up decision.": [
+    "អ្នកគ្រប់គ្រង QA កត់ត្រាសកម្មភាពកែតម្រូវ និងការសម្រេចចិត្តតាមដាន។",
+    "QA 主管记录纠正措施和后续决定。",
+    "Người giám sát QA ghi lại hành động khắc phục và quyết định tiếp theo.",
+    "Itinatala ng Supervisor ng QA ang aksyon sa pagwawasto at follow-up na desisyon.",
+    "Penyelia QA merekodkan tindakan pembetulan dan keputusan susulan."
+  ],
+  "QA Supervisor records their named review, corrective action and next step.": [
+    "អ្នកគ្រប់គ្រង QA កត់ត្រាការពិនិត្យឡើងវិញដែលមានឈ្មោះរបស់ពួកគេ សកម្មភាពកែតម្រូវ និងជំហានបន្ទាប់។",
+    "QA 主管记录他们指定的审查、纠正措施和下一步。",
+    "Giám sát viên QA ghi lại đánh giá được nêu tên, hành động khắc phục và bước tiếp theo của họ.",
+    "Itinatala ng QA Supervisor ang kanilang pinangalanang pagsusuri, pagwawasto at susunod na hakbang.",
+    "Penyelia QA merekodkan semakan yang dinamakan, tindakan pembetulan dan langkah seterusnya."
+  ],
+  "QA Supervisor review": [
+    "ការត្រួតពិនិត្យ QA Supervisor",
+    "QA主管审查",
+    "Đánh giá của Giám sát viên QA",
+    "Pagsusuri ng QA Supervisor",
+    "Semakan Penyelia QA"
+  ],
+  "QA Supervisor review and modification": [
+    "ការត្រួតពិនិត្យ និងការកែប្រែរបស់ប្រធាន QA",
+    "QA主管审核及修改",
+    "Giám sát viên QA xem xét và sửa đổi",
+    "Pagsusuri at pagbabago ng QA Supervisor",
+    "Semakan dan pengubahsuaian Penyelia QA"
+  ],
+  "QA Supervisor review saved with name and YHR ID.": [
+    "ការត្រួតពិនិត្យ QA Supervisor បានរក្សាទុកដោយឈ្មោះ និងលេខសម្គាល់ YHR ។",
+    "QA 主管审阅已保存姓名和 YHR ID。",
+    "Đánh giá của Giám sát viên QA được lưu với tên và ID YHR.",
+    "Na-save ang pagsusuri ng QA Supervisor na may pangalan at YHR ID.",
+    "Semakan Penyelia QA disimpan dengan nama dan ID YHR."
+  ],
+  "QA Supervisor reviews recurring or unresolved issues.": [
+    "អ្នកគ្រប់គ្រង QA ពិនិត្យមើលបញ្ហាដែលកើតឡើងដដែលៗ ឬមិនទាន់បានដោះស្រាយ។",
+    "质量检查主管审查重复出现或未解决的问题。",
+    "Giám sát viên QA xem xét các vấn đề định kỳ hoặc chưa được giải quyết.",
+    "Sinusuri ng QA Supervisor ang mga umuulit o hindi nalutas na isyu.",
+    "Penyelia QA menyemak isu berulang atau tidak dapat diselesaikan."
+  ],
+  "QA Supervisor reviews the result and corrective action.": [
+    "អ្នកគ្រប់គ្រង QA ពិនិត្យលទ្ធផល និងសកម្មភាពកែតម្រូវ។",
+    "质量保证主管审查结果和纠正措施。",
+    "Người giám sát QA xem xét kết quả và hành động khắc phục.",
+    "Sinusuri ng QA Supervisor ang resulta at pagwawasto.",
+    "Penyelia QA menyemak keputusan dan tindakan pembetulan."
+  ],
+  "QA Supervisor:": [
+    "អ្នកគ្រប់គ្រង QA៖",
+    "质量保证主管：",
+    "Giám sát viên QA:",
+    "QA Supervisor:",
+    "Penyelia QA:"
+  ],
+  "QA auditor / delegated quality supervisor": [
+    "សវនករ QA / អ្នកគ្រប់គ្រងគុណភាពដែលបានផ្ទេរសិទ្ធិ",
+    "QA审核员/委派质量主管",
+    "Kiểm toán viên QA / giám sát viên chất lượng được ủy quyền",
+    "QA auditor / itinalagang superbisor ng kalidad",
+    "Juruaudit QA / penyelia kualiti yang diwakilkan"
+  ],
+  "QA auditor / finishing quality leader": [
+    "សវនករ QA / អ្នកដឹកនាំគុណភាពបញ្ចប់",
+    "QA审核员/精加工质量负责人",
+    "Kiểm toán viên QA / trưởng nhóm chất lượng hoàn thiện",
+    "QA auditor / pinuno ng kalidad ng pagtatapos",
+    "Juruaudit QA / pemimpin kualiti penamat"
+  ],
+  "QA auditor with independent supervisor review": [
+    "សវនករ QA ជាមួយនឹងការត្រួតពិនិត្យឯករាជ្យ",
+    "具有独立主管审查的 QA 审核员",
+    "Kiểm toán viên QA với sự xem xét của người giám sát độc lập",
+    "QA auditor na may independiyenteng superbisor na pagsusuri",
+    "Juruaudit QA dengan semakan penyelia bebas"
+  ],
+  "QA audits exactly 20 pieces from a sewing line and records defects, severity and corrective action.": [
+    "QA ធ្វើសវនកម្មយ៉ាងពិតប្រាកដ 20 បំណែកពីបន្ទាត់ដេរ និងកត់ត្រាពិការភាព ភាពធ្ងន់ធ្ងរ និងសកម្មភាពកែតម្រូវ។",
+    "QA 审核缝纫线上的 20 件产品并记录缺陷、严重程度和纠正措施。",
+    "QA kiểm tra chính xác 20 sản phẩm từ một dây chuyền may và ghi lại các lỗi, mức độ nghiêm trọng và hành động khắc phục.",
+    "Ang QA ay nag-audit ng eksaktong 20 piraso mula sa isang linya ng pananahi at nagtatala ng mga depekto, kalubhaan at pagwawasto.",
+    "QA mengaudit tepat 20 keping dari garis jahitan dan merekodkan kecacatan, keterukan dan tindakan pembetulan."
+  ],
+  "QA decision": [
+    "ការសម្រេចចិត្ត QA",
+    "质量保证决定",
+    "Quyết định đảm bảo chất lượng",
+    "desisyon ng QA",
+    "keputusan QA"
+  ],
+  "QA leader / QA manager": [
+    "អ្នកដឹកនាំ QA / អ្នកគ្រប់គ្រង QA",
+    "质量保证负责人/质量保证经理",
+    "Trưởng nhóm QA/Quản lý QA",
+    "QA leader / QA manager",
+    "Pemimpin QA / pengurus QA"
+  ],
+  "QA leader or manager records review. Only approved startup may move to normal bulk sewing.": [
+    "ការពិនិត្យឡើងវិញនូវកំណត់ត្រារបស់អ្នកដឹកនាំ ឬអ្នកគ្រប់គ្រង QA ។ មានតែការចាប់ផ្តើមដែលត្រូវបានអនុម័តប៉ុណ្ណោះដែលអាចផ្លាស់ទីទៅការដេរភាគច្រើនធម្មតា។",
+    "QA 领导或经理记录审查。只有获得批准的启动才可以转向正常的批量缝纫。",
+    "Lãnh đạo QA hoặc người quản lý xem xét hồ sơ. Chỉ những công ty khởi nghiệp đã được phê duyệt mới có thể chuyển sang may số lượng lớn thông thường.",
+    "Pagsusuri ng mga talaan ng pinuno o tagapamahala ng QA. Tanging ang naaprubahang startup lamang ang maaaring lumipat sa normal na maramihang pananahi.",
+    "Semakan rekod pemimpin atau pengurus QA. Hanya permulaan yang diluluskan boleh beralih kepada jahitan pukal biasa."
+  ],
+  "QA leader reviews the record. If any check fails, rerun and record a new trial.": [
+    "អ្នកដឹកនាំ QA ពិនិត្យមើលកំណត់ត្រា។ ប្រសិនបើការត្រួតពិនិត្យណាមួយបរាជ័យ សូមដំណើរការឡើងវិញ និងកត់ត្រាការសាកល្បងថ្មី។",
+    "QA 负责人审查记录。如果任何检查失败，请重新运行并记录新的试验。",
+    "Lãnh đạo QA xem xét hồ sơ. Nếu bất kỳ lần kiểm tra nào không thành công, hãy chạy lại và ghi lại lần thử mới.",
+    "Sinusuri ng pinuno ng QA ang rekord. Kung ang anumang pagsusuri ay nabigo, muling patakbuhin at magtala ng bagong pagsubok.",
+    "Pemimpin QA menyemak rekod. Jika mana-mana semakan gagal, jalankan semula dan rekod percubaan baharu."
+  ],
+  "QA manager reviews daily line trends, first pass rate, DHU and unresolved call-outs.": [
+    "អ្នកគ្រប់គ្រង QA ពិនិត្យមើលនិន្នាការបន្ទាត់ប្រចាំថ្ងៃ អត្រាឆ្លងកាត់ដំបូង DHU និងការហៅចេញដែលមិនបានដោះស្រាយ។",
+    "QA 经理审查每日生产线趋势、首次通过率、DHU 和未解决的呼叫。",
+    "Người quản lý QA xem xét xu hướng hàng ngày, tỷ lệ vượt qua đầu tiên, DHU và các cuộc gọi đi chưa được giải quyết.",
+    "Sinusuri ng tagapamahala ng QA ang mga trend ng pang-araw-araw na linya, first pass rate, DHU, at mga hindi nalutas na call-out.",
+    "Pengurus QA menyemak trend talian harian, kadar lulus pertama, DHU dan butiran tidak diselesaikan."
+  ],
+  "QA review": [
+    "ការពិនិត្យ QA",
+    "质量检查审查",
+    "Đánh giá chất lượng",
+    "Pagsusuri ng QA",
+    "Semakan QA"
+  ],
+  "QA review:": [
+    "ការពិនិត្យ QA៖",
+    "质量检查审核：",
+    "Đánh giá chất lượng:",
+    "Pagsusuri ng QA:",
+    "Semakan QA:"
+  ],
+  "QC / QA": [
+    "QC / QA",
+    "质量控制/质量保证",
+    "Kiểm soát chất lượng/QA",
+    "QC / QA",
+    "QC / QA"
+  ],
+  "QC / QA inspector *": [
+    "អធិការ QC / QA *",
+    "QC/QA检验员*",
+    "Thanh tra viên QC/QA *",
+    "QC / QA inspector *",
+    "Pemeriksa QC / QA *"
+  ],
+  "QC checker / QA inspector": [
+    "អ្នកត្រួតពិនិត្យ QC / អធិការ QA",
+    "QC检查员/QA检验员",
+    "Người kiểm tra QC / người kiểm tra QA",
+    "QC checker / QA inspector",
+    "Pemeriksa QC / Pemeriksa QA"
+  ],
+  "QC checker inspects every sewn garment and scans its unique piece ID.": [
+    "អ្នកត្រួតពិនិត្យ QC ត្រួតពិនិត្យរាល់សម្លៀកបំពាក់ដែលដេរ ហើយស្កេនលេខសម្គាល់បំណែកតែមួយគត់របស់វា។",
+    "QC 检查员检查每件缝制的服装并扫描其唯一的单件 ID。",
+    "Trình kiểm tra QC kiểm tra từng sản phẩm may mặc và quét ID sản phẩm duy nhất của nó.",
+    "Sinusuri ng QC checker ang bawat tahing damit at ini-scan ang natatanging pirasong ID nito.",
+    "Pemeriksa QC memeriksa setiap pakaian yang dijahit dan mengimbas ID bahagian uniknya."
+  ],
+  "QC checks construction, measurements, operation skill, machine setup and every defect.": [
+    "QC ត្រួតពិនិត្យការសាងសង់ ការវាស់វែង ជំនាញប្រតិបត្តិការ ការដំឡើងម៉ាស៊ីន និងរាល់ការខ្វះខាត។",
+    "质量控制检查结构、测量、操作技能、机器设置和每一个缺陷。",
+    "QC kiểm tra kết cấu, số đo, kỹ năng vận hành, thiết lập máy và mọi lỗi.",
+    "Sinusuri ng QC ang konstruksyon, mga sukat, kasanayan sa pagpapatakbo, pag-setup ng makina at bawat depekto.",
+    "QC memeriksa pembinaan, pengukuran, kemahiran operasi, persediaan mesin dan setiap kecacatan."
+  ],
+  "QC leader / supervisor review and release are required.": [
+    "ការត្រួតពិនិត្យ និងការដោះលែងអ្នកដឹកនាំ QC ត្រូវបានទាមទារ។",
+    "需要QC领导/主管审核并发布。",
+    "Yêu cầu phải có sự xem xét và phê duyệt của trưởng nhóm/người giám sát QC.",
+    "Kinakailangan ang pagsusuri at pagpapalabas ng pinuno / superbisor ng QC.",
+    "Semakan dan pelepasan ketua / penyelia QC diperlukan."
+  ],
+  "QC records the check on the floor pad.": [
+    "QC កត់ត្រាការត្រួតពិនិត្យនៅលើកំរាលឥដ្ឋ។",
+    "QC 在地板垫上记录检查结果。",
+    "QC ghi lại việc kiểm tra trên tấm lót sàn.",
+    "Itinatala ng QC ang tseke sa floor pad.",
+    "QC merekodkan cek pada alas lantai."
+  ],
+  "Quality Control Data Management": [
+    "ការគ្រប់គ្រងទិន្នន័យ ការគ្រប់គ្រងគុណភាព",
+    "质量控制数据管理",
+    "Quản lý dữ liệu kiểm soát chất lượng",
+    "Pamamahala ng Data ng Quality Control",
+    "Pengurusan Data Kawalan Kualiti"
+  ],
+  "Quality Manager": [
+    "អ្នកគ្រប់គ្រងគុណភាព",
+    "品质经理",
+    "Giám đốc chất lượng",
+    "Tagapamahala ng Kalidad",
+    "Pengurus Kualiti"
+  ],
+  "Quality Manager / delegated QC document reviewer": [
+    "អ្នកគ្រប់គ្រងគុណភាព / អ្នកត្រួតពិនិត្យឯកសារ QC ដែលបានផ្ទេរសិទ្ធិ",
+    "质量经理/委派 QC 文件审核员",
+    "Người quản lý chất lượng / người đánh giá tài liệu QC được ủy quyền",
+    "Tagapamahala ng Kalidad / itinalagang tagasuri ng dokumento ng QC",
+    "Pengurus Kualiti / penyemak dokumen QC yang diwakilkan"
+  ],
+  "Quality Manager / meeting chair": [
+    "អ្នកគ្រប់គ្រងគុណភាព / ប្រធានកិច្ចប្រជុំ",
+    "质量经理/会议主席",
+    "Giám đốc chất lượng/ghế họp",
+    "Tagapamahala ng Kalidad / upuan ng pulong",
+    "Pengurus Kualiti / pengerusi mesyuarat"
+  ],
+  "Quality Manager delegation / release scope": [
+    "គណៈប្រតិភូអ្នកគ្រប់គ្រងគុណភាព / វិសាលភាពចេញផ្សាយ",
+    "质量经理授权/发布范围",
+    "Phạm vi ủy quyền / phát hành của Người quản lý chất lượng",
+    "Saklaw ng delegasyon / release ng Quality Manager",
+    "Skop delegasi / pelepasan Pengurus Kualiti"
+  ],
+  "Quality SOP and plan": [
+    "គុណភាព SOP និងផែនការ",
+    "质量SOP和计划",
+    "SOP và kế hoạch chất lượng",
+    "De-kalidad na SOP at plano",
+    "SOP dan rancangan yang berkualiti"
+  ],
+  "Quality check saved. Failed checks remain open for QA Supervisor follow-up.": [
+    "ការត្រួតពិនិត្យគុណភាពត្រូវបានរក្សាទុក។ ការត្រួតពិនិត្យដែលបរាជ័យនៅតែបើកចំហសម្រាប់ការតាមដាន QA Supervisor ។",
+    "已保存质量检查。未通过的检查仍可供 QA 主管跟进。",
+    "Đã lưu kiểm tra chất lượng. Những lần kiểm tra không thành công vẫn được mở để Giám sát viên QA theo dõi.",
+    "Na-save ang pagsusuri sa kalidad. Ang mga nabigong pagsusuri ay nananatiling bukas para sa QA Supervisor follow-up.",
+    "Semakan kualiti disimpan. Semakan gagal tetap dibuka untuk tindakan susulan Penyelia QA."
+  ],
+  "Quality module sections": [
+    "ផ្នែកម៉ូឌុលគុណភាព",
+    "质量模块部分",
+    "Phần mô-đun chất lượng",
+    "Mga seksyon ng kalidad ng module",
+    "Bahagian modul kualiti"
+  ],
+  "Quality record": [
+    "កំណត់ត្រាគុណភាព",
+    "质量记录",
+    "Hồ sơ chất lượng",
+    "Talaan ng kalidad",
+    "Rekod kualiti"
+  ],
+  "Quality records are saved to Yai. The YHR employee ID is recorded for traceability; role assignment follows the QA organization chart.": [
+    "កំណត់ត្រាគុណភាពត្រូវបានរក្សាទុកទៅយ៉ៃ។ លេខសម្គាល់បុគ្គលិក YHR ត្រូវបានកត់ត្រាសម្រាប់តាមដាន។ ការចាត់តាំងតួនាទីធ្វើតាមតារាងអង្គការ QA ។",
+    "质量记录保存到 Yai。记录YHR员工ID以供追溯；角色分配遵循 QA 组织结构图。",
+    "Hồ sơ chất lượng được lưu vào Yai. ID nhân viên YHR được ghi lại để truy xuất nguồn gốc; phân công vai trò tuân theo sơ đồ tổ chức QA.",
+    "Ang mga rekord ng kalidad ay ini-save sa Yai. Ang ID ng empleyado ng YHR ay naitala para sa traceability; Ang pagtatalaga ng tungkulin ay sumusunod sa tsart ng organisasyon ng QA.",
+    "Rekod kualiti disimpan ke Yai. ID pekerja YHR direkodkan untuk kebolehkesanan; penugasan peranan mengikut carta organisasi QA."
+  ],
+  "Quality release delegation": [
+    "គណៈប្រតិភូចេញផ្សាយគុណភាព",
+    "质量发布代表团",
+    "Ủy quyền phát hành chất lượng",
+    "Delegasyon ng pagpapalabas ng kalidad",
+    "Delegasi keluaran kualiti"
+  ],
+  "Quality review comment": [
+    "មតិពិនិត្យគុណភាព",
+    "质量审核意见",
+    "Bình luận đánh giá chất lượng",
+    "Komento sa pagsusuri ng kalidad",
+    "Ulasan ulasan kualiti"
+  ],
+  "Quality service is unavailable. Please try again.": [
+    "សេវាកម្មគុណភាពមិនមានទេ។ សូមព្យាយាមម្តងទៀត។",
+    "无法提供优质服务。请再试一次。",
+    "Dịch vụ chất lượng không có sẵn. Vui lòng thử lại.",
+    "Hindi available ang kalidad ng serbisyo. Pakisubukang muli.",
+    "Perkhidmatan berkualiti tidak tersedia. Sila cuba lagi."
+  ],
+  "Quantity and measurements": [
+    "បរិមាណនិងការវាស់វែង",
+    "数量和尺寸",
+    "Số lượng và số đo",
+    "Dami at sukat",
+    "Kuantiti dan ukuran"
+  ],
+  "Quantity and sampling": [
+    "បរិមាណនិងគំរូ",
+    "数量和取样",
+    "Số lượng và lấy mẫu",
+    "Dami at sampling",
+    "Kuantiti dan persampelan"
+  ],
+  "Rates describe recorded samples, which may overlap; they do not represent unique total production.": [
+    "អត្រាពិពណ៌នាអំពីគំរូដែលបានកត់ត្រា ដែលអាចត្រួតលើគ្នា; ពួកវាមិនតំណាងឱ្យផលិតកម្មសរុបតែមួយគត់ទេ។",
+    "速率描述了记录的样本，这些样本可能会重叠；它们并不代表独特的总产量。",
+    "Tỷ lệ mô tả các mẫu được ghi lại, có thể trùng lặp; chúng không đại diện cho tổng sản lượng duy nhất.",
+    "Inilalarawan ng mga rate ang mga naitala na sample, na maaaring mag-overlap; hindi ito kumakatawan sa natatanging kabuuang produksyon.",
+    "Kadar menggambarkan sampel yang direkodkan, yang mungkin bertindih; mereka tidak mewakili jumlah pengeluaran yang unik."
+  ],
+  "Readiness reference": [
+    "សេចក្តីយោងការត្រៀមខ្លួន",
+    "准备情况参考",
+    "Tham chiếu sẵn sàng",
+    "Sanggunian sa pagiging handa",
+    "Rujukan kesediaan"
+  ],
+  "Reason for changing the report": [
+    "ហេតុផលសម្រាប់ការផ្លាស់ប្តូររបាយការណ៍",
+    "报告变更原因",
+    "Lý do thay đổi báo cáo",
+    "Dahilan para baguhin ang ulat",
+    "Sebab untuk menukar laporan"
+  ],
+  "Received by *": [
+    "ទទួលបានដោយ *",
+    "收到*",
+    "Đã nhận bởi *",
+    "Natanggap ni *",
+    "Diterima oleh *"
+  ],
+  "Receiver:": [
+    "អ្នកទទួល៖",
+    "接收者：",
+    "Người nhận:",
+    "Receiver:",
+    "Penerima:"
+  ],
+  "Recheck pass": [
+    "ពិនិត្យលិខិតឆ្លងដែនឡើងវិញ",
+    "复检通过",
+    "Kiểm tra lại thẻ",
+    "Suriin muli ang pass",
+    "Semak semula pas"
+  ],
+  "Recheck pending": [
+    "ពិនិត្យមើលឡើងវិញដែលកំពុងរង់ចាំ",
+    "重新检查待定",
+    "Đang chờ kiểm tra lại",
+    "Nakabinbin muli",
+    "Semak semula belum selesai"
+  ],
+  "Recheck trigger:": [
+    "ពិនិត្យកេះឡើងវិញ៖",
+    "重新检查触发器：",
+    "Kiểm tra lại trình kích hoạt:",
+    "Suriin muli ang trigger:",
+    "Semak semula pencetus:"
+  ],
+  "Recheck:": [
+    "ពិនិត្យឡើងវិញ៖",
+    "复查：",
+    "Kiểm tra lại:",
+    "Suriin muli:",
+    "Semak semula:"
+  ],
+  "Recipe:": [
+    "រូបមន្ត៖",
+    "食谱：",
+    "Công thức:",
+    "Recipe:",
+    "Resipi:"
+  ],
+  "Record": [
+    "កត់ត្រា",
+    "记录",
+    "Ghi lại",
+    "Itala",
+    "Rekod"
+  ],
+  "Record / date": [
+    "កំណត់ត្រា / កាលបរិច្ឆេទ",
+    "记录/日期",
+    "Ghi / ngày",
+    "Record / petsa",
+    "Rekod / tarikh"
+  ],
+  "Record / order": [
+    "កត់ត្រា / បញ្ជា",
+    "记录/订购",
+    "Ghi lại/đặt hàng",
+    "Mag-record / mag-order",
+    "Rekod / pesanan"
+  ],
+  "Record a decision / CAP": [
+    "កត់ត្រាការសម្រេចចិត្ត / CAP",
+    "记录决定/CAP",
+    "Ghi lại quyết định/CAP",
+    "Magtala ng desisyon / CAP",
+    "Merekod keputusan / CAP"
+  ],
+  "Record a management action": [
+    "កត់ត្រាសកម្មភាពគ្រប់គ្រង",
+    "记录管理行动",
+    "Ghi lại một hành động quản lý",
+    "Magtala ng aksyon sa pamamahala",
+    "Merekod tindakan pengurusan"
+  ],
+  "Record a new management amendment": [
+    "កត់ត្រាការកែប្រែការគ្រប់គ្រងថ្មី។",
+    "记录新的管理修订",
+    "Ghi lại một sửa đổi quản lý mới",
+    "Magtala ng bagong pagbabago sa pamamahala",
+    "Merekodkan pindaan pengurusan baharu"
+  ],
+  "Record a sewing quality check": [
+    "កត់ត្រាការត្រួតពិនិត្យគុណភាពដេរ",
+    "记录缝纫质量检查",
+    "Ghi lại kiểm tra chất lượng may",
+    "Magtala ng pagsusuri sa kalidad ng pananahi",
+    "Catat semakan kualiti jahitan"
+  ],
+  "Record a startup trial": [
+    "កត់ត្រាការសាកល្បងចាប់ផ្តើម",
+    "记录启动试用",
+    "Ghi lại quá trình khởi động thử nghiệm",
+    "Mag-record ng startup trial",
+    "Rakam percubaan permulaan"
+  ],
+  "Record decision": [
+    "កត់ត្រាការសម្រេចចិត្ត",
+    "记录决定",
+    "Ghi lại quyết định",
+    "Magtala ng desisyon",
+    "Rekod keputusan"
+  ],
+  "Record each piece ID once, with all defects and operation or machine if known.": [
+    "កត់ត្រាលេខសម្គាល់ដុំនីមួយៗម្តង ដោយមានពិការភាព និងប្រតិបត្តិការ ឬម៉ាស៊ីន ប្រសិនបើដឹង។",
+    "记录每件 ID 一次，并记录所有缺陷和操作或机器（如果已知）。",
+    "Ghi lại từng ID chi tiết một lần, kèm theo tất cả các khuyết tật và hoạt động hoặc máy móc nếu biết.",
+    "Itala ang bawat piraso ID nang isang beses, kasama ang lahat ng mga depekto at operasyon o makina kung alam.",
+    "Rekod setiap ID bahagian sekali, dengan semua kecacatan dan operasi atau mesin jika diketahui."
+  ],
+  "Record every failed piece and defect.": [
+    "កត់ត្រារាល់បំណែកដែលបរាជ័យ និងពិការភាព។",
+    "记录每一个失败的部件和缺陷。",
+    "Ghi lại mọi phần bị lỗi và khiếm khuyết.",
+    "Itala ang bawat nabigong piraso at depekto.",
+    "Rekod setiap bahagian yang gagal dan kecacatan."
+  ],
+  "Record meeting minutes": [
+    "កត់ត្រាកំណត់ហេតុកិច្ចប្រជុំ",
+    "记录会议纪要",
+    "Ghi biên bản cuộc họp",
+    "Magtala ng mga minuto ng pagpupulong",
+    "Merekod minit mesyuarat"
+  ],
+  "Record pass, repair or reject, all defects, and operation / machine if known.": [
+    "ថតចម្លង ជួសជុល ឬបដិសេធ រាល់ការខូចមុខងារ និងប្រតិបត្តិការ/ម៉ាស៊ីន ប្រសិនបើដឹង។",
+    "记录合格、维修或拒绝、所有缺陷以及操作/机器（如果已知）。",
+    "Ghi lại pass, sửa chữa hoặc từ chối, tất cả các lỗi và vận hành/máy nếu biết.",
+    "Itala ang pass, pagkumpuni o pagtanggi, lahat ng mga depekto, at operasyon / makina kung alam.",
+    "Rekod pas, baiki atau tolak, semua kecacatan, dan operasi / mesin jika diketahui."
+  ],
+  "Record requirements": [
+    "តម្រូវការកត់ត្រា",
+    "备案要求",
+    "Yêu cầu ghi lại",
+    "Itala ang mga kinakailangan",
+    "Keperluan rekod"
+  ],
+  "Record the actual order, sample and findings. Saved checks feed this module's dashboard, reports and decision register.": [
+    "កត់ត្រាការបញ្ជាទិញ គំរូ និងការរកឃើញជាក់ស្តែង។ ការត្រួតពិនិត្យដែលបានរក្សាទុកផ្ដល់នូវផ្ទាំងគ្រប់គ្រង របាយការណ៍ និងការចុះឈ្មោះការសម្រេចចិត្តរបស់ម៉ូឌុលនេះ។",
+    "记录实际订单、样品和结果。保存的检查提供给该模块的仪表板、报告和决策寄存器。",
+    "Ghi lại thứ tự thực tế, mẫu và phát hiện. Các kiểm tra đã lưu cung cấp dữ liệu cho bảng điều khiển, báo cáo và đăng ký quyết định của mô-đun này.",
+    "Itala ang aktwal na pagkakasunud-sunod, sample at mga natuklasan. Ang mga naka-save na tseke ay nagpapakain sa dashboard, mga ulat at rehistro ng desisyon ng module na ito.",
+    "Catatkan pesanan, sampel dan penemuan sebenar. Cek disimpan suapan papan pemuka, laporan dan daftar keputusan modul ini."
+  ],
+  "Record the actual sample and every defect.": [
+    "កត់ត្រាគំរូជាក់ស្តែង និងរាល់ការខ្វះខាត។",
+    "记录实际样品和每个缺陷。",
+    "Ghi lại mẫu thực tế và mọi lỗi.",
+    "Itala ang aktwal na sample at bawat depekto.",
+    "Catatkan sampel sebenar dan setiap kecacatan."
+  ],
+  "Record the approved buyer plan. Lot quantity, planned sample and actual checked pieces are separate.": [
+    "កត់ត្រាផែនការអ្នកទិញដែលបានអនុម័ត។ បរិមាណច្រើន គំរូដែលបានគ្រោងទុក និងបំណែកដែលបានពិនិត្យជាក់ស្តែងគឺដាច់ដោយឡែកពីគ្នា។",
+    "记录批准的买家计划。批次数量、计划样品和实际检查件是分开的。",
+    "Ghi lại kế hoạch người mua đã được phê duyệt. Số lượng lô, mẫu dự kiến ​​và mẫu kiểm tra thực tế là riêng biệt.",
+    "Itala ang inaprubahang plano ng mamimili. Ang dami ng lot, nakaplanong sample at aktwal na naka-check na piraso ay hiwalay.",
+    "Catatkan pelan pembeli yang diluluskan. Kuantiti lot, sampel yang dirancang dan kepingan yang diperiksa adalah berasingan."
+  ],
+  "Record the finishing receiver and destination.": [
+    "កត់ត្រាអ្នកទទួល និងទិសដៅដែលបានបញ្ចប់។",
+    "记录完成接收者和目的地。",
+    "Ghi lại người nhận hoàn thiện và điểm đến.",
+    "Itala ang pagtatapos na tatanggap at patutunguhan.",
+    "Rakam penerima penamat dan destinasi."
+  ],
+  "Recorded at submission. Review authority is checked against the current YHR directory.": [
+    "កត់ត្រានៅពេលដាក់ស្នើ។ អាជ្ញាធរត្រួតពិនិត្យត្រូវបានត្រួតពិនិត្យប្រឆាំងនឹងបញ្ជីឈ្មោះ YHR បច្ចុប្បន្ន។",
+    "提交时记录。审核权限根据当前 YHR 目录进行检查。",
+    "Ghi lại khi nộp. Cơ quan đánh giá được kiểm tra dựa trên thư mục YHR hiện tại.",
+    "Naitala sa pagsusumite. Sinusuri ang awtoridad sa pagsusuri laban sa kasalukuyang direktoryo ng YHR.",
+    "Dirakam semasa penyerahan. Kuasa semakan disemak terhadap direktori YHR semasa."
+  ],
+  "Recorded by": [
+    "ថតដោយ",
+    "记录者",
+    "Được ghi lại bởi",
+    "Itinala ni",
+    "Dirakam oleh"
+  ],
+  "Recorded decision": [
+    "ការសម្រេចចិត្តដែលបានកត់ត្រា",
+    "记录决定",
+    "Quyết định được ghi lại",
+    "Naitala ang desisyon",
+    "Keputusan direkodkan"
+  ],
+  "Recorded defective-piece rate:": [
+    "អត្រាខូចទ្រង់ទ្រាយដែលបានកត់ត្រា៖",
+    "记录的缺陷件率：",
+    "Tỷ lệ sản phẩm bị lỗi được ghi nhận:",
+    "Naitala ang defective-piece rate:",
+    "Kadar pecahan yang direkodkan:"
+  ],
+  "Recorded floor inspection": [
+    "ការត្រួតពិនិត្យជាន់ដែលបានកត់ត្រា",
+    "记录地板检查",
+    "Ghi lại việc kiểm tra sàn",
+    "Naitala ang inspeksyon sa sahig",
+    "Pemeriksaan lantai yang direkodkan"
+  ],
+  "Recorded inspection scope": [
+    "វិសាលភាពត្រួតពិនិត្យដែលបានកត់ត្រា",
+    "备案检验范围",
+    "Phạm vi kiểm tra được ghi lại",
+    "Naka-record na saklaw ng inspeksyon",
+    "Skop pemeriksaan yang direkodkan"
+  ],
+  "Recorded quantity": [
+    "បរិមាណដែលបានកត់ត្រា",
+    "记录数量",
+    "Số lượng ghi lại",
+    "Naitalang dami",
+    "Kuantiti direkodkan"
+  ],
+  "Recorded result": [
+    "លទ្ធផលដែលបានកត់ត្រា",
+    "记录结果",
+    "Kết quả được ghi lại",
+    "Naitala na resulta",
+    "Keputusan direkodkan"
+  ],
+  "Reference / evidence IDs": [
+    "ឯកសារយោង / អត្តសញ្ញាណប័ណ្ណភស្តុតាង",
+    "参考/证据 ID",
+    "ID tham chiếu/bằng chứng",
+    "Mga ID ng sanggunian / ebidensya",
+    "ID rujukan / bukti"
+  ],
+  "Reference / report evidence IDs": [
+    "ឯកសារយោង / រាយការណ៍អត្តសញ្ញាណភស្តុតាង",
+    "参考/报告证据 ID",
+    "ID bằng chứng tham khảo / báo cáo",
+    "Mga ID ng ebidensya ng sanggunian / ulat",
+    "ID bukti rujukan / laporan"
+  ],
+  "Refresh inspections": [
+    "ធ្វើការត្រួតពិនិត្យឡើងវិញ",
+    "刷新检查",
+    "Làm mới kiểm tra",
+    "I-refresh ang mga inspeksyon",
+    "Muat semula pemeriksaan"
+  ],
+  "Refresh quality records": [
+    "ធ្វើឱ្យកំណត់ត្រាគុណភាពឡើងវិញ",
+    "刷新质量记录",
+    "Làm mới hồ sơ chất lượng",
+    "I-refresh ang mga tala ng kalidad",
+    "Muat semula rekod kualiti"
+  ],
+  "Refresh saved records": [
+    "ធ្វើឱ្យកំណត់ត្រាដែលបានរក្សាទុកឡើងវិញ",
+    "刷新保存的记录",
+    "Làm mới các bản ghi đã lưu",
+    "I-refresh ang mga naka-save na tala",
+    "Muat semula rekod yang disimpan"
+  ],
+  "Reinspect the same piece after repair. Do not count it as a new first check.": [
+    "ពិនិត្យបំណែកដូចគ្នាឡើងវិញបន្ទាប់ពីជួសជុល។ កុំរាប់វាជាការត្រួតពិនិត្យដំបូងថ្មី។",
+    "修复后重新检查同一部件。不要将其视为新的第一张支票。",
+    "Kiểm tra lại phần tương tự sau khi sửa chữa. Đừng coi đó là lần kiểm tra đầu tiên mới.",
+    "Suriin muli ang parehong piraso pagkatapos ayusin. Huwag ibilang ito bilang bagong unang tseke.",
+    "Periksa semula bahagian yang sama selepas pembaikan. Jangan kira ia sebagai cek pertama yang baharu."
+  ],
+  "Reject": [
+    "បដិសេធ",
+    "拒绝",
+    "Từ chối",
+    "Tanggihan",
+    "Tolak"
+  ],
+  "Reject (Re)": [
+    "បដិសេធ (ឡើងវិញ)",
+    "拒绝（重新）",
+    "Từ chối (Re)",
+    "Tanggihan (Muling)",
+    "Tolak (Semula)"
+  ],
+  "Reject / contain": [
+    "បដិសេធ / មាន",
+    "拒绝/遏制",
+    "Từ chối/chứa",
+    "Tanggihan / naglalaman",
+    "Menolak / mengandungi"
+  ],
+  "Related pad record": [
+    "កំណត់ហេតុដែលពាក់ព័ន្ធ",
+    "相关垫记录",
+    "Bản ghi pad liên quan",
+    "Kaugnay na pad record",
+    "Rekod pad yang berkaitan"
+  ],
+  "Release is blocked: required checks, evidence and upstream approvals must pass.": [
+    "ការចេញផ្សាយត្រូវបានរារាំង៖ ការត្រួតពិនិត្យចាំបាច់ ភស្តុតាង និងការយល់ព្រមលើចរន្តត្រូវតែឆ្លងកាត់។",
+    "发布受阻：必须通过所需的检查、证据和上游批准。",
+    "Việc phát hành bị chặn: các cuộc kiểm tra bắt buộc, bằng chứng và phê duyệt ngược dòng phải được thông qua.",
+    "Na-block ang paglabas: kailangang pumasa ang mga kinakailangang pagsusuri, ebidensya at upstream na pag-apruba.",
+    "Pengeluaran disekat: semakan yang diperlukan, bukti dan kelulusan huluan mesti lulus."
+  ],
+  "Released garments": [
+    "សម្លៀកបំពាក់ដែលបានចេញផ្សាយ",
+    "发布服装",
+    "Hàng may mặc được phát hành",
+    "Inilabas na mga kasuotan",
+    "Pakaian yang dilepaskan"
+  ],
+  "Released garments · sewing to finishing handoff": [
+    "សម្លៀកបំពាក់ដែលបានចេញផ្សាយ · ដេររហូតដល់ការបញ្ចប់ដោយដៃ",
+    "服装发布·缝制到整理交接",
+    "Phát hành hàng may mặc · khâu đến hoàn thiện bàn giao",
+    "Mga nilabas na kasuotan · pananahi hanggang sa pagtatapos ng handoff",
+    "Pakaian yang dilepaskan · menjahit hingga menyiapkan penyerahan"
+  ],
+  "Remove": [
+    "ដកចេញ",
+    "删除",
+    "Xóa",
+    "Alisin",
+    "Alih keluar"
+  ],
+  "Remove from this inspection": [
+    "ដកចេញពីការត្រួតពិនិត្យនេះ។",
+    "从本次检查中删除",
+    "Xóa khỏi cuộc kiểm tra này",
+    "Alisin mula sa inspeksyon na ito",
+    "Alih keluar daripada pemeriksaan ini"
+  ],
+  "Repair / recheck": [
+    "ជួសជុល / ពិនិត្យឡើងវិញ",
+    "修理/复检",
+    "Sửa chữa/kiểm tra lại",
+    "Ayusin / suriin muli",
+    "Baiki / semak semula"
+  ],
+  "Repair staff return the same piece for QC reinspection. Log result on the original record.": [
+    "បុគ្គលិកជួសជុលត្រឡប់ដុំដូចគ្នាសម្រាប់ការត្រួតពិនិត្យឡើងវិញ QC ។ កត់ត្រាលទ្ធផលនៅលើកំណត់ត្រាដើម។",
+    "维修人员将同一件退回以进行质量控制重新检查。将结果记录在原始记录上。",
+    "Nhân viên sửa chữa trả lại sản phẩm tương tự để QC kiểm tra lại. Ghi kết quả vào bản ghi gốc.",
+    "Ibinabalik ng mga repair staff ang parehong piraso para sa muling pagsisiyasat ng QC. Mag-log resulta sa orihinal na talaan.",
+    "Kakitangan pembaikan memulangkan bahagian yang sama untuk pemeriksaan semula QC. Log keputusan pada rekod asal."
+  ],
+  "Repair status": [
+    "ស្ថានភាពជួសជុល",
+    "修复状态",
+    "Tình trạng sửa chữa",
+    "Katayuan ng pag-aayos",
+    "Status pembaikan"
+  ],
+  "Repeat": [
+    "ធ្វើម្តងទៀត",
+    "重复",
+    "Lặp lại",
+    "Ulitin",
+    "ulang"
+  ],
+  "Report / evidence ID": [
+    "របាយការណ៍ / អត្តសញ្ញាណភស្តុតាង",
+    "报告/证据ID",
+    "ID báo cáo / bằng chứng",
+    "ID ng ulat / ebidensya",
+    "ID laporan / bukti"
+  ],
+  "Report / reference ID": [
+    "របាយការណ៍ / លេខសម្គាល់ឯកសារយោង",
+    "报告/参考 ID",
+    "ID báo cáo/tham chiếu",
+    "Report / reference ID",
+    "ID laporan / rujukan"
+  ],
+  "Report amended": [
+    "របាយការណ៍ត្រូវបានកែប្រែ",
+    "报告已修改",
+    "Báo cáo đã sửa đổi",
+    "Binago ang ulat",
+    "Laporan dipinda"
+  ],
+  "Report note / original reference": [
+    "របាយការណ៍កំណត់ចំណាំ / ឯកសារយោងដើម",
+    "报告说明/原始参考",
+    "Ghi chú báo cáo/tài liệu tham khảo gốc",
+    "Tala ng ulat / orihinal na sanggunian",
+    "Nota laporan / rujukan asal"
+  ],
+  "Required checks and test evidence": [
+    "ការត្រួតពិនិត្យ និងភស្តុតាងចាំបាច់",
+    "必要的检查和测试证据",
+    "Yêu cầu kiểm tra và kiểm tra bằng chứng",
+    "Mga kinakailangang tseke at ebidensya sa pagsubok",
+    "Pemeriksaan dan bukti ujian yang diperlukan"
+  ],
+  "Required control points": [
+    "ចំណុចត្រួតពិនិត្យដែលត្រូវការ",
+    "所需控制点",
+    "Điểm kiểm soát bắt buộc",
+    "Mga kinakailangang control point",
+    "Titik kawalan yang diperlukan"
+  ],
+  "Research-based inspection system": [
+    "ប្រព័ន្ធត្រួតពិនិត្យផ្អែកលើការស្រាវជ្រាវ",
+    "研究型检验系统",
+    "Hệ thống kiểm tra dựa trên nghiên cứu",
+    "Sistema ng inspeksyon na nakabatay sa pananaliksik",
+    "Sistem pemeriksaan berasaskan penyelidikan"
+  ],
+  "Resolved after correction": [
+    "ដោះស្រាយបន្ទាប់ពីការកែតម្រូវ",
+    "修正后解决",
+    "Đã giải quyết sau khi sửa",
+    "Nalutas pagkatapos ng pagwawasto",
+    "Selesai selepas pembetulan"
+  ],
+  "Responsible manager / supervisor name": [
+    "ឈ្មោះអ្នកគ្រប់គ្រង / អ្នកគ្រប់គ្រងដែលទទួលខុសត្រូវ",
+    "负责经理/主管姓名",
+    "Tên người quản lý/người giám sát chịu trách nhiệm",
+    "Pangalan ng responsableng manager / superbisor",
+    "Nama pengurus / penyelia yang bertanggungjawab"
+  ],
+  "Responsible quality roles · YHR reference": [
+    "តួនាទីគុណភាពដែលទទួលខុសត្រូវ · ឯកសារយោង YHR",
+    "负责的质量角色·YHR 参考",
+    "Vai trò chịu trách nhiệm về chất lượng · Tham khảo YHR",
+    "Responsableng mga tungkulin sa kalidad · YHR reference",
+    "Peranan kualiti yang bertanggungjawab · Rujukan YHR"
+  ],
+  "Responsible role": [
+    "តួនាទីទទួលខុសត្រូវ",
+    "负责的角色",
+    "Vai trò chịu trách nhiệm",
+    "Responsableng tungkulin",
+    "Peranan yang bertanggungjawab"
+  ],
+  "Retained photo, laboratory and packing references are shown above. No files have been attached to this record.": [
+    "រូបថតដែលបានរក្សាទុក ឯកសារយោងមន្ទីរពិសោធន៍ និងការវេចខ្ចប់ត្រូវបានបង្ហាញខាងលើ។ គ្មានឯកសារត្រូវបានភ្ជាប់ជាមួយកំណត់ត្រានេះទេ។",
+    "保留的照片、实验室和包装参考信息如上所示。该记录尚未附加任何文件。",
+    "Hình ảnh được giữ lại, phòng thí nghiệm và tài liệu tham khảo đóng gói được hiển thị ở trên. Không có tập tin nào được đính kèm vào hồ sơ này.",
+    "Ang mga napanatili na larawan, laboratoryo at mga sanggunian sa pag-iimpake ay ipinapakita sa itaas. Walang mga file na naka-attach sa record na ito.",
+    "Rujukan foto, makmal dan pembungkusan yang disimpan ditunjukkan di atas. Tiada fail telah dilampirkan pada rekod ini."
+  ],
+  "Retained reference and test report IDs": [
+    "ឯកសារយោង និងរបាយការណ៍សាកល្បងដែលរក្សាទុក",
+    "保留的参考和测试报告 ID",
+    "ID báo cáo thử nghiệm và tham chiếu được giữ lại",
+    "Nanatiling reference at test report ID",
+    "ID laporan rujukan dan ujian dikekalkan"
+  ],
+  "Review comment": [
+    "ពិនិត្យយោបល់",
+    "审核评论",
+    "Xem lại nhận xét",
+    "Suriin ang komento",
+    "Ulasan ulasan"
+  ],
+  "Review comment, training / assignment, effective SOP / sampling plan and Quality Manager delegation references are required.": [
+    "ពិនិត្យឡើងវិញនូវមតិយោបល់ ការបណ្តុះបណ្តាល / ការចាត់តាំង ផែនការ SOP / គំរូប្រកបដោយប្រសិទ្ធភាព និងឯកសារយោងគណៈប្រតិភូអ្នកគ្រប់គ្រងគុណភាពត្រូវបានទាមទារ។",
+    "需要审核意见、培训/分配、有效的 SOP/抽样计划和质量经理授权参考资料。",
+    "Cần phải xem xét nhận xét, đào tạo/phân công, SOP/kế hoạch lấy mẫu hiệu quả và tài liệu tham khảo về ủy quyền của Người quản lý chất lượng.",
+    "Ang komento sa pagsusuri, pagsasanay / pagtatalaga, epektibong SOP / sampling plan at mga sanggunian sa pagtatalaga ng Quality Manager ay kinakailangan.",
+    "Ulasan ulasan, latihan / tugasan, SOP / pelan persampelan yang berkesan dan rujukan delegasi Pengurus Kualiti diperlukan."
+  ],
+  "Review note": [
+    "កំណត់ចំណាំពិនិត្យឡើងវិញ",
+    "复习笔记",
+    "Xem lại ghi chú",
+    "Tala ng pagsusuri",
+    "Nota semakan"
+  ],
+  "Review required": [
+    "ទាមទារការពិនិត្យឡើងវិញ",
+    "需要审核",
+    "Yêu cầu xem xét",
+    "Kinakailangan ang pagsusuri",
+    "Semakan diperlukan"
+  ],
+  "Review saved in the quality record.": [
+    "ការពិនិត្យឡើងវិញបានរក្សាទុកក្នុងកំណត់ត្រាគុណភាព។",
+    "审核保存在质量记录中。",
+    "Đánh giá được lưu trong hồ sơ chất lượng.",
+    "Nai-save ang pagsusuri sa talaan ng kalidad.",
+    "Semakan disimpan dalam rekod kualiti."
+  ],
+  "Review startup release, repeated defects and unresolved end-line issues.": [
+    "ពិនិត្យមើលការចេញផ្សាយការចាប់ផ្ដើម ពិការភាពម្តងហើយម្តងទៀត និងបញ្ហាដែលមិនទាន់បានដោះស្រាយ។",
+    "审查启动版本、重复缺陷和未解决的最终问题。",
+    "Xem xét bản phát hành khởi động, các lỗi lặp lại và các vấn đề ở khâu cuối chưa được giải quyết.",
+    "Suriin ang paglabas ng startup, paulit-ulit na mga depekto at hindi nalutas na mga isyu sa end-line.",
+    "Semak keluaran permulaan, kecacatan berulang dan isu talian akhir yang tidak dapat diselesaikan."
+  ],
+  "Review the saved ground records on Dashboard and the five Report views.": [
+    "ពិនិត្យមើលកំណត់ត្រាដីដែលបានរក្សាទុកនៅលើផ្ទាំងគ្រប់គ្រង និងទិដ្ឋភាពរបាយការណ៍ចំនួនប្រាំ។",
+    "在仪表板和五个报告视图上查看保存的地面记录。",
+    "Xem lại các bản ghi mặt đất đã lưu trên Trang tổng quan và năm chế độ xem Báo cáo.",
+    "Suriin ang mga naka-save na ground record sa Dashboard at ang limang view ng Ulat.",
+    "Semak rekod tanah yang disimpan pada Papan Pemuka dan lima paparan Laporan."
+  ],
+  "Review, correction and reinspection": [
+    "ការពិនិត្យឡើងវិញ ការកែតម្រូវ និងការត្រួតពិនិត្យឡើងវិញ",
+    "审查、纠正和重新检查",
+    "Xem xét, sửa chữa và kiểm tra lại",
+    "Repasuhin, pagwawasto at muling pagsisiyasat",
+    "Semakan, pembetulan dan pemeriksaan semula"
+  ],
+  "Reviewed · pass": [
+    "ពិនិត្យ · ឆ្លង",
+    "已审核·通过",
+    "Đã đánh giá · đạt",
+    "Sinuri · pumasa",
+    "Disemak · lulus"
+  ],
+  "Revised checked / defective": [
+    "ពិនិត្យ/ខូច",
+    "修改检查/有缺陷",
+    "Đã sửa đổi đã kiểm tra / bị lỗi",
+    "Binagong may check / may sira",
+    "Disemak diperiksa / rosak"
+  ],
+  "Revised checked quantity": [
+    "បរិមាណដែលបានត្រួតពិនិត្យឡើងវិញ",
+    "修改检查数量",
+    "Số lượng đã kiểm tra đã sửa đổi",
+    "Binagong dami ng nasuri",
+    "Kuantiti disemak disemak"
+  ],
+  "Revised checked:": [
+    "ពិនិត្យ​ឡើងវិញ៖",
+    "修改检查：",
+    "Đã kiểm tra sửa đổi:",
+    "Sinuri ang check:",
+    "Disemak disemak:"
+  ],
+  "Revised defective quantity": [
+    "កែប្រែបរិមាណដែលខូច",
+    "修改后的缺陷数量",
+    "Sửa đổi số lượng bị lỗi",
+    "Binagong defective na dami",
+    "Kuantiti rosak yang disemak"
+  ],
+  "Revised report note / correction evidence": [
+    "កំណត់ត្រារបាយការណ៍កែប្រែ / ភស្តុតាងកែតម្រូវ",
+    "修改后的报告说明/更正证据",
+    "Ghi chú báo cáo sửa đổi / bằng chứng chỉnh sửa",
+    "Binagong ulat ng tala / katibayan ng pagwawasto",
+    "Nota laporan / bukti pembetulan yang disemak"
+  ],
+  "Role *": [
+    "តួនាទី *",
+    "角色 *",
+    "Vai trò *",
+    "Tungkulin *",
+    "Peranan *"
+  ],
+  "Root cause": [
+    "មូលហេតុដើម",
+    "根本原因",
+    "nguyên nhân gốc rễ",
+    "Ang ugat na dahilan",
+    "Punca punca"
+  ],
+  "Root cause / supporting evidence": [
+    "មូលហេតុដើម / ភស្តុតាងគាំទ្រ",
+    "根本原因/支持证据",
+    "Nguyên nhân gốc rễ/bằng chứng hỗ trợ",
+    "Root cause / sumusuportang ebidensya",
+    "Punca punca / bukti sokongan"
+  ],
+  "Rules for implementation": [
+    "ច្បាប់សម្រាប់ការអនុវត្ត",
+    "实施细则",
+    "Quy định thực hiện",
+    "Mga panuntunan para sa pagpapatupad",
+    "Peraturan untuk pelaksanaan"
+  ],
+  "SOP / document Training": [
+    "SOP / ឯកសារបណ្តុះបណ្តាល",
+    "SOP/文件培训",
+    "SOP/tài liệu đào tạo",
+    "SOP / dokumento Pagsasanay",
+    "SOP / dokumen Latihan"
+  ],
+  "SOP / document training": [
+    "SOP / ការបណ្តុះបណ្តាលឯកសារ",
+    "SOP/文件培训",
+    "Đào tạo SOP/tài liệu",
+    "Pagsasanay sa SOP / dokumento",
+    "SOP/dokumen latihan"
+  ],
+  "SOP document Training": [
+    "ការបណ្តុះបណ្តាលឯកសារ SOP",
+    "SOP文件培训",
+    "Đào tạo tài liệu SOP",
+    "Dokumento ng SOP Pagsasanay",
+    "Dokumen SOP Latihan"
+  ],
+  "SOP ·": [
+    "SOP ·",
+    "标准操作程序·",
+    "SOP ·",
+    "SOP ·",
+    "SOP ·"
+  ],
+  "SOP · End-line 100% check": [
+    "SOP · បន្ទាត់បញ្ចប់ 100% ពិនិត្យ",
+    "SOP·终线100%检查",
+    "SOP · Kiểm tra cuối dòng 100%",
+    "SOP · End-line 100% check",
+    "SOP · Baris akhir 100% semak"
+  ],
+  "SOP · First output gate": [
+    "SOP · ច្រកចេញដំបូង",
+    "SOP·第一个输出门",
+    "SOP · Cổng ra đầu tiên",
+    "SOP · Unang output gate",
+    "SOP · Gerbang keluaran pertama"
+  ],
+  "Sample current work and record the line, operation and machine.": [
+    "គំរូការងារបច្ចុប្បន្ន និងកត់ត្រាបន្ទាត់ ប្រតិបត្តិការ និងម៉ាស៊ីន។",
+    "对当前工作进行采样并记录生产线、操作和机器。",
+    "Lấy mẫu công việc hiện tại và ghi lại dây chuyền, hoạt động và máy.",
+    "Sample ng kasalukuyang trabaho at itala ang linya, operasyon at makina.",
+    "Contoh kerja semasa dan rekod talian, operasi dan mesin."
+  ],
+  "Sample pieces": [
+    "បំណែកគំរូ",
+    "样品件",
+    "Mảnh mẫu",
+    "Mga sample na piraso",
+    "Kepingan sampel"
+  ],
+  "Sampling and limits": [
+    "គំរូនិងដែនកំណត់",
+    "抽样和限制",
+    "Lấy mẫu và giới hạn",
+    "Sampling at mga limitasyon",
+    "Persampelan dan had"
+  ],
+  "Sampling setup is incomplete.": [
+    "ការដំឡើងគំរូមិនពេញលេញទេ។",
+    "采样设置不完整。",
+    "Thiết lập lấy mẫu không đầy đủ.",
+    "Hindi kumpleto ang sampling setup.",
+    "Persediaan pensampelan tidak lengkap."
+  ],
+  "Save QA decision": [
+    "រក្សាទុកការសម្រេចចិត្ត QA",
+    "保存质量检查决定",
+    "Lưu quyết định QA",
+    "I-save ang desisyon ng QA",
+    "Simpan keputusan QA"
+  ],
+  "Save decision / CAP": [
+    "រក្សាទុកការសម្រេចចិត្ត / CAP",
+    "保存决定/CAP",
+    "Lưu quyết định/CAP",
+    "I-save ang desisyon / CAP",
+    "Simpan keputusan / CAP"
+  ],
+  "Save inspection": [
+    "រក្សាទុកការត្រួតពិនិត្យ",
+    "保存检查",
+    "Lưu kiểm tra",
+    "I-save ang inspeksyon",
+    "Simpan pemeriksaan"
+  ],
+  "Save inspection and decision": [
+    "រក្សាទុកការត្រួតពិនិត្យ និងការសម្រេចចិត្ត",
+    "保存检查和决定",
+    "Lưu kiểm tra và quyết định",
+    "I-save ang inspeksyon at desisyon",
+    "Simpan pemeriksaan dan keputusan"
+  ],
+  "Save quality check": [
+    "រក្សាទុកការត្រួតពិនិត្យគុណភាព",
+    "保存质量检查",
+    "Lưu kiểm tra chất lượng",
+    "I-save ang pagsusuri sa kalidad",
+    "Simpan pemeriksaan kualiti"
+  ],
+  "Save recheck": [
+    "រក្សាទុកការត្រួតពិនិត្យឡើងវិញ",
+    "保存复核",
+    "Lưu kiểm tra lại",
+    "I-save ang recheck",
+    "Simpan semak semula"
+  ],
+  "Save report amendment": [
+    "រក្សាទុកការកែប្រែរបាយការណ៍",
+    "保存报告修改",
+    "Lưu sửa đổi báo cáo",
+    "I-save ang pag-amyenda ng ulat",
+    "Simpan pindaan laporan"
+  ],
+  "Save supervisor decision": [
+    "រក្សាទុកការសម្រេចចិត្តរបស់អ្នកគ្រប់គ្រង",
+    "保存主管决定",
+    "Lưu quyết định của người giám sát",
+    "I-save ang desisyon ng superbisor",
+    "Simpan keputusan penyelia"
+  ],
+  "Saved checks": [
+    "ការត្រួតពិនិត្យដែលបានរក្សាទុក",
+    "已保存的支票",
+    "Séc đã lưu",
+    "Naka-save na mga tseke",
+    "Cek disimpan"
+  ],
+  "Saved checks appear in this module’s dashboard, five reports, modification queue and decision register.": [
+    "ការត្រួតពិនិត្យដែលបានរក្សាទុកបង្ហាញនៅក្នុងផ្ទាំងគ្រប់គ្រងរបស់ម៉ូឌុលនេះ របាយការណ៍ចំនួនប្រាំ ជួរការកែប្រែ និងការចុះឈ្មោះការសម្រេចចិត្ត។",
+    "保存的检查出现在该模块的仪表板、五个报告、修改队列和决策寄存器中。",
+    "Các kiểm tra đã lưu sẽ xuất hiện trong bảng thông tin của mô-đun này, năm báo cáo, hàng sửa đổi và đăng ký quyết định.",
+    "Lumalabas ang mga naka-save na tseke sa dashboard ng module na ito, limang ulat, queue ng pagbabago at rehistro ng desisyon.",
+    "Semakan disimpan muncul dalam papan pemuka modul ini, lima laporan, baris gilir pengubahsuaian dan daftar keputusan."
+  ],
+  "Saved checks flow into this module’s dashboard, reports and decision register.": [
+    "ការត្រួតពិនិត្យដែលបានរក្សាទុកហូរចូលទៅក្នុងផ្ទាំងគ្រប់គ្រង របាយការណ៍ និងការចុះឈ្មោះការសម្រេចចិត្តរបស់ម៉ូឌុលនេះ។",
+    "保存的检查流入该模块的仪表板、报告和决策寄存器。",
+    "Các bước kiểm tra đã lưu sẽ được đưa vào bảng thông tin, báo cáo và sổ đăng ký quyết định của mô-đun này.",
+    "Ang mga naka-save na pagsusuri ay dumadaloy sa dashboard, mga ulat at rehistro ng desisyon ng module na ito.",
+    "Cek tersimpan mengalir ke papan pemuka, laporan dan daftar keputusan modul ini."
+  ],
+  "Scan each garment ID; separate with a space, comma or line break": [
+    "ស្កេនលេខសម្គាល់សម្លៀកបំពាក់នីមួយៗ; បំបែកដោយដកឃ្លា សញ្ញាក្បៀស ឬបន្ទាត់បំបែក",
+    "扫描每件服装ID；用空格、逗号或换行符分隔",
+    "Quét từng ID hàng may mặc; phân cách bằng dấu cách, dấu phẩy hoặc ngắt dòng",
+    "I-scan ang bawat garment ID; hiwalay na may puwang, kuwit o line break",
+    "Imbas setiap ID pakaian; asingkan dengan ruang, koma atau pemisah baris"
+  ],
+  "Scan each garment that is leaving sewing.": [
+    "ស្កែនសម្លៀកបំពាក់នីមួយៗដែលទុកសម្រាប់ដេរ។",
+    "扫描每件即将缝制的衣服。",
+    "Quét từng bộ quần áo đang may.",
+    "I-scan ang bawat damit na umaalis sa pananahi.",
+    "Imbas setiap pakaian yang meninggalkan jahitan."
+  ],
+  "Scan each unique garment or bundle piece ID once. Reinspection updates the original check so the piece is never counted twice.": [
+    "ស្កែនលេខសម្គាល់សម្លៀកបំពាក់ ឬដុំនីមួយៗដែលមានតែមួយ។ ការត្រួតពិនិត្យឡើងវិញធ្វើបច្ចុប្បន្នភាពការត្រួតពិនិត្យដើម ដូច្នេះបំណែកនេះមិនត្រូវបានរាប់ពីរដងទេ។",
+    "扫描每件独特的服装或捆绑件 ID 一次。重新检查会更新原始检查，因此该件永远不会被计算两次。",
+    "Quét từng ID hàng may mặc hoặc gói hàng duy nhất một lần. Kiểm tra lại cập nhật séc ban đầu để mảnh không bao giờ được tính hai lần.",
+    "I-scan ang bawat natatanging kasuotan o piraso ng bundle ID nang isang beses. Ina-update ng muling pagsisiyasat ang orihinal na tseke upang hindi mabibilang nang dalawang beses ang piraso.",
+    "Imbas setiap pakaian unik atau ID bahagian berkas sekali. Pemeriksaan semula mengemas kini cek asal supaya sekeping tidak dikira dua kali."
+  ],
+  "Scan or enter ID": [
+    "ស្កេន ឬបញ្ចូលលេខសម្គាល់",
+    "扫描或输入身份证件",
+    "Quét hoặc nhập ID",
+    "I-scan o ilagay ang ID",
+    "Imbas atau masukkan ID"
+  ],
+  "Scan to open the floor pad": [
+    "ស្កេនដើម្បីបើកកម្រាលឥដ្ឋ",
+    "扫描打开地垫",
+    "Quét để mở tấm lót sàn",
+    "I-scan para buksan ang floor pad",
+    "Imbas untuk membuka alas lantai"
+  ],
+  "Scan with floor tablet": [
+    "ស្កេនជាមួយកុំព្យូទ័របន្ទះ",
+    "使用落地平板电脑扫描",
+    "Quét bằng máy tính bảng sàn",
+    "I-scan gamit ang floor tablet",
+    "Imbas dengan tablet lantai"
+  ],
+  "Scope:": [
+    "វិសាលភាព៖",
+    "范围：",
+    "Phạm vi:",
+    "Saklaw:",
+    "Skop:"
+  ],
+  "Scoped pad access": [
+    "ការចូលប្រើបន្ទះដែលមានវិសាលភាព",
+    "范围内的 pad 访问",
+    "Truy cập bảng theo phạm vi",
+    "Saklaw na pag-access sa pad",
+    "Akses pad berskop"
+  ],
+  "Scorch or shine": [
+    "ឆេះឬភ្លឺ",
+    "烧焦或闪耀",
+    "Thiêu đốt hay tỏa sáng",
+    "Mapaso o umaraw",
+    "Hangus atau bersinar"
+  ],
+  "Scrollable complete inspection form": [
+    "ទម្រង់ត្រួតពិនិត្យពេញលេញដែលអាចរំកិលបាន។",
+    "可滚动的完整检查表",
+    "Biểu mẫu kiểm tra hoàn chỉnh có thể cuộn",
+    "Scrollable kumpletong inspeksyon form",
+    "Borang pemeriksaan lengkap boleh tatal"
+  ],
+  "Search decoration records": [
+    "ស្វែងរកកំណត់ត្រាតុបតែង",
+    "搜寻装修记录",
+    "Tìm kiếm hồ sơ trang trí",
+    "Maghanap ng mga tala ng dekorasyon",
+    "Cari rekod hiasan"
+  ],
+  "Search full inspection reports": [
+    "ស្វែងរករបាយការណ៍ត្រួតពិនិត្យពេញលេញ",
+    "搜索完整的检验报告",
+    "Tìm kiếm báo cáo kiểm tra đầy đủ",
+    "Maghanap ng buong ulat ng inspeksyon",
+    "Cari laporan pemeriksaan penuh"
+  ],
+  "Search ground records": [
+    "ស្វែងរកកំណត់ត្រាដី",
+    "搜寻地面记录",
+    "Tìm kiếm hồ sơ mặt đất",
+    "Maghanap ng mga tala sa lupa",
+    "Cari rekod tanah"
+  ],
+  "Search order, style, buyer or record": [
+    "ស្វែងរកលំដាប់ រចនាប័ទ្ម អ្នកទិញ ឬកំណត់ត្រា",
+    "搜索订单、款式、买家或记录",
+    "Tìm kiếm đơn hàng, kiểu dáng, người mua hoặc bản ghi",
+    "Maghanap ng order, istilo, mamimili o record",
+    "Cari pesanan, gaya, pembeli atau rekod"
+  ],
+  "Segregate failures, alert line leader and QA; send for repair.": [
+    "បំបែកការបរាជ័យ អ្នកដឹកនាំបន្ទាត់ជូនដំណឹង និង QA; ផ្ញើសម្រាប់ការជួសជុល។",
+    "隔离故障，向一线领导和 QA 发出警报；送修。",
+    "Tách biệt các lỗi, trưởng tuyến cảnh báo và QA; gửi đi sửa chữa.",
+    "Paghiwalayin ang mga pagkabigo, pinuno ng linya ng alerto at QA; ipadala para sa pagkumpuni.",
+    "Asingkan kegagalan, ketua baris amaran dan QA; hantar untuk dibaiki."
+  ],
+  "Select 20 pieces from the line.": [
+    "ជ្រើសរើស 20 បំណែកពីបន្ទាត់។",
+    "从行中选择 20 件。",
+    "Chọn 20 mảnh từ dòng.",
+    "Pumili ng 20 piraso mula sa linya.",
+    "Pilih 20 keping daripada baris."
+  ],
+  "Select YHR inspector": [
+    "ជ្រើសរើសអធិការ YHR",
+    "选择YHR检查员",
+    "Chọn thanh tra YHR",
+    "Piliin ang inspektor ng YHR",
+    "Pilih pemeriksa YHR"
+  ],
+  "Select a YHR inspector and enter valid checked / defective quantities.": [
+    "ជ្រើសរើសអធិការ YHR ហើយបញ្ចូលបរិមាណដែលបានត្រួតពិនិត្យ / ខូច។",
+    "选择一名 YHR 检验员并输入有效的检查/缺陷数量。",
+    "Chọn một thanh tra viên YHR và nhập số lượng đã kiểm tra / bị lỗi hợp lệ.",
+    "Pumili ng inspektor ng YHR at ilagay ang mga wastong dami ng nasuri / may sira.",
+    "Pilih pemeriksa YHR dan masukkan kuantiti diperiksa / rosak yang sah."
+  ],
+  "Select a current YHR QA inspector.": [
+    "ជ្រើសរើសអ្នកត្រួតពិនិត្យ YHR QA បច្ចុប្បន្ន។",
+    "选择当前的 YHR QA 检查员。",
+    "Chọn một thanh tra viên YHR QA hiện tại.",
+    "Pumili ng kasalukuyang inspektor ng YHR QA.",
+    "Pilih pemeriksa YHR QA semasa."
+  ],
+  "Select current QA employee": [
+    "ជ្រើសរើសបុគ្គលិក QA បច្ចុប្បន្ន",
+    "选择当前 QA 员工",
+    "Chọn nhân viên QA hiện tại",
+    "Piliin ang kasalukuyang empleyado ng QA",
+    "Pilih pekerja QA semasa"
+  ],
+  "Select current YHR QA owner": [
+    "ជ្រើសរើសម្ចាស់ YHR QA បច្ចុប្បន្ន",
+    "选择当前的 YHR QA 所有者",
+    "Chọn chủ sở hữu YHR QA hiện tại",
+    "Piliin ang kasalukuyang may-ari ng YHR QA",
+    "Pilih pemilik YHR QA semasa"
+  ],
+  "Select current YHR person": [
+    "ជ្រើសរើសបុគ្គល YHR បច្ចុប្បន្ន",
+    "选择当前 YHR 人员",
+    "Chọn người YHR hiện tại",
+    "Piliin ang kasalukuyang taong YHR",
+    "Pilih orang YHR semasa"
+  ],
+  "Select full inspection report": [
+    "ជ្រើសរើសរបាយការណ៍ត្រួតពិនិត្យពេញលេញ",
+    "选择完整的检验报告",
+    "Chọn báo cáo kiểm tra đầy đủ",
+    "Piliin ang buong ulat ng inspeksyon",
+    "Pilih laporan pemeriksaan penuh"
+  ],
+  "Select named responsibility": [
+    "ជ្រើសរើសការទទួលខុសត្រូវដែលមានឈ្មោះ",
+    "选择指定责任",
+    "Chọn trách nhiệm được đặt tên",
+    "Piliin ang pinangalanang responsibilidad",
+    "Pilih tanggungjawab yang dinamakan"
+  ],
+  "Select new / repeat": [
+    "ជ្រើសរើសថ្មី / ធ្វើម្តងទៀត",
+    "选择新/重复",
+    "Chọn mới/lặp lại",
+    "Pumili ng bago / ulitin",
+    "Pilih baharu / ulang"
+  ],
+  "Select record to amend": [
+    "ជ្រើសរើសកំណត់ត្រាដើម្បីកែប្រែ",
+    "选择要修改的记录",
+    "Chọn bản ghi để sửa đổi",
+    "Pumili ng tala na babaguhin",
+    "Pilih rekod untuk dipinda"
+  ],
+  "Select reporting-chain reviewer": [
+    "ជ្រើសរើសអ្នកត្រួតពិនិត្យខ្សែសង្វាក់រាយការណ៍",
+    "选择报告链审阅者",
+    "Chọn người đánh giá chuỗi báo cáo",
+    "Pumili ng reporting-chain reviewer",
+    "Pilih penyemak rantaian pelaporan"
+  ],
+  "Select result": [
+    "ជ្រើសរើសលទ្ធផល",
+    "选择结果",
+    "Chọn kết quả",
+    "Piliin ang resulta",
+    "Pilih hasil"
+  ],
+  "Select sample availability": [
+    "ជ្រើសរើសភាពអាចរកបាននៃគំរូ",
+    "选择样品可用性",
+    "Chọn tính sẵn có của mẫu",
+    "Pumili ng sample availability",
+    "Pilih ketersediaan sampel"
+  ],
+  "Senior Supervisor": [
+    "អ្នកគ្រប់គ្រងជាន់ខ្ពស់",
+    "高级主管",
+    "Giám sát cấp cao",
+    "Senior Supervisor",
+    "Penyelia Kanan"
+  ],
+  "Setup checks": [
+    "ដំឡើងការត្រួតពិនិត្យ",
+    "设置检查",
+    "Kiểm tra thiết lập",
+    "Mga pagsusuri sa pag-setup",
+    "Pemeriksaan persediaan"
+  ],
+  "Setup modification": [
+    "ដំឡើងការកែប្រែ",
+    "设置修改",
+    "Sửa đổi thiết lập",
+    "Pagbabago sa pag-setup",
+    "Pengubahsuaian persediaan"
+  ],
+  "Sew the agreed startup sample; verify construction and measurements against the approved sample and tech pack.": [
+    "ដេរគំរូចាប់ផ្តើមដែលបានព្រមព្រៀង; ផ្ទៀងផ្ទាត់ការសាងសង់ និងការវាស់វែងធៀបនឹងគំរូដែលបានអនុម័ត និងកញ្ចប់បច្ចេកវិទ្យា។",
+    "缝制约定的启动样品；根据批准的样品和技术包验证结构和测量。",
+    "Khâu mẫu khởi động đã thống nhất; xác minh việc xây dựng và đo lường so với mẫu và gói công nghệ đã được phê duyệt.",
+    "Tahiin ang napagkasunduang sample ng startup; i-verify ang konstruksyon at mga sukat laban sa naaprubahang sample at tech pack.",
+    "Jahit sampel permulaan yang dipersetujui; mengesahkan pembinaan dan pengukuran terhadap sampel dan pek teknologi yang diluluskan."
+  ],
+  "Sewing line *": [
+    "បន្ទាត់ដេរ *",
+    "缝纫线 *",
+    "Dây chuyền may *",
+    "linya ng pananahi *",
+    "Talian jahitan *"
+  ],
+  "Sewing quality views": [
+    "ទិដ្ឋភាពគុណភាពដេរ",
+    "缝纫质量视图",
+    "Quan điểm về chất lượng may",
+    "Mga tanawin ng kalidad ng pananahi",
+    "Pemandangan berkualiti jahitan"
+  ],
+  "Sewing to finishing handoff": [
+    "ដេរដើម្បីបញ្ចប់ការប្រគល់ដៃ",
+    "缝制到整理交接",
+    "Khâu để hoàn thiện bàn giao",
+    "Pananahi hanggang sa matapos ang handoff",
+    "Menjahit hingga selesai serahan"
+  ],
+  "Shift": [
+    "ប្ដូរ",
+    "转变",
+    "ca",
+    "Paglipat",
+    "Beralih"
+  ],
+  "Show": [
+    "បង្ហាញ",
+    "显示",
+    "Hiển thị",
+    "Ipakita",
+    "Tunjukkan"
+  ],
+  "Show / edit": [
+    "បង្ហាញ / កែសម្រួល",
+    "显示/编辑",
+    "Hiển thị/chỉnh sửa",
+    "Ipakita / i-edit",
+    "Tunjukkan / edit"
+  ],
+  "Sign in": [
+    "ចូល",
+    "登录",
+    "Đăng nhập",
+    "Mag-sign in",
+    "Log masuk"
+  ],
+  "Sign in required": [
+    "តម្រូវឱ្យចូល",
+    "需要登录",
+    "Yêu cầu đăng nhập",
+    "Kailangang mag-sign in",
+    "Log masuk diperlukan"
+  ],
+  "Six-digit code": [
+    "លេខកូដប្រាំមួយខ្ទង់",
+    "六位数代码",
+    "Mã sáu chữ số",
+    "Anim na digit na code",
+    "Kod enam digit"
+  ],
+  "Six-digit floor code": [
+    "លេខកូដជាន់ប្រាំមួយខ្ទង់",
+    "六位楼层代码",
+    "Mã tầng sáu chữ số",
+    "Anim na digit na floor code",
+    "Kod lantai enam digit"
+  ],
+  "Size": [
+    "ទំហំ",
+    "尺寸",
+    "Kích thước",
+    "Sukat",
+    "Saiz"
+  ],
+  "Size / piece": [
+    "ទំហំ / ដុំ",
+    "尺寸/件",
+    "Kích thước/cái",
+    "Sukat / piraso",
+    "Saiz / sekeping"
+  ],
+  "Size / ratio *": [
+    "ទំហំ / សមាមាត្រ *",
+    "尺寸/比例*",
+    "Kích thước/tỷ lệ *",
+    "Sukat / ratio *",
+    "Saiz / nisbah *"
+  ],
+  "Size ratio": [
+    "សមាមាត្រទំហំ",
+    "尺寸比例",
+    "Tỷ lệ kích thước",
+    "Laki ng ratio",
+    "Nisbah saiz"
+  ],
+  "Spec": [
+    "ជាក់លាក់",
+    "规格",
+    "Thông số kỹ thuật",
+    "Spec",
+    "Spesifikasi"
+  ],
+  "Standard mm": [
+    "ម.ម",
+    "标准毫米",
+    "Tiêu chuẩn mm",
+    "Karaniwang mm",
+    "Standard mm"
+  ],
+  "Startup check saved. QA review is required before bulk release.": [
+    "បានរក្សាទុកការត្រួតពិនិត្យការចាប់ផ្តើម។ ការពិនិត្យឡើងវិញ QA គឺត្រូវបានទាមទារមុនពេលចេញផ្សាយជាដុំ។",
+    "启动检查已保存。批量发布前需要进行 QA 审查。",
+    "Đã lưu kiểm tra khởi động. Cần phải xem xét QA trước khi phát hành số lượng lớn.",
+    "Na-save ang startup check. Kinakailangan ang pagsusuri sa QA bago ang maramihang pagpapalabas.",
+    "Semakan permulaan disimpan. Semakan QA diperlukan sebelum keluaran pukal."
+  ],
+  "Startup checks": [
+    "ការត្រួតពិនិត្យការចាប់ផ្តើម",
+    "启动检查",
+    "Kiểm tra khởi động",
+    "Mga pagsusuri sa pagsisimula",
+    "Pemeriksaan permulaan"
+  ],
+  "Startup decisions": [
+    "ការសម្រេចចិត្តចាប់ផ្តើម",
+    "启动决策",
+    "Quyết định khởi nghiệp",
+    "Mga desisyon sa pagsisimula",
+    "Keputusan permulaan"
+  ],
+  "Startup totals count sampled pieces; a repeated trial is a separate check.": [
+    "សរុបចាប់ផ្តើមរាប់បំណែកគំរូ; ការសាកល្បងម្តងហើយម្តងទៀតគឺជាការត្រួតពិនិត្យដាច់ដោយឡែក។",
+    "启动总计采样件数；重复试验是单独的检查。",
+    "Tổng số lần khởi động đếm các phần được lấy mẫu; thử nghiệm lặp lại là một lần kiểm tra riêng biệt.",
+    "Ang mga kabuuan ng startup ay nagbibilang ng mga sample na piraso; ang paulit-ulit na pagsubok ay isang hiwalay na tseke.",
+    "Jumlah permulaan mengira potongan sampel; percubaan berulang adalah pemeriksaan berasingan."
+  ],
+  "Startup trial · machine and skill check · QA release": [
+    "ការសាកល្បងចាប់ផ្តើម · ការត្រួតពិនិត្យម៉ាស៊ីន និងជំនាញ · ការចេញផ្សាយ QA",
+    "启动试用 · 机器和技能检查 · QA 发布",
+    "Thử nghiệm khởi động · kiểm tra máy và kỹ năng · Phát hành QA",
+    "Startup trial · machine at skill check · QA release",
+    "Percubaan permulaan · pemeriksaan mesin dan kemahiran · Keluaran QA"
+  ],
+  "Still needs repair": [
+    "នៅតែត្រូវការការជួសជុល",
+    "仍需维修",
+    "Vẫn cần sửa chữa",
+    "Kailangan pa ng repair",
+    "Masih memerlukan pembaikan"
+  ],
+  "Style *": [
+    "រចនាប័ទ្ម *",
+    "款式 *",
+    "Phong cách *",
+    "Estilo *",
+    "Gaya *"
+  ],
+  "Style / buyer": [
+    "រចនាប័ទ្ម / អ្នកទិញ",
+    "款式/买家",
+    "Phong cách / người mua",
+    "Estilo / mamimili",
+    "Gaya / pembeli"
+  ],
+  "Style number": [
+    "លេខរចនាប័ទ្ម",
+    "款式编号",
+    "Số kiểu",
+    "Numero ng istilo",
+    "Nombor gaya"
+  ],
+  "Submit floor inspection": [
+    "ដាក់ស្នើការត្រួតពិនិត្យជាន់",
+    "提交地板检查",
+    "Gửi kiểm tra sàn",
+    "Magsumite ng inspeksyon sa sahig",
+    "Hantar pemeriksaan lantai"
+  ],
+  "Submitted": [
+    "បានដាក់ស្នើ",
+    "已提交",
+    "Đã gửi",
+    "Naisumite",
+    "diserahkan"
+  ],
+  "Supervisor YHR ID": [
+    "លេខសម្គាល់អ្នកគ្រប់គ្រង YHR",
+    "主管 YHR ID",
+    "ID YHR của người giám sát",
+    "Supervisor YHR ID",
+    "ID YHR Penyelia"
+  ],
+  "Technical check:": [
+    "ការត្រួតពិនិត្យបច្ចេកទេស៖",
+    "技术检查：",
+    "Kiểm tra kỹ thuật:",
+    "Teknikal na pagsusuri:",
+    "Pemeriksaan teknikal:"
+  ],
+  "Technical results describe the recorded inspection. Independent management review and shipment authority are separate.": [
+    "លទ្ធផលបច្ចេកទេសពិពណ៌នាអំពីការត្រួតពិនិត្យដែលបានកត់ត្រា។ ការត្រួតពិនិត្យការគ្រប់គ្រងឯករាជ្យ និងអាជ្ញាធរដឹកជញ្ជូនគឺដាច់ដោយឡែក។",
+    "技术结果描述了记录的检查。独立的管理审查和发货权限是分开的。",
+    "Kết quả kỹ thuật mô tả việc kiểm tra đã được ghi nhận. Việc xem xét quản lý độc lập và cơ quan quản lý lô hàng là riêng biệt.",
+    "Inilalarawan ng mga teknikal na resulta ang naitalang inspeksyon. Ang independiyenteng pagsusuri sa pamamahala at awtoridad sa pagpapadala ay hiwalay.",
+    "Keputusan teknikal menerangkan pemeriksaan yang direkodkan. Semakan pengurusan bebas dan pihak berkuasa penghantaran adalah berasingan."
+  ],
+  "Test evidence:": [
+    "ភស្តុតាងសាកល្បង៖",
+    "测试证据：",
+    "Bằng chứng kiểm tra:",
+    "Katibayan sa pagsubok:",
+    "Bukti ujian:"
+  ],
+  "Tests and observations": [
+    "ការធ្វើតេស្តនិងការសង្កេត",
+    "测试和观察",
+    "Kiểm tra và quan sát",
+    "Mga pagsubok at obserbasyon",
+    "Ujian dan pemerhatian"
+  ],
+  "That defect is already recorded for this piece and location.": [
+    "ពិការភាពនោះត្រូវបានកត់ត្រារួចហើយសម្រាប់ដុំ និងទីតាំងនេះ។",
+    "该缺陷已针对该工件和位置进行了记录。",
+    "Khiếm khuyết đó đã được ghi lại cho phần và vị trí này.",
+    "Ang depektong iyon ay naitala na para sa piraso at lokasyong ito.",
+    "Kecacatan itu telah direkodkan untuk bahagian dan lokasi ini."
+  ],
+  "The employee selected on an inspection is recorded separately from this access session. This demo does not authenticate YHR quality approval permissions.": [
+    "និយោជិតដែលត្រូវបានជ្រើសរើសនៅលើការត្រួតពិនិត្យត្រូវបានកត់ត្រាដាច់ដោយឡែកពីវគ្គចូលដំណើរការនេះ។ ការបង្ហាញនេះមិនផ្ទៀងផ្ទាត់ការអនុញ្ញាតការអនុម័តគុណភាព YHR ទេ។",
+    "在检查中选择的员工将与此访问会话分开记录。此演示不验证 YHR 质量审批权限。",
+    "Nhân viên được chọn trong cuộc kiểm tra sẽ được ghi lại riêng biệt với phiên truy cập này. Bản demo này không xác thực quyền phê duyệt chất lượng YHR.",
+    "Ang empleyado na napili sa isang inspeksyon ay itinala nang hiwalay mula sa session ng access na ito. Hindi pinapatotohanan ng demo na ito ang mga pahintulot sa pag-apruba sa kalidad ng YHR.",
+    "Pekerja yang dipilih pada pemeriksaan direkodkan secara berasingan daripada sesi akses ini. Demo ini tidak mengesahkan kebenaran kelulusan kualiti YHR."
+  ],
+  "The org chart currently provides roles and a read-only directory. Confirm named ownership in YHR before using automated person-level routing.": [
+    "គំនូសតាង org បច្ចុប្បន្នផ្តល់តួនាទី និងថតបានតែអានប៉ុណ្ណោះ។ បញ្ជាក់ភាពជាម្ចាស់ដែលមានឈ្មោះនៅក្នុង YHR មុនពេលប្រើការកំណត់កម្រិតមនុស្សដោយស្វ័យប្រវត្តិ។",
+    "组织结构图当前提供角色和只读目录。使用自动人员级路由之前，请确认 YHR 中的指定所有权。",
+    "Sơ đồ tổ chức hiện cung cấp các vai trò và thư mục chỉ đọc. Xác nhận quyền sở hữu được đặt tên trong YHR trước khi sử dụng định tuyến cấp người tự động.",
+    "Ang org chart ay kasalukuyang nagbibigay ng mga tungkulin at isang read-only na direktoryo. Kumpirmahin ang pinangalanang pagmamay-ari sa YHR bago gumamit ng automated na pagruruta sa antas ng tao.",
+    "Carta organisasi pada masa ini menyediakan peranan dan direktori baca sahaja. Sahkan pemilikan yang dinamakan dalam YHR sebelum menggunakan penghalaan peringkat orang automatik."
+  ],
+  "The recorded result is calculated from evidence and approval gates.": [
+    "លទ្ធផលដែលបានកត់ត្រាត្រូវបានគណនាពីភស្តុតាង និងច្រកអនុម័ត។",
+    "记录的结果是根据证据和批准门计算得出的。",
+    "Kết quả ghi nhận được tính toán từ bằng chứng và cổng phê duyệt.",
+    "Ang naitalang resulta ay kinakalkula mula sa ebidensya at mga gate ng pag-apruba.",
+    "Keputusan yang direkodkan dikira daripada bukti dan pintu kelulusan."
+  ],
+  "This earlier screen contains sample figures. Submit actual checks using the connected form above.": [
+    "អេក្រង់មុននេះមានតួលេខគំរូ។ ដាក់ស្នើការត្រួតពិនិត្យជាក់ស្តែងដោយប្រើទម្រង់ភ្ជាប់ខាងលើ។",
+    "此较早的屏幕包含示例图。使用上面的连接表格提交实际支票。",
+    "Màn hình trước đó chứa các số liệu mẫu. Gửi séc thực tế bằng cách sử dụng biểu mẫu được kết nối ở trên.",
+    "Ang naunang screen na ito ay naglalaman ng mga sample na numero. Magsumite ng mga aktwal na tseke gamit ang konektadong form sa itaas.",
+    "Skrin awal ini mengandungi angka sampel. Serahkan semakan sebenar menggunakan borang bersambung di atas."
+  ],
+  "This full report displays original inspection measurements and findings. Management changes are recorded separately and applied to the summary reports below.": [
+    "របាយការណ៍ពេញលេញនេះបង្ហាញពីការវាស់វែង និងការរកឃើញអធិការកិច្ចដើម។ ការផ្លាស់ប្តូរការគ្រប់គ្រងត្រូវបានកត់ត្រាដាច់ដោយឡែក និងអនុវត្តចំពោះរបាយការណ៍សង្ខេបខាងក្រោម។",
+    "这份完整的报告显示了原始检查测量结果和结果。管理变更单独记录并应用于下面的摘要报告。",
+    "Báo cáo đầy đủ này hiển thị các phép đo và kết quả kiểm tra ban đầu. Những thay đổi về quản lý được ghi lại riêng biệt và áp dụng cho các báo cáo tóm tắt dưới đây.",
+    "Ang buong ulat na ito ay nagpapakita ng orihinal na mga sukat at natuklasan sa inspeksyon. Ang mga pagbabago sa pamamahala ay itinala nang hiwalay at inilalapat sa mga buod na ulat sa ibaba.",
+    "Laporan penuh ini memaparkan ukuran dan penemuan pemeriksaan asal. Perubahan pengurusan direkodkan secara berasingan dan digunakan pada laporan ringkasan di bawah."
+  ],
+  "This label comes from your existing signed Yai access session.": [
+    "ស្លាកនេះចេញមកពីវគ្គចូលប្រើប្រាស់ Yai ដែលបានចុះហត្ថលេខាដែលមានស្រាប់របស់អ្នក។",
+    "该标签来自您现有的签名 Yai 访问会话。",
+    "Nhãn này xuất phát từ phiên truy cập Yai đã ký hiện có của bạn.",
+    "Ang label na ito ay nagmula sa iyong kasalukuyang nilagdaang Yai access session.",
+    "Label ini datang daripada sesi akses Yai anda yang ditandatangani sedia ada."
+  ],
+  "Thread and workmanship": [
+    "ខ្សែស្រឡាយនិងស្នាដៃ",
+    "螺纹及做工",
+    "Chủ đề và tay nghề",
+    "Thread at pagkakagawa",
+    "Benang dan mutu kerja"
+  ],
+  "Top reading (% RH)": [
+    "ការអានកំពូល (% RH)",
+    "顶部读数（% RH）",
+    "Số đọc cao nhất (% RH)",
+    "Nangungunang pagbabasa (% RH)",
+    "Bacaan teratas (% RH)"
+  ],
+  "Training": [
+    "ការបណ្តុះបណ្តាល",
+    "培训",
+    "đào tạo",
+    "Pagsasanay",
+    "Latihan"
+  ],
+  "Training example": [
+    "ឧទាហរណ៍នៃការបណ្តុះបណ្តាល",
+    "训练示例",
+    "Ví dụ đào tạo",
+    "Halimbawa ng pagsasanay",
+    "Contoh latihan"
+  ],
+  "Training:": [
+    "ការបណ្តុះបណ្តាល៖",
+    "培训：",
+    "Đào tạo:",
+    "Pagsasanay:",
+    "Latihan:"
+  ],
+  "Trims and labels": [
+    "ការកាត់និងស្លាក",
+    "装饰和标签",
+    "Trang trí và nhãn",
+    "Mga trim at label",
+    "Kemasan dan label"
+  ],
+  "Unique garment / piece ID *": [
+    "លេខសម្គាល់សម្លៀកបំពាក់/បំណែក*",
+    "唯一的服装/单件 ID *",
+    "ID hàng may mặc/mảnh duy nhất *",
+    "Natatanging damit / piraso ID *",
+    "ID pakaian / sekeping unik *"
+  ],
+  "Unknown quality module": [
+    "ម៉ូឌុលគុណភាពមិនស្គាល់",
+    "质量未知的模块",
+    "Mô-đun chất lượng không xác định",
+    "Hindi alam na kalidad ng module",
+    "Modul kualiti tidak diketahui"
+  ],
+  "Upload inspection evidence": [
+    "ផ្ទុកភស្តុតាងអធិការកិច្ច",
+    "上传检验证据",
+    "Tải lên bằng chứng kiểm tra",
+    "Mag-upload ng ebidensya ng inspeksyon",
+    "Muat naik bukti pemeriksaan"
+  ],
+  "Uploaded evidence": [
+    "ភស្តុតាងដែលបានផ្ទុកឡើង",
+    "上传证据",
+    "Bằng chứng được tải lên",
+    "Nag-upload ng ebidensya",
+    "Muat naik bukti"
+  ],
+  "Uploading evidence…": [
+    "កំពុងផ្ទុកភស្តុតាង...",
+    "正在上传证据...",
+    "Đang tải lên bằng chứng…",
+    "Nag-a-upload ng ebidensya...",
+    "Memuat naik bukti…"
+  ],
+  "Use the A4 floor tablet to scan this QR code. Enter the six-digit code on the tablet to open the connected": [
+    "ប្រើកុំព្យូទ័របន្ទះ A4 ជាន់ដើម្បីស្កេនកូដ QR នេះ។ បញ្ចូលលេខកូដប្រាំមួយខ្ទង់នៅលើកុំព្យូទ័របន្ទះដើម្បីបើកការតភ្ជាប់",
+    "使用A4地板平板电脑扫描此二维码。在平板电脑上输入六位数代码以打开已连接的",
+    "Dùng máy tính bảng sàn A4 quét mã QR này. Nhập mã gồm sáu chữ số trên máy tính bảng để mở kết nối",
+    "Gamitin ang A4 floor tablet para i-scan ang QR code na ito. Ilagay ang anim na digit na code sa tablet para buksan ang nakakonekta",
+    "Gunakan tablet lantai A4 untuk mengimbas kod QR ini. Masukkan kod enam digit pada tablet untuk membuka yang disambungkan"
+  ],
+  "Use the A4 floor tablet to scan this QR code. Enter the six-digit code to open the connected": [
+    "ប្រើកុំព្យូទ័របន្ទះ A4 ជាន់ដើម្បីស្កេនកូដ QR នេះ។ បញ្ចូលលេខកូដប្រាំមួយខ្ទង់ ដើម្បីបើកការភ្ជាប់",
+    "使用A4地板平板电脑扫描此二维码。输入六位数代码即可打开已连接的",
+    "Dùng máy tính bảng sàn A4 quét mã QR này. Nhập mã gồm sáu chữ số để mở kết nối",
+    "Gamitin ang A4 floor tablet para i-scan ang QR code na ito. Ipasok ang anim na digit na code upang buksan ang konektado",
+    "Gunakan tablet lantai A4 untuk mengimbas kod QR ini. Masukkan kod enam digit untuk membuka yang disambungkan"
+  ],
+  "Use the A4 portrait tablet to scan this QR code. Enter the six-digit floor code on the tablet to open the connected": [
+    "ប្រើថេប្លេតបញ្ឈរ A4 ដើម្បីស្កេនកូដ QR នេះ។ បញ្ចូលលេខកូដជាន់ប្រាំមួយខ្ទង់នៅលើកុំព្យូទ័របន្ទះដើម្បីបើកការតភ្ជាប់",
+    "使用A4纵向平板电脑扫描此二维码。在平板电脑上输入六位楼层密码即可打开已连接的楼层",
+    "Sử dụng máy tính bảng dọc A4 để quét mã QR này. Nhập mã sàn gồm sáu chữ số trên máy tính bảng để mở kết nối",
+    "Gamitin ang A4 portrait tablet upang i-scan ang QR code na ito. Ilagay ang anim na digit na floor code sa tablet para buksan ang nakakonekta",
+    "Gunakan tablet potret A4 untuk mengimbas kod QR ini. Masukkan kod lantai enam digit pada tablet untuk membuka yang disambungkan"
+  ],
+  "Use the approved buyer and factory SOP for sample plans, limits and release authority.": [
+    "ប្រើអ្នកទិញ និងរោងចក្រដែលបានអនុម័ត SOP សម្រាប់ផែនការគំរូ ដែនកំណត់ និងសិទ្ធិអំណាចចេញផ្សាយ។",
+    "使用经批准的买方和工厂 SOP 获取样品计划、限制和发布权限。",
+    "Sử dụng SOP của nhà máy và người mua đã được phê duyệt để biết các kế hoạch mẫu, giới hạn và quyền phát hành.",
+    "Gamitin ang aprubadong buyer at factory SOP para sa mga sample plan, limitasyon at awtoridad sa pagpapalabas.",
+    "Gunakan SOP pembeli dan kilang yang diluluskan untuk pelan sampel, had dan kuasa pelepasan."
+  ],
+  "Verification": [
+    "ការផ្ទៀងផ្ទាត់",
+    "验证",
+    "Xác minh",
+    "Pagpapatunay",
+    "Pengesahan"
+  ],
+  "Verification evidence · required to finalise": [
+    "ភស្តុតាងផ្ទៀងផ្ទាត់ · ទាមទារដើម្បីបញ្ចប់",
+    "验证证据 · 需要最终确定",
+    "Bằng chứng xác minh · cần thiết để hoàn thiện",
+    "Katibayan sa pag-verify · kinakailangan upang tapusin",
+    "Bukti pengesahan · diperlukan untuk dimuktamadkan"
+  ],
+  "Video Training": [
+    "ការបណ្តុះបណ្តាលវីដេអូ",
+    "视频培训",
+    "Video đào tạo",
+    "Pagsasanay sa Video",
+    "Latihan Video"
+  ],
+  "View": [
+    "មើល",
+    "查看",
+    "Xem",
+    "Tingnan",
+    "Lihat"
+  ],
+  "View all recorded sizes and pieces": [
+    "មើលទំហំ និងបំណែកដែលបានកត់ត្រាទាំងអស់។",
+    "查看所有记录的尺寸和件数",
+    "Xem tất cả các kích thước và mảnh được ghi lại",
+    "Tingnan ang lahat ng naitalang laki at piraso",
+    "Lihat semua saiz dan kepingan yang direkodkan"
+  ],
+  "View earlier meeting minutes": [
+    "មើលកំណត់ហេតុកិច្ចប្រជុំមុន។",
+    "查看之前的会议纪要",
+    "Xem biên bản cuộc họp trước đó",
+    "Tingnan ang mga naunang minuto ng pagpupulong",
+    "Lihat minit mesyuarat awal"
+  ],
+  "View every individual reading and tolerance": [
+    "មើលរាល់ការអានបុគ្គល និងការអត់ឱន",
+    "查看每个个体的读数和耐受性",
+    "Xem từng chỉ số và dung sai riêng lẻ",
+    "Tingnan ang bawat indibidwal na pagbabasa at pagpaparaya",
+    "Lihat setiap bacaan dan toleransi individu"
+  ],
+  "View previous module screen · reference display": [
+    "មើលអេក្រង់ម៉ូឌុលមុន · ការបង្ហាញយោង",
+    "查看上一个模块屏幕·参考显示",
+    "Xem màn hình mô-đun trước đó · hiển thị tham chiếu",
+    "Tingnan ang nakaraang screen ng module · reference na display",
+    "Lihat skrin modul sebelumnya · paparan rujukan"
+  ],
+  "View responsible roles": [
+    "មើលតួនាទីដែលទទួលខុសត្រូវ",
+    "查看负责的角色",
+    "Xem vai trò chịu trách nhiệm",
+    "Tingnan ang mga responsableng tungkulin",
+    "Lihat peranan yang bertanggungjawab"
+  ],
+  "Visit sewing lines, sample work in progress, and record issues requiring line leader or QA follow-up.": [
+    "ទស្សនាខ្សែបន្ទាត់ដេរ ការងារគំរូដែលកំពុងដំណើរការ និងកត់ត្រាបញ្ហាដែលតម្រូវឱ្យអ្នកដឹកនាំខ្សែ ឬ QA តាមដាន។",
+    "参观缝纫线，对正在进行的工作进行抽样，并记录需要生产线领导或 QA 跟进的问题。",
+    "Thăm các dây chuyền may, lấy mẫu công việc đang thực hiện và ghi lại các vấn đề cần trưởng dây chuyền hoặc theo dõi QA.",
+    "Bisitahin ang mga linya ng pananahi, sample na ginagawa, at itala ang mga isyu na nangangailangan ng line leader o QA follow-up.",
+    "Lawati garis jahitan, contoh kerja yang sedang dijalankan dan rekod isu yang memerlukan ketua barisan atau tindakan susulan QA."
+  ],
+  "Where defect arose": [
+    "កន្លែងដែលពិការភាពកើតឡើង",
+    "缺陷出现的地方",
+    "Nơi phát sinh lỗi",
+    "Kung saan lumitaw ang depekto",
+    "Di mana kecacatan timbul"
+  ],
+  "Working training demo · Saved in this browser. All orders, recipes, tests and approvals are simulated.": [
+    "ការបង្ហាញការបណ្តុះបណ្តាលការងារ · បានរក្សាទុកនៅក្នុងកម្មវិធីរុករកនេះ។ រាល់ការបញ្ជាទិញ រូបមន្ត ការធ្វើតេស្ត និងការយល់ព្រមទាំងអស់ត្រូវបានក្លែងធ្វើ។",
+    "工作培训演示 · 保存在此浏览器中。所有订单、配方、测试和批准都是模拟的。",
+    "Bản demo đào tạo làm việc · Đã lưu trong trình duyệt này. Tất cả các đơn đặt hàng, công thức nấu ăn, kiểm tra và phê duyệt đều được mô phỏng.",
+    "Working training demo · Naka-save sa browser na ito. Ang lahat ng mga order, recipe, pagsubok at pag-apruba ay ginagaya.",
+    "Demo latihan bekerja · Disimpan dalam penyemak imbas ini. Semua pesanan, resipi, ujian dan kelulusan disimulasikan."
+  ],
+  "YAI ID": [
+    "អាយ",
+    "雅伊号",
+    "ID YAI",
+    "YAI ID",
+    "ID YAI"
+  ],
+  "YHR ID": [
+    "លេខសម្គាល់ YHR",
+    "青年人身份证号",
+    "ID YHR",
+    "YHR ID",
+    "ID YHR"
+  ],
+  "YHR ID · current manager / supervisor": [
+    "លេខសម្គាល់ YHR · អ្នកគ្រប់គ្រង/អ្នកគ្រប់គ្រងបច្ចុប្បន្ន",
+    "YHR ID·现任经理/主管",
+    "YHR ID · người quản lý/giám sát hiện tại",
+    "YHR ID · kasalukuyang tagapamahala / superbisor",
+    "ID YHR · pengurus / penyelia semasa"
+  ],
+  "YHR QA coordinator": [
+    "អ្នកសម្របសម្រួល YHR QA",
+    "YHR 质量保证协调员",
+    "Điều phối viên YHR QA",
+    "YHR QA coordinator",
+    "Penyelaras QA YHR"
+  ],
+  "YHR QA role hand-offs": [
+    "ការប្រគល់តួនាទីរបស់ YHR QA",
+    "YHR QA 角色交接",
+    "Chuyển giao vai trò YHR QA",
+    "Mga hand-off ng tungkulin ng YHR QA",
+    "Penyerahan peranan QA YHR"
+  ],
+  "YHR QC / QA inspector *": [
+    "YHR QC / QA អធិការ *",
+    "YHR QC/QA 检验员 *",
+    "Thanh tra YHR QC / QA *",
+    "YHR QC / QA inspector *",
+    "Pemeriksa QC / QA YHR *"
+  ],
+  "YHR employee ID *": [
+    "លេខសម្គាល់បុគ្គលិក YHR *",
+    "YHR 员工 ID *",
+    "ID nhân viên YHR *",
+    "ID ng empleyado ng YHR *",
+    "ID pekerja YHR *"
+  ],
+  "YHR release reviewer": [
+    "អ្នកវាយតម្លៃការចេញផ្សាយ YHR",
+    "YHR 发布审阅者",
+    "Người đánh giá bản phát hành YHR",
+    "Tagasuri ng release ng YHR",
+    "Penyemak keluaran YHR"
+  ],
+  "YHR reporting chain at inspection": [
+    "ខ្សែសង្វាក់រាយការណ៍ YHR នៅអធិការកិច្ច",
+    "检查时的 YHR 报告链",
+    "Chuỗi báo cáo YHR khi kiểm tra",
+    "YHR reporting chain sa inspeksyon",
+    "Rantaian pelaporan YHR semasa pemeriksaan"
+  ],
+  "YHR reviewer": [
+    "អ្នកវាយតម្លៃ YHR",
+    "YHR审稿人",
+    "Người đánh giá YHR",
+    "Tagasuri ng YHR",
+    "Penyemak YHR"
+  ],
+  "YHR unavailable": [
+    "YHR មិនអាចប្រើបានទេ។",
+    "YHR 不可用",
+    "YHR không có sẵn",
+    "Hindi available ang YHR",
+    "YHR tidak tersedia"
+  ],
+  "YQMS ·": [
+    "YQMS ·",
+    "扬质量管理系统·",
+    "YQMS ·",
+    "YQMS ·",
+    "YQMS ·"
+  ],
+  "YQMS · SEWING": [
+    "YQMS · ដេរ",
+    "YQMS · 缝纫",
+    "YQMS · MAY",
+    "YQMS · PAnanahi",
+    "YQMS · MENJAHIT"
+  ],
+  "Yai access session": [
+    "សម័យ​ចូល​ដំណើរ​ការ​យ៉ៃ",
+    "Yai 访问会话",
+    "Phiên truy cập Yai",
+    "Yai access session",
+    "Sesi akses Yai"
+  ],
+  "Yai access-session viewer. The inspector entered on the pad is separate and not verified as a YHR login.": [
+    "កម្មវិធីមើលការចូលប្រើយ៉ៃ។ អធិការដែលបានបញ្ចូលនៅលើបន្ទះគឺដាច់ដោយឡែក និងមិនត្រូវបានផ្ទៀងផ្ទាត់ថាជាការចូល YHR ទេ។",
+    "Yai 访问会话查看器。在键盘上输入的检查员是单独的，并且未验证为 YHR 登录。",
+    "Trình xem phiên truy cập Yai. Thanh tra được nhập trên bảng là riêng biệt và không được xác minh là thông tin đăng nhập YHR.",
+    "Yai access-session viewer. Ang inspektor na ipinasok sa pad ay hiwalay at hindi na-verify bilang isang YHR login.",
+    "pemapar sesi akses Yai. Pemeriksa yang dimasukkan pada pad adalah berasingan dan tidak disahkan sebagai log masuk YHR."
+  ],
+  "You are viewing a training demo without a signed-in Yai access session.": [
+    "អ្នក​កំពុង​មើល​ការ​បង្ហាញ​ការ​បណ្ដុះបណ្ដាល​ដោយ​មិន​ចាំបាច់​មាន​ការ​ចូល​ប្រើ​ពេល​ចូល​ប្រើ​Yai។",
+    "您正在查看培训演示，但没有登录 Yai 访问会话。",
+    "Bạn đang xem bản demo đào tạo mà không có phiên truy cập Yai đã đăng nhập.",
+    "Tumitingin ka ng demo ng pagsasanay nang walang naka-sign-in na session sa pag-access sa Yai.",
+    "Anda sedang melihat demo latihan tanpa sesi akses Yai yang dilog masuk."
+  ],
+  "Your floor entries feed the inspection report. Management amendments and final CAP decisions are recorded in Modify and DR on the desktop.": [
+    "ធាតុជាន់របស់អ្នកផ្តល់របាយការណ៍ត្រួតពិនិត្យ។ ការកែប្រែការគ្រប់គ្រង និងការសម្រេចចិត្តចុងក្រោយរបស់ CAP ត្រូវបានកត់ត្រានៅក្នុង Modify និង DR នៅលើផ្ទៃតុ។",
+    "您的楼层条目将提供给检查报告。管理修订和最终 CAP 决策记录在桌面上的修改和灾难恢复中。",
+    "Các mục sàn của bạn cung cấp báo cáo kiểm tra. Các sửa đổi quản lý và quyết định CAP cuối cùng được ghi lại trong Sửa đổi và DR trên máy tính để bàn.",
+    "Ang iyong mga entry sa sahig ay nagpapakain sa ulat ng inspeksyon. Ang mga pagbabago sa pamamahala at panghuling desisyon ng CAP ay nakatala sa Modify at DR sa desktop.",
+    "Entri lantai anda menyuap laporan pemeriksaan. Pindaan pengurusan dan keputusan CAP muktamad direkodkan dalam Modify dan DR pada desktop."
+  ],
+  "checked ·": [
+    "បានពិនិត្យ ·",
+    "已检查·",
+    "đã kiểm tra ·",
+    "nasuri ·",
+    "diperiksa ·"
+  ],
+  "checks ·": [
+    "ការត្រួតពិនិត្យ ·",
+    "检查·",
+    "kiểm tra ·",
+    "mga tseke ·",
+    "cek ·"
+  ],
+  "defect events": [
+    "ព្រឹត្តិការណ៍ពិការភាព",
+    "缺陷事件",
+    "sự kiện khiếm khuyết",
+    "mga pangyayaring may depekto",
+    "peristiwa kecacatan"
+  ],
+  "defect events ·": [
+    "ព្រឹត្តិការណ៍​ដែល​មាន​បញ្ហា ·",
+    "缺陷事件·",
+    "sự kiện khiếm khuyết ·",
+    "mga kaganapang may depekto ·",
+    "peristiwa kecacatan ·"
+  ],
+  "defective": [
+    "ខូច",
+    "有缺陷的",
+    "khiếm khuyết",
+    "may sira",
+    "rosak"
+  ],
+  "defective pieces": [
+    "បំណែកដែលខូច",
+    "有缺陷的件",
+    "mảnh bị lỗi",
+    "mga may sira na piraso",
+    "kepingan yang rosak"
+  ],
+  "defective pieces ·": [
+    "បំណែក​ខូច",
+    "残次品·",
+    "mảnh bị lỗi ·",
+    "may sira na piraso ·",
+    "kepingan yang rosak ·"
+  ],
+  "defective ·": [
+    "ខូច ·",
+    "有缺陷·",
+    "khiếm khuyết ·",
+    "may sira ·",
+    "rosak ·"
+  ],
+  "defective · evidence controls release": [
+    "មានកំហុស · ភស្តុតាងគ្រប់គ្រងការដោះលែង",
+    "有缺陷 · 证据控制释放",
+    "khiếm khuyết · phát hành kiểm soát bằng chứng",
+    "may sira · kinokontrol ang pagpapalabas ng ebidensya",
+    "rosak · bukti mengawal pelepasan"
+  ],
+  "distinct defective pieces. Each piece is counted at its highest severity.": [
+    "បំណែកដែលខូចដោយឡែកពីគ្នា។ បំណែកនីមួយៗត្រូវបានរាប់នៅកម្រិតធ្ងន់ធ្ងរបំផុតរបស់វា។",
+    "明显的缺陷件。每件作品均按其最高严重程度进行计数。",
+    "những phần khiếm khuyết rõ rệt. Mỗi phần được tính ở mức độ nghiêm trọng cao nhất.",
+    "natatanging mga may sira na piraso. Ang bawat piraso ay binibilang sa pinakamataas na kalubhaan nito.",
+    "kepingan rosak yang berbeza. Setiap bahagian dikira pada tahap keterukan tertinggi."
+  ],
+  "events": [
+    "ព្រឹត្តិការណ៍",
+    "事件",
+    "sự kiện",
+    "mga pangyayari",
+    "peristiwa"
+  ],
+  "failed · Defects:": [
+    "បរាជ័យ · ពិការភាព៖",
+    "失败·缺陷：",
+    "thất bại · Khiếm khuyết:",
+    "nabigo · Mga depekto:",
+    "gagal · Kecacatan:"
+  ],
+  "form.": [
+    "ទម្រង់។",
+    "形式。",
+    "hình thức.",
+    "anyo.",
+    "bentuk."
+  ],
+  "inspection form.": [
+    "ទម្រង់អធិការកិច្ច។",
+    "检查表。",
+    "hình thức kiểm tra.",
+    "form ng inspeksyon.",
+    "borang pemeriksaan."
+  ],
+  "inspections ·": [
+    "ការត្រួតពិនិត្យ ·",
+    "检查·",
+    "kiểm tra ·",
+    "inspeksyon ·",
+    "pemeriksaan ·"
+  ],
+  "issues": [
+    "បញ្ហា",
+    "问题",
+    "vấn đề",
+    "mga isyu",
+    "isu"
+  ],
+  "line leader + sewing supervisor; QA leader for repeated or unresolved issue": [
+    "អ្នកដឹកនាំជួរ + អ្នកគ្រប់គ្រងដេរ; អ្នកដឹកនាំ QA សម្រាប់បញ្ហាដដែលៗ ឬមិនទាន់បានដោះស្រាយ",
+    "线长+缝纫主管；重复或未解决问题的 QA 负责人",
+    "trưởng chuyền + giám sát may; Trưởng nhóm QA cho vấn đề lặp đi lặp lại hoặc chưa được giải quyết",
+    "pinuno ng linya + superbisor sa pananahi; QA leader para sa paulit-ulit o hindi nalutas na isyu",
+    "ketua barisan + penyelia jahitan; Pemimpin QA untuk isu berulang atau tidak diselesaikan"
+  ],
+  "min · module revision": [
+    "នាទី · ការកែប្រែម៉ូឌុល",
+    "分钟·模块修订",
+    "phút · sửa đổi mô-đun",
+    "min · rebisyon ng modyul",
+    "min · semakan modul"
+  ],
+  "outside tolerance.": [
+    "ការអត់ធ្មត់ខាងក្រៅ។",
+    "外部容忍度。",
+    "sức chịu đựng bên ngoài.",
+    "panlabas na pagpaparaya.",
+    "toleransi luar."
+  ],
+  "outstanding / failed checks": [
+    "ការត្រួតពិនិត្យដែលលើស / បរាជ័យ",
+    "未完成/未通过的检查",
+    "kiểm tra chưa hoàn thành/không thành công",
+    "hindi pa nababayarang / nabigong mga tseke",
+    "cek tertunggak / gagal"
+  ],
+  "pad.": [
+    "បន្ទះ។",
+    "垫。",
+    "đệm.",
+    "pad.",
+    "pad."
+  ],
+  "passed": [
+    "ឆ្លងកាត់",
+    "通过了",
+    "đã vượt qua",
+    "pumasa",
+    "lulus"
+  ],
+  "pcs · plan DEMO-ZERO-": [
+    "pcs · ផែនការ DEMO-ZERO-",
+    "pcs · 计划 DEMO-ZERO-",
+    "chiếc · kế hoạch DEMO-ZERO-",
+    "mga PC · plano DEMO-ZERO-",
+    "pcs · pelan DEMO-ZERO-"
+  ],
+  "pcs · zero-acceptance sample": [
+    "pcs · គំរូទទួលយកសូន្យ",
+    "件·零验收样品",
+    "chiếc · mẫu không được chấp nhận",
+    "pcs · sample ng zero-acceptance",
+    "pcs · sampel penerimaan sifar"
+  ],
+  "pieces checked ·": [
+    "បំណែកដែលបានត្រួតពិនិត្យ ·",
+    "检查件数·",
+    "phần đã được kiểm tra ·",
+    "sinuri ang mga piraso ·",
+    "kepingan diperiksa ·"
+  ],
+  "product, season, shipping & fabric information": [
+    "ព័ត៌មានអំពីផលិតផល រដូវកាល ការដឹកជញ្ជូន និងក្រណាត់",
+    "产品、季节、运输和面料信息",
+    "thông tin sản phẩm, mùa, vận chuyển và vải",
+    "impormasyon ng produkto, panahon, pagpapadala at tela",
+    "maklumat produk, musim, penghantaran & fabrik"
+  ],
+  "readings recorded ·": [
+    "ការអានដែលបានកត់ត្រា ·",
+    "读数记录·",
+    "bài đọc được ghi lại ·",
+    "naitala ang mga pagbasa ·",
+    "bacaan direkodkan ·"
+  ],
+  "readings ·": [
+    "ការអាន ·",
+    "读物·",
+    "bài đọc ·",
+    "mga pagbabasa ·",
+    "bacaan ·"
+  ],
+  "recorded events": [
+    "ព្រឹត្តិការណ៍ដែលបានកត់ត្រា",
+    "记录的事件",
+    "sự kiện được ghi lại",
+    "naitalang mga pangyayari",
+    "peristiwa yang dirakam"
+  ]
+}

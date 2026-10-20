@@ -140,7 +140,6 @@ import QCRovingDashboard from "./yqms/Fin-check/Dashboard/QCRovingDashboard";
 import CuttingDashboard from "./yqms/Fin-check/Dashboard/CuttingDashboard";
 import CuttingPanel from "./yqms/Cutting-panel";
 import SewingQuality from "./yqms/SewingQuality";
-import FinishingPackingWorkspace from "./yqms/FinishingPackingWorkspace";
 
 
 import QualityModule from "./yqms/standard/QualityModule";
@@ -495,7 +494,7 @@ export default function App() {
           />
           <Route
             path="yqms/packing-inspection"
-            element={<ModuleFrame><FinishingPackingWorkspace module="packing" onBack={handleBack} /></ModuleFrame>}
+            element={<ModuleFrame><QualityModule key="packing-inspection" moduleKey="packing-inspection" onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/final-inspection"
@@ -521,7 +520,7 @@ export default function App() {
           />
           <Route
             path="yqms/offline-audit"
-            element={<ModuleFrame><FinishingPackingWorkspace module="offline" onBack={handleBack} /></ModuleFrame>}
+            element={<ModuleFrame><QualityModule key="offline-audit" moduleKey="offline-audit" onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/endline-check"
@@ -564,7 +563,7 @@ export default function App() {
             path="yqms/qa-audit-finishing"
             element={
             <ModuleFrame>
-              <FinishingPackingWorkspace module="qa" onBack={handleBack} />
+              <QualityModule key="qa-audit-finishing" moduleKey="qa-audit-finishing" onBack={handleBack} />
             </ModuleFrame>
             }
           />
@@ -587,13 +586,13 @@ export default function App() {
             path="yqms/ironing-inspection"
             element={
             <ModuleFrame>
-              <FinishingPackingWorkspace module="ironing" onBack={handleBack} />
+              <QualityModule key="ironing-inspection" moduleKey="ironing-inspection" onBack={handleBack} />
             </ModuleFrame>
             }
           />
           <Route
             path="yqms/aquaboy"
-            element={<ModuleFrame><FinishingPackingWorkspace module="aquaboy" onBack={handleBack} /></ModuleFrame>}
+            element={<ModuleFrame><QualityModule key="aquaboy" moduleKey="aquaboy" onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/aquaboy/list"
@@ -665,7 +664,7 @@ export default function App() {
             path="yqms/finishing-inspection"
             element={
             <ModuleFrame>
-              <FinishingPackingWorkspace module="finishing" onBack={handleBack} />
+              <QualityModule key="finishing-inspection" moduleKey="finishing-inspection" onBack={handleBack} />
             </ModuleFrame>
             }
           />

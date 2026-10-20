@@ -285,7 +285,7 @@ export const YQMS_CARDS = {
       cards: [
         {
           title:
-            "First Output Finishing And Packing",
+            "First Output Tracker",
           action: "/dashboard/yqms/first-output-finishing",
           icon: "PackageCheck",
           color:
@@ -294,7 +294,7 @@ export const YQMS_CARDS = {
             "assets/yqms/first-output-finishing-packing-icon.svg",
         },
         {
-          title: "Dashboard",
+          title: "Master Dashboard",
           icon: "LayoutDashboard",
           image:
             "assets/yqms/dashboard-icon.svg",
@@ -303,7 +303,7 @@ export const YQMS_CARDS = {
           action: "/dashboard/yqms/dashboard",
         },
         {
-          title: "Report",
+          title: "Report Filing Agent",
           icon: "FileText",
           image:
             "assets/yqms/report-icon.svg",
@@ -312,7 +312,7 @@ export const YQMS_CARDS = {
           action: "/dashboard/yqms/report",
         },
         {
-          title: "Customer Complaint CAP",
+          title: "Customer CAP",
           action: "/dashboard/yqms/cap",
           icon: "AlertTriangle",
           color: "bg-white text-blue-600",

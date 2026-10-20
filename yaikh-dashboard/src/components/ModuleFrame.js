@@ -46,7 +46,7 @@ const ModuleFrame = ({ children }) => {
     navigate(hub);
   };
   return (
-    <div ref={topRef} className="module-frame" style={{ paddingTop: topPad }} onClickCapture={onClickCapture}>
+    <div ref={topRef} className="module-frame" data-yqms-i18n={/(?:^|\/)dashboard\/(?:yqms\/|submenu\/yqms$)/.test(pathname) ? 'true' : undefined} style={{ paddingTop: topPad }} onClickCapture={onClickCapture}>
       <style>{CSS}</style>
       <NavCover />
       <div className="module-body">{children}</div>

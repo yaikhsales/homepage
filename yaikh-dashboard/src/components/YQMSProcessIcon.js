@@ -30,9 +30,13 @@ const FLOWS = {
   "Pre Final Inspection": ["Package", "Eye", "FileCheck"],
   "Final Inspection": ["Package", "Search", "FileCheck"],
   "Buyer Final Inspection": ["Package", "Users", "CheckCircle"],
+  "First Output Tracker": ["ClipboardCheck", "Shirt", "Package"],
   "First Output Finishing And Packing": ["ClipboardCheck", "Shirt", "Package"],
+  "Master Dashboard": ["FileCheck", "BarChart3", "LayoutDashboard"],
   Dashboard: ["FileCheck", "BarChart3", "LayoutDashboard"],
+  "Report Filing Agent": ["ClipboardCheck", "BarChart3", "FileText"],
   Report: ["ClipboardCheck", "BarChart3", "FileText"],
+  "Customer CAP": ["AlertTriangle", "Search", "Wrench"],
   "Customer Complaint CAP": ["AlertTriangle", "Search", "Wrench"],
   "Supplier Evaluation": ["Truck", "Search", "CheckSquare"],
 };

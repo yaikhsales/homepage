@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import engTranslations from './eng';
 import khTranslations from './kh';
 import chTranslations from './ch';
@@ -14,8 +15,20 @@ export const useTranslation = () => {
 };
 
 export const TranslationProvider = ({ children }) => {
-    // Language codes: 'en' for English, 'km' for Khmer, 'zh' for Chinese
-    // Map to translation files: 'en' -> eng, 'km' -> kh, 'zh' -> ch
+    const { pathname } = useLocation();
+    const onQualityPage = /(?:\/yqms(?:\/|$)|\/quality-pad\/|\/yqms-pad\/)/.test(pathname);
+    const [qualityModule, setQualityModule] = useState(null);
+    const originalText = useRef(new WeakMap());
+    const originalAttributes = useRef(new WeakMap());
+    useEffect(() => {
+        if (!onQualityPage || qualityModule) return;
+        let current = true;
+        import('../yqms/qualityTranslations').then(module => { if (current) setQualityModule(module); });
+        return () => { current = false; };
+    }, [onQualityPage, qualityModule]);
+    const qualityTranslations = qualityModule?.qualityTranslations || {};
+    const translateQualityText = qualityModule?.translateQualityText || ((_, value) => value);
+    // Keep the selected factory language across dashboard pages.
     const [language, setLanguage] = useState(() => {
         // Saved choice wins; otherwise follow the browser's language once
         // (Chrome default → km / zh / en). The three header flags override it.
@@ -24,32 +37,97 @@ export const TranslationProvider = ({ children }) => {
         const nav = String((typeof navigator !== 'undefined' && (navigator.language || (navigator.languages || [])[0])) || 'en').toLowerCase();
         if (nav.startsWith('km')) return 'km';
         if (nav.startsWith('zh')) return 'zh';
+        if (nav.startsWith('vi')) return 'vi';
+        if (nav.startsWith('tl') || nav.startsWith('fil')) return 'tl';
+        if (nav.startsWith('ms')) return 'ms';
         return 'en';
     });
 
     const translations = {
         'en': engTranslations,
         'km': khTranslations,
-        'zh': chTranslations
+        'zh': chTranslations,
+        'vi': qualityTranslations.vi,
+        'tl': qualityTranslations.tl,
+        'ms': qualityTranslations.ms
     };
 
     const currentTranslations = translations[language] || engTranslations;
 
     const t = (key) => {
-        return currentTranslations[key] || key;
+        if (onQualityPage && qualityModule && typeof key === 'string') {
+            const translated = translateQualityText(language, key);
+            if (translated !== key) return translated;
+        }
+        return currentTranslations[key] || engTranslations[key] || key;
     };
 
     const changeLanguage = (langCode) => {
+        if (!['en', 'km', 'zh', 'vi', 'tl', 'ms'].includes(langCode)) return;
         setLanguage(langCode);
         localStorage.setItem('app-language', langCode);
     };
+
+    // Several older YQMS screens render fixed labels directly rather than
+    // calling t(). Localize their rendered text without changing form values
+    // or the underlying inspection records. Remember the English source so a
+    // later flag change can render the same text in another language.
+    useEffect(() => {
+        let frame = 0;
+        const localize = () => {
+            frame = 0;
+            if (!onQualityPage || !qualityModule) return;
+            document.documentElement.lang = language;
+            const roots = [...document.querySelectorAll('[data-yqms-i18n], .qs-standard, .sq-page, .qs-overlay, .deco-overlay')]
+                .filter(root => !root.parentElement?.closest('[data-yqms-i18n]'));
+            roots.forEach(root => {
+                const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+                while (walker.nextNode()) {
+                    const node = walker.currentNode;
+                    if (['SCRIPT', 'STYLE', 'TEXTAREA'].includes(node.parentElement?.tagName)) continue;
+                    const previous = originalText.current.get(node);
+                    const current = node.nodeValue || '';
+                    const source = previous && current === previous.last ? previous.source : current;
+                    // Native options often use their label as their submitted
+                    // value. Pin the original value before changing that label.
+                    if (node.parentElement?.tagName === 'OPTION' && !node.parentElement.hasAttribute('value')) {
+                        node.parentElement.setAttribute('value', source.trim());
+                    }
+                    const result = translateQualityText(language, source);
+                    originalText.current.set(node, { source, last: result });
+                    if (result !== current) node.nodeValue = result;
+                }
+                root.querySelectorAll('[placeholder], [title], [aria-label]').forEach(element => {
+                    const entries = originalAttributes.current.get(element) || {};
+                    for (const attribute of ['placeholder', 'title', 'aria-label']) {
+                        const current = element.getAttribute(attribute);
+                        if (current === null) continue;
+                        const previous = entries[attribute];
+                        const source = previous && current === previous.last ? previous.source : current;
+                        const result = translateQualityText(language, source);
+                        entries[attribute] = { source, last: result };
+                        if (result !== current) element.setAttribute(attribute, result);
+                    }
+                    originalAttributes.current.set(element, entries);
+                });
+            });
+        };
+        const schedule = () => { if (!frame) frame = window.requestAnimationFrame(localize); };
+        const observer = new MutationObserver(schedule);
+        observer.observe(document.body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['placeholder', 'title', 'aria-label'] });
+        schedule();
+        return () => { observer.disconnect(); if (frame) window.cancelAnimationFrame(frame); };
+    }, [language, onQualityPage, qualityModule, translateQualityText]);
 
     // Get language name based on code
     const getLanguageName = (code) => {
         const names = {
             'en': 'English',
             'km': 'ខ្មែរ',
-            'zh': '中文'
+            'zh': '中文',
+            'vi': 'Tiếng Việt',
+            'tl': 'Tagalog',
+            'ms': 'Bahasa Melayu'
         };
         return names[code] || 'English';
     };

@@ -6,6 +6,7 @@ import { MODULES, noStore, viewer, padViewer, sameOrigin, manager, qaDirectory, 
 import {addModuleExamples} from '@/lib/yqms-examples';
 export const dynamic='force-dynamic';export const runtime='nodejs';
 const collection='yqms_standard_records',eventsCollection='yqms_standard_events';
+const finishingModules=new Set(['finishing-inspection','ironing-inspection','aquaboy','offline-audit','packing-inspection','qa-audit-finishing']);
 const bad=(error:string,status=400)=>NextResponse.json({ok:false,error},{status,headers:noStore});
 const serialize=(r:any)=>({...r,_id:String(r._id)});
 export async function GET(request:Request){
@@ -23,11 +24,16 @@ export async function POST(request:Request){
  }
  if(b.action==='feed'){
   const r=b.record;if(!r||typeof r!=='object'||!text(r.order)||!r.payload||typeof r.payload!=='object')return bad('Order and original pad record are required.');
+  if(finishingModules.has(module)&&!(await qaDirectory()).some(person=>person.emp_no===text(r.inspector,40)))return bad('Select a current YHR QC / QA inspector for this floor check.');
   const checked=Number(r.checked),rejected=Number(r.rejected);if(!Number.isInteger(checked)||checked<0||checked>1000000||!Number.isInteger(rejected)||rejected<0||rejected>checked)return bad('Invalid checked / rejected quantities.');
   const requestId=text(b.requestId,100);if(!/^[\w-]{16,100}$/.test(requestId))return bad('Submission reference is required.');
   await coll.createIndex({module:1,requestId:1},{unique:true});const old=await coll.findOne({module,requestId});if(old)return NextResponse.json({ok:true,record:serialize(old)},{headers:noStore});
   const record={module,requestId,id:`QMS-${randomUUID().slice(0,8).toUpperCase()}`,order:text(r.order,120),style:text(r.style,120),buyer:text(r.buyer,120),line:text(r.line,120),inspector:text(r.inspector,160),checked,rejected,status:text(r.status,60)||'PENDING REVIEW',payload:r.payload,source:'floor-record',at,actor,amendments:[]};
-  const saved=await coll.insertOne(record);return NextResponse.json({ok:true,record:serialize({...record,_id:saved.insertedId})},{status:201,headers:noStore});
+  const saved=await coll.insertOne(record);
+  if(finishingModules.has(module)&&(/HOLD|FAIL/i.test(record.status)||record.rejected>0)){
+   await events.updateOne({module,id:`hold-${requestId}`},{$setOnInsert:{module,id:`hold-${requestId}`,kind:'Floor issue',at,recordId:record.id,issue:`${record.order} · ${record.status}`,detail:text(r.payload.note)||'Defects or failed checks require quality leader review.',actor:record.inspector,state:'OPEN',nextAction:'Contain affected goods; assign owner and CAP decision.'}},{upsert:true});
+  }
+  return NextResponse.json({ok:true,record:serialize({...record,_id:saved.insertedId})},{status:201,headers:noStore});
  }
  if(!desktop)return bad('A signed-in management session is required for report changes and CAP decisions.',403);
  const employeeId=text(b.employeeId,40),name=text(b.name,120),reason=text(b.reason),person=await manager(employeeId);if(!person||!name||!reason)return bad('Use a current YHR QA manager / supervisor ID, their name and a reason.');
