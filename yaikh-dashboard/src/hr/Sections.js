@@ -10,6 +10,7 @@ import { ArrowLeft, RefreshCw, Search, Users } from "lucide-react";
 import { NavCover, useScreenTop } from "../components/ScreenTop";
 import { post, num, GROUP, LEVEL, HrNav, Chip, RoleIcon } from "./hr";
 
+import YaiSectionList from "./YaiSectionList";
 const PAGE = 400; // the view returns at most 400 rows a page whatever page_size says
 const isLine = (s) => /^Line L\d+/.test(s || "");
 const lineOf = (s) => (isLine(s) ? s.replace("Line ", "") : "");
@@ -20,7 +21,7 @@ const mix = (rows) => {
   return Object.entries(c).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${v} ${k}`).join(" + ");
 };
 
-const Sections = ({ onBack }) => {
+const SimulatedSections = ({ onBack }) => {
   const navigate = useNavigate();
   const [topRef, topPad] = useScreenTop();
   const [params] = useSearchParams();
@@ -110,4 +111,5 @@ const Sections = ({ onBack }) => {
   );
 };
 
+const Sections = (props) => { const [params] = useSearchParams(); return params.get("structure") === "simulated" ? <SimulatedSections {...props} /> : <YaiSectionList />; };
 export default Sections;

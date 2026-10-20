@@ -1,7 +1,6 @@
-// HR · Headcount — the 1,032 people by group (Operations / Administrative) and department: management
-// vs workers / staff, present / absent / on leave today, share of women, payroll, with the
-// reconciliation of the HR master against the attendance screen by payroll group.
-// Data: {"module":"hr","view":"headcount"} → summary, rows, tables.reconciliation.
+// HR · Headcount — simulated HR master totals, gender percentages and department rows;
+// the simulated org-tree supplies section totals. The feed has no province or direct/indirect
+// labor fields, so those breakdowns are explicitly unavailable rather than inferred.
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, RefreshCw } from "lucide-react";
@@ -12,6 +11,7 @@ const Headcount = ({ onBack }) => {
   const navigate = useNavigate();
   const [topRef, topPad] = useScreenTop();
   const [data, setData] = useState(null);
+  const [org, setOrg] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const back = () => (onBack ? onBack() : navigate(-1));
@@ -19,7 +19,14 @@ const Headcount = ({ onBack }) => {
   const load = useCallback(async () => {
     setLoading(true);
     setError("");
-    try { setData(await post({ view: "headcount" })); } catch (e) { setError("Headcount is unavailable right now. Please try again in a moment."); } finally { setLoading(false); }
+    try {
+      const [headcount, organization] = await Promise.all([
+        post({ view: "headcount" }),
+        post({ view: "org-tree" }).catch(() => null),
+      ]);
+      setData(headcount);
+      setOrg(organization);
+    } catch (e) { setError("Headcount is unavailable right now. Please try again in a moment."); } finally { setLoading(false); }
   }, []);
   useEffect(() => { load(); }, [load]);
 
@@ -29,6 +36,16 @@ const Headcount = ({ onBack }) => {
   const max = Math.max(1, ...rows.map((r) => r.headcount || 0));
   const recon = (d.tables || []).find((t) => t.key === "reconciliation");
   const sum = Object.fromEntries((d.summary || []).map((x) => [x.label, x.value]));
+  const management = rows.reduce((total, row) => total + (Number(row.management) || 0), 0);
+  const workersStaff = rows.reduce((total, row) => total + (Number(row.workers_staff) || 0), 0);
+  const sections = useMemo(() => {
+    let department = "";
+    return (org?.rows || []).reduce((items, row) => {
+      if (row.department) department = row.department;
+      if (row.section) items.push({ department, section: row.section, headcount: row.headcount || 0 });
+      return items;
+    }, []).sort((a, b) => b.headcount - a.headcount);
+  }, [org]);
 
   return (
     <div ref={topRef} style={{ paddingTop: topPad }} className="yai-pa-aware min-h-screen bg-slate-900 text-slate-200 px-3 md:px-5 pb-8 font-sans">
@@ -36,7 +53,7 @@ const Headcount = ({ onBack }) => {
       <NavCover />
       <div className="flex flex-wrap items-center gap-2 mb-3">
         <button onClick={back} className="p-1 -ml-1 hover:bg-slate-700 rounded-full transition-colors text-slate-400 hover:text-white" aria-label="Back"><ArrowLeft size={18} /></button>
-        <h1 className="text-lg font-black text-white leading-none">Headcount</h1>
+        <h1 className="text-lg font-black text-white leading-none">Headcount dashboard</h1>
         <HrNav current="headcount" />
         <button onClick={load} className="ml-auto p-1.5 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700" aria-label="Refresh"><RefreshCw size={14} className={loading ? "animate-spin" : ""} /></button>
       </div>
@@ -45,10 +62,40 @@ const Headcount = ({ onBack }) => {
         <Tile label="Employees" value={num(sum.Employees)} sub="HR master" />
         <Tile label="Operations" value={num(sum.Operations)} tone="text-emerald-300" />
         <Tile label="Administrative" value={num(sum.Administrative)} tone="text-violet-300" />
+        <Tile label="Management" value={num(management)} sub="from HR master" tone="text-sky-300" />
+        <Tile label="Workers / staff" value={num(workersStaff)} sub="from HR master" />
         <Tile label="Present today" value={num(sum["Present today"])} tone="text-emerald-300" />
         <Tile label="On leave today" value={num(sum["On leave today"])} tone="text-amber-300" />
         <Tile label="Attendance screen" value={num(sum["Attendance screen workforce"])} sub={`difference ${num(sum.Difference)}`} tone={Number(sum.Difference) ? "text-rose-300" : "text-emerald-300"} />
       </div>
+      <div className="grid gap-3 xl:grid-cols-2 mb-3">
+        <Panel title="Women and men by department" right="percentages supplied by HR master">
+          <div className="space-y-2 max-h-72 overflow-auto pr-1">
+            {rows.map((row) => {
+              if (row.female_pct === null || row.female_pct === undefined || row.female_pct === "") return null;
+              const female = Number(row.female_pct);
+              if (!Number.isFinite(female) || female < 0 || female > 100) return null;
+              return <div key={`${row.group}-${row.department}`} className="text-xs">
+                <div className="flex justify-between gap-3"><span className="truncate" title={row.department}>{row.department}</span><span className="shrink-0 tabular-nums">{female}% women · {Math.round((100 - female) * 10) / 10}% men (derived)</span></div>
+                <div className="mt-1 h-2 rounded-full bg-sky-400/70 overflow-hidden"><div className="h-full bg-fuchsia-400" style={{ width: `${female}%` }} /></div>
+              </div>;
+            })}
+          </div>
+          <p className="mt-2 text-[11px] text-slate-400">Source provides rounded female percentages. Male share is derived as 100% minus female share, assuming all records use complete male/female categories. Unknown categories cannot be distinguished; exact female and male counts are unavailable.</p>
+        </Panel>
+        <Panel title="Workforce classifications" right="data coverage">
+          <div className="grid gap-2 sm:grid-cols-2 text-xs">
+            <div className="rounded-lg border border-slate-700 p-2"><strong className="block text-white">Management</strong>{num(management)} people · {num(workersStaff)} workers / staff</div>
+            <div className="rounded-lg border border-slate-700 p-2"><strong className="block text-white">Direct / indirect labor</strong>Not classified in the current HR feed. Operations and administrative groups are not labor classifications.</div>
+            <div className="rounded-lg border border-slate-700 p-2 sm:col-span-2"><strong className="block text-white">Cambodian province</strong>Province of origin is not supplied by the current HR feed; add it to the HR master before showing a province breakdown.</div>
+          </div>
+        </Panel>
+      </div>
+      <Panel title="Section breakdown" right={org ? `${num(sections.length)} sections · simulated organization feed` : "organization feed unavailable"} className="mb-3">
+        {sections.length ? <div className="grid gap-x-4 gap-y-1 sm:grid-cols-2 xl:grid-cols-3 max-h-80 overflow-auto text-xs">
+          {sections.map((section, index) => <div key={`${section.department}-${section.section}-${index}`} className="flex justify-between gap-3 border-b border-slate-700/60 py-1"><span className="truncate" title={`${section.department} · ${section.section}`}>{section.department} · {section.section}</span><strong className="tabular-nums text-white">{num(section.headcount)}</strong></div>)}
+        </div> : <p className="text-xs text-slate-400">Section data is not available from the organization feed.</p>}
+      </Panel>
       <div className="grid gap-3 xl:grid-cols-2">
         {groups.map((g) => (
           <Panel key={g.id} title={GROUP[g.id].label} right={`${num(g.total)} people · ${num(g.mgmt)} management · ${num(g.present)} present · ${num(g.leave)} on leave · ${num(g.absent)} absent · payroll USD ${num(g.payroll)}`}>
