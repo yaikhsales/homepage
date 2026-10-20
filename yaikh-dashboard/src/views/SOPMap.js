@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft, User } from "lucide-react";
 import { FABRIC_INSPECTION_ROLES, roleKey, activityMatchesRole } from "./sop-role-model";
 import FabricInspectionJobCard from "./FabricInspectionJobCard";
+import { buildWorkingAxis, factoryToday } from "./sop-working-time";
 import { QMS_AREAS } from "../hr/QmsOrganization";
 
 /* SOP — Standard Operating Procedures (Management Dashboard → SOP).
@@ -65,7 +66,7 @@ const sewingRoles = (first) => [
 const ORDER = {
   kind: "timeline",
   title: "Order → Ship",
-  summary: "DAY 0 = the brand's order package reaches the factory. Every activity on its days, who does it, and every hand-off between departments.",
+  summary: "DAY 0 = the order is placed (today by default). Process offsets follow working days: Monday–Friday morning, lunch, afternoon and OT; Saturday has no OT and Sunday is off.",
   lanes: ["dp", "sales", "ypi", "mrp", "fc", "ce", "prod", "qa", "ytm", "ship", "acct"],
   days: 132,
   phases: [
@@ -600,17 +601,19 @@ function ByIcon({ auto, size = 14 }) {
 }
 
 /* ---------- timeline layout ---------- */
-const PX = 14, LABEL_W = 132, HEAD_H = 46, BOX_W = 168, BOX_H = 56, TRACK_H = 64, PAD = 6;
+const PX = 14, LABEL_W = 132, HEAD_H = 76, BOX_W = 168, BOX_H = 56, TRACK_H = 64, PAD = 6;
 
 const isFabricInspection = a => a.id === "inspect" || a.id === "q4";
-function layoutTimeline(flow) {
+function layoutTimeline(flow, pixelsPerHour = 32, orderDate = factoryToday()) {
+  const axis = flow.ruler === false ? null : buildWorkingAxis(flow.days, pixelsPerHour, orderDate);
   const px = flow.px || PX, pos = {}, lanes = [];
-  let y = 0, width = flow.days * px;
+  const at = axis ? axis.at : day => day * px;
+  let y = 0, width = axis ? axis.width : flow.days * px;
   flow.lanes.forEach(lane => {
     const tracks = [], items = flow.acts.filter(a => a.lane === lane).sort((a,b) => a.d0-b.d0);
     items.forEach(a => {
-      const x = a.d0 * px, dur = flow.px ? px-14 : Math.max((a.d1-a.d0)*px,6);
-      const w = isFabricInspection(a) ? 1140 : Math.max(dur,flow.px ? 0 : BOX_W), h = isFabricInspection(a) ? 1390 : BOX_H;
+      const x = at(a.d0), dur = flow.px ? px-14 : Math.max(at(a.d1)-x,6);
+      const w = isFabricInspection(a) ? 1140 : axis ? Math.max(BOX_W, Math.min(dur, 300)) : Math.max(dur,flow.px ? 0 : BOX_W), h = isFabricInspection(a) ? 1390 : BOX_H;
       let t = tracks.findIndex(track => track.end+8 <= x);
       if(t<0){t=tracks.length;tracks.push({end:0,height:BOX_H});}
       tracks[t].end=x+w; tracks[t].height=Math.max(tracks[t].height,h);
@@ -621,11 +624,13 @@ function layoutTimeline(flow) {
     items.forEach(a=>{pos[a.id].y=y+offsets[pos[a.id].track];});
     const h=Math.max(BOX_H+PAD*2,height+PAD-8);lanes.push({lane,y,h});y+=h;
   });
-  return {pos,lanes,height:y,width,px};
+  return {pos,lanes,height:y,width,px,axis,at};
 }
 
 function Timeline({ flow, focus, sel, onSel, selectedRole, onRoleSelect }) {
-  const L = useMemo(() => layoutTimeline(flow), [flow]);
+  const [pixelsPerHour, setPixelsPerHour] = useState(32);
+  const [orderDate, setOrderDate] = useState(() => factoryToday());
+  const L = useMemo(() => layoutTimeline(flow, pixelsPerHour, orderDate), [flow, pixelsPerHour, orderDate]);
   const dim = (lane) => focus && !focus.includes(lane);
   const byId = useMemo(() => Object.fromEntries(flow.acts.map((a) => [a.id, a])), [flow]);
 
@@ -652,6 +657,8 @@ function Timeline({ flow, focus, sel, onSel, selectedRole, onRoleSelect }) {
   }));
 
   return (
+    <div>
+    {L.axis && <div className="mb-3 flex flex-wrap items-center gap-3 rounded-lg border border-slate-600 bg-slate-800 p-3 text-xs text-slate-200"><strong>Working-day timeline</strong><label className="flex items-center gap-2">Day 0 · Order placed<input aria-label="Day 0 order date" type="date" value={orderDate} onChange={event => {if (event.target.value) setOrderDate(event.target.value);}} className="rounded border border-slate-500 bg-slate-900 px-2 py-1" /></label><button onClick={() => setOrderDate(factoryToday())} className="rounded border border-emerald-500 px-2 py-1 text-emerald-200">Today</button><span>Mon–Fri: 4h morning + 1h lunch + 4h afternoon + 2h OT (11h elapsed / 10h work)</span><span>Sat: 4h + 1h lunch + 4h · No OT</span><span>Sun: off</span><label className="ml-auto flex items-center gap-2">Scale<select aria-label="Timeline hour scale" value={pixelsPerHour} onChange={event => setPixelsPerHour(Number(event.target.value))} className="rounded border border-slate-500 bg-slate-900 px-2 py-1"><option value={16}>Compact</option><option value={32}>Hourly</option><option value={48}>Expanded</option></select></label><span className="w-full text-slate-400">Day 0 = selected order date (defaults to today in Cambodia). Header dates count calendar days from the order. Activities follow working-day offsets and skip Sundays; shift hours are relative to shift start.</span></div>}
     <div className="flex rounded-xl border border-white/10 bg-slate-950/40 overflow-hidden">
       <div className="flex-shrink-0 border-r border-white/10" style={{ width: LABEL_W }}>
         <div style={{ height: HEAD_H }} className="border-b border-white/10 px-2 flex items-end pb-1 text-[10px] uppercase tracking-wider text-slate-500">Department</div>
@@ -664,17 +671,15 @@ function Timeline({ flow, focus, sel, onSel, selectedRole, onRoleSelect }) {
       <div className="overflow-x-auto flex-1">
         <div className="relative" style={{ width: L.width + BOX_W, height: HEAD_H + L.height }}>
           {flow.phases.map((p) => (
-            <div key={p.label} className="absolute top-0 text-[10px] text-slate-400 border-l border-white/10 px-1 truncate" style={{ left: p.d0 * L.px, width: (p.d1 - p.d0) * L.px, height: 18 }}>{p.label}</div>
+            <div key={p.label} className="absolute top-0 text-[10px] text-slate-400 border-l border-white/10 px-1 truncate" style={{ left: L.at(p.d0), width: L.at(p.d1) - L.at(p.d0), height: 18 }}>{p.label}</div>
           ))}
           {flow.ruler === false && flow.phases.map((p) => (
             <div key={`l${p.label}`} className="absolute border-l border-white/10" style={{ left: p.d0 * L.px, top: 18, height: HEAD_H + L.height - 18 }} />
           ))}
-          {flow.ruler !== false && Array.from({ length: Math.floor(flow.days / 5) + 1 }, (_, i) => i * 5).map((d) => (
-            <div key={d} className="absolute" style={{ left: d * PX, top: 18, height: HEAD_H + L.height - 18 }}>
-              <div className={`h-full ${d === 0 ? "border-l-2 border-emerald-400" : d % 10 === 0 ? "border-l border-white/10" : "border-l border-white/[0.04]"}`} />
-              {d % 10 === 0 && <div className={`absolute top-1 left-1 text-[10px] whitespace-nowrap ${d === 0 ? "text-emerald-300 font-bold" : "text-slate-500"}`}>{d === 0 ? "DAY 0" : `D${d}`}</div>}
-            </div>
-          ))}
+          {L.axis && L.axis.days.map((day, index) => <div key={`shift-${index}`} className="absolute border-l border-slate-600" style={{left:day.x,top:18,width:day.width,height:HEAD_H+L.height-18}}>
+            <div title={`${day.weekday} ${day.dateLabel}${day.off ? " · Non-working day" : ""}`} className={`h-6 overflow-hidden whitespace-nowrap px-1 text-[11px] font-semibold ${day.off ? "text-slate-500" : "text-emerald-200"}`}>{`D${day.calendarDay} · ${day.weekday}${day.off ? " · OFF" : ""} · ${day.dateLabel}`}</div>
+            {day.off ? <div className="absolute inset-x-0 bottom-0 top-6 bg-slate-500/10" /> : day.segments.map(segment => <div key={segment.key} className="absolute top-6 bottom-0 border-l border-white/10" style={{left:segment.x-day.x,width:segment.width,background:segment.work?undefined:"#a1620714"}}><div title={segment.label} className="h-8 overflow-hidden whitespace-nowrap px-1 py-1 text-[10px] text-white" style={{background:segment.color}}>{segment.key === "lunch" ? "Lunch 1h" : segment.label}</div></div>)}
+          </div>)}
           <div className="absolute left-0 right-0 border-b border-white/10" style={{ top: HEAD_H }} />
           {L.lanes.map((ln) => (
             <div key={ln.lane} className="absolute left-0 right-0 border-b border-white/5" style={{ top: HEAD_H + ln.y + ln.h }} />
@@ -700,7 +705,7 @@ function Timeline({ flow, focus, sel, onSel, selectedRole, onRoleSelect }) {
             const p = L.pos[a.id], c = DEPTS[a.lane].color, on = sel === a.id;
             if (isFabricInspection(a)) return <section key={a.id} aria-label="Fabric inspection responsibilities" className="absolute rounded-2xl overflow-hidden" style={{left:p.x,top:HEAD_H+p.y,width:p.w,height:p.h,zIndex:2,border:`5px solid ${activityMatchesRole(a, selectedRole) ? "#eab308" : c}`,background:"white"}}><FabricInspectionJobCard title={a.title} selectedRole={selectedRole} onRoleSelect={onRoleSelect} /></section>;
             return (
-              <button key={a.id} onClick={() => onSel(a.id)} title={flow.ruler === false ? `${a.step}. ${a.title}` : `${a.title} · Day ${a.d0}–${a.d1}`}
+              <button key={a.id} onClick={() => onSel(a.id)} title={flow.ruler === false ? `${a.step}. ${a.title}` : `${a.title} · Working day ${a.d0}–${a.d1}`}
                 className={`absolute text-left rounded-lg overflow-hidden transition-opacity ${dim(a.lane) ? "opacity-30" : ""}`}
                 style={{ left: p.x, top: HEAD_H + p.y, width: p.w, height: BOX_H, zIndex: 2, background: on ? "#334155" : "#1e293b", boxShadow: activityMatchesRole(a, selectedRole) ? "0 0 0 4px #eab308" : on ? `0 0 0 2px ${c}` : `inset 0 0 0 1px ${c}66` }}>
                 <div className="absolute left-0 top-0 bottom-0 w-[3px]" style={{ background: c }} />
@@ -711,12 +716,13 @@ function Timeline({ flow, focus, sel, onSel, selectedRole, onRoleSelect }) {
                   </div>
                   <ByLine by={a.by} size={10} />
                 </div>
-                <div className="absolute bottom-0 left-0 h-[3px]" style={{ width: p.dur, background: c }} />
+                <div className="absolute bottom-0 left-0 h-[3px]" style={{ width: Math.min(p.dur,p.w), background: c }} />
               </button>
             );
           })}
         </div>
       </div>
+    </div>
     </div>
   );
 }
