@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft, User } from "lucide-react";
 import { FABRIC_INSPECTION_ROLES, roleKey, activityMatchesRole } from "./sop-role-model";
 import FabricInspectionJobCard from "./FabricInspectionJobCard";
-import { buildWorkingAxis } from "./sop-working-time";
+import { buildWorkingAxis, factoryToday } from "./sop-working-time";
 import { QMS_AREAS } from "../hr/QmsOrganization";
 
 /* SOP — Standard Operating Procedures (Management Dashboard → SOP).
@@ -66,7 +66,7 @@ const sewingRoles = (first) => [
 const ORDER = {
   kind: "timeline",
   title: "Order → Ship",
-  summary: "DAY 0 = the brand's order package reaches the factory. Process offsets follow working days: Monday–Friday morning, lunch, afternoon and OT; Saturday has no OT and Sunday is off.",
+  summary: "DAY 0 = the order is placed (today by default). Process offsets follow working days: Monday–Friday morning, lunch, afternoon and OT; Saturday has no OT and Sunday is off.",
   lanes: ["dp", "sales", "ypi", "mrp", "fc", "ce", "prod", "qa", "ytm", "ship", "acct"],
   days: 132,
   phases: [
@@ -604,8 +604,8 @@ function ByIcon({ auto, size = 14 }) {
 const PX = 14, LABEL_W = 132, HEAD_H = 76, BOX_W = 168, BOX_H = 56, TRACK_H = 64, PAD = 6;
 
 const isFabricInspection = a => a.id === "inspect" || a.id === "q4";
-function layoutTimeline(flow, pixelsPerHour = 32) {
-  const axis = flow.ruler === false ? null : buildWorkingAxis(flow.days, pixelsPerHour);
+function layoutTimeline(flow, pixelsPerHour = 32, orderDate = factoryToday()) {
+  const axis = flow.ruler === false ? null : buildWorkingAxis(flow.days, pixelsPerHour, orderDate);
   const px = flow.px || PX, pos = {}, lanes = [];
   const at = axis ? axis.at : day => day * px;
   let y = 0, width = axis ? axis.width : flow.days * px;
@@ -629,7 +629,8 @@ function layoutTimeline(flow, pixelsPerHour = 32) {
 
 function Timeline({ flow, focus, sel, onSel, selectedRole, onRoleSelect }) {
   const [pixelsPerHour, setPixelsPerHour] = useState(32);
-  const L = useMemo(() => layoutTimeline(flow, pixelsPerHour), [flow, pixelsPerHour]);
+  const [orderDate, setOrderDate] = useState(() => factoryToday());
+  const L = useMemo(() => layoutTimeline(flow, pixelsPerHour, orderDate), [flow, pixelsPerHour, orderDate]);
   const dim = (lane) => focus && !focus.includes(lane);
   const byId = useMemo(() => Object.fromEntries(flow.acts.map((a) => [a.id, a])), [flow]);
 
@@ -657,7 +658,7 @@ function Timeline({ flow, focus, sel, onSel, selectedRole, onRoleSelect }) {
 
   return (
     <div>
-    {L.axis && <div className="mb-3 flex flex-wrap items-center gap-3 rounded-lg border border-slate-600 bg-slate-800 p-3 text-xs text-slate-200"><strong>Working-day timeline</strong><span>Mon–Fri: 4h morning + 1h lunch + 4h afternoon + 2h OT (11h elapsed / 10h work)</span><span>Sat: 4h + 1h lunch + 4h · No OT</span><span>Sun: off</span><label className="ml-auto flex items-center gap-2">Scale<select aria-label="Timeline hour scale" value={pixelsPerHour} onChange={event => setPixelsPerHour(Number(event.target.value))} className="rounded border border-slate-500 bg-slate-900 px-2 py-1"><option value={16}>Compact</option><option value={32}>Hourly</option><option value={48}>Expanded</option></select></label><span className="w-full text-slate-400">Day 0 = first Monday in the relative workweek. Existing process-day offsets are working days; Sundays are skipped. Times are relative to shift start.</span></div>}
+    {L.axis && <div className="mb-3 flex flex-wrap items-center gap-3 rounded-lg border border-slate-600 bg-slate-800 p-3 text-xs text-slate-200"><strong>Working-day timeline</strong><label className="flex items-center gap-2">Day 0 · Order placed<input aria-label="Day 0 order date" type="date" value={orderDate} onChange={event => {if (event.target.value) setOrderDate(event.target.value);}} className="rounded border border-slate-500 bg-slate-900 px-2 py-1" /></label><button onClick={() => setOrderDate(factoryToday())} className="rounded border border-emerald-500 px-2 py-1 text-emerald-200">Today</button><span>Mon–Fri: 4h morning + 1h lunch + 4h afternoon + 2h OT (11h elapsed / 10h work)</span><span>Sat: 4h + 1h lunch + 4h · No OT</span><span>Sun: off</span><label className="ml-auto flex items-center gap-2">Scale<select aria-label="Timeline hour scale" value={pixelsPerHour} onChange={event => setPixelsPerHour(Number(event.target.value))} className="rounded border border-slate-500 bg-slate-900 px-2 py-1"><option value={16}>Compact</option><option value={32}>Hourly</option><option value={48}>Expanded</option></select></label><span className="w-full text-slate-400">Day 0 = selected order date (defaults to today in Cambodia). Header dates count calendar days from the order. Activities follow working-day offsets and skip Sundays; shift hours are relative to shift start.</span></div>}
     <div className="flex rounded-xl border border-white/10 bg-slate-950/40 overflow-hidden">
       <div className="flex-shrink-0 border-r border-white/10" style={{ width: LABEL_W }}>
         <div style={{ height: HEAD_H }} className="border-b border-white/10 px-2 flex items-end pb-1 text-[10px] uppercase tracking-wider text-slate-500">Department</div>
@@ -676,7 +677,7 @@ function Timeline({ flow, focus, sel, onSel, selectedRole, onRoleSelect }) {
             <div key={`l${p.label}`} className="absolute border-l border-white/10" style={{ left: p.d0 * L.px, top: 18, height: HEAD_H + L.height - 18 }} />
           ))}
           {L.axis && L.axis.days.map((day, index) => <div key={`shift-${index}`} className="absolute border-l border-slate-600" style={{left:day.x,top:18,width:day.width,height:HEAD_H+L.height-18}}>
-            <div className={`h-6 px-1 text-[11px] font-semibold ${day.off ? "text-slate-500" : "text-emerald-200"}`}>{day.off ? "Sun · OFF" : `D${day.workday} · ${day.weekday}`}</div>
+            <div title={`${day.weekday} ${day.dateLabel}${day.off ? " · Non-working day" : ""}`} className={`h-6 overflow-hidden whitespace-nowrap px-1 text-[11px] font-semibold ${day.off ? "text-slate-500" : "text-emerald-200"}`}>{`D${day.calendarDay} · ${day.weekday}${day.off ? " · OFF" : ""} · ${day.dateLabel}`}</div>
             {day.off ? <div className="absolute inset-x-0 bottom-0 top-6 bg-slate-500/10" /> : day.segments.map(segment => <div key={segment.key} className="absolute top-6 bottom-0 border-l border-white/10" style={{left:segment.x-day.x,width:segment.width,background:segment.work?undefined:"#a1620714"}}><div title={segment.label} className="h-8 overflow-hidden whitespace-nowrap px-1 py-1 text-[10px] text-white" style={{background:segment.color}}>{segment.key === "lunch" ? "Lunch 1h" : segment.label}</div></div>)}
           </div>)}
           <div className="absolute left-0 right-0 border-b border-white/10" style={{ top: HEAD_H }} />
