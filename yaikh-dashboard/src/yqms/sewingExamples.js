@@ -6,19 +6,21 @@ const scenarios = [
   { mo: "DEMO-MO-104", line: "S09", style: "DEMO-TEE-04", defect: "oil mark", operation: "sleeve attach", machine: "OL-04" },
   { mo: "DEMO-MO-105", line: "S12", style: "DEMO-SHIRT-05", defect: "puckering", operation: "collar attach", machine: "SN-12" },
   { mo: "DEMO-MO-106", line: "S15", style: "DEMO-POLO-06", defect: "needle damage", operation: "placket", machine: "SN-18" },
+  { mo: "DEMO-MO-107", line: "S18", style: "DEMO-JACKET-07", defect: "loose thread", operation: "zipper attach", machine: "SN-21" },
+  { mo: "DEMO-MO-108", line: "S21", style: "DEMO-SHIRT-08", defect: "misaligned collar", operation: "collar attach", machine: "SN-24" },
 ];
 
 export function sewingExamples(mode) {
   return scenarios.map((item, index) => {
-    const issue = [1, 3, 5].includes(index);
+    const issue = [1, 3, 5, 7].includes(index);
     const base = {
       _id: `DEMO-${mode}-${index + 1}`,
       isExample: true,
-      createdAt: new Date(Date.UTC(2026, 9, 20, 1 + index, 15)).toISOString(),
+      createdAt: new Date(Date.UTC(2026, 9, 13 + index, 8, 15)).toISOString(),
       ...item,
       inspector: `Demo QC ${index + 1}`,
       employeeId: `DEMO-QC-${String(index + 1).padStart(3, "0")}`,
-      shift: index === 5 ? "Night" : "Day",
+      shift: index >= 5 ? "Night" : "Day",
       defects: issue ? [item.defect] : [],
       failed: issue ? 1 : 0,
       severity: issue ? "major" : "minor",
@@ -26,7 +28,7 @@ export function sewingExamples(mode) {
       reviewedBy: issue ? "Demo QA Supervisor" : "",
       reviewedEmployeeId: issue ? "DEMO-QA-001" : "",
       correctiveAction: issue ? `DEMO: Adjust ${item.machine}, retrain operator and reinspect.` : "",
-      history: issue ? [{ at: new Date(Date.UTC(2026, 9, 20, 2 + index, 0)).toISOString(), action: "review", actor: "Demo QA Supervisor", employeeId: "DEMO-QA-001", note: "DEMO: Correct operation and repeat quality check." }] : [],
+      history: issue ? [{ at: new Date(Date.UTC(2026, 9, 13 + index, 9, 0)).toISOString(), action: "review", actor: "Demo QA Supervisor", employeeId: "DEMO-QA-001", note: "DEMO: Correct operation and repeat quality check." }] : [],
     };
     if (mode === "first-output") return {
       ...base, sample: 20, color: "Navy", size: "M", sampleRef: `DEMO-REF-${index + 1}`,
