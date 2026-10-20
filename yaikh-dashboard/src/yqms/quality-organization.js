@@ -31,6 +31,8 @@ export const QUALITY_HANDOFFS=[
   ['Area Quality Leader','Desktop review','Review sample coverage, current SOP, inspector training and evidence. Segregate defective goods and return corrections for linked reinspection.'],
   ['Senior Quality Supervisor','Desktop disposition','Verify affected quantity, location, corrective action, independent reinspection and required tests before authorising the defined release scope.'],
   ['Quality Manager','Desktop oversight','Own the quality plan, delegated release scope, staffing and escalation. Coordinate area leaders, QA auditors, five brand QOs and training through YHR.'],
+  ['QA auditors · about 10 shared','Pad audit + desktop findings','Independently audit the assigned warehouse, cutting, sewing and packing scopes. Record findings and verify corrected work; allocation follows area and supervisor assignment.'],
+  ['Brand QOs · 5 total','Desktop brand follow-up','One coordinator per brand follows final quality, especially warehouse and packaging, supported by 1–2 workers per QO. Confirm buyer requirements, packing and final report follow-up with the area leader; QO title alone does not grant release authority.'],
   ['Yai / PA','Assisted monitoring','Calculate results, find missing evidence, route tasks and flag overdue actions. Human reviewers own inspection and release decisions.'],
 ];
 export function QualityOrganizationPanel(){
