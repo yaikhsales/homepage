@@ -6,3 +6,5 @@
 .cutting-form-tablet-home{position:absolute;bottom:9px;left:calc(50% - 13px);height:26px;width:26px;border:2px solid #64748b;border-radius:50%;background:#0f172a}
 .cutting-form-tablet-screen input,.cutting-form-tablet-screen select,.cutting-form-tablet-screen button{min-height:44px;touch-action:manipulation}
 @media(max-width:700px){.cutting-form-tablet-device{padding:28px 9px 38px;border-radius:28px;aspect-ratio:auto;height:1100px;max-height:85dvh;min-height:500px}.cutting-form-tablet-screen{padding:16px}.cutting-form-tablet-screen .grid{grid-template-columns:1fr}.cutting-form-tablet-screen table{min-width:680px}}
+
+.cutting-form-tablet-view{max-width:760px}@media(max-width:700px){.cutting-form-tablet-device{aspect-ratio:210 / 297;height:auto;max-height:none;min-height:0}}

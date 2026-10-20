@@ -77,6 +77,7 @@ export const YQMS_CARDS = {
             "bg-white text-blue-600",
           image:
             "assets/yqms/first-output-printing-embroidery.jpg",
+          action: "/dashboard/yqms/first-output-print",
         },
         {
           title: "Printing Inspection",
@@ -85,6 +86,7 @@ export const YQMS_CARDS = {
             "bg-white text-blue-600",
           image:
             "assets/fc/printing-inspection.jpg",
+          action: "/dashboard/yqms/printing-inspection",
         },
         {
           title: "Embroidery Inspection",
@@ -93,6 +95,7 @@ export const YQMS_CARDS = {
             "bg-white text-blue-600",
           image:
             "assets/fc/embroidery-inspection.jpg",
+          action: "/dashboard/yqms/embroidery-inspection",
         },
         {
           title: "QA Printing Embroidery",
@@ -101,6 +104,7 @@ export const YQMS_CARDS = {
             "bg-white text-blue-600",
           image:
             "assets/yqms/qa-printing-embroidery.jpg",
+          action: "/dashboard/yqms/qa-print",
         },
       ],
     },
