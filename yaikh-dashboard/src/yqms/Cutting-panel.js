@@ -171,12 +171,12 @@ const CuttingPanel = ({ onBack }) => {
       </div>
 
             {/* Main Content Area */}
-            <div ref={contentRef} className="flex-1 overflow-auto p-8 bg-slate-50/50">
+            <div ref={contentRef} className={`flex-1 overflow-auto ${activeTab === "form" ? "p-3" : "p-8"} bg-slate-50/50`}>
                 <div className={`${["form", "data"].includes(activeTab) ? "max-w-[1600px]" : "max-w-6xl"} mx-auto`}>
                     <div className="bg-white rounded-2xl shadow border border-slate-100 overflow-hidden">
-                        <div className="p-10 space-y-10">
+                        <div className={activeTab === "form" ? "p-3" : "p-10 space-y-10"}>
                             {activeTab === "form" ? (
-                                <CuttingFormTablet>
+                                <CuttingFormTablet compact>
                                 <div ref={formRef} key={order.mo} className="cutting-inspection-form space-y-10 text-[24px] leading-relaxed">
                                     <CuttingPadForm key={order.mo} order={order} orders={orders} onSelectOrder={setSelectedMO} onSubmit={handleSubmit} error={formError} submitted={isSubmitted} />
                                 </div>
