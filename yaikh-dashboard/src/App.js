@@ -125,7 +125,6 @@ import Calculator from "./fc/Calculator";
 import InternalRollingQC from "./yqms/InternalRollingQC";
 import CuttingInspection from "./yqms/CuttingInspection";
 import GarmentCheckOutput from "./yqms/GarmentCheckOutput";
-import PackingInspection from "./yqms/PackingInspection";
 import FinalInspection from "./yqms/FinalInspection";
 
 import AuditReport from "./yqms/AuditReport";
@@ -136,11 +135,11 @@ import YQMSReport from "./yqms/YQMSReport";
 // eslint-disable-next-line no-unused-vars
 import YQMSGlobalDashboard from "./yqms/YQMSGlobalDashboard";
 import { YQMSDashboard } from "./yqms/Fin-check/Dashboard/YQMSDashboard";
-import HumidityReportAdd from "./yqms/HumidityReport/add-model";
 import HumidityReportList from "./yqms/HumidityReport/show-list";
 import QCRovingDashboard from "./yqms/Fin-check/Dashboard/QCRovingDashboard";
 import CuttingDashboard from "./yqms/Fin-check/Dashboard/CuttingDashboard";
 import CuttingPanel from "./yqms/Cutting-panel";
+import FinishingPackingWorkspace from "./yqms/FinishingPackingWorkspace";
 
 
 export default function App() {
@@ -492,7 +491,7 @@ export default function App() {
           />
           <Route
             path="yqms/packing-inspection"
-            element={<ModuleFrame><PackingInspection onBack={handleBack} /></ModuleFrame>}
+            element={<ModuleFrame><FinishingPackingWorkspace module="packing" onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/final-inspection"
@@ -518,7 +517,7 @@ export default function App() {
           />
           <Route
             path="yqms/offline-audit"
-            element={<ModuleFrame><AuditReport title="Offline Audit" onBack={handleBack} /></ModuleFrame>}
+            element={<ModuleFrame><FinishingPackingWorkspace module="offline" onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/endline-check"
@@ -561,10 +560,7 @@ export default function App() {
             path="yqms/qa-audit-finishing"
             element={
             <ModuleFrame>
-              <AuditReport
-                title="QA Audit Finishing Packing"
-                onBack={handleBack}
-              />
+              <FinishingPackingWorkspace module="qa" onBack={handleBack} />
             </ModuleFrame>
             }
           />
@@ -587,13 +583,13 @@ export default function App() {
             path="yqms/ironing-inspection"
             element={
             <ModuleFrame>
-              <AuditReport title="Ironing Inspection" onBack={handleBack} />
+              <FinishingPackingWorkspace module="ironing" onBack={handleBack} />
             </ModuleFrame>
             }
           />
           <Route
             path="yqms/aquaboy"
-            element={<ModuleFrame><HumidityReportAdd onBack={handleBack} /></ModuleFrame>}
+            element={<ModuleFrame><FinishingPackingWorkspace module="aquaboy" onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/aquaboy/list"
@@ -668,19 +664,10 @@ export default function App() {
             path="yqms/finishing-inspection"
             element={
             <ModuleFrame>
-              <AuditReport title="Finishing Inspection" onBack={handleBack} />
+              <FinishingPackingWorkspace module="finishing" onBack={handleBack} />
             </ModuleFrame>
             }
           />
-          <Route
-            path="yqms/ironing-inspection"
-            element={
-            <ModuleFrame>
-              <AuditReport title="Ironing Inspection" onBack={handleBack} />
-            </ModuleFrame>
-            }
-          />
-
           <Route
             path="shipping/request"
             element={<ModuleFrame><ShippingRequest onBack={handleBack} /></ModuleFrame>}
