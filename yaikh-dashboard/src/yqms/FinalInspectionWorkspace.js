@@ -56,10 +56,22 @@ const inputClass = "min-h-11 w-full rounded-lg border border-slate-300 bg-white 
 const API = (process.env.REACT_APP_M1_LLM_URL || "/api/m1").replace(/\/$/, "");
 
 const emptyForm = {
-  order: "", buyer: "", style: "", po: "", colour: "", lotQty: "", cartons: "", inspectionDate: new Date().toISOString().slice(0, 10),
+  order: "", description: "", buyer: "", brand: "", supplier: "", facility: "Yorkmars (Cambodia) Garment MFG Co., Ltd.", style: "", articleNo: "", po: "", shipmentByPo: "", colour: "", sizes: "", lotQty: "", cartons: "", imt: "", handoverDate: "", serviceType: "Final Random Inspection", inspectorName: "", inspectionPlace: "Phnom Penh, Cambodia", inspectionDate: new Date().toISOString().slice(0, 10),
   plan: "", level: "", sample: "", acMajor: "", reMajor: "", acMinor: "", reMinor: "",
-  checked: "", passed: "", rejected: "", critical: "0", major: "0", minor: "0", measurementRejects: "0", notes: "",
+  checked: "", passed: "", rejected: "", critical: "0", major: "0", minor: "0", measurementRejects: "0", notes: "", specialAttention: "",
 };
+
+const REPORT_FINDINGS = [
+  ["quantity", "A) Quantity Available"],
+  ["description", "B) Product Description, Style & Colour"],
+  ["workmanship", "C) Workmanship"],
+  ["measurement", "D) Data Measurement / Check"],
+  ["packaging", "E) Packaging"],
+  ["shippingMark", "F) Shipping Mark"],
+  ["testReport", "G) Passing Product Test Report"],
+  ["washStandard", "H) Wash Standard Available"],
+  ["quantityTolerance", "I) Quantity Approval / ±3% Tolerance"],
+];
 
 const readDraft = (stage) => {
   try {
@@ -74,6 +86,8 @@ const FinalInspectionWorkspace = ({ stage = "final", onBack }) => {
   const copy = STAGE_COPY[stage] || STAGE_COPY.final;
   const [form, setForm] = useState(() => ({ ...emptyForm, ...((readDraft(stage) || {}).form || {}) }));
   const [checks, setChecks] = useState(() => ({ workmanship: false, measurements: false, appearance: false, labels: false, packing: false, cartonMarks: false, ...((readDraft(stage) || {}).checks || {}) }));
+  const [reportFindings, setReportFindings] = useState(() => ({ quantity: "", description: "", workmanship: "", measurement: "", packaging: "", shippingMark: "", testReport: "", washStandard: "", quantityTolerance: "", ...((readDraft(stage) || {}).reportFindings || {}) }));
+  const [photoNames, setPhotoNames] = useState([]);
   const [orderOptions, setOrderOptions] = useState([]);
   const [orderLoading, setOrderLoading] = useState(true);
   const [orderError, setOrderError] = useState("");
@@ -130,7 +144,7 @@ const FinalInspectionWorkspace = ({ stage = "final", onBack }) => {
 
   const saveDraft = () => {
     try {
-      window.localStorage.setItem(`yqms-final-inspection-draft-${stage}`, JSON.stringify({ form, checks, savedAt: new Date().toISOString() }));
+      window.localStorage.setItem(`yqms-final-inspection-draft-${stage}`, JSON.stringify({ form, checks, reportFindings, savedAt: new Date().toISOString() }));
       setSaved(true);
     } catch (_) {
       setSaved(false);
@@ -158,8 +172,9 @@ const FinalInspectionWorkspace = ({ stage = "final", onBack }) => {
         </nav>
       </header>
 
-      <div className="mx-auto grid max-w-7xl gap-4 p-3 pb-28 sm:p-5 lg:grid-cols-[minmax(0,1fr)_280px] lg:pb-8">
-        <section className="min-w-0 rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <div className="mx-auto grid max-w-6xl justify-center gap-4 p-3 pb-28 sm:p-5 lg:grid-cols-[minmax(0,800px)_280px] lg:pb-8">
+        <section className="min-w-0 rounded-[2rem] border-[9px] border-slate-500 bg-slate-900 p-2 shadow-xl">
+          <div className="min-w-0 overflow-hidden rounded-[1.35rem] bg-white">
           <div className="flex flex-wrap items-start justify-between gap-3 border-b border-slate-100 p-4 sm:p-5">
             <div className="flex items-start gap-3">
               <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-violet-50 text-violet-700"><ClipboardCheck size={20} /></span>
@@ -174,14 +189,36 @@ const FinalInspectionWorkspace = ({ stage = "final", onBack }) => {
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
                 <Field label="MO / order number">{orderOptions.length > 0 ? <select className={inputClass} value={form.order} onChange={selectOrder}><option value="">Select an available order…</option>{orderOptions.map((item) => <option key={item.id} value={item.id}>{item.name}{item.sub ? ` · ${item.sub}` : ""}</option>)}</select> : <input className={inputClass} value={form.order} onChange={set("order")} placeholder="Scan or enter order reference" />}</Field>
                 <Field label="Buyer"><input className={inputClass} value={form.buyer} onChange={set("buyer")} placeholder="Buyer name" /></Field>
+                <Field label="Brand"><input className={inputClass} value={form.brand} onChange={set("brand")} placeholder="Brand" /></Field>
+                <Field label="Description"><input className={inputClass} value={form.description} onChange={set("description")} placeholder="Product description" /></Field>
                 <Field label="Style"><input className={inputClass} value={form.style} onChange={set("style")} placeholder="Factory style" /></Field>
+                <Field label="Buyer article no."><input className={inputClass} value={form.articleNo} onChange={set("articleNo")} placeholder="Article number" /></Field>
                 <Field label="Purchase order"><input className={inputClass} value={form.po} onChange={set("po")} placeholder="PO number" /></Field>
                 <Field label="Colour / finish"><input className={inputClass} value={form.colour} onChange={set("colour")} placeholder="Colourway" /></Field>
+                <Field label="Size range"><input className={inputClass} value={form.sizes} onChange={set("sizes")} placeholder="Sizes in this lot" /></Field>
                 <Field label="Lot quantity"><input className={inputClass} type="number" min="0" value={form.lotQty} onChange={set("lotQty")} placeholder="Units" /></Field>
                 <Field label="Cartons presented"><input className={inputClass} type="number" min="0" value={form.cartons} onChange={set("cartons")} placeholder="Cartons" /></Field>
                 <Field label="Inspection date"><input className={inputClass} type="date" value={form.inspectionDate} onChange={set("inspectionDate")} /></Field>
               </div>
+              <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                <Field label="Supplier"><input className={inputClass} value={form.supplier} onChange={set("supplier")} placeholder="Supplier" /></Field>
+                <Field label="Facility"><input className={inputClass} value={form.facility} onChange={set("facility")} /></Field>
+                <Field label="Shipment qty by PO"><textarea className={`${inputClass} min-h-11 resize-y`} value={form.shipmentByPo} onChange={set("shipmentByPo")} placeholder="PO: quantity; one per line" /></Field>
+                <Field label="IMT"><input className={inputClass} value={form.imt} onChange={set("imt")} placeholder="Industry make type" /></Field>
+                <Field label="Handover to forwarder"><input className={inputClass} type="date" value={form.handoverDate} onChange={set("handoverDate")} /></Field>
+                <Field label="Service type"><input className={inputClass} value={form.serviceType} onChange={set("serviceType")} /></Field>
+                <Field label="Inspector full name"><input className={inputClass} value={form.inspectorName} onChange={set("inspectorName")} placeholder="Assigned inspector" /></Field>
+                <Field label="Inspection place"><input className={inputClass} value={form.inspectionPlace} onChange={set("inspectionPlace")} /></Field>
+              </div>
               {(orderLoading || orderDetailLoading || orderError) && <div role="status" className={`mt-3 rounded-lg px-3 py-2 text-xs font-semibold ${orderError ? "border border-amber-200 bg-amber-50 text-amber-900" : "bg-slate-50 text-slate-500"}`}>{orderError || (orderLoading ? "Loading available orders from YPI…" : "Loading approved order details…")}{orderError && <button type="button" onClick={loadOrderOptions} className="ml-2 underline">Retry</button>}</div>}
+            </section>
+
+            <section aria-labelledby="formal-findings-heading" className="rounded-xl border border-slate-200 p-3 sm:p-4">
+              <h3 id="formal-findings-heading" className="mb-3 text-sm font-black">Buyer report findings</h3>
+              <p className="mb-3 text-xs text-slate-500">Record these findings for the existing formal report. This pad changes data entry only.</p>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                {REPORT_FINDINGS.map(([id, label]) => <Field key={id} label={label}><select className={inputClass} value={reportFindings[id]} onChange={(event) => setReportFindings((old) => ({ ...old, [id]: event.target.value }))}><option value="">Select result…</option><option>Conformed</option><option>Not conformed</option><option>Pending / Hold</option><option>Special attention</option></select></Field>)}
+              </div>
             </section>
 
             <section aria-labelledby="sampling-plan-heading" className="rounded-xl border border-violet-100 bg-violet-50/60 p-3 sm:p-4">
@@ -224,7 +261,7 @@ const FinalInspectionWorkspace = ({ stage = "final", onBack }) => {
               </div>
               <div className="mt-3 grid gap-3 md:grid-cols-[1fr_1fr]">
                     <Field label="Defect details / location"><textarea className={`${inputClass} min-h-24 resize-y`} value={form.notes} onChange={set("notes")} placeholder="Describe defect, garment location, quantity, containment and repair / re-inspection reference" /></Field>
-                <Field label="Photo evidence"><span className="flex min-h-24 cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-slate-300 bg-slate-50 text-center text-xs font-bold text-slate-600 hover:bg-slate-100"><Camera size={20} className="text-violet-600" />Attach inspection photos<input className="sr-only" type="file" accept="image/*" multiple capture="environment" /></span></Field>
+                <Field label="Photo evidence"><span className="flex min-h-24 cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-slate-300 bg-slate-50 text-center text-xs font-bold text-slate-600 hover:bg-slate-100"><Camera size={20} className="text-violet-600" />Attach order inspection photos<input className="sr-only" type="file" accept="image/*" multiple capture="environment" onChange={(event) => setPhotoNames(Array.from(event.target.files || []).map((file) => file.name))} /></span>{photoNames.length > 0 && <span className="mt-1 block text-[11px] text-slate-500">{photoNames.join(", ")}</span>}<span className="mt-1 block text-[10px] text-slate-400">Public watermarked examples are for training/demo only; use actual order photos as report evidence.</span></Field>
               </div>
             </section>
 
@@ -232,6 +269,7 @@ const FinalInspectionWorkspace = ({ stage = "final", onBack }) => {
               <div><p className="text-xs font-bold text-slate-500">Count summary</p><p className="mt-1 text-sm font-black"><span className="text-emerald-700">{passCount} passed</span><span className="mx-2 text-slate-300">·</span><span className="text-rose-700">{rejectCount} rejected</span><span className="mx-2 text-slate-300">·</span><span>{checkedCount} inspected</span></p></div>
               <p role="status" className={`max-w-lg text-xs font-bold ${disposition.startsWith("HOLD") ? "text-rose-700" : "text-slate-600"}`}>{disposition}</p>
             </div>
+          </div>
           </div>
         </section>
 
@@ -252,7 +290,7 @@ const FinalInspectionWorkspace = ({ stage = "final", onBack }) => {
 
           <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
             <div className="flex items-center gap-2"><FileCheck2 size={18} className="text-slate-600" /><h2 className="text-sm font-black">Draft status</h2></div>
-            <p className="mt-2 text-xs leading-relaxed text-slate-500">Order lookup reads the YPI tech-pack order list. This page has no YQMS inspection-record write endpoint, so Save Draft stores this form only in this browser on this device; it does not create an official report or release a lot.</p>
+            <p className="mt-2 text-xs leading-relaxed text-slate-500">Order lookup reads the YPI tech-pack list. Drafts stay in this browser; this pad is arranged to match the existing formal Buyer Report and does not change or submit to that separate report system.</p>
             {saved && <p role="status" className="mt-2 text-xs font-bold text-emerald-700">Draft saved on this device.</p>}
           </section>
         </aside>
@@ -261,7 +299,7 @@ const FinalInspectionWorkspace = ({ stage = "final", onBack }) => {
       <footer className="fixed inset-x-0 bottom-0 z-20 border-t border-slate-200 bg-white/95 p-3 shadow-[0_-6px_20px_rgba(15,23,42,0.08)] backdrop-blur sm:static sm:mx-auto sm:mb-5 sm:w-full sm:max-w-7xl sm:rounded-xl sm:border sm:px-5">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 sm:max-w-none">
           <div className="min-w-0"><p className="text-xs font-bold text-slate-500">Current inspection result</p><p className="truncate text-sm font-black text-slate-800">{disposition}</p></div>
-          <button type="button" onClick={saveDraft} className="inline-flex min-h-12 shrink-0 items-center gap-2 rounded-xl bg-violet-700 px-5 text-sm font-black text-white shadow-md hover:bg-violet-800 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2"><CheckCircle2 size={17} />Save draft</button>
+          <button type="button" onClick={saveDraft} className="inline-flex min-h-12 shrink-0 items-center gap-2 rounded-xl bg-violet-700 px-5 text-sm font-black text-white shadow-md hover:bg-violet-800 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-2"><CheckCircle2 size={17} />Save pad entry</button>
         </div>
       </footer>
     </main>
