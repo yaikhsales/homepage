@@ -73,7 +73,7 @@ export const YQMS_CARDS = {
         {
           title: "First Output Printing Embroidery",
           action: "/dashboard/yqms/first-output-print",
-          icon: "Printer",
+          icon: "Shirt",
           color:
             "bg-white text-blue-600",
           image:
@@ -83,7 +83,7 @@ export const YQMS_CARDS = {
         {
           title: "Printing Inspection",
           action: "/dashboard/yqms/printing-inspection",
-          icon: "Printer",
+          icon: "Shirt",
           color:
             "bg-white text-blue-600",
           image:
@@ -93,7 +93,7 @@ export const YQMS_CARDS = {
         {
           title: "Embroidery Inspection",
           action: "/dashboard/yqms/embroidery-inspection",
-          icon: "PenTool",
+          icon: "Shirt",
           color:
             "bg-white text-blue-600",
           image:
