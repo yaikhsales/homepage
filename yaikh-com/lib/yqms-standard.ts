@@ -1,6 +1,6 @@
 import { cookies, headers } from 'next/headers';
 import { COOKIE_NAME, verifySession } from './auth';
-export const MODULES=['qc-file','pre-production-meeting','cut-panel-inspection','first-output-cutting','qa-cutting','cutting-inspection','first-output-print','printing-inspection','embroidery-inspection','qa-print','fin-check'];
+export const MODULES=['pre-final','final-inspection','buyer-final','qc-file','pre-production-meeting','cut-panel-inspection','first-output-cutting','qa-cutting','cutting-inspection','first-output-print','printing-inspection','embroidery-inspection','qa-print','fin-check'];
 export const PAD_COOKIE='yqms_standard_pad';
 export const noStore={'Cache-Control':'private, no-store'};
 export function viewer(){return verifySession(cookies().get(COOKIE_NAME)?.value);}

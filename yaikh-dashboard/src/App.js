@@ -499,7 +499,7 @@ export default function App() {
           />
           <Route
             path="yqms/final-inspection"
-            element={<ModuleFrame><FinalInspection onBack={handleBack} /></ModuleFrame>}
+            element={<ModuleFrame><QualityModule key="final-inspection" moduleKey="final-inspection" onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/ppm"
@@ -544,13 +544,13 @@ export default function App() {
             path="yqms/pre-final"
             element={
             <ModuleFrame>
-              <AuditReport title="Pre Final Inspection" onBack={handleBack} />
+              <QualityModule key="pre-final" moduleKey="pre-final" onBack={handleBack} />
             </ModuleFrame>
             }
           />
           <Route
             path="yqms/buyer-final"
-            element={<ModuleFrame><BuyerFinalInspection onBack={handleBack} /></ModuleFrame>}
+            element={<ModuleFrame><QualityModule key="buyer-final" moduleKey="buyer-final" onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/supplier-evaluation"

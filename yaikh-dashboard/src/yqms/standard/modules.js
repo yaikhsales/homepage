@@ -1,4 +1,7 @@
 export const MODULES={
+ 'pre-final':{title:'Pre Final Inspection',icon:'Pre Final Inspection',colour:'#497caa',group:'PACKING',kind:'fincheck',stage:'Pre-final inspection',role:'QA auditor / delegated quality supervisor',video:'/experience/assets/yqms/Fin-Check/Fincheck.mp4'},
+ 'final-inspection':{title:'Final Inspection',icon:'Final Inspection',colour:'#326db4',group:'PACKING',kind:'fincheck',stage:'Final inspection',role:'Final QA auditor / delegated quality supervisor',video:'/experience/assets/yqms/Fin-Check/Fincheck.mp4'},
+ 'buyer-final':{title:'Buyer Final Inspection',icon:'Buyer Final Inspection',colour:'#8c518f',group:'PACKING',kind:'fincheck',stage:'Buyer final inspection',external:true,role:'Buyer / third-party inspector with factory QA coordinator; confirm actual YHR assignment',video:'/experience/assets/yqms/Fin-Check/Fincheck.mp4'},
  'qc-file':{title:'QC File',icon:'QC File',colour:'#b43b35',group:'PRE PRODUCTION',kind:'qc-file',role:'Quality Manager / delegated QC document reviewer',video:'/experience/assets/short-video-training/QC-File.mp4'},
  'pre-production-meeting':{title:'Pre Production Meeting',icon:'Pre Production Meeting',colour:'#b9363b',group:'PRE PRODUCTION',kind:'ppm',role:'Quality Manager / meeting chair'},
  'cut-panel-inspection':{title:'Cutting Panel Inspection',icon:'Cutting Panel Inspection',colour:'#7e42ce',group:'CUT',kind:'cut-panel',role:'Cutting quality leader / delegated supervisor',video:'/experience/assets/short-video-training/Cutting-panel.mp4'},
