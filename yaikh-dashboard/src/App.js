@@ -129,6 +129,7 @@ import PackingInspection from "./yqms/PackingInspection";
 import FinalInspection from "./yqms/FinalInspection";
 
 import AuditReport from "./yqms/AuditReport";
+import DecorationQuality from "./yqms/decoration/DecorationQuality";
 import BuyerFinalInspection from "./yqms/BuyerFinalInspection";
 import SupplierEvaluation from "./yqms/SupplierEvaluation";
 import CustomerComplainCap from "./yqms/CustomerComplainCap";
@@ -616,10 +617,7 @@ export default function App() {
             path="yqms/first-output-print"
             element={
             <ModuleFrame>
-              <AuditReport
-                title="First Output Printing/Embroidery"
-                onBack={handleBack}
-              />
+              <DecorationQuality mode="first" onBack={handleBack} />
             </ModuleFrame>
             }
           />
@@ -639,7 +637,7 @@ export default function App() {
             path="yqms/qa-print"
             element={
             <ModuleFrame>
-              <AuditReport title="QA Printing/Embroidery" onBack={handleBack} />
+              <DecorationQuality mode="qa" onBack={handleBack} />
             </ModuleFrame>
             }
           />
@@ -652,7 +650,7 @@ export default function App() {
             path="yqms/printing-inspection"
             element={
             <ModuleFrame>
-              <AuditReport title="Printing Inspection" onBack={handleBack} />
+              <DecorationQuality mode="printing" onBack={handleBack} />
             </ModuleFrame>
             }
           />
@@ -660,7 +658,7 @@ export default function App() {
             path="yqms/embroidery-inspection"
             element={
             <ModuleFrame>
-              <AuditReport title="Embroidery Inspection" onBack={handleBack} />
+              <DecorationQuality mode="embroidery" onBack={handleBack} />
             </ModuleFrame>
             }
           />
