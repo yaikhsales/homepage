@@ -15,9 +15,14 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { useTranslation } from "../translate/TranslationContext";
+import FinalInspectionWorkspace from "./FinalInspectionWorkspace";
 
 const AuditReport = ({ title, onBack }) => {
   const { t } = useTranslation();
+
+  if (title === "Pre Final Inspection") {
+    return <FinalInspectionWorkspace stage="pre-final" onBack={onBack} />;
+  }
 
   const auditData = [
     {
