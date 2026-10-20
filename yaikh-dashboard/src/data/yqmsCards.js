@@ -72,6 +72,7 @@ export const YQMS_CARDS = {
       cards: [
         {
           title: "First Output Printing Embroidery",
+          action: "/dashboard/yqms/first-output-print",
           icon: "PenTool",
           color:
             "bg-white text-blue-600",
@@ -81,6 +82,7 @@ export const YQMS_CARDS = {
         },
         {
           title: "Printing Inspection",
+          action: "/dashboard/yqms/printing-inspection",
           icon: "Search",
           color:
             "bg-white text-blue-600",
@@ -90,6 +92,7 @@ export const YQMS_CARDS = {
         },
         {
           title: "Embroidery Inspection",
+          action: "/dashboard/yqms/embroidery-inspection",
           icon: "Search",
           color:
             "bg-white text-blue-600",
@@ -99,6 +102,7 @@ export const YQMS_CARDS = {
         },
         {
           title: "QA Printing Embroidery",
+          action: "/dashboard/yqms/qa-print",
           icon: "Search",
           color:
             "bg-white text-blue-600",
@@ -131,6 +135,7 @@ export const YQMS_CARDS = {
         },
         {
           title: "Inline Audit Rolling",
+          action: "/dashboard/yqms/inline-audit",
           icon: "FileCheck",
           color:
             "bg-white text-blue-600",
@@ -139,6 +144,7 @@ export const YQMS_CARDS = {
         },
         {
           title: "Internal Rolling QC",
+          action: "/dashboard/yqms/rolling-qc",
           icon: "FileCheck",
           color:
             "bg-white text-blue-600",
@@ -150,6 +156,7 @@ export const YQMS_CARDS = {
         },
         {
           title: "Garment Check Output",
+          action: "/dashboard/yqms/sewing-output",
           icon: "CheckCircle",
           color:
             "bg-white text-blue-600",
@@ -158,6 +165,7 @@ export const YQMS_CARDS = {
         },
         {
           title: "QA 20pcs Audit",
+          action: "/dashboard/yqms/20pcs-audit",
           icon: "ClipboardCheck",
           color:
             "bg-white text-blue-600",
@@ -171,6 +179,7 @@ export const YQMS_CARDS = {
       cards: [
         {
           title: "Finishing Inspection",
+          action: "/dashboard/yqms/finishing-inspection",
           icon: "ClipboardCheck",
           color:
             "bg-white text-blue-600",
@@ -179,6 +188,7 @@ export const YQMS_CARDS = {
         },
         {
           title: "Ironing Inspection",
+          action: "/dashboard/yqms/ironing-inspection",
           icon: "Thermometer",
           color:
             "bg-white text-blue-600",
@@ -191,6 +201,7 @@ export const YQMS_CARDS = {
         {
           title:
             "Humidity Aquaboy Checking",
+          action: "/dashboard/yqms/aquaboy",
           icon: "Droplets",
           color:
             "bg-white text-blue-600",
@@ -204,6 +215,7 @@ export const YQMS_CARDS = {
         },
         {
           title: "Offline Audit",
+          action: "/dashboard/yqms/offline-audit",
           icon: "FileCheck",
           color:
             "bg-white text-blue-600",
@@ -212,6 +224,7 @@ export const YQMS_CARDS = {
         },
         {
           title: "Packing Inspection",
+          action: "/dashboard/yqms/packing-inspection",
           icon: "PackageCheck",
           color:
             "bg-white text-blue-600",
@@ -221,6 +234,7 @@ export const YQMS_CARDS = {
         {
           title:
             "QA Audit Finishing Packing",
+          action: "/dashboard/yqms/qa-audit-finishing",
           icon: "ClipboardCheck",
           color:
             "bg-white text-blue-600",
@@ -243,6 +257,7 @@ export const YQMS_CARDS = {
         },
         {
           title: "Pre Final Inspection",
+          action: "/dashboard/yqms/pre-final",
           icon: "Eye",
           color:
             "bg-white text-blue-600",
@@ -251,12 +266,14 @@ export const YQMS_CARDS = {
         },
         {
           title: "Final Inspection",
+          action: "/dashboard/yqms/final-inspection",
           icon: "Eye",
           color: "bg-white text-blue-600",
           image: "assets/yqms/final-inspection-icon.svg",
         },
         {
           title: "Buyer Final Inspection",
+          action: "/dashboard/yqms/buyer-final",
           icon: "Eye",
           color: "bg-white text-blue-600",
           image: "assets/yqms/buyer-final-inspection-icon.svg",
@@ -269,6 +286,7 @@ export const YQMS_CARDS = {
         {
           title:
             "First Output Finishing And Packing",
+          action: "/dashboard/yqms/first-output-finishing",
           icon: "PackageCheck",
           color:
             "bg-white text-blue-600",
@@ -293,12 +311,14 @@ export const YQMS_CARDS = {
         },
         {
           title: "Customer Complaint CAP",
+          action: "/dashboard/yqms/cap",
           icon: "AlertTriangle",
           color: "bg-white text-blue-600",
           image: "assets/yqms/customer_complaint_cap_new.png",
         },
         {
           title: "Supplier Evaluation",
+          action: "/dashboard/yqms/supplier-evaluation",
           icon: "CheckSquare",
           color: "bg-white text-blue-600",
           image: "assets/yqms/supplier-evaluation-icon.svg",

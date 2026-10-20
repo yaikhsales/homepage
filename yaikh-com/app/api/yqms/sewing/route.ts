@@ -28,13 +28,14 @@ function serialize(doc: Record<string, any>) {
 }
 
 export async function GET(request: Request) {
-  if (!identity()) return bad("Sign in to Yai to view quality records.", 401);
+  const viewer = identity();
+  if (!viewer) return bad("Sign in to Yai to view quality records.", 401);
   const mode = new URL(request.url).searchParams.get("mode");
   if (mode !== "first-output" && mode !== "endline") return bad("Invalid workflow.");
   try {
     const db = await getDb();
     const records = await db.collection(collectionName).find({ mode }).sort({ createdAt: -1 }).limit(500).toArray();
-    return NextResponse.json({ ok: true, records: records.map(serialize) }, { headers: noStore });
+    return NextResponse.json({ ok: true, viewer, records: records.map(serialize) }, { headers: noStore });
   } catch (error) {
     console.error("YQMS sewing read failed", error);
     return bad("Quality records are unavailable. Check the database connection.", 503);
