@@ -601,25 +601,26 @@ function ByIcon({ auto, size = 14 }) {
 /* ---------- timeline layout ---------- */
 const PX = 14, LABEL_W = 132, HEAD_H = 46, BOX_W = 168, BOX_H = 56, TRACK_H = 64, PAD = 6;
 
+const isFabricInspection = a => a.id === "inspect" || a.id === "q4";
 function layoutTimeline(flow) {
-  const px = flow.px || PX;
-  const pos = {};
-  const lanes = [];
-  let y = 0;
-  flow.lanes.forEach((lane) => {
-    const tracks = [];
-    flow.acts.filter((a) => a.lane === lane).sort((a, b) => a.d0 - b.d0).forEach((a) => {
-      const x = a.d0 * px, dur = flow.px ? px - 14 : Math.max((a.d1 - a.d0) * px, 6), w = Math.max(dur, flow.px ? 0 : BOX_W);
-      let t = tracks.findIndex((e) => e + 8 <= x);
-      if (t < 0) { t = tracks.length; tracks.push(0); }
-      tracks[t] = x + w;
-      pos[a.id] = { x, w, dur, y: y + PAD + t * TRACK_H };
+  const px = flow.px || PX, pos = {}, lanes = [];
+  let y = 0, width = flow.days * px;
+  flow.lanes.forEach(lane => {
+    const tracks = [], items = flow.acts.filter(a => a.lane === lane).sort((a,b) => a.d0-b.d0);
+    items.forEach(a => {
+      const x = a.d0 * px, dur = flow.px ? px-14 : Math.max((a.d1-a.d0)*px,6);
+      const w = isFabricInspection(a) ? 1140 : Math.max(dur,flow.px ? 0 : BOX_W), h = isFabricInspection(a) ? 1110 : BOX_H;
+      let t = tracks.findIndex(track => track.end+8 <= x);
+      if(t<0){t=tracks.length;tracks.push({end:0,height:BOX_H});}
+      tracks[t].end=x+w; tracks[t].height=Math.max(tracks[t].height,h);
+      pos[a.id]={x,w,h,dur,track:t};width=Math.max(width,x+w);
     });
-    const h = Math.max(1, tracks.length) * TRACK_H + PAD * 2 - (TRACK_H - BOX_H);
-    lanes.push({ lane, y, h });
-    y += h;
+    const offsets=[];let height=PAD;
+    tracks.forEach(track=>{offsets.push(height);height+=track.height+8;});
+    items.forEach(a=>{pos[a.id].y=y+offsets[pos[a.id].track];});
+    const h=Math.max(BOX_H+PAD*2,height+PAD-8);lanes.push({lane,y,h});y+=h;
   });
-  return { pos, lanes, height: y, width: flow.days * px, px };
+  return {pos,lanes,height:y,width,px};
 }
 
 function Timeline({ flow, focus, sel, onSel }) {
@@ -634,13 +635,13 @@ function Timeline({ flow, focus, sel, onSel }) {
     let d;
     if (pb.x >= pa.x + pa.w - 4) {
       // B starts after A's box: right edge → left edge
-      const x1 = pa.x + pa.w, y1 = pa.y + BOX_H / 2, x2 = pb.x, y2 = pb.y + BOX_H / 2, dx = Math.max(16, (x2 - x1) / 2);
+      const x1 = pa.x + pa.w, y1 = pa.y + pa.h / 2, x2 = pb.x, y2 = pb.y + pb.h / 2, dx = Math.max(16, (x2 - x1) / 2);
       d = `M${x1},${y1} C${x1 + dx},${y1} ${x2 - dx},${y2} ${x2},${y2}`;
     } else {
       // overlapping in time: drop from A's edge onto B's top / bottom
       const down = pb.y > pa.y;
       const x2 = pb.x + 14, x1 = Math.min(Math.max(x2, pa.x + 14), pa.x + pa.w - 14);
-      const y1 = down ? pa.y + BOX_H : pa.y, y2 = down ? pb.y : pb.y + BOX_H, dy = (y2 - y1) / 2;
+      const y1 = down ? pa.y + pa.h : pa.y, y2 = down ? pb.y : pb.y + pb.h, dy = (y2 - y1) / 2;
       d = `M${x1},${y1} C${x1},${y1 + dy} ${x2},${y2 - dy} ${x2},${y2}`;
     }
     const cross = a.lane !== b.lane;
@@ -696,6 +697,7 @@ function Timeline({ flow, focus, sel, onSel }) {
 
           {flow.acts.map((a) => {
             const p = L.pos[a.id], c = DEPTS[a.lane].color, on = sel === a.id;
+            if (isFabricInspection(a)) return <section key={a.id} aria-label="Fabric inspection responsibilities" className="absolute rounded-2xl overflow-hidden" style={{left:p.x,top:HEAD_H+p.y,width:p.w,height:p.h,zIndex:2,border:`5px solid ${c}`,background:"white"}}><FabricInspectionJobCard /></section>;
             return (
               <button key={a.id} onClick={() => onSel(a.id)} title={flow.ruler === false ? `${a.step}. ${a.title}` : `${a.title} · Day ${a.d0}–${a.d1}`}
                 className={`absolute text-left rounded-lg overflow-hidden transition-opacity ${dim(a.lane) ? "opacity-30" : ""}`}
@@ -850,7 +852,6 @@ const SOPMap = ({ onBack }) => {
   const navigate = useNavigate();
   const [pid, setPid] = useState("order");
   const [sel, setSel] = useState(null);
-  const [jobCardOpen, setJobCardOpen] = useState(false);
   const [expanded, setExpanded] = useState(null);
   const [masterList, setMasterList] = useState(false);
   const [subProcess, setSubProcess] = useState(null);
@@ -871,7 +872,6 @@ const SOPMap = ({ onBack }) => {
 
   const selectProcess = (id) => { setMasterList(false); setPid(id); setSubProcess(null); setSel(null); };
   const pick = (id) => {
-    if (id === "inspect" || id === "q4") setJobCardOpen(true);
     setSel(id);
     setTimeout(() => cardRef.current && cardRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" }), 30);
   };
@@ -879,7 +879,6 @@ const SOPMap = ({ onBack }) => {
   return (
     // pt-20 clears the fixed agent bar (My Task Agent / Agent Collective / Big Brain) that floats under the header
     <div className="min-h-screen bg-slate-900 text-slate-100 flex flex-col pt-20">
-      {jobCardOpen && <FabricInspectionJobCard onClose={() => setJobCardOpen(false)} />}
       <div className="flex items-center gap-3 px-4 py-3 border-b border-white/10">
         <button onClick={onBack} className="p-2 rounded-lg hover:bg-white/10" aria-label="Back"><ArrowLeft size={18} /></button>
         <div className="flex-1">
