@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
+import { useTranslation } from "../translate/TranslationContext";
 
-const csvCell = value => `"${String(value ?? "").replaceAll('"', '""')}"`;
+const csvCell = value => { let text = String(value ?? ""); if (typeof value !== 'number' && /^[=+\-@\t\r]/.test(text)) text = "'" + text; return `"${text.replaceAll('"', '""')}"`; };
 const day = value => value ? new Date(value).toISOString().slice(0, 10) : "—";
 const count = row => Number(row.sample || row.quantity || 1);
 const issues = row => Number(row.failed || (row.result && row.result !== "pass" ? 1 : 0));
@@ -42,11 +43,12 @@ function buildReports(records, mode) {
 }
 
 export default function SewingReports({ records, mode, loading, exampleMode = false }) {
+  const { t } = useTranslation();
   const [selected, setSelected] = useState(0);
   const reports = useMemo(() => buildReports(records, mode), [records, mode]);
   const report = reports[selected];
   function download() {
-    const csv = [report.columns, ...report.rows].map(row => row.map(csvCell).join(",")).join("\r\n");
+    const csv = [report.columns, ...report.rows].map(row => row.map(value => csvCell(t(value))).join(",")).join("\r\n");
     const url = URL.createObjectURL(new Blob(["\uFEFF", csv], { type: "text/csv;charset=utf-8" }));
     const anchor = document.createElement("a"); anchor.href = url; anchor.download = `yqms-${mode}-${exampleMode ? "DEMO-" : ""}${report.name.toLowerCase().replaceAll(" ", "-")}.csv`; anchor.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);

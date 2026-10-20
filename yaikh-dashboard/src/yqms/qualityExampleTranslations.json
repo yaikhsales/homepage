@@ -1,0 +1,1283 @@
+{
+  "0-accept": [
+    "0- ទទួលយក",
+    "0-接受",
+    "0-chấp nhận",
+    "0-tanggapin",
+    "0-terima"
+  ],
+  "100% cotton": [
+    "កប្បាស 100%",
+    "100% 棉",
+    "100% bông",
+    "100% koton",
+    "100% kapas"
+  ],
+  "2XS 50 · XS 200 · S 776 · M 950 · L 450 · XL 76": [
+    "2XS 50 · XS 200 · S 776 · M 950 · L 450 · XL 76",
+    "2XS 50·XS 200·S 776·M 950·L 450·XL 76",
+    "2XS 50 · XS 200 · S 776 · M 950 · L 450 · XL 76",
+    "2XS 50 · XS 200 · S 776 · M 950 · L 450 · XL 76",
+    "2XS 50 · XS 200 · S 776 · M 950 · L 450 · XL 76"
+  ],
+  "70% cotton / 30% polyester": [
+    "កប្បាស 70% / 30% polyester",
+    "70% 棉 / 30% 涤纶",
+    "70% bông/30% polyester",
+    "70% koton / 30% polyester",
+    "70% kapas / 30% poliester"
+  ],
+  "Add changeover reference confirmation and a first-piece check to the station checklist.": [
+    "បន្ថែមការបញ្ជាក់សេចក្តីយោងនៃការផ្លាស់ប្តូរ និងការត្រួតពិនិត្យផ្នែកទីមួយទៅកាន់បញ្ជីត្រួតពិនិត្យស្ថានីយ។",
+    "将转换参考确认和首件检查添加到车站清单中。",
+    "Thêm xác nhận tham chiếu chuyển đổi và kiểm tra lần đầu vào danh sách kiểm tra trạm.",
+    "Magdagdag ng kumpirmasyon sa pagpapalit ng sanggunian at isang first-piece check sa checklist ng istasyon.",
+    "Tambahkan pengesahan rujukan pertukaran dan semakan bahagian pertama pada senarai semak stesen."
+  ],
+  "Approved artwork revision": [
+    "ការកែសម្រួលស្នាដៃសិល្បៈដែលបានអនុម័ត",
+    "批准的艺术品修订",
+    "Bản sửa đổi tác phẩm nghệ thuật đã được phê duyệt",
+    "Inaprubahang rebisyon ng likhang sining",
+    "Semakan karya seni yang diluluskan"
+  ],
+  "Approved sample": [
+    "គំរូដែលបានអនុម័ត",
+    "认可样品",
+    "Mẫu được phê duyệt",
+    "Inaprubahang sample",
+    "Sampel yang diluluskan"
+  ],
+  "Approved sample missing": [
+    "បាត់គំរូដែលបានអនុម័ត",
+    "批准的样品缺失",
+    "Thiếu mẫu đã được phê duyệt",
+    "Nawala ang inaprubahang sample",
+    "Sampel yang diluluskan tiada"
+  ],
+  "Approved sample versus bulk": [
+    "គំរូដែលបានអនុម័តធៀបនឹងចំនួនច្រើន។",
+    "批准的样品与批量",
+    "Mẫu được phê duyệt so với số lượng lớn",
+    "Inaprubahang sample kumpara sa maramihan",
+    "Sampel yang diluluskan berbanding pukal"
+  ],
+  "Armhole": [
+    "រន្ធដៃ",
+    "袖窿",
+    "lỗ khoét tay",
+    "Armhole",
+    "Lubang lengan"
+  ],
+  "Artwork registration": [
+    "ការចុះឈ្មោះស្នាដៃសិល្បៈ",
+    "艺术品登记",
+    "Đăng ký tác phẩm nghệ thuật",
+    "Pagpaparehistro ng likhang sining",
+    "Pendaftaran karya seni"
+  ],
+  "Back rise": [
+    "ការងើបឡើងវិញ",
+    "背部上升",
+    "Tăng trở lại",
+    "Pagtaas ng likod",
+    "Naik belakang"
+  ],
+  "Backing removal": [
+    "ការដកផ្នែកខាងក្រោយចេញ",
+    "背衬去除",
+    "Loại bỏ sao lưu",
+    "Pag-alis ng backing",
+    "Pembuangan sandaran"
+  ],
+  "Barcode / price / hang / care labels": [
+    "បាកូដ / តម្លៃ / ព្យួរ / ស្លាកសញ្ញាថែទាំ",
+    "条形码/价格/悬挂/护理标签",
+    "Mã vạch/giá/treo/nhãn chăm sóc",
+    "Mga label ng barcode / presyo / hang / pangangalaga",
+    "Kod bar / harga / gantung / label penjagaan"
+  ],
+  "Body length": [
+    "ប្រវែងរាងកាយ",
+    "体长",
+    "Chiều dài cơ thể",
+    "Haba ng katawan",
+    "Panjang badan"
+  ],
+  "Bottom hem height": [
+    "កម្ពស់បាត",
+    "下摆高度",
+    "Chiều cao viền dưới",
+    "Taas ng ibabang laylayan",
+    "Ketinggian labuh bawah"
+  ],
+  "Broken stitches": [
+    "ស្នាមដេរដែលខូច",
+    "断线",
+    "Mũi khâu bị gãy",
+    "Sirang tahi",
+    "Jahitan patah"
+  ],
+  "Bundle numbering": [
+    "ការដាក់លេខជាបាច់",
+    "捆绑编号",
+    "Đánh số bó",
+    "Bundle numbering",
+    "Penomboran berkas"
+  ],
+  "Bundle traceability": [
+    "ការតាមដានជាកញ្ចប់",
+    "捆绑追踪",
+    "Truy xuất nguồn gốc gói",
+    "Bundle traceability",
+    "Kebolehkesanan himpunan"
+  ],
+  "Buyer final inspection": [
+    "ការត្រួតពិនិត្យចុងក្រោយរបស់អ្នកទិញ",
+    "买家最终检验",
+    "Người mua kiểm tra lần cuối",
+    "Panghuling inspeksyon ng mamimili",
+    "Pemeriksaan akhir pembeli"
+  ],
+  "CAM (example)": [
+    "CAM (ឧទាហរណ៍)",
+    "凸轮（示例）",
+    "CAM (ví dụ)",
+    "CAM (halimbawa)",
+    "CAM (contoh)"
+  ],
+  "CAP decision": [
+    "ការសម្រេចចិត្ត CAP",
+    "CAP 决定",
+    "Quyết định CAP",
+    "desisyon ng CAP",
+    "keputusan CAP"
+  ],
+  "Calf position": [
+    "ទីតាំងកំភួនជើង",
+    "小腿位置",
+    "Vị trí bắp chân",
+    "Posisyon ng guya",
+    "Kedudukan betis"
+  ],
+  "Calf width": [
+    "ទទឹងកំភួនជើង",
+    "小腿宽度",
+    "Chiều rộng bắp chân",
+    "Lapad ng guya",
+    "Lebar betis"
+  ],
+  "Carton / packing": [
+    "ប្រអប់ / វេចខ្ចប់",
+    "纸箱/包装",
+    "Thùng/đóng gói",
+    "Karton / pag-iimpake",
+    "Karton / pembungkusan"
+  ],
+  "Carton dimensions & gross weight": [
+    "ទំហំប្រអប់ និងទម្ងន់សរុប",
+    "纸箱尺寸和毛重",
+    "Kích thước thùng carton & tổng trọng lượng",
+    "Mga sukat ng karton at kabuuang timbang",
+    "Dimensi kadbod & berat kasar"
+  ],
+  "Chest width": [
+    "ទទឹងទ្រូង",
+    "胸宽",
+    "Chiều rộng ngực",
+    "Lapad ng dibdib",
+    "Lebar dada"
+  ],
+  "Colour match": [
+    "ការផ្គូផ្គងពណ៌",
+    "颜色搭配",
+    "Phối màu",
+    "Tugma sa kulay",
+    "Padanan warna"
+  ],
+  "Conform": [
+    "អនុលោមតាម",
+    "符合",
+    "tuân thủ",
+    "umayon",
+    "Akur"
+  ],
+  "Customer BB": [
+    "អតិថិជន BB",
+    "客户BB",
+    "Khách hàng BB",
+    "Customer BB",
+    "Pelanggan BB"
+  ],
+  "Customer CC": [
+    "អតិថិជន CC",
+    "客户抄送",
+    "CC khách hàng",
+    "Customer CC",
+    "CC pelanggan"
+  ],
+  "Cut edge quality": [
+    "កាត់គែមគុណភាព",
+    "切边质量",
+    "Chất lượng vượt trội",
+    "Gupitin ang kalidad ng gilid",
+    "Kualiti canggih"
+  ],
+  "Decoration placement": [
+    "ទីតាំងតុបតែង",
+    "装修摆放",
+    "Vị trí trang trí",
+    "Paglalagay ng dekorasyon",
+    "Peletakan hiasan"
+  ],
+  "Defect close-up & garment location": [
+    "កន្លែងជិតស្និទ្ធ និងកន្លែងកាត់ដេរមានកំហុស",
+    "缺陷特写及服装位置",
+    "Cận cảnh khuyết điểm & vị trí may",
+    "Depekto sa close-up at lokasyon ng damit",
+    "Defect close-up & lokasi pakaian"
+  ],
+  "Demo 0-accept": [
+    "ការបង្ហាញ 0-ទទួលយក",
+    "演示0-接受",
+    "Demo 0-chấp nhận",
+    "Demo 0-tanggapin",
+    "Demo 0-terima"
+  ],
+  "Demo DC · AIR": [
+    "ការបង្ហាញ DC · AIR",
+    "演示直流·空气",
+    "Demo DC · AIR",
+    "Demo DC · AIR",
+    "Demo DC · AIR"
+  ],
+  "Demo DC · SEA": [
+    "Demo DC · SEA",
+    "演示 DC·SEA",
+    "Demo DC · BIỂN",
+    "Demo DC · SEA",
+    "Demo DC · SEA"
+  ],
+  "Drawcord buttonhole spacing": [
+    "គម្លាតរន្ធប៊ូតុង",
+    "拉绳扣眼间距",
+    "Khoảng cách lỗ khuy dây rút",
+    "Drawcord buttonhole spacing",
+    "Jarak lubang butang tali tarik"
+  ],
+  "Drop test": [
+    "ទម្លាក់ការធ្វើតេស្ត",
+    "跌落测试",
+    "Thử nghiệm thả rơi",
+    "Drop test",
+    "Ujian jatuh"
+  ],
+  "Dry rub": [
+    "ជូតស្ងួត",
+    "干擦",
+    "Chà khô",
+    "Dry rub",
+    "Gosok kering"
+  ],
+  "Example Buyer A": [
+    "ឧទាហរណ៍អ្នកទិញ ក",
+    "买家 A 示例",
+    "Ví dụ Người mua A",
+    "Halimbawang Mamimili A",
+    "Contoh Pembeli A"
+  ],
+  "Example Buyer B": [
+    "ឧទាហរណ៍ អ្នកទិញ ខ",
+    "买家 B 示例",
+    "Ví dụ Người mua B",
+    "Halimbawang Mamimili B",
+    "Contoh Pembeli B"
+  ],
+  "Example Buyer C": [
+    "ឧទាហរណ៍ អ្នកទិញ គ",
+    "买家示例 C",
+    "Ví dụ Người mua C",
+    "Halimbawang Mamimili C",
+    "Contoh Pembeli C"
+  ],
+  "Example Head 1": [
+    "ក្បាលឧទាហរណ៍ ១",
+    "示例头 1",
+    "Ví dụ đầu 1",
+    "Halimbawang Ulo 1",
+    "Contoh Ketua 1"
+  ],
+  "Example Head 2": [
+    "ក្បាលឧទាហរណ៍ 2",
+    "示例头 2",
+    "Ví dụ đầu 2",
+    "Halimbawang Ulo 2",
+    "Contoh Ketua 2"
+  ],
+  "Example Head 3": [
+    "ឧទាហរណ៍ ក្បាល ៣",
+    "示例头 3",
+    "Ví dụ đầu 3",
+    "Halimbawang Ulo 3",
+    "Contoh Ketua 3"
+  ],
+  "Example Head 4": [
+    "ឧទាហរណ៍ ក្បាល ៤",
+    "示例头 4",
+    "Ví dụ đầu 4",
+    "Halimbawang Ulo 4",
+    "Contoh Ketua 4"
+  ],
+  "Example Head 5": [
+    "ឧទាហរណ៍ ក្បាល ៥",
+    "示例头 5",
+    "Ví dụ đầu 5",
+    "Halimbawang Ulo 5",
+    "Contoh Ketua 5"
+  ],
+  "Example Line 1": [
+    "ឧទាហរណ៍ បន្ទាត់ 1",
+    "示例第 1 行",
+    "Ví dụ dòng 1",
+    "Halimbawang Linya 1",
+    "Contoh Baris 1"
+  ],
+  "Example Line 2": [
+    "ឧទាហរណ៍ បន្ទាត់ 2",
+    "示例第 2 行",
+    "Ví dụ dòng 2",
+    "Halimbawang Linya 2",
+    "Contoh Baris 2"
+  ],
+  "Example Line 3": [
+    "ឧទាហរណ៍​បន្ទាត់ 3",
+    "示例第 3 行",
+    "Ví dụ dòng 3",
+    "Halimbawa Linya 3",
+    "Contoh Baris 3"
+  ],
+  "Example Line 4": [
+    "ឧទាហរណ៍ជួរទី 4",
+    "示例第 4 行",
+    "Ví dụ dòng 4",
+    "Halimbawang Linya 4",
+    "Contoh Baris 4"
+  ],
+  "Example Line 5": [
+    "ឧទាហរណ៍​បន្ទាត់ 5",
+    "示例第 5 行",
+    "Ví dụ dòng 5",
+    "Halimbawa Linya 5",
+    "Contoh Baris 5"
+  ],
+  "Example Print station 1": [
+    "ឧទាហរណ៍ ស្ថានីយ៍បោះពុម្ព 1",
+    "示例 打印站 1",
+    "Ví dụ Trạm in 1",
+    "Halimbawa Print station 1",
+    "Contoh Stesen Cetak 1"
+  ],
+  "Example Print station 2": [
+    "ឧទាហរណ៍ ស្ថានីយ៍បោះពុម្ព 2",
+    "打印站 2 示例",
+    "Ví dụ Trạm in 2",
+    "Halimbawa Print station 2",
+    "Contoh Stesen Cetak 2"
+  ],
+  "Example Print station 3": [
+    "ឧទាហរណ៍ ស្ថានីយ៍បោះពុម្ព ៣",
+    "打印站 3 示例",
+    "Ví dụ Trạm in 3",
+    "Halimbawa Print station 3",
+    "Contoh Stesen Cetak 3"
+  ],
+  "Example Print station 4": [
+    "ឧទាហរណ៍ ស្ថានីយ៍បោះពុម្ព ៤",
+    "打印站 4 示例",
+    "Ví dụ Trạm in 4",
+    "Halimbawa Print station 4",
+    "Contoh Stesen Cetak 4"
+  ],
+  "Example Print station 5": [
+    "ឧទាហរណ៍ ស្ថានីយ៍បោះពុម្ព ៥",
+    "打印站 5 示例",
+    "Ví dụ Trạm in 5",
+    "Halimbawa Print station 5",
+    "Contoh Stesen cetak 5"
+  ],
+  "Example Table 1": [
+    "ឧទាហរណ៍តារាង 1",
+    "示例表1",
+    "Bảng ví dụ 1",
+    "Halimbawa Talahanayan 1",
+    "Contoh Jadual 1"
+  ],
+  "Example Table 2": [
+    "ឧទាហរណ៍តារាង 2",
+    "示例表2",
+    "Bảng ví dụ 2",
+    "Halimbawa Talahanayan 2",
+    "Contoh Jadual 2"
+  ],
+  "Example Table 3": [
+    "ឧទាហរណ៍តារាងទី 3",
+    "示例表3",
+    "Bảng ví dụ 3",
+    "Halimbawa Talahanayan 3",
+    "Contoh Jadual 3"
+  ],
+  "Example Table 4": [
+    "ឧទាហរណ៍តារាង 4",
+    "示例表4",
+    "Bảng ví dụ 4",
+    "Halimbawa Talahanayan 4",
+    "Contoh Jadual 4"
+  ],
+  "Example Table 5": [
+    "ឧទាហរណ៍តារាង 5",
+    "示例表5",
+    "Bảng ví dụ 5",
+    "Halimbawa Talahanayan 5",
+    "Contoh Jadual 5"
+  ],
+  "Example action owner (fictional)": [
+    "ឧទាហរណ៍ម្ចាស់សកម្មភាព (ប្រឌិត)",
+    "操作所有者示例（虚构）",
+    "Chủ sở hữu hành động mẫu (hư cấu)",
+    "Halimbawang may-ari ng aksyon (fictional)",
+    "Contoh pemilik tindakan (fiksyen)"
+  ],
+  "Example buyer inspector (fictional)": [
+    "ឧទាហរណ៍អ្នកត្រួតពិនិត្យអ្នកទិញ (ប្រឌិត)",
+    "买家检验员示例（虚构）",
+    "Ví dụ về thanh tra người mua (hư cấu)",
+    "Halimbawang buyer inspector (fictional)",
+    "Contoh pemeriksa pembeli (fiksyen)"
+  ],
+  "Example checker 1 (fictional)": [
+    "កម្មវិធីពិនិត្យឧទាហរណ៍ 1 (ប្រឌិត)",
+    "检查器示例 1（虚构）",
+    "Ví dụ kiểm tra 1 (hư cấu)",
+    "Halimbawang checker 1 (fictional)",
+    "Contoh penyemak 1 (fiksyen)"
+  ],
+  "Example checker 2 (fictional)": [
+    "ឧបករណ៍ពិនិត្យឧទាហរណ៍ 2 (ប្រឌិត)",
+    "检查器示例 2（虚构）",
+    "Ví dụ kiểm tra 2 (hư cấu)",
+    "Halimbawang checker 2 (fictional)",
+    "Contoh penyemak 2 (fiksyen)"
+  ],
+  "Example checker 3 (fictional)": [
+    "ឧបករណ៍ពិនិត្យឧទាហរណ៍ 3 (ប្រឌិត)",
+    "检查器示例 3（虚构）",
+    "Ví dụ kiểm tra 3 (hư cấu)",
+    "Halimbawang checker 3 (fictional)",
+    "Contoh penyemak 3 (fiksyen)"
+  ],
+  "Example correction only; original inspection remains available.": [
+    "ការកែតម្រូវឧទាហរណ៍តែប៉ុណ្ណោះ; ការត្រួតពិនិត្យដើមនៅតែមាន។",
+    "仅示例修正；原始检查仍然可用。",
+    "Chỉ sửa ví dụ; kiểm tra ban đầu vẫn còn có sẵn.",
+    "Halimbawang pagwawasto lamang; nananatiling available ang orihinal na inspeksyon.",
+    "Contoh pembetulan sahaja; pemeriksaan asal masih tersedia."
+  ],
+  "Example factory": [
+    "រោងចក្រឧទាហរណ៍",
+    "工厂示例",
+    "Nhà máy mẫu",
+    "Halimbawang pabrika",
+    "Contoh kilang"
+  ],
+  "Example hold rack A": [
+    "ឧទាហរណ៍ កាន់ rack A",
+    "保持架 A 示例",
+    "Ví dụ giá đỡ A",
+    "Halimbawa ng hold rack A",
+    "Contoh rak pegangan A"
+  ],
+  "Example independent inspection agency": [
+    "ឧទាហរណ៍ភ្នាក់ងារត្រួតពិនិត្យឯករាជ្យ",
+    "独立检验机构示例",
+    "Ví dụ cơ quan kiểm tra độc lập",
+    "Halimbawa ng independiyenteng ahensya ng inspeksyon",
+    "Contoh agensi pemeriksaan bebas"
+  ],
+  "Example inspector 1 (fictional)": [
+    "ឧទាហរណ៍អធិការ 1 (ប្រឌិត)",
+    "示例检查员 1（虚构）",
+    "Ví dụ thanh tra 1 (hư cấu)",
+    "Halimbawang inspektor 1 (fictional)",
+    "Contoh inspektor 1 (fiksyen)"
+  ],
+  "Example inspector 2 (fictional)": [
+    "ឧទាហរណ៍អធិការ 2 (ប្រឌិត)",
+    "示例检查员 2（虚构）",
+    "Ví dụ thanh tra 2 (hư cấu)",
+    "Halimbawang inspektor 2 (fictional)",
+    "Contoh inspektor 2 (fiksyen)"
+  ],
+  "Example inspector 3 (fictional)": [
+    "ឧទាហរណ៍អធិការ 3 (ប្រឌិត)",
+    "示例检查员 3（虚构）",
+    "Ví dụ thanh tra 3 (hư cấu)",
+    "Halimbawang inspektor 3 (fictional)",
+    "Contoh inspektor 3 (fiksyen)"
+  ],
+  "Example investigation: setup reference was not checked after the changeover; inspection log review identified the gap.": [
+    "ការស៊ើបអង្កេតឧទាហរណ៍៖ ឯកសារយោងនៃការដំឡើងមិនត្រូវបានពិនិត្យបន្ទាប់ពីការផ្លាស់ប្តូរ។ ការត្រួតពិនិត្យកំណត់ហេតុត្រួតពិនិត្យបានកំណត់គម្លាត។",
+    "调查示例：转换后未检查设置参考；检查日志审查发现了差距。",
+    "Điều tra ví dụ: tham chiếu thiết lập không được kiểm tra sau khi chuyển đổi; xem xét nhật ký kiểm tra đã xác định được khoảng cách.",
+    "Halimbawang pagsisiyasat: hindi nasuri ang reference sa pag-setup pagkatapos ng changeover; natukoy ng pagsusuri sa log ng inspeksyon ang puwang.",
+    "Contoh penyiasatan: rujukan persediaan tidak disemak selepas pertukaran; semakan log pemeriksaan mengenal pasti jurang."
+  ],
+  "Example management reviewer (fictional)": [
+    "ឧទាហរណ៍អ្នកត្រួតពិនិត្យការគ្រប់គ្រង (ប្រឌិត)",
+    "管理评审员示例（虚构）",
+    "Người đánh giá quản lý mẫu (hư cấu)",
+    "Halimbawa ng reviewer ng pamamahala (fictional)",
+    "Contoh penyemak pengurusan (fiksyen)"
+  ],
+  "Example quarantine rack A": [
+    "ឧទាហរណ៍ កន្លែងដាក់ឱ្យនៅដាច់ដោយឡែក A",
+    "检疫架 A 示例",
+    "Ví dụ giá cách ly A",
+    "Halimbawa ng quarantine rack A",
+    "Contoh rak kuarantin A"
+  ],
+  "Example verification: independent repeat check passed and the action checklist was reviewed. No shipment is authorised.": [
+    "ការផ្ទៀងផ្ទាត់ឧទាហរណ៍៖ ការត្រួតពិនិត្យឡើងវិញដោយឯករាជ្យបានឆ្លងកាត់ ហើយបញ្ជីត្រួតពិនិត្យសកម្មភាពត្រូវបានពិនិត្យ។ គ្មានការដឹកជញ្ជូនត្រូវបានអនុញ្ញាតទេ។",
+    "验证示例：通过了独立重复检查并审查了行动清单。不允许发货。",
+    "Xác minh ví dụ: kiểm tra lặp lại độc lập đã vượt qua và danh sách kiểm tra hành động đã được xem xét. Không có lô hàng nào được ủy quyền.",
+    "Halimbawang pag-verify: naipasa ang independiyenteng pag-uulit na pagsusuri at nasuri ang checklist ng pagkilos. Walang kargamento ang awtorisado.",
+    "Contoh pengesahan: semakan ulangan bebas diluluskan dan senarai semak tindakan telah disemak. Tiada penghantaran dibenarkan."
+  ],
+  "Example work area": [
+    "តំបន់ការងារឧទាហរណ៍",
+    "工作区示例",
+    "Khu vực làm việc mẫu",
+    "Halimbawang lugar ng trabaho",
+    "Contoh kawasan kerja"
+  ],
+  "Exposed drawcord length": [
+    "ប្រវែងខ្សែដែលលាតត្រដាង",
+    "外露拉绳长度",
+    "Chiều dài dây rút lộ ra ngoài",
+    "Nakalantad na haba ng drawcord",
+    "Panjang tali penarik terdedah"
+  ],
+  "FAIL": [
+    "បរាជ័យ",
+    "失败",
+    "THẤT BẠI",
+    "FAIL",
+    "GAGAL"
+  ],
+  "Fabric test certificate": [
+    "វិញ្ញាបនបត្រសាកល្បងក្រណាត់",
+    "面料测试证书",
+    "Giấy chứng nhận kiểm tra vải",
+    "Sertipiko ng pagsubok sa tela",
+    "Sijil ujian fabrik"
+  ],
+  "Fictional training example — no production approval": [
+    "ឧទាហរណ៍ការបណ្តុះបណ្តាលប្រឌិត - គ្មានការយល់ព្រមពីផលិតកម្ម",
+    "虚构的培训示例 - 没有生产批准",
+    "Ví dụ đào tạo hư cấu - không có phê duyệt sản xuất",
+    "Halimbawa ng kathang-isip na pagsasanay — walang pag-apruba sa produksyon",
+    "Contoh latihan fiksyen — tiada kelulusan pengeluaran"
+  ],
+  "Fictional training inspection. Evidence references illustrate required attachments; no original report photos or employee identities are published.": [
+    "ការត្រួតពិនិត្យការបណ្តុះបណ្តាលប្រឌិត។ ឯកសារយោងភស្តុតាងបង្ហាញពីឯកសារភ្ជាប់ដែលត្រូវការ; មិនមានរូបថតរបាយការណ៍ដើម ឬអត្តសញ្ញាណបុគ្គលិកត្រូវបានបោះពុម្ពផ្សាយទេ។",
+    "虚构训练检查。证据参考说明所需的附件；没有发布原始报告照片或员工身份。",
+    "Kiểm tra đào tạo hư cấu. Tài liệu tham khảo bằng chứng minh họa các tài liệu đính kèm cần thiết; không có ảnh báo cáo gốc hoặc danh tính nhân viên nào được công bố.",
+    "Fictional na pagsasanay inspeksyon. Ang mga sanggunian sa ebidensya ay naglalarawan ng mga kinakailangang kalakip; walang orihinal na larawan ng ulat o pagkakakilanlan ng empleyado ang nai-publish.",
+    "Pemeriksaan latihan fiksyen. Rujukan bukti menggambarkan lampiran yang diperlukan; tiada foto laporan asal atau identiti pekerja diterbitkan."
+  ],
+  "Final inspection": [
+    "ការត្រួតពិនិត្យចុងក្រោយ",
+    "最终检查",
+    "Kiểm tra lần cuối",
+    "Panghuling inspeksyon",
+    "Pemeriksaan akhir"
+  ],
+  "First inspection": [
+    "ការត្រួតពិនិត្យដំបូង",
+    "首次检查",
+    "Kiểm tra lần đầu",
+    "Unang inspeksyon",
+    "Pemeriksaan pertama"
+  ],
+  "First lay measurement": [
+    "ការវាស់វែងដំបូង",
+    "第一层测量",
+    "Đo lường lớp đầu tiên",
+    "Unang lay measurement",
+    "Pengukuran letak pertama"
+  ],
+  "Fly width": [
+    "ទទឹងហោះហើរ",
+    "门襟宽度",
+    "Chiều rộng bay",
+    "Lapad ng lumipad",
+    "Lebar terbang"
+  ],
+  "Front / back / side garment": [
+    "សម្លៀកបំពាក់ខាងមុខ / ខាងក្រោយ / ចំហៀង",
+    "前/后/侧衣",
+    "Quần áo trước/sau/bên hông",
+    "Front / likod / gilid na damit",
+    "Pakaian depan / belakang / sisi"
+  ],
+  "Front panel": [
+    "បន្ទះខាងមុខ",
+    "前面板",
+    "bảng điều khiển phía trước",
+    "Front panel",
+    "Panel hadapan"
+  ],
+  "Front pocket opening": [
+    "ការបើកហោប៉ៅខាងមុខ",
+    "前袋开口",
+    "Mở túi phía trước",
+    "Pagbukas ng bulsa sa harap",
+    "Bukaan poket depan"
+  ],
+  "Front pocket position": [
+    "ទីតាំងហោប៉ៅខាងមុខ",
+    "前袋位置",
+    "Vị trí túi phía trước",
+    "Posisyon ng bulsa sa harap",
+    "Kedudukan poket hadapan"
+  ],
+  "Front rise": [
+    "ការកើនឡើងផ្នែកខាងមុខ",
+    "前升",
+    "Tăng phía trước",
+    "Pagtaas sa harap",
+    "Naik depan"
+  ],
+  "Fusing response": [
+    "ច្របូកច្របល់ឆ្លើយតប",
+    "融合反应",
+    "Phản ứng kết hợp",
+    "Pagsasama ng tugon",
+    "Menyatukan tindak balas"
+  ],
+  "General II · normal single": [
+    "ទូទៅ II · ទោលធម្មតា។",
+    "一般二·普通单人",
+    "Tổng II · đơn bình thường",
+    "General II · normal na solong",
+    "Umum II · bujang biasa"
+  ],
+  "Grain alignment": [
+    "ការតម្រឹមគ្រាប់ធញ្ញជាតិ",
+    "晶粒排列",
+    "căn chỉnh hạt",
+    "Pag-align ng butil",
+    "Penjajaran bijirin"
+  ],
+  "HOLD": [
+    "កាន់",
+    "保持",
+    "GIỮ",
+    "HAWAKAN",
+    "TAHAN"
+  ],
+  "Hang tags": [
+    "ព្យួរស្លាក",
+    "吊牌",
+    "Treo thẻ",
+    "Mag-hang tag",
+    "gantung tag"
+  ],
+  "Independent final check": [
+    "ការពិនិត្យចុងក្រោយដោយឯករាជ្យ",
+    "独立最终检查",
+    "Kiểm tra cuối cùng độc lập",
+    "Independiyenteng huling pagsusuri",
+    "Pemeriksaan akhir bebas"
+  ],
+  "Independent panel audit": [
+    "សវនកម្មបន្ទះឯករាជ្យ",
+    "独立小组审核",
+    "Kiểm toán độc lập",
+    "Independent panel audit",
+    "Audit panel bebas"
+  ],
+  "Ink adhesion": [
+    "ការស្អិតជាប់នៃទឹកថ្នាំ",
+    "油墨附着力",
+    "Độ bám dính của mực",
+    "Pagdirikit ng tinta",
+    "Lekatan dakwat"
+  ],
+  "Ink curing": [
+    "ទឹកថ្នាំព្យាបាល",
+    "油墨固化",
+    "Chữa mực",
+    "Paggamot ng tinta",
+    "Pengawetan dakwat"
+  ],
+  "Inline inspection · sewing": [
+    "ការត្រួតពិនិត្យក្នុងបណ្តាញ · ដេរ",
+    "在线检测·缝制",
+    "Kiểm tra nội tuyến · may",
+    "Inline na inspeksyon · pananahi",
+    "Pemeriksaan sebaris · jahitan"
+  ],
+  "Inseam": [
+    "Inseam",
+    "内缝",
+    "Đường may trong",
+    "Inseam",
+    "Inseam"
+  ],
+  "J-stitch length": [
+    "ប្រវែងដេរ J",
+    "J 针迹长度",
+    "Chiều dài mũi khâu chữ J",
+    "Haba ng J-stitch",
+    "Panjang jahitan J"
+  ],
+  "Knee position": [
+    "ទីតាំងជង្គង់",
+    "膝盖位置",
+    "Tư thế đầu gối",
+    "Posisyon ng tuhod",
+    "Kedudukan lutut"
+  ],
+  "Knee width": [
+    "ទទឹងជង្គង់",
+    "膝盖宽度",
+    "Chiều rộng đầu gối",
+    "Lapad ng tuhod",
+    "Lebar lutut"
+  ],
+  "Lab test document": [
+    "ឯកសារធ្វើតេស្តមន្ទីរពិសោធន៍",
+    "实验室测试文件",
+    "Tài liệu thử nghiệm trong phòng thí nghiệm",
+    "Dokumento ng pagsubok sa lab",
+    "Dokumen ujian makmal"
+  ],
+  "Lab tests": [
+    "ការធ្វើតេស្តមន្ទីរពិសោធន៍",
+    "实验室测试",
+    "xét nghiệm trong phòng thí nghiệm",
+    "Mga pagsubok sa lab",
+    "Ujian makmal"
+  ],
+  "Label artwork approval": [
+    "ស្លាក​ការ​អនុម័ត​ស្នាដៃ​សិល្បៈ",
+    "标签艺术品批准",
+    "Phê duyệt tác phẩm nghệ thuật nhãn",
+    "Lagyan ng label ang pag-apruba sa artwork",
+    "Label kelulusan karya seni"
+  ],
+  "Leg opening": [
+    "ការបើកជើង",
+    "腿部开口",
+    "Mở chân",
+    "Pagbukas ng binti",
+    "Pembukaan kaki"
+  ],
+  "Line 27": [
+    "ជួរទី 27",
+    "27号线",
+    "Dòng 27",
+    "Linya 27",
+    "Baris 27"
+  ],
+  "Machine readiness": [
+    "ការត្រៀមលក្ខណៈម៉ាស៊ីន",
+    "机器准备情况",
+    "Máy sẵn sàng",
+    "Kahandaan sa makina",
+    "Kesediaan mesin"
+  ],
+  "Major": [
+    "មេ",
+    "专业",
+    "Thiếu tá",
+    "Major",
+    "Major"
+  ],
+  "Marker accuracy": [
+    "ភាពត្រឹមត្រូវនៃសញ្ញាសម្គាល់",
+    "打标精度",
+    "Độ chính xác của điểm đánh dấu",
+    "Katumpakan ng marker",
+    "Ketepatan penanda"
+  ],
+  "Measurement specification": [
+    "ការវាស់វែងជាក់លាក់",
+    "测量规格",
+    "Thông số đo lường",
+    "Pagtutukoy ng pagsukat",
+    "Spesifikasi ukuran"
+  ],
+  "Metal detection": [
+    "ការរកឃើញលោហៈ",
+    "金属检测",
+    "Máy dò kim loại",
+    "Pagtuklas ng metal",
+    "Pengesanan logam"
+  ],
+  "Metal detection record": [
+    "កំណត់ត្រារកឃើញលោហៈ",
+    "金属检测记录",
+    "Hồ sơ phát hiện kim loại",
+    "Talaan ng pagtuklas ng metal",
+    "Rekod pengesanan logam"
+  ],
+  "Migration / ghosting": [
+    "ការធ្វើចំណាកស្រុក / ខ្មោច",
+    "迁移/重影",
+    "Di chuyển/bóng ma",
+    "Migration / multo",
+    "Penghijrahan / hantu"
+  ],
+  "Missing component": [
+    "បាត់ធាតុផ្សំ",
+    "缺少组件",
+    "Thiếu thành phần",
+    "Nawawalang bahagi",
+    "Komponen hilang"
+  ],
+  "Navy": [
+    "កងទ័ពជើងទឹក",
+    "海军蓝",
+    "hải quân",
+    "Navy",
+    "Tentera Laut"
+  ],
+  "Neck width": [
+    "ទទឹងក",
+    "颈宽",
+    "Chiều rộng cổ",
+    "Lapad ng leeg",
+    "Lebar leher"
+  ],
+  "Needle control": [
+    "ការគ្រប់គ្រងម្ជុល",
+    "针控",
+    "Kiểm soát kim",
+    "Kontrol ng karayom",
+    "Kawalan jarum"
+  ],
+  "Needle damage": [
+    "ការខូចខាតម្ជុល",
+    "针损坏",
+    "Hư hỏng kim",
+    "Pagkasira ng karayom",
+    "Kerosakan jarum"
+  ],
+  "Not packed": [
+    "មិនបានខ្ចប់",
+    "未包装",
+    "Không được đóng gói",
+    "Hindi nakaimpake",
+    "Tidak dibungkus"
+  ],
+  "Notch position": [
+    "ទីតាំងស្នាមរន្ធ",
+    "缺口位置",
+    "Vị trí khía",
+    "Posisyon ng bingaw",
+    "Kedudukan takuk"
+  ],
+  "Numbering mismatch": [
+    "លេខរៀងមិនត្រូវគ្នា។",
+    "编号不匹配",
+    "Đánh số không khớp",
+    "Hindi tugma ang pagnumero",
+    "Penomboran tidak sepadan"
+  ],
+  "Open buyer query": [
+    "បើកសំណួរអ្នកទិញ",
+    "打开买家查询",
+    "Mở truy vấn của người mua",
+    "Buksan ang query ng mamimili",
+    "Buka pertanyaan pembeli"
+  ],
+  "Open seam": [
+    "បើកថ្នេរ",
+    "开缝",
+    "Đường may hở",
+    "Buksan ang tahi",
+    "Jahitan terbuka"
+  ],
+  "PASS": [
+    "ឆ្លងកាត់",
+    "通行证",
+    "ĐẠT",
+    "PASS",
+    "LULUS"
+  ],
+  "PENDING": [
+    "កំពុងរង់ចាំ",
+    "待定",
+    "Đang chờ xử lý",
+    "NAKAKABINTAY",
+    "SELESAI"
+  ],
+  "PENDING REVIEW": [
+    "កំពុងរង់ចាំការវាយតម្លៃ",
+    "待审核",
+    "ĐANG XEM XÉT",
+    "NAKAKABINTANG REVIEW",
+    "SEMAKAN TERTUNDA"
+  ],
+  "Packing 01": [
+    "ការវេចខ្ចប់ ០១",
+    "包装01",
+    "Đóng gói 01",
+    "Pag-iimpake 01",
+    "Pembungkusan 01"
+  ],
+  "Packing list": [
+    "បញ្ជីវេចខ្ចប់",
+    "装箱单",
+    "Danh sách đóng gói",
+    "Listahan ng pag-iimpake",
+    "Senarai pembungkusan"
+  ],
+  "Packing method confirmation": [
+    "ការបញ្ជាក់វិធីសាស្ត្រវេចខ្ចប់",
+    "包装方式确认",
+    "Xác nhận phương pháp đóng gói",
+    "Pagkumpirma ng paraan ng pag-iimpake",
+    "Pengesahan kaedah pembungkusan"
+  ],
+  "Panel measurement": [
+    "ការវាស់វែងបន្ទះ",
+    "面板测量",
+    "Đo bảng",
+    "Pagsukat ng panel",
+    "Pengukuran panel"
+  ],
+  "Pants": [
+    "ខោ",
+    "裤子",
+    "quần",
+    "pantalon",
+    "Seluar"
+  ],
+  "Pending": [
+    "កំពុងរង់ចាំ",
+    "待定",
+    "Đang chờ xử lý",
+    "Nakabinbin",
+    "Belum selesai"
+  ],
+  "Pilot trial approval": [
+    "ការអនុម័តសាកល្បងសាកល្បង",
+    "试点审批",
+    "Phê duyệt thử nghiệm thí điểm",
+    "Pag-apruba ng pagsubok sa piloto",
+    "Kelulusan percubaan juruterbang"
+  ],
+  "Placement measurement": [
+    "ការវាស់វែងទីតាំង",
+    "贴装测量",
+    "Đo lường vị trí",
+    "Pagsusukat ng pagkakalagay",
+    "Pengukuran penempatan"
+  ],
+  "Ply count mismatch": [
+    "Ply រាប់មិនស្មើគ្នា",
+    "层数不匹配",
+    "Số lượng lớp không khớp",
+    "Ply count mismatch",
+    "Kiraan lapis tidak padan"
+  ],
+  "Pocket bag length": [
+    "ប្រវែងកាបូប",
+    "口袋长度",
+    "Chiều dài túi bỏ túi",
+    "Haba ng pocket bag",
+    "Panjang beg poket"
+  ],
+  "Pocket bag width": [
+    "ទទឹងកាបូប",
+    "口袋袋宽度",
+    "Chiều rộng túi túi",
+    "Lapad ng pocket bag",
+    "Lebar beg poket"
+  ],
+  "Pre-final inspection": [
+    "ការត្រួតពិនិត្យមុនចុងក្រោយ",
+    "预最终检验",
+    "Kiểm tra trước cuối cùng",
+    "Pre-final inspection",
+    "Pemeriksaan pra-akhir"
+  ],
+  "Price / barcode": [
+    "តម្លៃ / បាកូដ",
+    "价格/条形码",
+    "Giá/mã vạch",
+    "Presyo / barcode",
+    "Harga / kod bar"
+  ],
+  "Print registration": [
+    "ការចុះឈ្មោះបោះពុម្ព",
+    "打印登记",
+    "Đăng ký in",
+    "I-print ang pagpaparehistro",
+    "Cetak pendaftaran"
+  ],
+  "REVIEW REQUIRED": [
+    "តម្រូវឱ្យពិនិត្យ",
+    "需要审核",
+    "BẮT BUỘC ĐÁNH GIÁ",
+    "KINAKAILANGAN ANG REVIEW",
+    "SEMAKAN DIPERLUKAN"
+  ],
+  "Reference example — file not attached": [
+    "ឧទាហរណ៍​យោង — ឯកសារ​មិន​បាន​ភ្ជាប់",
+    "参考示例-未附加文件",
+    "Ví dụ tham khảo - tệp không được đính kèm",
+    "Halimbawa ng sanggunian — hindi nakalakip ang file",
+    "Contoh rujukan — fail tidak dilampirkan"
+  ],
+  "Reinspection": [
+    "ការត្រួតពិនិត្យឡើងវិញ",
+    "复检",
+    "Kiểm tra lại",
+    "Muling pagsusuri",
+    "Pemeriksaan semula"
+  ],
+  "Reinspection verification": [
+    "ការត្រួតពិនិត្យឡើងវិញ",
+    "复检验证",
+    "Xác minh lại kiểm tra",
+    "Pagpapatunay ng muling pagsisiyasat",
+    "Pengesahan pemeriksaan semula"
+  ],
+  "SP27": [
+    "SP27",
+    "SP27",
+    "SP27",
+    "SP27",
+    "SP27"
+  ],
+  "Seam construction agreement": [
+    "កិច្ចព្រមព្រៀងសាងសង់ស៊ាម",
+    "接缝施工协议",
+    "Thỏa thuận thi công đường may",
+    "Kasunduan sa pagtatayo ng tahi",
+    "Perjanjian pembinaan jahitan"
+  ],
+  "Seat position from top": [
+    "ទីតាំងអង្គុយពីលើ",
+    "从顶部看座椅位置",
+    "Vị trí ngồi từ trên xuống",
+    "Posisyon ng upuan mula sa itaas",
+    "Kedudukan tempat duduk dari atas"
+  ],
+  "Seat width": [
+    "ទទឹងកៅអី",
+    "座椅宽度",
+    "Chiều rộng ghế",
+    "Lapad ng upuan",
+    "Lebar tempat duduk"
+  ],
+  "Segregate affected scope, restore the approved setting and reinspect the identified pieces.": [
+    "ញែកវិសាលភាពដែលរងផលប៉ះពាល់ ស្ដារការកំណត់ដែលបានអនុម័ត និងពិនិត្យមើលឡើងវិញនូវបំណែកដែលបានកំណត់។",
+    "隔离受影响的范围，恢复批准的设置并重新检查已识别的部分。",
+    "Tách biệt phạm vi bị ảnh hưởng, khôi phục cài đặt đã được phê duyệt và kiểm tra lại các phần đã xác định.",
+    "Paghiwalayin ang apektadong saklaw, ibalik ang naaprubahang setting at muling suriin ang mga natukoy na piraso.",
+    "Asingkan skop yang terjejas, pulihkan tetapan yang diluluskan dan periksa semula bahagian yang dikenal pasti."
+  ],
+  "Selected carton & shipping marks": [
+    "ប្រអប់ និងសញ្ញាដឹកជញ្ជូនដែលបានជ្រើសរើស",
+    "选定的纸箱和唛头",
+    "Thùng carton và nhãn hiệu vận chuyển đã chọn",
+    "Napiling karton at mga marka ng pagpapadala",
+    "Karton & tanda penghantaran terpilih"
+  ],
+  "Shade mixing": [
+    "ការលាយស្រមោល",
+    "色光混合",
+    "Pha trộn bóng râm",
+    "Paghahalo ng lilim",
+    "Pencampuran teduhan"
+  ],
+  "Shade segregation": [
+    "ការបែងចែកស្រមោល",
+    "遮光隔离",
+    "Phân chia bóng râm",
+    "Shade segregation",
+    "Pengasingan teduh"
+  ],
+  "Shoulder width": [
+    "ទទឹងស្មា",
+    "肩宽",
+    "Chiều rộng vai",
+    "Lapad ng balikat",
+    "Lebar bahu"
+  ],
+  "Side seam": [
+    "ថ្នេរចំហៀង",
+    "侧缝",
+    "Đường may bên",
+    "Pinagtahian sa gilid",
+    "Jahitan tepi"
+  ],
+  "Side seam forward from fold": [
+    "ដេរចំហៀងទៅមុខពីផ្នត់",
+    "侧缝从折叠处向前",
+    "Đường may bên về phía trước từ nếp gấp",
+    "Side seam pasulong mula sa fold",
+    "Jahitan sisi ke hadapan dari lipatan"
+  ],
+  "Sleeve length": [
+    "ប្រវែងដៃអាវ",
+    "袖长",
+    "Chiều dài tay áo",
+    "Haba ng manggas",
+    "Panjang lengan"
+  ],
+  "Stitch density": [
+    "ដង់ស៊ីតេនៃស្នាមដេរ",
+    "针迹密度",
+    "Mật độ khâu",
+    "Densidad ng tahi",
+    "Ketumpatan jahitan"
+  ],
+  "T-Shirt": [
+    "អាវយឺត",
+    "T恤",
+    "áo phông",
+    "T-Shirt",
+    "T-Shirt"
+  ],
+  "Tech pack revision": [
+    "ការពិនិត្យឡើងវិញនៃកញ្ចប់បច្ចេកវិទ្យា",
+    "技术包修订",
+    "Sửa đổi gói công nghệ",
+    "Pagbabago ng tech pack",
+    "Semakan pek teknologi"
+  ],
+  "Thigh width": [
+    "ទទឹងភ្លៅ",
+    "大腿宽度",
+    "chiều rộng đùi",
+    "Lapad ng hita",
+    "Lebar paha"
+  ],
+  "Thread colour": [
+    "ពណ៌ខ្សែស្រឡាយ",
+    "线色",
+    "Màu chủ đề",
+    "Kulay ng thread",
+    "Warna benang"
+  ],
+  "Training amendment: duplicate sample entry reconciled against the inspection tally.": [
+    "វិសោធនកម្មការបណ្តុះបណ្តាល៖ ធាតុគំរូស្ទួនត្រូវបានផ្សះផ្សាប្រឆាំងនឹងចំនួនអធិការកិច្ច។",
+    "培训修正：重复的样本输入与检查计数一致。",
+    "Sửa đổi đào tạo: mục nhập mẫu trùng lặp được đối chiếu với kiểm đếm kiểm tra.",
+    "Pagbabago sa pagsasanay: ang duplicate na sample na entry ay pinagkasundo laban sa inspeksyon tally.",
+    "Pindaan latihan: kemasukan sampel pendua diselaraskan dengan pengiraan pemeriksaan."
+  ],
+  "Training decision: corrective action verified; example CAP finalised.": [
+    "ការសម្រេចចិត្តលើការបណ្តុះបណ្តាល៖ សកម្មភាពកែតម្រូវត្រូវបានផ្ទៀងផ្ទាត់; ឧទាហរណ៍ CAP បានបញ្ចប់។",
+    "培训决策：验证纠正措施； CAP 示例已完成。",
+    "Quyết định đào tạo: hành động khắc phục đã được xác minh; ví dụ CAP đã hoàn tất.",
+    "Pagpapasya sa pagsasanay: na-verify na pagkilos sa pagwawasto; halimbawa natapos na ang CAP.",
+    "Keputusan latihan: tindakan pembetulan disahkan; contoh CAP dimuktamadkan."
+  ],
+  "Training decision: keep affected scope held pending verification.": [
+    "ការសម្រេចចិត្តលើការបណ្តុះបណ្តាល៖ រក្សាវិសាលភាពដែលរងផលប៉ះពាល់ដោយរង់ចាំការផ្ទៀងផ្ទាត់។",
+    "培训决定：保留受影响的范围以待核实。",
+    "Quyết định đào tạo: giữ phạm vi bị ảnh hưởng để chờ xác minh.",
+    "Pagpapasya sa pagsasanay: panatilihin ang apektadong saklaw habang nakabinbin ang pag-verify.",
+    "Keputusan latihan: kekalkan skop yang terjejas sementara menunggu pengesahan."
+  ],
+  "Training example: findings recorded for independent review.": [
+    "ឧទាហរណ៍នៃការបណ្តុះបណ្តាល៖ ការរកឃើញដែលបានកត់ត្រាសម្រាប់ការពិនិត្យឡើងវិញឯករាជ្យ។",
+    "培训示例：记录结果以供独立审查。",
+    "Ví dụ đào tạo: các phát hiện được ghi lại để đánh giá độc lập.",
+    "Halimbawa ng pagsasanay: naitala ang mga natuklasan para sa independiyenteng pagsusuri.",
+    "Contoh latihan: penemuan direkodkan untuk semakan bebas."
+  ],
+  "Training example: isolate affected scope, correct the issue, then perform a linked reinspection.": [
+    "ឧទាហរណ៍នៃការបណ្តុះបណ្តាល៖ ញែកវិសាលភាពដែលរងផលប៉ះពាល់ដោយឡែក កែបញ្ហា បន្ទាប់មកធ្វើការត្រួតពិនិត្យឡើងវិញដែលភ្ជាប់។",
+    "培训示例：隔离受影响的范围，纠正问题，然后执行链接的重新检查。",
+    "Ví dụ đào tạo: cô lập phạm vi bị ảnh hưởng, khắc phục sự cố, sau đó thực hiện kiểm tra lại được liên kết.",
+    "Halimbawa ng pagsasanay: ihiwalay ang apektadong saklaw, itama ang isyu, pagkatapos ay magsagawa ng naka-link na muling pagsisiyasat.",
+    "Contoh latihan: asingkan skop yang terjejas, betulkan isu, kemudian lakukan pemeriksaan semula terpaut."
+  ],
+  "Untrimmed thread": [
+    "ខ្សែស្រឡាយដែលមិនបានកាត់",
+    "未修剪的线",
+    "Chủ đề chưa được cắt",
+    "Hindi pinutol na thread",
+    "Benang yang tidak dipangkas"
+  ],
+  "Waist relaxed": [
+    "ចង្កេះបានធូរស្រាល",
+    "腰部放松",
+    "Eo thư giãn",
+    "Naka-relax ang bewang",
+    "Pinggang santai"
+  ],
+  "Waist stretched": [
+    "ចង្កេះលាតសន្ធឹង",
+    "腰部伸展",
+    "Vòng eo căng ra",
+    "Naka-stretch ang baywang",
+    "Pinggang diregangkan"
+  ],
+  "Waistband height": [
+    "កម្ពស់ចង្កេះ",
+    "腰带高度",
+    "Chiều cao dây thắt lưng",
+    "Taas ng waistband",
+    "Ketinggian pinggang"
+  ],
+  "Wash durability": [
+    "ធន់នឹងការលាងសម្អាត",
+    "耐洗性",
+    "Độ bền giặt",
+    "Hugasan ang tibay",
+    "Ketahanan basuh"
+  ],
+  "Wet rub": [
+    "ជូតសើម",
+    "湿擦",
+    "Chà ướt",
+    "Basang kuskusin",
+    "Gosok basah"
+  ],
+  "White": [
+    "ស",
+    "白色",
+    "trắng",
+    "Puti",
+    "putih"
+  ],
+  "XS 2893 · S 4483 · M 5813 · L 3800 · XL 1516 · XXL 73": [
+    "XS 2893 · S 4483 · M 5813 · L 3800 · XL 1516 · XXL 73",
+    "XS 2893 · S 4483 · M 5813 · L 3800 · XL 1516 · XXL 73",
+    "XS 2893 · S 4483 · M 5813 · L 3800 · XL 1516 · XXL 73",
+    "XS 2893 · S 4483 · M 5813 · L 3800 · XL 1516 · XXL 73",
+    "XS 2893 · S 4483 · M 5813 · L 3800 · XL 1516 · XXL 73"
+  ],
+  "Zipper pocket opening": [
+    "ការបើកហោប៉ៅហ្ស៊ីប",
+    "拉链口袋开口",
+    "Mở túi dây kéo",
+    "Pagbukas ng bulsa ng zipper",
+    "Pembukaan poket zip"
+  ],
+  "Zipper pocket position": [
+    "ទីតាំងហោប៉ៅហ្ស៊ីប",
+    "拉链口袋位置",
+    "Vị trí túi khóa kéo",
+    "Posisyon ng bulsa ng zipper",
+    "Kedudukan poket zip"
+  ]
+}

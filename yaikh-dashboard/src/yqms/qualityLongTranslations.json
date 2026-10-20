@@ -1,0 +1,79 @@
+{
+  "A failed result or defective quantity places this check on hold for the quality leader and supervisor. A pass records the sample result; it does not authorize shipment.": [
+    "លទ្ធផលដែលបរាជ័យ ឬបរិមាណមានកំហុសធ្វើឱ្យការត្រួតពិនិត្យនេះផ្អាកសម្រាប់អ្នកដឹកនាំ និងអ្នកគ្រប់គ្រងគុណភាព។ សំបុត្រកត់ត្រាលទ្ធផលគំរូ; វាមិនអនុញ្ញាតឱ្យដឹកជញ្ជូនទេ។",
+    "如果结果不合格或数量有缺陷，则质量负责人和主管将暂停此项检查。 A pass记录样本结果；它不授权发货。",
+    "Một kết quả không đạt hoặc số lượng bị lỗi sẽ khiến người lãnh đạo và người giám sát chất lượng phải tạm dừng việc kiểm tra này. Một lần vượt qua ghi lại kết quả mẫu; nó không cho phép vận chuyển.",
+    "Ang isang nabigong resulta o may depektong dami ay naglalagay sa tseke na ito para sa kalidad na pinuno at superbisor. Itinatala ng isang pass ang sample na resulta; hindi nito pinahihintulutan ang pagpapadala.",
+    "Keputusan yang gagal atau kuantiti yang rosak meletakkan semakan ini ditangguhkan untuk pemimpin dan penyelia yang berkualiti. Pas merekodkan keputusan sampel; ia tidak membenarkan penghantaran."
+  ],
+  "Buyer-specific tolerances and sample plans take precedence. Startup sample count and escalation thresholds must be set in the approved factory SOP; these screens do not substitute an AQL final inspection.": [
+    "ការអត់ធ្មត់ជាក់លាក់ និងផែនការគំរូរបស់អ្នកទិញមានអាទិភាព។ ចំនួនគំរូចាប់ផ្តើម និងកម្រិតនៃការកើនឡើងត្រូវតែកំណត់នៅក្នុង SOP រោងចក្រដែលបានអនុម័ត។ អេក្រង់ទាំងនេះមិនជំនួសការត្រួតពិនិត្យចុងក្រោយ AQL ទេ។",
+    "买方特定的公差和样品计划优先。启动样品计数和升级阈值必须在批准的工厂 SOP 中设定；这些筛选不能替代 AQL 最终检查。",
+    "Dung sai dành riêng cho người mua và kế hoạch mẫu được ưu tiên. Số lượng mẫu khởi động và ngưỡng leo thang phải được đặt trong SOP của nhà máy đã được phê duyệt; những màn hình này không thay thế việc kiểm tra cuối cùng về AQL.",
+    "Pangunahin ang mga pagpapaubaya na partikular sa mamimili at mga sample na plano. Dapat itakda ang bilang ng sample ng startup at mga threshold ng escalation sa inaprubahang factory SOP; hindi pinapalitan ng mga screen na ito ang panghuling inspeksyon ng AQL.",
+    "Toleransi khusus pembeli dan pelan sampel diutamakan. Kiraan sampel permulaan dan ambang peningkatan mesti ditetapkan dalam SOP kilang yang diluluskan; skrin ini tidak menggantikan pemeriksaan akhir AQL."
+  ],
+  "Chronological issues, decisions, corrective and preventive actions, and finalisation evidence. PA notices and Big Brain questions / replies appear only when actually recorded by a connected agent.": [
+    "បញ្ហាកាលប្បវត្តិ ការសម្រេចចិត្ត សកម្មភាពកែតម្រូវ និងបង្ការ និងភស្តុតាងចុងក្រោយ។ ការជូនដំណឹង PA និងសំណួរ / ការឆ្លើយតបរបស់ Big Brain លេចឡើងតែនៅពេលដែលពិតជាត្រូវបានកត់ត្រាដោយភ្នាក់ងារដែលបានភ្ជាប់។",
+    "按时间顺序排列的问题、决策、纠正和预防措施以及最终证据。 PA 通知和 Big Brain 问题/答复仅在连接的代理实际记录时才会出现。",
+    "Các vấn đề về trình tự thời gian, các quyết định, hành động khắc phục và phòng ngừa cũng như bằng chứng cuối cùng. Thông báo PA và câu hỏi/câu trả lời của Big Brain chỉ xuất hiện khi được một tác nhân được kết nối thực sự ghi lại.",
+    "Kronolohikal na mga isyu, mga desisyon, pagwawasto at pag-iwas sa mga aksyon, at katibayan ng pagtatapos. Ang mga abiso ng PA at mga tanong / tugon sa Big Brain ay lalabas lamang kapag aktwal na naitala ng isang konektadong ahente.",
+    "Isu kronologi, keputusan, tindakan pembetulan dan pencegahan, dan bukti pemuktamadan. Notis PA dan soalan / balasan Big Brain muncul hanya apabila benar-benar direkodkan oleh ejen yang berkaitan."
+  ],
+  "Higher management corrects a report here. Original pad evidence remains intact. Changes require a named manager / supervisor, YHR ID and reason, and are recorded in DR. Changing a report does not release failed goods.": [
+    "អ្នកគ្រប់គ្រងជាន់ខ្ពស់កែតម្រូវរបាយការណ៍នៅទីនេះ។ ភស្ដុតាងដើមនៅដដែល។ ការផ្លាស់ប្តូរតម្រូវឱ្យមានអ្នកគ្រប់គ្រង/អ្នកគ្រប់គ្រងដែលមានឈ្មោះ លេខសម្គាល់ YHR និងហេតុផល ហើយត្រូវបានកត់ត្រានៅក្នុង DR ។ ការផ្លាស់ប្តូររបាយការណ៍មិនបញ្ចេញទំនិញដែលបរាជ័យទេ។",
+    "高层管理人员在此更正报告。原始便签证据完好无损。更改需要指定经理/主管、YHR ID 和原因，并记录在 DR 中。更改报告不会发布不合格产品。",
+    "Quản lý cấp cao hơn sửa một báo cáo ở đây. Bằng chứng pad ban đầu vẫn còn nguyên vẹn. Các thay đổi yêu cầu người quản lý/người giám sát có tên, ID YHR và lý do, đồng thời được ghi lại trong DR. Việc thay đổi báo cáo không giải phóng hàng hóa bị lỗi.",
+    "Itinatama ng mas mataas na pamamahala ang isang ulat dito. Ang orihinal na ebidensya ng pad ay nananatiling buo. Ang mga pagbabago ay nangangailangan ng pinangalanang tagapamahala / superbisor, YHR ID at dahilan, at nakatala sa DR. Ang pagpapalit ng ulat ay hindi naglalabas ng mga nabigong produkto.",
+    "Pengurusan lebih tinggi membetulkan laporan di sini. Bukti pad asal kekal utuh. Perubahan memerlukan pengurus / penyelia bernama, ID YHR dan alasan, dan direkodkan dalam DR. Menukar laporan tidak mengeluarkan barang yang gagal."
+  ],
+  "Pad submissions feed this module's Dashboard and five Reports. Higher management amends reports in Modify. Issue decisions and root cause / CAP finalisation are recorded in DR.": [
+    "ការបញ្ជូន Pad ផ្តល់ព័ត៌មានដល់ផ្ទាំងគ្រប់គ្រងរបស់ម៉ូឌុលនេះ និងរបាយការណ៍ចំនួនប្រាំ។ អ្នកគ្រប់គ្រងជាន់ខ្ពស់កែប្រែរបាយការណ៍នៅក្នុង Modify ។ ការសម្រេចចិត្តលើបញ្ហា និងមូលហេតុដើម / ការបញ្ចប់ CAP ត្រូវបានកត់ត្រានៅក្នុង DR ។",
+    "Pad 提交内容为本模块的仪表板和五个报告提供信息。高层管理人员在“修改”中修改报告。问题决策和根本原因/CAP 最终确定都记录在 DR 中。",
+    "Việc gửi bảng đệm sẽ cung cấp Bảng điều khiển của mô-đun này và năm Báo cáo. Quản lý cấp cao hơn sửa đổi các báo cáo trong Sửa đổi. Các quyết định đưa ra và nguyên nhân gốc rễ/hoàn thiện CAP được ghi lại trong DR.",
+    "Ang mga pagsusumite ng pad ay nagpapakain sa Dashboard at limang Ulat ng module na ito. Inaamyenda ng mas mataas na pamamahala ang mga ulat sa Modify. Ang mga desisyon sa isyu at ugat na sanhi / CAP finalization ay naitala sa DR.",
+    "Penyerahan pad suapan Papan Pemuka modul ini dan lima Laporan. Pengurusan lebih tinggi meminda laporan dalam Modify. Keputusan isu dan punca/pemuktamadkan CAP direkodkan dalam DR."
+  ],
+  "Pilot workflow: Yai records the entered YHR ID and QA Supervisor name but does not yet verify role authority against YHR. Confirm supervisor authority through the factory’s release process.": [
+    "លំហូរការងារសាកល្បង៖ យ៉ៃកត់ត្រាឈ្មោះ YHR ID និង QA Supervisor ដែលបានបញ្ចូល ប៉ុន្តែមិនទាន់ផ្ទៀងផ្ទាត់សិទ្ធិអំណាចប្រឆាំងនឹង YHR នៅឡើយ។ បញ្ជាក់អាជ្ញាធរត្រួតពិនិត្យតាមរយៈដំណើរការដោះលែងរោងចក្រ។",
+    "试点工作流程：Yai 记录输入的 YHR ID 和 QA 主管姓名，但尚未根据 YHR 验证角色权限。通过工厂放行流程确认监管权限。",
+    "Quy trình thí điểm: Yai ghi lại ID YHR và tên Người giám sát QA đã nhập nhưng chưa xác minh quyền hạn vai trò đối với YHR. Xác nhận thẩm quyền của người giám sát thông qua quy trình xuất xưởng của nhà máy.",
+    "Pilot workflow: Itinatala ni Yai ang inilagay na YHR ID at pangalan ng QA Supervisor ngunit hindi pa nito nabe-verify ang awtoridad sa tungkulin laban sa YHR. Kumpirmahin ang awtoridad ng superbisor sa pamamagitan ng proseso ng pagpapalabas ng pabrika.",
+    "Aliran kerja perintis: Yai merekodkan ID YHR dan nama Penyelia QA yang dimasukkan tetapi belum mengesahkan kuasa peranan terhadap YHR. Sahkan kuasa penyelia melalui proses pelepasan kilang."
+  ],
+  "Pilot workflow: Yai records the entered YHR ID but does not yet authenticate that employee’s QA role. Confirm QA authority through the factory’s existing release process before bulk sewing.": [
+    "លំហូរការងារសាកល្បង៖ Yai កត់ត្រាលេខសម្គាល់ YHR ដែលបានបញ្ចូល ប៉ុន្តែមិនទាន់ផ្ទៀងផ្ទាត់តួនាទី QA របស់និយោជិតនោះទេ។ បញ្ជាក់អាជ្ញាធរ QA តាមរយៈដំណើរការចេញផ្សាយដែលមានស្រាប់របស់រោងចក្រ មុនពេលដេរភាគច្រើន។",
+    "试点工作流程：Yai 记录输入的 YHR ID，但尚未验证该员工的 QA 角色。在批量缝制前通过工厂现有的放行流程确认QA权限。",
+    "Quy trình làm việc thử nghiệm: Yai ghi lại ID YHR đã nhập nhưng chưa xác thực vai trò QA của nhân viên đó. Xác nhận thẩm quyền QA thông qua quy trình xuất xưởng hiện có của nhà máy trước khi may số lượng lớn.",
+    "Pilot workflow: Itinatala ni Yai ang inilagay na YHR ID ngunit hindi pa nito naa-authenticate ang tungkulin ng QA ng empleyado. Kumpirmahin ang awtoridad ng QA sa pamamagitan ng kasalukuyang proseso ng pagpapalabas ng pabrika bago ang maramihang pananahi.",
+    "Aliran kerja perintis: Yai merekodkan ID YHR yang dimasukkan tetapi belum lagi mengesahkan peranan QA pekerja tersebut. Sahkan kuasa QA melalui proses pelepasan sedia ada kilang sebelum menjahit pukal."
+  ],
+  "Record issues, management decisions, root causes, corrective / preventive actions, ownership, due date and verification in DR. Finalisation is distinct from product shipment authority.": [
+    "កត់ត្រាបញ្ហា ការសម្រេចចិត្តគ្រប់គ្រង មូលហេតុឫសគល់ សកម្មភាពកែតម្រូវ/បង្ការ ភាពជាម្ចាស់ កាលបរិច្ឆេទផុតកំណត់ និងការផ្ទៀងផ្ទាត់នៅក្នុង DR ។ ការបញ្ចប់គឺខុសពីអាជ្ញាធរដឹកជញ្ជូនផលិតផល។",
+    "在 DR 中记录问题、管理决策、根本原因、纠正/预防措施、所有权、到期日和验证。最终确定与产品发货授权不同。",
+    "Ghi lại các vấn đề, quyết định quản lý, nguyên nhân gốc rễ, hành động khắc phục/phòng ngừa, quyền sở hữu, ngày đến hạn và xác minh trong DR. Việc hoàn thiện khác với quyền vận chuyển sản phẩm.",
+    "Itala ang mga isyu, mga desisyon sa pamamahala, mga ugat na sanhi, pagwawasto / pag-iwas sa mga aksyon, pagmamay-ari, takdang petsa at pag-verify sa DR. Ang pagwawakas ay naiiba sa awtoridad sa pagpapadala ng produkto.",
+    "Isu rekod, keputusan pengurusan, punca, tindakan pembetulan / pencegahan, pemilikan, tarikh akhir dan pengesahan dalam DR. Penyelesaian adalah berbeza daripada pihak berkuasa penghantaran produk."
+  ],
+  "The floor pad retains the topic's original fields and inspection content. Record actual findings and evidence against the current approved buyer / factory instructions.": [
+    "កម្រាលឥដ្ឋរក្សាផ្នែកដើមនៃប្រធានបទ និងខ្លឹមសារអធិការកិច្ច។ កត់ត្រាការរកឃើញ និងភស្តុតាងជាក់ស្តែងប្រឆាំងនឹងការណែនាំរបស់អ្នកទិញ/រោងចក្រដែលត្រូវបានអនុម័តនាពេលបច្ចុប្បន្ន។",
+    "地板垫保留了主题的原始字段和检查内容。根据当前批准的买方/工厂说明记录实际发现和证据。",
+    "Tấm đệm sàn giữ lại các trường ban đầu và nội dung kiểm tra của chủ đề. Ghi lại những phát hiện thực tế và bằng chứng chống lại hướng dẫn hiện tại của người mua/nhà máy đã được phê duyệt.",
+    "Pinapanatili ng floor pad ang mga orihinal na field ng paksa at nilalaman ng inspeksyon. Magtala ng mga aktwal na natuklasan at ebidensya laban sa kasalukuyang inaprubahang tagubilin ng mamimili/pabrika.",
+    "Pad lantai mengekalkan medan asal topik dan kandungan pemeriksaan. Catatkan penemuan dan bukti sebenar terhadap arahan pembeli / kilang semasa yang diluluskan."
+  ],
+  "This is the current access session. Pad inspector identity, management name and YHR ID are recorded separately. A pilot code does not authenticate a person's quality release authority.": [
+    "នេះគឺជាវគ្គចូលប្រើបច្ចុប្បន្ន។ អត្តសញ្ញាណអ្នកត្រួតពិនិត្យបន្ទះ ឈ្មោះគ្រប់គ្រង និងលេខសម្គាល់ YHR ត្រូវបានកត់ត្រាដោយឡែកពីគ្នា។ លេខកូដអ្នកបើកយន្តហោះមិនផ្ទៀងផ្ទាត់សិទ្ធិអំណាចបញ្ចេញគុណភាពរបស់បុគ្គលនោះទេ។",
+    "这是当前的访问会话。 Pad 检查员身份、管理人员姓名和 YHR ID 分别记录。试点代码并不能验证一个人的质量发布权限。",
+    "Đây là phiên truy cập hiện tại. Danh tính người kiểm tra pad, tên quản lý và ID YHR được ghi riêng. Mã thí điểm không xác thực thẩm quyền công bố chất lượng của một người.",
+    "Ito ang kasalukuyang access session. Ang pagkakakilanlan ng pad inspector, pangalan ng pamamahala at YHR ID ay hiwalay na itinatala. Ang isang pilot code ay hindi nagpapatotoo sa kalidad ng awtoridad sa pagpapalabas ng isang tao.",
+    "Ini ialah sesi akses semasa. Identiti pemeriksa pad, nama pengurusan dan ID YHR direkodkan secara berasingan. Kod perintis tidak mengesahkan kuasa pelepasan kualiti seseorang."
+  ],
+  "Time ordered quality checks, decisions, corrective actions and next steps. PA notices and Big Brain questions/replies appear only when their connected systems send events. Names and YHR IDs are recorded; role authority is not yet verified against YHR.": [
+    "ពេលវេលាដែលបានបញ្ជាទិញ ការត្រួតពិនិត្យគុណភាព ការសម្រេចចិត្ត សកម្មភាពកែតម្រូវ និងជំហានបន្ទាប់។ ការជូនដំណឹងរបស់ PA និងសំណួរ/ការឆ្លើយតបរបស់ Big Brain លេចឡើងតែនៅពេលដែលប្រព័ន្ធភ្ជាប់របស់ពួកគេផ្ញើព្រឹត្តិការណ៍។ ឈ្មោះ និងលេខសម្គាល់ YHR ត្រូវបានកត់ត្រាទុក។ អាជ្ញាធរតួនាទីមិនទាន់ត្រូវបានផ្ទៀងផ្ទាត់ប្រឆាំងនឹង YHR នៅឡើយទេ។",
+    "按时间顺序进行质量检查、决策、纠正措施和后续步骤。仅当其连接的系统发送事件时，PA 通知和 Big Brain 问题/答复才会出现。记录姓名和 YHR ID；角色权限尚未根据 YHR 进行验证。",
+    "Thời gian ra lệnh kiểm tra chất lượng, quyết định, hành động khắc phục và các bước tiếp theo. Thông báo PA và câu hỏi/câu trả lời của Big Brain chỉ xuất hiện khi hệ thống được kết nối của họ gửi sự kiện. Tên và ID YHR được ghi lại; quyền đóng vai trò chưa được xác minh đối với YHR.",
+    "Inayos ng oras ang mga pagsusuri sa kalidad, pagpapasya, pagwawasto at mga susunod na hakbang. Ang mga abiso ng PA at mga tanong/sagot sa Big Brain ay lalabas lamang kapag ang kanilang mga konektadong system ay nagpapadala ng mga kaganapan. Ang mga pangalan at YHR ID ay naitala; hindi pa nabe-verify ang awtoridad sa tungkulin laban sa YHR.",
+    "Pemeriksaan kualiti yang diperintahkan, keputusan, tindakan pembetulan dan langkah seterusnya. Notis PA dan soalan/balas Big Brain muncul hanya apabila sistem yang disambungkan menghantar acara. Nama dan ID YHR direkodkan; pihak berkuasa peranan belum disahkan terhadap YHR."
+  ]
+}
