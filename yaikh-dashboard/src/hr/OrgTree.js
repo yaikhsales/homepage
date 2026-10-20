@@ -19,9 +19,9 @@ import { num, LEVEL, RoleIcon } from "./hr";
 
 /* ── geometry ─────────────────────────────────────────────────────────────────────────────────── */
 const keyOf = n => n && (n.id || n.emp_no);
-const BW = 200, BH = 108;        // one box
+const BW = 240, BH = 148;        // one box
 const GX = 14, GY = 56;          // gap between siblings · between a parent and its children
-const COLS = 8;                  // columns of a wrapped row
+const COLS = 6;                  // columns of a wrapped row
 const WRAP_AT = 12;              // a parent with more children than this (the Factory Manager: ~30) gets wrapped rows grouped by kind
 const ROW_GAP = 46, GROUP_GAP = 40, LABEL_H = 32;
 
@@ -160,9 +160,9 @@ const TreeBox = ({ b, isOpen, onToggle, onPerson, moved, onReorder }) => {
       <div className="flex gap-2 px-2 pt-1.5">
         <div className="w-9 h-9 rounded-full bg-slate-700 border border-slate-600 flex items-center justify-center flex-shrink-0 text-slate-300" aria-hidden>{n.level === "ai" ? <Bot size={20} /> : <User size={20} />}</div>
         <div className="min-w-0 flex-1">
-          <div className="text-[12px] font-black text-white leading-tight truncate" title={n.title}>{n.title}</div>
+          <div className="text-[12px] font-black text-white leading-tight" title={n.title}>{n.title}</div>
           {n.emp_no ? <button onClick={(e) => { stop(e); onPerson(n.emp_no); }} className="text-[11px] font-bold text-sky-300 hover:underline leading-tight">{n.emp_no}</button> : <div className="text-[10px] text-sky-300">{n.level === "ai" ? "AI support · not an employee" : "Role · ID unassigned"}</div>}
-          {n.id ? <div className="text-[10px] text-slate-400 leading-tight">{n.note || (n.reorderable ? "drag to reorder department" : "workers in section list")}</div> : <div className="text-[10px] text-slate-400 leading-tight">team <b className="text-white tabular-nums">{num(n.team)}</b>{n.level === "leader" && n.untitled_direct ? <span> · {num(n.untitled_direct)} workers</span> : kids ? <span> · {num(kids)} direct</span> : null}</div>}
+          {n.id ? <div className="mt-1 text-[10px] text-slate-300 leading-tight">{n.note || (n.reorderable ? "drag to reorder department" : "workers in section list")}</div> : <div className="text-[10px] text-slate-400 leading-tight">team <b className="text-white tabular-nums">{num(n.team)}</b>{n.level === "leader" && n.untitled_direct ? <span> · {num(n.untitled_direct)} workers</span> : kids ? <span> · {num(kids)} direct</span> : null}</div>}
         </div>
       </div>
       {ways.length > 0 && <div className="absolute left-1.5 right-1.5 bottom-1 flex gap-1 overflow-hidden">{ways.map((w) => <button key={w.q} onClick={(e) => { stop(e); navigate("/dashboard/hr/sections?" + w.q); }} className="inline-flex items-center gap-0.5 rounded border border-sky-500/50 bg-sky-500/15 text-sky-200 hover:bg-sky-500/35 px-1.5 py-px text-[10px] font-bold whitespace-nowrap"><LayoutGrid size={9} />{w.label}</button>)}</div>}
