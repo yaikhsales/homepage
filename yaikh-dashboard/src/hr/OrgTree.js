@@ -223,7 +223,8 @@ const OrgTree = ({ mgmt, onPerson, open, setOpen, onReorder }) => {
 
   const onPointerDown = (e) => {
     if (e.pointerType === "touch" && pinch.current) return;
-    if (e.target.closest("button, a, [draggable=true]")) return;
+    if (e.target.closest("button, a")) return;
+    if (e.target.closest("[draggable=true]")) { moved.current = false; return; }
     if (drag.current && e.pointerType === "touch") { const d = drag.current; pinch.current = { a: d.id, b: e.pointerId, ax: d.cx, ay: d.cy, bx: e.clientX, by: e.clientY, d0: Math.hypot(e.clientX - d.cx, e.clientY - d.cy) || 1, s: t.s, x: t.x, y: t.y }; return; }
     drag.current = { id: e.pointerId, sx: e.clientX, sy: e.clientY, cx: e.clientX, cy: e.clientY, x: t.x, y: t.y };
     moved.current = false;
