@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, User } from "lucide-react";
 import { QualityOrganizationPanel } from "../yqms/quality-organization";
+import FabricInspectionJobCard from "./FabricInspectionJobCard";
 import { QMS_AREAS } from "../hr/QmsOrganization";
 
 /* SOP — Standard Operating Procedures (Management Dashboard → SOP).
@@ -183,7 +184,7 @@ const ORDER = {
       screen: ["FC · Accessories receiving", "/dashboard/fc/accessories-receiving"],
       roles: [R("Accessory clerk", "fc", "Receives into the accessory store"), R("QC inspector", "qa", "Checks on the inspection table"), R("FC", "fc", "Locks branded labels and tags; issues exact quantities only")],
       inputs: "Trims delivery", outputs: "Trims in store", deps: ["track"] },
-    { id: "inspect", qms: true, lane: "qa", title: "Fabric inspection", d0: 62, d1: 65, by: H("QC inspector", "4-point checks the customer's % of rolls"),
+    { id: "inspect", qms: true, lane: "qa", title: "Fabric inspection", d0: 62, d1: 65, by: H("Multiple roles", "Open full job card · tasks, evidence & learning"),
       screen: ["FC · Fabric inspection", "/dashboard/fc/fabric-inspection"],
       roles: [R("Inspection supervisor", "fc", "Plans the % per lot (5–15 %, 100 % if costly)"), R("Workers", "fc", "Pull the sample rolls, run the machine"), R("QC department", "qa", "Judges holes, slubs, shade, width, selvage"), R("FC clerk", "fc", "Records pass / fail with pictures")],
       inputs: "Rolls in cages", outputs: "Pass / fail list", deps: ["receive"] },
@@ -855,6 +856,7 @@ const SOPMap = ({ onBack }) => {
   const navigate = useNavigate();
   const [pid, setPid] = useState("order");
   const [sel, setSel] = useState(null);
+  const [jobCardOpen, setJobCardOpen] = useState(false);
   const [expanded, setExpanded] = useState(null);
   const [masterList, setMasterList] = useState(false);
   const [subProcess, setSubProcess] = useState(null);
@@ -875,6 +877,7 @@ const SOPMap = ({ onBack }) => {
 
   const selectProcess = (id) => { setMasterList(false); setPid(id); setSubProcess(null); setSel(null); };
   const pick = (id) => {
+    if (id === "inspect" || id === "q4") setJobCardOpen(true);
     setSel(id);
     setTimeout(() => cardRef.current && cardRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" }), 30);
   };
@@ -882,6 +885,7 @@ const SOPMap = ({ onBack }) => {
   return (
     // pt-20 clears the fixed agent bar (My Task Agent / Agent Collective / Big Brain) that floats under the header
     <div className="min-h-screen bg-slate-900 text-slate-100 flex flex-col pt-20">
+      {jobCardOpen && <FabricInspectionJobCard onClose={() => setJobCardOpen(false)} />}
       <div className="flex items-center gap-3 px-4 py-3 border-b border-white/10">
         <button onClick={onBack} className="p-2 rounded-lg hover:bg-white/10" aria-label="Back"><ArrowLeft size={18} /></button>
         <div className="flex-1">
