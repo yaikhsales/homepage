@@ -223,11 +223,11 @@ const OrgTree = ({ mgmt, onPerson, open, setOpen, onReorder }) => {
 
   const onPointerDown = (e) => {
     if (e.pointerType === "touch" && pinch.current) return;
-    if (e.target.closest("[draggable=true]")) return;
+    if (e.target.closest("button, a, [draggable=true]")) return;
     if (drag.current && e.pointerType === "touch") { const d = drag.current; pinch.current = { a: d.id, b: e.pointerId, ax: d.cx, ay: d.cy, bx: e.clientX, by: e.clientY, d0: Math.hypot(e.clientX - d.cx, e.clientY - d.cy) || 1, s: t.s, x: t.x, y: t.y }; return; }
     drag.current = { id: e.pointerId, sx: e.clientX, sy: e.clientY, cx: e.clientX, cy: e.clientY, x: t.x, y: t.y };
     moved.current = false;
-    e.currentTarget.setPointerCapture && e.currentTarget.setPointerCapture(e.pointerId);
+
   };
   const onPointerMove = (e) => {
     const p = pinch.current;
@@ -244,6 +244,7 @@ const OrgTree = ({ mgmt, onPerson, open, setOpen, onReorder }) => {
     const dr = drag.current; if (!dr || e.pointerId !== dr.id) return;
     dr.cx = e.clientX; dr.cy = e.clientY;
     if (Math.hypot(e.clientX - dr.sx, e.clientY - dr.sy) > 4) moved.current = true;
+    if (moved.current && e.currentTarget.setPointerCapture && !e.currentTarget.hasPointerCapture(e.pointerId)) e.currentTarget.setPointerCapture(e.pointerId);
     if (moved.current) setT((o) => ({ ...o, x: dr.x + e.clientX - dr.sx, y: dr.y + e.clientY - dr.sy }));
   };
   const onPointerUp = (e) => {
