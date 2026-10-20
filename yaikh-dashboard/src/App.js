@@ -126,7 +126,6 @@ import SewingStations from "./yqms/SewingStations";
 import CuttingInspection from "./yqms/CuttingInspection";
 import FinalInspection from "./yqms/FinalInspection";
 
-import AuditReport from "./yqms/AuditReport";
 import DecorationQuality from "./yqms/decoration/DecorationQuality";
 import BuyerFinalInspection from "./yqms/BuyerFinalInspection";
 import SupplierEvaluation from "./yqms/SupplierEvaluation";
@@ -505,7 +504,7 @@ export default function App() {
             element={<ModuleFrame><QualityModule key="pre-production-meeting" moduleKey="pre-production-meeting" onBack={handleBack} /></ModuleFrame>}
           />
 
-          {/* Additional YQMS Routes using AuditReport */}
+          {/* Additional YQMS routes */}
           <Route
             path="yqms/20pcs-audit"
             element={<ModuleFrame><SewingStations mode="qa20" onBack={handleBack} /></ModuleFrame>}
@@ -569,14 +568,7 @@ export default function App() {
           />
           <Route
             path="yqms/first-output-finishing"
-            element={
-            <ModuleFrame>
-              <AuditReport
-                title="First Output Finishing And Packing"
-                onBack={handleBack}
-              />
-            </ModuleFrame>
-            }
+            element={<YwipFlow processOnly title="First Output Tracker" onBack={handleBack} />}
           />
           <Route
             path="yqms/report"
