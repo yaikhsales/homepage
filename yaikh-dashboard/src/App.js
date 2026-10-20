@@ -144,6 +144,8 @@ import CuttingPanel from "./yqms/Cutting-panel";
 import SewingQuality from "./yqms/SewingQuality";
 
 
+import QualityModule from "./yqms/standard/QualityModule";
+
 export default function App() {
   const navigate = useNavigate();
   const handleBack = () => navigate(-1);
@@ -151,6 +153,7 @@ export default function App() {
   return (
     <TranslationProvider>
       <Routes>
+        <Route path="/quality-pad/:moduleKey" element={<QualityModule floor />} />
         <Route path="/welcome" element={<WelcomePage />} />
         <Route path="/happy-new-year" element={<HappyNewYear />} />
         <Route path="/" element={<AppLayout />} />
@@ -470,14 +473,14 @@ export default function App() {
           />
 
           {/* YQMS Module Routes */}
-          <Route path="yqms/qc-file" element={<ModuleFrame><QCFile onBack={handleBack} /></ModuleFrame>} />
+          <Route path="yqms/qc-file" element={<ModuleFrame><QualityModule key="qc-file" moduleKey="qc-file" onBack={handleBack} /></ModuleFrame>} />
           <Route
             path="yqms/pre-production-meeting"
-            element={<ModuleFrame><PreProductionMeeting onBack={handleBack} /></ModuleFrame>}
+            element={<ModuleFrame><QualityModule key="pre-production-meeting" moduleKey="pre-production-meeting" onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/fin-check"
-            element={<ModuleFrame><FinCheckDashboard onBack={handleBack} /></ModuleFrame>}
+            element={<ModuleFrame><QualityModule key="fin-check" moduleKey="fin-check" onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/rolling-qc"
@@ -485,7 +488,7 @@ export default function App() {
           />
           <Route
             path="yqms/cutting-inspection"
-            element={<ModuleFrame><CuttingInspection onBack={handleBack} /></ModuleFrame>}
+            element={<ModuleFrame><QualityModule key="cutting-inspection" moduleKey="cutting-inspection" onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/sewing-output"
@@ -501,7 +504,7 @@ export default function App() {
           />
           <Route
             path="yqms/ppm"
-            element={<ModuleFrame><PreProductionMeeting onBack={handleBack} /></ModuleFrame>}
+            element={<ModuleFrame><QualityModule key="pre-production-meeting" moduleKey="pre-production-meeting" onBack={handleBack} /></ModuleFrame>}
           />
 
           {/* Additional YQMS Routes using AuditReport */}
@@ -534,7 +537,7 @@ export default function App() {
             path="yqms/first-output-cutting"
             element={
             <ModuleFrame>
-              <AuditReport title="First Output Cutting" onBack={handleBack} />
+              <QualityModule key="first-output-cutting" moduleKey="first-output-cutting" onBack={handleBack} />
             </ModuleFrame>
             }
           />
@@ -617,7 +620,7 @@ export default function App() {
             path="yqms/first-output-print"
             element={
             <ModuleFrame>
-              <DecorationQuality mode="first" onBack={handleBack} />
+              <QualityModule key="first-output-print" moduleKey="first-output-print" onBack={handleBack} />
             </ModuleFrame>
             }
           />
@@ -631,26 +634,26 @@ export default function App() {
           />
           <Route
             path="yqms/qa-cutting"
-            element={<ModuleFrame><AuditReport title="QA Cutting" onBack={handleBack} /></ModuleFrame>}
+            element={<ModuleFrame><QualityModule key="qa-cutting" moduleKey="qa-cutting" onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/qa-print"
             element={
             <ModuleFrame>
-              <DecorationQuality mode="qa" onBack={handleBack} />
+              <QualityModule key="qa-print" moduleKey="qa-print" onBack={handleBack} />
             </ModuleFrame>
             }
           />
           <Route
             path="yqms/cut-panel-inspection"
-            element={<ModuleFrame><CuttingPanel onBack={handleBack} /></ModuleFrame>}
+            element={<ModuleFrame><QualityModule key="cut-panel-inspection" moduleKey="cut-panel-inspection" onBack={handleBack} /></ModuleFrame>}
           />
 
           <Route
             path="yqms/printing-inspection"
             element={
             <ModuleFrame>
-              <DecorationQuality mode="printing" onBack={handleBack} />
+              <QualityModule key="printing-inspection" moduleKey="printing-inspection" onBack={handleBack} />
             </ModuleFrame>
             }
           />
@@ -658,7 +661,7 @@ export default function App() {
             path="yqms/embroidery-inspection"
             element={
             <ModuleFrame>
-              <DecorationQuality mode="embroidery" onBack={handleBack} />
+              <QualityModule key="embroidery-inspection" moduleKey="embroidery-inspection" onBack={handleBack} />
             </ModuleFrame>
             }
           />

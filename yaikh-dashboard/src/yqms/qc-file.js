@@ -34,7 +34,7 @@ import {
 } from 'lucide-react';
 import { useTranslation } from '../translate/TranslationContext';
 
-const QCFile = ({ onBack }) => {
+const QCFile = ({ onBack, onRecord }) => {
     const navigate = useNavigate();
     const { t } = useTranslation();
     const fileInputRef = React.useRef(null);
@@ -686,9 +686,9 @@ const QCFile = ({ onBack }) => {
                                     Cancel
                                 </button>
                                 <button
-                                    onClick={() => {
-                                        console.log('Posting recommendation:', commentText);
-                                        setIsCommentModalOpen(false);
+                                    onClick={async () => {
+                                        if(!commentText.trim())return;
+                                        try{if(onRecord)await onRecord({...selectedRecord,mo:selectedRecord.id,checked:1,rejected:0,status:'PENDING REVIEW',recommendation:commentText});setIsCommentModalOpen(false);}catch(error){setCommentText(commentText+'\n[Save failed: '+error.message+']');}
                                     }}
                                     className="flex items-center gap-3 px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl text-[11px] font-black shadow-xl shadow-emerald-200 transition-all uppercase tracking-[0.15em] hover:-translate-y-1"
                                 >

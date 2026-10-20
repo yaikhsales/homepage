@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ChevronLeft, Scissors, CheckCircle2 } from "lucide-react";
 import "./cutting-pad-ui.css";
-export default function BundlePadInspector({ initialBundles }) {
+export default function BundlePadInspector({ initialBundles, onRecord }) {
   const [bundles,setBundles]=useState(initialBundles);
   const [query,setQuery]=useState("");
   const [filter,setFilter]=useState("All");
@@ -13,7 +13,7 @@ export default function BundlePadInspector({ initialBundles }) {
   const needsReview=bundles.filter(b=>b.defects>0).length;
   const filtered=bundles.filter(b=>(filter!=="Needs review"||b.defects>0)&&(filter!=="Clear"||!b.defects)&&`${b.id} ${b.style} ${b.part}`.toLowerCase().includes(query.toLowerCase()));
   function open(bundle){setSelected(bundle);setRejected(String(bundle.defects));setNote(bundle.note||"");setError("");}
-  function save(){const count=Number(rejected);if(!rejected.trim()||!Number.isInteger(count)||count<0||count>selected.qty){setError(`Enter a whole number from 0 to ${selected.qty}.`);return;}setBundles(items=>items.map(b=>b.id===selected.id?{...b,defects:count,status:count?"HOLD":"CLEAR",note,checked:true}:b));setSaved(`${selected.id} check saved`);setSelected(null);}
+  async function save(){const count=Number(rejected);if(!rejected.trim()||!Number.isInteger(count)||count<0||count>selected.qty){setError(`Enter a whole number from 0 to ${selected.qty}.`);return;}if(onRecord){try{await onRecord({...selected,mo:selected.id,checked:selected.qty,rejected:count,defects:count,note,status:count?'HOLD':'PENDING REVIEW'});}catch(error){setError(error.message||'Could not save check.');return;}}setBundles(items=>items.map(b=>b.id===selected.id?{...b,defects:count,status:count?"HOLD":"CLEAR",note,checked:true}:b));setSaved(`${selected.id} check saved`);setSelected(null);}
   if(selected)return <div className="cut-pad-app">
     <div className="cut-pad-heading"><div><p>Bundle inspection</p><h2>{selected.part}</h2></div><Scissors size={28}/></div>
     <button className="cut-pad-button" onClick={()=>setSelected(null)}><ChevronLeft size={20}/>Back to bundles</button>

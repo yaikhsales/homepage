@@ -31,7 +31,7 @@ const CUTTING_PANEL_VIDEO_PATH =
 const CUTTING_PANEL_REPORT_PATH =
   "/assets/report-training/yhr-report.xlsx";
 
-const CuttingPanel = ({ onBack }) => {
+const CuttingPanel = ({ onBack, embeddedPad=false, onRecord }) => {
   const [activeTab, setActiveTab] = useState("form");
   const [selectedMO, setSelectedMO] = useState(CUTTING_ORDERS[0].mo);
   const [orders, setOrders] = useState(CUTTING_ORDERS);
@@ -44,7 +44,7 @@ const CuttingPanel = ({ onBack }) => {
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [selectedDocument, setSelectedDocument] = useState(null);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const form = formRef.current;
     const inspectedText = form.querySelector('[name="inspectionQty"]').value.trim();
     const rejectedText = form.querySelector('[name="rejectedQty"]').value.trim();
@@ -57,6 +57,7 @@ const CuttingPanel = ({ onBack }) => {
     const date = form.querySelector('[name="inspectionDate"]').value.trim();
     const table = form.querySelector('[name="cuttingTable"]').value.trim();
     if (!date || !table) { setFormError("Date and cutting table are required."); return; }
+    if(onRecord){try{await onRecord({...order,date,table,inspected,rejected,checked:inspected,status:rejected?'HOLD':'PENDING REVIEW'});}catch(error){setFormError(error.message||'Could not save check.');return;}}
     setOrders(previous => previous.map(item => item.mo !== selectedMO ? item : {
       ...item, date, table, inspected, rejected, pass: inspected - rejected,
       stages: item.stages.map(stage => stage.key !== "qc" ? stage : {
@@ -89,6 +90,7 @@ const CuttingPanel = ({ onBack }) => {
         { id: "dr", label: "DR", icon: History },
     ];
 
+  if(embeddedPad)return <CuttingFormTablet compact><div ref={formRef} key={order.mo}><CuttingPadForm key={order.mo} order={order} orders={orders} onSelectOrder={setSelectedMO} onSubmit={handleSubmit} error={formError} submitted={isSubmitted}/></div></CuttingFormTablet>;
   return (
     <div className="fixed inset-0 bg-slate-50 flex flex-col z-[50] animate-in fade-in duration-500 overflow-hidden font-sans">
       {/* Premium Header */}
