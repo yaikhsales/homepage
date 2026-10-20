@@ -342,7 +342,7 @@ const Donut = ({ parts }) => {
 };
 
 /* ── the screen ─────────────────────────────────────────────────────────── */
-const YwipFlow = ({ onBack }) => {
+const YwipFlow = ({ onBack, processOnly = false, title = "YWIP · Work in progress" }) => {
   const navigate = useNavigate();
   const [topRef, topPad] = useScreenTop();
   const [data, setData] = useState(null);
@@ -477,11 +477,11 @@ const YwipFlow = ({ onBack }) => {
       {!wall && <NavCover />}
       <div className="flex flex-wrap items-center gap-2 mb-2">
         {!wall && <button onClick={back} className="p-1 -ml-1 hover:bg-slate-700 rounded-full transition-colors text-slate-400 hover:text-white" aria-label="Back"><ArrowLeft size={18} /></button>}
-        <h1 className="text-lg font-black text-white leading-none">YWIP · Work in progress</h1>
+        <h1 className="text-lg font-black text-white leading-none">{title}</h1>
         <span className="text-xs text-slate-400">{d.day || ""} · {stations.length} stations · {live} with work today{acts ? ` · ${acts} activities, ${ongoing} ongoing${blocked ? ", " + blocked + " stuck" : ""}` : ""} · click a station or a bubble</span>
-        <div className="ml-auto flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-400">
+        {!processOnly && <div className="ml-auto flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-400">
           {(d.summary || []).map((x) => <span key={x.label} className="whitespace-nowrap">{x.label} <b className="text-white tabular-nums text-sm">{num(x.value)}</b></span>)}
-        </div>
+        </div>}
         <div className="inline-flex rounded-lg border border-slate-700 overflow-hidden text-xs" title="demo speed — the activities move through the day this many times faster">
           <span className="px-1.5 py-1 bg-slate-800 text-slate-400 flex items-center"><Gauge size={13} /></span>
           {SPEEDS.map((x) => <button key={x} onClick={() => { const n = new Date(); t0.current = String(n.getHours()).padStart(2, "0") + ":" + String(n.getMinutes()).padStart(2, "0"); setSpeed(x); }} className={`px-2 py-1 font-bold ${speed === x ? "bg-sky-500/30 text-white" : "bg-slate-800 text-slate-300 hover:bg-slate-700"}`}>{x}×</button>)}
@@ -512,7 +512,7 @@ const YwipFlow = ({ onBack }) => {
       </div>
 
       {/* BELOW — the dashboard */}
-      <div className="grid gap-3 xl:grid-cols-3">
+      {!processOnly && <div className="grid gap-3 xl:grid-cols-3">
         <Panel title="WIP by station" sub="pieces / rolls waiting at each station now · red = bottleneck" className="xl:col-span-2">
           {wip.length ? <Bars data={wip} value={(x) => x.qty || 0} label={(x) => `${x.no} ${x.title || ""}`.trim()} tone={(x) => (x.bottleneck ? "#f43f5e" : Number(x.no) >= 25 ? "#475569" : "#38bdf8")} height={190} /> : <div className="text-xs text-slate-500">—</div>}
         </Panel>
@@ -551,7 +551,7 @@ const YwipFlow = ({ onBack }) => {
             </div>
           )}
         </Panel>
-      </div>
+      </div>}
       <p className="mt-2 text-[10px] text-slate-500">{d.as_of ? `As of ${String(d.as_of).replace("T", " ").slice(0, 16)} · refreshes every 30 s · ` : ""}simulated factory — invented data, no real company or person</p>
       {card && <Card s={card.s} at={card} onClose={closeCard} />}
       {bubble && <BubbleCard a={bubble.a} s={bubble.s} at={bubble} onClose={closeBubble} />}
