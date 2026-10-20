@@ -31,7 +31,7 @@ export const YQMS_CARDS = {
       cards: [
         {
           title: "Cutting Panel Inspection",
-          icon: "Search",
+          icon: "Scissors",
           color:
             "bg-white text-blue-600",
           image:
@@ -49,7 +49,7 @@ export const YQMS_CARDS = {
         },
         {
           title: "QA Cutting",
-          icon: "Search",
+          icon: "ClipboardCheck",
           color:
             "bg-white text-blue-600",
           image:
@@ -58,7 +58,7 @@ export const YQMS_CARDS = {
         },
         {
           title: "Cutting Inspection",
-          icon: "Search",
+          icon: "Scissors",
           color:
             "bg-white text-blue-600",
           image:
@@ -73,7 +73,7 @@ export const YQMS_CARDS = {
         {
           title: "First Output Printing Embroidery",
           action: "/dashboard/yqms/first-output-print",
-          icon: "PenTool",
+          icon: "Printer",
           color:
             "bg-white text-blue-600",
           image:
@@ -83,7 +83,7 @@ export const YQMS_CARDS = {
         {
           title: "Printing Inspection",
           action: "/dashboard/yqms/printing-inspection",
-          icon: "Search",
+          icon: "Printer",
           color:
             "bg-white text-blue-600",
           image:
@@ -93,7 +93,7 @@ export const YQMS_CARDS = {
         {
           title: "Embroidery Inspection",
           action: "/dashboard/yqms/embroidery-inspection",
-          icon: "Search",
+          icon: "PenTool",
           color:
             "bg-white text-blue-600",
           image:
@@ -103,7 +103,7 @@ export const YQMS_CARDS = {
         {
           title: "QA Printing Embroidery",
           action: "/dashboard/yqms/qa-print",
-          icon: "Search",
+          icon: "ClipboardCheck",
           color:
             "bg-white text-blue-600",
           image:
@@ -118,7 +118,7 @@ export const YQMS_CARDS = {
         {
           title: "First Output Sewing",
           action: "/dashboard/yqms/first-output-sewing",
-          icon: "PenTool",
+          icon: "Shirt",
           color:
             "bg-white text-blue-600",
           image:
@@ -136,7 +136,7 @@ export const YQMS_CARDS = {
         {
           title: "Inline Audit Rolling",
           action: "/dashboard/yqms/inline-audit",
-          icon: "FileCheck",
+          icon: "GaugeCircle",
           color:
             "bg-white text-blue-600",
           image:
@@ -157,7 +157,7 @@ export const YQMS_CARDS = {
         {
           title: "Garment Check Output",
           action: "/dashboard/yqms/sewing-output",
-          icon: "CheckCircle",
+          icon: "Shirt",
           color:
             "bg-white text-blue-600",
           image:
@@ -258,7 +258,7 @@ export const YQMS_CARDS = {
         {
           title: "Pre Final Inspection",
           action: "/dashboard/yqms/pre-final",
-          icon: "Eye",
+          icon: "ClipboardCheck",
           color:
             "bg-white text-blue-600",
           image:
@@ -267,14 +267,14 @@ export const YQMS_CARDS = {
         {
           title: "Final Inspection",
           action: "/dashboard/yqms/final-inspection",
-          icon: "Eye",
+          icon: "FileCheck",
           color: "bg-white text-blue-600",
           image: "assets/yqms/final-inspection-icon.svg",
         },
         {
           title: "Buyer Final Inspection",
           action: "/dashboard/yqms/buyer-final",
-          icon: "Eye",
+          icon: "Users",
           color: "bg-white text-blue-600",
           image: "assets/yqms/buyer-final-inspection-icon.svg",
         },
@@ -295,6 +295,7 @@ export const YQMS_CARDS = {
         },
         {
           title: "Dashboard",
+          icon: "LayoutDashboard",
           image:
             "assets/yqms/dashboard-icon.svg",
           color:
@@ -303,6 +304,7 @@ export const YQMS_CARDS = {
         },
         {
           title: "Report",
+          icon: "FileText",
           image:
             "assets/yqms/report-icon.svg",
           color:

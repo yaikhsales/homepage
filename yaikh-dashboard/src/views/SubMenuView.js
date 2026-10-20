@@ -367,6 +367,7 @@ const renderCard = (
       : subIconImage || card.image;
   const isFCModule = imageToUse && imageToUse.includes("assets/fc/");
   const isYQMSModule = imageToUse && imageToUse.includes("assets/yqms/");
+  const isYQMSHubCard = moduleId === "yqms";
   const isEGovModule = card.url !== undefined; // E-Government modules have url property
   const isNonClickableModule = isYQMSModule && !card.galleryImages && card.title !== "QC File" && card.title !== "Pre Production Meeting" && !card.action;
 
@@ -649,6 +650,15 @@ const renderCard = (
           }
         >
           {(() => {
+            // The YQMS hub uses one clear icon language. Keep the original
+            // artwork available to each module screen, but not in this grid.
+            if (isYQMSHubCard) {
+              return (
+                <span className="flex h-[115px] w-[115px] items-center justify-center rounded-2xl border border-blue-200 bg-blue-50 text-blue-700">
+                  <IconRenderer iconName={card.icon || "FileCheck"} size={56} strokeWidth={1.75} aria-hidden="true" />
+                </span>
+              );
+            }
             const shouldUseOriginalIcon = false;
             const finalImageToUse = shouldUseOriginalIcon ? null : imageToUse;
 
