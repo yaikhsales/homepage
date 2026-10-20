@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, RefreshCw, X } from 'lucide-react';
 import { useTranslation } from '../translate/TranslationContext';
@@ -7,6 +7,22 @@ const CallOut = ({ onBack }) => {
     const navigate = useNavigate();
     const { t } = useTranslation();
     const [selectedLocation, setSelectedLocation] = useState(t('allLocation'));
+    const [qualityAlerts, setQualityAlerts] = useState([]);
+    const [qualityError, setQualityError] = useState('');
+
+    const loadQualityAlerts = useCallback(async () => {
+        try {
+            const responses = await Promise.all(['first-output', 'endline'].map(mode => fetch(`/api/yqms/sewing?mode=${mode}`, { credentials: 'same-origin', cache: 'no-store' })));
+            const payloads = await Promise.all(responses.map(response => response.json()));
+            const failed = payloads.find(payload => !payload.ok);
+            if (failed) throw new Error(failed.error || 'Could not load live quality call-outs.');
+            const first = payloads[0].records.filter(row => row.decision !== 'approved').map(row => ({ ...row, kind: 'startup' }));
+            const endline = payloads[1].records.filter(row => row.result !== 'pass' && row.repairStatus === 'open').map(row => ({ ...row, kind: 'endline' }));
+            setQualityAlerts([...first, ...endline].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
+            setQualityError('');
+        } catch (error) { setQualityError(error.message); }
+    }, []);
+    useEffect(() => { loadQualityAlerts(); }, [loadQualityAlerts]);
 
     const handleBack = () => {
         if (onBack) {
@@ -17,8 +33,7 @@ const CallOut = ({ onBack }) => {
     };
 
     const handleRefresh = () => {
-        // Refresh logic here
-        console.log('Refreshing data...');
+        loadQualityAlerts();
     };
 
     // Generate data for Lines 1-30
@@ -236,9 +251,21 @@ const CallOut = ({ onBack }) => {
 
             {/* Main Content */}
             <div className="flex-1 overflow-y-auto bg-gray-900 p-4">
+                <section className="mb-6 rounded-xl border border-emerald-700 bg-gray-800 p-4 text-white">
+                    <h2 className="text-lg font-bold mb-2">Live sewing quality call-outs</h2>
+                    {qualityError && <p className="text-amber-300 text-sm">{qualityError}</p>}
+                    {!qualityError && qualityAlerts.length === 0 && <p className="text-gray-400 text-sm">No open sewing quality call-outs.</p>}
+                    <div className="grid gap-2 md:grid-cols-2 xl:grid-cols-3">{qualityAlerts.map(row => <div key={row._id} className="rounded-lg border border-gray-600 bg-gray-900 p-3 text-sm">
+                        <b>{row.kind === 'startup' ? 'Startup review / hold' : 'End-line repair / recheck'} · {row.line}</b>
+                        <p>MO {row.mo} · {row.style}{row.pieceId ? ` · Piece ${row.pieceId}` : ''}</p>
+                        <p>To: {row.kind === 'startup' ? 'QA leader / manager, sewing supervisor and line leader' : `Line leader and sewing supervisor${row.machine ? ', mechanic' : ''}; QA leader for recurrence`}</p>
+                        <p>{row.defects?.join(', ') || (row.decision === 'pending-qa' ? 'Awaiting QA review' : 'Check startup cause')}</p>
+                        <button className="text-emerald-300 font-bold" onClick={() => navigate(row.kind === 'startup' ? '/dashboard/yqms/first-output-sewing' : '/dashboard/yqms/endline-check')}>Open quality record →</button>
+                    </div>)}</div>
+                </section>
                 {/* Sewing Section */}
                 <div className="mb-5">
-                    <div className="text-white font-bold text-base mb-2 px-1">{t('sewing')}</div>
+                    <div className="text-white font-bold text-base mb-2 px-1">{t('sewing')} · reference layout</div>
                     <div className="bg-gray-800 border border-gray-700 overflow-hidden">
                         <div className="flex overflow-x-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
                             {renderEmptyColumn(Math.max(...Object.values(sewingData).map(items => items.length)))}

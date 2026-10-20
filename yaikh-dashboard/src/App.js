@@ -142,6 +142,7 @@ import HumidityReportList from "./yqms/HumidityReport/show-list";
 import QCRovingDashboard from "./yqms/Fin-check/Dashboard/QCRovingDashboard";
 import CuttingDashboard from "./yqms/Fin-check/Dashboard/CuttingDashboard";
 import CuttingPanel from "./yqms/Cutting-panel";
+import SewingQuality from "./yqms/SewingQuality";
 
 
 export default function App() {
@@ -525,7 +526,7 @@ export default function App() {
             path="yqms/endline-check"
             element={
             <ModuleFrame>
-              <AuditReport title="QC End Line Checking" onBack={handleBack} />
+              <SewingQuality mode="endline" onBack={handleBack} />
             </ModuleFrame>
             }
           />
@@ -625,7 +626,7 @@ export default function App() {
             path="yqms/first-output-sewing"
             element={
             <ModuleFrame>
-              <AuditReport title="First Output Sewing" onBack={handleBack} />
+              <SewingQuality mode="first-output" onBack={handleBack} />
             </ModuleFrame>
             }
           />
