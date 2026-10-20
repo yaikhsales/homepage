@@ -64,7 +64,7 @@ const Employees = ({ onBack }) => {
       <NavCover />
       <div className="flex flex-wrap items-center gap-2 mb-2">
         <button onClick={back} className="p-1 -ml-1 hover:bg-slate-700 rounded-full transition-colors text-slate-400 hover:text-white" aria-label="Back"><ArrowLeft size={18} /></button>
-        <h1 className="text-lg font-black text-white leading-none">Employee directory</h1>
+        <h1 className="text-lg font-black text-white leading-none">Worker directory</h1>
         <HrNav current="employees" />
         <div className="ml-auto flex flex-wrap gap-x-3 text-xs text-slate-400">{(d.summary || []).map((x) => <span key={x.label} className="whitespace-nowrap">{x.label} <b className="text-white tabular-nums">{num(x.value)}</b></span>)}</div>
         <button onClick={load} className="p-1.5 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700" aria-label="Refresh"><RefreshCw size={14} className={loading ? "animate-spin" : ""} /></button>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { MessageCircle, Video } from "lucide-react";
 import { IconRenderer } from "../components/IconRenderer";
+import YQMSProcessIcon from "../components/YQMSProcessIcon";
 import { useTranslation } from "../translate/TranslationContext";
 import GeneralAIAgent from "../general-ag";
 import BotModules from "../chatbot/bot-modules";
@@ -213,12 +214,12 @@ const getSubIconImage = (title) => {
     Consumptions: "consumption.png",
     Calculator: "calculator.png",
     // New YQMS modules in IQC, Cut, Sew, Pack
-    "Internal Rolling QC": "internal-rolling-qc.jpg",
+    "Internal Roaming QC (IRQC)": "internal-rolling-qc.jpg",
     "Cutting Inspection": "cutting-inspection.jpg",
     "Cut Panel Inspection": "cut-panel-inspection.jpg",
     "Printing Inspection": "printing-inspection.jpg",
     "Embroidery Inspection": "embroidery-inspection.jpg",
-    "Garment Check Output": "garment-check-output.jpg",
+    "Garment Check Out": "garment-check-output.jpg",
     "Finishing Inspection": "finishing-inspection.jpg",
     "Ironing Inspection": "ironing-inspection.jpg",
     "Packing Inspection": "packing-inspection.jpg",
@@ -234,9 +235,9 @@ const getSubIconImage = (title) => {
       "first-output-finishing-packing-icon.svg",
     "QA Cutting": "qa-cutting.jpg",
     "QA Printing Embroidery": "qa-printing-embroidery.jpg",
-    "QA 20pcs Audit": "qa-20pcs-audit.jpg",
+    "20pcs QA Audit": "qa-20pcs-audit.jpg",
     "QA Audit Finishing Packing": "qa-audit-finishing-packing-icon.svg",
-    "Inline Audit Rolling": "inline-audit-rolling.jpg",
+    "Inline Auditor": "inline-audit-rolling.jpg",
     "Offline Audit": "offline-audit.jpg",
     "QC End Line Checking": "qc-end-line-checking.jpg",
     "QC File": "qc-file.jpg",
@@ -367,6 +368,7 @@ const renderCard = (
       : subIconImage || card.image;
   const isFCModule = imageToUse && imageToUse.includes("assets/fc/");
   const isYQMSModule = imageToUse && imageToUse.includes("assets/yqms/");
+  const isYQMSHubCard = moduleId === "yqms";
   const isEGovModule = card.url !== undefined; // E-Government modules have url property
   const isNonClickableModule = isYQMSModule && !card.galleryImages && card.title !== "QC File" && card.title !== "Pre Production Meeting" && !card.action;
 
@@ -649,6 +651,11 @@ const renderCard = (
           }
         >
           {(() => {
+            // Show the three-step workflow in one consistent YQMS icon language.
+            // The original artwork remains available in each module screen.
+            if (isYQMSHubCard) {
+              return <YQMSProcessIcon title={card.title} />;
+            }
             const shouldUseOriginalIcon = false;
             const finalImageToUse = shouldUseOriginalIcon ? null : imageToUse;
 

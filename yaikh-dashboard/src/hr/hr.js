@@ -49,10 +49,10 @@ export const Person = ({ p, big, onClick }) => {
 };
 
 export const HR_NAV = [
-  { view: "org-chart-master", title: "Master chart", path: "/dashboard/org-chart-master" },
-  { view: "sections", title: "Section chart", path: "/dashboard/hr/sections" },
-  { view: "employees", title: "Employee directory", path: "/dashboard/hr/employees" },
-  { view: "headcount", title: "Headcount", path: "/dashboard/hr/headcount" },
+  { view: "headcount", title: "Headcount dashboard", path: "/dashboard/hr/headcount" },
+  { view: "org-chart-master", title: "Master organization chart", path: "/dashboard/org-chart-master" },
+  { view: "sections", title: "Section list", path: "/dashboard/hr/sections?structure=yai" },
+  { view: "employees", title: "Worker directory", path: "/dashboard/hr/employees" },
 ];
 export const HrNav = ({ current }) => {
   const navigate = useNavigate();

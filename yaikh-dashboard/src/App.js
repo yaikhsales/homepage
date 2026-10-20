@@ -122,9 +122,8 @@ import Costing from "./ypi/Costing";
 import WarehouseMap from "./fc/WarehouseMap";
 import LocationPlan from "./fc/LocationPlan";
 import Calculator from "./fc/Calculator";
-import InternalRollingQC from "./yqms/InternalRollingQC";
+import SewingStations from "./yqms/SewingStations";
 import CuttingInspection from "./yqms/CuttingInspection";
-import GarmentCheckOutput from "./yqms/GarmentCheckOutput";
 import PackingInspection from "./yqms/PackingInspection";
 import FinalInspection from "./yqms/FinalInspection";
 
@@ -482,7 +481,7 @@ export default function App() {
           />
           <Route
             path="yqms/rolling-qc"
-            element={<ModuleFrame><InternalRollingQC onBack={handleBack} /></ModuleFrame>}
+            element={<ModuleFrame><SewingStations mode="roaming" onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/cutting-inspection"
@@ -490,7 +489,7 @@ export default function App() {
           />
           <Route
             path="yqms/sewing-output"
-            element={<ModuleFrame><GarmentCheckOutput onBack={handleBack} /></ModuleFrame>}
+            element={<ModuleFrame><SewingStations mode="checkout" onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/packing-inspection"
@@ -508,13 +507,13 @@ export default function App() {
           {/* Additional YQMS Routes using AuditReport */}
           <Route
             path="yqms/20pcs-audit"
-            element={<ModuleFrame><AuditReport title="QA 20pcs Audit" onBack={handleBack} /></ModuleFrame>}
+            element={<ModuleFrame><SewingStations mode="qa20" onBack={handleBack} /></ModuleFrame>}
           />
           <Route
             path="yqms/inline-audit"
             element={
             <ModuleFrame>
-              <AuditReport title="Inline Audit Rolling" onBack={handleBack} />
+              <SewingStations mode="inline" onBack={handleBack} />
             </ModuleFrame>
             }
           />

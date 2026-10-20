@@ -14,24 +14,27 @@
 // Data: the `mgmt` tree of {"module":"hr","view":"org-tree"} — simulated factory, roles and IDs only.
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { User, LayoutGrid, Users, ZoomIn, ZoomOut, Maximize2, Scan, ChevronsDownUp, ChevronsUpDown, MapPin } from "lucide-react";
+import { User, LayoutGrid, Users, ZoomIn, ZoomOut, Maximize2, Scan, ChevronsDownUp, ChevronsUpDown, MapPin, Bot } from "lucide-react";
 import { num, LEVEL, RoleIcon } from "./hr";
 
 /* ── geometry ─────────────────────────────────────────────────────────────────────────────────── */
-const BW = 200, BH = 108;        // one box
+const keyOf = n => n && (n.id || n.emp_no);
+const BW = 240, BH = 148;        // one box
 const GX = 14, GY = 56;          // gap between siblings · between a parent and its children
-const COLS = 8;                  // columns of a wrapped row
+const COLS = 6;                  // columns of a wrapped row
 const WRAP_AT = 12;              // a parent with more children than this (the Factory Manager: ~30) gets wrapped rows grouped by kind
 const ROW_GAP = 46, GROUP_GAP = 40, LABEL_H = 32;
 
 // the colour of the header strip: the GM amber, the production branches (Factory Manager, QC) the
 // Operations green, every other branch under the GM the Administrative violet
 const STRIP = {
+  ai: { bg: "#5b21b6", text: "#ddd6fe", ring: "#a78bfa" },
   gm: { bg: "#b45309", text: "#fde68a", ring: "#f59e0b" },
   operations: { bg: "#047857", text: "#a7f3d0", ring: "#10b981" },
   administrative: { bg: "#6d28d9", text: "#ddd6fe", ring: "#8b5cf6" },
 };
 const branchOf = (node, parentBranch) => {
+  if (node.branch) return node.branch;
   if (!parentBranch) return "gm";
   if (parentBranch !== "gm") return parentBranch;
   return node.level === "factory_manager" || /QC|QA|Quality/i.test(node.title || "") ? "operations" : "administrative";
@@ -59,7 +62,7 @@ const groupKids = (kids) => {
   return out;
 };
 const measure = (node, open) => {
-  const kids = open.has(node.emp_no) ? node.children || [] : [];
+  const kids = open.has(keyOf(node)) ? node.children || [] : [];
   if (kids.length === 0) return { node, w: BW, h: BH, kids: [] };
   const ms = kids.map((k) => measure(k, open));
   if (kids.length <= WRAP_AT) {
@@ -92,7 +95,7 @@ const place = (m, x, y, branch, out) => {
   if (m.mode === "row") {
     const total = m.kids.reduce((s, k) => s + k.w, 0) + GX * (m.kids.length - 1);
     const big = m.kids.reduce((a, k) => (k.w > a.w ? k : a), m.kids[0]);
-    if (big.w > 0.55 * total) { let kx = x + (m.w - total) / 2; for (const k of m.kids) { if (k === big) { cx = kx + k.w / 2; break; } kx += k.w + GX; } }
+    if (!m.node.id && big.w > 0.55 * total) { let kx = x + (m.w - total) / 2; for (const k of m.kids) { if (k === big) { cx = kx + k.w / 2; break; } kx += k.w + GX; } }
   }
   const bx = cx - BW / 2;
   const b = branchOf(m.node, branch);
@@ -141,25 +144,25 @@ export const layout = (root, open) => {
 };
 
 /* ── one box ──────────────────────────────────────────────────────────────────────────────────── */
-const TreeBox = ({ b, isOpen, onToggle, onPerson, moved }) => {
+const TreeBox = ({ b, isOpen, onToggle, onPerson, moved, onReorder }) => {
   const navigate = useNavigate();
   const n = b.node, L = LEVEL[n.level] || LEVEL.staff, S = STRIP[b.branch] || STRIP.operations;
   const kids = (n.children || []).length;
-  const ways = waysDown(n);
+  const ways = n.sectionQuery ? [{label: "Section list", q: n.sectionQuery}] : n.id ? [] : waysDown(n).map(w=>({...w,q:w.q+"&structure=simulated"}));
   const stop = (e) => e.stopPropagation();
   return (
-    <div className={`absolute select-none rounded-lg overflow-hidden bg-slate-800 shadow-lg shadow-black/40 ${kids ? "cursor-pointer" : "cursor-default"}`} style={{ left: b.x, top: b.y, width: BW, height: BH, border: `2px solid ${S.ring}` }} onClick={() => { if (!moved.current && kids) onToggle(n.emp_no); }} title={`${n.title} — ${n.emp_no}${kids ? (isOpen ? " · click to collapse" : " · click to expand") : ""}`}>
+    <div draggable={!!n.reorderable} onDragStart={e => { if (!n.reorderable) return; e.dataTransfer.setData("text/plain", n.id); e.stopPropagation(); }} onDragOver={e => { if(n.reorderable) e.preventDefault(); }} onDrop={e => { if(n.reorderable) { e.preventDefault(); onReorder?.(e.dataTransfer.getData("text/plain"), n.id); } }} className={`absolute select-none rounded-lg overflow-hidden bg-slate-800 shadow-lg shadow-black/40 ${kids ? "cursor-pointer" : "cursor-default"}`} style={{ left: b.x, top: b.y, width: BW, height: BH, border: `2px solid ${S.ring}` }} onClick={() => { if (!moved.current && kids) onToggle(keyOf(n)); }} title={`${n.title}${n.emp_no ? " — " + n.emp_no : ""}${kids ? (isOpen ? " · click to collapse" : " · click to expand") : ""}`}>
       <div className="flex items-center gap-1.5 px-2 h-6 text-[10px] font-black uppercase tracking-wider" style={{ background: S.bg, color: S.text }}>
-        <RoleIcon level={n.level} size={12} className="opacity-90" />
-        <span className="truncate">{L.label}</span>
+        {n.level === "ai" ? <Bot size={12} /> : <RoleIcon level={n.level} size={12} className="opacity-90" />}
+        <span className="truncate">{n.levelLabel || L.label}</span>
         {n.location && <span className="ml-auto inline-flex items-center gap-0.5 rounded-sm bg-black/25 px-1 py-px text-[9px] normal-case tracking-normal font-bold"><MapPin size={9} />{n.location}</span>}
       </div>
       <div className="flex gap-2 px-2 pt-1.5">
-        <div className="w-9 h-9 rounded-full bg-slate-700 border border-slate-600 flex items-center justify-center flex-shrink-0 text-slate-300" aria-hidden><User size={20} /></div>
+        <div className="w-9 h-9 rounded-full bg-slate-700 border border-slate-600 flex items-center justify-center flex-shrink-0 text-slate-300" aria-hidden>{n.level === "ai" ? <Bot size={20} /> : <User size={20} />}</div>
         <div className="min-w-0 flex-1">
-          <div className="text-[12px] font-black text-white leading-tight truncate" title={n.title}>{n.title}</div>
-          <button onClick={(e) => { stop(e); onPerson(n.emp_no); }} className="text-[11px] font-bold text-sky-300 hover:underline leading-tight">{n.emp_no}</button>
-          <div className="text-[10px] text-slate-400 leading-tight">team <b className="text-white tabular-nums">{num(n.team)}</b>{n.level === "leader" && n.untitled_direct ? <span> · {num(n.untitled_direct)} workers</span> : kids ? <span> · {num(kids)} direct</span> : null}</div>
+          <div className="text-[12px] font-black text-white leading-tight" title={n.title}>{n.title}</div>
+          {n.emp_no ? <button onClick={(e) => { stop(e); onPerson(n.emp_no); }} className="text-[11px] font-bold text-sky-300 hover:underline leading-tight">{n.emp_no}</button> : <div className="text-[10px] text-sky-300">{n.level === "ai" ? "AI support · not an employee" : "Role · ID unassigned"}</div>}
+          {n.id ? <div className="mt-1 text-[10px] text-slate-300 leading-tight">{n.note || (n.reorderable ? "drag to reorder department" : "workers in section list")}</div> : <div className="text-[10px] text-slate-400 leading-tight">team <b className="text-white tabular-nums">{num(n.team)}</b>{n.level === "leader" && n.untitled_direct ? <span> · {num(n.untitled_direct)} workers</span> : kids ? <span> · {num(kids)} direct</span> : null}</div>}
         </div>
       </div>
       {ways.length > 0 && <div className="absolute left-1.5 right-1.5 bottom-1 flex gap-1 overflow-hidden">{ways.map((w) => <button key={w.q} onClick={(e) => { stop(e); navigate("/dashboard/hr/sections?" + w.q); }} className="inline-flex items-center gap-0.5 rounded border border-sky-500/50 bg-sky-500/15 text-sky-200 hover:bg-sky-500/35 px-1.5 py-px text-[10px] font-bold whitespace-nowrap"><LayoutGrid size={9} />{w.label}</button>)}</div>}
@@ -169,11 +172,11 @@ const TreeBox = ({ b, isOpen, onToggle, onPerson, moved }) => {
 };
 
 /* ── the chart: pan · zoom · fit ──────────────────────────────────────────────────────────────── */
-const withKids = (node, out = []) => { if (!node) return out; if ((node.children || []).length) out.push(node.emp_no); (node.children || []).forEach((c) => withKids(c, out)); return out; };
+const withKids = (node, out = []) => { if (!node) return out; if ((node.children || []).length) out.push(keyOf(node)); (node.children || []).forEach((c) => withKids(c, out)); return out; };
 // the readable default: everything down to the supervisors; the leaders folded away
-export const defaultOpen = (mgmt) => new Set([mgmt && mgmt.emp_no, ...((mgmt && mgmt.children) || []).filter((c) => (c.children || []).length).map((c) => c.emp_no)].filter(Boolean));
+export const defaultOpen = (mgmt) => { if (mgmt?.id) { const ids=[]; const visit=n=>{if (["gm","factory_manager","manager"].includes(n.level) || n.levelLabel === "Senior supervisor") ids.push(keyOf(n)); (n.children||[]).forEach(visit);}; visit(mgmt); return new Set(ids); } return new Set([keyOf(mgmt), ...((mgmt && mgmt.children) || []).filter((c) => (c.children || []).length).map((c) => keyOf(c))].filter(Boolean)); };
 
-const OrgTree = ({ mgmt, onPerson, open, setOpen }) => {
+const OrgTree = ({ mgmt, onPerson, open, setOpen, onReorder }) => {
   const view = useRef(null);
   const moved = useRef(false);
   const drag = useRef(null);
@@ -199,13 +202,14 @@ const OrgTree = ({ mgmt, onPerson, open, setOpen }) => {
   const hundred = () => { const el = view.current; if (!el) return; setT({ s: 1, x: el.clientWidth / 2 - gmX(), y: 8 }); };
   useLayoutEffect(() => {
     const el = view.current; if (!el) return;
-    const ids = new Set(((mgmt && mgmt.children) || []).map((c) => c.emp_no));
-    const row = g.boxes.filter((b) => ids.has(b.node.emp_no));
+    const initialRow = mgmt?.id ? mgmt.children?.[0]?.children || [] : mgmt?.children || [];
+    const ids = new Set(initialRow.map(keyOf));
+    const row = g.boxes.filter((b) => ids.has(keyOf(b.node)));
     const x0 = row.length ? Math.min(...row.map((b) => b.x)) : 0, x1 = row.length ? Math.max(...row.map((b) => b.x + BW)) : g.w;
     // the whole GM level if it fits at a readable size, otherwise 60 % with the GM in the middle
-    const fitS = (el.clientWidth - 32) / (x1 - x0);
-    const s = fitS >= 0.6 ? Math.min(1, fitS) : 0.6;
-    setT({ s, x: el.clientWidth / 2 - (fitS >= 0.6 ? (x0 + x1) / 2 : gmX()) * s, y: 8 });
+    const fitS = (el.clientWidth - 32) / (mgmt?.id ? g.w : x1 - x0);
+    const s = mgmt?.id ? Math.max(0.3, Math.min(1, fitS)) : fitS >= 0.6 ? Math.min(1, fitS) : 0.6;
+    setT({ s, x: el.clientWidth / 2 - (mgmt?.id ? gmX() : fitS >= 0.6 ? (x0 + x1) / 2 : gmX()) * s, y: 8 });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mgmt]);
 
@@ -219,10 +223,12 @@ const OrgTree = ({ mgmt, onPerson, open, setOpen }) => {
 
   const onPointerDown = (e) => {
     if (e.pointerType === "touch" && pinch.current) return;
+    if (e.target.closest("button, a")) return;
+    if (e.target.closest("[draggable=true]")) { moved.current = false; return; }
     if (drag.current && e.pointerType === "touch") { const d = drag.current; pinch.current = { a: d.id, b: e.pointerId, ax: d.cx, ay: d.cy, bx: e.clientX, by: e.clientY, d0: Math.hypot(e.clientX - d.cx, e.clientY - d.cy) || 1, s: t.s, x: t.x, y: t.y }; return; }
     drag.current = { id: e.pointerId, sx: e.clientX, sy: e.clientY, cx: e.clientX, cy: e.clientY, x: t.x, y: t.y };
     moved.current = false;
-    e.currentTarget.setPointerCapture && e.currentTarget.setPointerCapture(e.pointerId);
+
   };
   const onPointerMove = (e) => {
     const p = pinch.current;
@@ -239,6 +245,7 @@ const OrgTree = ({ mgmt, onPerson, open, setOpen }) => {
     const dr = drag.current; if (!dr || e.pointerId !== dr.id) return;
     dr.cx = e.clientX; dr.cy = e.clientY;
     if (Math.hypot(e.clientX - dr.sx, e.clientY - dr.sy) > 4) moved.current = true;
+    if (moved.current && e.currentTarget.setPointerCapture && !e.currentTarget.hasPointerCapture(e.pointerId)) e.currentTarget.setPointerCapture(e.pointerId);
     if (moved.current) setT((o) => ({ ...o, x: dr.x + e.clientX - dr.sx, y: dr.y + e.clientY - dr.sy }));
   };
   const onPointerUp = (e) => {
@@ -255,7 +262,7 @@ const OrgTree = ({ mgmt, onPerson, open, setOpen }) => {
             <path d={g.edges.join(" ")} fill="none" stroke="#64748b" strokeWidth={2} strokeLinecap="round" />
           </svg>
           {g.labels.map((l) => <div key={l.text + l.x} className="absolute text-[11px] font-black uppercase tracking-wider" style={{ left: l.x, top: l.y, color: (STRIP[l.branch] || STRIP.operations).text }}>{l.text} <span className="text-slate-500 normal-case tracking-normal font-bold">· {l.n}</span></div>)}
-          {g.boxes.map((b) => <TreeBox key={b.node.emp_no} b={b} isOpen={open.has(b.node.emp_no)} onToggle={toggle} onPerson={onPerson} moved={moved} />)}
+          {g.boxes.map((b) => <TreeBox key={keyOf(b.node)} b={b} isOpen={open.has(keyOf(b.node))} onToggle={toggle} onPerson={onPerson} moved={moved} onReorder={onReorder} />)}
         </div>
       </div>
       <div className="absolute left-2 top-2 flex flex-wrap gap-1 items-center">
@@ -266,7 +273,7 @@ const OrgTree = ({ mgmt, onPerson, open, setOpen }) => {
         <span className="text-[10px] text-slate-500 tabular-nums px-1">{Math.round(t.s * 100)}%</span>
         <Btn onClick={() => setOpen(new Set(withKids(mgmt)))} title="Open every branch down to the leaders"><ChevronsUpDown size={13} />expand all</Btn>
         <Btn onClick={() => setOpen(defaultOpen(mgmt))} title="Back to the readable default: down to the supervisors"><ChevronsDownUp size={13} />to supervisors</Btn>
-        <Btn onClick={() => setOpen(new Set([mgmt && mgmt.emp_no].filter(Boolean)))} title="Only the GM and the managers"><Users size={13} />managers only</Btn>
+        <Btn onClick={() => setOpen(new Set([keyOf(mgmt), ...(mgmt?.id ? (mgmt.children||[]).map(keyOf) : [])].filter(Boolean)))} title="Only the GM and the managers"><Users size={13} />managers only</Btn>
       </div>
       <div className="absolute right-2 bottom-2 text-[10px] text-slate-500 bg-slate-900/70 rounded px-2 py-1">drag to pan · wheel / pinch to zoom · click a box to fold or unfold its branch · {g.boxes.length} boxes</div>
     </div>

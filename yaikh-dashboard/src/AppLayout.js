@@ -535,24 +535,30 @@ const AppLayout = () => {
                     ]
                   : demoType === "SUBMENU_ORG"
                     ? [
-                        // Org Chart
+                        // YHR: dashboard, master tree, section list, then worker directory.
+                        {
+                          title: "Headcount Dashboard",
+                          icon: "LayoutDashboard",
+                          color: "bg-emerald-500 text-white",
+                          action: "/dashboard/hr/headcount",
+                        },
                         {
                           title: "Master Organization Chart",
-                          icon: "LayoutDashboard",
+                          icon: "GitBranch",
                           color: "bg-purple-500 text-white",
                           action: "/dashboard/org-chart-master",
                         },
                         {
-                          title: "Custom Organization Chart",
-                          icon: "Settings2",
-                          color: "bg-indigo-500 text-white",
-                          action: "/dashboard/org-chart-master",
-                        },
-                        {
-                          title: "Leader/Worker Sections",
+                          title: "Section List",
                           icon: "Users",
                           color: "bg-sky-500 text-white",
-                          action: "/dashboard/org-chart-master",
+                          action: "/dashboard/hr/sections?structure=yai",
+                        },
+                        {
+                          title: "Worker Directory",
+                          icon: "UserRound",
+                          color: "bg-indigo-500 text-white",
+                          action: "/dashboard/hr/employees",
                         },
                       ]
                     : id === "cctv"

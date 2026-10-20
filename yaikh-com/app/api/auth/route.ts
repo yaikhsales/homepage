@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { findCode } from "@/lib/codes";
-import { makeSessionValue, COOKIE_NAME, COOKIE_MAX_AGE } from "@/lib/auth";
+import { makeSessionValue, verifySession, COOKIE_NAME, COOKIE_MAX_AGE } from "@/lib/auth";
 
 export const runtime = "nodejs";
 
@@ -35,4 +35,10 @@ export async function POST(req: Request) {
     maxAge: COOKIE_MAX_AGE,
   });
   return res;
+}
+
+// Read only the caller's existing signed Yai access session for the module header.
+export async function GET(req: NextRequest) {
+  const viewer = verifySession(req.cookies.get(COOKIE_NAME)?.value);
+  return NextResponse.json({ ok: true, authenticated: Boolean(viewer), viewer }, { headers: { "Cache-Control": "private, no-store" } });
 }
