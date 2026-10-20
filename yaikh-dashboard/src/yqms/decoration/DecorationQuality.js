@@ -47,7 +47,7 @@ function ReviewRelease({record,records,onReviewed}){
 }
 function CheckForm({mode,records,parent,onSave,compact=false}){
   const {org,error:orgError}=useQualityOrganization();
-  const inspectors=(org?.people||[]).filter(p=>p.level==='worker');
+  const inspectors=(org?.people||[]).filter(p=>['worker','staff'].includes(p.level)&&/inspect|check|auditor|coordinator|officer|\bQO\b/i.test(p.position||p.title||''));
   const eligible=JOBS.filter(job=>mode!=='printing'&&mode!=='embroidery'||(mode==='embroidery'?job.method==='embroidery':job.method!=='embroidery'));
   const [draft,setDraft]=useState(()=>{const value=draftFor(parent?jobFor(parent.jobId):eligible[0],mode);return {...value,parentId:parent?.id||null};});
   const [error,setError]=useState('');const job=jobFor(draft.jobId),method=METHODS[job.method];
