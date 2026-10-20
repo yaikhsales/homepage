@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { post } from '../hr/hr';
+import QmsOrganization from '../hr/QmsOrganization';
 let cached, pending;
 async function readOrganization(){
   if(cached && Date.now()-cached.loadedAt<300000)return cached;
@@ -27,9 +28,9 @@ export function qaChain(org,employee){
 export function reviewerOptions(org,employee){return qaChain(org,employee).filter(p=>['leader','supervisor','manager'].includes(p.level));}
 export const QUALITY_HANDOFFS=[
   ['Inspector / QC checker','A4 portrait pad','Identify order, lot, bundle and machine; enter checked and defective pieces, measurements, findings and evidence. Submit the recorded check.'],
-  ['QC leader','Desktop review','Review sample coverage, current SOP, inspector training and evidence. Segregate defective goods and return corrections for linked reinspection.'],
-  ['QC supervisor','Desktop disposition','Verify affected quantity, location, corrective action, independent reinspection and required tests before authorising the defined release scope.'],
-  ['Manager · QC','Desktop oversight','Own the quality plan, approve escalations, audit decisions, review trends and coordinate competence with YHR. Reports to the General Manager in the YHR chart.'],
+  ['Area Quality Leader','Desktop review','Review sample coverage, current SOP, inspector training and evidence. Segregate defective goods and return corrections for linked reinspection.'],
+  ['Senior Quality Supervisor','Desktop disposition','Verify affected quantity, location, corrective action, independent reinspection and required tests before authorising the defined release scope.'],
+  ['Quality Manager','Desktop oversight','Own the quality plan, delegated release scope, staffing and escalation. Coordinate area leaders, QA auditors, five brand QOs and training through YHR.'],
   ['Yai / PA','Assisted monitoring','Calculate results, find missing evidence, route tasks and flag overdue actions. Human reviewers own inspection and release decisions.'],
 ];
 export function QualityOrganizationPanel(){
@@ -37,6 +38,7 @@ export function QualityOrganizationPanel(){
   const manager=org?.people.find(p=>p.level==='manager'),supervisors=org?.people.filter(p=>p.level==='supervisor')||[],leaders=org?.people.filter(p=>p.level==='leader')||[];
   return <section style={{padding:16,border:'1px solid #94a3b8',borderRadius:12,background:'#f8fafc',color:'#1e293b',margin:'12px 0'}} aria-label="Quality roles aligned with YHR">
     <h3 style={{fontWeight:800,margin:'0 0 8px'}}>Quality responsibilities · YHR organisation</h3>
+    <QmsOrganization/><h4 style={{fontWeight:750,marginTop:14}}>Current employee assignments from the YHR directory</h4><p style={{fontSize:12}}>The planning chart above defines the intended department. Employee allocations below are the current simulated roster; unassigned posts are not filled with invented employee IDs.</p>
     {error?<p role="alert">{error}</p>:!org?<p>Loading the YHR QC / QA directory…</p>:<><p style={{fontSize:12}}>Source: the same YHR organisation and employee directory · {org.people.length} QC / QA positions · {org.simulated?'simulated factory':''} · as of {org.asOf||'current response'}.</p><p style={{fontWeight:700}}>{manager?.reports_to} → {manager?.emp_no} {manager?.title} → QC supervisors → QC leaders → inspectors</p><p style={{fontSize:12}}>{supervisors.map(p=>`${p.emp_no} ${p.title}`).join(' · ')}</p><p style={{fontSize:12}}>{leaders.map(p=>`${p.emp_no} ${p.title}`).join(' · ')}</p></>}
     <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(210px,1fr))',gap:10,marginTop:12}}>{QUALITY_HANDOFFS.map(([role,surface,task])=><div key={role} style={{border:'1px solid #cbd5e1',padding:12,borderRadius:9,background:'white'}}><strong>{role}</strong><div style={{fontSize:11,color:'#0369a1'}}>{surface}</div><p style={{fontSize:12}}>{task}</p></div>)}</div>
     <p style={{fontSize:12}}>Required handoff: current spec / artwork + named sampling plan → inspector evidence → leader review → correction and independent reinspection when needed → authorised scope release. Pending tests or failed product cannot be cleared by relabelling.</p>

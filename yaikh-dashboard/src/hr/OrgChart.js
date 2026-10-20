@@ -13,6 +13,7 @@ import { NavCover, useScreenTop } from "../components/ScreenTop";
 import { post, num, GROUP, Person, RoleIcon, HrNav, Chip } from "./hr";
 import OrgTree, { defaultOpen } from "./OrgTree";
 import SewingQualityRoles from "./SewingQualityRoles";
+import YaiOrganization from "./YaiOrganization";
 
 const DEPT_KEY = { "Accounting / Finance": "accounting", "Admin (office, canteen, dorm, drivers, Y-Shop)": "admin", "CSR — Compliance": "csr", Cutting: "cutting", Embroidery: "embroidery", "Factory management": "factory", Finishing: "finishing", "General management": "gm", HR: "hr", IT: "it", "Maintenance (YTM mechanics)": "ytm", "Merchandising (YPI, incl. sample room & CAD)": "ypi", Packaging: "packaging", "Planning (4DP, incl. MRP desk)": "4dp", Printing: "printing", "QC / QA": "qa" };
 const deptKey = (label, id) => DEPT_KEY[label] || (id ? String(id).split("/")[1] : "") || label;
@@ -90,7 +91,7 @@ const OrgChart = ({ onBack }) => {
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
-  const [mode, setMode] = useState("mgmt");
+  const [mode, setMode] = useState("yai");
   const [open, setOpen] = useState(() => new Set());
   const [showPeople, setShowPeople] = useState(() => new Set());
   const [mopen, setMopen] = useState(() => new Set());
@@ -128,18 +129,19 @@ const OrgChart = ({ onBack }) => {
         <button onClick={back} className="p-1 -ml-1 hover:bg-slate-700 rounded-full transition-colors text-slate-400 hover:text-white" aria-label="Back"><ArrowLeft size={18} /></button>
         <h1 className="text-lg font-black text-white leading-none">Organization chart</h1>
         <HrNav current="org-chart-master" />
-        <div className="ml-auto flex flex-wrap gap-x-3 text-xs text-slate-400">{(d.summary || []).map((x) => <span key={x.label} className="whitespace-nowrap">{x.label} <b className="text-white tabular-nums">{num(x.value)}</b></span>)}</div>
+        <div className="ml-auto flex flex-wrap gap-x-3 text-xs text-slate-400">{(mode === "mgmt" || mode === "dept" ? d.summary || [] : []).map((x) => <span key={x.label} className="whitespace-nowrap">{x.label} <b className="text-white tabular-nums">{num(x.value)}</b></span>)}</div>
         <button onClick={load} className="p-1.5 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700" aria-label="Refresh"><RefreshCw size={14} className={loading ? "animate-spin" : ""} /></button>
       </div>
-      {error && <div className="mb-2 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-200 px-3 py-2 text-sm">{error}</div>}
+      {error && (mode === "mgmt" || mode === "dept") && <div className="mb-2 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-200 px-3 py-2 text-sm">{error}</div>}
       <div className="flex flex-wrap items-center gap-2 mb-3">
-        <div className="inline-flex rounded-lg border border-slate-700 overflow-hidden text-xs">{[["mgmt", "Master chart"], ["dept", "By department"], ["sewing", "Sewing quality roles"]].map(([k, l]) => <button key={k} onClick={() => setMode(k)} className={`px-3 py-1 font-bold ${mode === k ? "bg-white text-slate-900" : "bg-slate-800 text-slate-300 hover:bg-slate-700"}`}>{l}</button>)}</div>
+        <div className="inline-flex rounded-lg border border-slate-700 overflow-hidden text-xs">{[["yai", "YAIKH organization"], ["mgmt", "Simulated factory"], ["dept", "Simulated departments"], ["sewing", "Sewing quality roles"]].map(([k, l]) => <button key={k} onClick={() => setMode(k)} className={`px-3 py-1 font-bold ${mode === k ? "bg-white text-slate-900" : "bg-slate-800 text-slate-300 hover:bg-slate-700"}`}>{l}</button>)}</div>
         {mode === "dept" ? <><button onClick={() => setOpen(new Set(collect(tree, ["group", "department", "section"])))} className="rounded-md border border-slate-700 bg-slate-800 px-2 py-1 text-[11px] text-slate-300 hover:bg-slate-700">expand all</button><button onClick={() => setOpen(new Set(collect(tree, ["group"])))} className="rounded-md border border-slate-700 bg-slate-800 px-2 py-1 text-[11px] text-slate-300 hover:bg-slate-700">departments only</button><button onClick={() => { setOpen(new Set()); setShowPeople(new Set()); }} className="rounded-md border border-slate-700 bg-slate-800 px-2 py-1 text-[11px] text-slate-300 hover:bg-slate-700">collapse all</button></> : null}
-        <button onClick={() => navigate("/dashboard/hr/sections")} className="inline-flex items-center gap-1 rounded-md border border-sky-500/50 bg-sky-500/10 text-sky-200 hover:bg-sky-500/25 px-2 py-1 text-[11px] font-bold"><LayoutGrid size={12} />section-by-section chart (all ID grids)</button>
+        {(mode === "mgmt" || mode === "dept") && <><button onClick={() => navigate("/dashboard/hr/sections")} className="inline-flex items-center gap-1 rounded-md border border-sky-500/50 bg-sky-500/10 text-sky-200 hover:bg-sky-500/25 px-2 py-1 text-[11px] font-bold"><LayoutGrid size={12} />section-by-section chart (all ID grids)</button>
         <span className="text-[11px] text-slate-500">GM → Factory Manager → Supervisors → Leaders; the workers are in the section chart (ID grids) · titles for management, employee numbers for everyone · no names, no photos</span>
-        <span className="ml-auto flex gap-1.5"><Chip cls={GROUP.operations.chip}>Operations</Chip><Chip cls={GROUP.administrative.chip}>Administrative</Chip></span>
+        <span className="ml-auto flex gap-1.5"><Chip cls={GROUP.operations.chip}>Operations</Chip><Chip cls={GROUP.administrative.chip}>Administrative</Chip></span></>}
       </div>
 
+      {mode === "yai" && <YaiOrganization />}
       {mode === "sewing" && <SewingQualityRoles />}
       {mode === "dept" && tree.length > 0 && (
         <div>
@@ -150,8 +152,8 @@ const OrgChart = ({ onBack }) => {
         </div>
       )}
       {mode === "mgmt" && mgmt && <OrgTree mgmt={mgmt} onPerson={onPerson} open={mopen} setOpen={setMopen} />}
-      {!data && <div className="rounded-2xl border border-dashed border-slate-700 p-8 text-center text-sm text-slate-500">{loading ? "Loading the organization…" : ""}</div>}
-      <p className="mt-3 text-[10px] text-slate-500">{d.as_of ? `As of ${String(d.as_of).replace("T", " ").slice(0, 16)} · ` : ""}simulated factory — employee numbers and roles only, no real person</p>
+      {!data && (mode === "mgmt" || mode === "dept") && <div className="rounded-2xl border border-dashed border-slate-700 p-8 text-center text-sm text-slate-500">{loading ? "Loading the organization…" : ""}</div>}
+      {(mode === "mgmt" || mode === "dept") && <p className="mt-3 text-[10px] text-slate-500">{d.as_of ? `As of ${String(d.as_of).replace("T", " ").slice(0, 16)} · ` : ""}simulated factory — employee numbers and roles only, no real person</p>}
     </div>
   );
 };
