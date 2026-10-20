@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, User } from "lucide-react";
+import { FABRIC_INSPECTION_ROLES, roleKey, activityMatchesRole } from "./sop-role-model";
 import FabricInspectionJobCard from "./FabricInspectionJobCard";
 import { QMS_AREAS } from "../hr/QmsOrganization";
 
@@ -185,7 +186,7 @@ const ORDER = {
       inputs: "Trims delivery", outputs: "Trims in store", deps: ["track"] },
     { id: "inspect", qms: true, lane: "qa", title: "Fabric inspection", d0: 62, d1: 65, by: H("Multiple roles", "Open full job card · tasks, evidence & learning"),
       screen: ["FC · Fabric inspection", "/dashboard/fc/fabric-inspection"],
-      roles: [R("Inspection supervisor", "fc", "Plans the % per lot (5–15 %, 100 % if costly)"), R("Workers", "fc", "Pull the sample rolls, run the machine"), R("QC department", "qa", "Judges holes, slubs, shade, width, selvage"), R("FC clerk", "fc", "Records pass / fail with pictures")],
+      roles: FABRIC_INSPECTION_ROLES,
       inputs: "Rolls in cages", outputs: "Pass / fail list", deps: ["receive"] },
     { id: "test", qms: true, lane: "qa", title: "Fabric testing", d0: 62, d1: 66, by: H("Lab technician", "shrinkage, weight, shade, test garment"),
       screen: ["FC · Fabric test", "/dashboard/fc/fabric-test"],
@@ -623,7 +624,7 @@ function layoutTimeline(flow) {
   return {pos,lanes,height:y,width,px};
 }
 
-function Timeline({ flow, focus, sel, onSel }) {
+function Timeline({ flow, focus, sel, onSel, selectedRole, onRoleSelect }) {
   const L = useMemo(() => layoutTimeline(flow), [flow]);
   const dim = (lane) => focus && !focus.includes(lane);
   const byId = useMemo(() => Object.fromEntries(flow.acts.map((a) => [a.id, a])), [flow]);
@@ -697,11 +698,11 @@ function Timeline({ flow, focus, sel, onSel }) {
 
           {flow.acts.map((a) => {
             const p = L.pos[a.id], c = DEPTS[a.lane].color, on = sel === a.id;
-            if (isFabricInspection(a)) return <section key={a.id} aria-label="Fabric inspection responsibilities" className="absolute rounded-2xl overflow-hidden" style={{left:p.x,top:HEAD_H+p.y,width:p.w,height:p.h,zIndex:2,border:`5px solid ${c}`,background:"white"}}><FabricInspectionJobCard /></section>;
+            if (isFabricInspection(a)) return <section key={a.id} aria-label="Fabric inspection responsibilities" className="absolute rounded-2xl overflow-hidden" style={{left:p.x,top:HEAD_H+p.y,width:p.w,height:p.h,zIndex:2,border:`5px solid ${activityMatchesRole(a, selectedRole) ? "#eab308" : c}`,background:"white"}}><FabricInspectionJobCard title={a.title} selectedRole={selectedRole} onRoleSelect={onRoleSelect} /></section>;
             return (
               <button key={a.id} onClick={() => onSel(a.id)} title={flow.ruler === false ? `${a.step}. ${a.title}` : `${a.title} · Day ${a.d0}–${a.d1}`}
                 className={`absolute text-left rounded-lg overflow-hidden transition-opacity ${dim(a.lane) ? "opacity-30" : ""}`}
-                style={{ left: p.x, top: HEAD_H + p.y, width: p.w, height: BOX_H, zIndex: 2, background: on ? "#334155" : "#1e293b", boxShadow: on ? `0 0 0 2px ${c}` : `inset 0 0 0 1px ${c}66` }}>
+                style={{ left: p.x, top: HEAD_H + p.y, width: p.w, height: BOX_H, zIndex: 2, background: on ? "#334155" : "#1e293b", boxShadow: activityMatchesRole(a, selectedRole) ? "0 0 0 4px #eab308" : on ? `0 0 0 2px ${c}` : `inset 0 0 0 1px ${c}66` }}>
                 <div className="absolute left-0 top-0 bottom-0 w-[3px]" style={{ background: c }} />
                 <div className="pl-2.5 pr-1.5 pt-1">
                   <div className="flex items-center gap-1">
@@ -783,7 +784,7 @@ function Cycle({ flow, sel, onSel, go }) {
   );
 }
 
-function ActivityCard({ flow, act, onSel, go, onProcess }) {
+function ActivityCard({ flow, act, onSel, go, onProcess, selectedRole, onRoleSelect }) {
   const c = DEPTS[act.lane].color;
   const i = flow.acts.indexOf(act);
   const next = flow.kind === "timeline"
@@ -817,7 +818,7 @@ function ActivityCard({ flow, act, onSel, go, onProcess }) {
             <div className="w-44 flex-shrink-0 flex items-start gap-1.5">
               <span className="mt-0.5"><ByIcon auto={r.dept === "sys"} size={14} /></span>
               <div>
-                <div className="font-semibold text-slate-100">{r.role}</div>
+                <button onClick={() => onRoleSelect?.({key:roleKey(r.role),label:r.role})} aria-pressed={selectedRole?.key === roleKey(r.role)} className={`text-left font-semibold underline ${selectedRole?.key === roleKey(r.role) ? "text-yellow-200" : "text-slate-100"}`}>{r.role}</button>
                 <div className="text-[10px]" style={{ color: DEPTS[r.dept].color }}>{DEPTS[r.dept].label}</div>
               </div>
             </div>
@@ -852,6 +853,16 @@ const SOPMap = ({ onBack }) => {
   const navigate = useNavigate();
   const [pid, setPid] = useState("order");
   const [sel, setSel] = useState(null);
+  const [selectedRole, setSelectedRole] = useState(null);
+  const selectRole = role => setSelectedRole(current => current?.key === role.key ? null : role);
+  const roleJobs = useMemo(() => {
+    if (!selectedRole) return [];
+    const seen = new Set();
+    return PROCESSES.flatMap(process => process.flow.acts.filter(activity => activityMatchesRole(activity, selectedRole)).flatMap(activity => {
+      if (seen.has(activity.id)) return []; seen.add(activity.id);
+      return [{ activity, processId: process.id, jobs: activity.roles.filter(role => roleKey(role.role) === selectedRole.key) }];
+    }));
+  }, [selectedRole]);
   const [expanded, setExpanded] = useState(null);
   const [masterList, setMasterList] = useState(false);
   const [subProcess, setSubProcess] = useState(null);
@@ -923,13 +934,14 @@ const SOPMap = ({ onBack }) => {
             {proc.focus && !subProcess && <div className="text-xs mt-1 text-slate-300">Showing this department's part of the order — hand-offs in and out stay visible.</div>}
           </div>
 
+          {selectedRole && <section aria-label="Selected role jobs" className="mb-4 rounded-xl border-2 border-yellow-400 bg-yellow-400/10 p-4"><div className="flex items-center justify-between gap-3"><h2 className="text-xl font-bold text-yellow-200">{selectedRole.label} · All jobs ({roleJobs.length} activities)</h2><button onClick={() => setSelectedRole(null)} className="rounded border border-yellow-400 px-3 py-1 text-sm">Clear role highlight</button></div><div className="mt-3 grid gap-3">{roleJobs.map(({activity,processId,jobs}) => <article key={activity.id} className="rounded-lg bg-slate-900/70 p-3"><button onClick={() => {selectProcess(processId);setSel(activity.id);}} className="font-bold text-yellow-200 underline">{activity.title}</button>{jobs.map((job,index) => <p key={index} className="mt-1 text-sm text-slate-200">{job.does}</p>)}</article>)}</div></section>}
           {masterList ? <div className="overflow-x-auto"><table className="w-full text-left text-xs"><thead><tr>{["Stage", "Process", "People & tasks", "UI / report / dashboard"].map(title => <th key={title} className="p-2 border-b border-slate-600">{title}</th>)}</tr></thead><tbody>{(proc.focus ? proc.flow.acts.filter(a => proc.focus.includes(a.lane)) : proc.flow.acts).map(a => <tr key={a.id} className="border-b border-slate-800"><td className="p-2 align-top">{a.stage || AGENT_NAMES[pid] || proc.name}</td><td className="p-2 align-top"><button className="text-emerald-200 underline" onClick={() => { setMasterList(false); setSubProcess(null); pick(a.id); }}>{a.title}</button></td><td className="p-2 align-top">{a.roles.map((r,i) => <p key={i} className="mb-2"><strong>{r.role}:</strong> {r.does}</p>)}</td><td className="p-2 align-top">{a.screen && <button className="text-sky-200 underline" onClick={() => go(a.screen[1])}>{a.screen[0]}</button>}<p className="mt-1">{a.menu}</p><p className="mt-1">{a.outputs}</p></td></tr>)}</tbody></table></div> : flow.kind === "timeline"
-            ? <Timeline flow={flow} focus={subProcess ? undefined : proc.focus} sel={sel} onSel={pick} />
+            ? <Timeline flow={flow} focus={subProcess ? undefined : proc.focus} sel={sel} onSel={pick} selectedRole={selectedRole} onRoleSelect={selectRole} />
             : <Cycle flow={flow} sel={sel} onSel={pick} go={go} />}
 
           <div ref={cardRef}>
             {act
-              ? <ActivityCard flow={flow} act={act} onSel={pick} go={go} onProcess={selectProcess} />
+              ? <ActivityCard flow={flow} act={act} onSel={pick} go={go} onProcess={selectProcess} selectedRole={selectedRole} onRoleSelect={selectRole} />
               : <div className="mt-4 text-sm text-slate-500">Click any box to see every role involved, what each one does, and where it goes next.</div>}
           </div>
         </main>
