@@ -367,6 +367,16 @@ const renderCard = (
       : subIconImage || card.image;
   const isFCModule = imageToUse && imageToUse.includes("assets/fc/");
   const isYQMSModule = imageToUse && imageToUse.includes("assets/yqms/");
+  const isYQMSHubCard = moduleId === "yqms";
+  const yqmsTone = {
+    "Pre Production": { ink: "#6d4bbd", pale: "#f2edff", ring: "#e7dcff" },
+    Cut: { ink: "#bd6429", pale: "#fff2e9", ring: "#ffe4d2" },
+    Decoration: { ink: "#a44894", pale: "#fff0fa", ring: "#f9dff1" },
+    Sewing: { ink: "#1776a7", pale: "#eaf7ff", ring: "#d7f0ff" },
+    "Finishing & Packing": { ink: "#168777", pale: "#e9faf6", ring: "#d8f3eb" },
+    "Final Inspection": { ink: "#4d8339", pale: "#f0f9e9", ring: "#e2f1d7" },
+    "Reporting & Compliance": { ink: "#385fc0", pale: "#edf3ff", ring: "#dce7ff" },
+  }[card.hubGroup] || { ink: "#285fc5", pale: "#eef5ff", ring: "#dce9ff" };
   const isEGovModule = card.url !== undefined; // E-Government modules have url property
   const isNonClickableModule = isYQMSModule && !card.galleryImages && card.title !== "QC File" && card.title !== "Pre Production Meeting" && !card.action;
 
@@ -649,6 +659,21 @@ const renderCard = (
           }
         >
           {(() => {
+            // The YQMS hub uses one clear icon language. Keep the original
+            // artwork available to each module screen, but not in this grid.
+            if (isYQMSHubCard) {
+              return (
+                <span
+                  className="relative flex h-[115px] w-[115px] items-center justify-center rounded-2xl border"
+                  style={{ background: `linear-gradient(145deg, #ffffff, ${yqmsTone.pale})`, borderColor: yqmsTone.ring, boxShadow: "0 3px 8px rgba(32, 53, 90, .09)" }}
+                >
+                  <span className="flex h-[77px] w-[77px] items-center justify-center rounded-full border-2 border-white" style={{ backgroundColor: yqmsTone.ring, color: yqmsTone.ink }}>
+                    <IconRenderer iconName={card.icon || "FileCheck"} size={48} strokeWidth={2} aria-hidden="true" />
+                  </span>
+                  <span className="absolute right-3 top-3 h-2 w-2 rounded-full" style={{ backgroundColor: yqmsTone.ink, opacity: .55 }} />
+                </span>
+              );
+            }
             const shouldUseOriginalIcon = false;
             const finalImageToUse = shouldUseOriginalIcon ? null : imageToUse;
 
@@ -976,7 +1001,7 @@ const SubMenuView = () => {
                   >
                     {group.cards.map((card, idx) => {
                       return renderCard(
-                        card,
+                        moduleId === "yqms" ? { ...card, hubGroup: group.label } : card,
                         idx,
                         navigate,
                         moduleId,
