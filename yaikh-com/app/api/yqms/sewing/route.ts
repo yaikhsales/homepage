@@ -16,6 +16,13 @@ function identity() {
   return verifySession(cookies().get(COOKIE_NAME)?.value);
 }
 
+function floorIdentity(mode: string) {
+  const value = verifySession(cookies().get("yqms_floor_session")?.value);
+  if (!value) return null;
+  const [scope, allowedMode, expiry] = value.split(":");
+  return scope === "yqms-floor" && allowedMode === mode && Number(expiry) > Date.now() ? `Floor pad · ${mode}` : null;
+}
+
 function sameOrigin() {
   const origin = headers().get("origin");
   const host = headers().get("x-forwarded-host") || headers().get("host");
@@ -43,13 +50,13 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const session = identity();
-  if (!session) return bad("Sign in to Yai before saving an inspection.", 401);
   if (!sameOrigin()) return bad("Invalid request origin.", 403);
   let body: Record<string, any>;
   try { body = await request.json(); } catch { return bad("Invalid inspection data."); }
   const mode = str(body.mode);
   if (mode !== "first-output" && mode !== "endline") return bad("Invalid workflow.");
+  const session = identity() || floorIdentity(mode);
+  if (!session) return bad("Sign in to the floor pad before saving an inspection.", 401);
   const mo = str(body.mo), line = str(body.line), style = str(body.style);
   const inspector = str(body.inspector), employeeId = str(body.employeeId);
   if (!mo || !line || !style || !inspector || !employeeId) return bad("MO, line, style, inspector name and YHR employee ID are required.");
