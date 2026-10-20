@@ -1,13 +1,14 @@
 import { cookies, headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { COOKIE_NAME, verifySession } from "@/lib/auth";
+import { MODULES } from "@/lib/yqms-standard";
 import { getDb } from "@/lib/mongo";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 const collectionName = "yqms_decision_events";
-const modes = ["first-output", "endline", "inline", "roaming", "checkout", "qa20"];
+const modes = ["first-output", "endline", "inline", "roaming", "checkout", "qa20", ...MODULES];
 const roles = ["Factory Manager", "Quality Manager", "Senior Supervisor", "QA Supervisor"];
 const noStore = { "Cache-Control": "private, no-store" };
 const bad = (error: string, status = 400) => NextResponse.json({ ok: false, error }, { status, headers: noStore });
