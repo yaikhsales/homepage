@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, User } from "lucide-react";
 import { FABRIC_INSPECTION_ROLES, roleKey, activityMatchesRole } from "./sop-role-model";
+import { SopLanguageProvider, SopLanguageFlags, useSopLanguage } from "./sop-languages";
 import FabricInspectionJobCard from "./FabricInspectionJobCard";
 import { buildWorkingAxis, factoryToday } from "./sop-working-time";
 import { QMS_AREAS } from "../hr/QmsOrganization";
@@ -587,10 +588,11 @@ const agentChildren = (proc) => {
 const AGENT_PROCESSES = AGENT_ORDER.map(id => { const proc = PROCESSES.find(p => p.id === id); return { ...proc, name: AGENT_NAMES[id], children: [...agentChildren(proc), ...(id === "ytm" ? [{ name: "YTM Shop", processId: "ytmshop" }] : [])] }; });
 
 /* ---------- who-does-it line ---------- */
-function ByLine({ by, size = 10.5, lines = 2 }) {
+function ByLine({ by, size = 14, lines = 2 }) {
+  const {text}=useSopLanguage();
   return (
     <div className="text-slate-300" style={{ fontSize: size, lineHeight: `${size + 3}px`, display: "-webkit-box", WebkitLineClamp: lines, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
-      <span className="font-semibold text-slate-100">{by.actor}</span> {by.does}
+      <span className="font-semibold text-slate-100">{text(by.actor)}</span> {text(by.does)}
     </div>
   );
 }
@@ -601,10 +603,10 @@ function ByIcon({ auto, size = 14 }) {
 }
 
 /* ---------- timeline layout ---------- */
-const PX = 14, LABEL_W = 132, HEAD_H = 76, BOX_W = 168, BOX_H = 56, TRACK_H = 64, PAD = 6;
+const PX = 14, LABEL_W = 210, HEAD_H = 104, BOX_W = 260, BOX_H = 112, TRACK_H = 120, PAD = 10;
 
 const isFabricInspection = a => a.id === "inspect" || a.id === "q4";
-function layoutTimeline(flow, pixelsPerHour = 32, orderDate = factoryToday(), publicHolidays = []) {
+function layoutTimeline(flow, pixelsPerHour = 32, orderDate = factoryToday(), publicHolidays = [], cardHeights = {}) {
   const axis = flow.ruler === false ? null : buildWorkingAxis(flow.days, pixelsPerHour, orderDate, publicHolidays);
   const px = flow.px || PX, pos = {}, lanes = [];
   const at = axis ? axis.at : day => day * px;
@@ -613,7 +615,7 @@ function layoutTimeline(flow, pixelsPerHour = 32, orderDate = factoryToday(), pu
     const tracks = [], items = flow.acts.filter(a => a.lane === lane).sort((a,b) => a.d0-b.d0);
     items.forEach(a => {
       const x = at(a.d0), dur = flow.px ? px-14 : Math.max(at(a.d1)-x,6);
-      const w = isFabricInspection(a) ? 1140 : axis ? Math.max(BOX_W, Math.min(dur, 300)) : Math.max(dur,flow.px ? 0 : BOX_W), h = isFabricInspection(a) ? 1390 : BOX_H;
+      const w = isFabricInspection(a) ? 1140 : axis ? Math.max(BOX_W, Math.min(dur, 300)) : Math.max(dur,flow.px ? 0 : BOX_W), h = isFabricInspection(a) ? (cardHeights[a.id] || 1390) : BOX_H;
       let t = tracks.findIndex(track => track.end+8 <= x);
       if(t<0){t=tracks.length;tracks.push({end:0,height:BOX_H});}
       tracks[t].end=x+w; tracks[t].height=Math.max(tracks[t].height,h);
@@ -628,11 +630,13 @@ function layoutTimeline(flow, pixelsPerHour = 32, orderDate = factoryToday(), pu
 }
 
 function Timeline({ flow, focus, sel, onSel, selectedRole, onRoleSelect }) {
-  const [pixelsPerHour, setPixelsPerHour] = useState(32);
-  const [orderDate, setOrderDate] = useState(() => factoryToday());
-  const [publicHolidays, setPublicHolidays] = useState([]);
-  const [holidayDate, setHolidayDate] = useState("");
-  const L = useMemo(() => layoutTimeline(flow, pixelsPerHour, orderDate, publicHolidays), [flow, pixelsPerHour, orderDate, publicHolidays]);
+  const {text,language} = useSopLanguage();
+  const [cardHeights,setCardHeights]=useState({});
+  const measureCard=(id,height)=>setCardHeights(current=>current[id]===height?current:{...current,[id]:height});
+  const pixelsPerHour = 32;
+  const orderDate = flow.orderDate || factoryToday();
+  const publicHolidays = useMemo(() => flow.publicHolidays || [], [flow.publicHolidays]);
+  const L = useMemo(() => layoutTimeline(flow, pixelsPerHour, orderDate, publicHolidays, cardHeights), [flow, pixelsPerHour, orderDate, publicHolidays, cardHeights]);
   const dim = (lane) => focus && !focus.includes(lane);
   const byId = useMemo(() => Object.fromEntries(flow.acts.map((a) => [a.id, a])), [flow]);
 
@@ -660,27 +664,27 @@ function Timeline({ flow, focus, sel, onSel, selectedRole, onRoleSelect }) {
 
   return (
     <div>
-    {L.axis && <div className="mb-3 flex flex-wrap items-center gap-3 rounded-lg border border-slate-600 bg-slate-800 p-3 text-xs text-slate-200"><strong>Working-day timeline</strong><label className="flex items-center gap-2">Day 0 · Order placed<input aria-label="Day 0 order date" type="date" value={orderDate} onChange={event => {if (event.target.value) setOrderDate(event.target.value);}} className="rounded border border-slate-500 bg-slate-900 px-2 py-1" /></label><button onClick={() => setOrderDate(factoryToday())} className="rounded border border-emerald-500 px-2 py-1 text-emerald-200">Today</button><span>Mon–Fri: 4h morning + 1h lunch + 4h afternoon + 2h OT (11h elapsed / 10h work)</span><span>Sat / Public holiday: 4h + 1h lunch + 4h · No OT</span><span>Sun: off</span><label className="ml-auto flex items-center gap-2">Scale<select aria-label="Timeline hour scale" value={pixelsPerHour} onChange={event => setPixelsPerHour(Number(event.target.value))} className="rounded border border-slate-500 bg-slate-900 px-2 py-1"><option value={16}>Compact</option><option value={32}>Hourly</option><option value={48}>Expanded</option></select></label><div className="flex w-full flex-wrap items-center gap-2"><label className="flex items-center gap-2">Public holiday<input aria-label="Public holiday date" type="date" value={holidayDate} onChange={event => setHolidayDate(event.target.value)} className="rounded border border-slate-500 bg-slate-900 px-2 py-1" /></label><button disabled={!holidayDate} onClick={() => {setPublicHolidays(dates => [...new Set([...dates,holidayDate])].sort());setHolidayDate("");}} className="rounded border border-amber-400 px-2 py-1 disabled:opacity-40">Add no-OT date</button>{publicHolidays.map(date => <button key={date} aria-label={`Remove public holiday ${date}`} onClick={() => setPublicHolidays(dates => dates.filter(value => value !== date))} className="rounded bg-amber-500/20 px-2 py-1">{date} ×</button>)}{!publicHolidays.length && <span className="text-slate-400">Add the factory’s approved holiday dates to apply 4 | 1 | 4.</span>}</div><span className="w-full text-slate-400">Day 0 = selected order date (defaults to today in Cambodia). Header dates count calendar days from the order. Activities follow working-day offsets and skip Sundays; shift hours are relative to shift start.</span></div>}
+
     <div className="flex rounded-xl border border-white/10 bg-slate-950/40 overflow-hidden">
       <div className="flex-shrink-0 border-r border-white/10" style={{ width: LABEL_W }}>
-        <div style={{ height: HEAD_H }} className="border-b border-white/10 px-2 flex items-end pb-1 text-[10px] uppercase tracking-wider text-slate-500">Department</div>
+        <div style={{ height: HEAD_H }} className="border-b border-white/10 px-2 flex items-end pb-1 text-base uppercase tracking-wider text-slate-500">{text("Department")}</div>
         {L.lanes.map((ln) => (
           <div key={ln.lane} style={{ height: ln.h }} className={`px-2 flex items-center border-b border-white/5 ${dim(ln.lane) ? "opacity-40" : ""}`}>
-            <span className="text-[11px] font-bold leading-tight" style={{ color: DEPTS[ln.lane].color }}>{DEPTS[ln.lane].label}</span>
+            <span className="text-lg font-bold leading-snug" style={{ color: DEPTS[ln.lane].color }}>{text(DEPTS[ln.lane].label)}</span>
           </div>
         ))}
       </div>
       <div className="overflow-x-auto flex-1">
         <div className="relative" style={{ width: L.width + BOX_W, height: HEAD_H + L.height }}>
           {flow.phases.map((p) => (
-            <div key={p.label} className="absolute top-0 text-[10px] text-slate-400 border-l border-white/10 px-1 truncate" style={{ left: L.at(p.d0), width: L.at(p.d1) - L.at(p.d0), height: 18 }}>{p.label}</div>
+            <div key={p.label} className="absolute top-0 text-sm text-slate-300 border-l border-white/10 px-1 truncate" style={{ left: L.at(p.d0), width: L.at(p.d1) - L.at(p.d0), height: 18 }}>{p.label}</div>
           ))}
           {flow.ruler === false && flow.phases.map((p) => (
             <div key={`l${p.label}`} className="absolute border-l border-white/10" style={{ left: p.d0 * L.px, top: 18, height: HEAD_H + L.height - 18 }} />
           ))}
           {L.axis && L.axis.days.map((day, index) => <div key={`shift-${index}`} className="absolute border-l border-slate-600" style={{left:day.x,top:18,width:day.width,height:HEAD_H+L.height-18}}>
-            <div title={`${day.weekday} ${day.dateLabel}${day.off ? " · Non-working day" : ""}`} className={`h-6 overflow-hidden whitespace-nowrap px-1 text-[11px] font-semibold ${day.off ? "text-slate-500" : "text-emerald-200"}`}>{`D${day.calendarDay} · ${day.weekday}${day.off ? " · OFF" : day.publicHoliday ? " · HOLIDAY" : ""} · ${day.dateLabel}`}</div>
-            {day.off ? <div className="absolute inset-x-0 bottom-0 top-6 bg-slate-500/10" /> : day.segments.map(segment => <div key={segment.key} className="absolute top-6 bottom-0 border-l border-white/10" style={{left:segment.x-day.x,width:segment.width,background:segment.work?undefined:"#a1620714"}}><div title={segment.label} className="h-8 overflow-hidden whitespace-nowrap px-1 py-1 text-[10px] text-white" style={{background:segment.color}}>{segment.key === "morning" ? "4h morning" : segment.key === "lunch" ? "1h lunch" : segment.key === "afternoon" ? "4h afternoon" : "2h OT"}</div></div>)}
+            <div title={`${day.weekday} ${day.dateLabel}${day.off ? " · Non-working day" : ""}`} className={`h-8 overflow-hidden whitespace-nowrap px-2 text-base font-semibold ${day.off ? "text-slate-500" : "text-emerald-200"}`}>{`D${day.calendarDay} · ${day.weekday}${day.off ? " · OFF" : day.publicHoliday ? " · HOLIDAY" : ""} · ${day.dateLabel}`}</div>
+            {day.off ? <div className="absolute inset-x-0 bottom-0 top-8 bg-slate-500/10" /> : day.segments.map(segment => <div key={segment.key} className="absolute top-8 bottom-0 border-l border-white/10" style={{left:segment.x-day.x,width:segment.width,background:segment.work?undefined:"#a1620714"}}><div title={segment.label} className="h-12 overflow-hidden whitespace-nowrap px-2 py-2 text-base text-white" style={{background:segment.color}}>{segment.key === "morning" ? `4h ${text("Morning")}` : segment.key === "lunch" ? `1h ${text("Lunch")}` : segment.key === "afternoon" ? `4h ${text("Afternoon")}` : `2h ${text("OT")}`}</div></div>)}
           </div>)}
           <div className="absolute left-0 right-0 border-b border-white/10" style={{ top: HEAD_H }} />
           {L.lanes.map((ln) => (
@@ -705,18 +709,18 @@ function Timeline({ flow, focus, sel, onSel, selectedRole, onRoleSelect }) {
 
           {flow.acts.map((a) => {
             const p = L.pos[a.id], c = DEPTS[a.lane].color, on = sel === a.id;
-            if (isFabricInspection(a)) return <section key={a.id} aria-label="Fabric inspection responsibilities" className="absolute rounded-2xl overflow-hidden" style={{left:p.x,top:HEAD_H+p.y,width:p.w,height:p.h,zIndex:2,border:`5px solid ${activityMatchesRole(a, selectedRole) ? "#eab308" : c}`,background:"white"}}><FabricInspectionJobCard title={a.title} selectedRole={selectedRole} onRoleSelect={onRoleSelect} /></section>;
+            if (isFabricInspection(a)) return <section key={a.id} aria-label="Fabric inspection responsibilities" className="absolute rounded-2xl overflow-hidden" style={{left:p.x,top:HEAD_H+p.y,width:p.w,height:p.h,zIndex:2,border:`5px solid ${activityMatchesRole(a, selectedRole) ? "#eab308" : c}`,background:"white"}}><FabricInspectionJobCard title={a.title} selectedRole={selectedRole} onRoleSelect={onRoleSelect} onHeight={height=>measureCard(a.id,height)} /></section>;
             return (
               <button key={a.id} onClick={() => onSel(a.id)} title={flow.ruler === false ? `${a.step}. ${a.title}` : `${a.title} · Working day ${a.d0}–${a.d1}`}
                 className={`absolute text-left rounded-lg overflow-hidden transition-opacity ${dim(a.lane) ? "opacity-30" : ""}`}
                 style={{ left: p.x, top: HEAD_H + p.y, width: p.w, height: BOX_H, zIndex: 2, background: on ? "#334155" : "#1e293b", boxShadow: activityMatchesRole(a, selectedRole) ? "0 0 0 4px #eab308" : on ? `0 0 0 2px ${c}` : `inset 0 0 0 1px ${c}66` }}>
                 <div className="absolute left-0 top-0 bottom-0 w-[3px]" style={{ background: c }} />
-                <div className="pl-2.5 pr-1.5 pt-1">
+                <div className="pl-3 pr-2 pt-2">
                   <div className="flex items-center gap-1">
-                    <ByIcon auto={a.by.auto} size={13} />
-                    <span className="text-[11px] font-bold truncate" style={{ color: c }}>{a.title}</span>
+                    <ByIcon auto={a.by.auto} size={18} />
+                    <span className="text-base font-bold leading-snug" style={{ color: c }}>{a.title}</span>
                   </div>
-                  <ByLine by={a.by} size={10} />
+                  <ByLine by={a.by} size={14} />
                 </div>
                 <div className="absolute bottom-0 left-0 h-[3px]" style={{ width: Math.min(p.dur,p.w), background: c }} />
               </button>
@@ -793,6 +797,7 @@ function Cycle({ flow, sel, onSel, go }) {
 }
 
 function ActivityCard({ flow, act, onSel, go, onProcess, selectedRole, onRoleSelect }) {
+  const {text,localizeRole}=useSopLanguage();
   const c = DEPTS[act.lane].color;
   const i = flow.acts.indexOf(act);
   const next = flow.kind === "timeline"
@@ -826,11 +831,11 @@ function ActivityCard({ flow, act, onSel, go, onProcess, selectedRole, onRoleSel
             <div className="w-44 flex-shrink-0 flex items-start gap-1.5">
               <span className="mt-0.5"><ByIcon auto={r.dept === "sys"} size={14} /></span>
               <div>
-                <button onClick={() => onRoleSelect?.({key:roleKey(r.role),label:r.role})} aria-pressed={selectedRole?.key === roleKey(r.role)} className={`text-left font-semibold underline ${selectedRole?.key === roleKey(r.role) ? "text-yellow-200" : "text-slate-100"}`}>{r.role}</button>
+                <button onClick={() => onRoleSelect?.({key:roleKey(r.role),label:r.role})} aria-pressed={selectedRole?.key === roleKey(r.role)} className={`text-left font-semibold underline ${selectedRole?.key === roleKey(r.role) ? "text-yellow-200" : "text-slate-100"}`}>{localizeRole(r).role}</button>
                 <div className="text-[10px]" style={{ color: DEPTS[r.dept].color }}>{DEPTS[r.dept].label}</div>
               </div>
             </div>
-            <div className="text-slate-300">{r.does}</div>
+            <div className="text-slate-300">{localizeRole(r).does}</div>
           </div>
         ))}
       </div>
@@ -857,7 +862,8 @@ function ActivityCard({ flow, act, onSel, go, onProcess, selectedRole, onRoleSel
   );
 }
 
-const SOPMap = ({ onBack }) => {
+const SOPMapContent = ({ onBack }) => {
+  const {text,localizeRole} = useSopLanguage();
   const navigate = useNavigate();
   const [pid, setPid] = useState("order");
   const [sel, setSel] = useState(null);
@@ -901,8 +907,8 @@ const SOPMap = ({ onBack }) => {
       <div className="flex items-center gap-3 px-4 py-3 border-b border-white/10">
         <button onClick={onBack} className="p-2 rounded-lg hover:bg-white/10" aria-label="Back"><ArrowLeft size={18} /></button>
         <div className="flex-1">
-          <div className="font-bold text-lg leading-tight">SOP · Standard Operating Procedures</div>
-          <div className="text-xs text-slate-400">Who does what, on which Yai screen, and who it hands to next.</div>
+          <div className="font-bold text-lg leading-tight">{text("SOP · Standard Operating Procedures")}</div>
+          <SopLanguageFlags />
         </div>
         <div className="hidden sm:flex items-center gap-3 text-[11px] text-slate-400">
           <span className="flex items-center gap-1"><ByIcon auto size={14} /> Yai / PA does it</span>
@@ -922,11 +928,11 @@ const SOPMap = ({ onBack }) => {
           {AGENT_PROCESSES.map(p => (
             <div key={p.id} className="mt-1">
               <button aria-expanded={expanded === p.id} aria-controls={`sop-children-${p.id}`} onClick={() => { setExpanded(expanded === p.id ? null : p.id); selectProcess(p.id); }} className={`w-full text-left text-sm px-3 py-2 rounded-lg flex justify-between gap-2 ${pid === p.id ? "bg-emerald-600 text-white" : "text-slate-300 hover:bg-white/5"}`}>
-                <span>{p.name}</span><span aria-hidden="true">{expanded === p.id ? "▾" : "▸"}</span>
+                <span>{text(p.name)}</span><span aria-hidden="true">{expanded === p.id ? "▾" : "▸"}</span>
               </button>
               {expanded === p.id && <div id={`sop-children-${p.id}`} className="ml-3 pl-2 border-l border-slate-700">
                 {p.children.map(child => <div key={child.name}>
-                  <button aria-expanded={subProcess?.name === child.name} onClick={() => { setMasterList(false); setPid(child.processId || p.id); setSubProcess(child.processId ? null : child); setSel(null); }} className={`block w-full text-left px-2 py-2 text-xs rounded-md ${subProcess?.name === child.name ? "bg-emerald-500/15 text-emerald-200" : "text-slate-400 hover:bg-white/5 hover:text-white"}`}>{child.name}</button>
+                  <button aria-expanded={subProcess?.name === child.name} onClick={() => { setMasterList(false); setPid(child.processId || p.id); setSubProcess(child.processId ? null : child); setSel(null); }} className={`block w-full text-left px-2 py-2 text-xs rounded-md ${subProcess?.name === child.name ? "bg-emerald-500/15 text-emerald-200" : "text-slate-400 hover:bg-white/5 hover:text-white"}`}>{text(child.name)}</button>
                   {subProcess?.name === child.name && <div className="ml-2 border-l border-slate-700 pl-2">{p.flow.acts.filter(a => child.ids?.includes(a.id)).map(a => <button key={a.id} onClick={() => pick(a.id)} className={`block w-full py-1.5 text-left text-xs ${sel === a.id ? "text-emerald-200" : "text-slate-400 hover:text-white"}`}>{a.title}</button>)}</div>}
                 </div>)}
               </div>}
@@ -935,14 +941,14 @@ const SOPMap = ({ onBack }) => {
         </aside>
 
         <main className="flex-1 min-w-0 p-4 overflow-y-auto">
-          <div className="mb-3 flex gap-2"><button onClick={() => setMasterList(false)} className={`rounded-lg border px-3 py-1 text-sm ${!masterList ? "border-emerald-400 text-emerald-200" : "border-slate-600"}`}>Process chart</button><button onClick={() => setMasterList(true)} className={`rounded-lg border px-3 py-1 text-sm ${masterList ? "border-emerald-400 text-emerald-200" : "border-slate-600"}`}>Master list</button></div>
+          <div className="mb-3 flex gap-2"><button onClick={() => setMasterList(false)} className={`rounded-lg border px-3 py-1 text-sm ${!masterList ? "border-emerald-400 text-emerald-200" : "border-slate-600"}`}>{text("Process chart")}</button><button onClick={() => setMasterList(true)} className={`rounded-lg border px-3 py-1 text-sm ${masterList ? "border-emerald-400 text-emerald-200" : "border-slate-600"}`}>{text("Master list")}</button></div>
           <div className="mb-3">
             <div className="text-xl font-bold">{subProcess ? `${AGENT_NAMES[pid] || proc.name} / ${subProcess.name}` : proc.focus ? (AGENT_NAMES[pid] || proc.name) : flow.title}</div>
-            <div className="text-sm text-slate-400">{flow.summary}</div>
+            {flow.ruler === false && <div className="text-sm text-slate-400">{flow.summary}</div>}
             {proc.focus && !subProcess && <div className="text-xs mt-1 text-slate-300">Showing this department's part of the order — hand-offs in and out stay visible.</div>}
           </div>
 
-          {selectedRole && <section aria-label="Selected role jobs" className="mb-4 rounded-xl border-2 border-yellow-400 bg-yellow-400/10 p-4"><div className="flex items-center justify-between gap-3"><h2 className="text-xl font-bold text-yellow-200">{selectedRole.label} · All jobs ({roleJobs.length} activities)</h2><button onClick={() => setSelectedRole(null)} className="rounded border border-yellow-400 px-3 py-1 text-sm">Clear role highlight</button></div><div className="mt-3 grid gap-3">{roleJobs.map(({activity,processId,jobs}) => <article key={activity.id} className="rounded-lg bg-slate-900/70 p-3"><button onClick={() => {selectProcess(processId);setSel(activity.id);}} className="font-bold text-yellow-200 underline">{activity.title}</button>{jobs.map((job,index) => <p key={index} className="mt-1 text-sm text-slate-200">{job.does}</p>)}</article>)}</div></section>}
+          {selectedRole && <section aria-label="Selected role jobs" className="mb-4 rounded-xl border-2 border-yellow-400 bg-yellow-400/10 p-4"><div className="flex items-center justify-between gap-3"><h2 className="text-xl font-bold text-yellow-200">{localizeRole({role:selectedRole.label}).role} · {text("All jobs")} ({roleJobs.length})</h2><button onClick={() => setSelectedRole(null)} className="rounded border border-yellow-400 px-3 py-1 text-sm">{text("Clear role highlight")}</button></div><div className="mt-3 grid gap-3">{roleJobs.map(({activity,processId,jobs}) => <article key={activity.id} className="rounded-lg bg-slate-900/70 p-3"><button onClick={() => {selectProcess(processId);setSel(activity.id);}} className="font-bold text-yellow-200 underline">{activity.title}</button>{jobs.map((job,index) => <p key={index} className="mt-1 text-sm text-slate-200">{localizeRole(job).does}</p>)}</article>)}</div></section>}
           {masterList ? <div className="overflow-x-auto"><table className="w-full text-left text-xs"><thead><tr>{["Stage", "Process", "People & tasks", "UI / report / dashboard"].map(title => <th key={title} className="p-2 border-b border-slate-600">{title}</th>)}</tr></thead><tbody>{(proc.focus ? proc.flow.acts.filter(a => proc.focus.includes(a.lane)) : proc.flow.acts).map(a => <tr key={a.id} className="border-b border-slate-800"><td className="p-2 align-top">{a.stage || AGENT_NAMES[pid] || proc.name}</td><td className="p-2 align-top"><button className="text-emerald-200 underline" onClick={() => { setMasterList(false); setSubProcess(null); pick(a.id); }}>{a.title}</button></td><td className="p-2 align-top">{a.roles.map((r,i) => <p key={i} className="mb-2"><strong>{r.role}:</strong> {r.does}</p>)}</td><td className="p-2 align-top">{a.screen && <button className="text-sky-200 underline" onClick={() => go(a.screen[1])}>{a.screen[0]}</button>}<p className="mt-1">{a.menu}</p><p className="mt-1">{a.outputs}</p></td></tr>)}</tbody></table></div> : flow.kind === "timeline"
             ? <Timeline flow={flow} focus={subProcess ? undefined : proc.focus} sel={sel} onSel={pick} selectedRole={selectedRole} onRoleSelect={selectRole} />
             : <Cycle flow={flow} sel={sel} onSel={pick} go={go} />}
@@ -958,4 +964,4 @@ const SOPMap = ({ onBack }) => {
   );
 };
 
-export default SOPMap;
+export default function SOPMap(props) { return <SopLanguageProvider><SOPMapContent {...props} /></SopLanguageProvider>; }

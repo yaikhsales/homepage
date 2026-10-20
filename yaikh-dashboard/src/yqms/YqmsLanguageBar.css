@@ -1,0 +1,8 @@
+.yqms-language-row{display:flex;align-items:center;justify-content:center;gap:14px;flex:0 0 100%;width:100%;grid-column:1/-1;order:4;border-top:1px solid #ffffff55;padding:9px 8px 2px;color:#fff}
+.yqms-language-row>strong{font:700 12px/1.2 Inter,Arial,sans-serif;white-space:nowrap}
+.yqms-language-row>div{max-width:none!important;overflow-x:auto}
+.yqms-language-row button{display:flex!important;flex-direction:row!important;align-items:center!important;gap:6px!important;min-height:38px!important;min-width:auto!important;padding:5px 9px!important;border:1px solid transparent!important;border-radius:20px!important;background:transparent!important;color:#fff!important;font:700 12px/1.2 Inter,Arial,sans-serif!important;white-space:nowrap}
+.yqms-language-row button[aria-pressed=true]{border-color:#ffbd59!important;background:#ffffff30!important;box-shadow:0 0 0 1px #ffbd59!important}
+.yqms-language-row button img{width:28px;height:20px;object-fit:cover}
+@media(max-width:700px){.yqms-language-row{justify-content:flex-start;gap:7px;overflow:hidden}.yqms-language-row>strong{font-size:10px}.yqms-language-row button{padding:5px 6px!important}}
+.sq-page .sq-header,.qs-standard .qs-header{flex-wrap:wrap}

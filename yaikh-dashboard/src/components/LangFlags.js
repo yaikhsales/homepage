@@ -1,14 +1,17 @@
 import React from "react";
 import { useTranslation } from "../translate/TranslationContext";
 
-/* Three language flags — Khmer · English · Chinese. Drives the whole UI
+/* Factory language flags. Drives the shared UI
    (module titles via TranslationContext) AND the chat: gemini-api.js sends
    `lang` from localStorage('app-language') so Big Brain answers in it.
    Default comes from the browser language (see TranslationContext). */
 const LANG_FLAGS = [
-  { code: "km", cc: "kh", label: "ខ្មែរ",   title: "ភាសាខ្មែរ · Khmer" },
   { code: "en", cc: "gb", label: "EN",     title: "English" },
+  { code: "km", cc: "kh", label: "ខ្មែរ",   title: "ភាសាខ្មែរ · Khmer" },
   { code: "zh", cc: "cn", label: "中文",   title: "中文 · Chinese" },
+  { code: "vi", cc: "vn", label: "VI", title: "Tiếng Việt · Vietnamese" },
+  { code: "tl", cc: "ph", label: "TL", title: "Tagalog · Filipino" },
+  { code: "ms", cc: "my", label: "MS", title: "Bahasa Melayu · Malay" },
 ];
 export const LangFlags = () => {
   const { language, changeLanguage } = useTranslation();
@@ -16,6 +19,7 @@ export const LangFlags = () => {
     <div
       className="flex items-center gap-2 rounded-full bg-slate-900/70 backdrop-blur px-2 py-1 border border-white/15"
       title="Language · ភាសា · 语言"
+      style={{ maxWidth: 'min(calc(100vw - 110px), 560px)', overflowX: 'auto' }}
       onMouseDown={(e) => e.stopPropagation()}
     >
       {LANG_FLAGS.map((f) => {
@@ -28,7 +32,7 @@ export const LangFlags = () => {
             title={f.title}
             aria-label={f.title}
             aria-pressed={active}
-            className={`flex items-center gap-1.5 rounded-full px-2 py-1 transition-all ${
+            className={`flex shrink-0 items-center gap-1.5 rounded-full px-2 py-1 transition-all ${
               active
                 ? "bg-white/15 ring-2 ring-orange-400/80 scale-105"
                 : "opacity-60 hover:opacity-100 hover:bg-white/10"
