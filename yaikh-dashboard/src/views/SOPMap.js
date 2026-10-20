@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, User } from "lucide-react";
 import { QualityOrganizationPanel } from "../yqms/quality-organization";
+import { QMS_AREAS } from "../hr/QmsOrganization";
 
 /* SOP — Standard Operating Procedures (Management Dashboard → SOP).
  * LEFT: the main processes, in Gamini's order.
@@ -492,13 +493,34 @@ const QMS_STEPS = [
   {"id": "q39", "lane": "qa", "col": 30, "title": "Audit, train and test", "auto": true, "role": "QA manager / auditor / trainer", "short": "audits, training and exams for QC staff", "action": "Score factory and subcontractor audits, schedule training and run exams for QC staff.", "menu": "Process > QMS Audit / YQMS Training / YQMS Exam", "route": "/dashboard/yqms/report", "label": "YQMS · Reports", "inputs": ["Audit requirements", "Level 1-4", "Training topics", "Exam questions"], "outputs": ["Total Score Achieved", "Training progress"], "standard": "Must-have items reject the audit if not OK", "trigger": "Periodic", "hands": "Continuous improvement", "stage": "consolidation/TV", "deps": ["q38"]},
 ];
 
+const fabricArrivalRoles = (q) => [
+  R("Senior Quality Supervisor", "qa", "Coordinates the warehouse quality leader and inspection coverage; escalates unresolved quality risks to the Quality Manager."),
+  R(QMS_AREAS.find(a => a.title === "Warehouse · Fabric Quality Leader").title, "qa", "Checks receiving evidence, lot identity and quality status; assigns quality checks and keeps unreviewed material identified pending inspection and disposition."),
+  R("Fabric warehouse supervisor", "fc", "Arranges receiving space, unloading manpower and safe movement; reconciles shortages or damage with the clerk and quality leader."),
+  R("Fabric warehouse workers", "fc", "Unload and count rolls by lot, check visible damage, segregate suspect rolls and place them in the assigned receiving area."),
+  R("Forklift driver", "ytm", "Checks forklift readiness and moves loads safely to the assigned receiving area; reports equipment problems to maintenance."),
+  R("Warehouse clerk", "fc", "Matches MPO, invoice, container and lots; records GRN, roll barcodes, quantities and bin locations in Fabric receiving."),
+  R("Fabric quality checker / assigned QA auditor", "qa", "Records receiving discrepancies and inspection evidence; follows the warehouse quality leader’s assignment. Inspection and lot-release decisions follow the fabric inspection process."),
+  R("Shipping officer / MRP officer", "ship", "Confirms arrival slot and supplier documents; follows up transport or supplier discrepancies."),
+  R(q.role, q.lane, q.action),
+];
+const QMS_STAGE_GROUPS = [
+  { name: "Pre-production", stages: ["pre-production"] },
+  { name: "Fabric & warehouse", stages: ["fabric arrival", "fabric inspection", "warehouse", "relaxing"] },
+  { name: "Cut", stages: ["cutting planning", "cutting", "cut-panel inspection"] },
+  { name: "Decoration", stages: ["printing/embroidery"] },
+  { name: "Sewing", stages: ["first-output sewing", "sewing inline/roving", "QC1 end-line"] },
+  { name: "Finishing & packing", stages: ["washing", "QC2", "repair", "grading", "OPA", "ironing", "humidity", "packing"] },
+  { name: "Final inspection & loading", stages: ["QAssure/final", "shipping"] },
+  { name: "Reporting & improvement", stages: ["consolidation/TV"] },
+];
 const QMS = {
   kind: "timeline",
   ruler: false,
   px: 190,
   title: "Quality Management · QMS",
   summary: "Inspector evidence on A4 portrait pads → QC leader desktop review → supervisor / manager disposition → controlled downstream release. Employee reporting lines come from the YHR QC / QA organisation. Buyer plans and current SOPs govern sampling and acceptance.",
-  lanes: ["fc", "cut", "qa", "sew", "wash", "fin", "ship"],
+  lanes: ["ypi", "fc", "cut", "qa", "sew", "wash", "fin", "ship"],
   days: 31,
   phases: [
     { d0: 0, d1: 3, label: "Fabric arrival" }, { d0: 3, d1: 5, label: "Inspection & lab" }, { d0: 5, d1: 7, label: "Relax & issue" },
@@ -507,12 +529,13 @@ const QMS = {
     { d0: 22, d1: 26, label: "Ironing · humidity · packing" }, { d0: 26, d1: 29, label: "QAssure · final · buyer" }, { d0: 29, d1: 31, label: "Dashboards & audits" },
   ],
   acts: [
+    ...["techpack", "pp", "pilot"].map((id, index) => { const source = ORDER.acts.find(a => a.id === id); return { ...source, id: `qpre${index}`, stage: "pre-production", d0: index, d1: index + 1, deps: index ? [`qpre${index - 1}`] : [], hands: "Approved references and pilot findings to area quality leaders and production setup" }; }),
     ...QMS_STEPS.map((q, i) => ({
       id: q.id, lane: q.lane, title: q.title, d0: q.col, d1: q.col + 1, step: i + 1, stage: q.stage,
       by: q.id === "q38" ? Y("Yai / PA", "calculates and summarises recorded quality data") : H(q.role, q.short),
       device: ["q4","q5","q11","q12","q14","q15","q16","q34","q18","q19","q20","q21","q24","q26"].includes(q.id) ? "Inspector entry: A4 portrait pad · Review / reports: desktop web" : "Desktop web · human review / handoff",
       screen: [q.label, q.route], menu: q.menu,
-      roles: q.id === "q34" || q.id === "q20" ? sewingRoles(q.id === "q34") : [R(q.role, q.lane, q.action)],
+      roles: q.stage === "fabric arrival" ? fabricArrivalRoles(q) : q.id === "q34" || q.id === "q20" ? sewingRoles(q.id === "q34") : [R(q.role, q.lane, q.action)],
       authority: q.id === "q34" || q.id === "q20" ? SEWING_AUTHORITY : q.lane === "qa" ? "YHR QC checker → QC Leader → QC Supervisor → Manager · QC → General Manager. Use the current employee reporting chain; human inspection and release decisions stay with authorised people." : undefined,
       inputs: q.inputs.join(", ") || "—", outputs: q.outputs.join(", ") || "—",
       standard: q.standard, trigger: q.trigger, hands: q.hands, deps: q.deps,
@@ -543,6 +566,18 @@ const PROCESSES = [
   { id: "ship", name: "Shipping & E-government", flow: ORDER, focus: ["ship"] },
   { id: "acct", name: "Accounting & Billing", sub: "Payroll cycle", flow: ACCT },
 ];
+
+// Agent navigation keeps the authored SOPs underneath their owning module.
+const AGENT_ORDER = ["acct", "hr", "admin", "csr", "ship", "mrp", "qa", "prod", "ie", "ytm", "dp", "ypi", "fc"];
+const AGENT_NAMES = { acct: "Accounting & Billing", hr: "YHR", admin: "Admin", csr: "CSR", ship: "Shipping & E-government", mrp: "MRP", qa: "YQMS", prod: "Production · YWIP", ie: "CE · IE", ytm: "YTM", dp: "4DP", ypi: "YPI", fc: "FC" };
+const agentChildren = (proc) => {
+  const acts = proc.focus ? proc.flow.acts.filter(a => proc.focus.includes(a.lane)) : proc.flow.acts;
+  if (proc.id === "qa") return QMS_STAGE_GROUPS.map(group => ({ name: group.name, ids: acts.filter(a => group.stages.includes(a.stage)).map(a => a.id) })).filter(group => group.ids.length);
+  const groups = new Map();
+  acts.forEach(a => { const key = a.stage || a.screen?.[0] || a.title; if (!groups.has(key)) groups.set(key, []); groups.get(key).push(a.id); });
+  return Array.from(groups, ([name, ids]) => ({ name, ids }));
+};
+const AGENT_PROCESSES = AGENT_ORDER.map(id => { const proc = PROCESSES.find(p => p.id === id); return { ...proc, name: AGENT_NAMES[id], children: [...agentChildren(proc), ...(id === "ytm" ? [{ name: "YTM Shop", processId: "ytmshop" }] : [])] }; });
 
 /* ---------- who-does-it line ---------- */
 function ByLine({ by, size = 10.5, lines = 2 }) {
@@ -812,13 +847,25 @@ const SOPMap = ({ onBack }) => {
   const navigate = useNavigate();
   const [pid, setPid] = useState("order");
   const [sel, setSel] = useState(null);
+  const [expanded, setExpanded] = useState(null);
+  const [masterList, setMasterList] = useState(false);
+  const [subProcess, setSubProcess] = useState(null);
   const cardRef = useRef(null);
   const proc = PROCESSES.find((p) => p.id === pid) || PROCESSES[0];
-  const flow = proc.flow;
+  const flow = useMemo(() => {
+    if (!subProcess || !subProcess.ids) return proc.flow;
+    const ids = new Set(subProcess.ids);
+    const acts = proc.flow.acts.filter(a => ids.has(a.id));
+    if (proc.flow.kind !== "timeline") return { ...proc.flow, title: subProcess.name, acts, loopTo: acts[0]?.id, loopLabel: "Repeat when triggered" };
+    const start = Math.min(...acts.map(a => a.d0));
+    return { ...proc.flow, title: subProcess.name, summary: "This sub-process shows its own activities. Open a step for responsibilities, inputs, outputs and hand-offs.", phases: [], days: Math.max(...acts.map(a => a.d1)) - start,
+      acts: acts.map(a => ({ ...a, hands: a.hands || proc.flow.acts.filter(next => (next.deps || []).includes(a.id)).map(next => next.title).join("; "), trigger: a.trigger || (a.deps || []).map(id => proc.flow.acts.find(prev => prev.id === id)?.title).filter(Boolean).join("; "), d0: a.d0 - start, d1: a.d1 - start, deps: (a.deps || []).filter(id => ids.has(id)) })) };
+  }, [proc, subProcess]);
   const act = flow.acts.find((a) => a.id === sel);
   const go = (path) => { if (path) navigate(path); };
 
-  useEffect(() => { setSel(null); }, [pid]);
+
+  const selectProcess = (id) => { setMasterList(false); setPid(id); setSubProcess(null); setSel(null); };
   const pick = (id) => {
     setSel(id);
     setTimeout(() => cardRef.current && cardRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" }), 30);
@@ -845,32 +892,40 @@ const SOPMap = ({ onBack }) => {
         <button onClick={() => go("/dashboard/org-chart-master")} className="mt-1 text-violet-200 underline">View YHR human and AI organization chart</button>
       </div>
       <div className="flex flex-col md:flex-row flex-1 min-h-0">
-        <aside className="md:w-56 flex-shrink-0 border-b md:border-b-0 md:border-r border-white/10 p-2 flex md:flex-col gap-1 overflow-x-auto md:overflow-y-auto">
-          <div className="hidden md:block text-[10px] uppercase tracking-wider text-slate-500 px-2 pt-1 pb-1">Main processes</div>
-          {PROCESSES.map((p) => (
-            <button key={p.id} onClick={() => setPid(p.id)}
-              className={`flex-shrink-0 text-left text-sm px-3 py-2 rounded-lg transition ${pid === p.id ? "bg-emerald-600 text-white" : "text-slate-300 hover:bg-white/5"}`}>
-              <div className="whitespace-nowrap">{p.name}</div>
-              {p.sub && <div className={`text-[10px] whitespace-nowrap ${pid === p.id ? "text-emerald-100" : "text-slate-500"}`}>{p.sub}</div>}
-            </button>
+        <aside aria-label="Yai agents and sub-processes" className="md:w-72 flex-shrink-0 border-b md:border-b-0 md:border-r border-white/10 p-2 max-h-[70vh] overflow-y-auto">
+          <div className="text-[10px] uppercase tracking-wider text-slate-500 px-2 py-2">Yai agents · sub-processes</div>
+          <button onClick={() => selectProcess("order")} className={`w-full text-left rounded-lg px-3 py-2 text-sm ${pid === "order" ? "bg-emerald-600 text-white" : "text-slate-300 hover:bg-white/5"}`}>Order → Ship overview</button>
+          {AGENT_PROCESSES.map(p => (
+            <div key={p.id} className="mt-1">
+              <button aria-expanded={expanded === p.id} aria-controls={`sop-children-${p.id}`} onClick={() => { setExpanded(expanded === p.id ? null : p.id); selectProcess(p.id); }} className={`w-full text-left text-sm px-3 py-2 rounded-lg flex justify-between gap-2 ${pid === p.id ? "bg-emerald-600 text-white" : "text-slate-300 hover:bg-white/5"}`}>
+                <span>{p.name}</span><span aria-hidden="true">{expanded === p.id ? "▾" : "▸"}</span>
+              </button>
+              {expanded === p.id && <div id={`sop-children-${p.id}`} className="ml-3 pl-2 border-l border-slate-700">
+                {p.children.map(child => <div key={child.name}>
+                  <button aria-expanded={subProcess?.name === child.name} onClick={() => { setMasterList(false); setPid(child.processId || p.id); setSubProcess(child.processId ? null : child); setSel(null); }} className={`block w-full text-left px-2 py-2 text-xs rounded-md ${subProcess?.name === child.name ? "bg-emerald-500/15 text-emerald-200" : "text-slate-400 hover:bg-white/5 hover:text-white"}`}>{child.name}</button>
+                  {subProcess?.name === child.name && <div className="ml-2 border-l border-slate-700 pl-2">{p.flow.acts.filter(a => child.ids?.includes(a.id)).map(a => <button key={a.id} onClick={() => pick(a.id)} className={`block w-full py-1.5 text-left text-xs ${sel === a.id ? "text-emerald-200" : "text-slate-400 hover:text-white"}`}>{a.title}</button>)}</div>}
+                </div>)}
+              </div>}
+            </div>
           ))}
         </aside>
 
         <main className="flex-1 min-w-0 p-4 overflow-y-auto">
+          <div className="mb-3 flex gap-2"><button onClick={() => setMasterList(false)} className={`rounded-lg border px-3 py-1 text-sm ${!masterList ? "border-emerald-400 text-emerald-200" : "border-slate-600"}`}>Process chart</button><button onClick={() => setMasterList(true)} className={`rounded-lg border px-3 py-1 text-sm ${masterList ? "border-emerald-400 text-emerald-200" : "border-slate-600"}`}>Master list</button></div>
           <div className="mb-3">
-            <div className="text-xl font-bold">{proc.focus ? proc.name : flow.title}</div>
+            <div className="text-xl font-bold">{subProcess ? `${AGENT_NAMES[pid] || proc.name} / ${subProcess.name}` : proc.focus ? (AGENT_NAMES[pid] || proc.name) : flow.title}</div>
             <div className="text-sm text-slate-400">{flow.summary}</div>
-            {proc.focus && <div className="text-xs mt-1 text-slate-300">Showing this department's part of the order — hand-offs in and out stay visible.</div>}
+            {proc.focus && !subProcess && <div className="text-xs mt-1 text-slate-300">Showing this department's part of the order — hand-offs in and out stay visible.</div>}
           </div>
 
           {pid === "qa" && <QualityOrganizationPanel/>}
-          {flow.kind === "timeline"
-            ? <Timeline flow={flow} focus={proc.focus} sel={sel} onSel={pick} />
+          {masterList ? <div className="overflow-x-auto"><table className="w-full text-left text-xs"><thead><tr>{["Stage", "Process", "People & tasks", "UI / report / dashboard"].map(title => <th key={title} className="p-2 border-b border-slate-600">{title}</th>)}</tr></thead><tbody>{(proc.focus ? proc.flow.acts.filter(a => proc.focus.includes(a.lane)) : proc.flow.acts).map(a => <tr key={a.id} className="border-b border-slate-800"><td className="p-2 align-top">{a.stage || AGENT_NAMES[pid] || proc.name}</td><td className="p-2 align-top"><button className="text-emerald-200 underline" onClick={() => { setMasterList(false); setSubProcess(null); pick(a.id); }}>{a.title}</button></td><td className="p-2 align-top">{a.roles.map((r,i) => <p key={i} className="mb-2"><strong>{r.role}:</strong> {r.does}</p>)}</td><td className="p-2 align-top">{a.screen && <button className="text-sky-200 underline" onClick={() => go(a.screen[1])}>{a.screen[0]}</button>}<p className="mt-1">{a.menu}</p><p className="mt-1">{a.outputs}</p></td></tr>)}</tbody></table></div> : flow.kind === "timeline"
+            ? <Timeline flow={flow} focus={subProcess ? undefined : proc.focus} sel={sel} onSel={pick} />
             : <Cycle flow={flow} sel={sel} onSel={pick} go={go} />}
 
           <div ref={cardRef}>
             {act
-              ? <ActivityCard flow={flow} act={act} onSel={pick} go={go} onProcess={setPid} />
+              ? <ActivityCard flow={flow} act={act} onSel={pick} go={go} onProcess={selectProcess} />
               : <div className="mt-4 text-sm text-slate-500">Click any box to see every role involved, what each one does, and where it goes next.</div>}
           </div>
         </main>
