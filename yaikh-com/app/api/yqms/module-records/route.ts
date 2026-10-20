@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 import { getDb } from '@/lib/mongo';
 import { MODULES, noStore, viewer, padViewer, sameOrigin, manager, qaDirectory, text } from '@/lib/yqms-standard';
+import {addModuleExamples} from '@/lib/yqms-examples';
 export const dynamic='force-dynamic';export const runtime='nodejs';
 const collection='yqms_standard_records',eventsCollection='yqms_standard_events';
 const bad=(error:string,status=400)=>NextResponse.json({ok:false,error},{status,headers:noStore});
@@ -16,6 +17,10 @@ export async function POST(request:Request){
  if(!sameOrigin())return bad('Invalid origin.',403);let b:any;try{const raw=await request.text();if(raw.length>250000)return bad('Record is too large.');b=JSON.parse(raw);}catch{return bad('Invalid record.');}
  const module=text(b.module,80);if(!MODULES.includes(module))return bad('Unknown module.');const desktop=viewer(),actor=desktop||padViewer(module);if(!actor)return bad('Authorise this pad before saving.',401);
  try{const db=await getDb(),coll=db.collection(collection),events=db.collection(eventsCollection),at=new Date();
+ if(b.action==='examples'){
+  if(!desktop)return bad('A signed-in desktop session is required to load training examples.',403);
+  const count=await addModuleExamples(module);return NextResponse.json({ok:true,count},{headers:noStore});
+ }
  if(b.action==='feed'){
   const r=b.record;if(!r||typeof r!=='object'||!text(r.order)||!r.payload||typeof r.payload!=='object')return bad('Order and original pad record are required.');
   const checked=Number(r.checked),rejected=Number(r.rejected);if(!Number.isInteger(checked)||checked<0||checked>1000000||!Number.isInteger(rejected)||rejected<0||rejected>checked)return bad('Invalid checked / rejected quantities.');
