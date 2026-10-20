@@ -4,7 +4,6 @@ import './YqmsLanguageBar.css';
 
 export default function YqmsLanguageBar() {
   return <div className="yqms-language-row" aria-label="YQMS module language">
-    <strong>YQMS language</strong>
-    <LangFlags />
+    <LangFlags showLabels={false} />
   </div>;
 }
