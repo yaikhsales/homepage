@@ -588,10 +588,11 @@ const agentChildren = (proc) => {
 const AGENT_PROCESSES = AGENT_ORDER.map(id => { const proc = PROCESSES.find(p => p.id === id); return { ...proc, name: AGENT_NAMES[id], children: [...agentChildren(proc), ...(id === "ytm" ? [{ name: "YTM Shop", processId: "ytmshop" }] : [])] }; });
 
 /* ---------- who-does-it line ---------- */
-function ByLine({ by, size = 10.5, lines = 2 }) {
+function ByLine({ by, size = 14, lines = 2 }) {
+  const {text}=useSopLanguage();
   return (
     <div className="text-slate-300" style={{ fontSize: size, lineHeight: `${size + 3}px`, display: "-webkit-box", WebkitLineClamp: lines, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
-      <span className="font-semibold text-slate-100">{by.actor}</span> {by.does}
+      <span className="font-semibold text-slate-100">{text(by.actor)}</span> {text(by.does)}
     </div>
   );
 }
@@ -796,6 +797,7 @@ function Cycle({ flow, sel, onSel, go }) {
 }
 
 function ActivityCard({ flow, act, onSel, go, onProcess, selectedRole, onRoleSelect }) {
+  const {text,localizeRole}=useSopLanguage();
   const c = DEPTS[act.lane].color;
   const i = flow.acts.indexOf(act);
   const next = flow.kind === "timeline"
@@ -829,11 +831,11 @@ function ActivityCard({ flow, act, onSel, go, onProcess, selectedRole, onRoleSel
             <div className="w-44 flex-shrink-0 flex items-start gap-1.5">
               <span className="mt-0.5"><ByIcon auto={r.dept === "sys"} size={14} /></span>
               <div>
-                <button onClick={() => onRoleSelect?.({key:roleKey(r.role),label:r.role})} aria-pressed={selectedRole?.key === roleKey(r.role)} className={`text-left font-semibold underline ${selectedRole?.key === roleKey(r.role) ? "text-yellow-200" : "text-slate-100"}`}>{r.role}</button>
+                <button onClick={() => onRoleSelect?.({key:roleKey(r.role),label:r.role})} aria-pressed={selectedRole?.key === roleKey(r.role)} className={`text-left font-semibold underline ${selectedRole?.key === roleKey(r.role) ? "text-yellow-200" : "text-slate-100"}`}>{localizeRole(r).role}</button>
                 <div className="text-[10px]" style={{ color: DEPTS[r.dept].color }}>{DEPTS[r.dept].label}</div>
               </div>
             </div>
-            <div className="text-slate-300">{r.does}</div>
+            <div className="text-slate-300">{localizeRole(r).does}</div>
           </div>
         ))}
       </div>
@@ -926,11 +928,11 @@ const SOPMapContent = ({ onBack }) => {
           {AGENT_PROCESSES.map(p => (
             <div key={p.id} className="mt-1">
               <button aria-expanded={expanded === p.id} aria-controls={`sop-children-${p.id}`} onClick={() => { setExpanded(expanded === p.id ? null : p.id); selectProcess(p.id); }} className={`w-full text-left text-sm px-3 py-2 rounded-lg flex justify-between gap-2 ${pid === p.id ? "bg-emerald-600 text-white" : "text-slate-300 hover:bg-white/5"}`}>
-                <span>{p.name}</span><span aria-hidden="true">{expanded === p.id ? "▾" : "▸"}</span>
+                <span>{text(p.name)}</span><span aria-hidden="true">{expanded === p.id ? "▾" : "▸"}</span>
               </button>
               {expanded === p.id && <div id={`sop-children-${p.id}`} className="ml-3 pl-2 border-l border-slate-700">
                 {p.children.map(child => <div key={child.name}>
-                  <button aria-expanded={subProcess?.name === child.name} onClick={() => { setMasterList(false); setPid(child.processId || p.id); setSubProcess(child.processId ? null : child); setSel(null); }} className={`block w-full text-left px-2 py-2 text-xs rounded-md ${subProcess?.name === child.name ? "bg-emerald-500/15 text-emerald-200" : "text-slate-400 hover:bg-white/5 hover:text-white"}`}>{child.name}</button>
+                  <button aria-expanded={subProcess?.name === child.name} onClick={() => { setMasterList(false); setPid(child.processId || p.id); setSubProcess(child.processId ? null : child); setSel(null); }} className={`block w-full text-left px-2 py-2 text-xs rounded-md ${subProcess?.name === child.name ? "bg-emerald-500/15 text-emerald-200" : "text-slate-400 hover:bg-white/5 hover:text-white"}`}>{text(child.name)}</button>
                   {subProcess?.name === child.name && <div className="ml-2 border-l border-slate-700 pl-2">{p.flow.acts.filter(a => child.ids?.includes(a.id)).map(a => <button key={a.id} onClick={() => pick(a.id)} className={`block w-full py-1.5 text-left text-xs ${sel === a.id ? "text-emerald-200" : "text-slate-400 hover:text-white"}`}>{a.title}</button>)}</div>}
                 </div>)}
               </div>}

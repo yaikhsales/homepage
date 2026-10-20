@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useMemo, useState } from "react";
+import TranslationContext from "../translate/TranslationContext";
+import { translateQualityText } from "../yqms/qualityTranslations";
 import { FABRIC_INSPECTION_ROLES, roleKey } from "./sop-role-model";
 export const SOP_LANGUAGES = [
  {code:"en",flag:"🇬🇧",label:"English"}, {code:"km",flag:"🇰🇭",label:"ខ្មែរ"},
@@ -52,8 +54,13 @@ const ROWS = {
 const Context = createContext({language:"en",text:value=>value,localizeRole:role=>role});
 export const useSopLanguage = () => useContext(Context);
 export function SopLanguageProvider({children}) {
- const [language,setLanguage]=useState(()=>{try {const saved=localStorage.getItem("sop-language")||localStorage.getItem("app-language");return SOP_LANGUAGES.some(item=>item.code===saved)?saved:"en";}catch{return "en";}});
- const value=useMemo(()=>({language,setLanguage:code=>{setLanguage(code);try{localStorage.setItem("sop-language",code);}catch{}},text:value=>LABELS[language]?.[value]||value,localizeRole:role=>{const index=FABRIC_INSPECTION_ROLES.findIndex(item=>roleKey(item.role)===roleKey(role.role));const row=ROWS[language]?.[index];return row?{...role,role:row[0],does:row[1],evidence:row[2]}:role;}}),[language]);
+ const shared=useContext(TranslationContext);
+ const [localLanguage,setLocalLanguage]=useState(()=>{try {const saved=localStorage.getItem("sop-language")||localStorage.getItem("app-language");return SOP_LANGUAGES.some(item=>item.code===saved)?saved:"en";}catch{return "en";}});
+ const language=shared ? (shared.language === "tl" ? "fil" : SOP_LANGUAGES.some(item=>item.code===shared.language)?shared.language:"en") : localLanguage;
+ const value=useMemo(()=>{
+  const text=value=>LABELS[language]?.[value]||translateQualityText(language==="fil"?"tl":language,value);
+  return {language,setLanguage:code=>{setLocalLanguage(code);shared?.changeLanguage(code==="fil"?"tl":code);try{localStorage.setItem("sop-language",code);}catch{}},text,localizeRole:role=>{const index=FABRIC_INSPECTION_ROLES.findIndex(item=>roleKey(item.role)===roleKey(role.role));const row=ROWS[language]?.[index];return row?{...role,role:row[0],does:row[1],evidence:row[2]}:{...role,role:text(role.role),does:text(role.does),evidence:text(role.evidence)};}};
+ },[language,shared]);
  return <Context.Provider value={value}>{children}</Context.Provider>;
 }
 export function SopLanguageFlags(){const {language,setLanguage}=useSopLanguage();return <div role="group" aria-label="SOP language" className="flex flex-wrap items-center gap-1">{SOP_LANGUAGES.map(item=><button key={item.code} title={item.label} aria-label={`SOP ${item.label}`} aria-pressed={language===item.code} onClick={()=>setLanguage(item.code)} className={`rounded px-2 py-1 text-base ${language===item.code?"bg-slate-600 ring-1 ring-emerald-400":"hover:bg-white/10"}`}><span aria-hidden="true">{item.flag}</span><span className="ml-1 text-sm">{item.label}</span></button>)}</div>;}
