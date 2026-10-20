@@ -20,7 +20,7 @@ import {
 import { useTranslation } from '../../translate/TranslationContext';
 import HumidityReportDetail from './HumidityReportDetail';
 
-const HumidityReportAdd = ({ onBack }) => {
+const HumidityReportAdd = ({ onBack, embedded = false }) => {
     const navigate = useNavigate();
     const { t } = useTranslation();
 
@@ -59,7 +59,7 @@ const HumidityReportAdd = ({ onBack }) => {
     return (
         <div className="w-full flex flex-col min-h-screen bg-[#F0F4F8]">
             {/* High-Fidelity Header */}
-            <div className="w-full bg-gradient-to-r from-[#5340C7] via-[#9F37B3] to-[#C9338D] p-4 shadow-xl relative z-50 rounded-xl">
+        <div className={`${embedded ? 'hidden ' : ''}w-full bg-gradient-to-r from-[#5340C7] via-[#9F37B3] to-[#C9338D] p-4 shadow-xl relative z-50 rounded-xl`}>
                 <div className="w-full flex items-center justify-between gap-4 px-4">
                     {/* Brand Section */}
                     <div className="flex items-center gap-4 shrink-0">
