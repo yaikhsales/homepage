@@ -13,7 +13,7 @@ const LANG_FLAGS = [
   { code: "tl", cc: "ph", label: "TL", title: "Tagalog · Filipino" },
   { code: "ms", cc: "my", label: "MS", title: "Bahasa Melayu · Malay" },
 ];
-export const LangFlags = () => {
+export const LangFlags = ({ showLabels = true }) => {
   const { language, changeLanguage } = useTranslation();
   return (
     <div
@@ -47,7 +47,7 @@ export const LangFlags = () => {
               className="rounded-[3px] shadow"
               style={{ objectFit: "cover" }}
             />
-            <span className="text-xs font-bold text-white/90">{f.label}</span>
+            {showLabels && <span className="text-xs font-bold text-white/90">{f.label}</span>}
           </button>
         );
       })}
