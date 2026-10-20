@@ -113,6 +113,7 @@ export const YQMS_CARDS = {
       cards: [
         {
           title: "First Output Sewing",
+          action: "/dashboard/yqms/first-output-sewing",
           icon: "PenTool",
           color:
             "bg-white text-blue-600",
@@ -121,6 +122,7 @@ export const YQMS_CARDS = {
         },
         {
           title: "QC End Line Checking",
+          action: "/dashboard/yqms/endline-check",
           icon: "CheckCircle",
           color:
             "bg-white text-blue-600",

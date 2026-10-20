@@ -12,6 +12,7 @@ import { ArrowLeft, RefreshCw, ChevronDown, ChevronRight, ExternalLink, Users, L
 import { NavCover, useScreenTop } from "../components/ScreenTop";
 import { post, num, GROUP, Person, RoleIcon, HrNav, Chip } from "./hr";
 import OrgTree, { defaultOpen } from "./OrgTree";
+import SewingQualityRoles from "./SewingQualityRoles";
 
 const DEPT_KEY = { "Accounting / Finance": "accounting", "Admin (office, canteen, dorm, drivers, Y-Shop)": "admin", "CSR — Compliance": "csr", Cutting: "cutting", Embroidery: "embroidery", "Factory management": "factory", Finishing: "finishing", "General management": "gm", HR: "hr", IT: "it", "Maintenance (YTM mechanics)": "ytm", "Merchandising (YPI, incl. sample room & CAD)": "ypi", Packaging: "packaging", "Planning (4DP, incl. MRP desk)": "4dp", Printing: "printing", "QC / QA": "qa" };
 const deptKey = (label, id) => DEPT_KEY[label] || (id ? String(id).split("/")[1] : "") || label;
@@ -132,13 +133,14 @@ const OrgChart = ({ onBack }) => {
       </div>
       {error && <div className="mb-2 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-200 px-3 py-2 text-sm">{error}</div>}
       <div className="flex flex-wrap items-center gap-2 mb-3">
-        <div className="inline-flex rounded-lg border border-slate-700 overflow-hidden text-xs">{[["mgmt", "Master chart"], ["dept", "By department"]].map(([k, l]) => <button key={k} onClick={() => setMode(k)} className={`px-3 py-1 font-bold ${mode === k ? "bg-white text-slate-900" : "bg-slate-800 text-slate-300 hover:bg-slate-700"}`}>{l}</button>)}</div>
+        <div className="inline-flex rounded-lg border border-slate-700 overflow-hidden text-xs">{[["mgmt", "Master chart"], ["dept", "By department"], ["sewing", "Sewing quality roles"]].map(([k, l]) => <button key={k} onClick={() => setMode(k)} className={`px-3 py-1 font-bold ${mode === k ? "bg-white text-slate-900" : "bg-slate-800 text-slate-300 hover:bg-slate-700"}`}>{l}</button>)}</div>
         {mode === "dept" ? <><button onClick={() => setOpen(new Set(collect(tree, ["group", "department", "section"])))} className="rounded-md border border-slate-700 bg-slate-800 px-2 py-1 text-[11px] text-slate-300 hover:bg-slate-700">expand all</button><button onClick={() => setOpen(new Set(collect(tree, ["group"])))} className="rounded-md border border-slate-700 bg-slate-800 px-2 py-1 text-[11px] text-slate-300 hover:bg-slate-700">departments only</button><button onClick={() => { setOpen(new Set()); setShowPeople(new Set()); }} className="rounded-md border border-slate-700 bg-slate-800 px-2 py-1 text-[11px] text-slate-300 hover:bg-slate-700">collapse all</button></> : null}
         <button onClick={() => navigate("/dashboard/hr/sections")} className="inline-flex items-center gap-1 rounded-md border border-sky-500/50 bg-sky-500/10 text-sky-200 hover:bg-sky-500/25 px-2 py-1 text-[11px] font-bold"><LayoutGrid size={12} />section-by-section chart (all ID grids)</button>
         <span className="text-[11px] text-slate-500">GM → Factory Manager → Supervisors → Leaders; the workers are in the section chart (ID grids) · titles for management, employee numbers for everyone · no names, no photos</span>
         <span className="ml-auto flex gap-1.5"><Chip cls={GROUP.operations.chip}>Operations</Chip><Chip cls={GROUP.administrative.chip}>Administrative</Chip></span>
       </div>
 
+      {mode === "sewing" && <SewingQualityRoles />}
       {mode === "dept" && tree.length > 0 && (
         <div>
           {gm && <div className="rounded-xl border-2 border-amber-400 bg-slate-800/60 px-3 py-2 mb-2 inline-flex items-center gap-3"><RoleIcon level="gm" size={18} /><button onClick={() => onPerson(gm.emp_no)} className="font-black text-white hover:underline">{gm.title}</button><span className="text-[11px] text-slate-400">{gm.emp_no} · {num(mgmt.team)} people · {num(mgmt.direct)} direct</span></div>}
