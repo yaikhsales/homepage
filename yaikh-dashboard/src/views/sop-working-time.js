@@ -11,7 +11,7 @@ export function factoryToday(now = new Date()) {
   const value = type => parts.find(part => part.type === type).value;
   return `${value("year")}-${value("month")}-${value("day")}`;
 }
-export function buildWorkingAxis(workdayCount, pixelsPerHour = 32, orderDate = factoryToday()) {
+export function buildWorkingAxis(workdayCount, pixelsPerHour = 32, orderDate = factoryToday(), publicHolidays = []) {
   const origin = new Date(`${orderDate}T12:00:00Z`);
   if (!Number.isFinite(origin.getTime())) throw new Error("Invalid order date");
   const initialWeekday = (origin.getUTCDay() + 6) % 7;
@@ -21,13 +21,14 @@ export function buildWorkingAxis(workdayCount, pixelsPerHour = 32, orderDate = f
     const weekday = (initialWeekday + calendarDay) % 7;
     const current = new Date(origin); current.setUTCDate(origin.getUTCDate() + calendarDay);
     const date = current.toISOString().slice(0,10);
+    const publicHoliday = publicHolidays.includes(date);
     const dateLabel = new Intl.DateTimeFormat("en-GB", {day:"numeric",month:"short",year:"numeric",timeZone:"UTC"}).format(current);
     const off = weekday === 6;
-    const blocks = off ? [] : SHIFT_BLOCKS.filter(block => weekday !== 5 || block.key !== "ot");
+    const blocks = off ? [] : SHIFT_BLOCKS.filter(block => (weekday !== 5 && !publicHoliday) || block.key !== "ot");
     let offset = 0;
     const segments = blocks.map(block => { const segment = { ...block, x: x + offset, width: block.hours * pixelsPerHour }; offset += segment.width; return segment; });
     const width = off ? pixelsPerHour * 2 : offset;
-    const day = { x, width, date, dateLabel, calendarDay, weekday: WEEK[weekday], off, workday: off ? null : working.length, segments };
+    const day = { x, width, publicHoliday, date, dateLabel, calendarDay, weekday: WEEK[weekday], off, workday: off ? null : working.length, segments };
     days.push(day); if (!off) working.push(day);
     x += width; calendarDay += 1;
   }
@@ -35,7 +36,7 @@ export function buildWorkingAxis(workdayCount, pixelsPerHour = 32, orderDate = f
     if (value <= 0) return 0;
     if (value >= working.length) return x;
     const index = Math.floor(value), fraction = value - index, day = working[index];
-    let hours = fraction * (day.weekday === "Sat" ? 8 : 10);
+    let hours = fraction * (day.weekday === "Sat" || day.publicHoliday ? 8 : 10);
     // Partial-day work offsets skip the lunch break.
     if (hours > 4) hours += 1;
     return day.x + hours * pixelsPerHour;
