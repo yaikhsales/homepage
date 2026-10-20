@@ -7,6 +7,7 @@ import './decoration-quality.css';
 import { useWorkspace, useViewer, defaultSetup, ModifySetup, AddingCatalog, DRHistory, VideoTraining } from './workspace';
 import { QualityOrganizationPanel, useQualityOrganization, qaChain, reviewerOptions } from '../quality-organization';
 import { useNarrativeTranslation } from '../useNarrativeTranslation';
+import YqmsLanguageBar from '../YqmsLanguageBar';
 const Badge=({status})=><span className={`deco-badge ${status.toLowerCase()}`}>{status}</span>;
 const Field=({label,children})=><label className="deco-field"><span>{label}</span>{children}</label>;
 const criteria=name=>name.includes('rub')?'Approved buyer rub method and grade limits':name.toLowerCase().includes('wash')?'Approved buyer wash protocol, cycles and appearance/grade limits':name.includes('Cure')?'Effective supplier recipe and measured process window':name.includes('Artwork')?'Effective artwork revision, approved colour and retained reference':name.includes('placement')?'Approved appearance and measured placement tolerance':name.includes('Needle')?'No needle damage; needle-control evidence clear':'Matches approved process sheet / first-output reference';
@@ -112,6 +113,7 @@ export default function DecorationQuality({embeddedPad=false,onRecord,mode='firs
       <div className="deco-brand"><button aria-label="Back to YQMS" onClick={onBack}><ArrowLeft size={22}/></button><img className="deco-module-icon" alt="" src={icon}/><div><h1>{flow.title}</h1><p>Quality Control Data Management</p></div></div>
       <nav className="deco-shell-tabs" aria-label="Decoration workflow">{tabs.map(([key,label,Icon])=><button key={key} aria-pressed={view===key} onClick={()=>setView(key)}><Icon size={18}/><span>{label}</span></button>)}</nav>
       <div className="deco-session-tools"><button aria-label="Video Training" onClick={()=>setModal({type:'video'})}><Video size={19}/><span>Training</span></button><button aria-label="Document Training" onClick={()=>setModal({type:'guide'})}><FileText size={19}/><span>Training</span></button><button className="deco-user" aria-label="Current session identity" onClick={()=>setModal({type:'session'})}><span className="deco-avatar">{viewer?viewer.split(/\s+/).map(x=>x[0]).slice(0,2).join('').toUpperCase():<UserRound size={20}/>}</span><span><strong>{viewer||'Demo session'}</strong><small>{viewer?'Yai access session':'Not signed in'}</small></span></button></div>
+      <YqmsLanguageBar />
     </div>
     <div className="deco-content"><p className="deco-notice">Working training demo · Saved in this browser. All orders, recipes, tests and approvals are simulated.</p>{(storageError||workspace.error)&&<p role="alert" className="deco-error">{storageError||workspace.error}</p>}{notice&&<p role="status" className="deco-success">{notice}</p>}
       {view==='pad'?<CheckForm key={mode} compact mode={mode} records={records} onSave={save} catalog={catalog} setup={setup}/>:<>
