@@ -56,7 +56,6 @@ export default function FinishingPackingPad({ moduleKey, config, onRecord }) {
     <div className="qs-finishing-tablet">
       <form className="qs-finishing-form" onSubmit={submit}>
         <div className="qs-toolbar"><div><h2>{config.title} · ground check</h2><p>Record the actual order, sample and findings. Saved checks feed this module's dashboard, reports and decision register.</p></div><strong>{config.stage}</strong></div>
-        <p>For this public demonstration, start the MO / order with <strong>DEMO-</strong>. It will appear in the public dashboard, reports and DR as sample data. Other orders remain restricted to signed-in factory management.</p>
         <div className="qs-form-grid three">
           <label>MO / order *<input required value={form.order} onChange={(e) => set('order', e.target.value)} /></label>
           <label>PO number<input value={form.po} onChange={(e) => set('po', e.target.value)} /></label>
