@@ -493,6 +493,14 @@ const QMS_STEPS = [
   {"id": "q39", "lane": "qa", "col": 30, "title": "Audit, train and test", "auto": true, "role": "QA manager / auditor / trainer", "short": "audits, training and exams for QC staff", "action": "Score factory and subcontractor audits, schedule training and run exams for QC staff.", "menu": "Process > QMS Audit / YQMS Training / YQMS Exam", "route": "/dashboard/yqms/report", "label": "YQMS · Reports", "inputs": ["Audit requirements", "Level 1-4", "Training topics", "Exam questions"], "outputs": ["Total Score Achieved", "Training progress"], "standard": "Must-have items reject the audit if not OK", "trigger": "Periodic", "hands": "Continuous improvement", "stage": "consolidation/TV", "deps": ["q38"]},
 ];
 
+const FABRIC_AUTHORITY = "YHR assignment gap: no Fabric QC Supervisor role or verified employee is assigned. Warehouse · Fabric Quality Leader and Fabric Inspection & Cutting Quality Leader are planning roles with unassigned employee IDs. The checker / inspector performs and records the inspection. Fabric quality disposition belongs to the Quality Manager or designated authorized human QA. Warehouse supervisor / leader titles and simulated YHR employee numbers do not grant quality release authority. Confirm named owner, line / shift, delegated scope and backup with YHR and the factory.";
+const fabricInspectionRoles = (q) => [
+  R(q.id === "q6" ? "Quality Manager / designated authorized QA" : q.role, "qa", q.action),
+  R("Fabric Inspection & Cutting Quality Leader", "qa", "Planning role; employee assignment pending. Coordinates inspector coverage and report follow-up after YHR / factory confirmation."),
+  R("Warehouse · Fabric Quality Leader", "qa", "Planning role; employee assignment pending. Coordinates warehouse containment and quality follow-up without assumed release authority."),
+  R("Warehouse supervisor / warehouse leader", "fc", "Keeps held lots segregated, coordinates handling and stock records; does not authorize quality release by warehouse title."),
+  R("Quality Manager / designated authorized QA", "qa", "Reviews inspector evidence and lab results and records lot hold, release or rejection within confirmed approval scope. Escalates supplier discrepancies for follow-up."),
+];
 const fabricArrivalRoles = (q) => [
   R("Senior Quality Supervisor", "qa", "Coordinates the warehouse quality leader and inspection coverage; escalates unresolved quality risks to the Quality Manager."),
   R(QMS_AREAS.find(a => a.title === "Warehouse · Fabric Quality Leader").title, "qa", "Checks receiving evidence, lot identity and quality status; assigns quality checks and keeps unreviewed material identified pending inspection and disposition."),
@@ -535,8 +543,8 @@ const QMS = {
       by: q.id === "q38" ? Y("Yai / PA", "calculates and summarises recorded quality data") : H(q.role, q.short),
       device: ["q4","q5","q11","q12","q14","q15","q16","q34","q18","q19","q20","q21","q24","q26"].includes(q.id) ? "Inspector entry: A4 portrait pad · Review / reports: desktop web" : "Desktop web · human review / handoff",
       screen: [q.label, q.route], menu: q.menu,
-      roles: q.stage === "fabric arrival" ? fabricArrivalRoles(q) : q.id === "q34" || q.id === "q20" ? sewingRoles(q.id === "q34") : [R(q.role, q.lane, q.action)],
-      authority: q.id === "q34" || q.id === "q20" ? SEWING_AUTHORITY : q.lane === "qa" ? "YHR QC checker → QC Leader → QC Supervisor → Manager · QC → General Manager. Use the current employee reporting chain; human inspection and release decisions stay with authorised people." : undefined,
+      roles: q.stage === "fabric arrival" ? fabricArrivalRoles(q) : q.stage === "fabric inspection" ? fabricInspectionRoles(q) : q.id === "q34" || q.id === "q20" ? sewingRoles(q.id === "q34") : [R(q.role, q.lane, q.action)],
+      authority: ["fabric arrival", "fabric inspection"].includes(q.stage) ? FABRIC_AUTHORITY : q.id === "q34" || q.id === "q20" ? SEWING_AUTHORITY : q.lane === "qa" ? "YHR QC checker → QC Leader → QC Supervisor → Manager · QC → General Manager. Use the current employee reporting chain; human inspection and release decisions stay with authorised people." : undefined,
       inputs: q.inputs.join(", ") || "—", outputs: q.outputs.join(", ") || "—",
       standard: q.standard, trigger: q.trigger, hands: q.hands, deps: q.deps,
     })),
