@@ -78,7 +78,7 @@ export const TranslationProvider = ({ children }) => {
             frame = 0;
             if (!onQualityPage || !qualityModule) return;
             document.documentElement.lang = language;
-            const roots = [...document.querySelectorAll('[data-yqms-i18n], .qs-standard, .sq-page, .qs-overlay')]
+            const roots = [...document.querySelectorAll('[data-yqms-i18n], .qs-standard, .sq-page, .qs-overlay, .deco-overlay')]
                 .filter(root => !root.parentElement?.closest('[data-yqms-i18n]'));
             roots.forEach(root => {
                 const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
