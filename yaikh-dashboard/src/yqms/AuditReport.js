@@ -17,7 +17,7 @@ import {
 import CuttingAuditDetails, { cuttingAudits } from "./CuttingAuditDetails";
 import { useTranslation } from "../translate/TranslationContext";
 
-const AuditReport = ({ title, onBack }) => {
+const AuditReport = ({ title, onBack, embedded = false }) => {
   const { t } = useTranslation();
 
   const isCutting = title === "First Output Cutting" || title === "QA Cutting";
@@ -64,9 +64,9 @@ const AuditReport = ({ title, onBack }) => {
   const auditData = isCutting ? cuttingAudits(title === "First Output Cutting") : defaultAuditData;
 
   return (
-    <div className="fixed inset-0 bg-slate-50 flex flex-col z-[50] animate-in fade-in duration-500 overflow-hidden font-sans">
+    <div className={embedded ? "flex min-h-[70vh] flex-col bg-slate-50 font-sans" : "fixed inset-0 bg-slate-50 flex flex-col z-[50] animate-in fade-in duration-500 overflow-hidden font-sans"}>
       {/* Header */}
-      <div className="bg-white px-8 py-5 border-b border-slate-200 flex items-center justify-between shrink-0 shadow-sm z-10">
+      <div className={`${embedded ? "hidden " : ""}bg-white px-8 py-5 border-b border-slate-200 flex items-center justify-between shrink-0 shadow-sm z-10`}>
         <div className="flex items-center gap-6">
           <button
             onClick={onBack}
