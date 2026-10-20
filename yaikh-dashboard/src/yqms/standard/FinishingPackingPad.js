@@ -13,6 +13,7 @@ export default function FinishingPackingPad({ moduleKey, config, onRecord }) {
   const [form, setForm] = useState({ order: '', po: '', style: '', buyer: '', colour: '', size: '', line: '', inspector: '', shift: 'Day', checked: '', rejected: '0', note: '', evidence: '', values: blank(config.fields) });
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  const [photos, setPhotos] = useState([]);
   const set = (key, value) => setForm((current) => ({ ...current, [key]: value }));
   const setField = (key, value) => setForm((current) => ({ ...current, values: { ...current.values, [key]: value } }));
   const legacy = moduleKey === 'packing-inspection' ? <PackingInspection embedded />
@@ -32,11 +33,21 @@ export default function FinishingPackingPad({ moduleKey, config, onRecord }) {
     const status = rejected > 0 || resultFailed || humidityFailed ? 'HOLD' : 'PASS';
     setBusy(true);
     try {
+      const evidenceFiles = [];
+      for (const file of photos) {
+        const body = new FormData(); body.append('file', file); body.append('category', config.stage);
+        const response = await fetch(`/api/yqms/module-evidence?module=${encodeURIComponent(moduleKey)}`, { method: 'POST', credentials: 'same-origin', body });
+        const result = await response.json();
+        if (!response.ok || !result.ok) throw new Error(result.error || `Could not upload ${file.name}.`);
+        evidenceFiles.push(result.file);
+      }
       await onRecord({ ...form, checked, rejected, status, date: new Date().toISOString(), source: 'floor-record', stage: config.stage,
+        evidence: [form.evidence, ...evidenceFiles.map((file) => file.url)].filter(Boolean).join(' · '), evidenceFiles,
         checks: Object.fromEntries(Object.entries(form.values).filter(([key]) => isResult(key))),
         findings: rejected ? [{ code: 'Defective pieces', count: rejected }] : [],
       });
       setForm((current) => ({ ...current, checked: '', rejected: '0', note: '', evidence: '', values: blank(config.fields) }));
+      setPhotos([]);
     } catch (cause) { setError(cause.message || 'Could not save this floor check.'); }
     finally { setBusy(false); }
   }
@@ -62,6 +73,8 @@ export default function FinishingPackingPad({ moduleKey, config, onRecord }) {
           ? <select required value={form.values[field]} onChange={(e) => setField(field, e.target.value)}><option value="">Select result</option><option>PASS</option><option>FAIL</option><option>NOT APPLICABLE</option></select>
           : <input required type={isNumber(field) ? 'number' : 'text'} min={isNumber(field) ? '0' : undefined} max={/% RH/.test(field) ? '100' : undefined} step={isNumber(field) ? '0.1' : undefined} value={form.values[field]} onChange={(e) => setField(field, e.target.value)} />}</label>)}</div>
         <div className="qs-form-grid three"><label>Pieces / cartons checked *<input required type="number" min="1" value={form.checked} onChange={(e) => set('checked', e.target.value)} /></label><label>Defective pieces / cartons *<input required type="number" min="0" value={form.rejected} onChange={(e) => set('rejected', e.target.value)} /></label><label>Evidence reference / photo URL<input value={form.evidence} onChange={(e) => set('evidence', e.target.value)} /></label></div>
+        <label>Inspection photos / evidence PDF · up to 8 MB each<input type="file" accept="image/jpeg,image/png,image/webp,application/pdf" multiple onChange={(e) => setPhotos(Array.from(e.target.files || []))} /></label>
+        {photos.length > 0 && <p>{photos.length} evidence file{photos.length === 1 ? '' : 's'} selected. Files upload when the inspection is submitted.</p>}
         <label>Findings, containment and next action<textarea rows={3} value={form.note} onChange={(e) => set('note', e.target.value)} /></label>
         <p>A failed result or defective quantity places this check on hold for the quality leader and supervisor. A pass records the sample result; it does not authorize shipment.</p>
         {error && <p role="alert" className="qs-error">{error}</p>}
