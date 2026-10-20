@@ -1,0 +1,25 @@
+import React from "react";
+import { Bot, Users } from "lucide-react";
+
+export const QMS_AREAS = [
+  {title: "Sample Room Quality Leader", detail: "Sample-room quality coverage; checker allocation to confirm."},
+  {title: "Warehouse · Fabric Quality Leader", detail: "Fabric warehouse quality, QA audit coverage and brand QO follow-up."},
+  {title: "Warehouse · Accessory Quality Leader", detail: "Accessory warehouse quality, QA audit coverage and brand QO follow-up."},
+  {title: "Fabric Inspection & Cutting Quality Leader", detail: "Covers fabric inspection and cutting. Cutting has 5–10 quality checkers; fabric-inspection checker allocation to confirm. QA auditors cover cutting quality audits."},
+  {title: "Printing & Embroidery Quality Leader", detail: "Printing and embroidery quality coverage; checker allocation to confirm."},
+  {title: "Sewing Quality Leaders", detail: "30 sewing lines; one leader per five lines gives about 6 leader groups. Each line has 2–3 checkers (60–90 line checkers total). Target team size: 15–20 checkers per leader; reconcile with line allocation."},
+  {title: "Finishing Quality Leaders", detail: "About 10 finishing lines; one leader per three lines gives about 4 leaders, including the remaining line. Target: 15–20 quality checkers per leader (60–80 across four teams)."},
+  {title: "Packaging Quality Leaders", detail: "2 quality leaders; packing checker team of about 5–10. Distribution between the two leaders to confirm. QA audit and brand QO final-quality follow-up."},
+  {title: "Loading Quality Leader", detail: "1 quality leader; loading quality and final hand-off. Checker allocation to confirm."}
+];
+function Role({title, detail}) { return <div className="rounded-lg border border-sky-500/40 bg-slate-800 p-3"><h4 className="flex items-start gap-2 text-sm font-bold text-white"><Users size={16} className="mt-0.5 shrink-0 text-sky-300" />{title}</h4><p className="mt-1 text-sm text-slate-300">{detail}</p></div>; }
+export default function QmsOrganization() {
+  return <section aria-label="YQMS department structure" className="mt-4 rounded-xl border border-sky-500/40 bg-slate-900/70 p-4">
+    <h3 className="text-lg font-black text-white">YQMS · Quality Department</h3><p className="mt-1 text-sm text-slate-300">Planning structure for a factory of about 1,000 workers and five brands. These are staffing ranges supplied by Gamini, not a confirmed employee roster.</p>
+    <div className="mx-auto mt-4 max-w-2xl"><Role title="Quality Manager" detail="Owns the whole quality department, quality standards, staffing and escalation. Quality release requires the designated authorized human approver." /><div className="mx-auto h-5 w-0 border-l-2 border-slate-500" /><Role title="Senior Quality Supervisors · 1–2" detail="One senior supervisor is responsible for internal quality. An optional second supervisor’s remit and area split remain to be assigned. Coordinate area leaders, audits and follow-up." /></div>
+    <div className="mt-4 border-t-2 border-slate-600 pt-4"><h4 className="mb-3 font-bold text-white">Area quality leaders → quality teams</h4><div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">{QMS_AREAS.map(area => <Role key={area.title} title={area.title} detail={area.detail} />)}</div></div>
+    <div className="mt-4 grid gap-3 md:grid-cols-2"><Role title="QA · Quality Auditors · about 10 total" detail="Assigned under area quality leaders, especially warehouse, cutting, sewing and packing. Allocations vary: some supervisors have one auditor, some two. These are shared allocations from the department total, not ten auditors per area." /><Role title="QO · Brand Quality Coordinators · 5 total" detail="One QO represents each of the five brands and follows final quality, mainly in warehouse and packaging. Each QO has 1–2 support workers (5–10 support workers total). QOs work with the relevant area leaders; exact reporting assignments remain to be confirmed. QO support workers are separate from line checkers unless an assignment explicitly combines them." /></div>
+    <div className="mt-4 rounded-lg border border-amber-500/40 bg-amber-500/10 p-3 text-sm text-amber-100"><strong>Staffing reconciliation</strong><p className="mt-1">Sewing: five lines × 2–3 checkers gives 10–15 checkers per leader, while the target is 15–20. Six teams at that target would imply 90–120 checkers. Confirm line grouping or relief/support coverage before fixing a total. Finishing’s 15–20 per leader is a separate stated target. Do not add QA or QO assignments again for every area.</p></div>
+    <div className="mt-4 rounded-lg border border-violet-400/50 bg-violet-500/10 p-3"><h4 className="flex items-center gap-2 font-bold text-violet-200"><Bot size={18} />YQMS AI Agent · Mobile AI Agent · Web AI Agent</h4><p className="mt-1 text-sm text-slate-300">AI support for inspection records, quality trends and follow-up, coordinated with Management Dashboard, System Analysis and SOP Director AI agents. AI agents are excluded from human headcount and do not hold human QA release authority.</p></div>
+  </section>;
+}
