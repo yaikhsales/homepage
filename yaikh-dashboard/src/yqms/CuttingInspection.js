@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import { useTranslation } from "../translate/TranslationContext";
 
-const CuttingInspection = ({ onBack }) => {
+const CuttingInspection = ({ onBack, embeddedPad=false, onRecord }) => {
   const { t } = useTranslation();
   const [viewMode, setViewMode] = useState("grid");
 
@@ -83,6 +83,7 @@ const CuttingInspection = ({ onBack }) => {
     },
   ];
 
+  if(embeddedPad)return <CuttingFormTablet label="Bundle Inspection"><BundlePadInspector initialBundles={bundles} onRecord={onRecord}/></CuttingFormTablet>;
   return (
     <div className="fixed inset-0 bg-slate-50 flex flex-col z-[50] animate-in fade-in duration-500 overflow-hidden font-sans">
       {/* Header */}

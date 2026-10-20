@@ -93,7 +93,7 @@ Each Yai chat agent (PA) consumes one or more digitalization modules. This table
 | Admin PA ✅ support_tickets wired | Support Ticket ✅, Y Shop, Gate Pass, Meeting Room | `support_tickets` ✅, `y_shop`, `gate_passes`, `meeting_rooms` | `agent/admin` |
 | CSR PA | Digital Audit, Energy, Air, Water | `digital_audits`, `energy_meters`, `air_logs`, `water_logs` | `agent/csr` |
 | Shipping PA | Shipping + MRP | `shipments`, `containers`, `materials`, `bom`, `stock` | `agent/shipping` |
-| QA PA | YQMS, Call Out | `qms_defects`, `call_outs`, `audits` | `agent/qa` |
+| QA PA | YQMS, Call Out | `qms_defects`, `call_outs`, `audits`, `yqms_standard_records`, `yqms_standard_events`, `yqms_decision_events` | `agent/qa` |
 | Production PA | FC, YWIP | `production_schedule`, `wip` | `agent/production` |
 | CE PA | CE | `customer_visits`, `feedback` | `agent/ce` |
 | YTM PA | YTM | `machine_maintenance`, `repair_log` | `agent/ytm` |

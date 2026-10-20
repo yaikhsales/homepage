@@ -88,7 +88,7 @@ function CheckForm({mode,records,parent,onSave,compact=false,catalog=[],setup}){
     {error&&<p role="alert" className="deco-error">{error}</p>}<div className="deco-save"><span>The recorded result is calculated from evidence and approval gates.</span><button className="deco-primary" onClick={save}>Save inspection and decision</button></div>
   </div>;
 }
-export default function DecorationQuality({mode='first',onBack}){
+export default function DecorationQuality({embeddedPad=false,onRecord,mode='first',onBack}){
   const flow=WORKFLOWS[mode],workspace=useWorkspace(),viewer=useViewer();
   const [records,setRecords]=useState(loadRecords),[view,setView]=useState('pad'),[query,setQuery]=useState(''),[filter,setFilter]=useState('ALL'),[modal,setModal]=useState(null),[notice,setNotice]=useState(''),[storageError,setStorageError]=useState('');
   const setup=workspace.data.setups[mode]||defaultSetup(),catalog=workspace.data.items.filter(i=>i.mode===mode),events=workspace.data.events.filter(i=>i.mode===mode);
@@ -96,13 +96,14 @@ export default function DecorationQuality({mode='first',onBack}){
   useEffect(()=>{setQuery('');setFilter('ALL');setModal(null);setNotice('');setView('pad');},[mode]);
   const stageRecords=records.filter(r=>r.stage===mode).sort((a,b)=>b.createdAt-a.createdAt);
   const shown=stageRecords.filter(r=>{const job=jobFor(r.jobId);return(filter==='ALL'||r.status===filter)&&`${r.id} ${job.mo} ${job.style} ${job.buyer} ${METHODS[job.method].name}`.toLowerCase().includes(query.toLowerCase());});
-  function save(record){setView('records');setRecords(items=>[...items,record]);setNotice(`${record.id} saved · ${record.status}`);setModal({type:'detail',record});}
+  async function save(record){if(onRecord){try{await onRecord({...record,job:jobFor(record.jobId)});}catch(error){setNotice(error.message||'Could not save the record.');return;}}setView('records');setRecords(items=>[...items,record]);setNotice(`${record.id} saved · ${record.status}`);setModal({type:'detail',record});}
   function reviewed(record){setRecords(items=>items.map(r=>r.id===record.id?record:r));setModal({type:'detail',record});setNotice(`${record.id} reviewed · ${record.status}`);}
   function saveSetup(value){const at=Date.now();workspace.setData(d=>({...d,setups:{...d.setups,[mode]:value},events:[...d.events,{id:`setup-${at}`,mode,at,type:'Setup modification',actor:viewer||'Demo session',detail:`${value.sop} · revision ${value.revision} · interval ${value.frequency} minutes`}]}));setNotice('Module setup saved. Change recorded in DR.');}
   function addItem(value){const at=Date.now();workspace.setData(d=>({...d,items:[...d.items,{...value,mode,id:`item-${at}`,at}],events:[...d.events,{id:`catalog-${at}`,mode,at,type:'Master data added',actor:viewer||'Demo session',detail:`${value.kind} ${value.code} · ${value.name}`}]}));setNotice(`${value.kind} ${value.code} added. Available in this module.`);}
   const tabs=[['pad','Inspection Form',ClipboardList],['records','Dashboard',BarChart3],['reports','Report',FileText],['modify','Modify',Settings],['adding','Adding',LayoutGrid],['dr','DR',History]];
   const icon=`${process.env.PUBLIC_URL}/assets/${mode==='printing'||mode==='embroidery'?'fc':'yqms'}/${({first:'first-output-printing-embroidery.jpg',printing:'printing-inspection.jpg',embroidery:'embroidery-inspection.jpg',qa:'qa-printing-embroidery.jpg'})[mode]}`;
   const title=modal?.type==='guide'?'Document Training · inspection knowledge':modal?.type==='video'?'Video Training':modal?.type==='roles'?'Responsible quality roles · YHR reference':modal?.type==='session'?'Current Yai session':modal?.type==='entry'?'New decoration inspection':modal?.record?`${modal.record.id} · inspection details`:'';
+  if(embeddedPad)return <div className="deco-page" data-decoration={mode}>{notice&&<p role="status" className="deco-notice">{notice}</p>}<CheckForm compact mode={mode} records={records} onSave={save} catalog={catalog} setup={setup}/></div>;
   return <div className="fixed inset-0 bg-slate-50 flex flex-col z-[50] overflow-hidden font-sans deco-page" data-decoration={mode}>
     <div className="deco-header deco-module-header">
       <div className="deco-brand"><button aria-label="Back to YQMS" onClick={onBack}><ArrowLeft size={22}/></button><img className="deco-module-icon" alt="" src={icon}/><div><h1>{flow.title}</h1><p>Quality Control Data Management</p></div></div>
@@ -123,3 +124,5 @@ export default function DecorationQuality({mode='first',onBack}){
     {modal&&<Modal mode={mode} key={modal.type+(modal.record?.id||'')} title={title} onClose={()=>setModal(null)}>{modal.type==='guide'?<Guide mode={mode}/>:modal.type==='video'?<VideoTraining mode={mode}/>:modal.type==='roles'?<QualityOrganizationPanel/>:modal.type==='session'?<div><h3>{viewer||'No signed-in Yai user'}</h3><p>{viewer?'This label comes from your existing signed Yai access session.':'You are viewing a training demo without a signed-in Yai access session.'}</p><p>The employee selected on an inspection is recorded separately from this access session. This demo does not authenticate YHR quality approval permissions.</p></div>:modal.type==='entry'?<CheckForm compact mode={mode} records={records} parent={modal.parent} onSave={save} catalog={catalog} setup={setup}/>:<RecordDetails record={modal.record} records={records} onReviewed={reviewed} onReinspect={record=>setModal({type:'entry',parent:record})}/>}</Modal>}
   </div>;
 }
+
+export { Guide as DecorationGuide };
