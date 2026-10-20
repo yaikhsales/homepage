@@ -10,7 +10,7 @@ export function useWorkspace(){
 }
 export function useViewer(){
  const [viewer,setViewer]=useState(null);
- useEffect(()=>{let alive=true;fetch('/api/auth',{credentials:'same-origin',cache:'no-store'}).then(r=>r.ok?r.json():null).then(d=>{if(alive)setViewer(d?.authenticated&&typeof d.viewer==='string'?d.viewer:null);}).catch(()=>{});return()=>{alive=false;};},[]);
+ useEffect(()=>{let alive=true;const load=()=>fetch('/api/auth',{credentials:'same-origin',cache:'no-store'}).then(r=>r.ok?r.json():null).then(d=>{if(alive)setViewer(d?.authenticated&&typeof d.viewer==='string'?d.viewer:null);}).catch(()=>{});load();window.addEventListener('focus',load);window.addEventListener('yai-session-changed',load);return()=>{alive=false;window.removeEventListener('focus',load);window.removeEventListener('yai-session-changed',load);};},[]);
  return viewer;
 }
 const Field=({label,children})=><label className="deco-field"><span>{label}</span>{children}</label>;
