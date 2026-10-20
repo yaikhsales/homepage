@@ -6,7 +6,6 @@ import { useTranslation } from '../translate/TranslationContext';
 const CallOut = ({ onBack }) => {
     const navigate = useNavigate();
     const { t } = useTranslation();
-    const [selectedLocation, setSelectedLocation] = useState(t('allLocation'));
     const [qualityAlerts, setQualityAlerts] = useState([]);
     const [qualityError, setQualityError] = useState('');
 
@@ -231,15 +230,7 @@ const CallOut = ({ onBack }) => {
 
             {/* Top Filter Bar */}
             <div className="bg-gray-800 border-b border-gray-700 px-4 py-2.5 flex items-center gap-2 flex-wrap">
-                <select
-                    value={selectedLocation}
-                    onChange={(e) => setSelectedLocation(e.target.value)}
-                    className="px-4 py-1.5 rounded text-sm font-medium bg-gray-700 text-gray-300 border border-gray-600 focus:outline-none focus:border-blue-500"
-                >
-                    <option>{t('allLocation')}</option>
-                    <option>{t('allLocation')} 1</option>
-                    <option>{t('allLocation')} 2</option>
-                </select>
+                <span className="text-gray-300 text-sm font-semibold">Sewing quality · live records</span>
                 <button
                     onClick={handleRefresh}
                     className="px-4 py-1.5 rounded text-sm font-medium bg-gray-700 text-gray-300 hover:bg-gray-600 transition-colors flex items-center gap-1.5"
@@ -263,6 +254,7 @@ const CallOut = ({ onBack }) => {
                         <button className="text-emerald-300 font-bold" onClick={() => navigate(row.kind === 'startup' ? '/dashboard/yqms/first-output-sewing' : '/dashboard/yqms/endline-check')}>Open quality record →</button>
                     </div>)}</div>
                 </section>
+                <details className="text-gray-400 text-xs"><summary className="cursor-pointer mb-3">Show legacy sample layout (not live data)</summary>
                 {/* Sewing Section */}
                 <div className="mb-5">
                     <div className="text-white font-bold text-base mb-2 px-1">{t('sewing')} · reference layout</div>
@@ -321,6 +313,7 @@ const CallOut = ({ onBack }) => {
                         </svg>
                     </div>
                 </div>
+                </details>
             </div>
         </div>
     );
