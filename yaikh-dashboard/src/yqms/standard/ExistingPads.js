@@ -8,9 +8,11 @@ import AddMeeting from '../PPM/add-meeting';
 import PreProductionMeeting from '../PPM/pre-production-meeting';
 import {cuttingAudits} from '../CuttingAuditDetails';
 import CuttingFormTablet from '../CuttingFormTablet';
+import FinishingPackingPad from './FinishingPackingPad';
 import {useQualityOrganization} from '../quality-organization';
 const points=['Approved pattern / marker','Fabric release / shade','Lay setup','Cut shape / dimensions','Notches / drill marks','Grain / direction','Edges / fabric defects','Numbering / bundle identity'];
 export default function ExistingPads({moduleKey,config,onRecord}){
+ if(config.kind==='finishing-packing')return <FinishingPackingPad moduleKey={moduleKey} config={config} onRecord={onRecord}/>;
  if(config.kind==='decoration')return <DecorationQuality embeddedPad mode={config.mode} onRecord={onRecord}/>;
  if(config.kind==='fincheck')return <FincheckWorkspace embeddedPad workflowConfig={{...config,moduleKey}} onRecord={onRecord}/>;
  if(config.kind==='cut-panel')return <CuttingPanel embeddedPad onRecord={onRecord}/>;
