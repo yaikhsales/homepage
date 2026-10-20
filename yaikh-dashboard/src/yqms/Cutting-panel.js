@@ -1,5 +1,4 @@
 import CuttingPadForm from "./CuttingPadForm";
-import { QualityOrganizationPanel } from "./quality-organization";
 import CuttingFormTablet from "./CuttingFormTablet";
 import React, { useState } from "react";
 import {
@@ -183,7 +182,7 @@ const CuttingPanel = ({ onBack }) => {
                                 </div>
                                 </CuttingFormTablet>
                             ) : activeTab === "data" ? (
-                                <><CuttingOrderDashboard orders={orders} order={order} onSelectOrder={setSelectedMO} onViewForm={() => setActiveTab("form")} /><QualityOrganizationPanel/></>
+                                <CuttingOrderDashboard orders={orders} order={order} onSelectOrder={setSelectedMO} onViewForm={() => setActiveTab("form")} />
                             ) : activeTab === "report" ? (
                                 <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
                                     {/* Stats Overview */}
