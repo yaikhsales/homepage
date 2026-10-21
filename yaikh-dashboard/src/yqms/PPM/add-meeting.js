@@ -15,7 +15,7 @@ import {
     Languages
 } from 'lucide-react';
 
-const AddMeeting = ({ onCancel, onSave }) => {
+const AddMeeting = ({ onCancel, onSave, embedded = false }) => {
     const [isRecording, setIsRecording] = useState(false);
     const isRecordingRef = useRef(false); // Ref to track recording state without triggering re-renders in callbacks
     const [selectedLanguage, setSelectedLanguage] = useState('en-US'); // Default to English
@@ -174,8 +174,8 @@ const AddMeeting = ({ onCancel, onSave }) => {
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-300">
-            <div className="w-full max-w-4xl bg-white border border-slate-200 rounded-[2.5rem] shadow-2xl shadow-slate-900/20 overflow-hidden animate-in zoom-in-95 duration-300 max-h-[90vh] flex flex-col">
+        <div className={embedded ? "qs-ppm-inline" : "fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-300"}>
+            <div className={embedded ? "w-full bg-white flex flex-col" : "w-full max-w-4xl bg-white border border-slate-200 rounded-[2.5rem] shadow-2xl shadow-slate-900/20 overflow-hidden animate-in zoom-in-95 duration-300 max-h-[90vh] flex flex-col"}>
                 {/* Form Header */}
                 <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-white z-10">
                     <div>
@@ -183,9 +183,9 @@ const AddMeeting = ({ onCancel, onSave }) => {
                             <div className="p-2 bg-red-50 rounded-xl text-red-600">
                                 <CalendarPlus className="w-6 h-6" />
                             </div>
-                            Schedule New Meeting
+                            {embedded ? 'Record Pre Production Meeting' : 'Schedule New Meeting'}
                         </h2>
-                        <p className="ml-12 text-slate-500 text-xs font-bold mt-1">Initialize Pre-Production Strategy & Alignment</p>
+                        <p className="ml-12 text-slate-500 text-xs font-bold mt-1">{embedded ? 'Ground-level minutes · send to management review' : 'Initialize Pre-Production Strategy & Alignment'}</p>
                     </div>
                     <button
                         onClick={onCancel}
@@ -261,7 +261,7 @@ const AddMeeting = ({ onCancel, onSave }) => {
                             {/* Attendees */}
                             <div className="space-y-2">
                                 <label className="flex items-center gap-2 text-sm font-bold text-gray-800">
-                                    <Users className="w-3.5 h-3.5" /> Expected Attendees
+                                    <Users className="w-3.5 h-3.5" /> {embedded ? 'Attendees' : 'Expected Attendees'}
                                 </label>
                                 <input
                                     type="number"
@@ -419,7 +419,7 @@ const AddMeeting = ({ onCancel, onSave }) => {
                         onClick={() => onSave(formData)}
                         className="px-6 py-3 bg-red-600 text-white rounded-xl text-sm font-bold hover:bg-red-700 transition-all flex items-center shadow-xl shadow-red-200 active:scale-95"
                     >
-                        <Save className="w-5 h-5 text-white/90" /> Confirm Schedule
+                        <Save className="w-5 h-5 text-white/90" /> {embedded ? 'Submit meeting minutes' : 'Confirm Schedule'}
                     </button>
                 </div>
             </div>
