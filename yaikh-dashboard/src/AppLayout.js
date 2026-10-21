@@ -9,8 +9,8 @@ import {
 
 import Header from "./components/Header";
 import SectionContainer from "./components/SectionContainer";
-import ColumnGroup from "./components/ColumnGroup";
-import { APPS_GROUP, DASHBOARD_DATA } from "./data/module";
+import AppsDeviceShowcase from "./components/AppsDeviceShowcase";
+import { DASHBOARD_DATA } from "./data/module";
 import YaiDataBot from "./chatbot/YaiDataBot";
 import BotModules from "./chatbot/bot-modules";
 import BigBrainPanel from "./chatbot/BigBrainPanel";
@@ -1339,9 +1339,7 @@ const AppLayout = () => {
                   isLightOn={false}
                 />
               </div>
-              <div className="flex justify-center pb-8" aria-label="Apps cluster">
-                <ColumnGroup group={APPS_GROUP} onModuleClick={handleModuleClick} isDropdownOpen={isDropdownOpen} />
-              </div>
+              <AppsDeviceShowcase />
             </div>
 
             {/* General AI Agent Button - Right Side Bottom.
