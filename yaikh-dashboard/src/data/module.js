@@ -495,3 +495,13 @@ export const DASHBOARD_DATA = [
     ]
   }
 ];
+
+// Device UI entry tiles, grouped independently from department agents.
+export const APPS_GROUP = {
+  id: "apps-col", title: "Apps",
+  modules: [
+    { id: "tv-ui", title: "TV UI", description: "Yai interface for factory TV screens." },
+    { id: "mobile-ui", title: "Mobile App UI", description: "Yai interface for worker mobile phones." },
+    { id: "ipad-ui", title: "iPad UI", description: "Yai interface for iPad workstations." },
+  ].map(module => ({ ...module, image: `IMG/icons/${module.id}.svg`, iconSrc: `IMG/icons/${module.id}.svg`, status: "active", popupTitle: "APPS · DEVICE INTERFACES" })),
+};
