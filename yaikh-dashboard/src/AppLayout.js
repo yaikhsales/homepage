@@ -1339,7 +1339,7 @@ const AppLayout = () => {
                   isLightOn={false}
                 />
               </div>
-              <AppsDeviceShowcase />
+              <AppsDeviceShowcase onModuleClick={handleModuleClick} />
             </div>
 
             {/* General AI Agent Button - Right Side Bottom.
