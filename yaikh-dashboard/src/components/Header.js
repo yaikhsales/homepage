@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import LangFlags from './LangFlags';
 
 /* Header — minimal chrome for the absorbed dashboard.
@@ -18,6 +19,8 @@ import LangFlags from './LangFlags';
  */
 
 const Header = () => {
+  const { pathname } = useLocation();
+  const yqmsModule = /^\/dashboard\/yqms\/[^/]+/.test(pathname) || /^\/quality-pad\//.test(pathname);
   const goHome = () => {
     window.location.href = '/';
   };
@@ -33,7 +36,7 @@ const Header = () => {
       >
         <span>← Home</span>
       </button>
-      <LangFlags />
+      {!yqmsModule && <LangFlags />}
       </div>
 
       {/* Right side intentionally empty — Experience duplicate removed. */}

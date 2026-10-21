@@ -12,6 +12,7 @@ const rows = {
   ...longRows,
   ...sewingExampleRows,
   'QC pad': ['ផ្ទាំង QC', '质检平板', 'Bảng QC', 'QC pad', 'Pad QC'],
+  'YQMS language': ['ភាសា YQMS', 'YQMS 语言', 'Ngôn ngữ YQMS', 'Wika ng YQMS', 'Bahasa YQMS'],
   'Dashboard': ['ផ្ទាំងគ្រប់គ្រង', '仪表板', 'Bảng điều khiển', 'Dashboard', 'Papan pemuka'],
   'Report': ['របាយការណ៍', '报告', 'Báo cáo', 'Ulat', 'Laporan'],
   'Modify': ['កែប្រែ', '修改', 'Chỉnh sửa', 'Baguhin', 'Ubah'],

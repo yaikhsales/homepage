@@ -126,7 +126,6 @@ import SewingStations from "./yqms/SewingStations";
 import CuttingInspection from "./yqms/CuttingInspection";
 import FinalInspection from "./yqms/FinalInspection";
 
-import AuditReport from "./yqms/AuditReport";
 import DecorationQuality from "./yqms/decoration/DecorationQuality";
 import BuyerFinalInspection from "./yqms/BuyerFinalInspection";
 import SupplierEvaluation from "./yqms/SupplierEvaluation";
@@ -134,7 +133,6 @@ import CustomerComplainCap from "./yqms/CustomerComplainCap";
 import YQMSReport from "./yqms/YQMSReport";
 // eslint-disable-next-line no-unused-vars
 import YQMSGlobalDashboard from "./yqms/YQMSGlobalDashboard";
-import { YQMSDashboard } from "./yqms/Fin-check/Dashboard/YQMSDashboard";
 import HumidityReportList from "./yqms/HumidityReport/show-list";
 import QCRovingDashboard from "./yqms/Fin-check/Dashboard/QCRovingDashboard";
 import CuttingDashboard from "./yqms/Fin-check/Dashboard/CuttingDashboard";
@@ -505,7 +503,7 @@ export default function App() {
             element={<ModuleFrame><QualityModule key="pre-production-meeting" moduleKey="pre-production-meeting" onBack={handleBack} /></ModuleFrame>}
           />
 
-          {/* Additional YQMS Routes using AuditReport */}
+          {/* Additional YQMS routes */}
           <Route
             path="yqms/20pcs-audit"
             element={<ModuleFrame><SewingStations mode="qa20" onBack={handleBack} /></ModuleFrame>}
@@ -569,14 +567,7 @@ export default function App() {
           />
           <Route
             path="yqms/first-output-finishing"
-            element={
-            <ModuleFrame>
-              <AuditReport
-                title="First Output Finishing And Packing"
-                onBack={handleBack}
-              />
-            </ModuleFrame>
-            }
+            element={<YwipFlow processOnly title="First Output Tracker" onBack={handleBack} />}
           />
           <Route
             path="yqms/report"
@@ -601,7 +592,7 @@ export default function App() {
 
           <Route
             path="yqms/dashboard"
-            element={<ModuleFrame><YQMSDashboard onBack={handleBack} /></ModuleFrame>}
+            element={<YwipFlow processOnly title="Master Dashboard" onBack={handleBack} />}
           />
           <Route
             path="yqms/qc-roving"
