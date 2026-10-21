@@ -20,6 +20,9 @@ export default function QCFilePad({ onRecord, legacy }) {
   const [form, setForm] = useState(blank);
   const [error, setError] = useState('');
   const [saved, setSaved] = useState('');
+  const [files, setFiles] = useState([]);
+  const [fileKey, setFileKey] = useState(0);
+  const [busy, setBusy] = useState(false);
   const set = (name, value) => setForm(current => ({ ...current, [name]: value }));
   const pending = Object.values(form.checks).filter(value => value === 'PENDING' || value === 'MISSING').length;
 
@@ -29,20 +32,40 @@ export default function QCFilePad({ onRecord, legacy }) {
       setError('Enter the order, style, buyer and reviewer before submitting.');
       return;
     }
+    if (files.some(file => file.size > 8 * 1024 * 1024)) {
+      setError('Each attached document must be 8 MB or smaller.');
+      return;
+    }
+    setBusy(true);
     try {
+      const evidenceFiles = [];
+      for (const file of files) {
+        const body = new FormData();
+        body.append('file', file);
+        body.append('category', 'QC file');
+        const response = await fetch('/api/yqms/module-evidence?module=qc-file', { method: 'POST', credentials: 'same-origin', body });
+        const result = await response.json();
+        if (!response.ok || !result.ok) throw new Error(result.error || `Could not upload ${file.name}.`);
+        evidenceFiles.push(result.file);
+      }
       const record = await onRecord({
         ...form,
         checked: documents.length,
         rejected: pending,
         inspector: form.reviewer,
+        evidenceFiles,
         status: pending ? 'HOLD' : 'PENDING REVIEW',
         source: 'QC file floor review',
       });
       setSaved(`${record.id} saved for management review.`);
       setError('');
       setForm(blank());
+      setFiles([]);
+      setFileKey(value => value + 1);
     } catch (cause) {
       setError(cause.message || 'The QC file review could not be saved.');
+    } finally {
+      setBusy(false);
     }
   }
 
@@ -64,9 +87,11 @@ export default function QCFilePad({ onRecord, legacy }) {
           <label>Missing document / follow-up<textarea rows={3} value={form.missing} onChange={event => set('missing', event.target.value)} /></label>
           <label>Ground review notes<textarea rows={3} value={form.notes} onChange={event => set('notes', event.target.value)} /></label>
         </div>
+        <label>Attach QC documents / evidence PDF or image · up to 8 MB each<input key={fileKey} type="file" accept="application/pdf,image/jpeg,image/png,image/webp" multiple onChange={event => setFiles(Array.from(event.target.files || []))} /></label>
+        {files.length > 0 && <p>{files.length} document{files.length === 1 ? '' : 's'} selected for upload when submitted.</p>}
         {error && <p className="qs-error" role="alert">{error}</p>}
         {saved && <p className="qs-success" role="status">{saved}</p>}
-        <div className="qs-qc-file-submit"><span>{pending ? `${pending} items require review` : 'All listed documents available · management review pending'}</span><button className="qs-primary" type="submit">Submit QC file review</button></div>
+        <div className="qs-qc-file-submit"><span>{pending ? `${pending} items require review` : 'All listed documents available · management review pending'}</span><button className="qs-primary" type="submit" disabled={busy}>{busy ? 'Saving…' : 'Submit QC file review'}</button></div>
       </form>
     </CuttingFormTablet>
     <details className="qs-legacy-reference"><summary>Existing QC file register</summary><div className="qs-legacy">{legacy}</div></details>
