@@ -11,7 +11,6 @@ const departments = ['Planning', 'Warehouse', 'Cutting', 'Sewing', 'Quality', 'P
 export default function AppsDeviceShowcase({ onModuleClick }) {
   const [tvView, setTvView] = useState('Overview');
   return <section className="apps-devices" aria-label="Apps cluster">
-    <header className="apps-device-heading"><span>Apps</span><h2>Yai on every screen</h2></header>
     <div className="apps-device-row">
       <article className="device-example device-example-tv">
         <h3 className="device-caption">TV UI</h3><p className="device-caption-sub">Factory overview · shared visibility</p>
