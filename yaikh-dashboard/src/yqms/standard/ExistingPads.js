@@ -9,6 +9,7 @@ import PreProductionMeeting from '../PPM/pre-production-meeting';
 import {cuttingAudits} from '../CuttingAuditDetails';
 import CuttingFormTablet from '../CuttingFormTablet';
 import QCFilePad from './QCFilePad';
+import QACuttingPad from './QACuttingPad';
 import FinishingPackingPad from './FinishingPackingPad';
 import {useQualityOrganization} from '../quality-organization';
 import './preproduction-pad.css';
@@ -19,7 +20,8 @@ export default function ExistingPads({moduleKey,config,onRecord}){
  if(config.kind==='fincheck')return <FincheckWorkspace embeddedPad workflowConfig={{...config,moduleKey}} onRecord={onRecord}/>;
  if(config.kind==='cut-panel')return <CuttingPanel embeddedPad onRecord={onRecord}/>;
  if(config.kind==='bundle')return <CuttingInspection embeddedPad onRecord={onRecord}/>;
- if(config.kind==='cut-audit')return <AuditPad first={moduleKey==='first-output-cutting'} title={config.title} onRecord={onRecord}/>;
+ if(moduleKey==='qa-cutting')return <QACuttingPad onRecord={onRecord}/>;
+ if(config.kind==='cut-audit')return <AuditPad first title={config.title} onRecord={onRecord}/>;
  if(config.kind==='ppm')return <MeetingPad onRecord={onRecord}/>;
  return <QCFilePad onRecord={onRecord} legacy={<QCFile onRecord={onRecord} onBack={()=>{}}/>}/>;
 }
