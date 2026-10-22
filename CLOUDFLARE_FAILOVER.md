@@ -25,7 +25,7 @@ The standby was deployed from main `c6e68381` using OpenNext 1.14.0 and Wrangler
 Verified in the browser:
 - Actual yaikh.com experience loads bundle `main.80d9d06b.js` and TV / Mobile / iPad screens.
 - Uploaded clips play on phone and iPad from same-origin `/experience/assets/yai-feed/` URLs (readyState 4, playback advancing).
-- HEAD/GET `/experience/` return 200 with `X-Yai-Experience-Origin: cloudflare`; `/experience` redirects to the slash path.
+- HEAD/GET both `/experience` and `/experience/` return 200 with `X-Yai-Experience-Origin: cloudflare`. The router normalizes the upstream entry path and follows its canonical redirect internally. Entry responses use `Cache-Control: no-store`, avoiding the former slash redirect loop. The homepage Experience → Meet Yai Agents path was verified in the browser.
 - `/api/db-ping` returns `connected:true` against MongoDB Atlas.
 
 **This is not yet complete provider-independent failover:**
