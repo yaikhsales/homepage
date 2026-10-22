@@ -16,9 +16,18 @@ export default function YaiMobileWorkspace({ variant = 'phone', onModuleClick })
   const [panel, setPanel] = useState(null);
   const [message, setMessage] = useState('');
   const [query, setQuery] = useState('');
+  const goHome = () => { setTab('Home'); setPanel(null); setMessage(''); setVideoExpanded(false); };
+  const goBack = () => {
+    if (videoExpanded) setVideoExpanded(false);
+    else if (panel) { setPanel(null); setMessage(''); }
+    else if (tab !== 'Home') goHome();
+    else if (window.history.length > 1) window.history.back();
+    else goHome();
+  };
   const openModule = id => { const module = modules.find(item => item.id === id); if (module && onModuleClick) onModuleClick(module); };
   const tile = ([title, id, Icon]) => <button key={id} className="ym-module" onClick={() => openModule(id)}><span><Icon size={21.6} strokeWidth={1.8} /></span><b>{title}</b></button>;
   return <div className={`ym-workspace ym-${variant}`} aria-label={`${variant === 'phone' ? 'Mobile' : 'iPad'} Yai application`}>
+    <nav className="ym-top-navigation" aria-label={`${variant} workspace navigation`}><button aria-label="Go back" onClick={goBack}><ArrowLeft size={16} />Back</button><button aria-label="Go to app home" onClick={goHome}><Home size={16} />Home</button></nav>
     <header className="ym-profile"><img src={asset('assets/about-us/teams/gamini.png')} alt="Gamini" /><div><b>Gamini Ka</b><span>Texlink · TL02</span></div><button aria-label="Notifications" onClick={() => setPanel({ title: 'Notifications', body: 'Your work notices and important updates appear here.' })}><Bell size={14.4} /></button><button aria-label="Language" onClick={() => setPanel({ title: 'Language', body: 'Use the language selector at the top of the Yai dashboard to change your working language.' })}>🇬🇧</button><button aria-label="Quick actions" onClick={() => setTab('Services')}><Plus size={14.4} /></button></header>
     <div className="ym-attendance"><span>Today <i /></span><span>00:00 / 08:00</span><span>Weekly schedule</span></div>
     {videoExpanded ? <div className="ym-full-feed"><YaiShortVideoFeed expanded onClose={() => setVideoExpanded(false)} /></div> : <div className="ym-scroll">
