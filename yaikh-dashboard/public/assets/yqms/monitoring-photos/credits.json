@@ -1,0 +1,180 @@
+{
+  "usage": "Illustrative stock photos for mock QA identities and mock garment orders; not actual workers or inspected products.",
+  "photos": [
+    {
+      "file": "qa-01.jpg",
+      "id": 220453,
+      "type": "people",
+      "source": "https://www.pexels.com/photo/220453/",
+      "license": "https://www.pexels.com/license/"
+    },
+    {
+      "file": "qa-02.jpg",
+      "id": 415829,
+      "type": "people",
+      "source": "https://www.pexels.com/photo/415829/",
+      "license": "https://www.pexels.com/license/"
+    },
+    {
+      "file": "qa-03.jpg",
+      "id": 774909,
+      "type": "people",
+      "source": "https://www.pexels.com/photo/774909/",
+      "license": "https://www.pexels.com/license/"
+    },
+    {
+      "file": "qa-04.jpg",
+      "id": 614810,
+      "type": "people",
+      "source": "https://www.pexels.com/photo/614810/",
+      "license": "https://www.pexels.com/license/"
+    },
+    {
+      "file": "qa-05.jpg",
+      "id": 733872,
+      "type": "people",
+      "source": "https://www.pexels.com/photo/733872/",
+      "license": "https://www.pexels.com/license/"
+    },
+    {
+      "file": "qa-06.jpg",
+      "id": 1239291,
+      "type": "people",
+      "source": "https://www.pexels.com/photo/1239291/",
+      "license": "https://www.pexels.com/license/"
+    },
+    {
+      "file": "qa-07.jpg",
+      "id": 91227,
+      "type": "people",
+      "source": "https://www.pexels.com/photo/91227/",
+      "license": "https://www.pexels.com/license/"
+    },
+    {
+      "file": "qa-08.jpg",
+      "id": 2379004,
+      "type": "people",
+      "source": "https://www.pexels.com/photo/2379004/",
+      "license": "https://www.pexels.com/license/"
+    },
+    {
+      "file": "qa-09.jpg",
+      "id": 1130626,
+      "type": "people",
+      "source": "https://www.pexels.com/photo/1130626/",
+      "license": "https://www.pexels.com/license/"
+    },
+    {
+      "file": "qa-10.jpg",
+      "id": 1043474,
+      "type": "people",
+      "source": "https://www.pexels.com/photo/1043474/",
+      "license": "https://www.pexels.com/license/"
+    },
+    {
+      "file": "qa-11.jpg",
+      "id": 1181686,
+      "type": "people",
+      "source": "https://www.pexels.com/photo/1181686/",
+      "license": "https://www.pexels.com/license/"
+    },
+    {
+      "file": "qa-12.jpg",
+      "id": 1681010,
+      "type": "people",
+      "source": "https://www.pexels.com/photo/1681010/",
+      "license": "https://www.pexels.com/license/"
+    },
+    {
+      "file": "qa-13.jpg",
+      "id": 1181690,
+      "type": "people",
+      "source": "https://www.pexels.com/photo/1181690/",
+      "license": "https://www.pexels.com/license/"
+    },
+    {
+      "file": "qa-14.jpg",
+      "id": 3777943,
+      "type": "people",
+      "source": "https://www.pexels.com/photo/3777943/",
+      "license": "https://www.pexels.com/license/"
+    },
+    {
+      "file": "qa-15.jpg",
+      "id": 1043471,
+      "type": "people",
+      "source": "https://www.pexels.com/photo/1043471/",
+      "license": "https://www.pexels.com/license/"
+    },
+    {
+      "file": "qa-16.jpg",
+      "id": 1181682,
+      "type": "people",
+      "source": "https://www.pexels.com/photo/1181682/",
+      "license": "https://www.pexels.com/license/"
+    },
+    {
+      "file": "qa-17.jpg",
+      "id": 937481,
+      "type": "people",
+      "source": "https://www.pexels.com/photo/937481/",
+      "license": "https://www.pexels.com/license/"
+    },
+    {
+      "file": "qa-18.jpg",
+      "id": 2182970,
+      "type": "people",
+      "source": "https://www.pexels.com/photo/2182970/",
+      "license": "https://www.pexels.com/license/"
+    },
+    {
+      "file": "garment-01.jpg",
+      "id": 12039633,
+      "type": "garments",
+      "source": "https://www.pexels.com/photo/12039633/",
+      "license": "https://www.pexels.com/license/"
+    },
+    {
+      "file": "garment-02.jpg",
+      "id": 1082529,
+      "type": "garments",
+      "source": "https://www.pexels.com/photo/1082529/",
+      "license": "https://www.pexels.com/license/"
+    },
+    {
+      "file": "garment-03.jpg",
+      "id": 9594694,
+      "type": "garments",
+      "source": "https://www.pexels.com/photo/9594694/",
+      "license": "https://www.pexels.com/license/"
+    },
+    {
+      "file": "garment-04.jpg",
+      "id": 6773803,
+      "type": "garments",
+      "source": "https://www.pexels.com/photo/6773803/",
+      "license": "https://www.pexels.com/license/"
+    },
+    {
+      "file": "garment-05.jpg",
+      "id": 6046231,
+      "type": "garments",
+      "source": "https://www.pexels.com/photo/6046231/",
+      "license": "https://www.pexels.com/license/"
+    },
+    {
+      "file": "garment-06.jpg",
+      "id": 6311392,
+      "type": "garments",
+      "source": "https://www.pexels.com/photo/6311392/",
+      "license": "https://www.pexels.com/license/"
+    },
+    {
+      "file": "garment-07.jpg",
+      "id": 9218536,
+      "type": "garments",
+      "source": "https://www.pexels.com/photo/9218536/",
+      "license": "https://www.pexels.com/license/"
+    }
+  ]
+}
