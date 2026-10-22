@@ -2,6 +2,10 @@
 
 You are working in the **`yaikhsales/homepage`** monorepo. Read this file end-to-end before doing anything else. It is the single source of truth for what's wired in production and the gotchas we've already paid for.
 
+## Cloudflare standby during Railway outages
+
+Read [CLOUDFLARE_FAILOVER.md](./CLOUDFLARE_FAILOVER.md) before any Cloudflare work. Shared Worker: `yai-backup`. **One publishing session only: acquire `ops/cloudflare/deploy-lock.py`; all other sessions MUST WAIT until the owner finishes live verification and releases the lock.** Do not deploy stale/unmerged checkouts. Do not assume DNS failover or complete Railway independence: the runbook lists outstanding dependencies.
+
 Last verified green: **2026-06-14**.
 
 ---

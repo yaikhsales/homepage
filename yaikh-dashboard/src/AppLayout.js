@@ -9,6 +9,7 @@ import {
 
 import Header from "./components/Header";
 import SectionContainer from "./components/SectionContainer";
+import AppsDeviceShowcase from "./components/AppsDeviceShowcase";
 import { DASHBOARD_DATA } from "./data/module";
 import YaiDataBot from "./chatbot/YaiDataBot";
 import BotModules from "./chatbot/bot-modules";
@@ -1338,6 +1339,7 @@ const AppLayout = () => {
                   isLightOn={false}
                 />
               </div>
+              <AppsDeviceShowcase onModuleClick={handleModuleClick} />
             </div>
 
             {/* General AI Agent Button - Right Side Bottom.
