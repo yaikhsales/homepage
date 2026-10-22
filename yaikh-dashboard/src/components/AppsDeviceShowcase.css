@@ -16,3 +16,6 @@
 
 /* Presentation handset: 20% larger without altering its physical ratio. */
 .phone-frame{transform:scale(1.2);transform-origin:top center;margin-bottom:110px}
+
+/* Portrait iPad hardware. */
+.tablet-frame{max-width:340px;margin-left:auto;margin-right:auto;padding:20px 13px 15px}.tablet-camera{top:7px;left:calc(50% - 3px)}.tablet-display{aspect-ratio:3/4}
