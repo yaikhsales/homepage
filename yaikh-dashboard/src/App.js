@@ -1,3 +1,4 @@
+import YQMSHub, { QCWorkspace, QualityMonitoring } from './yqms/YQMSHub';
 import React from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import AppLayout from "./AppLayout";
@@ -198,6 +199,9 @@ export default function App() {
           {/* YWIP is a full screen, not a sub-menu hub: /submenu/ywip (the URL pattern every other module uses)
               said "No modules available", so send it to the real screen. */}
           <Route path="submenu/ywip" element={<Navigate to="/dashboard/ywip" replace />} />
+          <Route path="submenu/yqms" element={<ModuleFrame><YQMSHub /></ModuleFrame>} />
+          <Route path="submenu/yqms-workspace" element={<ModuleFrame><QCWorkspace /></ModuleFrame>} />
+          <Route path="yqms/quality-monitoring" element={<ModuleFrame><QualityMonitoring /></ModuleFrame>} />
           <Route path="submenu/:moduleId" element={<ModuleFrame><SubMenuView /></ModuleFrame>} />
           <Route path="image/*" element={<ImageView onBack={handleBack} />} />
           <Route path="iframe" element={<IframeView onBack={handleBack} />} />

@@ -59,6 +59,7 @@ const MODULE_ID_TO_TITLE = {
   "shipping-bill": "Shipping Bill",
   "iews": "IEWS",
   "accountant": "Accountant",
+  "yqms-workspace": "QC Work space",
 };
 // Every PA-owned sub-menu title also registers its slug (direct URL /
 // refresh), so ALL departments' PAs wake on land — not just Accounting.
@@ -75,6 +76,7 @@ Object.keys(PA_BY_SUBMENU_TITLE).forEach((t) => {
 const MODULE_ID_TO_CARDS = {
   // YQMS hub (grouped) — the back arrow on every YQMS screen lands here without router state
   "yqms": YQMS_CARDS,
+  "yqms-workspace": YQMS_CARDS,
   "fc": FC_CARDS,
   "mrp": MRP_CARDS,
   "ypi": YPI_CARDS,
@@ -368,7 +370,7 @@ const renderCard = (
       : subIconImage || card.image;
   const isFCModule = imageToUse && imageToUse.includes("assets/fc/");
   const isYQMSModule = imageToUse && imageToUse.includes("assets/yqms/");
-  const isYQMSHubCard = moduleId === "yqms";
+  const isYQMSHubCard = moduleId === "yqms" || moduleId === "yqms-workspace";
   const isEGovModule = card.url !== undefined; // E-Government modules have url property
   const isNonClickableModule = isYQMSModule && !card.galleryImages && card.title !== "QC File" && card.title !== "Pre Production Meeting" && !card.action;
 
@@ -766,9 +768,10 @@ const renderCard = (
   );
 };
 
-const SubMenuView = () => {
+const SubMenuView = ({ moduleIdOverride } = {}) => {
   const navigate = useNavigate();
-  const { moduleId } = useParams();
+  const { moduleId: routeModuleId } = useParams();
+  const moduleId = moduleIdOverride || routeModuleId;
   const { state } = useLocation();
   const { title: stateTitle, cards: stateCards, isGrouped = false } = state || {};
   // Fall back to a moduleId-derived title/cards when state is missing
