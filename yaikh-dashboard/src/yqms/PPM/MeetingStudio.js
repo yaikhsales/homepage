@@ -13,11 +13,12 @@ const dateToday = () => new Date().toLocaleDateString('en-CA');
 const meetingId = () => `MTG-${Date.now().toString(36).toUpperCase()}`;
 const minutes = seconds => `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
 const noteChunks = value => value.match(/[\s\S]{1,1800}/g) || [];
+const audioExtension = blob => /\.(mp4|m4a)$/i.test(blob?.name || '') || blob?.type.includes('mp4') || blob?.type.includes('m4a') ? 'mp4' : 'webm';
 
 export default function MeetingStudio({ onRecord, records = [] }) {
   const [type, setType] = useState('pre-production');
   const [view, setView] = useState('schedule');
-  const [form, setForm] = useState({ id: meetingId(), date: dateToday(), time: '09:00', order: '', style: '', buyer: '', attendees: '', agenda: '' });
+  const [form, setForm] = useState({ id: meetingId(), date: dateToday(), time: '09:00', order: '', style: '', buyer: '', attendees: '', agenda: '', meetingLink: '' });
   const [selectedId, setSelectedId] = useState(DEMO_MEETINGS[0].id);
   const [language, setLanguage] = useState('en');
   const [transcripts, setTranscripts] = useState(blankTranscript);
@@ -49,6 +50,7 @@ export default function MeetingStudio({ onRecord, records = [] }) {
       style: record.style,
       buyer: record.buyer,
       attendees: record.payload.attendees,
+      meetingLink: record.payload.meetingLink,
       title: record.payload.agenda || `${record.payload.meetingType} meeting`,
       status: record.status,
       summary: record.payload.summary || 'Meeting record saved to the quality report.',
@@ -92,6 +94,10 @@ export default function MeetingStudio({ onRecord, records = [] }) {
     if (!form.order.trim() || !form.style.trim() || !form.buyer.trim() || !form.date || !form.time) {
       setError('Enter order, style, buyer, date and time to schedule this meeting.');
       return;
+    }
+    if (form.meetingLink.trim()) {
+      try { if (new URL(form.meetingLink).protocol !== 'https:') throw new Error(); }
+      catch { setError('Use a valid HTTPS link for the remote meeting.'); return; }
     }
     setBusy('schedule');
     try {
@@ -180,12 +186,26 @@ export default function MeetingStudio({ onRecord, records = [] }) {
     setRecording(false);
   }
 
+  function loadRecording(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    if (file.size > 8 * 1024 * 1024) { setError('Use a WebM or MP4 recording up to 8 MB.'); return; }
+    if (!/\.(webm|mp4|m4a)$/i.test(file.name)) { setError('Use a WebM, MP4 or M4A recording.'); return; }
+    if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
+    const url = URL.createObjectURL(file);
+    audioUrlRef.current = url;
+    setAudioBlob(file);
+    setAudioUrl(url);
+    setError('');
+    setMessage('Recording loaded. Generate and review its transcript before saving.');
+  }
+
   async function generateTranscript() {
     if (!audioBlob) return;
     setBusy('transcribe');
     setError('');
     try {
-      const extension = audioBlob.type.includes('mp4') ? 'mp4' : 'webm';
+      const extension = audioExtension(audioBlob);
       const file = new File([audioBlob], `${form.id}.${extension}`, { type: audioBlob.type });
       const body = new FormData();
       body.append('file', file);
@@ -236,7 +256,7 @@ export default function MeetingStudio({ onRecord, records = [] }) {
       if (audioBlob) {
         if (audioBlob.size > 8 * 1024 * 1024) throw new Error('Recording exceeds 8 MB. Download it, then make a shorter segment before saving.');
         const body = new FormData();
-        const extension = audioBlob.type.includes('mp4') ? 'mp4' : 'webm';
+        const extension = audioExtension(audioBlob);
         body.append('file', new File([audioBlob], `${form.id}.${extension}`, { type: audioBlob.type }));
         body.append('category', 'Meeting audio');
         const response = await fetch('/api/yqms/module-evidence?module=pre-production-meeting', { method: 'POST', body, credentials: 'same-origin' });
@@ -258,7 +278,7 @@ export default function MeetingStudio({ onRecord, records = [] }) {
     if (recording) return;
     setType(item.type);
     setScheduled(false);
-    setForm({ id: meetingId(), date: dateToday(), time: '09:00', order: item.order, style: item.style, buyer: item.buyer, attendees: item.attendees, agenda: item.title });
+    setForm({ id: meetingId(), date: dateToday(), time: '09:00', order: item.order, style: item.style, buyer: item.buyer, attendees: item.attendees, agenda: item.title, meetingLink: '' });
     setView('schedule');
     setMessage('Order details copied from the demo example. This creates a new meeting, not an approval.');
   }
@@ -290,6 +310,7 @@ export default function MeetingStudio({ onRecord, records = [] }) {
         <label>Buyer<input value={form.buyer} onChange={event => updateForm('buyer', event.target.value)} placeholder="Buyer" /></label>
       </div>
       <label className="qms-meeting-wide"><Users size={15} /> Attendees / roles<input value={form.attendees} onChange={event => updateForm('attendees', event.target.value)} placeholder="QA, production, technical, merchandising…" /></label>
+      <label className="qms-meeting-wide">Teams / Zoom meeting link (optional)<input type="url" value={form.meetingLink} onChange={event => updateForm('meetingLink', event.target.value)} placeholder="https://…" /></label>
       <label className="qms-meeting-wide">Agenda<textarea rows={2} value={form.agenda} onChange={event => updateForm('agenda', event.target.value)} placeholder="Topics and controlled references for this meeting" /></label>
       <div className="qms-meeting-actions"><button type="submit" className="primary" disabled={!!busy}><CalendarDays size={17} />{busy === 'schedule' ? 'Saving…' : 'Save schedule and open room'}</button></div>
     </form>}
@@ -297,12 +318,14 @@ export default function MeetingStudio({ onRecord, records = [] }) {
     {view === 'room' && <section className="qms-meeting-panel">
       <div className="qms-meeting-room-top"><div><span className="qms-meeting-kicker">AUDIO MEETING ROOM</span><h3>{form.agenda || MEETING_TYPES.find(item => item.id === type)?.label}</h3><p>{form.id} · {form.order || 'Order not entered'} · {form.style || 'Style not entered'}</p></div><span className={recording ? 'qms-rec live' : 'qms-rec'}>{recording ? `● REC ${minutes(seconds)}` : 'Ready to record'}</span></div>
       <p className="qms-meeting-room-note">This pad captures the microphone on this device. Tell attendees before recording. It does not transmit a live call to remote participants.</p>
+      {form.meetingLink.startsWith('https://') && <p><a href={form.meetingLink} target="_blank" rel="noopener noreferrer">Join remote meeting ↗</a></p>}
       <p className="qms-meeting-people"><Users size={17} />{form.attendees || 'Add attendees in Schedule'}</p>
       <div className="qms-meeting-controls">
         <button type="button" className={recording ? 'stop' : 'primary'} onClick={recording ? stopRecording : startRecording} disabled={!!busy}>{recording ? <CircleStop size={18} /> : <Mic size={18} />}{recording ? 'Stop recording' : 'Start recording'}</button>
         <label>Spoken language<select value={language} disabled={recording} onChange={event => setLanguage(event.target.value)}>{Object.entries(LANGUAGE).map(([code, item]) => <option key={code} value={code}>{item.label}</option>)}</select></label>
+        <label>Or import a Teams / Zoom recording<input type="file" accept="audio/webm,audio/mp4,.webm,.mp4,.m4a" disabled={recording} onChange={loadRecording} /></label>
       </div>
-      {audioUrl && <div className="qms-meeting-playback"><Volume2 size={18} /><audio controls src={audioUrl}>Audio playback is unavailable.</audio><a href={audioUrl} download={`${form.id}.${audioBlob?.type.includes('mp4') ? 'mp4' : 'webm'}`}>Download recording</a></div>}
+      {audioUrl && <div className="qms-meeting-playback"><Volume2 size={18} /><audio controls src={audioUrl}>Audio playback is unavailable.</audio><a href={audioUrl} download={`${form.id}.${audioExtension(audioBlob)}`}>Download recording</a></div>}
       <div className="qms-meeting-transcript-head"><h4><Languages size={18} /> Transcript</h4><div><button type="button" onClick={generateTranscript} disabled={!audioBlob || !!busy}>{busy === 'transcribe' ? 'Transcribing…' : 'Generate from audio'}</button><button type="button" onClick={generateLanguages} disabled={!!busy}>{busy === 'translate' ? 'Translating…' : 'Generate EN · ខ្មែរ · 中文'}</button></div></div>
       <div className="qms-meeting-language-tabs">{Object.entries(LANGUAGE).map(([code, item]) => <button type="button" key={code} aria-pressed={language === code} className={language === code ? 'active' : ''} disabled={recording} onClick={() => setLanguage(code)}>{item.label}{transcripts[code] ? ' ✓' : ''}</button>)}</div>
       <textarea className="qms-meeting-transcript" value={transcripts[language]} onChange={event => updateTranscript(language, event.target.value)} placeholder={recording ? 'Listening for speech…' : 'Record, generate from audio, or enter meeting words here.'} rows={8} />
@@ -314,7 +337,7 @@ export default function MeetingStudio({ onRecord, records = [] }) {
       <h3>Previous {MEETING_TYPES.find(item => item.id === type)?.label} meetings</h3>
       <div className="qms-meeting-history">
         <div className="qms-meeting-list">{currentMeetings.map(item => <button type="button" key={item.recordId || item.id} className={selectedMeeting?.id === item.id ? 'active' : ''} onClick={() => setSelectedId(item.id)}><strong>{item.title}</strong><span>{item.date} · {item.order} · {item.style}</span><small>{item.demo ? 'Illustrative transcript' : item.status}</small></button>)}</div>
-        {selectedMeeting && <article className="qms-meeting-record"><div className="qms-meeting-record-top"><div><span className="qms-meeting-kicker">{selectedMeeting.demo ? 'DEMO EXAMPLE' : 'SAVED MEETING'}</span><h4>{selectedMeeting.title}</h4><p>{selectedMeeting.id} · {selectedMeeting.date} · {selectedMeeting.time}</p></div><span className="qms-rec">{selectedMeeting.status}</span></div><p>{selectedMeeting.summary}</p><p className="qms-meeting-people"><Users size={16} />{selectedMeeting.attendees}</p>{selectedMeeting.audio && <audio controls src={selectedMeeting.audio.url} />}{Object.entries(LANGUAGE).map(([code, item]) => <div className="qms-meeting-history-transcript" key={code}><strong>{item.label}</strong><p>{selectedMeeting.transcripts?.[code] || 'No transcript in this language yet.'}</p></div>)}{selectedMeeting.demo && <button type="button" onClick={() => useExample(selectedMeeting)}>Use this order for a new meeting</button>}</article>}
+        {selectedMeeting && <article className="qms-meeting-record"><div className="qms-meeting-record-top"><div><span className="qms-meeting-kicker">{selectedMeeting.demo ? 'DEMO EXAMPLE' : 'SAVED MEETING'}</span><h4>{selectedMeeting.title}</h4><p>{selectedMeeting.id} · {selectedMeeting.date} · {selectedMeeting.time}</p></div><span className="qms-rec">{selectedMeeting.status}</span></div><p>{selectedMeeting.summary}</p><p className="qms-meeting-people"><Users size={16} />{selectedMeeting.attendees}</p>{selectedMeeting.meetingLink?.startsWith('https://') && <a href={selectedMeeting.meetingLink} target="_blank" rel="noopener noreferrer">Join remote meeting ↗</a>}{selectedMeeting.audio && <audio controls src={selectedMeeting.audio.url} />}{Object.entries(LANGUAGE).map(([code, item]) => <div className="qms-meeting-history-transcript" key={code}><strong>{item.label}</strong><p>{selectedMeeting.transcripts?.[code] || 'No transcript in this language yet.'}</p></div>)}{selectedMeeting.demo && <button type="button" onClick={() => useExample(selectedMeeting)}>Use this order for a new meeting</button>}</article>}
       </div>
     </section>}
   </div>;
