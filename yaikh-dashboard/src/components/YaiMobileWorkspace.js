@@ -17,13 +17,7 @@ export default function YaiMobileWorkspace({ variant = 'phone', onModuleClick })
   const [message, setMessage] = useState('');
   const [query, setQuery] = useState('');
   const goHome = () => { setTab('Home'); setPanel(null); setMessage(''); setVideoExpanded(false); };
-  const goBack = () => {
-    if (videoExpanded) setVideoExpanded(false);
-    else if (panel) { setPanel(null); setMessage(''); }
-    else if (tab !== 'Home') goHome();
-    else if (window.history.length > 1) window.history.back();
-    else goHome();
-  };
+  const goBack = goHome;
   const openModule = id => { const module = modules.find(item => item.id === id); if (module && onModuleClick) onModuleClick(module); };
   const tile = ([title, id, Icon]) => <button key={id} className="ym-module" onClick={() => openModule(id)}><span><Icon size={21.6} strokeWidth={1.8} /></span><b>{title}</b></button>;
   return <div className={`ym-workspace ym-${variant}`} aria-label={`${variant === 'phone' ? 'Mobile' : 'iPad'} Yai application`}>
