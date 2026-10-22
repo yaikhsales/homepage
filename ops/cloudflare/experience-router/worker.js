@@ -4,7 +4,12 @@ export default {
     const original = new URL(request.url);
     const experience = original.pathname === '/experience' || original.pathname.startsWith('/experience/');
     if (!experience || !['GET', 'HEAD'].includes(request.method)) return fetch(request);
-    const target = new URL(original.pathname + original.search, BACKUP);
+    // SPA routes must load the static entry directly: OpenNext does not resolve
+    // these nested public-directory routes through Next's rewrite reliably.
+    const relative = original.pathname.slice('/experience'.length);
+    const asset = /^\/(?:static|assets|IMG|pdf)(?:\/|$)/.test(relative) || /\.[^/]+$/.test(relative);
+    const document = !asset || relative === '/index.html';
+    const target = new URL((document ? '/experience/' : original.pathname) + original.search, BACKUP);
     const headers = new Headers(request.headers);
     // Only public SPA documents/assets are proxied; session credentials stay on yaikh.com.
     headers.delete('host');
@@ -16,6 +21,7 @@ export default {
       const response = new Response(result.body, result);
       response.headers.set('X-Yai-Experience-Origin', 'cloudflare');
       response.headers.delete('set-cookie');
+      if (document) response.headers.set('Cache-Control', 'no-store');
       const location = response.headers.get('location');
       if (location) {
         const redirect = new URL(location, target);
