@@ -19,3 +19,6 @@
 
 /* Portrait iPad hardware. */
 .tablet-frame{max-width:340px;margin-left:auto;margin-right:auto;padding:20px 13px 15px}.tablet-camera{top:7px;left:calc(50% - 3px)}.tablet-display{aspect-ratio:3/4}
+
+/* Thirty percent larger iPad for presentation viewing. */
+.tablet-frame{transform:scale(1.3);transform-origin:top center;margin-bottom:160px}
