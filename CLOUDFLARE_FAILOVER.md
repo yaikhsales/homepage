@@ -1,26 +1,31 @@
 # YAI Cloudflare standby — session runbook
 
-Last verified: 22 October 2026, Cambodia time. Railway remains the primary host.
+Last verified: 22 October 2026, Cambodia time. Railway hosts the homepage/API; the experience frontend is routed through Cloudflare.
 
 ## 1. Use the standby now
 
-- Client demo: **https://yai-backup.gamini.workers.dev/experience/**
+- Client demo: **https://yaikh.com/experience/** (Cloudflare frontend).
+- Direct standby: https://yai-backup.gamini.workers.dev/experience/
 - Homepage: https://yai-backup.gamini.workers.dev/
 - Database check: https://yai-backup.gamini.workers.dev/api/db-ping
 - Cloudflare account: **Gamini@ggmt.sg's Account**, ID `4e6f113aa77ceb0c3b4f7631b828e495`.
 - Cloudflare dashboard: Workers & Pages → **yai-backup**.
 - Primary Railway: project `robust-hope`, environment `production`, service `yaikh-com`.
 
-Give clients the standby URL during Railway deployment failures. The standby runs on Cloudflare, not on the user's Mac. The Mac is only used to build/publish.
+Give clients the normal yaikh.com experience URL. The frontend runs on Cloudflare; the Mac only builds/publishes. If an old redirect is cached, use https://yaikh.com/experience/?release=c6e68381.
 
-**Do not claim yaikh.com switches automatically.** DNS and automatic traffic failover are NOT configured. The public yaikh.com domain still serves Railway. A provider deployment pause does not necessarily mean the existing site is down.
+**Live routing:** YaiKH account `e45374d7eecce58154aa480b37c21863`, Worker `yai-experience-router`, route `yaikh.com/experience*`, fail-open to origin. Source: `ops/cloudflare/experience-router/worker.js`. This proxies public GET/HEAD SPA assets to `yai-backup`, strips credentials, and preserves the client hostname. Homepage and `/api/*` remain Railway; this is frontend routing, not full automatic failover. No DNS/email records changed.
+
+**Rollback:** in YaiKH → Workers & Pages → yai-experience-router → Domains, remove only route `yaikh.com/experience*`; existing Railway DNS resumes serving that path. Acquire the same shared deployment lock before any route/code change. Do not delete the Worker or change DNS as a rollback.
 
 ## 2. Verified state and limits
 
-The standby was deployed from main `99d47e50` using OpenNext 1.14.0 and Wrangler 4.151.3. Published Worker version: `3bf58e02-4c5c-41b4-8818-0dca17a45eaa`.
+The standby was deployed from main `c6e68381` using OpenNext 1.14.0 and Wrangler 4.151.3. Published Worker version: `01f85e19-8f90-4c9d-9470-4d4a9ccd9c8b`.
 
 Verified in the browser:
-- Dashboard loads and contains Apps → TV UI / Mobile App UI / iPad UI.
+- Actual yaikh.com experience loads bundle `main.80d9d06b.js` and TV / Mobile / iPad screens.
+- Uploaded clips play on phone and iPad from same-origin `/experience/assets/yai-feed/` URLs (readyState 4, playback advancing).
+- HEAD/GET `/experience/` return 200 with `X-Yai-Experience-Origin: cloudflare`; `/experience` redirects to the slash path.
 - `/api/db-ping` returns `connected:true` against MongoDB Atlas.
 
 **This is not yet complete provider-independent failover:**
