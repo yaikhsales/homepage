@@ -13,7 +13,7 @@ export default function YQMSHub() {
 }
 export function QCWorkspace() {
   const navigate = useNavigate();
-  return <><nav className="yqms-workspace-back"><button onClick={() => navigate('/dashboard/submenu/yqms')}><ArrowLeft size={17}/>YQMS</button></nav><SubMenuView/></>;
+  return <><nav className="yqms-workspace-back"><button onClick={() => navigate('/dashboard/submenu/yqms')}><ArrowLeft size={17}/>YQMS</button></nav><SubMenuView moduleIdOverride="yqms-workspace"/></>;
 }
 export function QualityMonitoring() {
   const navigate = useNavigate();

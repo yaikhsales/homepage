@@ -768,9 +768,10 @@ const renderCard = (
   );
 };
 
-const SubMenuView = () => {
+const SubMenuView = ({ moduleIdOverride } = {}) => {
   const navigate = useNavigate();
-  const { moduleId } = useParams();
+  const { moduleId: routeModuleId } = useParams();
+  const moduleId = moduleIdOverride || routeModuleId;
   const { state } = useLocation();
   const { title: stateTitle, cards: stateCards, isGrouped = false } = state || {};
   // Fall back to a moduleId-derived title/cards when state is missing
