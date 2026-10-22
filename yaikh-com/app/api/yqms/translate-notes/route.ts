@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
 const languages: Record<string, string> = {
-  km: 'Khmer', zh: 'Simplified Chinese', vi: 'Vietnamese',
+  en: 'English', km: 'Khmer', zh: 'Simplified Chinese', vi: 'Vietnamese',
   tl: 'Tagalog', ms: 'Malay',
 };
 const cache = new Map<string, string>();
