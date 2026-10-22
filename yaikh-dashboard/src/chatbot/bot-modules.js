@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import './pa-docked.css';
 import LangFlags from "../components/LangFlags";
 import {
     X, Plus, Grid3x3, Mic, Send, Sparkles, Paperclip,
@@ -1667,7 +1669,7 @@ const PhoneFrame = ({
                         </div>
 
                         {/* Content Area */}
-                        <div className="flex-1 overflow-y-auto overflow-x-hidden px-6 py-8 min-h-0">
+                        <div className="pa-conversation flex-1 overflow-y-auto overflow-x-hidden px-6 py-8 min-h-0">
                             {!hasMessages ? (
                                 // Welcome Screen — greeting removed, land straight on topic pills.
                                 <div className="space-y-6 pt-8">
@@ -2255,7 +2257,7 @@ const PhoneFrame = ({
                         </div>
 
                         {/* Input Field with Thinking Status */}
-                        <div className={`flex-shrink-0 px-4 py-4 border-t ${bot.borderColor || 'border-gray-200'}`}>
+                        <div className={`pa-composer flex-shrink-0 px-4 py-4 border-t ${bot.borderColor || 'border-gray-200'}`}>
                             {uploadedImage && (
                                 <div className="relative inline-block mb-3 ml-4 border-2 border-slate-200 rounded-lg overflow-hidden shadow-sm">
                                     <img src={uploadedImage} alt="Upload preview" className="h-16 w-auto object-cover bg-white" />
@@ -2280,6 +2282,7 @@ const PhoneFrame = ({
                                 >
                                     <textarea
                                         ref={inputRef}
+                                        aria-label={`Message ${bot.name}`}
                                         value={inputValue}
                                         onChange={(e) => setInputValue(e.target.value)}
                                         onKeyDown={handleKeyPress}
@@ -5700,9 +5703,9 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
         ? `fixed top-0 right-0 bottom-0 z-[200] w-[380px] max-md:top-auto max-md:left-0 max-md:right-0 max-md:w-full max-md:h-[70vh] max-md:rounded-t-3xl max-md:rounded-l-none flex flex-col overflow-hidden rounded-l-3xl shadow-2xl transition-all duration-300 ease-out ${isClosing ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`
         : `fixed inset-0 z-[200] flex flex-col overflow-hidden transition-all duration-300 ease-out ${isClosing ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`;
 
-    return (
+    const panel = (
         <div
-            className={outerClass}
+            className={`${outerClass} ${isCompactMount ? "yai-pa-docked" : ""}`}
             style={{
                 animation: isClosing ? 'none' : 'fadeInScale 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
                 // Inline geometry for the docked panel: some screens mount this
@@ -5710,11 +5713,12 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                 // 0 — inline wins everywhere. Bottom sheet on narrow screens.
                 ...(isCompactMount
                     ? (window.matchMedia && window.matchMedia('(max-width: 767px)').matches
-                        ? { position: 'fixed', left: 0, right: 0, bottom: 0, top: 'auto', height: '70vh', width: '100%' }
-                        : { position: 'fixed', top: 0, right: 0, bottom: 0, width: 380 })
+                        ? { position: 'fixed', left: 0, right: 0, bottom: 0, top: 'auto', height: '85dvh', maxHeight: '100dvh', width: '100%' }
+                        : { position: 'fixed', top: 12, right: 12, bottom: 12, width: 'min(460px, calc(100vw - 24px))', height: 'calc(100dvh - 24px)', maxHeight: 'calc(100dvh - 24px)' })
                     : {}),
             }}
         >
+            {isCompactMount && <div className="pa-dock-toolbar"><strong>{visibleBots[0]?.name || 'Yai PA'}</strong><span>{t('Chat')}</span><button onClick={onClose} aria-label="Close agent chat"><X size={19}/></button></div>}
             <style>{`
                 @keyframes fadeInScale {
                     from {
@@ -6385,6 +6389,7 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
 
         </div>
     );
+    return isCompactMount ? createPortal(panel, document.body) : panel;
 };
 
 export default BotModules;

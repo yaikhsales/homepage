@@ -1,0 +1,19 @@
+/* Single department PA: viewport dock, independent of transformed page ancestors. */
+.yai-pa-docked{box-sizing:border-box;min-height:0!important;border:1px solid #cfd8e8;background:white;border-radius:20px!important;box-shadow:0 20px 70px #050d2166;z-index:220!important}
+.yai-pa-docked>.flex-1,.yai-pa-docked .custom-scrollbar{min-height:0!important;height:100%!important;overflow:hidden!important}
+.yai-pa-docked .custom-scrollbar>div.flex{width:100%!important;min-width:0!important;height:100%!important;min-height:0!important;gap:0!important}
+.yai-pa-docked .bot-container{width:100%!important;height:100%!important;min-height:0!important;max-height:100%!important;flex:1!important;padding:0!important}
+.yai-pa-docked .phone-frame-wrapper{width:100%!important;height:100%!important;min-height:0!important;flex:1 1 0%!important;overflow:hidden!important}
+.yai-pa-docked .phone-frame{width:100%!important;min-width:0!important;max-width:none!important;height:100%!important;min-height:0!important;max-height:100%!important;padding:0!important;border-radius:18px!important;background:white!important;box-shadow:none!important}
+.yai-pa-docked .phone-frame>div{border-radius:18px!important;min-height:0!important;border:0!important}
+.yai-pa-docked .bot-container>div:last-child:not(.phone-frame-wrapper){display:none!important}
+.yai-pa-docked .pa-conversation{min-height:90px!important;flex:1 1 0%!important;padding:16px 18px!important;overflow:auto!important;overscroll-behavior:contain}
+.yai-pa-docked .pa-conversation>.space-y-6{padding-top:0!important}
+.yai-pa-docked .pa-conversation .mt-8{margin-top:8px!important}
+.yai-pa-docked .pa-composer{flex:0 0 auto!important;position:relative;bottom:0;padding:12px 14px max(12px,env(safe-area-inset-bottom))!important;background:#fff;border-top:1px solid #dce2ee;z-index:25}
+.yai-pa-docked textarea{font-size:16px!important;min-height:72px!important;max-height:130px!important;color:#243650!important}
+.yai-pa-docked .pa-conversation button{white-space:normal;overflow-wrap:anywhere}
+@media(max-width:767px){.yai-pa-docked{border-radius:20px 20px 0 0!important;bottom:0!important}.yai-pa-docked .pa-composer{padding-bottom:max(12px,env(safe-area-inset-bottom))!important}}
+.yai-pa-docked .pa-dock-toolbar{display:flex;align-items:center;gap:10px;flex:0 0 auto;background:#17263c;color:white;padding:12px 16px;min-height:48px}.pa-dock-toolbar strong{font-size:15px}.pa-dock-toolbar span{font-size:12px;color:#b8c9de}.pa-dock-toolbar button{margin-left:auto;border:1px solid #4b5f7b;border-radius:7px;color:#fff;background:#263a55;padding:4px;cursor:pointer}
+.yai-pa-docked .phone-frame{transform:none!important;zoom:1!important;transform-origin:initial!important;box-sizing:border-box!important;border:0!important}
+.yai-pa-docked .phone-frame>div{width:100%!important;height:100%!important;max-height:100%!important;box-sizing:border-box!important}

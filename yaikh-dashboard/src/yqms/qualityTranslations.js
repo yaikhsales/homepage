@@ -1,4 +1,5 @@
 // YQMS presentation strings. English record values remain the source of truth.
+import monitoringRows from './monitoring/translations';
 import autoRows from './qualityAutoTranslations.json';
 import exampleRows from './qualityExampleTranslations.json';
 import moreRows from './qualityMoreTranslations.json';
@@ -6,6 +7,7 @@ import longRows from './qualityLongTranslations.json';
 import sewingExampleRows from './qualitySewingExampleTranslations.json';
 // Order in each row: Khmer, Chinese, Vietnamese, Tagalog, Malay.
 const rows = {
+  ...monitoringRows,
   ...autoRows,
   ...exampleRows,
   ...moreRows,

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Activity, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import SubMenuView from '../views/SubMenuView';
 import './YQMSHub.css';
 import { useTranslation } from '../translate/TranslationContext';
@@ -28,8 +28,4 @@ export function QCWorkspace() {
   const labels = useHubCopy();
   return <><nav className="yqms-workspace-back"><button onClick={() => navigate('/dashboard/submenu/yqms')}><ArrowLeft size={17}/>{labels[5]}</button></nav><SubMenuView moduleIdOverride="yqms-workspace"/></>;
 }
-export function QualityMonitoring() {
-  const navigate = useNavigate();
-  const labels = useHubCopy();
-  return <main className="yqms-hub"><nav className="yqms-workspace-back"><button onClick={() => navigate('/dashboard/submenu/yqms')}><ArrowLeft size={17}/>{labels[5]}</button></nav><h1>{labels[2]}</h1><section className="yqms-monitoring-empty"><Activity size={44}/><h2>{labels[2]}</h2><p>{labels[4]}</p></section></main>;
-}
+export { default as QualityMonitoring } from './monitoring/QualityMonitoring';
