@@ -12,6 +12,19 @@ export const PHSAR_PRODUCTS = [
  {id:'basket',name:'Woven palm-leaf basket',province:'Siem Reap',seller:'Rith’s family',unit:'1 basket',price:550,category:'Crafts',art:'🧺',color:'#e9e1cf'},
  {id:'pot',name:'Handmade clay bowl',province:'Kampong Chhnang',seller:'Bopha’s family',unit:'1 bowl',price:325,category:'Home',art:'🥣',color:'#eadad1'},
  {id:'mat',name:'Handwoven reed placemats',province:'Kandal',seller:'Pisey’s family',unit:'Set of 2',price:450,category:'Home',art:'🪴',color:'#dce8d9'},
+ {id:'honey',name:'Forest honey',province:'Mondulkiri',seller:'Malis’s family',unit:'250 ml jar',price:650,category:'Food',art:'🍯',color:'#f7dfb4'},
+ {id:'coffee',name:'Roasted local coffee',province:'Ratanakiri',seller:'Vuthy’s family',unit:'250 g pack',price:500,category:'Food',art:'☕',color:'#e7d5c6'},
+ {id:'noodles',name:'Traditional rice noodles',province:'Kandal',seller:'Srey Neang’s family',unit:'500 g pack',price:200,category:'Food',art:'🍜',color:'#f7eacb'},
+ {id:'sesame',name:'Sesame peanut brittle',province:'Kampong Cham',seller:'Nary’s family',unit:'200 g pack',price:175,category:'Food',art:'🍪',color:'#efddc3'},
+ {id:'salt',name:'Coastal sea salt',province:'Kep',seller:'Sokun’s family',unit:'500 g bag',price:150,category:'Food',art:'🧂',color:'#e0edf0'},
+ {id:'lotus',name:'Roasted lotus seeds',province:'Prey Veng',seller:'Sina’s family',unit:'150 g pack',price:300,category:'Food',art:'🪷',color:'#ebdfe9'},
+ {id:'coconut',name:'Coconut cookies',province:'Kampot',seller:'Srey Leak’s family',unit:'200 g box',price:225,category:'Food',art:'🥥',color:'#eee2ca'},
+ {id:'silk',name:'Handwoven silk scarf',province:'Takeo',seller:'Chanthy’s family',unit:'1 scarf',price:1800,category:'Crafts',art:'🧵',color:'#e4dbef'},
+ {id:'bag',name:'Woven market tote',province:'Siem Reap',seller:'Sophal’s family',unit:'1 bag',price:750,category:'Crafts',art:'👜',color:'#eadcc8'},
+ {id:'wood',name:'Hand-carved wooden spoon',province:'Pursat',seller:'Bunthoeun’s family',unit:'Set of 2',price:400,category:'Home',art:'🥄',color:'#e7dbc4'},
+ {id:'broom',name:'Natural grass broom',province:'Kampong Chhnang',seller:'Davy’s family',unit:'1 broom',price:250,category:'Home',art:'🧹',color:'#e8e1c3'},
+ {id:'soap',name:'Handmade lemongrass soap',province:'Battambang',seller:'Socheata’s family',unit:'100 g bar',price:300,category:'Home',art:'🧼',color:'#dfe9d8'},
+
 ];
 export const cartTotal = cart => PHSAR_PRODUCTS.reduce((sum,p)=>sum+p.price*(cart[p.id]||0),0);
 const money = cents => `$${(cents/100).toFixed(2)}`;
