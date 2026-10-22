@@ -5,19 +5,22 @@ export default {
     const experience = original.pathname === '/experience' || original.pathname.startsWith('/experience/');
     if (!experience || !['GET', 'HEAD'].includes(request.method)) return fetch(request);
     const entry = original.pathname === '/experience' || original.pathname === '/experience/';
-    // Serve both entry spellings directly, avoiding slash redirects cached from the old host.
-    const target = new URL((entry ? '/experience/' : original.pathname) + original.search, BACKUP);
+    // React owns dashboard document routes; serve its shell while keeping the requested URL.
+    // File requests must retain their path so missing assets still return a real 404.
+    const dashboardDocument = /^\/experience\/dashboard(?:\/|$)/.test(original.pathname) && !/\.[^/]+$/.test(original.pathname);
+    const documentRoute = entry || dashboardDocument;
+    const target = new URL((documentRoute ? '/experience/' : original.pathname) + original.search, BACKUP);
     const headers = new Headers(request.headers);
     // Only public SPA documents/assets are proxied; session credentials stay on yaikh.com.
     headers.delete('host');
     headers.delete('cookie');
     headers.delete('authorization');
     try {
-      const result = await fetch(new Request(target, { method: request.method, headers, redirect: entry ? 'follow' : 'manual' }));
+      const result = await fetch(new Request(target, { method: request.method, headers, redirect: documentRoute ? 'follow' : 'manual' }));
       if (result.status >= 500) throw new Error('Backup unavailable');
       const response = new Response(result.body, result);
       response.headers.set('X-Yai-Experience-Origin', 'cloudflare');
-      if (entry) response.headers.set('Cache-Control', 'no-store');
+      if (documentRoute) response.headers.set('Cache-Control', 'no-store');
       response.headers.delete('set-cookie');
       const location = response.headers.get('location');
       if (location) {
