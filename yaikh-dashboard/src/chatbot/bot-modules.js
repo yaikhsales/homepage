@@ -165,11 +165,11 @@ const PREDEFINED_BOTS = [
         name: 'QA PA',
         description: 'End-to-end quality: supplier material reports (fabric, accessories, packaging) · fabric relaxation via QR/RFID/CCTV Ai-vision · marker consumption preview before cutting · 4-point / AQL 2.5 on-site tests · roll inventory linked to MRP · defects, complaints, audits, Call Out',
         icon: ClipboardCheck,
-        bgGradient: 'from-violet-500 to-purple-500',
-        lightBg: 'bg-gradient-to-br from-violet-50 via-purple-50 to-indigo-50',
-        lightAccent: 'from-violet-200 to-purple-200',
-        textColor: 'text-violet-800',
-        borderColor: 'border-violet-200',
+        bgGradient: 'from-blue-600 to-blue-800',
+        lightBg: 'bg-gradient-to-br from-blue-50 via-slate-50 to-blue-50',
+        lightAccent: 'from-blue-100 to-blue-200',
+        textColor: 'text-blue-900',
+        borderColor: 'border-blue-200',
         suggestedActions: [
             { text: 'Material quality reports', highlight: true },
             { text: 'Fabric relaxation status' },
@@ -5707,6 +5707,7 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
     const panel = (
         <div
             className={`${outerClass} ${isCompactMount ? "yai-pa-docked" : ""}`}
+            data-pa-bot={isCompactMount ? visibleBots[0]?.id : undefined}
             style={{
                 animation: isClosing ? 'none' : 'fadeInScale 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
                 // Inline geometry for the docked panel: some screens mount this

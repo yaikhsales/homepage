@@ -1177,7 +1177,7 @@ const SubMenuView = ({ moduleIdOverride } = {}) => {
           aria-label={`Ask ${title} bot`}
           title={`Ask ${title} bot`}
         >
-          <MessageCircle className="w-7 h-7 group-hover:rotate-12 transition-transform" />
+          {paBotId === "qa-bot" ? <img src={`${process.env.PUBLIC_URL}/assets/modules-image/yai1.png`} alt="Yai" className="w-10 h-10 rounded-full object-cover"/> : <MessageCircle className="w-7 h-7 group-hover:rotate-12 transition-transform" />}
           <span className="font-bold text-base whitespace-nowrap">{(paBotId && PA_NAME[paBotId]) || title}</span>
         </button>
       )}

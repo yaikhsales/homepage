@@ -45,6 +45,8 @@ export const PA_BY_SUBMENU_TITLE = {
   "E-Government": "shipping-bot",
   // QA PA
   "YQMS": "qa-bot",
+  "QC Work space": "qa-bot",
+  "Quality Monitoring": "qa-bot",
   "Call Out": "qa-bot",
   // Production column (not dictated — mapped to existing bots, flagged to Gamini)
   "FC": "production-bot",
@@ -99,7 +101,7 @@ export const PA_GRADIENT = {
   "csr-bot": "from-purple-500 to-pink-500",
   "shipping-bot": "from-cyan-500 to-sky-500",
   "mrp-bot": "from-red-500 to-orange-500",
-  "qa-bot": "from-violet-500 to-purple-500",
+  "qa-bot": "from-blue-600 to-blue-800",
   "production-bot": "from-orange-500 to-amber-500",
   "ce-bot": "from-pink-500 to-rose-500",
   "ytm-bot": "from-teal-500 to-cyan-500",

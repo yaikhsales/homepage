@@ -1145,7 +1145,7 @@ const AppLayout = () => {
           aria-label="Open department PA"
           title="Open department PA"
         >
-          <MessageCircle className="w-7 h-7" />
+          {activeRoutePa === "qa-bot" ? <img src={`${process.env.PUBLIC_URL}/assets/modules-image/yai1.png`} alt="Yai" className="w-10 h-10 rounded-full object-cover"/> : <MessageCircle className="w-7 h-7" />}
           <span className="font-bold text-base whitespace-nowrap">{PA_NAME[activeRoutePa] || "PA"}</span>
         </button>
       )}
