@@ -13,3 +13,6 @@
 .tv-frame,.tablet-frame{margin-top:24px}
 
 .phone-display>.ym-workspace{flex:1;min-height:0;height:auto}.tablet-display{aspect-ratio:4/3;min-height:0}.phone-home-indicator{flex-shrink:0}.phone-display .ym-workspace{overflow:hidden}
+
+/* Presentation handset: 20% larger without altering its physical ratio. */
+.phone-frame{transform:scale(1.2);transform-origin:top center;margin-bottom:110px}
