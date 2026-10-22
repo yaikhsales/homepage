@@ -2324,7 +2324,7 @@ const PhoneFrame = ({
                                             disabled={!inputValue.trim() && !uploadedImage}
                                             title="Send to agent"
                                             aria-label="Send"
-                                            className={`p-0.5 rounded-full transition-all ml-1 ${
+                                            className={`pa-send-button p-0.5 rounded-full transition-all ml-1 ${
                                                 (inputValue.trim() || uploadedImage)
                                                     ? 'opacity-100 hover:scale-110 cursor-pointer'
                                                     : 'opacity-40 cursor-not-allowed'
@@ -2335,6 +2335,7 @@ const PhoneFrame = ({
                                                 alt="Send"
                                                 className="w-10 h-10 rounded-full object-cover shadow-md ring-2 ring-yai-blue/50"
                                             />
+                                            <span className="pa-send-label">{t('Send')}</span>
                                         </button>
                                     </div>
                                 </div>
