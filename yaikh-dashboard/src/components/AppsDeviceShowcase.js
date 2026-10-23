@@ -13,7 +13,7 @@ export default function AppsDeviceShowcase({ onModuleClick }) {
   return <section className="apps-devices" aria-label="Apps cluster">
     <div className="apps-device-row">
       <article className="device-example device-example-tv">
-        <h3 className="device-caption">TV UI</h3><p className="device-caption-sub">Factory overview · shared visibility</p>
+        <h3 className="device-caption">Data TV</h3><p className="device-caption-sub">Factory overview · shared visibility</p>
         <div className="tv-frame"><div className="tv-display">
           <div className="tv-top"><Brand subtitle="Factory command centre" /><span className="device-demo-badge">Interface preview</span></div>
           <div className="device-tabbar">{['Overview', 'Production', 'Quality'].map(tab => <button key={tab} className={tvView === tab ? 'selected' : ''} onClick={() => setTvView(tab)}>{tab}</button>)}</div>
@@ -26,12 +26,12 @@ export default function AppsDeviceShowcase({ onModuleClick }) {
         
       </article>
       <article className="device-example device-example-phone">
-        <h3 className="device-caption">Mobile App UI</h3><p className="device-caption-sub">Personal tasks · worker access</p>
+        <h3 className="device-caption">Mobile phone</h3><p className="device-caption-sub">Personal tasks · worker access</p>
         <div className="phone-frame"><div className="phone-display"><div className="phone-status"><span>9:41</span><div className="phone-island" /><span>▮▮ ▰</span></div><YaiMobileWorkspace onModuleClick={onModuleClick} /><div className="phone-home-indicator" /></div></div>
         
       </article>
       <article className="device-example device-example-tablet">
-        <h3 className="device-caption">iPad UI</h3><p className="device-caption-sub">Your Yai workspace · made for iPad</p>
+        <h3 className="device-caption">Pads</h3><p className="device-caption-sub">Your Yai workspace · made for iPad</p>
         <div className="tablet-frame"><span className="tablet-camera" /><div className="tablet-display"><YaiMobileWorkspace variant="tablet" onModuleClick={onModuleClick} /></div></div>
       </article>
     </div>
