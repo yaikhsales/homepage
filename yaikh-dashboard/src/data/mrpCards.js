@@ -8,19 +8,19 @@ export const MRP_CARDS = {
         cards: [
         {
           title: "Suppliers",
-          icon: "CheckCircle",
+          icon: "Factory",
           color: "bg-teal-500/30 text-white",
           action: "/dashboard/mrp/suppliers",
         },
         {
           title: "Orders by Supplier",
-          icon: "FileText",
+          icon: "ListOrdered",
           color: "bg-teal-500/30 text-white",
           action: "/dashboard/mrp/supplier-orders",
         },
         {
           title: "Supplier Portal",
-          icon: "Layers",
+          icon: "Globe",
           color: "bg-teal-500/30 text-white",
           action: "/dashboard/mrp/supplier-portal",
         },
@@ -31,13 +31,13 @@ export const MRP_CARDS = {
         cards: [
         {
           title: "Material Orders",
-          icon: "FileText",
+          icon: "ScrollText",
           color: "bg-blue-500/30 text-white",
           action: "/dashboard/mrp/orders",
         },
         {
           title: "Supplier Confirmation",
-          icon: "CheckCircle",
+          icon: "BadgeCheck",
           color: "bg-blue-500/30 text-white",
           action: "/dashboard/mrp/confirmation",
         },
@@ -48,7 +48,7 @@ export const MRP_CARDS = {
         cards: [
         {
           title: "Packing Lists",
-          icon: "Package",
+          icon: "ClipboardList",
           color: "bg-indigo-500/30 text-white",
           action: "/dashboard/mrp/packing-lists",
         },
@@ -71,19 +71,19 @@ export const MRP_CARDS = {
         },
         {
           title: "Shipping Documents",
-          icon: "Layers",
+          icon: "Files",
           color: "bg-emerald-500/30 text-white",
           action: "/dashboard/mrp/documents",
         },
         {
           title: "Vessel & Truck Tracking",
-          icon: "Truck",
+          icon: "Ship",
           color: "bg-emerald-500/30 text-white",
           action: "/dashboard/mrp/tracking",
         },
         {
           title: "Customs Clearance",
-          icon: "Shield",
+          icon: "Stamp",
           color: "bg-emerald-500/30 text-white",
           action: "/dashboard/mrp/customs",
         },
@@ -94,13 +94,13 @@ export const MRP_CARDS = {
         cards: [
         {
           title: "Arrival Board (TV)",
-          icon: "MonitorPlay",
+          icon: "Tv",
           color: "bg-amber-500/30 text-white",
           action: "/dashboard/mrp/board",
         },
         {
           title: "Arrivals to FC",
-          icon: "Warehouse",
+          icon: "PackageCheck",
           color: "bg-amber-500/30 text-white",
           action: "/dashboard/mrp/arrivals",
         },
@@ -111,13 +111,13 @@ export const MRP_CARDS = {
         cards: [
         {
           title: "Consumption",
-          icon: "BarChart2",
+          icon: "Gauge",
           color: "bg-violet-500/30 text-white",
           action: "/dashboard/mrp/consumption",
         },
         {
           title: "Ordered vs Required",
-          icon: "CheckSquare",
+          icon: "Scale",
           color: "bg-violet-500/30 text-white",
           action: "/dashboard/mrp/check",
         },

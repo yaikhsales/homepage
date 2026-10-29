@@ -7,10 +7,23 @@ import {
     Car, Bike, Bus, Rocket, BarChartBig, UsersRound, Download, Flame, Fan,
     ToggleRight, ArrowDownToLine, ArrowUpFromLine, X, Image as ImageIcon,
     Search, FlaskConical, ArrowUpRight, MapPin, Eye, PenTool, ClipboardCheck, AlertTriangle, Thermometer,
-    ArrowDownLeft, Shield, BarChart3, Globe, Calculator, Printer, Droplets
+    ArrowDownLeft, Shield, BarChart3, Globe, Calculator, Printer, Droplets,
+    // MRP hub: one distinct, literal icon per card
+    Factory, ListOrdered, ScrollText, BadgeCheck, ClipboardList, Files, Ship, Stamp, Tv, Gauge, Scale
 } from 'lucide-react';
 
 const iconMap = {
+    Factory,
+    ListOrdered,
+    ScrollText,
+    BadgeCheck,
+    ClipboardList,
+    Files,
+    Ship,
+    Stamp,
+    Tv,
+    Gauge,
+    Scale,
     CheckCircle,
     FileCheck,
     Banknote,

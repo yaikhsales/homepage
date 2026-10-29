@@ -250,6 +250,12 @@ const getSubIconImage = (title) => {
     "Fin Check": "fincheck.png",
   };
 
+  // Cards that read better as a line icon than as a photograph. "Shipping
+  // Documents" partial-matched the shipping truck and "Consumption" the
+  // shopping trolley — both are about paperwork and fabric usage.
+  const PREFER_ICON = new Set(["Shipping Documents", "Consumption"]);
+  if (PREFER_ICON.has(title)) return null;
+
   // First try exact match
   let imageName = titleToImageMap[title];
 
@@ -263,10 +269,17 @@ const getSubIconImage = (title) => {
     }
   }
 
-  // If still no match, try partial matching
+  // If still no match, try partial matching.
+  //
+  // Only for keys of five characters or more. Short keys ("IE", "In", "Out")
+  // match as substrings of unrelated words and silently hand a card the wrong
+  // picture: every MRP supplier card took ie.png because "Suppl-ie-rs" holds
+  // "ie", and "Vessel & Truck Track-in-g" took the water meter from "In". The
+  // card still renders, so nothing looks broken — it is just wrong.
   if (!imageName) {
     for (const [key, value] of Object.entries(titleToImageMap)) {
       const normalizedKey = normalize(key);
+      if (normalizedKey.length < 5) continue;
       if (
         normalizedTitle.includes(normalizedKey) ||
         normalizedKey.includes(normalizedTitle)
