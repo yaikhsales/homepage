@@ -368,6 +368,11 @@ export default function App() {
             path="sop-map"
             element={<SOPMap onBack={handleBack} />}
           />
+          {/* YQMS · SOP — the Quality SOP with the QC workspace's own topics. */}
+          <Route
+            path="yqms/sop"
+            element={<SOPMap scope="qms" onBack={() => navigate('/dashboard/submenu/yqms')} />}
+          />
           <Route
             path="management-dashboard"
             element={<ManagementDashboard onBack={handleBack} />}

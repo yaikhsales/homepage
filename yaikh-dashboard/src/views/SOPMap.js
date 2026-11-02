@@ -555,6 +555,24 @@ const QMS = {
   ],
 };
 
+/* YQMS · SOP — the same page the SOP Director shows for Quality, but entered
+ * from the QC workspace, so the topics on the left are the workspace's own
+ * stages (Pre Production → Reporting & Compliance) instead of the departments.
+ * Fabric arrival, inspection, warehouse and relaxing sit under Pre Production:
+ * they run before cutting and the workspace has no fabric group of its own. */
+const QC_STAGE_GROUPS = [
+  { name: "Pre Production", stages: ["pre-production", "fabric arrival", "fabric inspection", "warehouse", "relaxing"] },
+  { name: "Cut", stages: ["cutting planning", "cutting", "cut-panel inspection"] },
+  { name: "Decoration", stages: ["printing/embroidery"] },
+  { name: "Sewing", stages: ["first-output sewing", "sewing inline/roving", "QC1 end-line"] },
+  { name: "Finishing & Packing", stages: ["washing", "QC2", "repair", "grading", "OPA", "ironing", "humidity", "packing"] },
+  { name: "Final Inspection", stages: ["QAssure/final", "shipping"] },
+  { name: "Reporting & Compliance", stages: ["consolidation/TV"] },
+];
+const QC_TOPICS = QC_STAGE_GROUPS
+  .map(group => ({ name: group.name, ids: QMS.acts.filter(a => group.stages.includes(a.stage)).map(a => a.id) }))
+  .filter(topic => topic.ids.length);
+
 // Order (Gamini 2026-10-06): overview first, production modules in flow
 // sequence, then the support departments, Accounting last.
 const PROCESSES = [
@@ -862,10 +880,11 @@ function ActivityCard({ flow, act, onSel, go, onProcess, selectedRole, onRoleSel
   );
 }
 
-const SOPMapContent = ({ onBack }) => {
+const SOPMapContent = ({ onBack, scope }) => {
+  const qcScope = scope === "qms";
   const {text,localizeRole} = useSopLanguage();
   const navigate = useNavigate();
-  const [pid, setPid] = useState("order");
+  const [pid, setPid] = useState(qcScope ? "qa" : "order");
   const [sel, setSel] = useState(null);
   const [selectedRole, setSelectedRole] = useState(null);
   const selectRole = role => setSelectedRole(current => current?.key === role.key ? null : role);
@@ -922,8 +941,21 @@ const SOPMapContent = ({ onBack }) => {
         <button onClick={() => go("/dashboard/org-chart-master")} className="mt-1 text-violet-200 underline">View YHR human and AI organization chart</button>
       </div>
       <div className="flex flex-col md:flex-row flex-1 min-h-0">
-        <aside aria-label="Yai agents and sub-processes" className="md:w-72 flex-shrink-0 border-b md:border-b-0 md:border-r border-white/10 p-2 max-h-[70vh] overflow-y-auto">
-          <div className="text-[10px] uppercase tracking-wider text-slate-500 px-2 py-2">Yai agents · sub-processes</div>
+        <aside aria-label={qcScope ? "QC process topics and steps" : "Yai agents and sub-processes"} className="md:w-72 flex-shrink-0 border-b md:border-b-0 md:border-r border-white/10 p-2 max-h-[70vh] overflow-y-auto">
+          <div className="text-[10px] uppercase tracking-wider text-slate-500 px-2 py-2">{qcScope ? "QC process · steps" : "Yai agents · sub-processes"}</div>
+          {qcScope ? <>
+            <button onClick={() => selectProcess("qa")} className={`w-full text-left rounded-lg px-3 py-2 text-sm ${!subProcess ? "bg-emerald-600 text-white" : "text-slate-300 hover:bg-white/5"}`}>{text("Quality overview")}</button>
+            {QC_TOPICS.map(topic => (
+              <div key={topic.name} className="mt-1">
+                <button aria-expanded={subProcess?.name === topic.name} aria-controls={`sop-topic-${topic.name}`} onClick={() => { setMasterList(false); setPid("qa"); setSubProcess(subProcess?.name === topic.name ? null : topic); setSel(null); }} className={`w-full text-left text-sm px-3 py-2 rounded-lg flex justify-between gap-2 ${subProcess?.name === topic.name ? "bg-emerald-600 text-white" : "text-slate-300 hover:bg-white/5"}`}>
+                  <span>{text(topic.name)}</span><span aria-hidden="true">{subProcess?.name === topic.name ? "▾" : "▸"}</span>
+                </button>
+                {subProcess?.name === topic.name && <div id={`sop-topic-${topic.name}`} className="ml-3 pl-2 border-l border-slate-700">
+                  {QMS.acts.filter(a => topic.ids.includes(a.id)).map(a => <button key={a.id} onClick={() => pick(a.id)} className={`block w-full py-1.5 text-left text-xs ${sel === a.id ? "text-emerald-200" : "text-slate-400 hover:text-white"}`}>{a.title}</button>)}
+                </div>}
+              </div>
+            ))}
+          </> : <>
           <button onClick={() => selectProcess("order")} className={`w-full text-left rounded-lg px-3 py-2 text-sm ${pid === "order" ? "bg-emerald-600 text-white" : "text-slate-300 hover:bg-white/5"}`}>Order → Ship overview</button>
           {AGENT_PROCESSES.map(p => (
             <div key={p.id} className="mt-1">
@@ -938,6 +970,7 @@ const SOPMapContent = ({ onBack }) => {
               </div>}
             </div>
           ))}
+          </>}
         </aside>
 
         <main className="flex-1 min-w-0 p-4 overflow-y-auto">
