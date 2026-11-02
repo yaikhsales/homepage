@@ -955,6 +955,8 @@ const SOPMapContent = ({ onBack, scope }) => {
         <button onClick={onBack} className="p-2 rounded-lg hover:bg-white/10" aria-label="Back"><ArrowLeft size={18} /></button>
         <div className="flex-1 flex flex-wrap items-center gap-x-4 gap-y-1">
           <div className="font-bold text-lg leading-tight">{text("SOP · Standard Operating Procedures")}</div>
+          {/* The YHR quality organisation, reachable from the header itself. */}
+          <button onClick={() => setView(view === "org" ? "chart" : "org")} aria-pressed={view === "org"} className={`rounded px-2.5 py-1 text-sm font-semibold ${view === "org" ? "bg-emerald-600 text-white" : "bg-white/5 text-slate-200 hover:bg-white/15"}`}>{text("Organization")}</button>
           <SopLanguageFlags />
         </div>
         <div className="hidden sm:flex items-center gap-3 text-[11px] text-slate-400">
