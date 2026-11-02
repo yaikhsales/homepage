@@ -867,7 +867,7 @@ function ActivityCard({ flow, act, onSel, go, onProcess, selectedRole, onRoleSel
       {/* Every step gets the same detailed job table fabric inspection has:
         * who, what they must do, and the evidence they hand on. */}
       <div className="mt-3 rounded-xl overflow-hidden">
-        <FabricInspectionJobCard title={act.title} roles={act.roles} selectedRole={selectedRole} onRoleSelect={onRoleSelect} sharedEvidence={evidenceOf(act)} />
+        <FabricInspectionJobCard title={null} roles={act.roles} selectedRole={selectedRole} onRoleSelect={onRoleSelect} sharedEvidence={evidenceOf(act)} />
       </div>
       {act.authority && <div className="mt-3 rounded-lg border border-amber-400/30 bg-amber-500/10 p-3 text-xs text-amber-100"><p>{act.authority}</p><button onClick={() => go("/dashboard/org-chart-master")} className="mt-2 underline">Open YHR organization chart</button></div>}
       {(act.standard || act.trigger || act.hands || act.menu) && (

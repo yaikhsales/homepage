@@ -10,7 +10,7 @@ export default memo(function FabricInspectionJobCard({ title = "Fabric inspectio
  const contentRef=useRef(null);
  useLayoutEffect(()=>{const node=contentRef.current;if(!node||!onHeight)return;const measure=()=>onHeight(Math.max(300,Math.ceil(node.scrollHeight)+12));measure();if(typeof ResizeObserver==="undefined")return;const observer=new ResizeObserver(measure);observer.observe(node);return()=>observer.disconnect();},[language,roles,onHeight]);
  return <div ref={contentRef} lang={language} style={{background:"white",color:"#203448",padding:18}}>
-  <h3 style={{fontSize:26,fontWeight:800,margin:"0 0 14px"}}>{text(title)}</h3>
+  {title && <h3 style={{fontSize:26,fontWeight:800,margin:"0 0 14px"}}>{text(title)}</h3>}
   <table style={{width:"100%",borderCollapse:"collapse",tableLayout:"fixed",fontSize:18,lineHeight:1.6}}>
    <thead><tr>{["Person / role","What this person must do","Evidence / hand-off"].map((label,index)=><th key={label} style={{width:["24%","50%","26%"][index],textAlign:"left",background:"#203448",color:"white",padding:15,fontSize:15}}>{text(label)}</th>)}</tr></thead>
    <tbody>{roles.map((role,index)=>{const active=selectedRole?.key===roleKey(role.role);const display=localizeRole(role);return <tr key={roleKey(role.role)} style={{background:active?"#fef3c7":"white",boxShadow:active?"inset 5px 0 #eab308":undefined}}>
