@@ -5,7 +5,7 @@ import { FABRIC_INSPECTION_ROLES, roleKey, activityMatchesRole } from "./sop-rol
 import { SopLanguageProvider, SopLanguageFlags, useSopLanguage } from "./sop-languages";
 import FabricInspectionJobCard from "./FabricInspectionJobCard";
 import { buildWorkingAxis, factoryToday } from "./sop-working-time";
-import { QMS_AREAS } from "../hr/QmsOrganization";
+import QmsOrganization, { QMS_AREAS } from "../hr/QmsOrganization";
 import { YQMS_CARDS } from "../data/yqmsCards";
 
 /* SOP — Standard Operating Procedures (Management Dashboard → SOP).
@@ -909,7 +909,7 @@ const SOPMapContent = ({ onBack, scope }) => {
     }));
   }, [selectedRole]);
   const [expanded, setExpanded] = useState(null);
-  const [masterList, setMasterList] = useState(false);
+  const [view, setView] = useState("chart");
   const [subProcess, setSubProcess] = useState(null);
   const [cardFocus, setCardFocus] = useState(null);
   const [openTopic, setOpenTopic] = useState(null);
@@ -942,7 +942,7 @@ const SOPMapContent = ({ onBack, scope }) => {
   const go = (path) => { if (path) navigate(path); };
 
 
-  const selectProcess = (id) => { setMasterList(false); setPid(id); setSubProcess(null); setCardFocus(null); setOpenTopic(null); setSel(null); };
+  const selectProcess = (id) => { setView("chart"); setPid(id); setSubProcess(null); setCardFocus(null); setOpenTopic(null); setSel(null); };
   const pick = (id) => {
     setSel(id);
     setTimeout(() => cardRef.current && cardRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" }), 30);
@@ -953,7 +953,7 @@ const SOPMapContent = ({ onBack, scope }) => {
     <div className="min-h-screen bg-slate-900 text-slate-100 flex flex-col pt-20">
       <div className="flex items-center gap-3 px-4 py-3 border-b border-white/10">
         <button onClick={onBack} className="p-2 rounded-lg hover:bg-white/10" aria-label="Back"><ArrowLeft size={18} /></button>
-        <div className="flex-1">
+        <div className="flex-1 flex flex-wrap items-center gap-x-4 gap-y-1">
           <div className="font-bold text-lg leading-tight">{text("SOP · Standard Operating Procedures")}</div>
           <SopLanguageFlags />
         </div>
@@ -970,11 +970,11 @@ const SOPMapContent = ({ onBack, scope }) => {
             <button onClick={() => selectProcess("qa")} className={`w-full text-left rounded-lg px-3 py-2 text-sm ${!subProcess ? "bg-emerald-600 text-white" : "text-slate-300 hover:bg-white/5"}`}>{text("Quality overview")}</button>
             {QC_TOPICS.map(topic => (
               <div key={topic.name} className="mt-1">
-                <button aria-expanded={openTopic === topic.name} aria-controls={`sop-topic-${topic.name}`} onClick={() => { const open = openTopic === topic.name; setMasterList(false); setPid("qa"); setOpenTopic(open ? null : topic.name); setSubProcess(open ? null : topic); setCardFocus(null); setSel(null); }} className={`w-full text-left text-sm px-3 py-2 rounded-lg flex justify-between gap-2 ${subProcess?.name === topic.name || cardFocus?.topic === topic.name ? "bg-emerald-600 text-white" : "text-slate-300 hover:bg-white/5"}`}>
+                <button aria-expanded={openTopic === topic.name} aria-controls={`sop-topic-${topic.name}`} onClick={() => { const open = openTopic === topic.name; setView("chart"); setPid("qa"); setOpenTopic(open ? null : topic.name); setSubProcess(open ? null : topic); setCardFocus(null); setSel(null); }} className={`w-full text-left text-sm px-3 py-2 rounded-lg flex justify-between gap-2 ${subProcess?.name === topic.name || cardFocus?.topic === topic.name ? "bg-emerald-600 text-white" : "text-slate-300 hover:bg-white/5"}`}>
                   <span>{text(topic.name)}</span><span aria-hidden="true">{openTopic === topic.name ? "▾" : "▸"}</span>
                 </button>
                 {openTopic === topic.name && <div id={`sop-topic-${topic.name}`} className="ml-3 pl-2 border-l border-slate-700">
-                  {topic.cards.map(card => <button key={card.action} aria-pressed={cardFocus?.action === card.action} onClick={() => { setMasterList(false); setPid("qa"); setSubProcess(null); setSel(null); setCardFocus(cardFocus?.action === card.action ? null : card); }} className={`block w-full py-1.5 text-left text-xs ${cardFocus?.action === card.action ? "text-emerald-200 font-semibold" : "text-slate-400 hover:text-white"}`}>{text(card.title)}</button>)}
+                  {topic.cards.map(card => <button key={card.action} aria-pressed={cardFocus?.action === card.action} onClick={() => { setView("chart"); setPid("qa"); setSubProcess(null); setSel(null); setCardFocus(cardFocus?.action === card.action ? null : card); }} className={`block w-full py-1.5 text-left text-xs ${cardFocus?.action === card.action ? "text-emerald-200 font-semibold" : "text-slate-400 hover:text-white"}`}>{text(card.title)}</button>)}
                   <div className="mt-1 border-t border-slate-700 pt-1">
                     {QMS.acts.filter(a => topic.ids.includes(a.id)).map(a => <button key={a.id} onClick={() => pick(a.id)} className={`block w-full py-1.5 text-left text-[11px] ${sel === a.id ? "text-emerald-200" : "text-slate-500 hover:text-white"}`}>{a.title}</button>)}
                   </div>
@@ -990,7 +990,7 @@ const SOPMapContent = ({ onBack, scope }) => {
               </button>
               {expanded === p.id && <div id={`sop-children-${p.id}`} className="ml-3 pl-2 border-l border-slate-700">
                 {p.children.map(child => <div key={child.name}>
-                  <button aria-expanded={subProcess?.name === child.name} onClick={() => { setMasterList(false); setPid(child.processId || p.id); setSubProcess(child.processId ? null : child); setSel(null); }} className={`block w-full text-left px-2 py-2 text-xs rounded-md ${subProcess?.name === child.name ? "bg-emerald-500/15 text-emerald-200" : "text-slate-400 hover:bg-white/5 hover:text-white"}`}>{text(child.name)}</button>
+                  <button aria-expanded={subProcess?.name === child.name} onClick={() => { setView("chart"); setPid(child.processId || p.id); setSubProcess(child.processId ? null : child); setSel(null); }} className={`block w-full text-left px-2 py-2 text-xs rounded-md ${subProcess?.name === child.name ? "bg-emerald-500/15 text-emerald-200" : "text-slate-400 hover:bg-white/5 hover:text-white"}`}>{text(child.name)}</button>
                   {subProcess?.name === child.name && <div className="ml-2 border-l border-slate-700 pl-2">{p.flow.acts.filter(a => child.ids?.includes(a.id)).map(a => <button key={a.id} onClick={() => pick(a.id)} className={`block w-full py-1.5 text-left text-xs ${sel === a.id ? "text-emerald-200" : "text-slate-400 hover:text-white"}`}>{a.title}</button>)}</div>}
                 </div>)}
               </div>}
@@ -1000,7 +1000,9 @@ const SOPMapContent = ({ onBack, scope }) => {
         </aside>
 
         <main className="flex-1 min-w-0 p-4 overflow-y-auto">
-          <div className="mb-3 flex gap-2"><button onClick={() => setMasterList(false)} className={`rounded-lg border px-3 py-1 text-sm ${!masterList ? "border-emerald-400 text-emerald-200" : "border-slate-600"}`}>{text("Process chart")}</button><button onClick={() => setMasterList(true)} className={`rounded-lg border px-3 py-1 text-sm ${masterList ? "border-emerald-400 text-emerald-200" : "border-slate-600"}`}>{text("Master list")}</button></div>
+          <div className="mb-3 flex flex-wrap gap-2">{[["chart", "Process chart"], ["list", "Master list"], ["org", "Organization"]].map(([key, label]) => (
+            <button key={key} onClick={() => setView(key)} aria-pressed={view === key} className={`rounded-lg border px-3 py-1 text-sm ${view === key ? "border-emerald-400 text-emerald-200" : "border-slate-600"}`}>{text(label)}</button>
+          ))}</div>
           <div className="mb-3">
             <div className="text-xl font-bold">{cardFocus ? `${AGENT_NAMES[pid] || proc.name} / ${text(cardFocus.title)}` : subProcess ? `${AGENT_NAMES[pid] || proc.name} / ${subProcess.name}` : proc.focus ? (AGENT_NAMES[pid] || proc.name) : flow.title}</div>
             {flow.ruler === false && <div className="text-sm text-slate-400">{flow.summary}</div>}
@@ -1014,12 +1016,12 @@ const SOPMapContent = ({ onBack, scope }) => {
           </div>
 
           {selectedRole && <section aria-label="Selected role jobs" className="mb-4 rounded-xl border-2 border-yellow-400 bg-yellow-400/10 p-4"><div className="flex items-center justify-between gap-3"><h2 className="text-xl font-bold text-yellow-200">{localizeRole({role:selectedRole.label}).role} · {text("All jobs")} ({roleJobs.length})</h2><button onClick={() => setSelectedRole(null)} className="rounded border border-yellow-400 px-3 py-1 text-sm">{text("Clear role highlight")}</button></div><div className="mt-3 grid gap-3">{roleJobs.map(({activity,processId,jobs}) => <article key={activity.id} className="rounded-lg bg-slate-900/70 p-3"><button onClick={() => {selectProcess(processId);setSel(activity.id);}} className="font-bold text-yellow-200 underline">{activity.title}</button>{jobs.map((job,index) => <p key={index} className="mt-1 text-sm text-slate-200">{localizeRole(job).does}</p>)}</article>)}</div></section>}
-          {masterList ? <div className="overflow-x-auto"><table className="w-full text-left text-xs"><thead><tr>{["Stage", "Process", "People & tasks", "UI / report / dashboard"].map(title => <th key={title} className="p-2 border-b border-slate-600">{title}</th>)}</tr></thead><tbody>{(proc.focus ? proc.flow.acts.filter(a => proc.focus.includes(a.lane)) : proc.flow.acts).map(a => <tr key={a.id} className="border-b border-slate-800"><td className="p-2 align-top">{a.stage || AGENT_NAMES[pid] || proc.name}</td><td className="p-2 align-top"><button className="text-emerald-200 underline" onClick={() => { setMasterList(false); setSubProcess(null); pick(a.id); }}>{a.title}</button></td><td className="p-2 align-top">{a.roles.map((r,i) => <p key={i} className="mb-2"><strong>{r.role}:</strong> {r.does}</p>)}</td><td className="p-2 align-top">{a.screen && <button className="text-sky-200 underline" onClick={() => go(a.screen[1])}>{a.screen[0]}</button>}<p className="mt-1">{a.menu}</p><p className="mt-1">{a.outputs}</p></td></tr>)}</tbody></table></div> : flow.kind === "timeline"
+          {view === "org" ? <QmsOrganization /> : view === "list" ? <div className="overflow-x-auto"><table className="w-full text-left text-xs"><thead><tr>{["Stage", "Process", "People & tasks", "UI / report / dashboard"].map(title => <th key={title} className="p-2 border-b border-slate-600">{title}</th>)}</tr></thead><tbody>{(proc.focus ? proc.flow.acts.filter(a => proc.focus.includes(a.lane)) : proc.flow.acts).map(a => <tr key={a.id} className="border-b border-slate-800"><td className="p-2 align-top">{a.stage || AGENT_NAMES[pid] || proc.name}</td><td className="p-2 align-top"><button className="text-emerald-200 underline" onClick={() => { setView("chart"); setSubProcess(null); pick(a.id); }}>{a.title}</button></td><td className="p-2 align-top">{a.roles.map((r,i) => <p key={i} className="mb-2"><strong>{r.role}:</strong> {r.does}</p>)}</td><td className="p-2 align-top">{a.screen && <button className="text-sky-200 underline" onClick={() => go(a.screen[1])}>{a.screen[0]}</button>}<p className="mt-1">{a.menu}</p><p className="mt-1">{a.outputs}</p></td></tr>)}</tbody></table></div> : flow.kind === "timeline"
             ? <Timeline flow={flow} focus={subProcess ? undefined : proc.focus} related={related} sel={sel} onSel={pick} selectedRole={selectedRole} onRoleSelect={selectRole} />
             : <Cycle flow={flow} sel={sel} onSel={pick} go={go} />}
 
           <div ref={cardRef}>
-            {act
+            {view === "org" ? null : act
               ? <ActivityCard flow={flow} act={act} onSel={pick} go={go} onProcess={selectProcess} selectedRole={selectedRole} onRoleSelect={selectRole} />
               : <div className="mt-4 text-sm text-slate-500">Click any box to see every role involved, what each one does, and where it goes next.</div>}
           </div>
