@@ -21,7 +21,7 @@ export default function YQMSHub() {
   return <main className="yqms-hub"><h1>YQMS</h1><div className="yqms-hub-modules">
     <button onClick={() => navigate('/dashboard/submenu/yqms-workspace')}><img className="yqms-hub-illustration" src={`${process.env.PUBLIC_URL}/assets/yqms/qc-inspector.png`} alt={labels[0]}/><strong>{labels[0]}</strong><small>{labels[1]}</small></button>
     <button onClick={() => navigate('/dashboard/yqms/quality-monitoring')}><img className="yqms-hub-illustration" src={`${process.env.PUBLIC_URL}/assets/yqms/quality-managers.png`} alt={labels[2]}/><strong>{labels[2]}</strong><small>{labels[3]}</small></button>
-    <button onClick={() => navigate('/dashboard/yqms/sop')}><img className="yqms-hub-illustration" src={`${process.env.PUBLIC_URL}/assets/yqms/sop-process.svg`} alt={labels[6]}/><strong>{labels[6]}</strong><small>{labels[7]}</small></button>
+    <button onClick={() => navigate('/dashboard/yqms/sop')}><img className="yqms-hub-illustration" src={`${process.env.PUBLIC_URL}/assets/yqms/sop-process.png`} alt={labels[6]}/><strong>{labels[6]}</strong><small>{labels[7]}</small></button>
   </div></main>;
 }
 export function QCWorkspace() {
