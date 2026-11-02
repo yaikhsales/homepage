@@ -6,6 +6,7 @@ import { SopLanguageProvider, SopLanguageFlags, useSopLanguage } from "./sop-lan
 import FabricInspectionJobCard from "./FabricInspectionJobCard";
 import { buildWorkingAxis, factoryToday } from "./sop-working-time";
 import { QMS_AREAS } from "../hr/QmsOrganization";
+import { YQMS_CARDS } from "../data/yqmsCards";
 
 /* SOP — Standard Operating Procedures (Management Dashboard → SOP).
  * LEFT: the main processes, in Gamini's order.
@@ -570,7 +571,17 @@ const QC_STAGE_GROUPS = [
   { name: "Reporting & Compliance", stages: ["consolidation/TV"] },
 ];
 const QC_TOPICS = QC_STAGE_GROUPS
-  .map(group => ({ name: group.name, ids: QMS.acts.filter(a => group.stages.includes(a.stage)).map(a => a.id) }))
+  .map(group => {
+    const ids = QMS.acts.filter(a => group.stages.includes(a.stage)).map(a => a.id);
+    // Each topic lists the QC workspace screens filed under it. A screen is tied
+    // to the SOP steps that open it; where no step does yet, the screen falls
+    // back to its whole stage and says so rather than lighting nothing.
+    const cards = (YQMS_CARDS.groups.find(g => g.label === group.name)?.cards || []).map(card => {
+      const own = QMS.acts.filter(a => a.screen?.[1] === card.action).map(a => a.id);
+      return { title: card.title, action: card.action, ids: own.length ? own : ids, stageOnly: !own.length, topic: group.name };
+    });
+    return { name: group.name, ids, cards };
+  })
   .filter(topic => topic.ids.length);
 
 // Order (Gamini 2026-10-06): overview first, production modules in flow
@@ -647,7 +658,7 @@ function layoutTimeline(flow, pixelsPerHour = 32, orderDate = factoryToday(), pu
   return {pos,lanes,height:y,width,px,axis,at};
 }
 
-function Timeline({ flow, focus, sel, onSel, selectedRole, onRoleSelect }) {
+function Timeline({ flow, focus, related, sel, onSel, selectedRole, onRoleSelect }) {
   const {text,language} = useSopLanguage();
   const [cardHeights,setCardHeights]=useState({});
   const measureCard=(id,height)=>setCardHeights(current=>current[id]===height?current:{...current,[id]:height});
@@ -656,6 +667,9 @@ function Timeline({ flow, focus, sel, onSel, selectedRole, onRoleSelect }) {
   const publicHolidays = useMemo(() => flow.publicHolidays || [], [flow.publicHolidays]);
   const L = useMemo(() => layoutTimeline(flow, pixelsPerHour, orderDate, publicHolidays, cardHeights), [flow, pixelsPerHour, orderDate, publicHolidays, cardHeights]);
   const dim = (lane) => focus && !focus.includes(lane);
+  // related = the steps that open the chosen QC screen, plus the steps that
+  // feed them and the steps they feed. Everything else stays on screen, dimmed.
+  const rank = (id) => !related ? 2 : related.core.has(id) ? 2 : related.near.has(id) ? 1 : 0;
   const byId = useMemo(() => Object.fromEntries(flow.acts.map((a) => [a.id, a])), [flow]);
 
   const arrows = [];
@@ -676,7 +690,7 @@ function Timeline({ flow, focus, sel, onSel, selectedRole, onRoleSelect }) {
     }
     const cross = a.lane !== b.lane;
     const hot = !!sel && (sel === aid || sel === b.id);
-    const faded = (focus && dim(a.lane) && dim(b.lane)) || (sel && !hot);
+    const faded = (focus && dim(a.lane) && dim(b.lane)) || (sel && !hot) || (related && (!rank(aid) || !rank(b.id)));
     arrows.push({ key: `${aid}>${b.id}`, d, color: cross ? DEPTS[a.lane].color : "#64748b", marker: cross ? a.lane : "same", hot, faded, cross });
   }));
 
@@ -726,11 +740,11 @@ function Timeline({ flow, focus, sel, onSel, selectedRole, onRoleSelect }) {
           </svg>
 
           {flow.acts.map((a) => {
-            const p = L.pos[a.id], c = DEPTS[a.lane].color, on = sel === a.id;
-            if (isFabricInspection(a)) return <section key={a.id} aria-label="Fabric inspection responsibilities" className="absolute rounded-2xl overflow-hidden" style={{left:p.x,top:HEAD_H+p.y,width:p.w,height:p.h,zIndex:2,border:`5px solid ${activityMatchesRole(a, selectedRole) ? "#eab308" : c}`,background:"white"}}><FabricInspectionJobCard title={a.title} selectedRole={selectedRole} onRoleSelect={onRoleSelect} onHeight={height=>measureCard(a.id,height)} /></section>;
+            const p = L.pos[a.id], c = DEPTS[a.lane].color, on = sel === a.id, r = rank(a.id);
+            if (isFabricInspection(a)) return <section key={a.id} aria-label="Fabric inspection responsibilities" className={`absolute rounded-2xl overflow-hidden transition-opacity ${r === 1 ? "opacity-50" : r === 0 ? "opacity-[0.14]" : ""}`} style={{left:p.x,top:HEAD_H+p.y,width:p.w,height:p.h,zIndex:2,border:`5px solid ${activityMatchesRole(a, selectedRole) ? "#eab308" : c}`,background:"white"}}><FabricInspectionJobCard title={a.title} selectedRole={selectedRole} onRoleSelect={onRoleSelect} onHeight={height=>measureCard(a.id,height)} /></section>;
             return (
               <button key={a.id} onClick={() => onSel(a.id)} title={flow.ruler === false ? `${a.step}. ${a.title}` : `${a.title} · Working day ${a.d0}–${a.d1}`}
-                className={`absolute text-left rounded-lg overflow-hidden transition-opacity ${dim(a.lane) ? "opacity-30" : ""}`}
+                className={`absolute text-left rounded-lg overflow-hidden transition-opacity ${dim(a.lane) ? "opacity-30" : ""} ${r === 1 ? "opacity-50" : r === 0 ? "opacity-[0.14]" : ""}`}
                 style={{ left: p.x, top: HEAD_H + p.y, width: p.w, height: BOX_H, zIndex: 2, background: on ? "#334155" : "#1e293b", boxShadow: activityMatchesRole(a, selectedRole) ? "0 0 0 4px #eab308" : on ? `0 0 0 2px ${c}` : `inset 0 0 0 1px ${c}66` }}>
                 <div className="absolute left-0 top-0 bottom-0 w-[3px]" style={{ background: c }} />
                 <div className="pl-3 pr-2 pt-2">
@@ -814,6 +828,13 @@ function Cycle({ flow, sel, onSel, go }) {
   );
 }
 
+/* The evidence / hand-off a step produces, from its own authored fields —
+ * nothing invented for the steps that have no per-role evidence line. */
+const evidenceOf = (act) => [
+  act.outputs && act.outputs !== "\u2014" ? act.outputs : null,
+  act.hands ? `\u2192 ${act.hands}` : null,
+].filter(Boolean).join(" ") || null;
+
 function ActivityCard({ flow, act, onSel, go, onProcess, selectedRole, onRoleSelect }) {
   const {text,localizeRole}=useSopLanguage();
   const c = DEPTS[act.lane].color;
@@ -843,19 +864,10 @@ function ActivityCard({ flow, act, onSel, go, onProcess, selectedRole, onRoleSel
         <span className="text-[10px] uppercase tracking-wider rounded px-1.5 py-0.5" style={{ background: act.by.auto ? "#10b98133" : "#ffffff14", color: act.by.auto ? "#6ee7b7" : "#cbd5e1" }}>{act.by.auto ? "Yai · automatic" : "Human"}</span>
         <ByLine by={act.by} size={13} lines={2} />
       </div>
-      <div className="mt-3 grid gap-2">
-        {act.roles.map((r) => (
-          <div key={r.role} className="flex gap-3 items-start text-sm">
-            <div className="w-44 flex-shrink-0 flex items-start gap-1.5">
-              <span className="mt-0.5"><ByIcon auto={r.dept === "sys"} size={14} /></span>
-              <div>
-                <button onClick={() => onRoleSelect?.({key:roleKey(r.role),label:r.role})} aria-pressed={selectedRole?.key === roleKey(r.role)} className={`text-left font-semibold underline ${selectedRole?.key === roleKey(r.role) ? "text-yellow-200" : "text-slate-100"}`}>{localizeRole(r).role}</button>
-                <div className="text-[10px]" style={{ color: DEPTS[r.dept].color }}>{DEPTS[r.dept].label}</div>
-              </div>
-            </div>
-            <div className="text-slate-300">{localizeRole(r).does}</div>
-          </div>
-        ))}
+      {/* Every step gets the same detailed job table fabric inspection has:
+        * who, what they must do, and the evidence they hand on. */}
+      <div className="mt-3 rounded-xl overflow-hidden">
+        <FabricInspectionJobCard title={act.title} roles={act.roles} selectedRole={selectedRole} onRoleSelect={onRoleSelect} sharedEvidence={evidenceOf(act)} />
       </div>
       {act.authority && <div className="mt-3 rounded-lg border border-amber-400/30 bg-amber-500/10 p-3 text-xs text-amber-100"><p>{act.authority}</p><button onClick={() => go("/dashboard/org-chart-master")} className="mt-2 underline">Open YHR organization chart</button></div>}
       {(act.standard || act.trigger || act.hands || act.menu) && (
@@ -899,6 +911,8 @@ const SOPMapContent = ({ onBack, scope }) => {
   const [expanded, setExpanded] = useState(null);
   const [masterList, setMasterList] = useState(false);
   const [subProcess, setSubProcess] = useState(null);
+  const [cardFocus, setCardFocus] = useState(null);
+  const [openTopic, setOpenTopic] = useState(null);
   const cardRef = useRef(null);
   const proc = PROCESSES.find((p) => p.id === pid) || PROCESSES[0];
   const flow = useMemo(() => {
@@ -910,11 +924,25 @@ const SOPMapContent = ({ onBack, scope }) => {
     return { ...proc.flow, title: subProcess.name, summary: "This sub-process shows its own activities. Open a step for responsibilities, inputs, outputs and hand-offs.", phases: [], days: Math.max(...acts.map(a => a.d1)) - start,
       acts: acts.map(a => ({ ...a, hands: a.hands || proc.flow.acts.filter(next => (next.deps || []).includes(a.id)).map(next => next.title).join("; "), trigger: a.trigger || (a.deps || []).map(id => proc.flow.acts.find(prev => prev.id === id)?.title).filter(Boolean).join("; "), d0: a.d0 - start, d1: a.d1 - start, deps: (a.deps || []).filter(id => ids.has(id)) })) };
   }, [proc, subProcess]);
+  // Which boxes connect to the chosen QC screen: the steps that open it, then
+  // one hop out in both directions (what feeds them, what they feed).
+  const related = useMemo(() => {
+    if (!cardFocus) return null;
+    const core = new Set(cardFocus.ids);
+    const near = new Set();
+    QMS.acts.forEach(a => {
+      (a.deps || []).forEach(id => {
+        if (core.has(id) && !core.has(a.id)) near.add(a.id);
+        if (core.has(a.id) && !core.has(id)) near.add(id);
+      });
+    });
+    return { core, near };
+  }, [cardFocus]);
   const act = flow.acts.find((a) => a.id === sel);
   const go = (path) => { if (path) navigate(path); };
 
 
-  const selectProcess = (id) => { setMasterList(false); setPid(id); setSubProcess(null); setSel(null); };
+  const selectProcess = (id) => { setMasterList(false); setPid(id); setSubProcess(null); setCardFocus(null); setOpenTopic(null); setSel(null); };
   const pick = (id) => {
     setSel(id);
     setTimeout(() => cardRef.current && cardRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" }), 30);
@@ -935,11 +963,6 @@ const SOPMapContent = ({ onBack, scope }) => {
         </div>
       </div>
 
-      <div className="mx-4 my-3 rounded-xl border border-violet-400/25 bg-violet-500/10 px-3 py-2 text-xs text-slate-300">
-        <p><strong className="text-violet-200">Shared AI coordination:</strong> Management Dashboard AI Agent, System Analysis AI Agent and SOP Director AI Agent support departmental mobile and web AI. SOP Director maintains process flows and hand-offs as modules change. These agents are separate from human roles and employee headcount.</p>
-        <p className="mt-1">Human managers retain department accountability. The Quality Manager and explicitly authorized Sewing Quality Leaders retain human hold and release authority; AI analysis or call-out acknowledgement does not grant approval.</p>
-        <button onClick={() => go("/dashboard/org-chart-master")} className="mt-1 text-violet-200 underline">View YHR human and AI organization chart</button>
-      </div>
       <div className="flex flex-col md:flex-row flex-1 min-h-0">
         <aside aria-label={qcScope ? "QC process topics and steps" : "Yai agents and sub-processes"} className="md:w-72 flex-shrink-0 border-b md:border-b-0 md:border-r border-white/10 p-2 max-h-[70vh] overflow-y-auto">
           <div className="text-[10px] uppercase tracking-wider text-slate-500 px-2 py-2">{qcScope ? "QC process · steps" : "Yai agents · sub-processes"}</div>
@@ -947,11 +970,14 @@ const SOPMapContent = ({ onBack, scope }) => {
             <button onClick={() => selectProcess("qa")} className={`w-full text-left rounded-lg px-3 py-2 text-sm ${!subProcess ? "bg-emerald-600 text-white" : "text-slate-300 hover:bg-white/5"}`}>{text("Quality overview")}</button>
             {QC_TOPICS.map(topic => (
               <div key={topic.name} className="mt-1">
-                <button aria-expanded={subProcess?.name === topic.name} aria-controls={`sop-topic-${topic.name}`} onClick={() => { setMasterList(false); setPid("qa"); setSubProcess(subProcess?.name === topic.name ? null : topic); setSel(null); }} className={`w-full text-left text-sm px-3 py-2 rounded-lg flex justify-between gap-2 ${subProcess?.name === topic.name ? "bg-emerald-600 text-white" : "text-slate-300 hover:bg-white/5"}`}>
-                  <span>{text(topic.name)}</span><span aria-hidden="true">{subProcess?.name === topic.name ? "▾" : "▸"}</span>
+                <button aria-expanded={openTopic === topic.name} aria-controls={`sop-topic-${topic.name}`} onClick={() => { const open = openTopic === topic.name; setMasterList(false); setPid("qa"); setOpenTopic(open ? null : topic.name); setSubProcess(open ? null : topic); setCardFocus(null); setSel(null); }} className={`w-full text-left text-sm px-3 py-2 rounded-lg flex justify-between gap-2 ${subProcess?.name === topic.name || cardFocus?.topic === topic.name ? "bg-emerald-600 text-white" : "text-slate-300 hover:bg-white/5"}`}>
+                  <span>{text(topic.name)}</span><span aria-hidden="true">{openTopic === topic.name ? "▾" : "▸"}</span>
                 </button>
-                {subProcess?.name === topic.name && <div id={`sop-topic-${topic.name}`} className="ml-3 pl-2 border-l border-slate-700">
-                  {QMS.acts.filter(a => topic.ids.includes(a.id)).map(a => <button key={a.id} onClick={() => pick(a.id)} className={`block w-full py-1.5 text-left text-xs ${sel === a.id ? "text-emerald-200" : "text-slate-400 hover:text-white"}`}>{a.title}</button>)}
+                {openTopic === topic.name && <div id={`sop-topic-${topic.name}`} className="ml-3 pl-2 border-l border-slate-700">
+                  {topic.cards.map(card => <button key={card.action} aria-pressed={cardFocus?.action === card.action} onClick={() => { setMasterList(false); setPid("qa"); setSubProcess(null); setSel(null); setCardFocus(cardFocus?.action === card.action ? null : card); }} className={`block w-full py-1.5 text-left text-xs ${cardFocus?.action === card.action ? "text-emerald-200 font-semibold" : "text-slate-400 hover:text-white"}`}>{text(card.title)}</button>)}
+                  <div className="mt-1 border-t border-slate-700 pt-1">
+                    {QMS.acts.filter(a => topic.ids.includes(a.id)).map(a => <button key={a.id} onClick={() => pick(a.id)} className={`block w-full py-1.5 text-left text-[11px] ${sel === a.id ? "text-emerald-200" : "text-slate-500 hover:text-white"}`}>{a.title}</button>)}
+                  </div>
                 </div>}
               </div>
             ))}
@@ -976,14 +1002,20 @@ const SOPMapContent = ({ onBack, scope }) => {
         <main className="flex-1 min-w-0 p-4 overflow-y-auto">
           <div className="mb-3 flex gap-2"><button onClick={() => setMasterList(false)} className={`rounded-lg border px-3 py-1 text-sm ${!masterList ? "border-emerald-400 text-emerald-200" : "border-slate-600"}`}>{text("Process chart")}</button><button onClick={() => setMasterList(true)} className={`rounded-lg border px-3 py-1 text-sm ${masterList ? "border-emerald-400 text-emerald-200" : "border-slate-600"}`}>{text("Master list")}</button></div>
           <div className="mb-3">
-            <div className="text-xl font-bold">{subProcess ? `${AGENT_NAMES[pid] || proc.name} / ${subProcess.name}` : proc.focus ? (AGENT_NAMES[pid] || proc.name) : flow.title}</div>
+            <div className="text-xl font-bold">{cardFocus ? `${AGENT_NAMES[pid] || proc.name} / ${text(cardFocus.title)}` : subProcess ? `${AGENT_NAMES[pid] || proc.name} / ${subProcess.name}` : proc.focus ? (AGENT_NAMES[pid] || proc.name) : flow.title}</div>
             {flow.ruler === false && <div className="text-sm text-slate-400">{flow.summary}</div>}
             {proc.focus && !subProcess && <div className="text-xs mt-1 text-slate-300">Showing this department's part of the order — hand-offs in and out stay visible.</div>}
+            {cardFocus && <div className="mt-1 flex flex-wrap items-center gap-2 text-xs">
+              <span className="text-slate-300">{cardFocus.stageOnly
+                ? `No SOP step opens this screen yet — showing the ${cardFocus.topic} steps it belongs to; everything else is dimmed.`
+                : "The steps that open this screen are lit, with what feeds them and what they feed. The rest of the SOP is dimmed."}</span>
+              <button onClick={() => setCardFocus(null)} className="rounded-lg border border-emerald-400/40 px-2 py-0.5 text-emerald-200">Show the whole SOP</button>
+            </div>}
           </div>
 
           {selectedRole && <section aria-label="Selected role jobs" className="mb-4 rounded-xl border-2 border-yellow-400 bg-yellow-400/10 p-4"><div className="flex items-center justify-between gap-3"><h2 className="text-xl font-bold text-yellow-200">{localizeRole({role:selectedRole.label}).role} · {text("All jobs")} ({roleJobs.length})</h2><button onClick={() => setSelectedRole(null)} className="rounded border border-yellow-400 px-3 py-1 text-sm">{text("Clear role highlight")}</button></div><div className="mt-3 grid gap-3">{roleJobs.map(({activity,processId,jobs}) => <article key={activity.id} className="rounded-lg bg-slate-900/70 p-3"><button onClick={() => {selectProcess(processId);setSel(activity.id);}} className="font-bold text-yellow-200 underline">{activity.title}</button>{jobs.map((job,index) => <p key={index} className="mt-1 text-sm text-slate-200">{localizeRole(job).does}</p>)}</article>)}</div></section>}
           {masterList ? <div className="overflow-x-auto"><table className="w-full text-left text-xs"><thead><tr>{["Stage", "Process", "People & tasks", "UI / report / dashboard"].map(title => <th key={title} className="p-2 border-b border-slate-600">{title}</th>)}</tr></thead><tbody>{(proc.focus ? proc.flow.acts.filter(a => proc.focus.includes(a.lane)) : proc.flow.acts).map(a => <tr key={a.id} className="border-b border-slate-800"><td className="p-2 align-top">{a.stage || AGENT_NAMES[pid] || proc.name}</td><td className="p-2 align-top"><button className="text-emerald-200 underline" onClick={() => { setMasterList(false); setSubProcess(null); pick(a.id); }}>{a.title}</button></td><td className="p-2 align-top">{a.roles.map((r,i) => <p key={i} className="mb-2"><strong>{r.role}:</strong> {r.does}</p>)}</td><td className="p-2 align-top">{a.screen && <button className="text-sky-200 underline" onClick={() => go(a.screen[1])}>{a.screen[0]}</button>}<p className="mt-1">{a.menu}</p><p className="mt-1">{a.outputs}</p></td></tr>)}</tbody></table></div> : flow.kind === "timeline"
-            ? <Timeline flow={flow} focus={subProcess ? undefined : proc.focus} sel={sel} onSel={pick} selectedRole={selectedRole} onRoleSelect={selectRole} />
+            ? <Timeline flow={flow} focus={subProcess ? undefined : proc.focus} related={related} sel={sel} onSel={pick} selectedRole={selectedRole} onRoleSelect={selectRole} />
             : <Cycle flow={flow} sel={sel} onSel={pick} go={go} />}
 
           <div ref={cardRef}>
