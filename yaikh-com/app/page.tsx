@@ -2217,7 +2217,7 @@ function PartnerStack() {
       // The lockup already reads "Claude Partner Network", so this card drops
       // the Powered-by-Claude pill the other two still carry.
       tag: null,
-      logo: "/images/logo-claude-partner-network.svg",
+      logo: "/images/logo-claude-partner-network.png",
       logoAlt: "Claude Partner Network",
       desc: t("partners.claude.desc"),
       bullet: ["Production use of Claude Sonnet 4.5", "Anthropic Academy certified team", "Responsible-AI policy live"],
