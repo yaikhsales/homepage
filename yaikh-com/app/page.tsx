@@ -2274,12 +2274,12 @@ function PartnerStack() {
               {/* Partner logo */}
               {/* One optical size for very different marks: a wide lockup, a
                   round badge and two square tiles all cap at the same height. */}
-              <div className="h-12 flex items-center mb-3">
+              <div className="h-20 flex items-center mb-4">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={p.logo}
                   alt={p.logoAlt}
-                  className="max-h-11 max-w-[150px] w-auto object-contain"
+                  className="max-h-[72px] max-w-[190px] w-auto object-contain"
                   draggable={false}
                 />
               </div>
