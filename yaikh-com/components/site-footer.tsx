@@ -109,7 +109,7 @@ export default function SiteFooter() {
         <FooterCol title="Partners">
           <FooterLink href="/#partners">Anthropic</FooterLink>
           <FooterLink href="/#partners">Google Cloud</FooterLink>
-          <FooterLink href="/#impact">JICA · Impact</FooterLink>
+          <FooterLink href="/#impact">Impact</FooterLink>
         </FooterCol>
         <FooterCol title="Company">
           <FooterLink href="mailto:gamini@yaikh.com">Contact</FooterLink>
