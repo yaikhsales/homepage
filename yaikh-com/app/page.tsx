@@ -1799,7 +1799,10 @@ function FlatStepColumn({
   };
 }) {
   return (
-    <div className="flex flex-col shrink-0 w-[124px]" style={{ height: s.h }}>
+    /* minHeight, not height: the two shortest towers can need a few pixels
+       more than their step height on a wider font, and a hard height let
+       their white number tab spill below the row's baseline. */
+    <div className="flex flex-col shrink-0 w-[124px]" style={{ minHeight: s.h }}>
       {/* Gradient tower body */}
       <div className={`flex-1 rounded-t-2xl border border-b-0 border-yai-border bg-gradient-to-b ${s.grad} flex flex-col items-center px-3.5 pt-4 pb-3 text-center`}>
         <div className="text-[9px] font-bold uppercase tracking-widest text-gray-500">
@@ -2211,33 +2214,45 @@ function PartnerStack() {
   const partners = [
     {
       name: "Anthropic · Claude Partner Network",
-      tag: "Powered by Claude",
-      logo: "/images/logo-claude.svg",
-      logoAlt: "Anthropic",
+      // The lockup already reads "Claude Partner Network", so this card drops
+      // the Powered-by-Claude pill the other two still carry.
+      tag: null,
+      logo: "/images/logo-claude-partner-network.svg",
+      logoAlt: "Claude Partner Network",
       desc: t("partners.claude.desc"),
       bullet: ["Production use of Claude Sonnet 4.5", "Anthropic Academy certified team", "Responsible-AI policy live"],
       color: "#D97757",
       cta: "Read the technical brief",
     },
     {
-      name: "Google Ai Services",
-      tag: "Built on GCP",
-      logo: "/images/logo-googlecloud.svg",
-      logoAlt: "Google Cloud",
-      desc: t("partners.google.desc"),
-      bullet: ["Vertex AI · Gemini · Cloud Run", "Multi-region ASEAN deployment", "$300 credit pilots → enterprise tier"],
-      color: "#4285F4",
-      cta: "See the GCP architecture",
+      name: "ESG · Sustainable Solutions Partner",
+      tag: "Sustainability",
+      logo: "/images/logo-esg.png",
+      logoAlt: "ESG Sustainable Solutions Partner",
+      desc: t("partners.esg.desc"),
+      bullet: ["Compliance data management", "ESG reporting for factories", "Working together since 2010"],
+      color: "#E3262F",
+      cta: "See the ESG work",
     },
     {
-      name: "JICA · Cambodia digitalisation",
-      tag: "Impact-aligned",
-      logo: "/images/logo-jica.svg",
-      logoAlt: "JICA",
-      desc: t("partners.jica.desc"),
-      bullet: ["Ministry of Environment ✓", "Cambodia-born team", "Solar-powered Layer 3 compute"],
-      color: "#0A3327",
-      cta: "Read the impact dossier",
+      name: "GK SMART",
+      tag: "Live in production",
+      logo: "/images/logo-gksmart.png",
+      logoAlt: "GK SMART",
+      desc: t("partners.gksmart.desc"),
+      bullet: ["Factory floor, every day", "Soft-goods manufacturing", "Cambodia"],
+      color: "#5F9E12",
+      cta: "See it on the floor",
+    },
+    {
+      name: "ES Packing",
+      tag: "Beyond garments",
+      logo: "/images/logo-espacking.png",
+      logoAlt: "ES Packing",
+      desc: t("partners.espacking.desc"),
+      bullet: ["Packaging manufacturing", "First non-garment floor", "Cambodia"],
+      color: "#E8912A",
+      cta: "See the packing line",
     },
   ];
 
@@ -2252,26 +2267,30 @@ function PartnerStack() {
           {t("partners.para")}
         </p>
       </div>
-      <div className="grid md:grid-cols-3 gap-5 mt-10">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-10">
         {partners.map((p, i) => (
           <Reveal key={p.name} delay={i * 0.1}>
             <div className="rounded-2xl bg-white p-7 border border-black/5 hover:shadow-2xl transition h-full flex flex-col">
               {/* Partner logo */}
-              <div className="h-10 flex items-center mb-3">
+              {/* One optical size for very different marks: a wide lockup, a
+                  round badge and two square tiles all cap at the same height. */}
+              <div className="h-12 flex items-center mb-3">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={p.logo}
                   alt={p.logoAlt}
-                  className="h-9 w-auto object-contain"
+                  className="max-h-11 max-w-[150px] w-auto object-contain"
                   draggable={false}
                 />
               </div>
-              <div
-                className="self-start text-[10px] uppercase tracking-[0.2em] font-bold px-2.5 py-1 rounded-full text-white"
-                style={{ background: p.color }}
-              >
-                {p.tag}
-              </div>
+              {p.tag && (
+                <div
+                  className="self-start text-[10px] uppercase tracking-[0.2em] font-bold px-2.5 py-1 rounded-full text-white"
+                  style={{ background: p.color }}
+                >
+                  {p.tag}
+                </div>
+              )}
               <h3 className="font-serif text-xl font-semibold text-yai-navy mt-4 leading-tight">
                 {p.name}
               </h3>
