@@ -15,6 +15,19 @@ import { useLang } from "@/app/i18n";
 
 type State = "idle" | "sending" | "sent" | "error";
 
+/* The public Yai channel — same handle the footer links to. A https://t.me
+   link hands straight to the installed Telegram app on phone and desktop,
+   and falls back to the web client when there is none. */
+const TELEGRAM_URL = "https://t.me/yaikh1";
+
+function TelegramGlyph() {
+  return (
+    <svg viewBox="0 0 496 512" fill="currentColor" className="h-3.5 w-3.5" aria-hidden="true">
+      <path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm114 169-41 193c-3 14-12 17-24 11l-62-46-30 29c-3 3-6 6-13 6l5-63 115-104c5-4-1-7-8-3l-142 90-61-20c-13-4-14-13 3-20l239-92c11-4 21 3 17 19z" />
+    </svg>
+  );
+}
+
 export default function ChatBubble() {
   const { t } = useLang();
   const [open, setOpen] = useState(false);
@@ -23,7 +36,7 @@ export default function ChatBubble() {
   const [anchor, setAnchor] = useState<"float" | "nav">("float");
   const [state, setState] = useState<State>("idle");
   const [error, setError] = useState("");
-  const [form, setForm] = useState({ name: "", contact: "", message: "", website: "" });
+  const [form, setForm] = useState({ name: "", message: "", website: "" });
   const panelRef = useRef<HTMLDivElement>(null);
   const firstFieldRef = useRef<HTMLInputElement>(null);
 
@@ -69,7 +82,7 @@ export default function ChatBubble() {
       const body = await response.json().catch(() => null);
       if (!response.ok || !body?.ok) throw new Error(body?.error || t("chat.failed"));
       setState("sent");
-      setForm({ name: "", contact: "", message: "", website: "" });
+      setForm({ name: "", message: "", website: "" });
     } catch (caught) {
       setState("error");
       setError(caught instanceof Error ? caught.message : t("chat.failed"));
@@ -97,9 +110,25 @@ export default function ChatBubble() {
           aria-label={t("chat.title")}
           className={`fixed z-[60] w-[min(22rem,calc(100vw-2.5rem))] overflow-hidden rounded-2xl border border-black/10 bg-white shadow-2xl ${anchor === "nav" ? "top-20 right-5" : "bottom-24 right-5"}`}
         >
-          <div className="bg-yai-navy px-5 py-4 text-white">
-            <div className="font-serif text-lg font-semibold leading-tight">{t("chat.title")}</div>
+          <div className="relative bg-yai-navy px-5 py-4 pr-12 text-white">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+              <span className="font-serif text-lg font-semibold leading-tight">{t("chat.title")}</span>
+              {/* Says up front where the message lands. */}
+              <span className="inline-flex items-center gap-1 rounded-full bg-[#2AABEE]/20 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.12em] text-[#7fd3f7]">
+                <TelegramGlyph /> {t("chat.integrated")}
+              </span>
+            </div>
             <p className="mt-1 text-[12px] leading-snug text-white/70">{t("chat.sub")}</p>
+            {/* Its own close button. The round button bottom-right also closes
+                the panel, but from the header that is too far away to find. */}
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              aria-label={t("chat.close")}
+              className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full text-white/80 transition hover:bg-white/15 hover:text-white"
+            >
+              <X size={18} />
+            </button>
           </div>
 
           {state === "sent" ? (
@@ -122,14 +151,6 @@ export default function ChatBubble() {
                 onChange={set("name")}
                 placeholder={t("chat.name")}
                 maxLength={80}
-                required
-                className="rounded-lg border border-yai-border px-3 py-2 text-sm outline-none focus:border-yai-blue"
-              />
-              <input
-                value={form.contact}
-                onChange={set("contact")}
-                placeholder={t("chat.reach")}
-                maxLength={120}
                 required
                 className="rounded-lg border border-yai-border px-3 py-2 text-sm outline-none focus:border-yai-blue"
               />
@@ -159,6 +180,22 @@ export default function ChatBubble() {
               >
                 {state === "sending" ? t("chat.sending") : <>{t("chat.send")} <Send size={15} /></>}
               </button>
+
+              {/* Straight into the Telegram app for anyone who would rather
+                  talk there than fill a form. */}
+              <div className="mt-1 flex items-center gap-2" aria-hidden="true">
+                <span className="h-px flex-1 bg-yai-border" />
+                <span className="text-[10px] uppercase tracking-[0.2em] text-gray-400">{t("chat.or")}</span>
+                <span className="h-px flex-1 bg-yai-border" />
+              </div>
+              <a
+                href={TELEGRAM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-[#2AABEE] px-5 py-2 text-sm font-bold text-[#2AABEE] transition hover:bg-[#2AABEE] hover:text-white"
+              >
+                <TelegramGlyph /> {t("chat.telegram")}
+              </a>
             </form>
           )}
         </div>

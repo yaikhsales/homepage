@@ -1,6 +1,10 @@
 /* /api/contact-chat
  *
- *   POST { name, contact, message, website? }
+ *   POST { name, message, website?, contact? }
+ *
+ * The form asks for a name and a message only. Anyone who wants us to have
+ * their number taps through to Telegram instead, which carries it; `contact`
+ * stays accepted for a page a visitor already had open.
  *        → stores the message and pushes it to the Texlink Telegram chat.
  *
  * Telegram needs two server-side variables on Railway. Neither belongs in the
@@ -75,9 +79,6 @@ export async function POST(request: Request) {
     if (name.length < 2) {
       return NextResponse.json({ ok: false, error: "Tell us your name." }, { status: 400 });
     }
-    if (contact.length < 3) {
-      return NextResponse.json({ ok: false, error: "Leave an email, phone or Telegram handle." }, { status: 400 });
-    }
     if (message.length < 2) {
       return NextResponse.json({ ok: false, error: "Write your message." }, { status: 400 });
     }
@@ -89,7 +90,7 @@ export async function POST(request: Request) {
     try {
       collection = (await getDb()).collection("website_chats");
       const duplicate = await collection.findOne({
-        contact,
+        name,
         message,
         createdAt: { $gte: new Date(Date.now() - 2 * 60 * 1000) },
       });
@@ -99,10 +100,13 @@ export async function POST(request: Request) {
       console.error("[contact-chat] store unavailable, relaying anyway:", error);
     }
 
+    /* The team must be able to tell this apart from a Telegram message: the
+       sender has no Telegram identity here, so nobody can just hit reply. */
     const text = [
       "<b>yaikh.com · chat</b>",
+      "<i>From the website form — not a Telegram user. Ask for an email or phone to reply on.</i>",
       `<b>From:</b> ${escapeHtml(name)}`,
-      `<b>Reach:</b> ${escapeHtml(contact)}`,
+      contact ? `<b>Reach:</b> ${escapeHtml(contact)}` : "",
       page ? `<b>Page:</b> ${escapeHtml(page)}` : "",
       "",
       escapeHtml(message),
@@ -117,7 +121,7 @@ export async function POST(request: Request) {
       try {
         await collection.insertOne({
           name,
-          contact,
+          contact: contact || null,
           message,
           page: page || null,
           delivered: relay.delivered,
