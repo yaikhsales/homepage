@@ -1689,7 +1689,7 @@ function CustomersStrip() {
     },
     {
       step: "Step 5",
-      name: "Agentic",
+      name: "Ai Vision Solutions",
       clients: 1,
       capacity: t("cap.6mo"),
       h: 300,
@@ -2226,7 +2226,7 @@ function PartnerStack() {
     },
     {
       name: "ESG · Sustainable Solutions Partner",
-      tag: "Sustainability",
+      tag: "Ai Native Factory Compliance",
       logo: "/images/logo-esg.png",
       logoAlt: "ESG Sustainable Solutions Partner",
       desc: t("partners.esg.desc"),
@@ -2236,7 +2236,7 @@ function PartnerStack() {
     },
     {
       name: "GK SMART",
-      tag: "Live in production",
+      tag: "Ai Agents for Financial and Taxation",
       logo: "/images/logo-gksmart.png",
       logoAlt: "GK SMART",
       desc: t("partners.gksmart.desc"),
@@ -2246,7 +2246,7 @@ function PartnerStack() {
     },
     {
       name: "ES Packing",
-      tag: "Beyond garments",
+      tag: "Ai Native Factory Administration",
       logo: "/images/logo-espacking.png",
       logoAlt: "ES Packing",
       desc: t("partners.espacking.desc"),
@@ -2480,7 +2480,7 @@ const SC_BEFORE: StaticStep[] = [
 ];
 
 const SC_AFTER: StaticStep[] = [
-  { step: "Step 5", stage: "Agentic",      plan: "Agentic",      sub: "After ~6 months",      price: "+ $5,000", usdAmount: 5000, per: "/ year · 10 agents + 35 mini",       h: 410, bg: "from-violet-200 to-violet-50", accent: "text-yai-blue",   icon: SC_ClusterAgentic },
+  { step: "Step 5", stage: "Ai Vision Solutions", plan: "Ai Vision Solutions", sub: "After ~6 months",      price: "+ $5,000", usdAmount: 5000, per: "/ year · 10 agents + 35 mini",       h: 410, bg: "from-violet-200 to-violet-50", accent: "text-yai-blue",   icon: SC_ClusterAgentic },
   { step: "Step 6", stage: "Big Ai Brain", plan: "Big Ai Brain", sub: "Boss · after ~1 year", price: "+ $5,000", usdAmount: 5000, per: "/ year · talks across 5+ factories", h: 460, bg: "from-orange-200 to-orange-50", accent: "text-yai-orange", icon: SC_ClusterBrain },
 ];
 
@@ -2508,7 +2508,8 @@ function SC_StepCard({ s, mode, onContact }: { s: StaticStep; mode: "buy" | "con
         <div className="text-[10px] text-gray-500 mt-0.5 leading-tight">{s.sub}</div>
         <div className={`${s.accent} flex-1 flex items-center justify-center`}>{s.icon}</div>
       </div>
-      <SC_Price s={s} />
+      {/* Steps 5 and 6 carry no figure any more: Contact us starts that talk. */}
+      {mode === "buy" && <SC_Price s={s} />}
       <div className={`mt-2 w-full rounded-md px-1.5 py-2 text-center text-[9px] font-extrabold uppercase tracking-wider text-white shadow-sm ${mode === "buy" ? "bg-yai-blue" : "bg-yai-orange"}`}>
         {mode === "buy" ? "Buy" : "Contact us"}
       </div>
