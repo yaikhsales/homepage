@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { LangProvider, useLang, type Lang } from "./i18n";
 import Footer from "@/components/site-footer";
 import MobileNav from "@/components/mobile-nav";
+import ContactChatBubble from "@/components/chat-bubble";
 
 /* yaikh.com home — modern, partner-review optimised single-page scroll.
  * Sections: Nav · Hero · Audience router · 3-layer story · Customers ·
@@ -36,6 +37,7 @@ export default function Home() {
         <Impact />
         <CTA />
         <Footer />
+        <ContactChatBubble />
       </main>
     </LangProvider>
   );

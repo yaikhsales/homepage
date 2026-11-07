@@ -4,7 +4,9 @@ import { getDb } from "@/lib/mongo";
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-const ALLOWED_PLANS = new Set(["Ai Server", "Agentic", "Big Ai Brain"]);
+/* Steps 5 and 6 were renamed on the ladders. The old names stay accepted so
+   a page a visitor already had open keeps working. */
+const ALLOWED_PLANS = new Set(["Ai Server", "Ai Vision Solutions", "Unmanned Systems", "Agentic", "Big Ai Brain"]);
 const ALLOWED_OPTIONS = new Set(["Administrative", "Operation"]);
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
