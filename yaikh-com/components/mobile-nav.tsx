@@ -51,7 +51,7 @@ export default function MobileNav({
       ],
     },
     { label: "Ai feed", href: "/ai-feed" },
-    { label: "Chat with us", href: "#contact" },
+    { label: "Chat with us", href: "#chat" },
   ];
 
   return (
@@ -141,6 +141,18 @@ export default function MobileNav({
               )}
             </div>
           ) : (
+            link.href === "#chat" ? (
+              /* Opens the same panel the desktop header and the floating
+                 bubble open, rather than jumping to the email block. */
+              <button
+                key={link.href}
+                type="button"
+                onClick={() => { setOpen(false); window.dispatchEvent(new CustomEvent("yai-chat:open", { detail: { anchor: "float" } })); }}
+                className="px-4 py-3 rounded-lg text-left text-white/90 hover:text-yai-orange hover:bg-white/5 transition font-medium text-sm"
+              >
+                {link.label}
+              </button>
+            ) : (
             <Link
               key={link.href}
               href={link.href}
@@ -149,6 +161,7 @@ export default function MobileNav({
             >
               {link.label}
             </Link>
+            )
           ))}
 
           {!hideLogin && (

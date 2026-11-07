@@ -18,6 +18,9 @@ type State = "idle" | "sending" | "sent" | "error";
 export default function ChatBubble() {
   const { t } = useLang();
   const [open, setOpen] = useState(false);
+  /* "nav" hangs the panel under the Chat with us link in the header;
+     "float" keeps it above the round button bottom-right. */
+  const [anchor, setAnchor] = useState<"float" | "nav">("float");
   const [state, setState] = useState<State>("idle");
   const [error, setError] = useState("");
   const [form, setForm] = useState({ name: "", contact: "", message: "", website: "" });
@@ -27,6 +30,18 @@ export default function ChatBubble() {
   useEffect(() => {
     if (open) firstFieldRef.current?.focus();
   }, [open]);
+
+  /* The header and the mobile menu open this same panel. */
+  useEffect(() => {
+    const onOpen = (event: Event) => {
+      const where = (event as CustomEvent<{ anchor?: "float" | "nav" }>).detail?.anchor;
+      setAnchor(where === "nav" ? "nav" : "float");
+      setState("idle");
+      setOpen(true);
+    };
+    window.addEventListener("yai-chat:open", onOpen);
+    return () => window.removeEventListener("yai-chat:open", onOpen);
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -65,7 +80,7 @@ export default function ChatBubble() {
     <>
       <button
         type="button"
-        onClick={() => { setOpen((v) => !v); setState("idle"); }}
+        onClick={() => { setAnchor("float"); setOpen((v) => !v); setState("idle"); }}
         aria-expanded={open}
         aria-controls="yai-chat-panel"
         aria-label={t("chat.open")}
@@ -80,7 +95,7 @@ export default function ChatBubble() {
           ref={panelRef}
           role="dialog"
           aria-label={t("chat.title")}
-          className="fixed bottom-24 right-5 z-50 w-[min(22rem,calc(100vw-2.5rem))] overflow-hidden rounded-2xl border border-black/10 bg-white shadow-2xl"
+          className={`fixed z-[60] w-[min(22rem,calc(100vw-2.5rem))] overflow-hidden rounded-2xl border border-black/10 bg-white shadow-2xl ${anchor === "nav" ? "top-20 right-5" : "bottom-24 right-5"}`}
         >
           <div className="bg-yai-navy px-5 py-4 text-white">
             <div className="font-serif text-lg font-semibold leading-tight">{t("chat.title")}</div>

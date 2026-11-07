@@ -8,6 +8,7 @@ import { LangProvider, useLang, type Lang } from "./i18n";
 import Footer from "@/components/site-footer";
 import MobileNav from "@/components/mobile-nav";
 import ContactChatBubble from "@/components/chat-bubble";
+import { MessageCircle } from "lucide-react";
 
 /* yaikh.com home — modern, partner-review optimised single-page scroll.
  * Sections: Nav · Hero · Audience router · 3-layer story · Customers ·
@@ -46,6 +47,7 @@ export default function Home() {
 /* ─────────────── NAV ─────────────── */
 function Nav() {
   const { t } = useLang();
+  const openChat = () => window.dispatchEvent(new CustomEvent("yai-chat:open", { detail: { anchor: "nav" } }));
   const [scrolled, setScrolled] = useState(false);
   const [partnersOpen, setPartnersOpen] = useState(false);
   const [experienceOpen, setExperienceOpen] = useState(false);
@@ -155,7 +157,19 @@ function Nav() {
               )}
             </div>
             <a href="/ai-feed"   className="hover:text-yai-orange transition whitespace-nowrap">Ai feed</a>
-            <a href="#contact"   className="hover:text-yai-orange transition whitespace-nowrap">{t("nav.chat")}</a>
+            <span className="relative inline-flex flex-col items-center">
+              <button type="button" onClick={openChat} className="hover:text-yai-orange transition whitespace-nowrap">{t("nav.chat")}</button>
+              {/* The bubble sits under the link at all times, so the way in is
+                  visible before anyone goes looking for it. */}
+              <button
+                type="button"
+                onClick={openChat}
+                aria-label={t("chat.open")}
+                className="absolute top-full mt-1 flex h-7 w-7 items-center justify-center rounded-full bg-yai-orange text-white shadow-lg ring-2 ring-white/80 transition hover:scale-110"
+              >
+                <MessageCircle size={14} />
+              </button>
+            </span>
             <a href="#join"      className="hover:text-yai-orange transition font-semibold whitespace-nowrap">{t("nav.join")}</a>
           </div>
         </div>
