@@ -1699,13 +1699,13 @@ function CustomersStrip() {
     },
     {
       step: "Step 6",
-      name: "Big Ai Brain",
+      name: "Unmanned Systems",
       clients: 1,
-      capacity: t("cap.boss"),
+      capacity: t("cap.unmanned"),
       h: 340,
       grad: "from-orange-300 to-orange-100",
       accent: "text-yai-orange",
-      icon: <BossBrainIcon />,
+      icon: <UnmannedIcon />,
     },
   ];
 
@@ -2064,6 +2064,43 @@ function BossBrainIcon() {
       <div className="text-[8px] font-extrabold uppercase tracking-wide text-yai-orange leading-tight text-center">
         5 factories<br />1 chat
       </div>
+    </div>
+  );
+}
+
+/* Step 6 · Unmanned systems — a quadcopter and a humanoid, drawn in the same
+   line weight as the other tower icons so the ladder stays one family. */
+function UnmannedIcon() {
+  const stroke = { fill: "none", stroke: "currentColor", strokeWidth: 1.6, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
+  return (
+    <div className="flex items-end justify-center gap-1">
+      <svg viewBox="0 0 24 24" className="w-10 h-10" aria-hidden="true" {...stroke}>
+        <ellipse cx="4.6" cy="5" rx="3" ry="0.9" />
+        <ellipse cx="19.4" cy="5" rx="3" ry="0.9" />
+        <line x1="8.6" y1="8.4" x2="5.2" y2="5.7" />
+        <line x1="15.4" y1="8.4" x2="18.8" y2="5.7" />
+        <rect x="8.4" y="8" width="7.2" height="5" rx="1.6" />
+        <circle cx="12" cy="14.6" r="1.4" />
+        <line x1="9.6" y1="13" x2="8.6" y2="16.4" />
+        <line x1="14.4" y1="13" x2="15.4" y2="16.4" />
+        <line x1="7.4" y1="16.8" x2="10" y2="16.8" />
+        <line x1="14" y1="16.8" x2="16.6" y2="16.8" />
+      </svg>
+      <svg viewBox="0 0 24 24" className="w-10 h-10" aria-hidden="true" {...stroke}>
+        <line x1="12" y1="1.6" x2="12" y2="3.2" />
+        <circle cx="12" cy="1.3" r="0.7" fill="currentColor" stroke="none" />
+        <rect x="8.4" y="3.2" width="7.2" height="5.6" rx="2.4" />
+        <circle cx="10.4" cy="6" r="0.7" fill="currentColor" stroke="none" />
+        <circle cx="13.6" cy="6" r="0.7" fill="currentColor" stroke="none" />
+        <line x1="12" y1="8.8" x2="12" y2="10.2" />
+        <rect x="7.6" y="10.2" width="8.8" height="7" rx="2" />
+        <line x1="7.6" y1="11.4" x2="5" y2="15" />
+        <line x1="16.4" y1="11.4" x2="19" y2="15" />
+        <line x1="10" y1="17.2" x2="10" y2="21.4" />
+        <line x1="14" y1="17.2" x2="14" y2="21.4" />
+        <line x1="8.8" y1="22" x2="11.2" y2="22" />
+        <line x1="12.8" y1="22" x2="15.2" y2="22" />
+      </svg>
     </div>
   );
 }
@@ -2481,7 +2518,7 @@ const SC_BEFORE: StaticStep[] = [
 
 const SC_AFTER: StaticStep[] = [
   { step: "Step 5", stage: "Ai Vision Solutions", plan: "Ai Vision Solutions", sub: "After ~6 months",      price: "+ $5,000", usdAmount: 5000, per: "/ year · 10 agents + 35 mini",       h: 410, bg: "from-violet-200 to-violet-50", accent: "text-yai-blue",   icon: SC_ClusterAgentic },
-  { step: "Step 6", stage: "Big Ai Brain", plan: "Big Ai Brain", sub: "Boss · after ~1 year", price: "+ $5,000", usdAmount: 5000, per: "/ year · talks across 5+ factories", h: 460, bg: "from-orange-200 to-orange-50", accent: "text-yai-orange", icon: SC_ClusterBrain },
+  { step: "Step 6", stage: "Unmanned Systems", plan: "Unmanned Systems", sub: "Drones · humanoids · after ~1 year", price: "+ $5,000", usdAmount: 5000, per: "/ year · talks across 5+ factories", h: 460, bg: "from-orange-200 to-orange-50", accent: "text-yai-orange", icon: <UnmannedIcon /> },
 ];
 
 function SC_Price({ s }: { s: StaticStep }) {
@@ -2666,7 +2703,7 @@ function PricingStaircase() {
                 <span className="text-xs font-extrabold uppercase tracking-[0.18em] text-yai-blue">Chaos → Digitalization</span>
               </div>
               <div style={{ width: 2 * 124 + 1 * 16 }} className="shrink-0 rounded-md bg-yai-orange/10 border border-yai-orange/30 py-2 text-center">
-                <span className="text-xs font-extrabold uppercase tracking-[0.18em] text-yai-orange">Big Ai Brain</span>
+                <span className="text-xs font-extrabold uppercase tracking-[0.18em] text-yai-orange">Ai Vision → Unmanned Systems</span>
               </div>
             </div>
 
