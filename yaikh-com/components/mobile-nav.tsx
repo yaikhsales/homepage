@@ -48,6 +48,7 @@ export default function MobileNav({
       children: [
         { label: "Meet Yai Agents", href: "/experience" },
         { label: "Media & Publications", href: "https://main.yaikh.com/" },
+        { label: "Task", href: "/task" },
       ],
     },
     { label: "Ai feed", href: "/ai-feed" },
