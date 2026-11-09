@@ -26,7 +26,8 @@ export default function Home() {
         <MobileNav hideLogin={false} />
 
         {/* Desktop nav */}
-        <div className="hidden lg:block">
+        {/* The full row needs ~1200px; below that the hamburger carries it. */}
+        <div className="hidden xl:block">
           <Nav />
         </div>
 
@@ -64,9 +65,9 @@ function Nav() {
         scrolled ? "bg-white/85 backdrop-blur-md border-b border-black/5" : "bg-transparent"
       }`}
     >
-      <nav className="max-w-[1600px] mx-auto px-6 lg:px-10 h-16 flex items-center justify-between gap-6">
+      <nav className="max-w-[1600px] mx-auto px-6 lg:px-8 h-16 flex items-center justify-between gap-3 xl:gap-6">
         {/* LEFT — logo + slogan + main nav links */}
-        <div className="flex items-center gap-6 lg:gap-8 min-w-0">
+        <div className="flex items-center gap-3 xl:gap-8 min-w-0">
           <a href="#top" aria-label="Yai · home" className="flex items-center gap-3.5 shrink-0">
             <Image
               src="/images/yai-logo.jpg"
@@ -77,7 +78,10 @@ function Nav() {
               unoptimized
               className="w-14 h-14 rounded-full drop-shadow-lg shrink-0"
             />
-            <span className={`hidden sm:block leading-tight transition-colors ${scrolled ? "text-yai-navy" : "text-white"}`}>
+            {/* Measured at 1280: logo block 226 + links 747 + flags 252 +
+                login 110 = 1335 before padding, so something has to give.
+                Below 2xl the slogan goes and the mobile header still shows it. */}
+            <span className={`hidden sm:max-xl:block min-[1600px]:block leading-tight transition-colors ${scrolled ? "text-yai-navy" : "text-white"}`}>
               <span className="block font-serif font-semibold text-[15px] tracking-tight">
                 {t("slogan1")}
               </span>
@@ -87,7 +91,7 @@ function Nav() {
             </span>
           </a>
           <div
-            className={`hidden lg:flex items-center gap-6 text-[13px] font-semibold transition-colors ${
+            className={`hidden xl:flex items-center gap-4 2xl:gap-5 text-[13px] font-semibold transition-colors whitespace-nowrap ${
               scrolled ? "text-yai-navy/80" : "text-white/90"
             }`}
           >
@@ -209,7 +213,7 @@ function LangFlags({ scrolled }: { scrolled: boolean }) {
     { code: "hi", label: "हिन्दी · Hindi",       svg: <FlagIN /> },
   ];
   return (
-    <div className="hidden md:flex items-center gap-1.5">
+    <div className="hidden md:flex items-center gap-1 xl:gap-1.5">
       {langs.map((l) => (
         <button
           key={l.code}
@@ -218,7 +222,7 @@ function LangFlags({ scrolled }: { scrolled: boolean }) {
           aria-label={`Switch to ${l.label}`}
           aria-pressed={lang === l.code}
           onClick={() => setLang(l.code)}
-          className={`group relative w-8 h-8 rounded-full overflow-hidden transition-all hover:-translate-y-0.5 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-yai-amber ${
+          className={`group relative w-7 h-7 rounded-full overflow-hidden transition-all hover:-translate-y-0.5 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-yai-amber ${
             lang === l.code ? "ring-2 ring-yai-amber scale-110" : ""
           }`}
           style={{

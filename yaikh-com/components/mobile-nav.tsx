@@ -58,7 +58,7 @@ export default function MobileNav({
     <>
       {/* Mobile nav — visible only on small screens */}
       <div
-        className={`lg:hidden fixed top-0 inset-x-0 z-40 transition-all duration-300 ${
+        className={`xl:hidden fixed top-0 inset-x-0 z-40 transition-all duration-300 ${
           scrolled
             ? "bg-white/85 backdrop-blur-md border-b border-black/5"
             : "bg-yai-navy/95 backdrop-blur-sm border-b border-white/10"
@@ -94,7 +94,7 @@ export default function MobileNav({
             onClick={() => setOpen(!open)}
             aria-label="Toggle menu"
             aria-expanded={open}
-            className={`lg:hidden flex items-center justify-center w-10 h-10 rounded-lg transition ${
+            className={`xl:hidden flex items-center justify-center w-10 h-10 rounded-lg transition ${
               scrolled ? "text-yai-navy hover:bg-black/5" : "text-white hover:bg-white/10"
             }`}
           >
@@ -106,7 +106,7 @@ export default function MobileNav({
       {/* Mobile menu backdrop + drawer */}
       {open && (
         <div
-          className="fixed inset-0 bg-black/70 z-[38] lg:hidden"
+          className="fixed inset-0 bg-black/70 z-[38] xl:hidden"
           onClick={() => setOpen(false)}
           role="presentation"
         />
@@ -114,7 +114,7 @@ export default function MobileNav({
 
       {/* Slide-out menu */}
       <div
-        className={`fixed top-20 left-0 right-0 z-[39] lg:hidden bg-yai-navy border-b border-white/20 transition-all duration-300 overflow-hidden ${
+        className={`fixed top-20 left-0 right-0 z-[39] xl:hidden bg-yai-navy border-b border-white/20 transition-all duration-300 overflow-hidden ${
           open ? "max-h-[calc(100vh-5rem)] opacity-100" : "max-h-0 opacity-0"
         }`}
       >
@@ -177,7 +177,7 @@ export default function MobileNav({
       </div>
 
       {/* Spacer to prevent content overlap on mobile */}
-      <div className="lg:hidden h-20" />
+      <div className="xl:hidden h-20" />
     </>
   );
 }
