@@ -1826,7 +1826,7 @@ const PhoneFrame = ({
                                                                 }
                                                                 onSendMessage(action.text);
                                                             }}
-                                                            className={`text-left rounded-full bg-gradient-to-r ${bot.lightAccent || 'from-gray-100 to-gray-200'} border ${bot.borderColor || 'border-gray-200'} ${bot.textColor || 'text-gray-800'} hover:opacity-80 hover:shadow-md transition flex items-center font-medium ${isAccountingFilter ? 'px-3 py-1.5 gap-1.5 text-xs' : 'px-5 py-3 gap-2 text-sm flex-1'} ${isActiveTopic ? 'ring-2 ring-offset-1 ring-emerald-500 shadow-md' : ''}`}
+                                                            className={`text-left rounded-full bg-gradient-to-r ${bot.lightAccent || 'from-gray-100 to-gray-200'} ${bot.textColor || 'text-gray-800'} hover:opacity-80 hover:shadow-md transition flex items-center font-medium ${isAccountingFilter ? 'px-3 py-1.5 gap-1.5 text-xs' : 'px-3.5 py-2 gap-1.5 text-sm'} ${isActiveTopic ? 'ring-2 ring-offset-1 ring-emerald-500 shadow-md' : ''}`}
                                                         >
                                                             {action.highlight && !isAccountingFilter && <Sparkles size={16} className={`text-${bot.bgGradient.split('-')[1]}-500`} />}
                                                             <span className={isAccountingFilter ? '' : 'flex-1'}>{chipLabel}</span>
@@ -6174,72 +6174,30 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                     onScroll={checkScrollPosition}
                 >
                     <style>{`
+                    /* Responsive board (Gamini 2026-11-09): frame width follows the
+                       viewing screen — one fluid clamp, no stepped media queries.
+                       The frame always fills its .bot-container exactly, so the
+                       first column can never overhang the left edge. */
                     .phone-frame {
                         width: 100%;
                         height: 100%;
                         min-height: 100%;
                         max-height: 100%;
                     }
-                    @media (min-width: 1920px) {
-                        .phone-frame {
-                            width: 380px;
-                            height: 100%;
-                            min-height: 100%;
-                            max-height: 100%;
-                        }
-                    }
-                    @media (min-width: 1600px) and (max-width: 1919px) {
-                        .phone-frame {
-                            width: 340px;
-                            height: 100%;
-                            min-height: 100%;
-                            max-height: 100%;
-                        }
-                    }
-                    @media (min-width: 1280px) and (max-width: 1599px) {
-                        .phone-frame {
-                            width: 300px;
-                            height: 100%;
-                            min-height: 100%;
-                            max-height: 100%;
-                        }
-                    }
-                    @media (min-width: 1024px) and (max-width: 1279px) {
-                        .phone-frame {
-                            width: 280px;
-                            height: 100%;
-                            min-height: 100%;
-                            max-height: 100%;
-                        }
-                    }
-                    @media (min-width: 768px) and (max-width: 1023px) {
-                        .phone-frame {
-                            width: 260px;
-                            height: 100%;
-                            min-height: 100%;
-                            max-height: 100%;
-                        }
-                    }
-                    @media (max-width: 767px) {
-                        .phone-frame {
-                            width: 100%;
-                            min-width: 240px;
-                            max-width: 320px;
-                            height: 100%;
-                            min-height: 100%;
-                            max-height: 100%;
-                        }
-                    }
                     .bot-container {
-                        flex-shrink: 0;
+                        width: clamp(250px, 23vw, 380px);
+                        flex: 0 0 auto;
                         display: flex;
                         flex-direction: column;
-                        align-items: center;
+                        align-items: stretch;
                         height: 100%;
                         max-height: 100%;
                         justify-content: space-between;
                         overflow: visible;
                         padding-bottom: 0;
+                    }
+                    @media (max-width: 767px) {
+                        .bot-container { width: min(85vw, 320px); }
                     }
                     .phone-frame-wrapper {
                         flex: 1 1 auto;
@@ -6255,7 +6213,10 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                         max-height: 100% !important;
                     }
                 `}</style>
-                    <div className="flex gap-2 sm:gap-4 md:gap-6 items-stretch justify-start w-max h-full min-h-full flex-1">
+                    {/* flex-1 (not h-full) so the row height = space under the
+                        header — a forced 100% pushed every composer below the
+                        fold on laptop screens. */}
+                    <div className="flex gap-2 sm:gap-4 md:gap-6 items-stretch justify-start w-max flex-1 min-h-0">
                         {visibleBots.map((bot) => {
                             const botState = botStates[bot.id];
                             return (
