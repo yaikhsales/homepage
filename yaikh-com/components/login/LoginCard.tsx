@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { MadeInCambodia } from "@/components/plan/MadeInCambodia";
 
-export function LoginCard() {
+export function LoginCard({ redirectTo = "/plan", title }: { redirectTo?: string; title?: string } = {}) {
   const router = useRouter();
   const [code, setCode] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -29,8 +29,8 @@ export function LoginCard() {
       const data = await res.json();
       if (res.ok && data.ok) {
         // replace, not push — otherwise the login URL stays in history and
-        // hitting Chrome's Back from /plan lands back on the login page.
-        router.replace("/plan");
+        // hitting Chrome's Back from the portal lands back on the login page.
+        router.replace(redirectTo);
       } else {
         setError(data.error || "Invalid code");
         setShake((n) => n + 1);
@@ -72,6 +72,17 @@ export function LoginCard() {
           className="h-32 sm:h-36 w-auto rounded-lg shadow-2xl"
         />
       </motion.div>
+
+      {title && (
+        <motion.div
+          initial={{ opacity: 0, y: -4 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.4 }}
+          className="text-center mb-6 text-white text-xs font-extrabold uppercase tracking-[0.28em]"
+        >
+          {title}
+        </motion.div>
+      )}
 
       <motion.form
         initial={{ opacity: 0, y: 10 }}

@@ -12,7 +12,8 @@ export function middleware(req: NextRequest) {
   const session = req.cookies.get("yai_session");
   if (!session?.value) {
     const url = req.nextUrl.clone();
-    url.pathname = "/SDTV";
+    // /task has its own branded gate; /plan + /strategy share SDTV.
+    url.pathname = req.nextUrl.pathname.startsWith("/task") ? "/task-login" : "/SDTV";
     url.searchParams.set("redirected", "1");
     return NextResponse.redirect(url);
   }
