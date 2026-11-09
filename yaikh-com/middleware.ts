@@ -12,8 +12,7 @@ export function middleware(req: NextRequest) {
   const session = req.cookies.get("yai_session");
   if (!session?.value) {
     const url = req.nextUrl.clone();
-    // /task has its own branded gate; /plan + /strategy share SDTV.
-    url.pathname = req.nextUrl.pathname.startsWith("/task") ? "/task-login" : "/SDTV";
+    url.pathname = "/SDTV";
     url.searchParams.set("redirected", "1");
     return NextResponse.redirect(url);
   }
@@ -24,5 +23,7 @@ export const config = {
   // /strategy is the internal funding board — same access code as /plan, never
   // public. It names real people and how to reach them, so it must never be
   // reachable without the cookie.
-  matcher: ["/plan/:path*", "/strategy", "/strategy/:path*", "/task", "/task/:path*"],
+  // /task handles its own login inline (shows the TASK gate card when no
+  // cookie), so middleware does NOT redirect /task — it stays at /task.
+  matcher: ["/plan/:path*", "/strategy", "/strategy/:path*"],
 };

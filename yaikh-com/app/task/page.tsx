@@ -1,23 +1,33 @@
 /* /task — events calendar.
  *
- * Gated by the shared yai_session cookie (middleware bounces to /SDTV).
- * Access codes gK12@# and tL25@# must be present in Railway env var
- * YAI_ACCESS_CODES (format: `GK12@#:Gamini task,TL25@#:Texlink task`).
+ * Single URL: unauthenticated visitors see the TASK login card inline;
+ * authenticated viewers see the calendar. No /task-login redirect.
+ *
+ * Access codes (set in Railway YAI_ACCESS_CODES):
+ *   GK12@#:Gamini task
+ *   TL25@#:Texlink task
  *
  * Data source (phase 2): events harvested by _strategy-board/telegram/scout.py
  * from the GOV STARTUP folder (21 channels) + TAFTAC MEMBERS topics. For
  * now the calendar renders empty with a "feed pending" placeholder.
  */
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { verifySession, COOKIE_NAME } from "@/lib/auth";
 import { TaskCalendar } from "@/components/task/TaskCalendar";
+import { LoginCard } from "@/components/login/LoginCard";
 
 export const dynamic = "force-dynamic";
 
 export default function TaskPage() {
   const viewer = verifySession(cookies().get(COOKIE_NAME)?.value);
-  if (!viewer) redirect("/SDTV?redirected=1");
+
+  if (!viewer) {
+    return (
+      <main className="min-h-screen leather-bg flex items-center justify-center p-4 sm:p-6">
+        <LoginCard redirectTo="/task" title="Task · Events Calendar" />
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-[#f3f0e8] px-4 py-8 sm:px-8 sm:py-12">
