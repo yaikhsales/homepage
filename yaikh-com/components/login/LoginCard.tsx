@@ -31,6 +31,12 @@ export function LoginCard({ redirectTo = "/plan", title }: { redirectTo?: string
         // replace, not push — otherwise the login URL stays in history and
         // hitting Chrome's Back from the portal lands back on the login page.
         router.replace(redirectTo);
+        // When the login form lives AT the destination URL (e.g. /task
+        // shows the card inline when there is no cookie), router.replace
+        // to the same URL is a no-op and the server component does not
+        // re-render — refresh forces the RSC to re-fetch with the new
+        // cookie and swap the card for the real page.
+        router.refresh();
       } else {
         setError(data.error || "Invalid code");
         setShake((n) => n + 1);
