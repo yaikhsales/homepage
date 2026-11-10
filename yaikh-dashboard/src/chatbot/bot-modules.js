@@ -1578,8 +1578,10 @@ const PhoneFrame = ({
                                 identity shifts to the active topic agent so the
                                 user knows "I'm now talking to the Purchase
                                 Request specialist", not the parent PA. */}
-                            <div className={notifSlug ? "flex-1 min-w-0 text-center px-1 leading-tight [&>span]:text-[13px]" : "absolute left-1/2 transform -translate-x-1/2"}>
-                                <span className={`text-sm font-semibold ${bot.textColor || 'text-gray-800'}`}>
+                            {/* One line, truncating — never wraps under the flag
+                                or behind the Yai badge (Gamini 2026-11-11). */}
+                            <div className={notifSlug ? "flex-1 min-w-0 text-center pl-4 pr-2" : "absolute left-1/2 transform -translate-x-1/2"}>
+                                <span className={`block truncate whitespace-nowrap ${notifSlug ? "text-[13px]" : "text-sm"} font-semibold ${bot.textColor || 'text-gray-800'}`}>
                                     {botId === 'accounting-bot' && activeTopic
                                         ? `${t(activeTopic)} PA`
                                         : t(bot.name)}
