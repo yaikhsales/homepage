@@ -6188,11 +6188,11 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                         max-height: 100%;
                     }
                     .bot-container {
-                        /* Full comfortable width always — the slider handles
-                           left/right, so frames never shrink into narrow
-                           unreadable columns (Gamini 2026-11-10; +10% fatter
-                           2026-11-11). */
-                        width: 420px;
+                        /* Adjusts with the screen (Gamini 2026-11-11): ~26% of
+                           the viewport per frame — about 3.5 frames in view on
+                           any monitor — never narrower than 320px (the slider
+                           owns the overflow) and never a cartoonish 500+. */
+                        width: clamp(320px, 26vw, 480px);
                         flex: 0 0 auto;
                         display: flex;
                         flex-direction: column;
