@@ -18,14 +18,36 @@ import { TeamTaskList } from "./TeamTaskList";
 
 const IDLE_MS = 60_000; // 1 minute
 
-export function TaskPageInner({ viewer, events, teamOptions }: {
+export function TaskPageInner({ viewer, events: initialEvents, teamOptions }: {
   viewer: string;
   events: TaskEvent[];
   teamOptions: string[];
 }) {
   const router = useRouter();
+  const [events, setEvents] = useState<TaskEvent[]>(initialEvents);
+  const [feedState, setFeedState] = useState<"idle" | "loading" | "ok" | "err">("idle");
   const [secondsLeft, setSecondsLeft] = useState(IDLE_MS / 1000);
   const loggingOut = useRef(false);
+
+  // Pull live events from /api/events once on mount; keeps initialEvents
+  // as a safe fallback if the API is down.
+  useEffect(() => {
+    let cancelled = false;
+    setFeedState("loading");
+    fetch("/api/events", { credentials: "same-origin" })
+      .then((r) => r.ok ? r.json() : Promise.reject(r.statusText))
+      .then((d) => {
+        if (cancelled) return;
+        if (d?.ok && Array.isArray(d.events)) {
+          setEvents(d.events);
+          setFeedState("ok");
+        } else {
+          setFeedState("err");
+        }
+      })
+      .catch(() => { if (!cancelled) setFeedState("err"); });
+    return () => { cancelled = true; };
+  }, []);
 
   const logout = useCallback(async () => {
     if (loggingOut.current) return;
@@ -81,6 +103,11 @@ export function TaskPageInner({ viewer, events, teamOptions }: {
             </p>
             <div className="mt-1 text-[11px] text-gray-500">
               Signed in as <strong>{viewer}</strong>
+              {feedState === "loading" && <span> · loading events…</span>}
+              {feedState === "ok" && <span> · {events.length} events loaded</span>}
+              {feedState === "err" && (
+                <span className="text-rose-600"> · events feed unavailable</span>
+              )}
             </div>
           </div>
           <div className="flex flex-col items-end gap-1 shrink-0">
