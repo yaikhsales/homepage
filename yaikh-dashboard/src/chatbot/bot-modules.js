@@ -6190,14 +6190,17 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                     .bot-container {
                         /* Full comfortable width always — the slider handles
                            left/right, so frames never shrink into narrow
-                           unreadable columns (Gamini 2026-11-10). */
-                        width: 380px;
+                           unreadable columns (Gamini 2026-11-10; +10% fatter
+                           2026-11-11). */
+                        width: 420px;
                         flex: 0 0 auto;
                         display: flex;
                         flex-direction: column;
                         align-items: stretch;
-                        height: 100%;
-                        max-height: 100%;
+                        /* 80% tall (Gamini 2026-11-11: "reduce the height of
+                           each 20%") — shorter frames, anchored to the top. */
+                        height: 80%;
+                        max-height: 80%;
                         justify-content: space-between;
                         overflow: visible;
                         padding-bottom: 0;
