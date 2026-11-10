@@ -2257,7 +2257,10 @@ const PhoneFrame = ({
                         </div>
 
                         {/* Input Field with Thinking Status */}
-                        <div className={`pa-composer flex-shrink-0 px-4 py-4 border-t ${bot.borderColor || 'border-gray-200'}`}>
+                        {/* pb-7: the composer floats up off the panel's bottom
+                            edge instead of sitting flush on the rounded corner
+                            (Gamini 2026-11-10). */}
+                        <div className={`pa-composer flex-shrink-0 px-4 pt-4 pb-7 border-t ${bot.borderColor || 'border-gray-200'}`}>
                             {uploadedImage && (
                                 <div className="relative inline-block mb-3 ml-4 border-2 border-slate-200 rounded-lg overflow-hidden shadow-sm">
                                     <img src={uploadedImage} alt="Upload preview" className="h-16 w-auto object-cover bg-white" />
