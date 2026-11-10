@@ -6188,7 +6188,10 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                         max-height: 100%;
                     }
                     .bot-container {
-                        width: clamp(250px, 23vw, 380px);
+                        /* Full comfortable width always — the slider handles
+                           left/right, so frames never shrink into narrow
+                           unreadable columns (Gamini 2026-11-10). */
+                        width: 380px;
                         flex: 0 0 auto;
                         display: flex;
                         flex-direction: column;
