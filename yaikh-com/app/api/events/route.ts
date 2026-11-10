@@ -34,7 +34,8 @@ export async function GET() {
     const events = rows.map((r) => ({
       id: String(r._id),
       date: r.date,
-      title: r.title,
+      title: r.titleEn || r.title,       // prefer EN; fallback to original
+      titleOriginal: r.title,            // keep the KM original around
       kind: r.kind,
       source: r.source,
       status: r.status || "proposed",
