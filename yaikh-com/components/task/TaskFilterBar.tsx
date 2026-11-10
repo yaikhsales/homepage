@@ -85,7 +85,7 @@ export function TaskFilterBar({
   const sources = Array.from(srcMap.values()).sort((a, b) => b.count - a.count);
 
   return (
-    <section className="mb-4 rounded-lg border border-[#d9d3c1] bg-white/70 p-3 sm:p-4">
+    <section className="mt-4 rounded-lg border border-[#d9d3c1] bg-white/70 p-3 sm:p-4">
       {/* Row 1 — months */}
       <div className="flex items-center gap-2 flex-wrap">
         <button

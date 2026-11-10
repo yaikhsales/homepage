@@ -157,6 +157,8 @@ export function TaskPageInner({ viewer, events: initialEvents, teamOptions }: {
           </div>
         </header>
 
+        <TaskCalendar events={filteredEvents} cursorMonth={cursorMonth} />
+
         <TaskFilterBar
           cursorMonth={cursorMonth}
           onShift={shiftCursor}
@@ -167,7 +169,6 @@ export function TaskPageInner({ viewer, events: initialEvents, teamOptions }: {
           events={events}
         />
 
-        <TaskCalendar events={filteredEvents} cursorMonth={cursorMonth} />
         <TeamTaskList events={filteredEvents} teamOptions={teamOptions} />
       </div>
     </main>
