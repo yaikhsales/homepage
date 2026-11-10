@@ -119,23 +119,6 @@ export function TaskPageInner({ viewer, events: initialEvents, teamOptions }: {
   return (
     <main className="min-h-screen bg-[#f3f0e8] px-4 py-8 sm:px-8 sm:py-12">
       <div className="max-w-7xl mx-auto">
-        <header className="mb-4">
-          <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-yai-orange">
-            Yai · Task
-          </div>
-          <h1 className="mt-1 text-2xl sm:text-3xl font-extrabold text-yai-navy">
-            Events Calendar
-          </h1>
-          <div className="mt-1 text-[11px] text-gray-500">
-            Signed in as <strong>{viewer}</strong>
-            {feedState === "loading" && <span> · loading events…</span>}
-            {feedState === "ok" && <span> · {events.length} events loaded</span>}
-            {feedState === "err" && (
-              <span className="text-rose-600"> · events feed unavailable</span>
-            )}
-          </div>
-        </header>
-
         <div className="mb-3 flex items-center justify-end gap-3">
           <div
             className={`text-[10px] ${secondsLeft <= 15 ? "text-rose-600 font-semibold" : "text-gray-500"}`}
