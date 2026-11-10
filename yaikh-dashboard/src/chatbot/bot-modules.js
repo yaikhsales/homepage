@@ -2262,7 +2262,7 @@ const PhoneFrame = ({
                         {/* pb-7: the composer floats up off the panel's bottom
                             edge instead of sitting flush on the rounded corner
                             (Gamini 2026-11-10). */}
-                        <div className={`pa-composer flex-shrink-0 px-4 pt-4 pb-7 border-t ${bot.borderColor || 'border-gray-200'}`}>
+                        <div className={`pa-composer flex-shrink-0 px-4 pt-3 pb-4 border-t ${bot.borderColor || 'border-gray-200'}`}>
                             {uploadedImage && (
                                 <div className="relative inline-block mb-3 ml-4 border-2 border-slate-200 rounded-lg overflow-hidden shadow-sm">
                                     <img src={uploadedImage} alt="Upload preview" className="h-16 w-auto object-cover bg-white" />
@@ -2296,9 +2296,9 @@ const PhoneFrame = ({
                                                 ? `${t('Ask about')} ${t(activeTopic)}`
                                                 : `${t('Ask')} ${t(bot.name)}`
                                         }
-                                        rows={3}
+                                        rows={1}
                                         className={`w-full bg-transparent border-0 outline-none resize-none px-4 pt-3 pb-1 text-base leading-relaxed cursor-text ${bot.textColor || 'text-gray-800'} placeholder:${bot.textColor || 'text-gray-400'}`}
-                                        style={{ minHeight: '4.5rem', maxHeight: '22.5rem', overflowY: 'auto' }}
+                                        style={{ minHeight: '2.75rem', maxHeight: '22.5rem', overflowY: 'auto' }}
                                     />
                                     <div className="flex items-center justify-end gap-1 px-3 pb-2">
                                         {(isListening || isTyping) && (
@@ -6194,7 +6194,7 @@ const BotModules = ({ onClose, moduleContext, onVersionChange, currentVersion = 
                            the viewport per frame — about 3.5 frames in view on
                            any monitor — never narrower than 320px (the slider
                            owns the overflow) and never a cartoonish 500+. */
-                        width: clamp(320px, 26vw, 480px);
+                        width: clamp(360px, 32vw, 600px); /* +25% (Gamini 2026-11-11) */
                         flex: 0 0 auto;
                         display: flex;
                         flex-direction: column;
