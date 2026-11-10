@@ -31,18 +31,23 @@ export async function GET() {
       .limit(500)
       .toArray();
 
-    const events = rows.map((r) => ({
-      id: String(r._id),
-      date: r.date,
-      title: r.titleEn || r.title,       // prefer EN; fallback to original
-      titleOriginal: r.title,            // keep the KM original around
-      kind: r.kind,
-      source: r.source,
-      status: r.status || "proposed",
-      venue: r.venue || "",
-      time: r.time || "",
-      link: r.link || "",
-    }));
+    const events = rows.map((r) => {
+      const slug: string = r.sourceSlug || "";
+      return {
+        id: String(r._id),
+        date: r.date,
+        title: r.titleEn || r.title,       // prefer EN; fallback to original
+        titleOriginal: r.title,            // keep the KM original around
+        kind: r.kind,
+        source: r.source,
+        sourceSlug: slug,
+        logo: slug ? `/task-logos/${slug}.jpg` : "",
+        status: r.status || "proposed",
+        venue: r.venue || "",
+        time: r.time || "",
+        link: r.link || "",
+      };
+    });
 
     return NextResponse.json(
       { ok: true, count: events.length, events },

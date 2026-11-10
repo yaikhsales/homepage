@@ -11,10 +11,11 @@
  * a thin shell.
  */
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { TaskCalendar, type TaskEvent } from "./TaskCalendar";
 import { TeamTaskList } from "./TeamTaskList";
+import { TaskFilterBar, keyOf, type MonthKey } from "./TaskFilterBar";
 
 const IDLE_MS = 60_000; // 1 minute
 
@@ -28,6 +29,35 @@ export function TaskPageInner({ viewer, events: initialEvents, teamOptions }: {
   const [feedState, setFeedState] = useState<"idle" | "loading" | "ok" | "err">("idle");
   const [secondsLeft, setSecondsLeft] = useState(IDLE_MS / 1000);
   const loggingOut = useRef(false);
+
+  // Filter / cursor state. cursorMonth is the middle of the 3-month strip.
+  // selectedMonth + selectedSource scope what the list below shows.
+  const today = useMemo(() => new Date(), []);
+  const [cursorMonth, setCursorMonth] = useState<MonthKey>(
+    () => keyOf(today.getFullYear(), today.getMonth())
+  );
+  const [selectedMonth, setSelectedMonth] = useState<MonthKey | null>(null);
+  const [selectedSource, setSelectedSource] = useState<string | null>(null);
+
+  const shiftCursor = useCallback((delta: number) => {
+    setCursorMonth((mk) => {
+      const [y, m] = mk.split("-").map(Number);
+      const total = y * 12 + (m - 1) + delta;
+      const ny = Math.floor(total / 12);
+      const nm = ((total % 12) + 12) % 12;
+      return `${ny}-${String(nm + 1).padStart(2, "0")}`;
+    });
+    // When the strip shifts, drop any month selection that leaves the view.
+    setSelectedMonth(null);
+  }, []);
+
+  const filteredEvents = useMemo(() => {
+    return events.filter((e) => {
+      if (selectedMonth && e.date.slice(0, 7) !== selectedMonth) return false;
+      if (selectedSource && e.sourceSlug !== selectedSource) return false;
+      return true;
+    });
+  }, [events, selectedMonth, selectedSource]);
 
   // Pull live events from /api/events once on mount; keeps initialEvents
   // as a safe fallback if the API is down.
@@ -127,8 +157,18 @@ export function TaskPageInner({ viewer, events: initialEvents, teamOptions }: {
           </div>
         </header>
 
-        <TaskCalendar events={events} />
-        <TeamTaskList events={events} teamOptions={teamOptions} />
+        <TaskFilterBar
+          cursorMonth={cursorMonth}
+          onShift={shiftCursor}
+          selectedMonth={selectedMonth}
+          onSelectMonth={setSelectedMonth}
+          selectedSource={selectedSource}
+          onSelectSource={setSelectedSource}
+          events={events}
+        />
+
+        <TaskCalendar events={filteredEvents} cursorMonth={cursorMonth} />
+        <TeamTaskList events={filteredEvents} teamOptions={teamOptions} />
       </div>
     </main>
   );

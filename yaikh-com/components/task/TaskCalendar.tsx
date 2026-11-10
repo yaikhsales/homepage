@@ -11,9 +11,14 @@ export type TaskEvent = {
   id: string;
   date: string; // ISO yyyy-mm-dd
   title: string;
+  titleOriginal?: string;
   source?: string;
+  sourceSlug?: string;
+  logo?: string;              // "/task-logos/<slug>.jpg"
   kind?: "funding" | "expo" | "meeting" | "training" | "tender" | "other";
   status?: "proposed" | "go" | "skip" | "later";
+  venue?: string;
+  time?: string;
   link?: string;
 };
 
@@ -114,13 +119,23 @@ function shiftMonth(y: number, m: number, delta: number): { y: number; m: number
   return { y: Math.floor(total / 12), m: ((total % 12) + 12) % 12 };
 }
 
-export function TaskCalendar({ events }: { events: TaskEvent[] }) {
+export function TaskCalendar({ events, cursorMonth }: {
+  events: TaskEvent[];
+  cursorMonth?: string; // "yyyy-mm" — when provided, calendar follows this; otherwise self-managed
+}) {
   const today = useMemo(() => new Date(), []);
   // Cursor is the MIDDLE month of the three-month strip.
-  const [cursor, setCursor] = useState(() => ({
+  const [internalCursor, setInternalCursor] = useState(() => ({
     y: today.getFullYear(),
     m: today.getMonth(),
   }));
+  const cursor = cursorMonth
+    ? (() => {
+        const [y, m] = cursorMonth.split("-").map(Number);
+        return { y, m: m - 1 };
+      })()
+    : internalCursor;
+  const setCursor = setInternalCursor;
 
   const byDay = useMemo(() => {
     const m = new Map<string, TaskEvent[]>();
@@ -145,12 +160,15 @@ export function TaskCalendar({ events }: { events: TaskEvent[] }) {
     setCursor((c) => shiftMonth(c.y, c.m, delta));
   };
 
+  const controlled = Boolean(cursorMonth);
+
   return (
     <section className="rounded-lg border border-[#d9d3c1] bg-[#eceadf] p-4 sm:p-5">
       <header className="flex items-center justify-between mb-3">
         <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-gray-700">
           Events · {upcomingCount} upcoming
         </div>
+        {!controlled && (
         <div className="flex items-center gap-2">
           <button
             type="button"
@@ -172,6 +190,7 @@ export function TaskCalendar({ events }: { events: TaskEvent[] }) {
             ›
           </button>
         </div>
+        )}
       </header>
 
       <div className="flex flex-col lg:flex-row gap-4">
