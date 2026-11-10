@@ -6,6 +6,7 @@
  * header. Events are a flat array the caller supplies. */
 
 import { useMemo, useState } from "react";
+import { HOLIDAY_BY_ISO } from "./cambodia-holidays";
 
 export type TaskEvent = {
   id: string;
@@ -80,20 +81,31 @@ function MonthGrid({ year, month, byDay, today }: {
           const iso = isoDay(year, month, day);
           const dayEvents = byDay.get(iso) || [];
           const isToday = isSameDay(today, year, month, day);
+          const holiday = HOLIDAY_BY_ISO.get(iso);
+          const base = isToday
+            ? "border-2 border-yai-blue bg-white"
+            : holiday
+              ? "border border-rose-300 bg-rose-100/70"
+              : "border border-gray-300/70 bg-[#cfcbba]/60";
+          const dayColor = isToday
+            ? "text-yai-blue"
+            : holiday ? "text-rose-700" : "text-gray-700";
           return (
             <div
               key={i}
-              className={`h-14 sm:h-16 rounded px-1 py-0.5 overflow-hidden ${
-                isToday
-                  ? "border-2 border-yai-blue bg-white"
-                  : "border border-gray-300/70 bg-[#cfcbba]/60"
-              }`}
+              title={holiday || undefined}
+              className={`h-14 sm:h-16 rounded px-1 py-0.5 overflow-hidden ${base}`}
             >
-              <div className={`text-[10px] font-bold leading-none ${isToday ? "text-yai-blue" : "text-gray-700"}`}>
+              <div className={`text-[10px] font-bold leading-none ${dayColor}`}>
                 {day}
               </div>
+              {holiday && (
+                <div className="mt-0.5 truncate text-[8px] leading-tight font-semibold text-rose-700 uppercase tracking-wide">
+                  {holiday}
+                </div>
+              )}
               <div className="mt-0.5 space-y-0.5">
-                {dayEvents.slice(0, 2).map((e) => (
+                {dayEvents.slice(0, holiday ? 1 : 2).map((e) => (
                   <div
                     key={e.id}
                     title={e.title}
@@ -102,8 +114,10 @@ function MonthGrid({ year, month, byDay, today }: {
                     {e.title}
                   </div>
                 ))}
-                {dayEvents.length > 2 && (
-                  <div className="text-[8px] text-gray-600">+{dayEvents.length - 2}</div>
+                {dayEvents.length > (holiday ? 1 : 2) && (
+                  <div className="text-[8px] text-gray-600">
+                    +{dayEvents.length - (holiday ? 1 : 2)}
+                  </div>
                 )}
               </div>
             </div>
