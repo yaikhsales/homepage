@@ -63,11 +63,15 @@ function daysFromNow(iso: string): number {
   return Math.round((d.getTime() - today.getTime()) / 86_400_000);
 }
 
-export function TeamTaskList({ events, teamOptions = [] }: {
+export function TeamTaskList({ events, teamOptions = [], overrides: overridesProp, onSetStatus, onSetAssignee }: {
   events: TaskEvent[];
   teamOptions?: string[];
+  overrides?: Record<string, { status?: Status; assignee?: string }>;
+  onSetStatus?: (id: string, status: Status) => void;
+  onSetAssignee?: (id: string, assignee: string) => void;
 }) {
-  const [overrides, setOverrides] = useState<Record<string, { status?: Status; assignee?: string }>>({});
+  const [localOverrides, setLocalOverrides] = useState<Record<string, { status?: Status; assignee?: string }>>({});
+  const overrides = overridesProp ?? localOverrides;
   const [sort, setSort] = useState<SortMode>("month-source");
 
   const upcoming = useMemo(() => {
@@ -75,8 +79,9 @@ export function TeamTaskList({ events, teamOptions = [] }: {
     today.setHours(0, 0, 0, 0);
     return [...events]
       .filter((e) => new Date(e.date) >= today)
+      .filter((e) => (overrides[e.id]?.status ?? e.status) !== "skip")
       .sort((a, b) => a.date.localeCompare(b.date));
-  }, [events]);
+  }, [events, overrides]);
 
   // Group: month → source → [events]
   const grouped = useMemo(() => {
@@ -101,10 +106,12 @@ export function TeamTaskList({ events, teamOptions = [] }: {
   }, [upcoming]);
 
   const setStatus = (id: string, status: Status) => {
-    setOverrides((o) => ({ ...o, [id]: { ...(o[id] || {}), status } }));
+    if (onSetStatus) onSetStatus(id, status);
+    else setLocalOverrides((o) => ({ ...o, [id]: { ...(o[id] || {}), status } }));
   };
   const setAssignee = (id: string, assignee: string) => {
-    setOverrides((o) => ({ ...o, [id]: { ...(o[id] || {}), assignee } }));
+    if (onSetAssignee) onSetAssignee(id, assignee);
+    else setLocalOverrides((o) => ({ ...o, [id]: { ...(o[id] || {}), assignee } }));
   };
 
   const statusOf = (e: TaskEvent): Status =>

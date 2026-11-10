@@ -17,7 +17,7 @@ import { TaskCalendar, type TaskEvent } from "./TaskCalendar";
 import { TeamTaskList } from "./TeamTaskList";
 import { TaskFilterBar, keyOf, type MonthKey } from "./TaskFilterBar";
 
-const IDLE_MS = 60_000; // 1 minute
+const IDLE_MS = 5 * 60_000; // 5 minutes
 
 export function TaskPageInner({ viewer, events: initialEvents, teamOptions }: {
   viewer: string;
@@ -49,6 +49,16 @@ export function TaskPageInner({ viewer, events: initialEvents, teamOptions }: {
     });
     // When the strip shifts, drop any month selection that leaves the view.
     setSelectedMonth(null);
+  }, []);
+
+  // Per-event local overrides (go / skip / later / assignee) — survive
+  // interactions within the session, persist back to Mongo later.
+  const [overrides, setOverrides] = useState<Record<string, { status?: "proposed" | "go" | "skip" | "later"; assignee?: string }>>({});
+  const setStatus = useCallback((id: string, status: "proposed" | "go" | "skip" | "later") => {
+    setOverrides((o) => ({ ...o, [id]: { ...(o[id] || {}), status } }));
+  }, []);
+  const setAssignee = useCallback((id: string, assignee: string) => {
+    setOverrides((o) => ({ ...o, [id]: { ...(o[id] || {}), assignee } }));
   }, []);
 
   const filteredEvents = useMemo(() => {
@@ -135,7 +145,12 @@ export function TaskPageInner({ viewer, events: initialEvents, teamOptions }: {
           </button>
         </div>
 
-        <TaskCalendar events={filteredEvents} cursorMonth={cursorMonth} />
+        <TaskCalendar
+          events={filteredEvents}
+          cursorMonth={cursorMonth}
+          overrides={overrides}
+          onSetStatus={setStatus}
+        />
 
         <TaskFilterBar
           cursorMonth={cursorMonth}
@@ -147,7 +162,13 @@ export function TaskPageInner({ viewer, events: initialEvents, teamOptions }: {
           events={events}
         />
 
-        <TeamTaskList events={filteredEvents} teamOptions={teamOptions} />
+        <TeamTaskList
+          events={filteredEvents}
+          teamOptions={teamOptions}
+          overrides={overrides}
+          onSetStatus={setStatus}
+          onSetAssignee={setAssignee}
+        />
       </div>
     </main>
   );
