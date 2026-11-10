@@ -1500,7 +1500,9 @@ const PhoneFrame = ({
 
                         {/* Header with Bot Name and Avatar */}
                         <div ref={paHeaderRef} className={`flex-shrink-0 flex items-center justify-between ${notifSlug ? 'px-3' : 'px-4'} pt-12 pb-3 border-b ${KHMER_NEW_YEAR.isActive ? 'border-red-400/50 bg-gradient-to-r from-red-600/10 via-orange-500/10 to-yellow-500/10' : bot.borderColor || 'border-gray-200'} relative z-10`}>
-                            <div className="flex items-center gap-2">
+                            {/* gap-4: Icom and Yai breathe apart — their badges
+                                were colliding (Gamini 2026-11-11: "spaced!"). */}
+                            <div className="flex items-center gap-4">
                                 <button
                                     onClick={() => {
                                         // Department PAs: the Icom button is the TEAM CHAT —
@@ -1548,7 +1550,7 @@ const PhoneFrame = ({
                                         <span className="relative inline-flex items-center gap-1">
                                             <MessageCircle size={18} className={bot.textColor || 'text-gray-600'} />
                                             <span className={`text-[10px] font-black ${bot.textColor || 'text-gray-600'}`}>Icom</span>
-                                            {icomUnread > 0 && <span className="absolute -top-2.5 -right-5 min-w-[16px] h-4 px-1 rounded-full bg-rose-600 text-white text-[9px] font-bold leading-4 text-center ring-2 ring-white shadow-sm">{icomUnread > 99 ? '99+' : icomUnread}</span>}
+                                            {icomUnread > 0 && <span className="absolute -top-2.5 -right-3 min-w-[16px] h-4 px-1 rounded-full bg-rose-600 text-white text-[9px] font-bold leading-4 text-center ring-2 ring-white shadow-sm">{icomUnread > 99 ? '99+' : icomUnread}</span>}
                                         </span>
                                     ) : (
                                         <Menu size={18} className={bot.textColor || 'text-gray-600'} />
