@@ -19,6 +19,45 @@ const PA_SLUG_BY_BOT = {
     'ytm-bot': 'ytm', '4dp-bot': '4dp', 'ypi-bot': 'ypi', 'social-bot': 'social',
 };
 import { KHMER_NEW_YEAR } from '../thems';
+import { DASHBOARD_DATA } from '../data/module';
+
+/* The replying agent's FACE + Khmer name in each PA header (Gamini
+   2026-11-11): faces come from the Meet Yai Agents set via
+   data/module.js; names are simulated Khmer given names. */
+const MODULE_FACE = (() => {
+    const m = {};
+    try {
+        DASHBOARD_DATA.forEach((s) => (s.groups || []).forEach((g) => (g.modules || []).forEach((mod) => { if (mod.image) m[mod.title] = mod.image; })));
+    } catch (e) { /* data shape changed — fall back to icons */ }
+    return m;
+})();
+const PA_FACE = {
+    'accounting-bot': ['Accountant', 'សុភា'],
+    'finance-bot': ['Accountant', 'នីតា'],
+    'hr-bot': ['YHR', 'ស្រីពៅ'],
+    'admin-bot': ['Support Ticket', 'ដារ៉ា'],
+    'csr-bot': ['Digital Audit', 'ម៉ាលីស'],
+    'shipping-bot': ['Shipping', 'វិសាល'],
+    'qa-bot': ['YQMS', 'កញ្ញា'],
+    'production-bot': ['FC', 'សុខា'],
+    '4dp-bot': ['4DP', 'ចន្ថា'],
+    'ypi-bot': ['YPI', 'រតនា'],
+    'mrp-bot': ['MRP', 'ពិសិដ្ឋ'],
+    'ce-bot': ['CE', 'សុវណ្ណ'],
+    'ytm-bot': ['YTM', 'វណ្ណា'],
+    'social-bot': ['Social', 'លីដា'],
+};
+/* Accounting topics are their own specialists — face + name follow. */
+const ACC_TOPIC_KH = { 'Purchase Request': 'ពិសី', 'Bill Claim': 'សុធា', 'Salary Bill': 'ចរិយា', 'Shipping Bill': 'សំណាង', 'IEWS': 'បូផា', 'Accountant': 'សុភា' };
+const paFace = (botId, activeTopic) => {
+    if (botId === 'accounting-bot' && activeTopic && MODULE_FACE[activeTopic]) {
+        return { image: MODULE_FACE[activeTopic], kh: ACC_TOPIC_KH[activeTopic] || 'សុភា' };
+    }
+    const f = PA_FACE[botId];
+    if (!f) return null;
+    const img = MODULE_FACE[f[0]];
+    return img ? { image: img, kh: f[1] } : null;
+};
 import { useTranslation } from '../translate/TranslationContext';
 import { useNavigate } from 'react-router-dom';
 import PaSkills, { usePaSkills } from './PaSkills';
@@ -1662,13 +1701,29 @@ const PhoneFrame = ({
                                     )}
                                 </div>
                                 
-                                {/* Bot Avatar */}
-                                <div className="relative">
-                                    <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${KHMER_NEW_YEAR.isActive ? 'from-red-500 to-yellow-500 shadow-[0_0_10px_rgba(234,179,8,0.4)]' : bot.bgGradient} flex items-center justify-center border-2 border-white/20 shadow-md`}>
-                                        <bot.icon size={20} className="text-white" />
-                                    </div>
-                                    {KHMER_NEW_YEAR.isActive && <div className="absolute -top-1 -right-1 z-10 text-xs drop-shadow-md cursor-default pointer-events-none">🌸</div>}
-                                </div>
+                                {/* Replying agent: face from the Meet Yai Agents
+                                    set + simulated Khmer name (falls back to the
+                                    old gradient icon when no face is mapped). */}
+                                {(() => {
+                                    const face = paFace(botId, activeTopic);
+                                    return (
+                                        <div className="relative flex flex-col items-center">
+                                            {face ? (
+                                                <img
+                                                    src={`${process.env.PUBLIC_URL || ''}/${face.image}`}
+                                                    alt={face.kh}
+                                                    className={`w-10 h-10 rounded-full object-cover border-2 shadow-md ${bot.borderColor || 'border-gray-200'}`}
+                                                />
+                                            ) : (
+                                                <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${KHMER_NEW_YEAR.isActive ? 'from-red-500 to-yellow-500 shadow-[0_0_10px_rgba(234,179,8,0.4)]' : bot.bgGradient} flex items-center justify-center border-2 border-white/20 shadow-md`}>
+                                                    <bot.icon size={20} className="text-white" />
+                                                </div>
+                                            )}
+                                            {face && <span className={`mt-0.5 text-[9px] font-bold leading-none whitespace-nowrap ${bot.textColor || 'text-gray-700'}`}>{face.kh}</span>}
+                                            {KHMER_NEW_YEAR.isActive && <div className="absolute -top-1 -right-1 z-10 text-xs drop-shadow-md cursor-default pointer-events-none">🌸</div>}
+                                        </div>
+                                    );
+                                })()}
                             </div>
                         </div>
 
