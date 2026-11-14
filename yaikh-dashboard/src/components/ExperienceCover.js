@@ -146,9 +146,13 @@ export default function ExperienceCover() {
       <div className="yai-cover-head">
         <img className="yai-cover-mark" src={`${process.env.PUBLIC_URL}/logo.jpg`} alt="Yai" />
         <div>
+          {/* All three at once: the room reads different languages, and the
+              flags can only serve one of them at a time. */}
           <h1 className="yai-cover-title">
-            {copy.titlePre}<em>{copy.titleEm}</em>{copy.titlePost}
+            {COPY.en.titlePre}<em>{COPY.en.titleEm}</em>{COPY.en.titlePost}
           </h1>
+          <p className="yai-cover-title-km">{COPY.km.titlePre}{COPY.km.titleEm}{COPY.km.titlePost}</p>
+          <p className="yai-cover-title-zh">{COPY.zh.titlePre}{COPY.zh.titleEm}{COPY.zh.titlePost}</p>
           <p className="yai-cover-site">www.yaikh.com</p>
         </div>
       </div>
