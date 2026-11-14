@@ -22,6 +22,7 @@ import { ThemeBackground } from "./thems";
 import GMChat from "./chatbot/GMChat";
 import GeneralAIAgent from "./general-ag";
 import KhmerNewYearSplash from "./components/KhmerNewYearSplash";
+import ExperienceCover from "./components/ExperienceCover";
 import { YQMS_CARDS } from "./data/yqmsCards";
 import { FC_CARDS } from "./data/fcCards";
 import { MRP_CARDS } from "./data/mrpCards";
@@ -963,6 +964,9 @@ const AppLayout = () => {
         !location.pathname.includes("money-claim") && <ThemeBackground />}
 
       <KhmerNewYearSplash />
+
+      {/* Presentation cover — sits in front, changes nothing behind it. */}
+      <ExperienceCover />
 
       <style>{`
                 * {
