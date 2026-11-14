@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import { useTranslation } from "../translate/TranslationContext";
 import "./ExperienceCover.css";
 
 /* Presentation cover for /experience.
@@ -23,6 +24,29 @@ const STORE_KEY = "yai-cover-points-v1";
 const SEEN_KEY = "yai-cover-seen-v1";
 const SLOTS = 6;
 const DEFAULT_POINTS = ["Yai & Texlink", "", "", "", "", ""];
+
+/* The flags along the top of the dashboard drive this too. English, Khmer and
+   Chinese are written out; the remaining flags fall back to English. The title
+   is split in three so the middle word keeps its gold emphasis in every
+   language. The six points themselves are typed per audience, so they are
+   never translated. */
+const COPY = {
+  en: {
+    titlePre: "Ai-Native ", titleEm: "Manufacturing", titlePost: " Intelligence Platform",
+    cta: "Let's experience \u2192", edit: "Edit points", done: "Done", clearAll: "Clear all",
+    close: "Close", point: (n) => `Point ${n}`, dialog: "Presentation cover",
+  },
+  km: {
+    titlePre: "វេទិកាបញ្ញា", titleEm: "ផលិតកម្ម", titlePost: " ដើមកំណើត AI",
+    cta: "ចាប់ផ្តើមបទពិសោធន៍ \u2192", edit: "កែប្រែចំណុច", done: "រួចរាល់", clearAll: "សម្អាតទាំងអស់",
+    close: "បិទ", point: (n) => `ចំណុច ${n}`, dialog: "ក្របបទបង្ហាញ",
+  },
+  zh: {
+    titlePre: "AI 原生", titleEm: "制造", titlePost: "智能平台",
+    cta: "开始体验 \u2192", edit: "编辑要点", done: "完成", clearAll: "全部清除",
+    close: "关闭", point: (n) => `要点 ${n}`, dialog: "演示封面",
+  },
+};
 
 function readStored() {
   try {
@@ -49,6 +73,8 @@ function readParams(search) {
 }
 
 export default function ExperienceCover() {
+  const { language } = useTranslation();
+  const copy = COPY[language] || COPY.en;
   const [visible, setVisible] = useState(false);
   const [leaving, setLeaving] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -73,12 +99,20 @@ export default function ExperienceCover() {
     if (forced === "1" || !seen) setVisible(true);
   }, []);
 
-  const dismiss = useCallback(() => {
-    if (editing) return;
+  /* Leaves the cover whatever mode it is in. The X uses this, so there is
+     always a way out — including mid-edit, where "Done" only ends editing. */
+  const close = useCallback(() => {
+    setEditing(false);
     setLeaving(true);
     try { sessionStorage.setItem(SEEN_KEY, "1"); } catch { /* private window */ }
     setTimeout(() => { setVisible(false); setLeaving(false); }, 420);
-  }, [editing]);
+  }, []);
+
+  /* Escape and the primary button: typing a point must not fire them. */
+  const dismiss = useCallback(() => {
+    if (editing) return;
+    close();
+  }, [editing, close]);
 
   useEffect(() => {
     if (!visible) return;
@@ -103,12 +137,17 @@ export default function ExperienceCover() {
      transform makes a stacking context and the overlay renders behind
      the module tiles no matter how high its z-index is. */
   return createPortal(
-    <div className={`yai-cover ${leaving ? "is-leaving" : ""}`} role="dialog" aria-label="Presentation cover">
+    <div className={`yai-cover ${leaving ? "is-leaving" : ""}`} role="dialog" aria-label={copy.dialog}>
+      {/* Always reachable, in both modes. */}
+      <button type="button" className="yai-cover-close" onClick={close} aria-label={copy.close} title={copy.close}>
+        \u2715
+      </button>
+
       <div className="yai-cover-head">
-        <span className="yai-cover-mark" aria-hidden="true">Yai</span>
+        <img className="yai-cover-mark" src={`${process.env.PUBLIC_URL}/logo.jpg`} alt="Yai" />
         <div>
           <h1 className="yai-cover-title">
-            Ai-Native <em>Manufacturing</em> Intelligence Platform
+            {copy.titlePre}<em>{copy.titleEm}</em>{copy.titlePost}
           </h1>
           <p className="yai-cover-site">www.yaikh.com</p>
         </div>
@@ -122,8 +161,8 @@ export default function ExperienceCover() {
               <input
                 value={text}
                 onChange={(event) => setPoint(index, event.target.value)}
-                placeholder={`Point ${index + 1}`}
-                aria-label={`Point ${index + 1}`}
+                placeholder={copy.point(index + 1)}
+                aria-label={copy.point(index + 1)}
                 maxLength={80}
                 className="yai-cover-input"
               />
@@ -137,19 +176,19 @@ export default function ExperienceCover() {
       <div className="yai-cover-actions">
         {editing ? (
           <>
-            <button type="button" className="yai-cover-btn is-primary" onClick={() => setEditing(false)}>Done</button>
+            <button type="button" className="yai-cover-btn is-primary" onClick={() => setEditing(false)}>{copy.done}</button>
             <button
               type="button"
               className="yai-cover-btn"
               onClick={() => { setPoints(DEFAULT_POINTS); try { localStorage.removeItem(STORE_KEY); } catch { /* private window */ } }}
             >
-              Clear all
+              {copy.clearAll}
             </button>
           </>
         ) : (
           <>
-            <button type="button" className="yai-cover-btn is-primary" onClick={dismiss}>Let's experience →</button>
-            <button type="button" className="yai-cover-btn" onClick={() => setEditing(true)}>Edit points</button>
+            <button type="button" className="yai-cover-btn is-primary" onClick={close}>{copy.cta}</button>
+            <button type="button" className="yai-cover-btn" onClick={() => setEditing(true)}>{copy.edit}</button>
           </>
         )}
       </div>
