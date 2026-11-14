@@ -148,7 +148,7 @@ export default function ExperienceCover() {
           </>
         ) : (
           <>
-            <button type="button" className="yai-cover-btn is-primary" onClick={dismiss}>Enter the platform →</button>
+            <button type="button" className="yai-cover-btn is-primary" onClick={dismiss}>Let's experience →</button>
             <button type="button" className="yai-cover-btn" onClick={() => setEditing(true)}>Edit points</button>
           </>
         )}
