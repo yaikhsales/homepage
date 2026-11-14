@@ -6,15 +6,18 @@
 @keyframes yai-cover-in{from{opacity:0}to{opacity:1}}
 @keyframes yai-cover-out{from{opacity:1}to{opacity:0;visibility:hidden}}
 
-.yai-cover-head{display:flex;align-items:flex-start;gap:clamp(14px,1.8vw,26px);padding-right:56px;position:relative;z-index:2}
+.yai-cover-head{display:flex;align-items:flex-start;gap:clamp(14px,1.8vw,26px);padding-right:64px;position:relative;z-index:2}
 .yai-cover-mark{flex-shrink:0;margin-top:.1em;width:clamp(76px,7.4vw,112px);height:clamp(76px,7.4vw,112px);border-radius:50%;object-fit:cover;box-shadow:0 0 44px #f3702166,0 10px 26px #0006}
-.yai-cover-title{margin:0;font-family:Georgia,"Times New Roman",serif;font-weight:700;letter-spacing:-.01em;line-height:1.1;font-size:clamp(26px,3.6vw,58px)}
+.yai-cover-title{margin:0;font-family:Georgia,"Times New Roman",serif;font-weight:700;letter-spacing:-.01em;line-height:1.1;font-size:clamp(22px,2.95vw,52px)}
 .yai-cover-title em{font-style:italic;color:#f5d6a3}
-.yai-cover-title-km,.yai-cover-title-zh{margin:.3em 0 0;font-weight:700;line-height:1.35;color:#dfe7fa;font-size:clamp(13px,1.45vw,23px)}
+.yai-cover-title-km,.yai-cover-title-zh{margin:0;font-weight:700;line-height:1.45;color:#e7edfb;font-size:clamp(16px,1.85vw,31px);overflow-wrap:anywhere}
 .yai-cover-title-km{font-family:"Khmer OS Battambang","Kantumruy Pro","Noto Sans Khmer",sans-serif}
 .yai-cover-site{margin:.5em 0 0;color:#f3884a;font-weight:700;letter-spacing:.02em;font-size:clamp(13px,1.15vw,19px)}
 
-.yai-cover-points{list-style:none;margin:0;padding:0;position:relative;z-index:2;flex:1 1 auto;align-content:space-evenly;display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(8px,1.2vh,18px)}
+.yai-cover-body{flex:1 1 auto;min-height:0;position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.85fr);gap:clamp(16px,2.6vw,48px);align-items:stretch}
+@media(max-width:900px){.yai-cover-body{grid-template-columns:minmax(0,1fr)}}
+.yai-cover-langs{display:flex;flex-direction:column;justify-content:center;gap:clamp(10px,1.6vh,22px);min-width:0}
+.yai-cover-points{list-style:none;margin:0;padding:0;position:relative;z-index:2;height:100%;align-content:space-evenly;display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(8px,1.2vh,18px)}
 @media(max-width:820px){.yai-cover-points{max-height:56vh;overflow-y:auto;padding-right:4px}}
 /* No card behind a point — the number and the words carry it. */
 .yai-cover-point{display:flex;align-items:center;gap:clamp(12px,1.4vw,22px);min-height:clamp(54px,7.4vh,82px);padding:clamp(4px,.6vh,8px) 0}

@@ -140,25 +140,22 @@ export default function ExperienceCover() {
     <div className={`yai-cover ${leaving ? "is-leaving" : ""}`} role="dialog" aria-label={copy.dialog}>
       {/* Always reachable, in both modes. */}
       <button type="button" className="yai-cover-close" onClick={close} aria-label={copy.close} title={copy.close}>
-        \u2715
+        ✕
       </button>
 
       <div className="yai-cover-head">
         <img className="yai-cover-mark" src={`${process.env.PUBLIC_URL}/logo.jpg`} alt="Yai" />
         <div>
-          {/* All three at once: the room reads different languages, and the
-              flags can only serve one of them at a time. */}
           <h1 className="yai-cover-title">
             {COPY.en.titlePre}<em>{COPY.en.titleEm}</em>{COPY.en.titlePost}
           </h1>
-          <p className="yai-cover-title-km">{COPY.km.titlePre}{COPY.km.titleEm}{COPY.km.titlePost}</p>
-          <p className="yai-cover-title-zh">{COPY.zh.titlePre}{COPY.zh.titleEm}{COPY.zh.titlePost}</p>
           <p className="yai-cover-site">www.yaikh.com</p>
         </div>
       </div>
 
-      <ol className="yai-cover-points">
-        {points.map((text, index) => (
+      <div className="yai-cover-body">
+        <ol className="yai-cover-points">
+          {points.map((text, index) => (
           <li key={index} className={`yai-cover-point ${text ? "" : "is-empty"}`}>
             <span className="yai-cover-num" aria-hidden="true">{index + 1}</span>
             {editing ? (
@@ -175,7 +172,17 @@ export default function ExperienceCover() {
             )}
           </li>
         ))}
-      </ol>
+        </ol>
+
+        {/* All three languages on the slide at once: the room reads different
+            ones, and the flags can only serve a single language at a time.
+            They live here because the column of numbers leaves this half of
+            the cover empty. */}
+        <div className="yai-cover-langs">
+          <p className="yai-cover-title-km">{COPY.km.titlePre}{COPY.km.titleEm}{COPY.km.titlePost}</p>
+          <p className="yai-cover-title-zh">{COPY.zh.titlePre}{COPY.zh.titleEm}{COPY.zh.titlePost}</p>
+        </div>
+      </div>
 
       <div className="yai-cover-actions">
         {editing ? (
