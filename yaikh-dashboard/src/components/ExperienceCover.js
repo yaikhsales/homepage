@@ -71,6 +71,17 @@ export function coverButtonLabel(language) {
   return (COPY[language] || COPY.en).cover;
 }
 
+/* "A | B | C" shows as three lines, so long points stay narrow. */
+function lines(text) {
+  const parts = text.split(/\s*\|\s*/).filter(Boolean);
+  return parts.map((part, i) => (
+    <React.Fragment key={i}>
+      {i > 0 && <br />}
+      {part}
+    </React.Fragment>
+  ));
+}
+
 function readStored() {
   try {
     const raw = localStorage.getItem(STORE_KEY);
@@ -219,10 +230,10 @@ export default function ExperienceCover() {
                   onClick={() => setPanel((current) => (current === POINT_LINKS[index] ? null : POINT_LINKS[index]))}
                   aria-expanded={panel === POINT_LINKS[index]}
                 >
-                  {text}
+                  {lines(text)}
                 </button>
               ) : (
-                <span className="yai-cover-text">{text}</span>
+                <span className="yai-cover-text">{lines(text)}</span>
               )
             )}
           </li>
