@@ -41,19 +41,32 @@ const COPY = {
   en: {
     titlePre: "Ai-Native ", titleEm: "Manufacturing", titlePost: " Intelligence Platform",
     cta: "Let's experience \u2192", edit: "Edit", done: "Done", clearAll: "Clear all",
+    cover: "Cover Page",
     close: "Close", point: (n) => `Point ${n}`, dialog: "Presentation cover",
   },
   km: {
     titlePre: "វេទិកាបញ្ញា", titleEm: "ផលិតកម្ម", titlePost: " ដើមកំណើត AI",
     cta: "ចាប់ផ្តើមបទពិសោធន៍ \u2192", edit: "កែប្រែ", done: "រួចរាល់", clearAll: "សម្អាតទាំងអស់",
+    cover: "ទំព័រក្រប",
     close: "បិទ", point: (n) => `ចំណុច ${n}`, dialog: "ក្របបទបង្ហាញ",
   },
   zh: {
     titlePre: "AI 原生", titleEm: "制造", titlePost: "智能平台",
     cta: "开始体验 \u2192", edit: "编辑", done: "完成", clearAll: "全部清除",
+    cover: "封面",
     close: "关闭", point: (n) => `要点 ${n}`, dialog: "演示封面",
   },
 };
+
+/* The "Cover Page" button in the header brings the cover back to the front
+   from anywhere in the dashboard. It fires this event; the cover listens. */
+const OPEN_EVENT = "yai-cover-open";
+export function openCover() {
+  window.dispatchEvent(new Event(OPEN_EVENT));
+}
+export function coverButtonLabel(language) {
+  return (COPY[language] || COPY.en).cover;
+}
 
 function readStored() {
   try {
@@ -104,6 +117,16 @@ export default function ExperienceCover() {
     let seen = false;
     try { seen = sessionStorage.getItem(SEEN_KEY) === "1"; } catch { /* private window */ }
     if (forced === "1" || !seen) setVisible(true);
+  }, []);
+
+  useEffect(() => {
+    const onOpen = () => {
+      setEditing(false);
+      setLeaving(false);
+      setVisible(true);
+    };
+    window.addEventListener(OPEN_EVENT, onOpen);
+    return () => window.removeEventListener(OPEN_EVENT, onOpen);
   }, []);
 
   /* Leaves the cover whatever mode it is in. The X uses this, so there is

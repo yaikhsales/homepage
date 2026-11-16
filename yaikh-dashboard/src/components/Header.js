@@ -1,6 +1,8 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import LangFlags from './LangFlags';
+import { openCover, coverButtonLabel } from './ExperienceCover';
+import { useTranslation } from '../translate/TranslationContext';
 
 /* Header — minimal chrome for the absorbed dashboard.
  *
@@ -20,6 +22,7 @@ import LangFlags from './LangFlags';
 
 const Header = () => {
   const { pathname } = useLocation();
+  const { language } = useTranslation();
   const yqmsModule = /^\/dashboard\/yqms\/[^/]+/.test(pathname) || /^\/quality-pad\//.test(pathname);
   const goHome = () => {
     window.location.href = '/';
@@ -37,6 +40,16 @@ const Header = () => {
         <span>← Home</span>
       </button>
       {!yqmsModule && <LangFlags />}
+      {/* Brings the presentation cover back to the front. */}
+      {!yqmsModule && (
+        <button
+          type="button"
+          onClick={openCover}
+          className="shrink-0 px-4 py-1.5 rounded-full border border-white/25 bg-white/10 text-white text-sm font-semibold hover:bg-white/20 transition"
+        >
+          {coverButtonLabel(language)}
+        </button>
+      )}
       </div>
 
       {/* Right side intentionally empty — Experience duplicate removed. */}
