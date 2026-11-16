@@ -153,21 +153,17 @@ export default function ExperienceCover() {
       <div className="yai-cover-head">
         <img className="yai-cover-mark" src={`${process.env.PUBLIC_URL}/logo.jpg`} alt="Yai" />
         <div>
-          <p className="yai-cover-site">www.yaikh.com</p>
+          {/* One line above the title: the site, then the Khmer and Chinese
+              titles. All three languages are on the slide at once because the
+              room reads different ones, and the flags serve one at a time. */}
+          <div className="yai-cover-topline">
+            <p className="yai-cover-site">www.yaikh.com</p>
+            <p className="yai-cover-title-km">{COPY.km.titlePre}{COPY.km.titleEm}{COPY.km.titlePost}</p>
+            <p className="yai-cover-title-zh">{COPY.zh.titlePre}{COPY.zh.titleEm}{COPY.zh.titlePost}</p>
+          </div>
           <h1 className="yai-cover-title">
             {COPY.en.titlePre}<em>{COPY.en.titleEm}</em>{COPY.en.titlePost}
           </h1>
-          {/* All three languages on the slide at once: the room reads different
-              ones, and the flags can only serve a single language at a time.
-              An invisible copy of "Ai-Native " in the title's font pushes the
-              two lines across so they start exactly under "Manufacturing". */}
-          <div className="yai-cover-langs">
-            <span className="yai-cover-langs-indent" aria-hidden="true">{COPY.en.titlePre}</span>
-            <div className="yai-cover-langs-lines">
-              <p className="yai-cover-title-km">{COPY.km.titlePre}{COPY.km.titleEm}{COPY.km.titlePost}</p>
-              <p className="yai-cover-title-zh">{COPY.zh.titlePre}{COPY.zh.titleEm}{COPY.zh.titlePost}</p>
-            </div>
-          </div>
         </div>
       </div>
 
