@@ -1,10 +1,10 @@
 # YAI Cloudflare standby — session runbook
 
-Last verified: 22 October 2026, Cambodia time. Railway hosts the homepage/API; the experience frontend is routed through Cloudflare.
+Last verified: 22 October 2026, Cambodia time. Railway hosts the homepage/API and, since 16 Nov 2026, is also the primary for /experience; Cloudflare's yai-backup copy serves /experience only when Railway fails.
 
 ## 1. Use the standby now
 
-- Client demo: **https://yaikh.com/experience/** (Cloudflare frontend).
+- Client demo: **https://yaikh.com/experience/** (Railway first, Cloudflare standby).
 - Direct standby: https://yai-backup.gamini.workers.dev/experience/
 - Homepage: https://yai-backup.gamini.workers.dev/
 - Database check: https://yai-backup.gamini.workers.dev/api/db-ping
@@ -12,9 +12,11 @@ Last verified: 22 October 2026, Cambodia time. Railway hosts the homepage/API; t
 - Cloudflare dashboard: Workers & Pages → **yai-backup**.
 - Primary Railway: project `robust-hope`, environment `production`, service `yaikh-com`.
 
-Give clients the normal yaikh.com experience URL. The frontend runs on Cloudflare; the Mac only builds/publishes. If an old redirect is cached, use https://yaikh.com/experience/?release=c6e68381.
+Give clients the normal yaikh.com experience URL. If an old redirect is cached, use https://yaikh.com/experience/?release=c6e68381.
 
-**Live routing:** YaiKH account `e45374d7eecce58154aa480b37c21863`, Worker `yai-experience-router`, route `yaikh.com/experience*`, fail-open to origin. Source: `ops/cloudflare/experience-router/worker.js`. This proxies public GET/HEAD SPA assets to `yai-backup`, strips credentials, and preserves the client hostname. Homepage and `/api/*` remain Railway; this is frontend routing, not full automatic failover. No DNS/email records changed.
+**Live routing (Railway first since 16 Nov 2026):** YaiKH account `e45374d7eecce58154aa480b37c21863`, Worker `yai-experience-router`, route `yaikh.com/experience*`. Source: `ops/cloudflare/experience-router/worker.js`. For public GET/HEAD requests under `/experience` it asks **Railway first** (same-zone subrequest to the origin). Only when Railway answers 5xx, cannot be reached, or takes more than 10 s to start answering does it proxy to the `yai-backup` standby (credentials stripped, client hostname preserved). Header `X-Yai-Experience-Origin` says which answered: `railway` or `cloudflare`. So a push to main is live on yaikh.com/experience once Railway has built it; a `wrangler deploy` of yai-backup only refreshes the standby copy, which can lag Railway. Homepage and `/api/*` remain Railway. No DNS/email records changed.
+
+Before 16 Nov the router served `yai-backup` first and fell back to Railway only on failure, so /experience stayed on whatever was last published to Cloudflare even after Railway had newer code.
 
 **Rollback:** in YaiKH → Workers & Pages → yai-experience-router → Domains, remove only route `yaikh.com/experience*`; existing Railway DNS resumes serving that path. Acquire the same shared deployment lock before any route/code change. Do not delete the Worker or change DNS as a rollback.
 
