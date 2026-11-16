@@ -12,7 +12,7 @@
 .yai-cover-title em{font-style:italic;color:#f5d6a3}
 .yai-cover-title-km,.yai-cover-title-zh{margin:0;font-weight:700;line-height:1.45;color:#e7edfb;font-size:clamp(16px,1.85vw,31px);overflow-wrap:anywhere}
 .yai-cover-title-km{font-family:"Khmer OS Battambang","Kantumruy Pro","Noto Sans Khmer",sans-serif}
-.yai-cover-site{margin:0;color:#fff;font-weight:700;letter-spacing:.02em;font-size:clamp(16px,1.38vw,23px)}
+.yai-cover-site{margin:0;color:#fff;font-weight:700;letter-spacing:.02em;font-size:clamp(19px,1.66vw,28px)}
 
 .yai-cover-body{flex:1 1 auto;min-height:0;position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,1fr)}
 /* The site, then the Khmer and Chinese titles, on one line above the English
