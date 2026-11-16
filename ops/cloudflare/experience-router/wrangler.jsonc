@@ -1,0 +1,20 @@
+{
+  // yai-experience-router — Worker on route yaikh.com/experience*.
+  //
+  // account_id is deliberately NOT set here. This Worker lives in the YaiKH
+  // account (see CLOUDFLARE_FAILOVER.md §1), which is NOT the account that
+  // owns yai-backup. Pass CLOUDFLARE_ACCOUNT_ID, or wrangler will prompt, so
+  // a wrong id can never be baked in and deployed to the wrong account.
+  //
+  // Routes are NOT declared here either. The route binding
+  // (yaikh.com/experience*) is managed in the Cloudflare dashboard, the same
+  // way yai-backup's is. Declaring routes here would make wrangler sync them
+  // and could detach the live route on a bad deploy. Deploy updates the
+  // script only; see CLOUDFLARE_FAILOVER.md for rollback.
+  "name": "yai-experience-router",
+  "main": "worker.js",
+  "compatibility_date": "2026-10-19",
+  "observability": {
+    "enabled": true
+  }
+}
