@@ -27,8 +27,8 @@ const DEFAULT_POINTS = [
   "Yai & Texlink",
   "Industry Needs",
   "Our Solution",
-  "Administration and Operation with Top Management",
   "Ai Nativeness",
+  "Administration and Operation with Top Management",
   "See It Real",
 ];
 
