@@ -28,7 +28,7 @@ const DEFAULT_POINTS = [
   "Industry Needs",
   "Our Solution",
   "Ai Nativeness",
-  "Administration and Operation with Top Management",
+  "Administration | Operation | Top Management",
   "See It Real",
 ];
 
