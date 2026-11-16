@@ -23,7 +23,8 @@ import "./ExperienceCover.css";
 const STORE_KEY = "yai-cover-points-v1";
 const SEEN_KEY = "yai-cover-seen-v1";
 const SLOTS = 6;
-/* Points that open a page when clicked, by position (0 = point 1). */
+/* Points that show a page in the right half of the cover when clicked,
+   by position (0 = point 1). The page loads in a frame, so the cover stays. */
 const POINT_LINKS = { 0: "/about" };
 const DEFAULT_POINTS = [
   "Yai & Texlink",
@@ -101,6 +102,7 @@ export default function ExperienceCover() {
   const [leaving, setLeaving] = useState(false);
   const [editing, setEditing] = useState(false);
   const [points, setPoints] = useState(DEFAULT_POINTS);
+  const [panel, setPanel] = useState(null);
 
   useEffect(() => {
     const search = window.location.search;
@@ -135,6 +137,7 @@ export default function ExperienceCover() {
      always a way out — including mid-edit, where "Done" only ends editing. */
   const close = useCallback(() => {
     setEditing(false);
+    setPanel(null);
     setLeaving(true);
     try { sessionStorage.setItem(SEEN_KEY, "1"); } catch { /* private window */ }
     setTimeout(() => { setVisible(false); setLeaving(false); }, 420);
@@ -149,11 +152,13 @@ export default function ExperienceCover() {
   useEffect(() => {
     if (!visible) return;
     const onKey = (event) => {
-      if (event.key === "Escape" && !editing) dismiss();
+      if (event.key !== "Escape" || editing) return;
+      if (panel) setPanel(null);
+      else dismiss();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [visible, editing, dismiss]);
+  }, [visible, editing, panel, dismiss]);
 
   const setPoint = (index, value) =>
     setPoints((current) => {
@@ -192,7 +197,7 @@ export default function ExperienceCover() {
         </div>
       </div>
 
-      <div className="yai-cover-body">
+      <div className={`yai-cover-body ${panel ? "has-panel" : ""}`}>
         <ol className="yai-cover-points">
           {points.map((text, index) => (
           <li key={index} className={`yai-cover-point ${text ? "" : "is-empty"}`}>
@@ -208,7 +213,14 @@ export default function ExperienceCover() {
               />
             ) : (
               POINT_LINKS[index] && text ? (
-                <a className="yai-cover-text yai-cover-link" href={POINT_LINKS[index]}>{text}</a>
+                <button
+                  type="button"
+                  className={`yai-cover-text yai-cover-link ${panel === POINT_LINKS[index] ? "is-open" : ""}`}
+                  onClick={() => setPanel((current) => (current === POINT_LINKS[index] ? null : POINT_LINKS[index]))}
+                  aria-expanded={panel === POINT_LINKS[index]}
+                >
+                  {text}
+                </button>
               ) : (
                 <span className="yai-cover-text">{text}</span>
               )
@@ -216,6 +228,15 @@ export default function ExperienceCover() {
           </li>
         ))}
         </ol>
+
+        {panel && (
+          <div className="yai-cover-panel">
+            <button type="button" className="yai-cover-panel-close" onClick={() => setPanel(null)} aria-label={copy.close} title={copy.close}>
+              ✕
+            </button>
+            <iframe className="yai-cover-frame" src={panel} title={panel} />
+          </div>
+        )}
       </div>
 
       <div className="yai-cover-actions">
