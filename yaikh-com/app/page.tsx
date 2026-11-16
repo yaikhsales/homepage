@@ -151,7 +151,7 @@ function Nav() {
               </button>
               {experienceOpen && (
                 <div role="menu" className="absolute left-0 top-full pt-3 min-w-[175px]">
-                  <a href="/experience" role="menuitem" onClick={() => setExperienceOpen(false)} className="block text-[13px] font-semibold hover:text-yai-orange transition whitespace-nowrap">
+                  <a href="/experience?cover=1" role="menuitem" onClick={() => setExperienceOpen(false)} className="block text-[13px] font-semibold hover:text-yai-orange transition whitespace-nowrap">
                     Meet Yai Agents
                   </a>
                   <a href="https://main.yaikh.com/" role="menuitem" onClick={() => setExperienceOpen(false)} className="mt-2 block text-[13px] font-semibold hover:text-yai-orange transition whitespace-nowrap">
