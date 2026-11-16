@@ -40,17 +40,17 @@ const DEFAULT_POINTS = [
 const COPY = {
   en: {
     titlePre: "Ai-Native ", titleEm: "Manufacturing", titlePost: " Intelligence Platform",
-    cta: "Let's experience \u2192", edit: "Edit points", done: "Done", clearAll: "Clear all",
+    cta: "Let's experience \u2192", edit: "Edit", done: "Done", clearAll: "Clear all",
     close: "Close", point: (n) => `Point ${n}`, dialog: "Presentation cover",
   },
   km: {
     titlePre: "វេទិកាបញ្ញា", titleEm: "ផលិតកម្ម", titlePost: " ដើមកំណើត AI",
-    cta: "ចាប់ផ្តើមបទពិសោធន៍ \u2192", edit: "កែប្រែចំណុច", done: "រួចរាល់", clearAll: "សម្អាតទាំងអស់",
+    cta: "ចាប់ផ្តើមបទពិសោធន៍ \u2192", edit: "កែប្រែ", done: "រួចរាល់", clearAll: "សម្អាតទាំងអស់",
     close: "បិទ", point: (n) => `ចំណុច ${n}`, dialog: "ក្របបទបង្ហាញ",
   },
   zh: {
     titlePre: "AI 原生", titleEm: "制造", titlePost: "智能平台",
-    cta: "开始体验 \u2192", edit: "编辑要点", done: "完成", clearAll: "全部清除",
+    cta: "开始体验 \u2192", edit: "编辑", done: "完成", clearAll: "全部清除",
     close: "关闭", point: (n) => `要点 ${n}`, dialog: "演示封面",
   },
 };
