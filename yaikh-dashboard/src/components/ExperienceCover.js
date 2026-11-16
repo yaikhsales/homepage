@@ -23,6 +23,8 @@ import "./ExperienceCover.css";
 const STORE_KEY = "yai-cover-points-v1";
 const SEEN_KEY = "yai-cover-seen-v1";
 const SLOTS = 6;
+/* Points that open a page when clicked, by position (0 = point 1). */
+const POINT_LINKS = { 0: "/about" };
 const DEFAULT_POINTS = [
   "Yai & Texlink",
   "Industry Needs",
@@ -205,7 +207,11 @@ export default function ExperienceCover() {
                 className="yai-cover-input"
               />
             ) : (
-              <span className="yai-cover-text">{text}</span>
+              POINT_LINKS[index] && text ? (
+                <a className="yai-cover-text yai-cover-link" href={POINT_LINKS[index]}>{text}</a>
+              ) : (
+                <span className="yai-cover-text">{text}</span>
+              )
             )}
           </li>
         ))}

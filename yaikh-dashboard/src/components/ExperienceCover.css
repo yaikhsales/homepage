@@ -24,6 +24,8 @@
 .yai-cover-point{display:flex;align-items:center;gap:clamp(12px,1.4vw,22px);min-height:clamp(54px,7.4vh,82px);padding:clamp(4px,.6vh,8px) 0}
 .yai-cover-num{display:flex;align-items:center;justify-content:center;flex-shrink:0;width:clamp(38px,3.2vw,52px);height:clamp(38px,3.2vw,52px);border-radius:50%;background:linear-gradient(145deg,#f7903f,#e9661b);box-shadow:0 0 26px #f3702155;font-weight:800;font-size:clamp(15px,1.3vw,22px);color:#fff}
 .yai-cover-text{font-weight:700;font-size:clamp(18px,1.8vw,30px);line-height:1.25;overflow-wrap:anywhere}
+.yai-cover-link{color:inherit;text-decoration:none;cursor:pointer;transition:color .15s}
+.yai-cover-link:hover,.yai-cover-link:focus-visible{color:#f5d6a3;text-decoration:underline;text-underline-offset:4px}
 .yai-cover-input{flex:1;min-width:0;background:#0000004d;border:1px solid #ffffff3d;border-radius:9px;padding:9px 12px;color:#fff;font:inherit;font-weight:700;font-size:clamp(14px,1.25vw,20px)}
 .yai-cover-input:focus{outline:2px solid #f3884a;outline-offset:1px}
 
