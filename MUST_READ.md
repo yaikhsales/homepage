@@ -4,6 +4,8 @@ You are working in the **`yaikhsales/homepage`** monorepo. Read this file end-to
 
 ## Cloudflare standby during Railway outages
 
+**Updating /experience = push to main. Nothing else.** Since 16 Nov 2026 the Cloudflare router on `yaikh.com/experience*` asks Railway first, so a push to main is live on yaikh.com/experience as soon as Railway has built it (~10–18 min). Cloudflare's `yai-backup` copy is only served when Railway fails; publishing it just refreshes that backup and is optional. Check with `curl -sI https://yaikh.com/experience | grep -i x-yai-experience-origin` → `railway`.
+
 Read [CLOUDFLARE_FAILOVER.md](./CLOUDFLARE_FAILOVER.md) before any Cloudflare work. Shared Worker: `yai-backup`. **One publishing session only: acquire `ops/cloudflare/deploy-lock.py`; all other sessions MUST WAIT until the owner finishes live verification and releases the lock.** Do not deploy stale/unmerged checkouts. Do not assume DNS failover or complete Railway independence: the runbook lists outstanding dependencies.
 
 Last verified green: **2026-06-14**.
