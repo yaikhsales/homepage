@@ -52,7 +52,11 @@ const SEEN_KEY = "yai-cover-seen-v1";
 const SLOTS = 6;
 /* Points that show a page in the right half of the cover when clicked,
    by position (0 = point 1). The page loads in a frame, so the cover stays. */
-const POINT_LINKS = { 0: "/about?embed=1", 1: "/?embed=evolution" };
+const POINT_LINKS = { 0: "/about?embed=1", 1: "/?embed=evolution", 2: "slides:solution" };
+/* A point linked to "slides:<name>" plays only these slides (by their place in
+   SLIDES) in the right half, instead of opening a page. */
+const SLIDE_SETS = { solution: [1, 4, 6].map((i) => SLIDES[i]) };
+const slideSet = (panel) => SLIDE_SETS[panel.slice(7)] || SLIDES;
 const DEFAULT_POINTS = [
   "Yai & Texlink",
   "Industry Needs",
@@ -143,17 +147,17 @@ function ScaledFrame({ src }) {
   );
 }
 
-function Slideshow({ language }) {
+function Slideshow({ language, items = SLIDES }) {
   const [index, setIndex] = useState(0);
   useEffect(() => {
-    SLIDES.forEach((slide) => { const img = new Image(); img.src = slide.img; });
-    const timer = setInterval(() => setIndex((i) => (i + 1) % SLIDES.length), SLIDE_MS);
+    items.forEach((slide) => { const img = new Image(); img.src = slide.img; });
+    const timer = setInterval(() => setIndex((i) => (i + 1) % items.length), SLIDE_MS);
     return () => clearInterval(timer);
-  }, []);
+  }, [items]);
   const lang = LANG_INDEX[language] ?? 0;
   return (
     <div className="yai-cover-slides" aria-roledescription="slideshow">
-      {SLIDES.map((slide, i) => (
+      {items.map((slide, i) => (
         <figure key={slide.img} className={`yai-cover-slide ${i === index ? "is-on" : ""}`} aria-hidden={i !== index}>
           <img src={slide.img} alt={slide.title[lang]} />
           {/* English is the main line, as on the points; Khmer and Chinese
@@ -169,7 +173,7 @@ function Slideshow({ language }) {
         </figure>
       ))}
       <div className="yai-cover-slide-dots">
-        {SLIDES.map((slide, i) => (
+        {items.map((slide, i) => (
           <button key={slide.img} type="button" className={i === index ? "is-on" : ""} onClick={() => setIndex(i)} aria-label={`${i + 1}`} />
         ))}
       </div>
@@ -428,11 +432,15 @@ export default function ExperienceCover() {
         )}
 
         {panel && (
-          <div className="yai-cover-panel">
+          <div className={`yai-cover-panel ${panel.startsWith("slides:") ? "is-slides" : ""}`}>
             <button type="button" className="yai-cover-panel-close" onClick={() => setPanel(null)} aria-label={copy.close} title={copy.close}>
               ✕
             </button>
-            <ScaledFrame src={panel} />
+            {panel.startsWith("slides:") ? (
+              <Slideshow key={panel} language={language} items={slideSet(panel)} />
+            ) : (
+              <ScaledFrame src={panel} />
+            )}
           </div>
         )}
       </div>
