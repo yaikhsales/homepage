@@ -160,11 +160,11 @@ function Slideshow({ language }) {
    text. A point typed in through Edit has no entry, so it shows English only. */
 const POINT_TRANSLATIONS = {
   "Yai & Texlink": ["Yai និង Texlink", "Yai 与 Texlink"],
-  "Industry Needs": ["តម្រូវការឧស្សាហកម្ម", "行业需求"],
+  "Industry Needs": ["តម្រូវការក្នុងវិស័យឧស្សាហកម្ម", "行业需求"],
   "Our Solution": ["ដំណោះស្រាយរបស់យើង", "我们的解决方案"],
-  "Ai Nativeness": ["ភាពដើមកំណើត AI", "AI 原生"],
-  "Administration | Operation | Top Management": ["រដ្ឋបាល · ប្រតិបត្តិការ · ថ្នាក់ដឹកនាំកំពូល", "行政 · 运营 · 高层管理"],
-  "See It Real": ["មើលឃើញជាក់ស្តែង", "亲眼见证"],
+  "Ai Nativeness": ["បច្ចេកវិទ្យា AI ពីមូលដ្ឋានគ្រឹះ", "AI 原生"],
+  "Administration | Operation | Top Management": ["រដ្ឋបាល · ប្រតិបត្តិការ · ថ្នាក់គ្រប់គ្រងកំពូល", "行政 · 运营 · 高层管理"],
+  "See It Real": ["ទស្សនាការអនុវត្តជាក់ស្តែង", "亲眼见证"],
 };
 
 function readStored() {
