@@ -31,9 +31,9 @@ const SLIDES = [
   { img: "/images/dream-l1.png", tag: ["Layer 1 · Digitalization", "ស្រទាប់ទី១ · ឌីជីថលូបនីយកម្ម", "第1层 · 数字化"], title: ["One database, all factory data", "មូលដ្ឋានទិន្នន័យតែមួយ ទិន្នន័យរោងចក្រទាំងអស់", "一个数据库，全部工厂数据"] },
   { img: "/images/dream-l2.png", tag: ["Layer 2 · Agentic", "ស្រទាប់ទី២ · ប្រព័ន្ធភ្នាក់ងារ AI", "第2层 · 智能体"], title: ["Ai agents own the workflows", "ភ្នាក់ងារ AI គ្រប់គ្រងលំហូរការងារ", "AI智能体掌管工作流"] },
   { img: "/images/dream-l3.png", tag: ["Layer 3 · Full Ai", "ស្រទាប់ទី៣ · AI ពេញលេញ", "第3层 · 全面AI"], title: ["Executive command", "មជ្ឈមណ្ឌលបញ្ជាថ្នាក់ដឹកនាំ", "高管指挥中心"] },
-  { img: "/images/acc-today.png", tag: ["Accounting · Today", "គណនេយ្យ · បច្ចុប្បន្ន", "会计 · 今天"], title: ["Buried in paper ledgers", "លិចលង់ក្នុងសៀវភៅបញ្ជីក្រដាស", "埋在纸质账本里"] },
+  { img: "/images/acc-today.png", tag: ["Accounting · Today", "គណនេយ្យ · បច្ចុប្បន្ន", "会计 · 今天"], title: ["Buried in paper ledgers", "ជាប់គាំងក្នុងសៀវភៅបញ្ជីក្រដាស", "埋在纸质账本里"] },
   { img: "/images/acc-l1.png", tag: ["Accounting · Layer 1", "គណនេយ្យ · ស្រទាប់ទី១", "会计 · 第1层"], title: ["Forms replace paper", "ទម្រង់ជំនួសក្រដាស", "表单取代纸张"] },
-  { img: "/images/acc-l2.png", tag: ["Accounting · Layer 2", "គណនេយ្យ · ស្រទាប់ទី២", "会计 · 第2层"], title: ["Agents post the vouchers", "ភ្នាក់ងារ AI ស្វ័យប្រវត្តិកម្មបង្កាន់ដៃ", "智能体自动过账"] },
+  { img: "/images/acc-l2.png", tag: ["Accounting · Layer 2", "គណនេយ្យ · ស្រទាប់ទី២", "会计 · 第2层"], title: ["Agents post the vouchers", "ភ្នាក់ងារ AI ធ្វើការកត់ត្រាបង្កាន់ដៃស្វ័យប្រវត្តិ", "智能体自动过账"] },
   { img: "/images/acc-l3.png", tag: ["Accounting · Layer 3", "គណនេយ្យ · ស្រទាប់ទី៣", "会计 · 第3层"], title: ["Analysis, not data entry", "ការវិភាគ មិនមែនការបញ្ចូលទិន្នន័យ", "做分析，而非录入"] },
 ];
 const LANG_INDEX = { en: 0, km: 1, zh: 2 };
@@ -141,9 +141,15 @@ function Slideshow({ language }) {
       {SLIDES.map((slide, i) => (
         <figure key={slide.img} className={`yai-cover-slide ${i === index ? "is-on" : ""}`} aria-hidden={i !== index}>
           <img src={slide.img} alt={slide.title[lang]} />
+          {/* English is the main line, as on the points; Khmer and Chinese
+              sit small above it so the whole room can read the slide. */}
           <figcaption>
-            <span className="yai-cover-slide-tag">{slide.tag[lang]}</span>
-            <span className="yai-cover-slide-title">{slide.title[lang]}</span>
+            <span className="yai-cover-slide-tag">{slide.tag[0]}</span>
+            <span className="yai-cover-slide-tr">
+              <span className="yai-cover-point-km">{slide.title[1]}</span>
+              <span>{slide.title[2]}</span>
+            </span>
+            <span className="yai-cover-slide-title">{slide.title[0]}</span>
           </figcaption>
         </figure>
       ))}

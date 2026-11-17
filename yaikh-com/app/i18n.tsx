@@ -436,7 +436,7 @@ const D: Record<string, string[]> = {
 
   /* ── ACCOUNTING CINEMA FRAMES (photoreal, in the main slideshow) ── */
   "dream.acc1.tag":   ["Accounting · Today", "គណនេយ្យ · បច្ចុប្បន្ន", "会计 · 今天", "会計 · 現在", "회계 · 오늘", "হিসাব · আজ", "अकाउंटिंग · आज"],
-  "dream.acc1.title": ["Buried in paper ledgers", "លិចលង់ក្នុងសៀវភៅបញ្ជីក្រដាស", "埋在纸质账本里", "紙の台帳に埋もれて", "종이 장부에 파묻혀", "কাগজের খাতায় চাপা", "कागज़ी बहीखातों में दबे"],
+  "dream.acc1.title": ["Buried in paper ledgers", "ជាប់គាំងក្នុងសៀវភៅបញ្ជីក្រដាស", "埋在纸质账本里", "紙の台帳に埋もれて", "종이 장부에 파묻혀", "কাগজের খাতায় চাপা", "कागज़ी बहीखातों में दबे"],
   "dream.acc1.cap": [
     "All paper. Ledger books, calculators, binders stacked high.",
     "ក្រដាសទាំងអស់។ សៀវភៅបញ្ជី ម៉ាស៊ីនគិតលេខ ឯកសារគរខ្ពស់។",
@@ -458,7 +458,7 @@ const D: Record<string, string[]> = {
     "डिजिटल — कागज़ खत्म, पर अब भी क्लिक कर फॉर्म भरना पड़ता है।",
   ],
   "dream.acc3.tag":   ["Accounting · Layer 2", "គណនេយ្យ · ស្រទាប់ទី២", "会计 · 第2层", "会計 · レイヤー2", "회계 · 레이어 2", "হিসাব · লেয়ার ২", "अकाउंटिंग · लेयर 2"],
-  "dream.acc3.title": ["Agents post the vouchers", "ភ្នាក់ងារ AI ស្វ័យប្រវត្តិកម្មបង្កាន់ដៃ", "智能体自动过账", "エージェントが伝票を処理", "에이전트가 전표를 처리", "এজেন্ট ভাউচার পোস্ট করে", "एजेंट वाउचर पोस्ट करते हैं"],
+  "dream.acc3.title": ["Agents post the vouchers", "ភ្នាក់ងារ AI ធ្វើការកត់ត្រាបង្កាន់ដៃស្វ័យប្រវត្តិ", "智能体自动过账", "エージェントが伝票を処理", "에이전트가 전표를 처리", "এজেন্ট ভাউচার পোস্ট করে", "एजेंट वाउचर पोस्ट करते हैं"],
   "dream.acc3.cap": [
     "Agents take over — vouchers process themselves, the human just confirms.",
     "ភ្នាក់ងារទទួលបន្ត — បង្កាន់ដៃដំណើរការដោយខ្លួនឯង មនុស្សគ្រាន់តែបញ្ជាក់។",
