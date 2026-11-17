@@ -58,7 +58,7 @@ const POINT_LINKS = { 0: "/about?embed=1", 1: "/?embed=evolution", 2: "slides:so
 /* Ai Nativeness: one split picture, what Yai is not (left) and what it is
    (right). Its labels are page text, so they stay sharp and spelled right. */
 const NATIVE_SLIDE = {
-  img: "/images/ai-native.jpg",
+  img: "/images/ai-native-factory.jpg",
   tag: ["Ai Nativeness", "បច្ចេកវិទ្យា AI ពីមូលដ្ឋានគ្រឹះ", "AI 原生"],
   title: [
     "Built on Ai itself, not Ai added on top of old systems",
