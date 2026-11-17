@@ -96,3 +96,14 @@
 .yai-cover-modes svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 @media(max-width:700px){.yai-cover-modes{display:none}.yai-cover-head{flex-wrap:wrap}}
 .yai-cover-head>div:not(.yai-cover-tools){flex:1 1 auto;min-width:0}
+
+/* Split slide: a title over each half, on the picture's dark top strip. */
+.yai-cover-slide-split{position:absolute;left:0;right:0;top:0;display:grid;grid-template-columns:1fr 1fr;background:linear-gradient(#0b1530f2 60%,transparent);padding-bottom:clamp(18px,3vh,40px);z-index:1}
+.yai-cover-slide-split>div{display:flex;flex-direction:column;gap:3px;padding:clamp(12px,2vh,24px) clamp(16px,2.2vw,32px)}
+.yai-cover-slide-split strong{font-weight:800;font-size:calc(var(--s,1)*clamp(16px,min(2vw,3.6vh),34px));line-height:1.15}
+.yai-cover-slide-split .is-no strong{color:#c9d1e0}
+.yai-cover-slide-split .is-no strong span{color:#ff6b5b}
+.yai-cover-slide-split .is-yes strong{color:#fff}
+.yai-cover-slide-split .is-yes strong span{color:#3ddc84}
+.yai-cover-slide-split small{color:#dbe3f5cc;font-weight:600;font-size:calc(var(--s,1)*clamp(11px,min(1vw,1.9vh),17px));line-height:1.35}
+.yai-cover-slide-dots[hidden]{display:none}

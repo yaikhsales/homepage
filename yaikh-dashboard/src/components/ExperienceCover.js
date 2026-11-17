@@ -52,10 +52,33 @@ const SEEN_KEY = "yai-cover-seen-v1";
 const SLOTS = 6;
 /* Points that show a page in the right half of the cover when clicked,
    by position (0 = point 1). The page loads in a frame, so the cover stays. */
-const POINT_LINKS = { 0: "/about?embed=1", 1: "/?embed=evolution", 2: "slides:solution" };
+const POINT_LINKS = { 0: "/about?embed=1", 1: "/?embed=evolution", 2: "slides:solution", 3: "slides:native" };
 /* A point linked to "slides:<name>" plays only these slides (by their place in
    SLIDES) in the right half, instead of opening a page. */
-const SLIDE_SETS = { solution: [1, 4, 6].map((i) => SLIDES[i]) };
+/* Ai Nativeness: one split picture, what Yai is not (left) and what it is
+   (right). Its labels are page text, so they stay sharp and spelled right. */
+const NATIVE_SLIDE = {
+  img: "/images/ai-native.jpg",
+  tag: ["Ai Nativeness", "បច្ចេកវិទ្យា AI ពីមូលដ្ឋានគ្រឹះ", "AI 原生"],
+  title: [
+    "Built on Ai itself, not Ai added on top of old systems",
+    "បង្កើតឡើងដោយផ្អែកលើ AI ផ្ទាល់ មិនមែនគ្រាន់តែបន្ថែម AI ពីលើប្រព័ន្ធចាស់នោះឡើយ",
+    "基于 AI 本身构建，而非在旧系统上叠加 AI",
+  ],
+  split: [
+    {
+      mark: "✕",
+      head: ["Not Ai-native", "មិនមែនជា AI ពីកំណើត", "非 AI 原生"],
+      sub: "Ai taped onto old systems · piles of documents to analyse · data typed in again for the Ai",
+    },
+    {
+      mark: "✓",
+      head: ["Ai-native · Yai", "AI ពីកំណើត · Yai", "AI 原生 · Yai"],
+      sub: "Built on Apple, Gemini & Claude Ai itself · one ecosystem for Administration, Operation & Top Management",
+    },
+  ],
+};
+const SLIDE_SETS = { solution: [1, 4, 6].map((i) => SLIDES[i]), native: [NATIVE_SLIDE] };
 const slideSet = (panel) => SLIDE_SETS[panel.slice(7)] || SLIDES;
 const DEFAULT_POINTS = [
   "Yai & Texlink",
@@ -160,6 +183,20 @@ function Slideshow({ language, items = SLIDES }) {
       {items.map((slide, i) => (
         <figure key={slide.img} className={`yai-cover-slide ${i === index ? "is-on" : ""}`} aria-hidden={i !== index}>
           <img src={slide.img} alt={slide.title[lang]} />
+          {slide.split && (
+            <div className="yai-cover-slide-split">
+              {slide.split.map((side, k) => (
+                <div key={k} className={k ? "is-yes" : "is-no"}>
+                  <span className="yai-cover-slide-tr">
+                    <span className="yai-cover-point-km">{side.head[1]}</span>
+                    <span>{side.head[2]}</span>
+                  </span>
+                  <strong><span aria-hidden="true">{side.mark}</span> {side.head[0]}</strong>
+                  <small>{side.sub}</small>
+                </div>
+              ))}
+            </div>
+          )}
           {/* English is the main line, as on the points; Khmer and Chinese
               sit small above it so the whole room can read the slide. */}
           <figcaption>
@@ -172,7 +209,7 @@ function Slideshow({ language, items = SLIDES }) {
           </figcaption>
         </figure>
       ))}
-      <div className="yai-cover-slide-dots">
+      <div className="yai-cover-slide-dots" hidden={items.length < 2}>
         {items.map((slide, i) => (
           <button key={slide.img} type="button" className={i === index ? "is-on" : ""} onClick={() => setIndex(i)} aria-label={`${i + 1}`} />
         ))}
