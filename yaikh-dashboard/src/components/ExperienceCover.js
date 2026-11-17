@@ -70,19 +70,19 @@ const DEFAULT_POINTS = [
 const COPY = {
   en: {
     titlePre: "Ai-Native ", titleEm: "Manufacturing", titlePost: " Intelligence Platform",
-    cta: "Let's experience \u2192", edit: "Edit", done: "Done", clearAll: "Clear all",
+    cta: "Let's experience \u2192", edit: "Edit", exit: "Exit", done: "Done", clearAll: "Clear all",
     cover: "Cover Page", slides: "Slideshow",
     close: "Close", point: (n) => `Point ${n}`, dialog: "Presentation cover",
   },
   km: {
     titlePre: "វេទិកាបញ្ញា", titleEm: "ផលិតកម្ម", titlePost: " កម្រិត AI-Native",
-    cta: "ចាប់ផ្តើមបទពិសោធន៍ \u2192", edit: "កែប្រែ", done: "រួចរាល់", clearAll: "សម្អាតទាំងអស់",
+    cta: "ចាប់ផ្តើមបទពិសោធន៍ \u2192", edit: "កែប្រែ", exit: "ចាកចេញ", done: "រួចរាល់", clearAll: "សម្អាតទាំងអស់",
     cover: "ទំព័រក្រប", slides: "បញ្ចាំងស្លាយ",
     close: "បិទ", point: (n) => `ចំណុច ${n}`, dialog: "ក្របបទបង្ហាញ",
   },
   zh: {
     titlePre: "AI 原生", titleEm: "制造", titlePost: "智能平台",
-    cta: "开始体验 \u2192", edit: "编辑", done: "完成", clearAll: "全部清除",
+    cta: "开始体验 \u2192", edit: "编辑", exit: "退出", done: "完成", clearAll: "全部清除",
     cover: "封面", slides: "幻灯片",
     close: "关闭", point: (n) => `要点 ${n}`, dialog: "演示封面",
   },
@@ -334,7 +334,8 @@ export default function ExperienceCover() {
             {COPY.en.titlePre}<em>{COPY.en.titleEm}</em>{COPY.en.titlePost}
           </h1>
         </div>
-        {/* One compact toolbar: screen size, slideshow, edit, start, exit. */}
+        {/* One compact toolbar: screen size, slideshow, start, exit. Editing the
+            points opens with a double-click on the list. */}
         <div className="yai-cover-tools">
           <div className="yai-cover-modes" role="group" aria-label="Screen size">
             {SCREEN_MODES.map((m) => (
@@ -370,17 +371,14 @@ export default function ExperienceCover() {
             ) : (
               <>
                 <button type="button" className="yai-cover-btn is-primary" onClick={close}>{copy.cta}</button>
-                <button type="button" className="yai-cover-btn" onClick={() => setEditing(true)}>{copy.edit}</button>
+                <button type="button" className="yai-cover-btn" onClick={close}>{copy.exit}</button>
               </>
             )}
-          <button type="button" className="yai-cover-close" onClick={close} aria-label={copy.close} title={copy.close}>
-            ✕
-          </button>
         </div>
       </div>
 
       <div className={`yai-cover-body ${panel || slides ? "has-panel" : ""}`}>
-        <ol className="yai-cover-points">
+        <ol className="yai-cover-points" onDoubleClick={() => setEditing(true)}>
           {points.map((text, index) => (
           <li key={index} className={`yai-cover-point ${text ? "" : "is-empty"}`}>
             <span className="yai-cover-num" aria-hidden="true">{index + 1}</span>
