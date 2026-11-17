@@ -58,7 +58,7 @@ const POINT_LINKS = { 0: "/about?embed=1", 1: "/?embed=evolution", 2: "slides:so
 /* Ai Nativeness: one split picture, what Yai is not (left) and what it is
    (right). Its labels are page text, so they stay sharp and spelled right. */
 const NATIVE_SLIDE = {
-  img: "/images/ai-native-factory.jpg",
+  img: "/images/ai-native-yai.jpg",
   tag: ["Ai Nativeness", "បច្ចេកវិទ្យា AI ពីមូលដ្ឋានគ្រឹះ", "AI 原生"],
   title: [
     "Built on Ai itself, not Ai added on top of old systems",
@@ -126,6 +126,26 @@ export function coverButtonLabel(language) {
 }
 
 /* "A | B | C" shows as three lines, so long points stay narrow. */
+/* A point of exactly three parts ("A | B | C") is drawn as an inverted
+   triangle: B and C on the two top corners, A at the bottom point holding
+   them up. */
+function triangle(text) {
+  const parts = text.split(/\s*\|\s*/).filter(Boolean);
+  if (parts.length !== 3) return null;
+  return (
+    <span className="yai-cover-tri">
+      <span className="yai-cover-tri-top">
+        <span>{parts[1]}</span>
+        <span>{parts[2]}</span>
+      </span>
+      <svg className="yai-cover-tri-lines" viewBox="0 0 100 30" preserveAspectRatio="none" aria-hidden="true">
+        <polygon points="14,2 86,2 50,28" />
+      </svg>
+      <span className="yai-cover-tri-base">{parts[0]}</span>
+    </span>
+  );
+}
+
 function lines(text) {
   const parts = text.split(/\s*\|\s*/).filter(Boolean);
   return parts.map((part, i) => (
@@ -454,7 +474,7 @@ export default function ExperienceCover() {
                   {lines(text)}
                 </button>
               ) : (
-                <span className="yai-cover-text">{lines(text)}</span>
+                <span className="yai-cover-text">{triangle(text) || lines(text)}</span>
               )}
               </div>
             )}

@@ -107,3 +107,10 @@
 .yai-cover-slide-split .is-yes strong span{color:#3ddc84}
 .yai-cover-slide-split small{color:#dbe3f5cc;font-weight:600;font-size:calc(var(--s,1)*clamp(11px,min(1vw,1.9vh),17px));line-height:1.35}
 .yai-cover-slide-dots[hidden]{display:none}
+
+/* Point 5 as an inverted triangle: two names on top, the base name below. */
+.yai-cover-tri{display:inline-flex;flex-direction:column;align-items:stretch;min-width:min(100%,22em)}
+.yai-cover-tri-top{display:flex;justify-content:space-between;gap:1.2em}
+.yai-cover-tri-lines{display:block;width:100%;height:1.5em;margin:.15em 0}
+.yai-cover-tri-lines polygon{fill:#f3702126;stroke:#f37021;stroke-width:1.5;vector-effect:non-scaling-stroke;stroke-linejoin:round}
+.yai-cover-tri-base{text-align:center}
