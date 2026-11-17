@@ -37,6 +37,17 @@ const SLIDES = [
   { img: "/images/acc-l3.png", tag: ["Accounting · Layer 3", "គណនេយ្យ · ស្រទាប់ទី៣", "会计 · 第3层"], title: ["Analysis, not data entry", "ការវិភាគ មិនមែនការបញ្ចូលទិន្នន័យ", "做分析，而非录入"] },
 ];
 const LANG_INDEX = { en: 0, km: 1, zh: 2 };
+
+/* Screen-size presets for the stage. The cover already fits itself to the
+   window; these scale its text up or down on top of that. Click the active
+   one again to go back to automatic. */
+const MODE_KEY = "yai-cover-screen-v1";
+const SCREEN_MODES = [
+  { key: "laptop", scale: 0.9, label: "Laptop", icon: <svg viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="10" rx="1.5" /><path d="M2.5 18.5h19" /></svg> },
+  { key: "desktop", scale: 1.05, label: "Desktop", icon: <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="1.5" /><path d="M9 20h6M12 16v4" /></svg> },
+  { key: "tv", scale: 1.3, label: "TV", icon: <svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="12.5" rx="1.5" /><path d="M8 21h8M9 2.5l3 2.5 3-2.5" /></svg> },
+  { key: "wide", scale: 0.8, label: "Wide stage", icon: <svg viewBox="0 0 24 24"><rect x="1.5" y="8" width="21" height="8" rx="1.5" /></svg> },
+];
 const SEEN_KEY = "yai-cover-seen-v1";
 const SLOTS = 6;
 /* Points that show a page in the right half of the cover when clicked,
@@ -205,6 +216,17 @@ export default function ExperienceCover() {
   const [editing, setEditing] = useState(false);
   const [points, setPoints] = useState(DEFAULT_POINTS);
   const [panel, setPanel] = useState(null);
+  const [mode, setMode] = useState(() => {
+    try { return localStorage.getItem(MODE_KEY) || ""; } catch { return ""; }
+  });
+  const pickMode = (key) => {
+    setMode((current) => {
+      const next = current === key ? "" : key;
+      try { localStorage.setItem(MODE_KEY, next); } catch { /* private window */ }
+      return next;
+    });
+  };
+  const scale = (SCREEN_MODES.find((m) => m.key === mode) || {}).scale || 1;
   const [slides, setSlides] = useState(() => {
     // On unless someone switched it off on this browser.
     try { return localStorage.getItem(SLIDES_KEY) !== "0"; } catch { return true; }
@@ -294,16 +316,33 @@ export default function ExperienceCover() {
      transform makes a stacking context and the overlay renders behind
      the module tiles no matter how high its z-index is. */
   return createPortal(
-    <div className={`yai-cover ${leaving ? "is-leaving" : ""}`} role="dialog" aria-label={copy.dialog}>
+    <div className={`yai-cover ${leaving ? "is-leaving" : ""}`} role="dialog" aria-label={copy.dialog} style={{ "--s": scale }}>
       {/* Always reachable, in both modes. */}
-      <label className="yai-cover-switch" title={copy.slides}>
-        <span>{copy.slides}</span>
-        <input type="checkbox" role="switch" checked={slides} onChange={toggleSlides} aria-label={copy.slides} />
-        <span className="yai-cover-switch-track" aria-hidden="true"><span /></span>
-      </label>
-      <button type="button" className="yai-cover-close" onClick={close} aria-label={copy.close} title={copy.close}>
-        ✕
-      </button>
+      <div className="yai-cover-tools">
+        <div className="yai-cover-modes" role="group" aria-label="Screen size">
+          {SCREEN_MODES.map((m) => (
+            <button
+              key={m.key}
+              type="button"
+              className={mode === m.key ? "is-on" : ""}
+              onClick={() => pickMode(m.key)}
+              aria-pressed={mode === m.key}
+              aria-label={m.label}
+              title={mode === m.key ? `${m.label} (click again for automatic)` : m.label}
+            >
+              {m.icon}
+            </button>
+          ))}
+        </div>
+        <label className="yai-cover-switch" title={copy.slides}>
+          <span>{copy.slides}</span>
+          <input type="checkbox" role="switch" checked={slides} onChange={toggleSlides} aria-label={copy.slides} />
+          <span className="yai-cover-switch-track" aria-hidden="true"><span /></span>
+        </label>
+        <button type="button" className="yai-cover-close" onClick={close} aria-label={copy.close} title={copy.close}>
+          ✕
+        </button>
+      </div>
 
       <div className="yai-cover-head">
         <img className="yai-cover-mark" src={`${process.env.PUBLIC_URL}/logo.jpg`} alt="Yai" />
