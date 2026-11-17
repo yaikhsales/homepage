@@ -116,3 +116,4 @@
 .yai-cover-slide-split.is-light>div:last-child .yai-cover-slide-tr{justify-content:flex-end}
 .yai-cover-slide-split.is-light>div:nth-child(2):not(:last-child) .yai-cover-slide-tr{justify-content:center}
 .yai-cover-slide-split.is-light strong{color:#fff}
+.yai-cover-slide-split.is-light>div:last-child{padding-right:clamp(56px,4.5vw,72px)}
