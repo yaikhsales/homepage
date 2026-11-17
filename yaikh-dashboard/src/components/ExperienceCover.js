@@ -78,26 +78,12 @@ const NATIVE_SLIDE = {
     },
   ],
 };
-/* Point 5: an inverted triangle. Operation and Top Management on the two top
-   corners, Administration at the bottom point holding them up, Yai in the
-   middle. Names reuse the point's reviewed Khmer and Chinese. */
+/* Point 5: a small inverted triangle around Yai, with Operation and Top
+   Management on the top corners and Administration at the bottom point. The
+   triangle, logo and three words are drawn into the picture. */
 const TEAMS_SLIDE = {
-  img: "/images/teams-triangle.jpg",
-  light: true,
-  split: [
-    {
-      head: ["Operation", "ប្រតិបត្តិការ", "运营"],
-      sub: "Workers · line leaders · supervisors · managers",
-    },
-    {
-      head: ["Administration", "រដ្ឋបាល", "行政"],
-      sub: "HR · compliance · accounting · shipping · electrician · driver · cooking auntie, holding it all up",
-    },
-    {
-      head: ["Top Management", "ថ្នាក់គ្រប់គ្រងកំពូល", "高层管理"],
-      sub: "The boss with the management team",
-    },
-  ],
+  img: "/images/teams-yai.jpg",
+  alt: "Operation and Top Management on the top corners, Administration at the bottom point, Yai in the middle",
 };
 const SLIDE_SETS = { solution: [1, 4, 6].map((i) => SLIDES[i]), native: [NATIVE_SLIDE], teams: [TEAMS_SLIDE] };
 const slideSet = (panel) => SLIDE_SETS[panel.slice(7)] || SLIDES;
@@ -203,7 +189,7 @@ function Slideshow({ language, items = SLIDES }) {
     <div className="yai-cover-slides" aria-roledescription="slideshow">
       {items.map((slide, i) => (
         <figure key={slide.img} className={`yai-cover-slide ${i === index ? "is-on" : ""}`} aria-hidden={i !== index}>
-          <img src={slide.img} alt={slide.title ? slide.title[lang] : slide.split.map((h) => h.head[0]).join(", ")} />
+          <img src={slide.img} alt={slide.alt || (slide.title ? slide.title[lang] : slide.split.map((h) => h.head[0]).join(", "))} />
           {slide.split && (
             <div className={`yai-cover-slide-split ${slide.light ? "is-light" : ""}`} style={{ gridTemplateColumns: `repeat(${slide.split.length}, 1fr)` }}>
               {slide.split.map((side, k) => (
