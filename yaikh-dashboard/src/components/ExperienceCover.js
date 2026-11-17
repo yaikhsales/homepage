@@ -52,7 +52,7 @@ const SEEN_KEY = "yai-cover-seen-v1";
 const SLOTS = 6;
 /* Points that show a page in the right half of the cover when clicked,
    by position (0 = point 1). The page loads in a frame, so the cover stays. */
-const POINT_LINKS = { 0: "/about?embed=1" };
+const POINT_LINKS = { 0: "/about?embed=1", 1: "/?embed=evolution" };
 const DEFAULT_POINTS = [
   "Yai & Texlink",
   "Industry Needs",

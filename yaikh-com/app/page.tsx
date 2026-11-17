@@ -19,6 +19,21 @@ import { MessageCircle } from "lucide-react";
  * the JSON-LD in layout.tsx + the semantic HTML here. */
 
 export default function Home() {
+  // ?embed=evolution: only the Old way → Layer 1–3 cards, shown inside the
+  // /experience cover ("Industry Needs"), which has its own close.
+  const [embed, setEmbed] = useState<string | null>(null);
+  useEffect(() => {
+    setEmbed(new URLSearchParams(window.location.search).get("embed"));
+  }, []);
+  if (embed === "evolution") {
+    return (
+      <LangProvider>
+        <main className="overflow-x-hidden min-h-screen bg-yai-bg">
+          <LayerStory cardsOnly />
+        </main>
+      </LangProvider>
+    );
+  }
   return (
     <LangProvider>
       <main className="overflow-x-hidden">
@@ -792,7 +807,7 @@ function AudienceRouter() {
 }
 
 /* ─────────────── 3-LAYER STORY ─────────────── */
-function LayerStory() {
+function LayerStory({ cardsOnly = false }: { cardsOnly?: boolean }) {
   const { t } = useLang();
   const layers = [
     {
@@ -840,6 +855,7 @@ function LayerStory() {
 
   return (
     <Section id="product" className="!pt-4 lg:!pt-6">
+      {!cardsOnly && (<>
       <SectionEyebrow>{t("platform.eyebrow")}</SectionEyebrow>
       {/* Title + subtitle in a 2-col row so the supporting copy sits to the
           right at the title's bottom level, leaving the layer cards to come
@@ -852,6 +868,7 @@ function LayerStory() {
           {t("platform.para")}
         </p>
       </div>
+      </>)}
 
       {/* Evolution rail */}
       <div className="hidden md:flex items-center justify-center gap-3 mt-6 mb-4 text-yai-navy/50">
