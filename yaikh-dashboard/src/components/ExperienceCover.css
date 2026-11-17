@@ -1,7 +1,7 @@
 /* Presentation cover — see ExperienceCover.js. Scoped under .yai-cover so it
    cannot leak into the dashboard behind it. */
 
-.yai-cover{position:fixed;inset:0;z-index:2147483000;display:flex;flex-direction:column;justify-content:flex-start;gap:clamp(18px,2.6vh,34px);padding:clamp(24px,3.4vw,54px) clamp(28px,5vw,88px) clamp(28px,5vw,88px);overflow:hidden;color:#fff;background:radial-gradient(1200px 680px at 78% 18%,#6d4a63 0%,transparent 58%),radial-gradient(900px 620px at 12% 24%,#1d3f7a 0%,transparent 62%),linear-gradient(145deg,#15294e,#101c35 52%,#16243f) #101c35;animation:yai-cover-in .45s ease both}
+.yai-cover{position:fixed;inset:0;z-index:2147483000;display:flex;flex-direction:column;justify-content:flex-start;gap:clamp(18px,2.6vh,34px);padding:clamp(24px,3.4vw,54px) clamp(28px,5vw,88px) clamp(28px,5vw,88px);overflow:hidden;overflow:clip;color:#fff;background:radial-gradient(1200px 680px at 78% 18%,#6d4a63 0%,transparent 58%),radial-gradient(900px 620px at 12% 24%,#1d3f7a 0%,transparent 62%),linear-gradient(145deg,#15294e,#101c35 52%,#16243f) #101c35;animation:yai-cover-in .45s ease both}
 .yai-cover.is-leaving{animation:yai-cover-out .4s ease both}
 @keyframes yai-cover-in{from{opacity:0}to{opacity:1}}
 @keyframes yai-cover-out{from{opacity:1}to{opacity:0;visibility:hidden}}
@@ -67,7 +67,7 @@
 .yai-cover-slide-dots button{width:9px;height:9px;padding:0;border:0;border-radius:50%;background:#ffffff59;cursor:pointer}
 .yai-cover-slide-dots button.is-on{background:#f37021;width:22px;border-radius:5px}
 .yai-cover-switch{position:absolute;top:clamp(14px,2.2vh,26px);right:calc(clamp(14px,2vw,30px) + 56px);z-index:4;height:44px;display:flex;align-items:center;gap:8px;padding:0 12px;border:1px solid #ffffff2e;border-radius:999px;background:#ffffff12;color:#fff;font-weight:700;font-size:13px;cursor:pointer;user-select:none}
-.yai-cover-switch input{position:absolute;opacity:0;pointer-events:none}
+.yai-cover-switch input{position:absolute;top:0;left:0;width:1px;height:1px;margin:0;opacity:0;pointer-events:none}
 .yai-cover-switch-track{position:relative;width:36px;height:20px;border-radius:999px;background:#ffffff3d;transition:background .2s}
 .yai-cover-switch-track span{position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .2s}
 .yai-cover-switch input:checked + .yai-cover-switch-track{background:#f37021}
