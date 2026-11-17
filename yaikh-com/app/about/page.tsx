@@ -214,7 +214,13 @@ export default function CustomersPage() {
                         <span className="text-xs font-semibold mt-1">{c.name}</span>
                       </div>
                     ) : (
-                      <img src={c.image} alt={c.name} className="w-full h-auto max-h-40 object-contain rounded bg-white/90 p-1.5 ring-1 ring-yai-navy/10 shadow-sm hover:ring-yai-orange/40 hover:shadow-md transition-all" />
+                      <img
+                        src={c.image}
+                        alt={c.name}
+                        // Only the QIP CDC logo is a transparent PNG with blue text, so only
+                        // it gets a light backing; the certificate scans have their own paper.
+                        className={`w-full h-auto max-h-40 object-contain rounded ${c.name === "QIP CDC" ? "bg-white/90 p-1.5 " : ""}ring-1 ring-yai-navy/10 shadow-sm hover:ring-yai-orange/40 hover:shadow-md transition-all`}
+                      />
                     )}
                   </button>
                 ))}
