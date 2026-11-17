@@ -112,28 +112,32 @@ function lines(text) {
 /* Shows a page at full desktop width and shrinks it to fit the panel, so it
    keeps its real layout instead of reflowing into a narrow phone layout. */
 const FRAME_WIDTH = 1440;
+/* Pages that are short for their width get a narrower frame, so they are drawn
+   bigger and fill the panel instead of leaving its lower half empty. */
+const FRAME_WIDTHS = { "/?embed=evolution": 1100 };
 function ScaledFrame({ src }) {
+  const frameWidth = FRAME_WIDTHS[src] || FRAME_WIDTH;
   const box = useRef(null);
   const [size, setSize] = useState({ scale: 1, height: 900 });
   useEffect(() => {
     const el = box.current;
     if (!el) return undefined;
     const fit = () => {
-      const scale = el.clientWidth / FRAME_WIDTH || 1;
+      const scale = el.clientWidth / frameWidth || 1;
       setSize({ scale, height: el.clientHeight / scale });
     };
     fit();
     const observer = new ResizeObserver(fit);
     observer.observe(el);
     return () => observer.disconnect();
-  }, []);
+  }, [frameWidth]);
   return (
     <div ref={box} className="yai-cover-frame-box">
       <iframe
         className="yai-cover-frame"
         src={src}
         title={src}
-        style={{ width: FRAME_WIDTH, height: size.height, transform: `scale(${size.scale})` }}
+        style={{ width: frameWidth, height: size.height, transform: `scale(${size.scale})` }}
       />
     </div>
   );
