@@ -64,3 +64,8 @@ Thumbs.db
 **/.claude/sessions/
 **/*.inspect.ndjson
 yaikh-com/public/dashboard/**/*.map
+
+# /experience/assets lives in yaikhsales/yai-media (served by the yai-media
+# Railway service). Local copies for dashboard dev must not be committed.
+/yaikh-dashboard/public/assets/
+/yaikh-com/public/experience/assets/

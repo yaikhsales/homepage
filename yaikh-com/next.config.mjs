@@ -80,19 +80,17 @@ const nextConfig = {
   // Keep /experience/index.html as an internal rewrite target. Redirecting it
   // back to /experience also redirects the rewrite target and creates a loop.
   async rewrites() {
-    // Training videos are served by the yai-media Railway service, not
-    // bundled into this app's image (they made every deploy re-upload
-    // ~950 MB). Set MEDIA_ORIGIN on Railway (private URL of yai-media); when
-    // it is unset (local dev, the Cloudflare standby) the files in public/
-    // are served as before. beforeFiles, so the /experience catch-all below
-    // cannot answer a video request with index.html.
+    // /experience/assets (the dashboard's images, icons and training videos,
+    // ~1.3 GB) is served by the yai-media Railway service from the
+    // yaikhsales/yai-media repo, not from this repo, because Railway downloads
+    // this whole repo on every deploy. MEDIA_ORIGIN is the private URL of
+    // yai-media; when it is unset (local dev, the Cloudflare standby) the
+    // public/ folder is used as before. beforeFiles, so the /experience
+    // catch-all below cannot answer an asset request with index.html.
     const media = process.env.MEDIA_ORIGIN;
     return {
       beforeFiles: media
-        ? [
-            { source: "/experience/assets/:path(.+\\.mp4)", destination: `${media}/:path` },
-            { source: "/assets/:path(.+\\.mp4)", destination: `${media}/:path` },
-          ]
+        ? [{ source: "/experience/assets/:path*", destination: `${media}/:path*` }]
         : [],
       afterFiles: [
         // public/strategy/index.html is a standalone page (own fonts, inline
@@ -115,7 +113,9 @@ const nextConfig = {
       // only when nothing at the root matches, so the marketing site's own
       // /assets/about-us and /assets/modules-image keep winning.
       fallback: [
-        { source: "/assets/:path*", destination: "/experience/assets/:path*" },
+        media
+          ? { source: "/assets/:path*", destination: `${media}/:path*` }
+          : { source: "/assets/:path*", destination: "/experience/assets/:path*" },
         { source: "/pdf/:path*", destination: "/experience/pdf/:path*" },
       ],
     };

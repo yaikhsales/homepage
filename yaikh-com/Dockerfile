@@ -1,13 +1,9 @@
 # yaikh-com on Railway.
 #
-# Why a Dockerfile: Railway's default builder copied the whole app, including
-# ~1.4 GB of training videos and images under public/experience/assets, into
-# ONE image layer. Any change, even one word, made that layer new, so every
-# deploy re-packed and re-uploaded the 1.4 GB (~10 min).
-#
-# Here the big media sit in their own layer that only changes when the media
-# change, and npm packages sit in a layer that only changes with
-# package-lock.json. A normal code push rebuilds and uploads just the code.
+# npm packages sit in their own layer that only changes with
+# package-lock.json, so a normal code push rebuilds and uploads just the code.
+# /experience/assets (images + videos) is not in this repo any more: it is
+# served by the yai-media service (yaikhsales/yai-media) via MEDIA_ORIGIN.
 
 # --- npm packages: reused until package-lock.json changes -------------------
 FROM node:22-slim AS deps
@@ -42,8 +38,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npm run build \
  && rm -rf .next/cache \
- && mv node_modules /tmp/node_modules \
- && mv public/experience/assets /tmp/experience-assets
+ && mv node_modules /tmp/node_modules
 
 # --- run --------------------------------------------------------------------
 FROM node:22-slim AS run
@@ -51,6 +46,5 @@ WORKDIR /app
 ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1
 # Layer order = how often each part changes: rarest first.
 COPY --from=deps /app/node_modules ./node_modules
-COPY public/experience/assets ./public/experience/assets
 COPY --from=build /app ./
 CMD ["npm", "run", "start"]
