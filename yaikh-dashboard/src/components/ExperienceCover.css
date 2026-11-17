@@ -80,5 +80,8 @@
 .yai-cover-point-tr{display:flex;flex-wrap:wrap;column-gap:12px;row-gap:0;color:#c9d4eecc;font-weight:600;font-size:clamp(11px,.85vw,15px);line-height:1.35}
 .yai-cover-point-km{font-family:"Khmer OS Battambang","Kantumruy Pro","Noto Sans Khmer",sans-serif}
 .yai-cover-slide-tr{display:flex;flex-wrap:wrap;column-gap:14px;color:#dbe3f5;font-weight:600;font-size:clamp(13px,1.1vw,19px);line-height:1.35}
-/* Short windows: the points scroll inside their column instead of running under the buttons. */
-.yai-cover-points{overflow-y:auto;min-height:0}
+/* Each point's row is as tall as its text (the 3-line point must not spill
+   into its neighbours). Short windows: tighter spacing, and the column
+   scrolls instead of running under the buttons. */
+.yai-cover-points{overflow-y:auto;min-height:0;grid-auto-rows:max-content}
+@media(max-height:820px){.yai-cover-points{gap:2px}.yai-cover-point{min-height:0;padding:2px 0}}
