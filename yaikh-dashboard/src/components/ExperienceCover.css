@@ -107,3 +107,12 @@
 .yai-cover-slide-split .is-yes strong span{color:#3ddc84}
 .yai-cover-slide-split small{color:#dbe3f5cc;font-weight:600;font-size:calc(var(--s,1)*clamp(11px,min(1vw,1.9vh),17px));line-height:1.35}
 .yai-cover-slide-dots[hidden]{display:none}
+
+/* Light labels (point 5): a short fade, so the picture below stays visible;
+   middle column centred, last column right-aligned. */
+.yai-cover-slide-split.is-light{background:linear-gradient(#0b1530f0 55%,transparent);padding-bottom:clamp(10px,2vh,24px)}
+.yai-cover-slide-split.is-light>div:nth-child(2):not(:last-child){align-items:center;text-align:center}
+.yai-cover-slide-split.is-light>div:last-child{align-items:flex-end;text-align:right}
+.yai-cover-slide-split.is-light>div:last-child .yai-cover-slide-tr{justify-content:flex-end}
+.yai-cover-slide-split.is-light>div:nth-child(2):not(:last-child) .yai-cover-slide-tr{justify-content:center}
+.yai-cover-slide-split.is-light strong{color:#fff}

@@ -52,7 +52,7 @@ const SEEN_KEY = "yai-cover-seen-v1";
 const SLOTS = 6;
 /* Points that show a page in the right half of the cover when clicked,
    by position (0 = point 1). The page loads in a frame, so the cover stays. */
-const POINT_LINKS = { 0: "/about?embed=1", 1: "/?embed=evolution", 2: "slides:solution", 3: "slides:native" };
+const POINT_LINKS = { 0: "/about?embed=1", 1: "/?embed=evolution", 2: "slides:solution", 3: "slides:native", 4: "slides:teams" };
 /* A point linked to "slides:<name>" plays only these slides (by their place in
    SLIDES) in the right half, instead of opening a page. */
 /* Ai Nativeness: one split picture, what Yai is not (left) and what it is
@@ -78,7 +78,28 @@ const NATIVE_SLIDE = {
     },
   ],
 };
-const SLIDE_SETS = { solution: [1, 4, 6].map((i) => SLIDES[i]), native: [NATIVE_SLIDE] };
+/* Point 5: an inverted triangle. Operation and Top Management on the two top
+   corners, Administration at the bottom point holding them up, Yai in the
+   middle. Names reuse the point's reviewed Khmer and Chinese. */
+const TEAMS_SLIDE = {
+  img: "/images/teams-triangle.jpg",
+  light: true,
+  split: [
+    {
+      head: ["Operation", "ប្រតិបត្តិការ", "运营"],
+      sub: "Workers · line leaders · supervisors · managers",
+    },
+    {
+      head: ["Administration", "រដ្ឋបាល", "行政"],
+      sub: "HR · compliance · accounting · shipping · electrician · driver · cooking auntie, holding it all up",
+    },
+    {
+      head: ["Top Management", "ថ្នាក់គ្រប់គ្រងកំពូល", "高层管理"],
+      sub: "The boss with the management team",
+    },
+  ],
+};
+const SLIDE_SETS = { solution: [1, 4, 6].map((i) => SLIDES[i]), native: [NATIVE_SLIDE], teams: [TEAMS_SLIDE] };
 const slideSet = (panel) => SLIDE_SETS[panel.slice(7)] || SLIDES;
 const DEFAULT_POINTS = [
   "Yai & Texlink",
@@ -182,16 +203,16 @@ function Slideshow({ language, items = SLIDES }) {
     <div className="yai-cover-slides" aria-roledescription="slideshow">
       {items.map((slide, i) => (
         <figure key={slide.img} className={`yai-cover-slide ${i === index ? "is-on" : ""}`} aria-hidden={i !== index}>
-          <img src={slide.img} alt={slide.title[lang]} />
+          <img src={slide.img} alt={slide.title ? slide.title[lang] : slide.split.map((h) => h.head[0]).join(", ")} />
           {slide.split && (
-            <div className="yai-cover-slide-split">
+            <div className={`yai-cover-slide-split ${slide.light ? "is-light" : ""}`} style={{ gridTemplateColumns: `repeat(${slide.split.length}, 1fr)` }}>
               {slide.split.map((side, k) => (
-                <div key={k} className={k ? "is-yes" : "is-no"}>
+                <div key={k} className={slide.light ? "" : k ? "is-yes" : "is-no"}>
                   <span className="yai-cover-slide-tr">
                     <span className="yai-cover-point-km">{side.head[1]}</span>
                     <span>{side.head[2]}</span>
                   </span>
-                  <strong><span aria-hidden="true">{side.mark}</span> {side.head[0]}</strong>
+                  <strong>{side.mark && <span aria-hidden="true">{side.mark} </span>}{side.head[0]}</strong>
                   <small>{side.sub}</small>
                 </div>
               ))}
@@ -199,14 +220,14 @@ function Slideshow({ language, items = SLIDES }) {
           )}
           {/* English is the main line, as on the points; Khmer and Chinese
               sit small above it so the whole room can read the slide. */}
-          <figcaption>
+          {slide.title && <figcaption>
             <span className="yai-cover-slide-tag">{slide.tag[0]}</span>
             <span className="yai-cover-slide-tr">
               <span className="yai-cover-point-km">{slide.title[1]}</span>
               <span>{slide.title[2]}</span>
             </span>
             <span className="yai-cover-slide-title">{slide.title[0]}</span>
-          </figcaption>
+          </figcaption>}
         </figure>
       ))}
       <div className="yai-cover-slide-dots" hidden={items.length < 2}>
