@@ -1,0 +1,9 @@
+# Used instead of .dockerignore for the main Dockerfile (yaikh-com).
+# Videos are served by the yai-media service (MEDIA_ORIGIN), so they are
+# left out of this build entirely.
+node_modules
+.next
+.env
+.env*.local
+npm-debug.log*
+public/experience/assets/**/*.mp4
