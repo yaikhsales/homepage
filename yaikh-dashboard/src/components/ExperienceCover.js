@@ -27,13 +27,13 @@ const SLIDE_MS = 6000;
 /* Event slideshow for the empty half of the cover (registration desk).
    Same eight pictures and captions as the yaikh.com homepage reel. */
 const SLIDES = [
-  { img: "/images/dream-today.png", tag: ["Today", "បច្ចុប្បន្ន", "今天"], title: ["The chaos most factories live in", "ភាពវឹកវរដែលរោងចក្រភាគច្រើនកំពុងជួប", "大多数工厂身处的混乱"] },
+  { img: "/images/dream-today.png", tag: ["Today", "បច្ចុប្បន្ន", "今天"], title: ["The chaos most factories live in", "ភាពវឹកវរក្នុងរោងចក្រភាគច្រើនសព្វថ្ងៃ", "大多数工厂身处的混乱"] },
   { img: "/images/dream-l1.png", tag: ["Layer 1 · Digitalization", "ស្រទាប់ទី១ · ឌីជីថលូបនីយកម្ម", "第1层 · 数字化"], title: ["One database, all factory data", "មូលដ្ឋានទិន្នន័យតែមួយ ទិន្នន័យរោងចក្រទាំងអស់", "一个数据库，全部工厂数据"] },
-  { img: "/images/dream-l2.png", tag: ["Layer 2 · Agentic", "ស្រទាប់ទី២ · ភ្នាក់ងារ Ai", "第2层 · 智能体"], title: ["Ai agents own the workflows", "ភ្នាក់ងារ Ai គ្រប់គ្រងលំហូរការងារ", "Ai智能体掌管工作流"] },
-  { img: "/images/dream-l3.png", tag: ["Layer 3 · Full Ai", "ស្រទាប់ទី៣ · Ai ពេញលេញ", "第3层 · 全面Ai"], title: ["Executive command", "បញ្ជាការថ្នាក់ដឹកនាំ", "高管指挥中心"] },
-  { img: "/images/acc-today.png", tag: ["Accounting · Today", "គណនេយ្យ · បច្ចុប្បន្ន", "会计 · 今天"], title: ["Buried in paper ledgers", "កប់ក្នុងសៀវភៅបញ្ជីក្រដាស", "埋在纸质账本里"] },
+  { img: "/images/dream-l2.png", tag: ["Layer 2 · Agentic", "ស្រទាប់ទី២ · ប្រព័ន្ធភ្នាក់ងារ AI", "第2层 · 智能体"], title: ["Ai agents own the workflows", "ភ្នាក់ងារ AI គ្រប់គ្រងលំហូរការងារ", "AI智能体掌管工作流"] },
+  { img: "/images/dream-l3.png", tag: ["Layer 3 · Full Ai", "ស្រទាប់ទី៣ · AI ពេញលេញ", "第3层 · 全面AI"], title: ["Executive command", "មជ្ឈមណ្ឌលបញ្ជាថ្នាក់ដឹកនាំ", "高管指挥中心"] },
+  { img: "/images/acc-today.png", tag: ["Accounting · Today", "គណនេយ្យ · បច្ចុប្បន្ន", "会计 · 今天"], title: ["Buried in paper ledgers", "លិចលង់ក្នុងសៀវភៅបញ្ជីក្រដាស", "埋在纸质账本里"] },
   { img: "/images/acc-l1.png", tag: ["Accounting · Layer 1", "គណនេយ្យ · ស្រទាប់ទី១", "会计 · 第1层"], title: ["Forms replace paper", "ទម្រង់ជំនួសក្រដាស", "表单取代纸张"] },
-  { img: "/images/acc-l2.png", tag: ["Accounting · Layer 2", "គណនេយ្យ · ស្រទាប់ទី២", "会计 · 第2层"], title: ["Agents post the vouchers", "ភ្នាក់ងារកត់ត្រាបង្កាន់ដៃ", "智能体自动过账"] },
+  { img: "/images/acc-l2.png", tag: ["Accounting · Layer 2", "គណនេយ្យ · ស្រទាប់ទី២", "会计 · 第2层"], title: ["Agents post the vouchers", "ភ្នាក់ងារ AI ស្វ័យប្រវត្តិកម្មបង្កាន់ដៃ", "智能体自动过账"] },
   { img: "/images/acc-l3.png", tag: ["Accounting · Layer 3", "គណនេយ្យ · ស្រទាប់ទី៣", "会计 · 第3层"], title: ["Analysis, not data entry", "ការវិភាគ មិនមែនការបញ្ចូលទិន្នន័យ", "做分析，而非录入"] },
 ];
 const LANG_INDEX = { en: 0, km: 1, zh: 2 };
@@ -64,9 +64,9 @@ const COPY = {
     close: "Close", point: (n) => `Point ${n}`, dialog: "Presentation cover",
   },
   km: {
-    titlePre: "វេទិកាបញ្ញា", titleEm: "ផលិតកម្ម", titlePost: " ដើមកំណើត AI",
+    titlePre: "វេទិកាបញ្ញា", titleEm: "ផលិតកម្ម", titlePost: " កម្រិត AI-Native",
     cta: "ចាប់ផ្តើមបទពិសោធន៍ \u2192", edit: "កែប្រែ", done: "រួចរាល់", clearAll: "សម្អាតទាំងអស់",
-    cover: "ទំព័រក្រប", slides: "បញ្ចាំងរូបភាព",
+    cover: "ទំព័រក្រប", slides: "បញ្ចាំងស្លាយ",
     close: "បិទ", point: (n) => `ចំណុច ${n}`, dialog: "ក្របបទបង្ហាញ",
   },
   zh: {
