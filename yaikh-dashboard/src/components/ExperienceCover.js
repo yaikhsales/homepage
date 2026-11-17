@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "../translate/TranslationContext";
 import "./ExperienceCover.css";
@@ -80,6 +80,36 @@ function lines(text) {
       {part}
     </React.Fragment>
   ));
+}
+
+/* Shows a page at full desktop width and shrinks it to fit the panel, so it
+   keeps its real layout instead of reflowing into a narrow phone layout. */
+const FRAME_WIDTH = 1440;
+function ScaledFrame({ src }) {
+  const box = useRef(null);
+  const [size, setSize] = useState({ scale: 1, height: 900 });
+  useEffect(() => {
+    const el = box.current;
+    if (!el) return undefined;
+    const fit = () => {
+      const scale = el.clientWidth / FRAME_WIDTH || 1;
+      setSize({ scale, height: el.clientHeight / scale });
+    };
+    fit();
+    const observer = new ResizeObserver(fit);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+  return (
+    <div ref={box} className="yai-cover-frame-box">
+      <iframe
+        className="yai-cover-frame"
+        src={src}
+        title={src}
+        style={{ width: FRAME_WIDTH, height: size.height, transform: `scale(${size.scale})` }}
+      />
+    </div>
+  );
 }
 
 function readStored() {
@@ -245,7 +275,7 @@ export default function ExperienceCover() {
             <button type="button" className="yai-cover-panel-close" onClick={() => setPanel(null)} aria-label={copy.close} title={copy.close}>
               ✕
             </button>
-            <iframe className="yai-cover-frame" src={panel} title={panel} />
+            <ScaledFrame src={panel} />
           </div>
         )}
       </div>
