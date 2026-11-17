@@ -80,7 +80,20 @@ const nextConfig = {
   // Keep /experience/index.html as an internal rewrite target. Redirecting it
   // back to /experience also redirects the rewrite target and creates a loop.
   async rewrites() {
+    // Training videos are served by the yai-media Railway service, not
+    // bundled into this app's image (they made every deploy re-upload
+    // ~950 MB). Set MEDIA_ORIGIN on Railway (private URL of yai-media); when
+    // it is unset (local dev, the Cloudflare standby) the files in public/
+    // are served as before. beforeFiles, so the /experience catch-all below
+    // cannot answer a video request with index.html.
+    const media = process.env.MEDIA_ORIGIN;
     return {
+      beforeFiles: media
+        ? [
+            { source: "/experience/assets/:path(.+\\.mp4)", destination: `${media}/:path` },
+            { source: "/assets/:path(.+\\.mp4)", destination: `${media}/:path` },
+          ]
+        : [],
       afterFiles: [
         // public/strategy/index.html is a standalone page (own fonts, inline
         // CSS, no JS). Next does not resolve a folder to its index.html, so

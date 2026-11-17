@@ -35,6 +35,8 @@ ARG PAYWAY_BASE_URL
 ARG PAYWAY_MERCHANT_ID
 ARG PAYWAY_RSA_PUBLIC_KEY
 ARG PAYWAY_TRANSACTION_LIFETIME_MINUTES
+# Private URL of the yai-media service; baked into the rewrites at build time.
+ARG MEDIA_ORIGIN
 ENV NEXT_TELEMETRY_DISABLED=1
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
