@@ -21,7 +21,7 @@ import "./ExperienceCover.css";
  */
 
 const STORE_KEY = "yai-cover-points-v1";
-const SLIDES_KEY = "yai-cover-slides-v1";
+const SLIDES_KEY = "yai-cover-slides-v2"; // v2: v1 saved "off" whenever a point was opened
 const SLIDE_MS = 6000;
 
 /* Event slideshow for the empty half of the cover (registration desk).
@@ -206,10 +206,12 @@ export default function ExperienceCover() {
   const [points, setPoints] = useState(DEFAULT_POINTS);
   const [panel, setPanel] = useState(null);
   const [slides, setSlides] = useState(() => {
-    try { return localStorage.getItem(SLIDES_KEY) === "1"; } catch { return false; }
+    // On unless someone switched it off on this browser.
+    try { return localStorage.getItem(SLIDES_KEY) !== "0"; } catch { return true; }
   });
   /* The switch beside the exit: on closes whatever is open in the right half
-     and runs the slideshow; opening a page from a point turns it off. */
+     and runs the slideshow. Opening a page from a point only covers the
+     slideshow; closing the page brings it back. */
   const toggleSlides = () => {
     setSlides((on) => {
       const next = !on;
@@ -220,8 +222,6 @@ export default function ExperienceCover() {
   };
   const openPanel = (url) => {
     setPanel((current) => (current === url ? null : url));
-    setSlides(false);
-    try { localStorage.setItem(SLIDES_KEY, "0"); } catch { /* private window */ }
   };
 
   useEffect(() => {
