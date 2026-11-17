@@ -75,3 +75,7 @@
 .yai-cover-switch input:focus-visible + .yai-cover-switch-track{outline:3px solid #f5d6a3;outline-offset:2px}
 @media(max-width:600px){.yai-cover-switch>span:first-child{display:none}}
 @media(max-width:600px){.yai-cover-head{padding-right:120px}}
+/* Small Khmer + Chinese line above each point's English text. */
+.yai-cover-point-label{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:0}
+.yai-cover-point-tr{display:flex;flex-wrap:wrap;column-gap:12px;row-gap:0;color:#c9d4eecc;font-weight:600;font-size:clamp(11px,.85vw,15px);line-height:1.35}
+.yai-cover-point-km{font-family:"Khmer OS Battambang","Kantumruy Pro","Noto Sans Khmer",sans-serif}

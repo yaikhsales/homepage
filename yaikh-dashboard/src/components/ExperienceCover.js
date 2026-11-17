@@ -156,6 +156,17 @@ function Slideshow({ language }) {
   );
 }
 
+/* Small Khmer and Chinese line shown above a point, keyed by its English
+   text. A point typed in through Edit has no entry, so it shows English only. */
+const POINT_TRANSLATIONS = {
+  "Yai & Texlink": ["Yai និង Texlink", "Yai 与 Texlink"],
+  "Industry Needs": ["តម្រូវការឧស្សាហកម្ម", "行业需求"],
+  "Our Solution": ["ដំណោះស្រាយរបស់យើង", "我们的解决方案"],
+  "Ai Nativeness": ["ភាពដើមកំណើត AI", "AI 原生"],
+  "Administration | Operation | Top Management": ["រដ្ឋបាល · ប្រតិបត្តិការ · ថ្នាក់ដឹកនាំកំពូល", "行政 · 运营 · 高层管理"],
+  "See It Real": ["មើលឃើញជាក់ស្តែង", "亲眼见证"],
+};
+
 function readStored() {
   try {
     const raw = localStorage.getItem(STORE_KEY);
@@ -320,7 +331,14 @@ export default function ExperienceCover() {
                 className="yai-cover-input"
               />
             ) : (
-              POINT_LINKS[index] && text ? (
+              <div className="yai-cover-point-label">
+              {POINT_TRANSLATIONS[text] && (
+                <span className="yai-cover-point-tr">
+                  <span className="yai-cover-point-km">{POINT_TRANSLATIONS[text][0]}</span>
+                  <span>{POINT_TRANSLATIONS[text][1]}</span>
+                </span>
+              )}
+              {POINT_LINKS[index] && text ? (
                 <button
                   type="button"
                   className={`yai-cover-text yai-cover-link ${panel === POINT_LINKS[index] ? "is-open" : ""}`}
@@ -331,7 +349,8 @@ export default function ExperienceCover() {
                 </button>
               ) : (
                 <span className="yai-cover-text">{lines(text)}</span>
-              )
+              )}
+              </div>
             )}
           </li>
         ))}
