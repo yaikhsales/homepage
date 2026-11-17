@@ -6,7 +6,7 @@
 @keyframes yai-cover-in{from{opacity:0}to{opacity:1}}
 @keyframes yai-cover-out{from{opacity:1}to{opacity:0;visibility:hidden}}
 
-.yai-cover-head{display:flex;align-items:flex-start;gap:clamp(14px,1.8vw,26px);padding-right:clamp(120px,24vw,380px);position:relative;z-index:2}
+.yai-cover-head{display:flex;align-items:flex-start;gap:clamp(14px,1.8vw,26px);padding-right:0;position:relative;z-index:2}
 .yai-cover-mark{flex-shrink:0;width:calc(var(--s,1)*clamp(48px,min(7.4vw,11vh),112px));height:calc(var(--s,1)*clamp(48px,min(7.4vw,11vh),112px));border-radius:50%;object-fit:cover;box-shadow:0 0 44px #f3702166,0 10px 26px #0006}
 .yai-cover-title{margin:0;font-family:Georgia,"Times New Roman",serif;font-weight:700;letter-spacing:-.01em;line-height:1.1;font-size:calc(var(--s,1)*clamp(20px,min(2.95vw,5.4vh),52px))}
 .yai-cover-title em{font-style:italic;color:#f5d6a3}
@@ -86,11 +86,13 @@
    last resort. */
 .yai-cover-points{overflow-y:auto;min-height:0;grid-auto-rows:max-content}
 /* Top-right toolbar: screen-size presets, slideshow switch, exit. */
-.yai-cover-tools{position:absolute;top:clamp(10px,2vh,26px);right:clamp(12px,2vw,30px);z-index:4;display:flex;align-items:center;gap:8px}
+.yai-cover-tools{margin-left:auto;flex-shrink:0;align-self:flex-start;display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:8px;position:relative;z-index:4}
+.yai-cover-tools .yai-cover-btn{height:40px;padding:0 16px;font-size:13px;white-space:nowrap}
 .yai-cover-modes{display:flex;gap:2px;padding:3px;border:1px solid #ffffff2e;border-radius:999px;background:#ffffff12}
 .yai-cover-modes button{width:34px;height:34px;display:flex;align-items:center;justify-content:center;padding:0;border:0;border-radius:50%;background:transparent;color:#ffffffb3;cursor:pointer;transition:background .15s,color .15s}
 .yai-cover-modes button:hover{background:#ffffff1f;color:#fff}
 .yai-cover-modes button.is-on{background:#f37021;color:#fff}
 .yai-cover-modes button:focus-visible{outline:3px solid #f5d6a3;outline-offset:1px}
 .yai-cover-modes svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-@media(max-width:700px){.yai-cover-modes{display:none}.yai-cover-head{padding-right:120px}}
+@media(max-width:700px){.yai-cover-modes{display:none}.yai-cover-head{flex-wrap:wrap}}
+.yai-cover-head>div:not(.yai-cover-tools){flex:1 1 auto;min-width:0}

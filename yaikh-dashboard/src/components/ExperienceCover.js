@@ -318,31 +318,6 @@ export default function ExperienceCover() {
   return createPortal(
     <div className={`yai-cover ${leaving ? "is-leaving" : ""}`} role="dialog" aria-label={copy.dialog} style={{ "--s": scale }}>
       {/* Always reachable, in both modes. */}
-      <div className="yai-cover-tools">
-        <div className="yai-cover-modes" role="group" aria-label="Screen size">
-          {SCREEN_MODES.map((m) => (
-            <button
-              key={m.key}
-              type="button"
-              className={mode === m.key ? "is-on" : ""}
-              onClick={() => pickMode(m.key)}
-              aria-pressed={mode === m.key}
-              aria-label={m.label}
-              title={mode === m.key ? `${m.label} (click again for automatic)` : m.label}
-            >
-              {m.icon}
-            </button>
-          ))}
-        </div>
-        <label className="yai-cover-switch" title={copy.slides}>
-          <span>{copy.slides}</span>
-          <input type="checkbox" role="switch" checked={slides} onChange={toggleSlides} aria-label={copy.slides} />
-          <span className="yai-cover-switch-track" aria-hidden="true"><span /></span>
-        </label>
-        <button type="button" className="yai-cover-close" onClick={close} aria-label={copy.close} title={copy.close}>
-          ✕
-        </button>
-      </div>
 
       <div className="yai-cover-head">
         <img className="yai-cover-mark" src={`${process.env.PUBLIC_URL}/logo.jpg`} alt="Yai" />
@@ -358,6 +333,49 @@ export default function ExperienceCover() {
           <h1 className="yai-cover-title">
             {COPY.en.titlePre}<em>{COPY.en.titleEm}</em>{COPY.en.titlePost}
           </h1>
+        </div>
+        {/* One compact toolbar: screen size, slideshow, edit, start, exit. */}
+        <div className="yai-cover-tools">
+          <div className="yai-cover-modes" role="group" aria-label="Screen size">
+            {SCREEN_MODES.map((m) => (
+              <button
+                key={m.key}
+                type="button"
+                className={mode === m.key ? "is-on" : ""}
+                onClick={() => pickMode(m.key)}
+                aria-pressed={mode === m.key}
+                aria-label={m.label}
+                title={mode === m.key ? `${m.label} (click again for automatic)` : m.label}
+              >
+                {m.icon}
+              </button>
+            ))}
+          </div>
+          <label className="yai-cover-switch" title={copy.slides}>
+            <span>{copy.slides}</span>
+            <input type="checkbox" role="switch" checked={slides} onChange={toggleSlides} aria-label={copy.slides} />
+            <span className="yai-cover-switch-track" aria-hidden="true"><span /></span>
+          </label>
+            {editing ? (
+              <>
+                <button type="button" className="yai-cover-btn is-primary" onClick={() => setEditing(false)}>{copy.done}</button>
+                <button
+                  type="button"
+                  className="yai-cover-btn"
+                  onClick={() => { setPoints(DEFAULT_POINTS); try { localStorage.removeItem(STORE_KEY); } catch { /* private window */ } }}
+                >
+                  {copy.clearAll}
+                </button>
+              </>
+            ) : (
+              <>
+                <button type="button" className="yai-cover-btn is-primary" onClick={close}>{copy.cta}</button>
+                <button type="button" className="yai-cover-btn" onClick={() => setEditing(true)}>{copy.edit}</button>
+              </>
+            )}
+          <button type="button" className="yai-cover-close" onClick={close} aria-label={copy.close} title={copy.close}>
+            ✕
+          </button>
         </div>
       </div>
 
@@ -417,25 +435,6 @@ export default function ExperienceCover() {
         )}
       </div>
 
-      <div className="yai-cover-actions">
-        {editing ? (
-          <>
-            <button type="button" className="yai-cover-btn is-primary" onClick={() => setEditing(false)}>{copy.done}</button>
-            <button
-              type="button"
-              className="yai-cover-btn"
-              onClick={() => { setPoints(DEFAULT_POINTS); try { localStorage.removeItem(STORE_KEY); } catch { /* private window */ } }}
-            >
-              {copy.clearAll}
-            </button>
-          </>
-        ) : (
-          <>
-            <button type="button" className="yai-cover-btn is-primary" onClick={close}>{copy.cta}</button>
-            <button type="button" className="yai-cover-btn" onClick={() => setEditing(true)}>{copy.edit}</button>
-          </>
-        )}
-      </div>
 
       <div className="yai-cover-wedge" aria-hidden="true" />
     </div>,
