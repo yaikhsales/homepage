@@ -17,7 +17,7 @@
  * certificate JPGs/PNGs) so they stay in git rather than moving to
  * Drive/Mongo at this stage. */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, FileText, X } from "lucide-react";
 
@@ -125,11 +125,18 @@ const COLOR_FILTER =
 export default function CustomersPage() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedPdf, setSelectedPdf]   = useState<string | null>(null);
+  // ?embed=1: shown inside the /experience cover, which has its own close
+  // button, so the Home bar is dropped.
+  const [embedded, setEmbedded] = useState(false);
+  useEffect(() => {
+    setEmbedded(new URLSearchParams(window.location.search).get("embed") === "1");
+  }, []);
 
   return (
     <div className="fixed inset-0 z-[300] flex flex-col overflow-hidden mesh-hero">
       {/* Header: solid navy bar with subtle border so it reads as a chrome
           element separate from the mesh body */}
+      {!embedded && (
       <header className="bg-yai-navy/95 backdrop-blur text-white shadow-lg border-b border-yai-orange/30 px-3 sm:px-6 py-2 sm:py-3 flex items-center justify-center gap-3 flex-shrink-0 relative z-10">
         <Link
           href="/"
@@ -147,6 +154,7 @@ export default function CustomersPage() {
           <img src="/logo.jpg" alt="Home" className="w-full h-full object-cover" />
         </Link>
       </header>
+      )}
 
       {/* Body — 3-column desktop / stacked on smaller */}
       <main className="flex-1 overflow-auto p-3 md:p-5">
