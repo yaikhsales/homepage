@@ -79,7 +79,7 @@ function slugify(value: string): string {
     .slice(0, 60);
 }
 
-const KINDS = ["funding", "expo", "meeting", "training", "tender", "other"] as const;
+const KINDS = ["workshop", "funding", "expo", "meeting", "training", "tender", "other"] as const;
 
 function clean(value: unknown, max: number): string {
   return typeof value === "string" ? value.trim().slice(0, max) : "";

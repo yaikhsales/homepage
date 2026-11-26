@@ -17,9 +17,10 @@ import { useMemo, useState } from "react";
 import type { TaskEvent } from "./TaskCalendar";
 
 const KINDS: { value: string; label: string }[] = [
+  { value: "workshop", label: "Workshop" },
   { value: "meeting", label: "Meeting" },
-  { value: "expo", label: "Expo" },
   { value: "training", label: "Training" },
+  { value: "expo", label: "Expo" },
   { value: "funding", label: "Funding" },
   { value: "tender", label: "Tender" },
   { value: "other", label: "Other" },
@@ -44,10 +45,9 @@ export function AddEventCard({
   const [date, setDate] = useState("");
   const [title, setTitle] = useState("");
   const [source, setSource] = useState("");
-  const [kind, setKind] = useState("meeting");
+  const [kind, setKind] = useState("workshop");
   const [time, setTime] = useState("");
   const [venue, setVenue] = useState("");
-  const [link, setLink] = useState("");
 
   // Organisers already on the board, so the viewer can reuse one rather
   // than retyping it slightly differently and splitting the chip.
@@ -58,8 +58,8 @@ export function AddEventCard({
   }, [events]);
 
   const reset = () => {
-    setDate(""); setTitle(""); setSource(""); setKind("meeting");
-    setTime(""); setVenue(""); setLink(""); setError(null);
+    setDate(""); setTitle(""); setSource(""); setKind("workshop");
+    setTime(""); setVenue(""); setError(null);
   };
 
   const submit = async (e: React.FormEvent) => {
@@ -72,7 +72,7 @@ export function AddEventCard({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "same-origin",
-        body: JSON.stringify({ date, title, source, kind, time, venue, link }),
+        body: JSON.stringify({ date, title, source, kind, time, venue }),
       });
       const data = await res.json();
       if (!res.ok || !data?.ok) {
@@ -119,36 +119,11 @@ export function AddEventCard({
       </div>
 
       <form onSubmit={submit}>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-6">
           <div>
             <label className={LABEL} htmlFor="ev-date">Date</label>
             <input id="ev-date" type="date" required value={date} disabled={saving}
               onChange={(e) => setDate(e.target.value)} className={FIELD} />
-          </div>
-
-          <div className="sm:col-span-2">
-            <label className={LABEL} htmlFor="ev-title">Title</label>
-            <input id="ev-title" type="text" required minLength={2} maxLength={200}
-              placeholder="What is happening" value={title} disabled={saving}
-              onChange={(e) => setTitle(e.target.value)} className={FIELD} />
-          </div>
-
-          <div>
-            <label className={LABEL} htmlFor="ev-source">Organiser</label>
-            <input id="ev-source" type="text" required minLength={2} maxLength={80}
-              list="ev-source-options" placeholder="Yai" value={source} disabled={saving}
-              onChange={(e) => setSource(e.target.value)} className={FIELD} />
-            <datalist id="ev-source-options">
-              {knownSources.map((s) => <option key={s} value={s} />)}
-            </datalist>
-          </div>
-
-          <div>
-            <label className={LABEL} htmlFor="ev-kind">Kind</label>
-            <select id="ev-kind" value={kind} disabled={saving}
-              onChange={(e) => setKind(e.target.value)} className={FIELD}>
-              {KINDS.map((k) => <option key={k.value} value={k.value}>{k.label}</option>)}
-            </select>
           </div>
 
           <div>
@@ -157,16 +132,35 @@ export function AddEventCard({
               disabled={saving} onChange={(e) => setTime(e.target.value)} className={FIELD} />
           </div>
 
-          <div>
+          <div className="lg:col-span-2">
             <label className={LABEL} htmlFor="ev-venue">Venue <span className="font-normal normal-case">(optional)</span></label>
             <input id="ev-venue" type="text" maxLength={200} placeholder="Where" value={venue}
               disabled={saving} onChange={(e) => setVenue(e.target.value)} className={FIELD} />
           </div>
 
-          <div>
-            <label className={LABEL} htmlFor="ev-link">Link <span className="font-normal normal-case">(optional)</span></label>
-            <input id="ev-link" type="url" maxLength={500} placeholder="https://" value={link}
-              disabled={saving} onChange={(e) => setLink(e.target.value)} className={FIELD} />
+          <div className="lg:col-span-2">
+            <label className={LABEL} htmlFor="ev-kind">Kind</label>
+            <select id="ev-kind" value={kind} disabled={saving}
+              onChange={(e) => setKind(e.target.value)} className={FIELD}>
+              {KINDS.map((k) => <option key={k.value} value={k.value}>{k.label}</option>)}
+            </select>
+          </div>
+
+          <div className="lg:col-span-4">
+            <label className={LABEL} htmlFor="ev-title">Title</label>
+            <input id="ev-title" type="text" required minLength={2} maxLength={200}
+              placeholder="What is happening" value={title} disabled={saving}
+              onChange={(e) => setTitle(e.target.value)} className={FIELD} />
+          </div>
+
+          <div className="lg:col-span-2">
+            <label className={LABEL} htmlFor="ev-source">Organiser</label>
+            <input id="ev-source" type="text" required minLength={2} maxLength={80}
+              list="ev-source-options" placeholder="Yai" value={source} disabled={saving}
+              onChange={(e) => setSource(e.target.value)} className={FIELD} />
+            <datalist id="ev-source-options">
+              {knownSources.map((s) => <option key={s} value={s} />)}
+            </datalist>
           </div>
         </div>
 

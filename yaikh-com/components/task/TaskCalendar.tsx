@@ -9,6 +9,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { HOLIDAY_BY_ISO } from "./cambodia-holidays";
 
 const KIND_TAB_COLOR: Record<string, string> = {
+  workshop: "bg-yai-orange",
   funding: "bg-emerald-500",
   expo: "bg-sky-500",
   meeting: "bg-amber-500",
@@ -123,7 +124,7 @@ export type TaskEvent = {
   source?: string;
   sourceSlug?: string;
   logo?: string;              // "/task-logos/<slug>.jpg"
-  kind?: "funding" | "expo" | "meeting" | "training" | "tender" | "other";
+  kind?: "workshop" | "funding" | "expo" | "meeting" | "training" | "tender" | "other";
   status?: "proposed" | "go" | "skip" | "later";
   venue?: string;
   time?: string;
