@@ -56,6 +56,7 @@ export async function GET() {
         slug: r.slug || "",
         catering: Array.isArray(r.catering) ? r.catering : [],
         titleKm: r.titleKm || "",
+        titleZh: r.titleZh || "",
         files: Array.isArray(r.files) ? (r.files as EventFile[]).map(publicFile) : [],
         title: r.titleEn || r.title,       // prefer EN; fallback to original
         titleOriginal: r.title,            // keep the KM original around

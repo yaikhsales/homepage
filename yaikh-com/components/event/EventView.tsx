@@ -13,6 +13,7 @@ export type EventViewData = {
   id: string;
   title: string;
   titleKm: string;
+  titleZh?: string;
   date: string;
   endDate?: string;
   time: string;          // already formatted "09:00 – 12:00"
@@ -67,7 +68,7 @@ export function EventView({ ev }: { ev: EventViewData }) {
             <h1 className={`font-extrabold leading-tight text-white ${
               ev.titleKm ? "text-base text-white/85 sm:text-xl" : "text-xl sm:text-3xl"
             }`}>
-              {ev.title}
+              {lang === "zh" && ev.titleZh ? ev.titleZh : ev.title}
             </h1>
           </div>
           <div className="flex shrink-0 gap-1.5">

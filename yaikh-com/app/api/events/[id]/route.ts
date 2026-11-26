@@ -1,4 +1,4 @@
-/* PATCH /api/events/<id> — correct the Khmer title of one of our events.
+/* PATCH /api/events/<id> — set the Khmer and/or Chinese title of one of our events.
  * Session-gated, and limited to events we created (origin "manual"): the
  * scout's rows are somebody else's and are not ours to rewrite. */
 import { NextResponse } from "next/server";
@@ -17,20 +17,28 @@ export async function PATCH(request: Request, { params }: { params: { id: string
   if (!ObjectId.isValid(params.id)) {
     return NextResponse.json({ ok: false, error: "Unknown event." }, { status: 404 });
   }
-  let titleKm = "";
+  // Only the titles sent are changed, so saving one never blanks the other.
+  const set: Record<string, string> = {};
   try {
     const body = await request.json();
-    titleKm = typeof body?.titleKm === "string" ? body.titleKm.trim().slice(0, 300) : "";
+    if (typeof body?.titleKm === "string") set.titleKm = body.titleKm.trim().slice(0, 300);
+    if (typeof body?.titleZh === "string") set.titleZh = body.titleZh.trim().slice(0, 300);
   } catch { /* fall through */ }
-  if (titleKm && !/[ក-៿]/.test(titleKm)) {
+  if (!Object.keys(set).length) {
+    return NextResponse.json({ ok: false, error: "Nothing to save." }, { status: 400 });
+  }
+  if (set.titleKm && !/[ក-៿]/.test(set.titleKm)) {
     return NextResponse.json({ ok: false, error: "That does not look like Khmer." }, { status: 400 });
+  }
+  if (set.titleZh && !/[\u4e00-\u9fff]/.test(set.titleZh)) {
+    return NextResponse.json({ ok: false, error: "That does not look like Chinese." }, { status: 400 });
   }
   const db = await getDb();
   const res = await db
     .collection("task_events")
-    .updateOne({ _id: new ObjectId(params.id), origin: "manual" }, { $set: { titleKm } });
+    .updateOne({ _id: new ObjectId(params.id), origin: "manual" }, { $set: set });
   if (!res.matchedCount) {
     return NextResponse.json({ ok: false, error: "Unknown event." }, { status: 404 });
   }
-  return NextResponse.json({ ok: true, titleKm });
+  return NextResponse.json({ ok: true, ...set });
 }

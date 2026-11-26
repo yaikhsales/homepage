@@ -151,6 +151,7 @@ export type TaskEvent = {
   catering?: string[];        // "morning" | "lunch" | "afternoon"
   eventNo?: number;           // running number of our own events
   titleKm?: string;           // Khmer title, shown above the English one
+  titleZh?: string;           // Chinese title, shown when the page is in 中文
   files?: { id: string; kind: "handout" | "slides"; name: string; size: number; type: string }[];
   slug?: string;              // "event001" — the short public link
   origin?: string;            // "manual" = ours, "telegram" = scout-found

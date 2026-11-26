@@ -56,7 +56,7 @@ export function YaiEventsPanel({
   const [state, setState] = useState<"loading" | "ok" | "err">("loading");
   const [copied, setCopied] = useState<string | null>(null);
   // Editing the Khmer title of one saved event.
-  const [kmEdit, setKmEdit] = useState<{ id: string; km: string } | null>(null);
+  const [kmEdit, setKmEdit] = useState<{ id: string; km: string; field?: "titleKm" | "titleZh" } | null>(null);
   const [kmBusy, setKmBusy] = useState(false);
   // The error belongs to the event it happened on, not every event shown.
   const [kmError, setKmError] = useState<{ id: string; msg: string } | null>(null);
@@ -67,11 +67,12 @@ export function YaiEventsPanel({
     try {
       const res = await fetch(`/api/events/${kmEdit.id}`, {
         method: "PATCH", headers: { "Content-Type": "application/json" }, credentials: "same-origin",
-        body: JSON.stringify({ titleKm: kmEdit.km }),
+        body: JSON.stringify({ [kmEdit.field || "titleKm"]: kmEdit.km }),
       });
       const d = await res.json();
       if (!res.ok || !d?.ok) { setKmError({ id: kmEdit.id, msg: d?.error || "Could not save." }); return; }
-      onUpdated?.(kmEdit.id, { titleKm: d.titleKm });
+      const field = kmEdit.field || "titleKm";
+      onUpdated?.(kmEdit.id, { [field]: d[field] });
       setKmEdit(null);
     } catch { setKmError({ id: kmEdit.id, msg: "Network error." }); } finally { setKmBusy(false); }
   };
@@ -163,7 +164,7 @@ export function YaiEventsPanel({
                       so the files sit in the empty space beside the table on wide screens. */}
                   <div className="min-w-0">
                   <div className="mb-3">
-                    {kmEdit?.id === e.id ? (
+                    {kmEdit?.id === e.id && (kmEdit.field || "titleKm") === "titleKm" ? (
                       <div className="mb-1">
                         <input lang="km" value={kmEdit.km} disabled={kmBusy}
                           placeholder="Paste from the proofread handout"
@@ -188,6 +189,29 @@ export function YaiEventsPanel({
                     )}
                     {kmError?.id === e.id && <p className="text-[11px] text-rose-600">{kmError.msg}</p>}
                     <p className="text-[14px] font-bold text-yai-navy">{e.title}</p>
+                    {kmEdit?.id === e.id && kmEdit.field === "titleZh" ? (
+                      <div className="mb-1">
+                        <input lang="zh" value={kmEdit.km} disabled={kmBusy}
+                          placeholder="Paste the Chinese title from the handout"
+                          onChange={(ev) => setKmEdit({ ...kmEdit, km: ev.target.value })}
+                          className="w-full rounded border border-gray-300 px-2 py-1 text-[14px] text-yai-navy" />
+                        <div className="mt-1 flex gap-2">
+                          <button type="button" onClick={saveKhmer} disabled={kmBusy}
+                            className="rounded bg-yai-navy px-2 py-0.5 text-[11px] font-bold text-white disabled:opacity-50">Save 中文</button>
+                          <button type="button" onClick={() => setKmEdit(null)}
+                            className="px-1 text-[11px] text-gray-500">Cancel</button>
+                        </div>
+                      </div>
+                    ) : (
+                      <p lang="zh" className="text-[13px] font-semibold text-yai-navy/80">
+                        {e.titleZh || <span className="text-[12px] font-normal italic text-rose-600">No Chinese title yet</span>}
+                        <button type="button" disabled={kmBusy}
+                          onClick={() => setKmEdit({ id: e.id, km: e.titleZh || "", field: "titleZh" })}
+                          className="ml-2 rounded border border-gray-300 px-1.5 py-0.5 align-middle text-[10px] font-semibold text-gray-600 hover:bg-gray-50">
+                          {e.titleZh ? "Edit" : "Add 中文"}
+                        </button>
+                      </p>
+                    )}
                     <p className="text-[11px] text-gray-500">
                       {formatDateRange(e)}
                       {formatTimeRange(e) && ` · ${formatTimeRange(e)}`}
