@@ -98,7 +98,6 @@ const CERTIFICATES = [
   { name: "MOC E-Commerce License", image: "/assets/about-us/certificates/moc-ecommerce.jpg" },
   { name: "ICT Certificate", image: "/assets/about-us/certificates/ict-certificate.jpg" },
   { name: "TAFTAC",          image: "/assets/about-us/certificates/taftac.png" },
-  { name: "QIP CDC",         image: "/assets/about-us/certificates/qip-cdc.png" },
 ];
 
 // Same set, same order as slide 1 of the About deck (deck/v4-work/make-yai-about-deck.js):
@@ -218,9 +217,7 @@ export default function CustomersPage() {
                       <img
                         src={c.image}
                         alt={c.name}
-                        // Only the QIP CDC logo is a transparent PNG with blue text, so only
-                        // it gets a light backing; the certificate scans have their own paper.
-                        className={`w-full h-auto max-h-40 object-contain rounded ${c.name === "QIP CDC" ? "bg-white/90 p-1.5 " : ""}ring-1 ring-yai-navy/10 shadow-sm hover:ring-yai-orange/40 hover:shadow-md transition-all`}
+                        className={`w-full h-auto max-h-40 object-contain rounded ring-1 ring-yai-navy/10 shadow-sm hover:ring-yai-orange/40 hover:shadow-md transition-all`}
                       />
                     )}
                   </button>
