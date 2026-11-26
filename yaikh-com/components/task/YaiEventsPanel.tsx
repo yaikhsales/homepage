@@ -195,8 +195,9 @@ export function YaiEventsPanel({
                     )}
                   </div>
 
-                  <div className="flex flex-wrap gap-5">
-                    <div className="shrink-0">
+                  {/* QR first, then who registered right under it. */}
+                  <div className="space-y-4">
+                    <div>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={`/api/events/${e.id}/qr`} alt={`QR code for ${e.title}`}
                         className="h-40 w-40 rounded border border-gray-200 bg-white p-1" />
@@ -215,7 +216,7 @@ export function YaiEventsPanel({
                       </p>
                     </div>
 
-                    <div className="min-w-[18rem] flex-1">
+                    <div className="min-w-0">
                       <p className="mb-2 text-[11px] font-bold uppercase tracking-wider text-gray-500">
                         Registered · {list.length}
                       </p>
@@ -227,34 +228,38 @@ export function YaiEventsPanel({
                             <thead>
                               <tr className="border-b border-gray-200 text-[10px] uppercase tracking-wider text-gray-500">
                                 <th className="py-1.5 pr-3 font-bold">Name</th>
-                                <th className="py-1.5 pr-3 font-bold">Email</th>
-                                <th className="py-1.5 pr-3 font-bold">Phone</th>
-                                <th className="py-1.5 pr-3 font-bold">Telegram</th>
-                                <th className="py-1.5 pr-3 font-bold">May contact by</th>
-                                <th className="py-1.5 font-bold">Attending</th>
+                                <th className="py-1.5 pr-3 font-bold">Contact by</th>
+                                <th className="py-1.5 font-bold">Day</th>
                               </tr>
                             </thead>
                             <tbody>
-                              {list.map((r) => (
-                                <tr key={r.id} className="border-b border-gray-100 last:border-0">
-                                  <td className="py-1.5 pr-3 font-semibold text-yai-navy">{r.name}</td>
-                                  <td className="py-1.5 pr-3 text-gray-700">{r.email || "—"}</td>
-                                  <td className="py-1.5 pr-3 text-gray-700">{r.phone || "—"}</td>
-                                  <td className="py-1.5 pr-3 text-gray-700">{r.telegram ? `@${r.telegram}` : "—"}</td>
-                                  <td className="py-1.5 pr-3 text-gray-700">
-                                    {(r.contactVia && r.contactVia.length ? r.contactVia : [r.contactMethod])
-                                      .map((v) => v.charAt(0).toUpperCase() + v.slice(1)).join(", ")}
-                                  </td>
-                                  <td className="py-1.5 text-gray-700">
-                                    {(r.attendDays && r.attendDays.length ? r.attendDays : r.chosenDate ? [r.chosenDate] : [])
-                                      .map((d) => {
-                                        const x = new Date(`${d}T00:00:00`);
-                                        return x.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
-                                      })
-                                      .join(" + ") || "—"}
-                                  </td>
-                                </tr>
-                              ))}
+                              {list.map((r) => {
+                                const via = r.contactVia && r.contactVia.length ? r.contactVia : [r.contactMethod];
+                                const detail: Record<string, string> = {
+                                  email: r.email, phone: r.phone, telegram: r.telegram ? `@${r.telegram}` : "",
+                                };
+                                return (
+                                  <tr key={r.id} className="border-b border-gray-100 align-top last:border-0">
+                                    <td className="py-1.5 pr-3 font-semibold text-yai-navy">{r.name}</td>
+                                    <td className="py-1.5 pr-3 text-gray-700">
+                                      {via.map((v) => (
+                                        <div key={v}>
+                                          <span className="text-gray-500">{v.charAt(0).toUpperCase() + v.slice(1)}:</span>{" "}
+                                          {detail[v] || "—"}
+                                        </div>
+                                      ))}
+                                    </td>
+                                    <td className="py-1.5 text-gray-700">
+                                      {(r.attendDays && r.attendDays.length ? r.attendDays : r.chosenDate ? [r.chosenDate] : [])
+                                        .map((d) => {
+                                          const x = new Date(`${d}T00:00:00`);
+                                          return x.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
+                                        })
+                                        .join(" + ") || "—"}
+                                    </td>
+                                  </tr>
+                                );
+                              })}
                             </tbody>
                           </table>
                         </div>
