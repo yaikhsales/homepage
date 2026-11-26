@@ -146,7 +146,10 @@ export function YaiEventsPanel({
             {dayEvents.map((e) => {
               const list = regs.filter((r) => r.eventId === e.id);
               return (
-                <div key={e.id} className="rounded-lg border border-gray-200 bg-white p-3">
+                <div key={e.id} className="rounded-lg border border-gray-200 bg-white p-3 lg:grid lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:gap-6">
+                  {/* Left: details, QR and who registered. Right: handouts and slides,
+                      so the files sit in the empty space beside the table on wide screens. */}
+                  <div className="min-w-0">
                   <div className="mb-3">
                     {kmEdit?.id === e.id ? (
                       <div className="mb-1">
@@ -257,6 +260,7 @@ export function YaiEventsPanel({
                         </div>
                       )}
                     </div>
+                  </div>
                   </div>
 
                   <EventFiles event={e} ready={filesReady}

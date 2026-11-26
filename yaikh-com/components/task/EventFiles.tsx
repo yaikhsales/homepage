@@ -65,13 +65,13 @@ export function EventFiles({
   };
 
   return (
-    <div className="mt-4 border-t border-gray-200 pt-3">
+    <div className="mt-4 border-t border-gray-200 pt-3 lg:mt-0 lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0">
       {!ready && (
         <p className="mb-2 rounded bg-amber-50 px-2 py-1 text-[11px] text-amber-800">
           File storage is not switched on yet — the R2 keys still need adding on Railway.
         </p>
       )}
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
         {KINDS.map(({ kind, title, hint, accept }) => {
           const list = files.filter((f) => f.kind === kind);
           return (
