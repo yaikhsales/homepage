@@ -12,21 +12,21 @@
  */
 
 import { useState } from "react";
+import { evT, type EvLang } from "./strings";
 
 const FIELD =
   "w-full min-w-0 rounded-lg border border-white/30 bg-white px-3 py-2.5 text-[15px] text-yai-blue-deep " +
   "placeholder-yai-blue-deep/40 focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent " +
   "disabled:opacity-60";
-const INLINE_LABEL = "w-20 shrink-0 text-white text-sm font-semibold sm:w-24";
-
 const CHANNELS = [
-  { value: "email", label: "Email", type: "email", placeholder: "you@company.com", max: 200 },
-  { value: "phone", label: "Phone", type: "tel", placeholder: "+855 ...", max: 40 },
-  { value: "telegram", label: "Telegram", type: "text", placeholder: "@username", max: 80 },
+  { value: "email", type: "email", max: 200, ph: "emailPh" },
+  { value: "phone", type: "tel", max: 40, ph: "phonePh" },
+  { value: "telegram", type: "text", max: 80, ph: "telegramPh" },
 ] as const;
 type Channel = (typeof CHANNELS)[number]["value"];
 
-export function RegisterForm({ eventId, dates }: { eventId: string; dates: string[] }) {
+export function RegisterForm({ eventId, dates, lang = "en" }: { eventId: string; dates: string[]; lang?: EvLang }) {
+  const t = (k: Parameters<typeof evT>[1]) => evT(lang, k);
   const [name, setName] = useState("");
   const [via, setVia] = useState<Channel[]>([]);
   const [detail, setDetail] = useState<Record<Channel, string>>({ email: "", phone: "", telegram: "" });
@@ -43,7 +43,7 @@ export function RegisterForm({ eventId, dates }: { eventId: string; dates: strin
     e.preventDefault();
     if (saving) return;
     if (via.length === 0) {
-      setError("Tick at least one way we may contact you.");
+      setError(t("tickOne"));
       return;
     }
     setSaving(true);
@@ -64,12 +64,13 @@ export function RegisterForm({ eventId, dates }: { eventId: string; dates: strin
       });
       const data = await res.json();
       if (!res.ok || !data?.ok) {
-        setError(data?.error || "Could not register just now. Please try again.");
+        // Server messages are English; in another language show our own wording.
+        setError(lang === "en" && data?.error ? data.error : t("failed"));
         return;
       }
       setDone(true);
     } catch {
-      setError("Network error. Please try again.");
+      setError(t("network"));
     } finally {
       setSaving(false);
     }
@@ -78,10 +79,10 @@ export function RegisterForm({ eventId, dates }: { eventId: string; dates: strin
   if (done) {
     return (
       <div className="rounded-2xl border border-white/20 bg-white/10 p-8 text-center backdrop-blur-md">
-        <p className="text-2xl font-bold text-white">You are registered.</p>
-        <p className="mt-2 text-white/75">We will be in touch.</p>
+        <p className="text-2xl font-bold text-white">{t("doneTitle")}</p>
+        <p className="mt-2 text-white/75">{t("doneBody")}</p>
         <a href="/" className="mt-6 inline-block text-sm font-semibold text-white/80 underline hover:text-white">
-          Back to home
+          {t("home")}
         </a>
       </div>
     );
@@ -89,7 +90,7 @@ export function RegisterForm({ eventId, dates }: { eventId: string; dates: strin
 
   return (
     <form onSubmit={submit} className="rounded-2xl border border-white/15 bg-white/10 p-6 backdrop-blur-md sm:p-8">
-      <h2 className="mb-5 text-lg font-bold text-white">Register</h2>
+      <h2 className="mb-4 text-lg font-bold text-white">{t("register")}</h2>
 
       {dates.length > 1 && (
         <div className="mb-4 flex flex-wrap gap-2">
@@ -104,15 +105,15 @@ export function RegisterForm({ eventId, dates }: { eventId: string; dates: strin
         </div>
       )}
 
-      <div className="mb-5 flex items-center gap-3">
-        <label className={INLINE_LABEL} htmlFor="rg-name">Name</label>
+      <div className="mb-4">
+        <label className="sr-only" htmlFor="rg-name">{t("name")}</label>
         <input id="rg-name" required minLength={2} maxLength={120} value={name}
           disabled={saving} onChange={(e) => setName(e.target.value)}
-          className={FIELD} placeholder="Full name" />
+          className={FIELD} placeholder={t("name")} />
       </div>
 
       <fieldset className="mb-4">
-        <legend className="mb-2 text-sm font-semibold text-white">Confirm — we may contact you by</legend>
+        <legend className="mb-2 text-sm font-semibold text-white">{t("consent")}</legend>
         <div className="flex flex-wrap gap-2">
           {CHANNELS.map((c) => {
             const on = via.includes(c.value);
@@ -123,7 +124,7 @@ export function RegisterForm({ eventId, dates }: { eventId: string; dates: strin
                 }`}>
                 <input type="checkbox" className="h-4 w-4 accent-yai-orange" checked={on}
                   disabled={saving} onChange={() => toggle(c.value)} />
-                {c.label}
+                {t(c.value)}
               </label>
             );
           })}
@@ -131,10 +132,10 @@ export function RegisterForm({ eventId, dates }: { eventId: string; dates: strin
       </fieldset>
 
       {CHANNELS.filter((c) => via.includes(c.value)).map((c) => (
-        <div key={c.value} className="mb-3 flex items-center gap-3">
-          <label className={INLINE_LABEL} htmlFor={`rg-${c.value}`}>{c.label}</label>
+        <div key={c.value} className="mb-3">
+          <label className="sr-only" htmlFor={`rg-${c.value}`}>{t(c.value)}</label>
           <input id={`rg-${c.value}`} type={c.type} required maxLength={c.max}
-            value={detail[c.value]} disabled={saving} placeholder={c.placeholder}
+            value={detail[c.value]} disabled={saving} placeholder={t(c.ph)}
             onChange={(e) => setDetail((d) => ({ ...d, [c.value]: e.target.value }))}
             className={FIELD} />
         </div>
@@ -151,7 +152,7 @@ export function RegisterForm({ eventId, dates }: { eventId: string; dates: strin
 
       <button type="submit" disabled={saving}
         className="mt-3 w-full rounded-lg bg-white py-3 font-bold text-yai-blue transition hover:bg-white/95 disabled:opacity-50">
-        {saving ? "Submitting…" : "Submit"}
+        {saving ? t("submitting") : t("submit")}
       </button>
     </form>
   );

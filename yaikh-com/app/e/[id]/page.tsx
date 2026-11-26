@@ -9,8 +9,8 @@ import { notFound } from "next/navigation";
 import { ObjectId } from "mongodb";
 import { getDb } from "@/lib/mongo";
 import { backfillEventNumbers } from "@/lib/event-number";
-import { RegisterForm } from "@/components/event/RegisterForm";
-import { formatDateRange, formatTimeRange, cateringItems } from "@/lib/event-format";
+import { EventView } from "@/components/event/EventView";
+import { formatTimeRange, cateringItems } from "@/lib/event-format";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -51,47 +51,19 @@ export default async function EventPage({ params }: { params: { id: string } }) 
   return (
     <main className="relative min-h-screen overflow-hidden mesh-hero grain text-white px-4 py-5 sm:px-6 sm:py-16">
       <div className="relative mx-auto grid max-w-5xl gap-5 lg:grid-cols-2 lg:gap-12">
-        <div>
-          {/* Logo and title share one line — no stacked gap on a phone. */}
-          <div className="flex items-start gap-3">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/images/yai-logo.jpg" alt="Yai" className="mt-0.5 h-8 w-8 shrink-0 rounded-md object-cover shadow-lg sm:h-9 sm:w-9" />
-            <h1 className="text-xl font-extrabold leading-tight text-white sm:text-3xl">
-              {event.titleEn || event.title}
-            </h1>
-          </div>
-
-          {/* One flowing line: icon + text pairs that only wrap as whole
-              items on a narrow phone, never mid-item. */}
-          <p className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-[14px] text-white/85">
-            <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
-              <span aria-hidden="true">📅</span>{formatDateRange(when)}
-            </span>
-            {formatTimeRange(when) && (
-              <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
-                <span aria-hidden="true">🕘</span>{formatTimeRange(when)}
-              </span>
-            )}
-            {event.venue && (
-              <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
-                <span aria-hidden="true">📍</span>{String(event.venue)}
-                {mapUrl && (
-                  <a href={mapUrl} target="_blank" rel="noopener noreferrer"
-                    className="ml-1 font-semibold text-white underline hover:text-yai-orange">
-                    map ↗
-                  </a>
-                )}
-              </span>
-            )}
-            {provided.map((c) => (
-              <span key={c.value} className="inline-flex items-center gap-1.5 whitespace-nowrap">
-                <span aria-hidden="true">{c.icon}</span>{c.label}
-              </span>
-            ))}
-          </p>
-        </div>
-
-        <RegisterForm eventId={String(event._id)} dates={dates} />
+        <EventView
+          ev={{
+            id: String(event._id),
+            title: String(event.titleEn || event.title),
+            date: when.date,
+            endDate: when.endDate,
+            time: formatTimeRange(when),
+            venue: event.venue ? String(event.venue) : "",
+            mapUrl,
+            catering: provided.map((c) => c.value),
+            dates,
+          }}
+        />
       </div>
     </main>
   );
