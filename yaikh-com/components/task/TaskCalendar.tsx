@@ -248,15 +248,30 @@ function MonthGrid({ year, month, byDay, today, onIgnore, onKeep, onGo, onSelect
                 </div>
               )}
               <div className="mt-0.5 flex flex-wrap gap-0.5">
-                {entries.slice(0, 10).map((en, j) => (
-                  <EventTab
-                    key={`${en.event.id}-${en.isDeadline ? "d" : "e"}-${j}`}
-                    entry={en}
-                    onIgnore={onIgnore}
-                    onKeep={onKeep}
-                    onGo={onGo}
-                  />
-                ))}
+                {onSelectDay
+                  ? // Yai events tab: the day itself is the button. A plain
+                    // labelled bar, no pop-up — the pop-up's triage actions
+                    // belong to the Task tab, and inside a small cell it was
+                    // clipped and hid the click that opens the day's detail.
+                    entries.slice(0, 2).map((en, j) => (
+                      <span
+                        key={`${en.event.id}-${j}`}
+                        className={`pointer-events-none block w-full truncate rounded-sm px-1 text-[8px] font-bold uppercase leading-[12px] text-white ${
+                          KIND_TAB_COLOR[en.event.kind || "other"] || KIND_TAB_COLOR.other
+                        }`}
+                      >
+                        {en.event.title}
+                      </span>
+                    ))
+                  : entries.slice(0, 10).map((en, j) => (
+                      <EventTab
+                        key={`${en.event.id}-${en.isDeadline ? "d" : "e"}-${j}`}
+                        entry={en}
+                        onIgnore={onIgnore}
+                        onKeep={onKeep}
+                        onGo={onGo}
+                      />
+                    ))}
                 {entries.length > 10 && (
                   <span className="text-[8px] text-gray-600 self-end">+{entries.length - 10}</span>
                 )}
