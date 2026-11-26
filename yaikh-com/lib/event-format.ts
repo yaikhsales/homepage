@@ -3,20 +3,27 @@
 
 type When = { date: string; endDate?: string; startTime?: string; endTime?: string; time?: string };
 
-function day(iso: string, opts: Intl.DateTimeFormatOptions): string {
+const WD = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const MON = ["January", "February", "March", "April", "May", "June", "July",
+  "August", "September", "October", "November", "December"];
+
+// Built by hand: toLocaleDateString puts a comma after the weekday in some
+// runtimes and not others, which made "Fri 18 – Sat, 19 …" on the page.
+function parts(iso: string) {
   const d = new Date(`${iso}T00:00:00`);
-  return Number.isNaN(d.getTime()) ? iso : d.toLocaleDateString("en-GB", opts);
+  if (Number.isNaN(d.getTime())) return null;
+  return { wd: WD[d.getDay()], day: d.getDate(), mon: MON[d.getMonth()], year: d.getFullYear() };
 }
 
 /** "Fri 18 December 2026" or "Fri 18 – Sat 19 December 2026". */
 export function formatDateRange(e: When): string {
-  const end = e.endDate && e.endDate > e.date ? e.endDate : "";
-  if (!end) return day(e.date, { weekday: "short", day: "numeric", month: "long", year: "numeric" });
-  const sameMonth = e.date.slice(0, 7) === end.slice(0, 7);
-  const from = sameMonth
-    ? day(e.date, { weekday: "short", day: "numeric" })
-    : day(e.date, { weekday: "short", day: "numeric", month: "long" });
-  return `${from} – ${day(end, { weekday: "short", day: "numeric", month: "long", year: "numeric" })}`;
+  const a = parts(e.date);
+  if (!a) return e.date;
+  const b = e.endDate && e.endDate > e.date ? parts(e.endDate) : null;
+  if (!b) return `${a.wd} ${a.day} ${a.mon} ${a.year}`;
+  if (a.year !== b.year) return `${a.wd} ${a.day} ${a.mon} ${a.year} – ${b.wd} ${b.day} ${b.mon} ${b.year}`;
+  if (a.mon !== b.mon) return `${a.wd} ${a.day} ${a.mon} – ${b.wd} ${b.day} ${b.mon} ${b.year}`;
+  return `${a.wd} ${a.day} – ${b.wd} ${b.day} ${b.mon} ${b.year}`;
 }
 
 /** "09:00 – 17:00", or whatever older rows stored in `time`. */

@@ -93,6 +93,10 @@ const nextConfig = {
         ? [{ source: "/experience/assets/:path*", destination: `${media}/:path*` }]
         : [],
       afterFiles: [
+        // Short public link for our own events: yaikh.com/event001 is the
+        // sign-up page of event number 1. Digits only, so /events (the
+        // public list) is never caught by it.
+        { source: "/event:no(\\d+)", destination: "/e/:no" },
         // public/strategy/index.html is a standalone page (own fonts, inline
         // CSS, no JS). Next does not resolve a folder to its index.html, so
         // /strategy needs this or it 404s.

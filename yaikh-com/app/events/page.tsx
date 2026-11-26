@@ -64,7 +64,7 @@ export default async function EventsPage() {
               };
               return (
                 <li key={id}>
-                  <Link href={`/e/${id}`}
+                  <Link href={e.slug ? `/${String(e.slug)}` : `/e/${id}`}
                     className="block rounded-2xl border border-white/15 bg-white/10 p-6 transition hover:border-white/40 hover:bg-white/15">
                     {e.kind ? (
                       <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.22em] text-yai-orange">

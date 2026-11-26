@@ -15,6 +15,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifySession, COOKIE_NAME } from "@/lib/auth";
 import { getDb } from "@/lib/mongo";
+import { nextEventNo, eventSlug, backfillEventNumbers } from "@/lib/event-number";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -27,6 +28,9 @@ export async function GET() {
 
   try {
     const db = await getDb();
+    // Events of ours saved before running numbers existed get theirs here,
+    // once — the guard inside makes every later call a no-op.
+    await backfillEventNumbers(db);
     const today = new Date();
     const iso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
     const rows = await db
@@ -46,6 +50,8 @@ export async function GET() {
         startTime: r.startTime || "",
         endTime: r.endTime || "",
         mapUrl: r.mapUrl || "",
+        eventNo: typeof r.eventNo === "number" ? r.eventNo : undefined,
+        slug: r.slug || "",
         catering: Array.isArray(r.catering) ? r.catering : [],
         title: r.titleEn || r.title,       // prefer EN; fallback to original
         titleOriginal: r.title,            // keep the KM original around
@@ -189,7 +195,9 @@ export async function POST(request: Request) {
 
   try {
     const db = await getDb();
-    const result = await db.collection("task_events").insertOne(doc);
+    const eventNo = await nextEventNo(db);
+    const slug = eventSlug(eventNo);
+    const result = await db.collection("task_events").insertOne({ ...doc, eventNo, slug });
     return NextResponse.json({
       ok: true,
       event: {
@@ -201,6 +209,8 @@ export async function POST(request: Request) {
         endTime: doc.endTime,
         mapUrl: doc.mapUrl,
         catering: doc.catering,
+        eventNo,
+        slug,
         title: doc.title,
         titleOriginal: doc.title,
         kind: doc.kind,

@@ -10,10 +10,12 @@
 import { useState } from "react";
 
 const FIELD =
-  "w-full rounded-lg border border-white/30 bg-white px-3 py-2.5 text-[15px] text-yai-blue-deep " +
+  "w-full min-w-0 rounded-lg border border-white/30 bg-white px-3 py-2.5 text-[15px] text-yai-blue-deep " +
   "placeholder-yai-blue-deep/40 focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent " +
   "disabled:opacity-60";
-const LABEL = "block text-white/85 text-sm font-medium mb-1.5";
+const LABEL = "block text-white text-sm font-semibold mb-1.5";
+// Name [ field ] on one line — the label sits to the left of its box.
+const INLINE_LABEL = "w-20 shrink-0 text-white text-sm font-semibold sm:w-24";
 
 export function RegisterForm({ eventId, dates }: { eventId: string; dates: string[] }) {
   const [name, setName] = useState("");
@@ -91,29 +93,29 @@ export function RegisterForm({ eventId, dates }: { eventId: string; dates: strin
         </div>
       )}
 
-      <div className="mb-4">
-        <label className={LABEL} htmlFor="rg-name">Name</label>
+      <div className="mb-3 flex items-center gap-3">
+        <label className={INLINE_LABEL} htmlFor="rg-name">Name</label>
         <input id="rg-name" required minLength={2} maxLength={120} value={name}
           disabled={saving} onChange={(e) => setName(e.target.value)}
           className={FIELD} placeholder="Full name" />
       </div>
 
-      <div className="mb-4">
-        <label className={LABEL} htmlFor="rg-email">Email</label>
+      <div className="mb-3 flex items-center gap-3">
+        <label className={INLINE_LABEL} htmlFor="rg-email">Email</label>
         <input id="rg-email" type="email" maxLength={200} value={email}
           disabled={saving} onChange={(e) => setEmail(e.target.value)}
           className={FIELD} placeholder="you@company.com" />
       </div>
 
-      <div className="mb-4">
-        <label className={LABEL} htmlFor="rg-phone">Phone number</label>
+      <div className="mb-3 flex items-center gap-3">
+        <label className={INLINE_LABEL} htmlFor="rg-phone">Phone</label>
         <input id="rg-phone" type="tel" maxLength={40} value={phone}
           disabled={saving} onChange={(e) => setPhone(e.target.value)}
           className={FIELD} placeholder="+855 ..." />
       </div>
 
-      <div className="mb-5">
-        <label className={LABEL} htmlFor="rg-tg">Telegram</label>
+      <div className="mb-3 flex items-center gap-3">
+        <label className={INLINE_LABEL} htmlFor="rg-tg">Telegram</label>
         <input id="rg-tg" maxLength={80} value={telegram}
           disabled={saving} onChange={(e) => setTelegram(e.target.value)}
           className={FIELD} placeholder="@username" />

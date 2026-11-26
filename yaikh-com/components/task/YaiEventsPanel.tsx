@@ -71,8 +71,11 @@ export function YaiEventsPanel({
     return ours.filter((e) => runsOn(e, selectedDay));
   }, [ours, selectedDay]);
 
-  const copyLink = async (id: string) => {
-    const url = `${window.location.origin}/e/${id}`;
+  const linkOf = (e: TaskEvent) => `${window.location.origin}/${e.slug || `e/${e.id}`}`;
+
+  const copyLink = async (e: TaskEvent) => {
+    const id = e.id;
+    const url = linkOf(e);
     try {
       await navigator.clipboard.writeText(url);
       setCopied(id);
@@ -145,17 +148,17 @@ export function YaiEventsPanel({
                       <img src={`/api/events/${e.id}/qr`} alt={`QR code for ${e.title}`}
                         className="h-40 w-40 rounded border border-gray-200 bg-white p-1" />
                       <div className="mt-2 flex flex-wrap gap-2">
-                        <button type="button" onClick={() => copyLink(e.id)}
+                        <button type="button" onClick={() => copyLink(e)}
                           className="rounded border border-gray-300 px-2 py-1 text-[11px] font-semibold text-gray-700 hover:bg-gray-50">
                           {copied === e.id ? "Copied" : "Copy link"}
                         </button>
-                        <a href={`/api/events/${e.id}/qr`} download={`event-${e.id}.svg`}
+                        <a href={`/api/events/${e.id}/qr`} download={`${e.slug || `event-${e.id}`}-qr.svg`}
                           className="rounded border border-gray-300 px-2 py-1 text-[11px] font-semibold text-gray-700 hover:bg-gray-50">
                           Download QR
                         </a>
                       </div>
                       <p className="mt-2 max-w-[10rem] break-all text-[10px] text-gray-400">
-                        /e/{e.id}
+                        yaikh.com/{e.slug || `e/${e.id}`}
                       </p>
                     </div>
 

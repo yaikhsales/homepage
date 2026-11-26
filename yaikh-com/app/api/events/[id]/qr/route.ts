@@ -11,6 +11,8 @@
 import { NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
 import QRCode from "qrcode";
+import { getDb } from "@/lib/mongo";
+import { eventSlug } from "@/lib/event-number";
 
 export const runtime = "nodejs";
 
@@ -28,7 +30,20 @@ export async function GET(request: Request, { params }: { params: { id: string }
     return new NextResponse("Unknown event", { status: 404 });
   }
 
-  const target = `${originOf(request)}/e/${params.id}`;
+  // Prefer the short running-number link: it is what people will read off
+  // a printed handout, and a shorter URL makes a sparser, easier-to-scan QR.
+  let path = `/e/${params.id}`;
+  try {
+    const db = await getDb();
+    const event = await db
+      .collection("task_events")
+      .findOne({ _id: new ObjectId(params.id) }, { projection: { eventNo: 1 } });
+    if (!event) return new NextResponse("Unknown event", { status: 404 });
+    if (typeof event.eventNo === "number") path = `/${eventSlug(event.eventNo)}`;
+  } catch {
+    /* fall back to the long link rather than fail the image */
+  }
+  const target = `${originOf(request)}${path}`;
 
   try {
     const svg = await QRCode.toString(target, {
@@ -40,8 +55,9 @@ export async function GET(request: Request, { params }: { params: { id: string }
     return new NextResponse(svg, {
       headers: {
         "Content-Type": "image/svg+xml; charset=utf-8",
-        // The URL for an event id never changes, so this is safe to hold.
-        "Cache-Control": "public, max-age=86400",
+        // Short: an event's number is assigned once, but older events get
+        // theirs on first listing, and the image must pick that up.
+        "Cache-Control": "public, max-age=300",
       },
     });
   } catch (err) {
