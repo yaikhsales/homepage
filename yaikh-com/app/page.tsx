@@ -80,7 +80,7 @@ function Nav() {
         scrolled ? "bg-white/85 backdrop-blur-md border-b border-black/5" : "bg-transparent"
       }`}
     >
-      <nav className="max-w-[1600px] mx-auto px-6 lg:px-8 h-16 flex items-center justify-between gap-3 xl:gap-6">
+      <nav className="max-w-[1600px] mx-auto px-6 lg:px-8 h-16 flex items-center justify-between gap-3 xl:gap-10">
         {/* LEFT — logo + slogan + main nav links */}
         <div className="flex items-center gap-3 xl:gap-8 min-w-0">
           <a href="#top" aria-label="Yai · home" className="flex items-center gap-3.5 shrink-0">
@@ -100,13 +100,13 @@ function Nav() {
               <span className="block font-serif font-semibold text-[15px] tracking-tight">
                 {t("slogan1")}
               </span>
-              <span className="block text-[12px] font-semibold tracking-tight max-w-[20ch] mt-0.5">
+              <span className="block text-[12px] font-semibold tracking-tight max-w-[20ch] mt-0.5 truncate">
                 {t("slogan2")}
               </span>
             </span>
           </a>
           <div
-            className={`hidden xl:flex items-center gap-4 2xl:gap-5 text-[13px] font-semibold transition-colors whitespace-nowrap ${
+            className={`hidden xl:flex shrink-0 items-center gap-4 2xl:gap-5 text-[13px] font-semibold transition-colors whitespace-nowrap ${
               scrolled ? "text-yai-navy/80" : "text-white/90"
             }`}
           >
