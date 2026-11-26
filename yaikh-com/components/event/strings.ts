@@ -40,7 +40,7 @@ const S = {
   doneBody: { en: "We will be in touch.", km: "យើងនឹងទាក់ទងអ្នកឆាប់ៗនេះ។", zh: "我们会尽快与您联系。" },
   home: { en: "Back to home", km: "ត្រឡប់ទៅទំព័រដើម", zh: "返回首页" },
   map: { en: "map ↗", km: "ផែនទី ↗", zh: "地图 ↗" },
-  attend: { en: "I will attend", km: "ខ្ញុំនឹងចូលរួមថ្ងៃ", zh: "我将参加" },
+  attend: { en: "I will attend — pick one day", km: "ខ្ញុំនឹងចូលរួមថ្ងៃ — ជ្រើសរើសតែមួយថ្ងៃ", zh: "我将参加 — 只选一天" },
   tickDay: {
     en: "Tick the day you will attend.",
     km: "សូមជ្រើសរើសថ្ងៃដែលអ្នកនឹងចូលរួម។",
