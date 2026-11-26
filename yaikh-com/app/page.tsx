@@ -172,7 +172,7 @@ function Nav() {
                   <a href="https://main.yaikh.com/" role="menuitem" onClick={() => setExperienceOpen(false)} className="mt-2 block text-[13px] font-semibold hover:text-yai-orange transition whitespace-nowrap">
                     Media &amp; Publications
                   </a>
-                  <a href="/task" role="menuitem" onClick={() => setExperienceOpen(false)} className="mt-2 block text-[13px] font-semibold hover:text-yai-orange transition whitespace-nowrap">
+                  <a href="/events" role="menuitem" onClick={() => setExperienceOpen(false)} className="mt-2 block text-[13px] font-semibold hover:text-yai-orange transition whitespace-nowrap">
                     Events
                   </a>
                 </div>
@@ -192,7 +192,7 @@ function Nav() {
                 <MessageCircle size={14} />
               </button>
             </span>
-            <a href="/task"      className="hover:text-yai-orange transition whitespace-nowrap">Events</a>
+            <a href="/events"    className="hover:text-yai-orange transition whitespace-nowrap">Events</a>
             <a href="#join"      className="hover:text-yai-orange transition font-semibold whitespace-nowrap">{t("nav.join")}</a>
           </div>
         </div>
