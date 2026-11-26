@@ -14,6 +14,7 @@
 
 import { useMemo, useState } from "react";
 import type { TaskEvent } from "./TaskCalendar";
+import { CATERING } from "@/lib/event-format";
 
 const KINDS: { value: string; label: string }[] = [
   { value: "workshop", label: "Workshop" },
@@ -48,6 +49,7 @@ export function AddEventCard({
   const [endTime, setEndTime] = useState("17:00");
   const [venue, setVenue] = useState("");
   const [mapUrl, setMapUrl] = useState("");
+  const [catering, setCatering] = useState<string[]>([]);
   const [kind, setKind] = useState("workshop");
   const [title, setTitle] = useState("");
   const [source, setSource] = useState("");
@@ -60,7 +62,7 @@ export function AddEventCard({
 
   const reset = () => {
     setSpan("one"); setDate(""); setEndDate(""); setStartTime("09:00"); setEndTime("17:00");
-    setVenue(""); setMapUrl(""); setKind("workshop"); setTitle(""); setSource(""); setError(null);
+    setVenue(""); setMapUrl(""); setCatering([]); setKind("workshop"); setTitle(""); setSource(""); setError(null);
   };
 
   const submit = async (e: React.FormEvent) => {
@@ -88,6 +90,7 @@ export function AddEventCard({
           endTime,
           venue,
           mapUrl,
+          catering,
           kind,
           title,
           source,
@@ -227,6 +230,26 @@ export function AddEventCard({
               onChange={(e) => setKind(e.target.value)} className={FIELD}>
               {KINDS.map((k) => <option key={k.value} value={k.value}>{k.label}</option>)}
             </select>
+          </div>
+        </div>
+
+        <div className="mt-3">
+          <span className={LABEL}>Provided</span>
+          <div className="flex flex-wrap gap-2">
+            {CATERING.map((c) => {
+              const on = catering.includes(c.value);
+              return (
+                <label key={c.value}
+                  className={`flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-1.5 text-[13px] font-semibold transition ${
+                    on ? "border-yai-orange bg-orange-50 text-yai-navy" : "border-gray-300 bg-white text-gray-600 hover:bg-gray-50"
+                  }`}>
+                  <input type="checkbox" className="h-4 w-4 accent-yai-orange" checked={on} disabled={saving}
+                    onChange={() => setCatering((v) => (on ? v.filter((x) => x !== c.value) : [...v, c.value]))} />
+                  <span className="text-base leading-none">{c.icon}</span>
+                  {c.label}
+                </label>
+              );
+            })}
           </div>
         </div>
 

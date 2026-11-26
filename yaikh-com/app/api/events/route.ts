@@ -46,6 +46,7 @@ export async function GET() {
         startTime: r.startTime || "",
         endTime: r.endTime || "",
         mapUrl: r.mapUrl || "",
+        catering: Array.isArray(r.catering) ? r.catering : [],
         title: r.titleEn || r.title,       // prefer EN; fallback to original
         titleOriginal: r.title,            // keep the KM original around
         kind: r.kind,
@@ -145,6 +146,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: "The map link must start with https://" }, { status: 400 });
   }
 
+  const CATERING_VALUES = ["morning", "lunch", "afternoon"];
+  const catering = Array.isArray(body.catering)
+    ? CATERING_VALUES.filter((v) => (body.catering as unknown[]).includes(v))
+    : [];
+
   const kindInput = clean(body.kind, 20);
   const kind = (KINDS as readonly string[]).includes(kindInput) ? kindInput : "other";
   const sourceSlug = slugify(source);
@@ -164,6 +170,7 @@ export async function POST(request: Request) {
     startTime,
     endTime,
     mapUrl: mapInput,
+    catering,
     title,
     titleEn: title,
     kind,
@@ -193,6 +200,7 @@ export async function POST(request: Request) {
         startTime: doc.startTime,
         endTime: doc.endTime,
         mapUrl: doc.mapUrl,
+        catering: doc.catering,
         title: doc.title,
         titleOriginal: doc.title,
         kind: doc.kind,

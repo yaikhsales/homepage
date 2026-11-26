@@ -14,7 +14,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { TaskCalendar, type TaskEvent } from "./TaskCalendar";
 import { AddEventCard } from "./AddEventCard";
-import { formatDateRange, formatTimeRange, runsOn } from "@/lib/event-format";
+import { formatDateRange, formatTimeRange, runsOn, cateringItems } from "@/lib/event-format";
 
 type Registration = {
   id: string;
@@ -126,6 +126,11 @@ export function YaiEventsPanel({
                       {e.venue && ` · ${e.venue}`}
                       {e.source && ` · ${e.source}`}
                     </p>
+                    {cateringItems(e.catering).length > 0 && (
+                      <p className="text-[12px] text-gray-600">
+                        {cateringItems(e.catering).map((c) => `${c.icon} ${c.label}`).join("   ")}
+                      </p>
+                    )}
                     {e.mapUrl && (
                       <a href={e.mapUrl} target="_blank" rel="noopener noreferrer"
                         className="text-[11px] font-semibold text-yai-blue underline">

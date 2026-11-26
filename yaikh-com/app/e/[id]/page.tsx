@@ -9,7 +9,7 @@ import { notFound } from "next/navigation";
 import { ObjectId } from "mongodb";
 import { getDb } from "@/lib/mongo";
 import { RegisterForm } from "@/components/event/RegisterForm";
-import { formatDateRange, formatTimeRange } from "@/lib/event-format";
+import { formatDateRange, formatTimeRange, cateringItems } from "@/lib/event-format";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -31,6 +31,7 @@ export default async function EventPage({ params }: { params: { id: string } }) 
     endTime: event.endTime ? String(event.endTime) : undefined,
     time: event.time ? String(event.time) : undefined,
   };
+  const provided = cateringItems(event.catering);
   const mapUrl =
     typeof event.mapUrl === "string" && /^https:\/\//i.test(event.mapUrl) ? event.mapUrl : "";
 
@@ -46,6 +47,16 @@ export default async function EventPage({ params }: { params: { id: string } }) 
             <p>{formatDateRange(when)}</p>
             {formatTimeRange(when) && <p>{formatTimeRange(when)}</p>}
             {event.venue && <p>{String(event.venue)}</p>}
+            {provided.length > 0 && (
+              <p className="pt-2">
+                {provided.map((c) => (
+                  <span key={c.value} className="mr-4 inline-flex items-center gap-1.5 whitespace-nowrap">
+                    <span className="text-lg leading-none">{c.icon}</span>
+                    {c.label}
+                  </span>
+                ))}
+              </p>
+            )}
             {mapUrl && (
               <p>
                 <a href={mapUrl} target="_blank" rel="noopener noreferrer"

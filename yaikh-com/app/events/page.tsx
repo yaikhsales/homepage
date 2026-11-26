@@ -9,7 +9,7 @@
  */
 import Link from "next/link";
 import { getDb } from "@/lib/mongo";
-import { formatDateRange, formatTimeRange } from "@/lib/event-format";
+import { formatDateRange, formatTimeRange, cateringItems } from "@/lib/event-format";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -75,6 +75,11 @@ export default async function EventsPage() {
                     <p className="mt-2 text-white/75">{formatDateRange(when)}</p>
                     {formatTimeRange(when) ? <p className="text-white/60">{formatTimeRange(when)}</p> : null}
                     {e.venue ? <p className="text-white/60">{String(e.venue)}</p> : null}
+                    {cateringItems(e.catering).length > 0 ? (
+                      <p className="mt-1 text-white/60">
+                        {cateringItems(e.catering).map((c) => `${c.icon} ${c.label}`).join("   ")}
+                      </p>
+                    ) : null}
                     <span className="mt-4 inline-block text-sm font-bold text-white underline">
                       Register →
                     </span>
