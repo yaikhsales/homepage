@@ -39,22 +39,20 @@ export default async function EventsPage() {
   }
 
   return (
-    <main className="relative min-h-screen overflow-hidden mesh-hero grain text-white px-4 py-12 sm:px-6 sm:py-20">
+    <main className="relative min-h-screen overflow-hidden mesh-hero grain text-white px-4 py-6 sm:px-6 sm:py-10">
       <div className="relative mx-auto max-w-3xl">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/images/yai-logo.jpg" alt="Yai" className="mb-8 h-14 w-auto rounded-lg shadow-xl" />
-
-        <h1 className="text-3xl font-extrabold text-white sm:text-4xl">Events</h1>
-        <p className="mt-3 text-white/70">
-          Workshops, trainings and meetings we are running. Pick one to register.
-        </p>
+        <div className="flex items-center gap-3">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/images/yai-logo.jpg" alt="Yai" className="h-9 w-auto rounded-md shadow" />
+          <h1 className="text-2xl font-extrabold text-white">Events</h1>
+        </div>
 
         {events.length === 0 ? (
-          <p className="mt-10 rounded-2xl border border-white/15 bg-white/5 p-8 text-white/70">
+          <p className="mt-5 rounded-2xl border border-white/15 bg-white/5 p-8 text-white/70">
             Nothing scheduled right now. Check back soon.
           </p>
         ) : (
-          <ul className="mt-10 space-y-4">
+          <ul className="mt-5 space-y-3">
             {events.map((e) => {
               const id = String(e._id);
               const when = {
@@ -67,29 +65,23 @@ export default async function EventsPage() {
               return (
                 <li key={id}>
                   <Link href={e.slug ? `/${String(e.slug)}` : `/e/${id}`}
-                    className="block rounded-2xl border border-white/15 bg-white/10 p-6 transition hover:border-white/40 hover:bg-white/15">
-                    {e.kind ? (
-                      <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.22em] text-yai-orange">
-                        {String(e.kind)}
-                      </p>
-                    ) : null}
+                    className="block rounded-xl border border-white/15 bg-white/10 px-4 py-3 transition hover:border-white/40 hover:bg-white/15">
                     {e.titleKm ? (
-                      <p lang="km" className="text-lg font-bold text-white">{String(e.titleKm)}</p>
+                      <p lang="km" className="text-[15px] font-bold leading-snug text-white">{String(e.titleKm)}</p>
                     ) : null}
-                    <h2 className={e.titleKm ? "text-base font-bold text-white/85" : "text-xl font-bold text-white"}>
+                    <h2 className="text-[15px] font-bold leading-snug text-white/90">
                       {String(e.titleEn || e.title)}
                     </h2>
-                    <p className="mt-2 text-white/75">{formatDateRange(when)}</p>
-                    {formatTimeRange(when) ? <p className="text-white/60">{formatTimeRange(when)}</p> : null}
-                    {e.venue ? <p className="text-white/60">{String(e.venue)}</p> : null}
-                    {cateringItems(e.catering).length > 0 ? (
-                      <p className="mt-1 text-white/60">
-                        {cateringItems(e.catering).map((c) => `${c.icon} ${c.label}`).join("   ")}
-                      </p>
-                    ) : null}
-                    <span className="mt-4 inline-block text-sm font-bold text-white underline">
-                      Register →
-                    </span>
+                    {/* Same one flowing line as the event page. */}
+                    <p className="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] text-white/80">
+                      <span>📅 {formatDateRange(when)}</span>
+                      {formatTimeRange(when) ? <span>🕘 {formatTimeRange(when)}</span> : null}
+                      {e.venue ? <span>📍 {String(e.venue)}</span> : null}
+                      {cateringItems(e.catering).length > 0 ? (
+                        <span>{cateringItems(e.catering).map((c) => `${c.icon} ${c.label}`).join("  ")}</span>
+                      ) : null}
+                      <span className="ml-auto font-bold text-yai-orange">Register →</span>
+                    </p>
                   </Link>
                 </li>
               );
@@ -97,7 +89,7 @@ export default async function EventsPage() {
           </ul>
         )}
 
-        <Link href="/" className="mt-12 inline-block text-sm font-semibold text-white/60 underline hover:text-white">
+        <Link href="/" className="mt-6 inline-block text-sm font-semibold text-white/60 underline hover:text-white">
           Back to home
         </Link>
       </div>
