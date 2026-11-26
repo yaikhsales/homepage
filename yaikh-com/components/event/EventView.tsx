@@ -115,8 +115,15 @@ export function EventView({ ev }: { ev: EventViewData }) {
           ))}
         </p>
 
+      </div>
+
+      <RegisterForm eventId={ev.id} days={eventDays(ev.date, ev.endDate)} lang={lang} />
+
+      {/* Handouts and slides come after the sign-up, so the form is the first thing to act on. */}
+      {(handouts.length > 0 || slideFiles.length > 0) && (
+        <div className="lg:col-span-2">
         {handouts.length > 0 && (
-          <div className="mt-4 flex gap-2 overflow-x-auto">
+          <div className="flex gap-2 overflow-x-auto">
             {handouts.map((f) => (
               <a key={f.id} href={`/api/events/${ev.id}/files/${f.id}`} target="_blank" rel="noopener noreferrer"
                 className="block shrink-0" title={f.name}>
@@ -149,9 +156,8 @@ export function EventView({ ev }: { ev: EventViewData }) {
             )}
           </div>
         )}
-      </div>
-
-      <RegisterForm eventId={ev.id} days={eventDays(ev.date, ev.endDate)} lang={lang} />
+        </div>
+      )}
     </>
   );
 }
