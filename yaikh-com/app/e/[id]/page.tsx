@@ -10,6 +10,7 @@ import { ObjectId } from "mongodb";
 import { getDb } from "@/lib/mongo";
 import { backfillEventNumbers } from "@/lib/event-number";
 import { EventView } from "@/components/event/EventView";
+import { publicFile, slidesWindow, type EventFile } from "@/lib/event-files";
 import { formatTimeRange, cateringItems } from "@/lib/event-format";
 
 export const runtime = "nodejs";
@@ -63,6 +64,8 @@ export default async function EventPage({ params }: { params: { id: string } }) 
             mapUrl,
             catering: provided.map((c) => c.value),
             dates,
+            files: (Array.isArray(event.files) ? (event.files as EventFile[]) : []).map(publicFile),
+            slides: slidesWindow(when.date, when.endDate),
           }}
         />
       </div>

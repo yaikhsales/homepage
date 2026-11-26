@@ -16,6 +16,8 @@ import { cookies } from "next/headers";
 import { verifySession, COOKIE_NAME } from "@/lib/auth";
 import { getDb } from "@/lib/mongo";
 import { nextEventNo, eventSlug, backfillEventNumbers } from "@/lib/event-number";
+import { publicFile, type EventFile } from "@/lib/event-files";
+import { r2Configured } from "@/lib/r2";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -54,6 +56,7 @@ export async function GET() {
         slug: r.slug || "",
         catering: Array.isArray(r.catering) ? r.catering : [],
         titleKm: r.titleKm || "",
+        files: Array.isArray(r.files) ? (r.files as EventFile[]).map(publicFile) : [],
         title: r.titleEn || r.title,       // prefer EN; fallback to original
         titleOriginal: r.title,            // keep the KM original around
         kind: r.kind,
@@ -69,7 +72,7 @@ export async function GET() {
     });
 
     return NextResponse.json(
-      { ok: true, count: events.length, events },
+      { ok: true, count: events.length, events, filesReady: r2Configured() },
       { headers: { "Cache-Control": "private, max-age=30" } }
     );
   } catch (err) {

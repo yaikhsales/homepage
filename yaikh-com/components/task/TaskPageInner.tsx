@@ -28,6 +28,7 @@ export function TaskPageInner({ viewer, events: initialEvents, teamOptions }: {
   const router = useRouter();
   const [events, setEvents] = useState<TaskEvent[]>(initialEvents);
   const [feedState, setFeedState] = useState<"idle" | "loading" | "ok" | "err">("idle");
+  const [filesReady, setFilesReady] = useState(false);
   const [secondsLeft, setSecondsLeft] = useState(IDLE_MS / 1000);
   const loggingOut = useRef(false);
 
@@ -105,6 +106,7 @@ export function TaskPageInner({ viewer, events: initialEvents, teamOptions }: {
         if (cancelled) return;
         if (d?.ok && Array.isArray(d.events)) {
           setEvents(d.events);
+          setFilesReady(Boolean(d.filesReady));
           setFeedState("ok");
         } else {
           setFeedState("err");
@@ -225,6 +227,7 @@ export function TaskPageInner({ viewer, events: initialEvents, teamOptions }: {
           <YaiEventsPanel
             events={events}
             onCreated={addEvent}
+            filesReady={filesReady}
             onUpdated={(id, patch) =>
               setEvents((prev) => prev.map((ev) => (ev.id === id ? { ...ev, ...patch } : ev)))
             }

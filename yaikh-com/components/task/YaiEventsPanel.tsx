@@ -14,6 +14,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { TaskCalendar, type TaskEvent } from "./TaskCalendar";
 import { AddEventCard } from "./AddEventCard";
+import { EventFiles } from "./EventFiles";
 import { formatDateRange, formatTimeRange, runsOn, cateringItems } from "@/lib/event-format";
 
 type Registration = {
@@ -42,10 +43,12 @@ export function YaiEventsPanel({
   events,
   onCreated,
   onUpdated,
+  filesReady = false,
 }: {
   events: TaskEvent[];
   onCreated: (e: TaskEvent) => void;
   onUpdated?: (id: string, patch: Partial<TaskEvent>) => void;
+  filesReady?: boolean;
 }) {
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [regs, setRegs] = useState<Registration[]>([]);
@@ -249,6 +252,9 @@ export function YaiEventsPanel({
                       )}
                     </div>
                   </div>
+
+                  <EventFiles event={e} ready={filesReady}
+                    onChange={(files) => onUpdated?.(e.id, { files })} />
                 </div>
               );
             })}

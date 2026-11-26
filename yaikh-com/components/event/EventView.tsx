@@ -20,6 +20,8 @@ export type EventViewData = {
   mapUrl: string;
   catering: string[];    // "morning" | "lunch" | "afternoon"
   dates: string[];
+  files: { id: string; kind: "handout" | "slides"; name: string; size: number; type: string }[];
+  slides: { open: boolean; opensOn: string; closesAfter: string };
 };
 
 const FLAGS: Record<EvLang, { label: string; Flag: () => JSX.Element }> = {
@@ -33,6 +35,9 @@ const STORE_KEY = "yai-event-lang";
 
 export function EventView({ ev }: { ev: EventViewData }) {
   const [lang, setLang] = useState<EvLang>("en");
+  const handouts = ev.files.filter((f) => f.kind === "handout");
+  const slideFiles = ev.files.filter((f) => f.kind === "slides");
+  const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Phnom_Penh" }).format(new Date());
 
   // Remember the choice on this device; private windows may refuse storage.
   useEffect(() => {
@@ -108,6 +113,41 @@ export function EventView({ ev }: { ev: EventViewData }) {
             </span>
           ))}
         </p>
+
+        {handouts.length > 0 && (
+          <div className="mt-4 flex gap-2 overflow-x-auto">
+            {handouts.map((f) => (
+              <a key={f.id} href={`/api/events/${ev.id}/files/${f.id}`} target="_blank" rel="noopener noreferrer"
+                className="block shrink-0" title={f.name}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={`/api/events/${ev.id}/files/${f.id}`} alt={evT(lang, "handouts")}
+                  className="h-40 w-auto rounded-md border border-white/20 bg-white shadow-lg sm:h-52" />
+              </a>
+            ))}
+          </div>
+        )}
+
+        {slideFiles.length > 0 && (
+          <div className="mt-3 text-[14px] text-white/85">
+            {ev.slides.open ? (
+              <div className="flex flex-wrap gap-x-4 gap-y-1">
+                {slideFiles.map((f) => (
+                  <a key={f.id} href={`/api/events/${ev.id}/files/${f.id}`} target="_blank" rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 font-semibold text-white underline hover:text-yai-orange">
+                    <span aria-hidden="true">📄</span>{f.name}
+                  </a>
+                ))}
+              </div>
+            ) : (
+              <p className="inline-flex items-center gap-1.5 text-white/60">
+                <span aria-hidden="true">🔒</span>
+                {ev.slides.opensOn > today
+                  ? `${evT(lang, "slidesSoon")} ${evDateRange(lang, ev.slides.opensOn)}`
+                  : evT(lang, "slidesClosed")}
+              </p>
+            )}
+          </div>
+        )}
       </div>
 
       <RegisterForm eventId={ev.id} dates={ev.dates} lang={lang} />
