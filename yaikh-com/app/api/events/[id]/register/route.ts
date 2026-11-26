@@ -47,10 +47,6 @@ export async function POST(request: Request, { params }: { params: { id: string 
   const telegram = clean(body.telegram, 80).replace(/^@/, "");
   const chosenDate = clean(body.chosenDate, 10);
   const note = clean(body.note, 500);
-  const methodInput = clean(body.contactMethod, 20);
-  const contactMethod = (CONTACT_METHODS as readonly string[]).includes(methodInput)
-    ? (methodInput as ContactMethod)
-    : "email";
 
   if (name.length < 2) {
     return NextResponse.json({ ok: false, error: "Please tell us your name." }, { status: 400 });
@@ -58,23 +54,16 @@ export async function POST(request: Request, { params }: { params: { id: string 
   if (email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
     return NextResponse.json({ ok: false, error: "That email does not look right." }, { status: 400 });
   }
-
-  // Whichever way they asked to be contacted, we need that detail — being
-  // able to reach them is the entire point of the form.
-  const missing =
-    (contactMethod === "email" && !email) ||
-    ((contactMethod === "sms" || contactMethod === "phone") && !phone) ||
-    (contactMethod === "telegram" && !telegram);
-  if (missing) {
-    const need =
-      contactMethod === "email" ? "an email address"
-        : contactMethod === "telegram" ? "a Telegram username"
-          : "a phone number";
+  if (!email && !phone && !telegram) {
     return NextResponse.json(
-      { ok: false, error: `Please add ${need} so we can reach you that way.` },
+      { ok: false, error: "Leave an email, phone number or Telegram so we can reach you." },
       { status: 400 }
     );
   }
+
+  // Not asked for any more — the registry still wants to show how to reach
+  // someone, so take the first detail they actually gave.
+  const contactMethod: ContactMethod = email ? "email" : phone ? "phone" : "telegram";
 
   try {
     const db = await getDb();
