@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import { TaskCalendar, type TaskEvent } from "./TaskCalendar";
 import { TeamTaskList } from "./TeamTaskList";
 import { TaskFilterBar, keyOf, type MonthKey } from "./TaskFilterBar";
+import { AddEventCard } from "./AddEventCard";
 
 const IDLE_MS = 5 * 60_000; // 5 minutes
 
@@ -59,6 +60,15 @@ export function TaskPageInner({ viewer, events: initialEvents, teamOptions }: {
   }, []);
   const setAssignee = useCallback((id: string, assignee: string) => {
     setOverrides((o) => ({ ...o, [id]: { ...(o[id] || {}), assignee } }));
+  }, []);
+
+  // A newly created event is folded into the same list the feed produced,
+  // kept in date order. The filter bar derives its organiser chips from
+  // this list, so a new organiser appears as a chip with no extra wiring.
+  const addEvent = useCallback((created: TaskEvent) => {
+    setEvents((prev) =>
+      [...prev, created].sort((a, b) => a.date.localeCompare(b.date))
+    );
   }, []);
 
   const filteredEvents = useMemo(() => {
@@ -151,6 +161,8 @@ export function TaskPageInner({ viewer, events: initialEvents, teamOptions }: {
           overrides={overrides}
           onSetStatus={setStatus}
         />
+
+        <AddEventCard events={events} onCreated={addEvent} />
 
         <TaskFilterBar
           cursorMonth={cursorMonth}
