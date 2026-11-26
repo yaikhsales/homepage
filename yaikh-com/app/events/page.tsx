@@ -80,11 +80,11 @@ export default async function EventsPage() {
                       {cateringItems(e.catering).length > 0 ? (
                         <span>{cateringItems(e.catering).map((c) => `${c.icon} ${c.label}`).join("  ")}</span>
                       ) : null}
-                      <span className="ml-auto flex flex-col items-center rounded-full bg-yai-orange px-5 py-1.5 text-white shadow-lg">
+                      {/* Khmer always sits above the English. */}
+                      <span className="ml-auto flex flex-col items-center rounded-2xl bg-yai-orange px-5 py-1.5 text-white shadow-lg">
+                        <span lang="km" className="text-[13px] font-bold leading-tight">ចុះឈ្មោះ</span>
                         <span className="text-[15px] font-bold leading-tight">Register →</span>
-                        <span className="text-[10px] font-semibold leading-tight text-white/90">
-                          <span lang="km">ចុះឈ្មោះ</span> · <span lang="zh">报名</span>
-                        </span>
+                        <span lang="zh" className="text-[10px] font-semibold leading-tight text-white/90">报名</span>
                       </span>
                     </p>
                   </Link>
