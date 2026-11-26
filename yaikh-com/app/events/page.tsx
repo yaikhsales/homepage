@@ -80,7 +80,9 @@ export default async function EventsPage() {
                       {cateringItems(e.catering).length > 0 ? (
                         <span>{cateringItems(e.catering).map((c) => `${c.icon} ${c.label}`).join("  ")}</span>
                       ) : null}
-                      <span className="ml-auto font-bold text-yai-orange">Register →</span>
+                      <span className="ml-auto rounded-full bg-yai-orange px-5 py-2 text-[15px] font-bold text-white shadow-lg">
+                        Register →
+                      </span>
                     </p>
                   </Link>
                 </li>
