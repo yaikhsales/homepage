@@ -209,17 +209,22 @@ function MonthGrid({ year, month, byDay, today, onIgnore, onKeep, onGo, onSelect
           const isToday = isSameDay(today, year, month, day);
           const holiday = HOLIDAY_BY_ISO.get(iso);
           const picked = selectedDay === iso;
+          // A day of one of our own events is filled orange, the way a public
+          // holiday is filled pink, so it stands out from the scout feed.
+          const ourEvent = entries.find((en) => en.event.origin === "manual")?.event;
           const base = picked
             ? "border-2 border-yai-orange bg-orange-50"
             : isToday
               ? "border-2 border-yai-blue bg-white"
-              : holiday
-                ? "border border-rose-300 bg-rose-100/70"
-                : "border border-gray-300/70 bg-[#cfcbba]/60";
+              : ourEvent
+                ? "border border-orange-300 bg-orange-200/70"
+                : holiday
+                  ? "border border-rose-300 bg-rose-100/70"
+                  : "border border-gray-300/70 bg-[#cfcbba]/60";
           const clickable = Boolean(onSelectDay) && entries.length > 0;
           const dayColor = isToday
             ? "text-yai-blue"
-            : holiday ? "text-rose-700" : "text-gray-700";
+            : ourEvent ? "text-orange-700" : holiday ? "text-rose-700" : "text-gray-700";
           return (
             <div
               key={i}
@@ -249,6 +254,14 @@ function MonthGrid({ year, month, byDay, today, onIgnore, onKeep, onGo, onSelect
                   className="mt-0.5 truncate text-[8px] leading-tight font-semibold text-rose-700 uppercase tracking-wide"
                 >
                   {holiday}
+                </div>
+              )}
+              {ourEvent && !onSelectDay && (
+                <div
+                  title={ourEvent.title}
+                  className="mt-0.5 truncate text-[8px] leading-tight font-semibold text-orange-700 uppercase tracking-wide"
+                >
+                  {ourEvent.title}
                 </div>
               )}
               <div className="mt-0.5 flex flex-wrap gap-0.5">
