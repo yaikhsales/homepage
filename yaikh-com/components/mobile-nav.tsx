@@ -53,6 +53,7 @@ export default function MobileNav({
     },
     { label: "Ai feed", href: "/ai-feed" },
     { label: "Chat with us", href: "#chat" },
+    { label: "Events", href: "/task" },
   ];
 
   return (

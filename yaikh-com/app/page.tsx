@@ -192,6 +192,7 @@ function Nav() {
                 <MessageCircle size={14} />
               </button>
             </span>
+            <a href="/task"      className="hover:text-yai-orange transition whitespace-nowrap">Events</a>
             <a href="#join"      className="hover:text-yai-orange transition font-semibold whitespace-nowrap">{t("nav.join")}</a>
           </div>
         </div>
