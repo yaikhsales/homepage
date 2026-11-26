@@ -95,6 +95,7 @@ const TEAM: TeamMember[] = [
 
 const CERTIFICATES = [
   { name: "MOC",             image: "/assets/about-us/certificates/moc.png" },
+  { name: "MOC E-Commerce License", image: "/assets/about-us/certificates/moc-ecommerce.jpg" },
   { name: "ICT Certificate", image: "/assets/about-us/certificates/ict-certificate.jpg" },
   { name: "TAFTAC",          image: "/assets/about-us/certificates/taftac.png" },
   { name: "QIP CDC",         image: "/assets/about-us/certificates/qip-cdc.png" },
