@@ -13,6 +13,8 @@
 
 import { useState } from "react";
 import { evT, evDayShort, type EvLang } from "./strings";
+import { AttendanceCard } from "./AttendanceCard";
+import type { EventViewData } from "./EventView";
 
 const FIELD =
   "w-full min-w-0 rounded-lg border border-white/30 bg-white px-3 py-2.5 text-[15px] text-yai-blue-deep " +
@@ -25,7 +27,8 @@ const CHANNELS = [
 ] as const;
 type Channel = (typeof CHANNELS)[number]["value"];
 
-export function RegisterForm({ eventId, days, lang = "en" }: { eventId: string; days: string[]; lang?: EvLang }) {
+export function RegisterForm({ ev, days, lang = "en" }: { ev: EventViewData; days: string[]; lang?: EvLang }) {
+  const eventId = ev.id;
   const t = (k: Parameters<typeof evT>[1]) => evT(lang, k);
   const [name, setName] = useState("");
   const [via, setVia] = useState<Channel[]>([]);
@@ -37,7 +40,7 @@ export function RegisterForm({ eventId, days, lang = "en" }: { eventId: string; 
   const [website, setWebsite] = useState(""); // honeypot
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [done, setDone] = useState(false);
+  const [done, setDone] = useState<{ code: string; day: string } | null>(null);
 
   const toggle = (c: Channel) =>
     setVia((v) => (v.includes(c) ? v.filter((x) => x !== c) : [...v, c]));
@@ -75,13 +78,17 @@ export function RegisterForm({ eventId, days, lang = "en" }: { eventId: string; 
         setError(lang === "en" && data?.error ? data.error : t("failed"));
         return;
       }
-      setDone(true);
+      setDone({ code: String(data.checkInCode || ""), day: (data.attendDays && data.attendDays[0]) || attend || days[0] });
     } catch {
       setError(t("network"));
     } finally {
       setSaving(false);
     }
   };
+
+  if (done && done.code) {
+    return <AttendanceCard ev={ev} name={name.trim()} code={done.code} day={done.day} lang={lang} />;
+  }
 
   if (done) {
     return (

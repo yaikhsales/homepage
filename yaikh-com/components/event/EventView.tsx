@@ -117,7 +117,7 @@ export function EventView({ ev }: { ev: EventViewData }) {
 
       </div>
 
-      <RegisterForm eventId={ev.id} days={eventDays(ev.date, ev.endDate)} lang={lang} />
+      <RegisterForm ev={ev} days={eventDays(ev.date, ev.endDate)} lang={lang} />
 
       {/* Handouts and slides come after the sign-up, so the form is the first thing to act on. */}
       {(handouts.length > 0 || slideFiles.length > 0) && (

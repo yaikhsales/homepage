@@ -43,6 +43,7 @@ export async function GET(request: Request) {
       chosenDate: r.chosenDate || "",
       attendDays: Array.isArray(r.attendDays) && r.attendDays.length ? r.attendDays : r.chosenDate ? [r.chosenDate] : [],
       note: r.note || "",
+      checkInCode: r.checkInCode || "",
       status: r.status || "new",
       createdAt: r.createdAt ? new Date(r.createdAt).toISOString() : "",
     }));

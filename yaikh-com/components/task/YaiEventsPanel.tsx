@@ -29,6 +29,7 @@ type Registration = {
   chosenDate: string;
   attendDays?: string[];
   note: string;
+  checkInCode?: string;
   createdAt: string;
 };
 
@@ -263,6 +264,7 @@ export function YaiEventsPanel({
                           <table className="w-full text-left text-[12px]">
                             <thead>
                               <tr className="border-b border-gray-200 text-[10px] uppercase tracking-wider text-gray-500">
+                                <th className="py-1.5 pr-3 font-bold">Code</th>
                                 <th className="py-1.5 pr-3 font-bold">Name</th>
                                 <th className="py-1.5 pr-3 font-bold">Contact by</th>
                                 <th className="py-1.5 font-bold">Day</th>
@@ -276,6 +278,7 @@ export function YaiEventsPanel({
                                 };
                                 return (
                                   <tr key={r.id} className="border-b border-gray-100 align-top last:border-0">
+                                    <td className="py-1.5 pr-3 font-mono font-bold tracking-wider text-yai-orange">{r.checkInCode || "—"}</td>
                                     <td className="py-1.5 pr-3 font-semibold text-yai-navy">{r.name}</td>
                                     <td className="py-1.5 pr-3 text-gray-700">
                                       {via.map((v) => (

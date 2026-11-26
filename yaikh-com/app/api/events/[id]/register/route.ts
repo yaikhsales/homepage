@@ -11,7 +11,10 @@
  */
 import { NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
+import { randomBytes } from "crypto";
 import { getDb } from "@/lib/mongo";
+
+const CODE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -112,7 +115,23 @@ export async function POST(request: Request, { params }: { params: { id: string 
     // One person, one place per event: a second submit with the same contact
     // detail updates the first rather than filling the registry with repeats.
     const identity = email || phone || telegram;
-    await db.collection("event_registrations").updateOne(
+    const regs = db.collection("event_registrations");
+
+    // Check-in code: four letters, unique within this event, kept if the
+    // same person registers again so a card already saved stays valid.
+    // No I or O, which read as 1 and 0 at the door.
+    const existing = await regs.findOne({ eventId: params.id, identity }, { projection: { checkInCode: 1 } });
+    let checkInCode = typeof existing?.checkInCode === "string" ? existing.checkInCode : "";
+    for (let i = 0; !checkInCode && i < 20; i++) {
+      const bytes = randomBytes(4);
+      const code = Array.from(bytes, (b) => CODE_ALPHABET[b % CODE_ALPHABET.length]).join("");
+      if (!(await regs.findOne({ eventId: params.id, checkInCode: code }, { projection: { _id: 1 } }))) {
+        checkInCode = code;
+      }
+    }
+    if (!checkInCode) throw new Error("Could not make a check-in code. Please try again.");
+
+    await regs.updateOne(
       { eventId: params.id, identity },
       {
         $set: {
@@ -128,6 +147,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
           chosenDate: date,
           attendDays,
           note,
+          checkInCode,
           updatedAt: new Date(),
         },
         $setOnInsert: { createdAt: new Date(), status: "new" },
@@ -135,7 +155,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
       { upsert: true }
     );
 
-    return NextResponse.json({ ok: true, registered: true, attendDays });
+    return NextResponse.json({ ok: true, registered: true, attendDays, checkInCode, name });
   } catch (err) {
     return NextResponse.json(
       { ok: false, error: err instanceof Error ? err.message : String(err) },
