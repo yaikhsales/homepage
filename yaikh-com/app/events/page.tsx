@@ -73,7 +73,12 @@ export default async function EventsPage() {
                         {String(e.kind)}
                       </p>
                     ) : null}
-                    <h2 className="text-xl font-bold text-white">{String(e.titleEn || e.title)}</h2>
+                    {e.titleKm ? (
+                      <p lang="km" className="text-lg font-bold text-white">{String(e.titleKm)}</p>
+                    ) : null}
+                    <h2 className={e.titleKm ? "text-base font-bold text-white/85" : "text-xl font-bold text-white"}>
+                      {String(e.titleEn || e.title)}
+                    </h2>
                     <p className="mt-2 text-white/75">{formatDateRange(when)}</p>
                     {formatTimeRange(when) ? <p className="text-white/60">{formatTimeRange(when)}</p> : null}
                     {e.venue ? <p className="text-white/60">{String(e.venue)}</p> : null}

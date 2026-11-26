@@ -50,6 +50,9 @@ export function AddEventCard({
   const [venue, setVenue] = useState("");
   const [mapUrl, setMapUrl] = useState("");
   const [catering, setCatering] = useState<string[]>([]);
+  const [titleKm, setTitleKm] = useState("");
+  const [kmBack, setKmBack] = useState("");          // Gemini's English back-translation
+  const [kmBusy, setKmBusy] = useState(false);
   const [kind, setKind] = useState("workshop");
   const [title, setTitle] = useState("");
   const [source, setSource] = useState("");
@@ -62,7 +65,32 @@ export function AddEventCard({
 
   const reset = () => {
     setSpan("one"); setDate(""); setEndDate(""); setStartTime("09:00"); setEndTime("17:00");
-    setVenue(""); setMapUrl(""); setCatering([]); setKind("workshop"); setTitle(""); setSource(""); setError(null);
+    setVenue(""); setMapUrl(""); setCatering([]); setTitleKm(""); setKmBack(""); setKind("workshop"); setTitle(""); setSource(""); setError(null);
+  };
+
+  const draftKhmer = async () => {
+    if (kmBusy || title.trim().length < 2) return;
+    setKmBusy(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/events/translate-title", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify({ title }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data?.ok) {
+        setError(res.status === 401 ? "You were signed out. Sign in again in a new tab, then come back." : data?.error || "Gemini could not translate just now.");
+        return;
+      }
+      setTitleKm(data.km);
+      setKmBack(data.back || "");
+    } catch {
+      setError("Network error. Please try again.");
+    } finally {
+      setKmBusy(false);
+    }
   };
 
   const submit = async (e: React.FormEvent) => {
@@ -91,6 +119,7 @@ export function AddEventCard({
           venue,
           mapUrl,
           catering,
+          titleKm,
           kind,
           title,
           source,
@@ -211,7 +240,9 @@ export function AddEventCard({
             <label className={LABEL} htmlFor="ev-title">Title</label>
             <input id="ev-title" type="text" required minLength={2} maxLength={200}
               placeholder="What is happening" value={title} disabled={saving}
-              onChange={(e) => setTitle(e.target.value)} className={FIELD} />
+              onChange={(e) => setTitle(e.target.value)}
+              onBlur={() => { if (!titleKm) void draftKhmer(); }}
+              className={FIELD} />
           </div>
 
           <div>
@@ -231,6 +262,27 @@ export function AddEventCard({
               {KINDS.map((k) => <option key={k.value} value={k.value}>{k.label}</option>)}
             </select>
           </div>
+        </div>
+
+        <div className="mt-3">
+          <div className="mb-1 flex items-center justify-between gap-2">
+            <label className={LABEL + " mb-0"} htmlFor="ev-title-km">
+              Khmer title <span className="font-normal normal-case">(shown on top — check it before saving)</span>
+            </label>
+            <button type="button" onClick={draftKhmer} disabled={kmBusy || saving || title.trim().length < 2}
+              className="rounded border border-gray-300 px-2 py-0.5 text-[11px] font-semibold text-gray-700 hover:bg-gray-50 disabled:opacity-50">
+              {kmBusy ? "Gemini…" : titleKm ? "✨ Ask Gemini again" : "✨ Gemini"}
+            </button>
+          </div>
+          <input id="ev-title-km" type="text" maxLength={300} lang="km" value={titleKm} disabled={saving}
+            onChange={(e) => { setTitleKm(e.target.value); setKmBack(""); }}
+            placeholder="ចំណងជើងជាភាសាខ្មែរ"
+            className={FIELD + " text-[15px]"} />
+          {kmBack && (
+            <p className="mt-1 text-[11px] text-gray-500">
+              Gemini says this reads back as: <em>“{kmBack}”</em>
+            </p>
+          )}
         </div>
 
         <div className="mt-3">

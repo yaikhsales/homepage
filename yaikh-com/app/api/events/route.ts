@@ -53,6 +53,7 @@ export async function GET() {
         eventNo: typeof r.eventNo === "number" ? r.eventNo : undefined,
         slug: r.slug || "",
         catering: Array.isArray(r.catering) ? r.catering : [],
+        titleKm: r.titleKm || "",
         title: r.titleEn || r.title,       // prefer EN; fallback to original
         titleOriginal: r.title,            // keep the KM original around
         kind: r.kind,
@@ -177,6 +178,8 @@ export async function POST(request: Request) {
     endTime,
     mapUrl: mapInput,
     catering,
+    // Khmer title, checked by whoever saved it (Gemini draft, editable).
+    titleKm: /[\u1780-\u17FF]/.test(clean(body.titleKm, 300)) ? clean(body.titleKm, 300) : "",
     title,
     titleEn: title,
     kind,
@@ -209,6 +212,7 @@ export async function POST(request: Request) {
         endTime: doc.endTime,
         mapUrl: doc.mapUrl,
         catering: doc.catering,
+        titleKm: doc.titleKm,
         eventNo,
         slug,
         title: doc.title,

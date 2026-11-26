@@ -55,6 +55,7 @@ export default async function EventPage({ params }: { params: { id: string } }) 
           ev={{
             id: String(event._id),
             title: String(event.titleEn || event.title),
+            titleKm: typeof event.titleKm === "string" ? event.titleKm : "",
             date: when.date,
             endDate: when.endDate,
             time: formatTimeRange(when),

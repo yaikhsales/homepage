@@ -12,6 +12,7 @@ import { evT, evDateRange, EV_LANGS, type EvLang } from "./strings";
 export type EventViewData = {
   id: string;
   title: string;
+  titleKm: string;
   date: string;
   endDate?: string;
   time: string;          // already formatted "09:00 – 12:00"
@@ -52,9 +53,18 @@ export function EventView({ ev }: { ev: EventViewData }) {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/images/yai-logo.jpg" alt="Yai"
             className="mt-0.5 h-8 w-8 shrink-0 rounded-md object-cover shadow-lg sm:h-9 sm:w-9" />
-          <h1 className="min-w-0 flex-1 text-xl font-extrabold leading-tight text-white sm:text-3xl">
-            {ev.title}
-          </h1>
+          <div className="min-w-0 flex-1">
+            {ev.titleKm && (
+              <p lang="km" className="mb-1 text-lg font-bold leading-snug text-white sm:text-2xl">
+                {ev.titleKm}
+              </p>
+            )}
+            <h1 className={`font-extrabold leading-tight text-white ${
+              ev.titleKm ? "text-base text-white/85 sm:text-xl" : "text-xl sm:text-3xl"
+            }`}>
+              {ev.title}
+            </h1>
+          </div>
           <div className="flex shrink-0 gap-1.5">
             {EV_LANGS.map((l) => {
               const { label, Flag } = FLAGS[l];

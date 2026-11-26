@@ -41,14 +41,50 @@ function longDate(iso: string): string {
 export function YaiEventsPanel({
   events,
   onCreated,
+  onUpdated,
 }: {
   events: TaskEvent[];
   onCreated: (e: TaskEvent) => void;
+  onUpdated?: (id: string, patch: Partial<TaskEvent>) => void;
 }) {
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [regs, setRegs] = useState<Registration[]>([]);
   const [state, setState] = useState<"loading" | "ok" | "err">("loading");
   const [copied, setCopied] = useState<string | null>(null);
+  // Editing the Khmer title of one saved event.
+  const [kmEdit, setKmEdit] = useState<{ id: string; km: string; back: string } | null>(null);
+  const [kmBusy, setKmBusy] = useState(false);
+  // The error belongs to the event it happened on, not every event shown.
+  const [kmError, setKmError] = useState<{ id: string; msg: string } | null>(null);
+
+  const askGemini = async (e: TaskEvent) => {
+    setKmBusy(true); setKmError(null);
+    const fail = (msg: string) => setKmError({ id: e.id, msg });
+    try {
+      const res = await fetch("/api/events/translate-title", {
+        method: "POST", headers: { "Content-Type": "application/json" }, credentials: "same-origin",
+        body: JSON.stringify({ title: e.title }),
+      });
+      const d = await res.json();
+      if (!res.ok || !d?.ok) { fail(d?.error || "Gemini could not translate just now."); return; }
+      setKmEdit({ id: e.id, km: d.km, back: d.back || "" });
+    } catch { fail("Network error."); } finally { setKmBusy(false); }
+  };
+
+  const saveKhmer = async () => {
+    if (!kmEdit) return;
+    setKmBusy(true); setKmError(null);
+    try {
+      const res = await fetch(`/api/events/${kmEdit.id}`, {
+        method: "PATCH", headers: { "Content-Type": "application/json" }, credentials: "same-origin",
+        body: JSON.stringify({ titleKm: kmEdit.km }),
+      });
+      const d = await res.json();
+      if (!res.ok || !d?.ok) { setKmError({ id: kmEdit.id, msg: d?.error || "Could not save." }); return; }
+      onUpdated?.(kmEdit.id, { titleKm: d.titleKm });
+      setKmEdit(null);
+    } catch { setKmError({ id: kmEdit.id, msg: "Network error." }); } finally { setKmBusy(false); }
+  };
 
   const ours = useMemo(() => events.filter((e) => e.origin === "manual"), [events]);
 
@@ -122,6 +158,35 @@ export function YaiEventsPanel({
               return (
                 <div key={e.id} className="rounded-lg border border-gray-200 bg-white p-3">
                   <div className="mb-3">
+                    {kmEdit?.id === e.id ? (
+                      <div className="mb-1">
+                        <input lang="km" value={kmEdit.km} disabled={kmBusy}
+                          onChange={(ev) => setKmEdit({ ...kmEdit, km: ev.target.value, back: "" })}
+                          className="w-full rounded border border-gray-300 px-2 py-1 text-[15px] text-yai-navy" />
+                        {kmEdit.back && (
+                          <p className="mt-0.5 text-[11px] text-gray-500">Reads back as: <em>“{kmEdit.back}”</em></p>
+                        )}
+                        <div className="mt-1 flex gap-2">
+                          <button type="button" onClick={saveKhmer} disabled={kmBusy}
+                            className="rounded bg-yai-navy px-2 py-0.5 text-[11px] font-bold text-white disabled:opacity-50">Save Khmer</button>
+                          <button type="button" onClick={() => askGemini(e)} disabled={kmBusy}
+                            className="rounded border border-gray-300 px-2 py-0.5 text-[11px] font-semibold text-gray-700 disabled:opacity-50">
+                            {kmBusy ? "Gemini…" : "✨ Ask Gemini again"}</button>
+                          <button type="button" onClick={() => setKmEdit(null)}
+                            className="px-1 text-[11px] text-gray-500">Cancel</button>
+                        </div>
+                      </div>
+                    ) : (
+                      <p lang="km" className="text-[15px] font-bold text-yai-navy">
+                        {e.titleKm || <span className="text-[12px] font-normal italic text-rose-600">No Khmer title yet</span>}
+                        <button type="button" disabled={kmBusy}
+                          onClick={() => (e.titleKm ? setKmEdit({ id: e.id, km: e.titleKm, back: "" }) : askGemini(e))}
+                          className="ml-2 rounded border border-gray-300 px-1.5 py-0.5 align-middle text-[10px] font-semibold text-gray-600 hover:bg-gray-50">
+                          {e.titleKm ? "Edit" : kmBusy ? "Gemini…" : "✨ Add with Gemini"}
+                        </button>
+                      </p>
+                    )}
+                    {kmError?.id === e.id && <p className="text-[11px] text-rose-600">{kmError.msg}</p>}
                     <p className="text-[14px] font-bold text-yai-navy">{e.title}</p>
                     <p className="text-[11px] text-gray-500">
                       {formatDateRange(e)}

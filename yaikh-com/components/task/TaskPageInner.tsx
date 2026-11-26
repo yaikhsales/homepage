@@ -217,7 +217,13 @@ export function TaskPageInner({ viewer, events: initialEvents, teamOptions }: {
             />
           </>
         ) : (
-          <YaiEventsPanel events={events} onCreated={addEvent} />
+          <YaiEventsPanel
+            events={events}
+            onCreated={addEvent}
+            onUpdated={(id, patch) =>
+              setEvents((prev) => prev.map((ev) => (ev.id === id ? { ...ev, ...patch } : ev)))
+            }
+          />
         )}
       </div>
     </main>
