@@ -6,6 +6,7 @@
  * header. Events are a flat array the caller supplies. */
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { HOLIDAY_BY_ISO } from "./cambodia-holidays";
 
 const KIND_TAB_COLOR: Record<string, string> = {
@@ -28,18 +29,29 @@ function EventTab({ entry, onIgnore, onKeep, onGo }: {
 }) {
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement | null>(null);
+  const popRef = useRef<HTMLDivElement | null>(null);
+  // The pop-up is drawn on the page, not inside the day cell: the cell hides
+  // its overflow, so a pop-up inside it was cut off at the cell's edge.
+  const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
   const { event: e, isDeadline } = entry;
   const color = KIND_TAB_COLOR[e.kind || "other"] || KIND_TAB_COLOR.other;
 
   useEffect(() => {
     if (!open) return;
     const onDoc = (ev: MouseEvent) => {
-      if (wrapRef.current && !wrapRef.current.contains(ev.target as Node)) {
-        setOpen(false);
-      }
+      const t = ev.target as Node;
+      if (wrapRef.current?.contains(t) || popRef.current?.contains(t)) return;
+      setOpen(false);
     };
+    const close = () => setOpen(false);
     document.addEventListener("mousedown", onDoc);
-    return () => document.removeEventListener("mousedown", onDoc);
+    window.addEventListener("scroll", close, true);
+    window.addEventListener("resize", close);
+    return () => {
+      document.removeEventListener("mousedown", onDoc);
+      window.removeEventListener("scroll", close, true);
+      window.removeEventListener("resize", close);
+    };
   }, [open]);
 
   const label = isDeadline ? "DL" : "";
@@ -49,7 +61,12 @@ function EventTab({ entry, onIgnore, onKeep, onGo }: {
       <button
         type="button"
         title={`${isDeadline ? "⏰ Deadline — " : ""}${e.title} · ${e.source}`}
-        onClick={(ev) => { ev.stopPropagation(); setOpen((o) => !o); }}
+        onClick={(ev) => {
+          ev.stopPropagation();
+          const r = ev.currentTarget.getBoundingClientRect();
+          setPos({ top: r.bottom + 4, left: Math.max(8, Math.min(r.left, window.innerWidth - 300)) });
+          setOpen((o) => !o);
+        }}
         className={`inline-flex items-center justify-center h-2.5 min-w-[8px] rounded-sm cursor-pointer transition hover:ring-2 hover:ring-yai-navy/40 ${color} ${
           isDeadline ? "ring-1 ring-rose-600/70 outline outline-1 outline-offset-0 outline-rose-700/40" : ""
         }`}
@@ -58,8 +75,9 @@ function EventTab({ entry, onIgnore, onKeep, onGo }: {
           <span className="text-[7px] font-extrabold text-white leading-none px-0.5">{label}</span>
         )}
       </button>
-      {open && (
-        <div className="absolute z-30 left-0 top-full mt-1 w-64 sm:w-72 bg-white border border-gray-300 rounded-md shadow-xl p-3 text-left">
+      {open && pos && createPortal(
+        <div ref={popRef} style={{ position: "fixed", top: pos.top, left: pos.left }}
+          className="z-[500] w-64 sm:w-72 bg-white border border-gray-300 rounded-md shadow-xl p-3 text-left">
           <div className="flex items-start gap-2">
             {e.logo ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -109,7 +127,8 @@ function EventTab({ entry, onIgnore, onKeep, onGo }: {
               Ignore
             </button>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
