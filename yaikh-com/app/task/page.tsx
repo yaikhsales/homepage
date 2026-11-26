@@ -34,7 +34,7 @@ export default function TaskPage() {
   if (!viewer) {
     return (
       <main className="min-h-screen leather-bg flex items-center justify-center p-4 sm:p-6">
-        <LoginCard redirectTo="/task" title="Task · Events Calendar" />
+        <LoginCard redirectTo="/task" title="Events Calendar" />
       </main>
     );
   }

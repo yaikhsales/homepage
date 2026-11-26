@@ -173,7 +173,7 @@ function Nav() {
                     Media &amp; Publications
                   </a>
                   <a href="/task" role="menuitem" onClick={() => setExperienceOpen(false)} className="mt-2 block text-[13px] font-semibold hover:text-yai-orange transition whitespace-nowrap">
-                    Task
+                    Events
                   </a>
                 </div>
               )}
