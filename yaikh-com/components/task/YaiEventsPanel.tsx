@@ -23,6 +23,7 @@ type Registration = {
   phone: string;
   telegram: string;
   contactMethod: string;
+  contactVia?: string[];
   chosenDate: string;
   note: string;
   createdAt: string;
@@ -34,12 +35,6 @@ function longDate(iso: string): string {
   return d.toLocaleDateString("en-GB", {
     weekday: "long", day: "numeric", month: "long", year: "numeric",
   });
-}
-
-function contactOf(r: Registration): string {
-  if (r.telegram && r.contactMethod === "telegram") return `@${r.telegram}`;
-  if (r.phone && (r.contactMethod === "phone" || r.contactMethod === "sms")) return r.phone;
-  return r.email || r.phone || (r.telegram ? `@${r.telegram}` : "—");
 }
 
 export function YaiEventsPanel({
@@ -164,20 +159,27 @@ export function YaiEventsPanel({
                             <thead>
                               <tr className="border-b border-gray-200 text-[10px] uppercase tracking-wider text-gray-500">
                                 <th className="py-1.5 pr-3 font-bold">Name</th>
-                                <th className="py-1.5 pr-3 font-bold">Contact</th>
-                                <th className="py-1.5 pr-3 font-bold">For</th>
-                                <th className="py-1.5 font-bold">Note</th>
+                                <th className="py-1.5 pr-3 font-bold">Email</th>
+                                <th className="py-1.5 pr-3 font-bold">Phone</th>
+                                <th className="py-1.5 pr-3 font-bold">Telegram</th>
+                                <th className="py-1.5 pr-3 font-bold">May contact by</th>
+                                <th className="py-1.5 font-bold">Date</th>
                               </tr>
                             </thead>
                             <tbody>
                               {list.map((r) => (
                                 <tr key={r.id} className="border-b border-gray-100 last:border-0">
                                   <td className="py-1.5 pr-3 font-semibold text-yai-navy">{r.name}</td>
-                                  <td className="py-1.5 pr-3 text-gray-700">{contactOf(r)}</td>
+                                  <td className="py-1.5 pr-3 text-gray-700">{r.email || "—"}</td>
+                                  <td className="py-1.5 pr-3 text-gray-700">{r.phone || "—"}</td>
+                                  <td className="py-1.5 pr-3 text-gray-700">{r.telegram ? `@${r.telegram}` : "—"}</td>
                                   <td className="py-1.5 pr-3 text-gray-700">
-                                    {r.chosenDate ? longDate(r.chosenDate).split(",")[0] : "—"}
+                                    {(r.contactVia && r.contactVia.length ? r.contactVia : [r.contactMethod])
+                                      .map((v) => v.charAt(0).toUpperCase() + v.slice(1)).join(", ")}
                                   </td>
-                                  <td className="py-1.5 text-gray-500">{r.note || "—"}</td>
+                                  <td className="py-1.5 text-gray-700">
+                                    {r.chosenDate ? longDate(r.chosenDate).split(",").slice(0, 2).join(",") : "—"}
+                                  </td>
                                 </tr>
                               ))}
                             </tbody>

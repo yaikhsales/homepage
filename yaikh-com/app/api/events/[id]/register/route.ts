@@ -61,9 +61,30 @@ export async function POST(request: Request, { params }: { params: { id: string 
     );
   }
 
-  // Not asked for any more — the registry still wants to show how to reach
-  // someone, so take the first detail they actually gave.
-  const contactMethod: ContactMethod = email ? "email" : phone ? "phone" : "telegram";
+  // Explicit permission: which channels the person agreed to be contacted on.
+  const VIA = ["email", "telegram", "phone"] as const;
+  const contactVia = Array.isArray(body.contactVia)
+    ? Array.from(new Set(body.contactVia.map((v) => clean(v, 20)).filter((v) => (VIA as readonly string[]).includes(v))))
+    : [];
+  if (contactVia.length === 0) {
+    return NextResponse.json(
+      { ok: false, error: "Tick at least one way we may contact you." },
+      { status: 400 }
+    );
+  }
+  // A ticked channel is only usable if they left the detail for it.
+  const lacking = contactVia.find(
+    (v) => (v === "email" && !email) || (v === "telegram" && !telegram) || (v === "phone" && !phone)
+  );
+  if (lacking) {
+    const need = lacking === "email" ? "your email" : lacking === "telegram" ? "your Telegram username" : "your phone number";
+    return NextResponse.json(
+      { ok: false, error: `You ticked ${lacking} — please add ${need}.` },
+      { status: 400 }
+    );
+  }
+
+  const contactMethod = contactVia[0] as ContactMethod;
 
   try {
     const db = await getDb();
@@ -92,6 +113,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
           phone,
           telegram,
           contactMethod,
+          contactVia,
           chosenDate: date,
           note,
           updatedAt: new Date(),

@@ -21,6 +21,10 @@ export function RegisterForm({ eventId, dates }: { eventId: string; dates: strin
   const [phone, setPhone] = useState("");
   const [telegram, setTelegram] = useState("");
   const [chosenDate, setChosenDate] = useState(dates[0] || "");
+  // Which channels the person agrees to be contacted on. Asked explicitly
+  // rather than inferred: leaving a phone number is not the same as saying
+  // "you may call me".
+  const [contactVia, setContactVia] = useState<string[]>([]);
   const [website, setWebsite] = useState(""); // honeypot
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -35,7 +39,7 @@ export function RegisterForm({ eventId, dates }: { eventId: string; dates: strin
       const res = await fetch(`/api/events/${eventId}/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, phone, telegram, chosenDate, website }),
+        body: JSON.stringify({ name, email, phone, telegram, chosenDate, contactVia, website }),
       });
       const data = await res.json();
       if (!res.ok || !data?.ok) {
@@ -114,6 +118,29 @@ export function RegisterForm({ eventId, dates }: { eventId: string; dates: strin
           disabled={saving} onChange={(e) => setTelegram(e.target.value)}
           className={FIELD} placeholder="@username" />
       </div>
+
+      <fieldset className="mb-5">
+        <legend className={LABEL}>You may contact me by</legend>
+        <div className="flex flex-wrap gap-2">
+          {([
+            ["email", "Email"],
+            ["telegram", "Telegram"],
+            ["phone", "Phone"],
+          ] as const).map(([value, label]) => {
+            const on = contactVia.includes(value);
+            return (
+              <label key={value}
+                className={`flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 text-sm font-semibold transition ${
+                  on ? "border-white bg-white text-yai-blue-deep" : "border-white/30 bg-white/5 text-white hover:bg-white/15"
+                }`}>
+                <input type="checkbox" className="h-4 w-4 accent-yai-orange" checked={on} disabled={saving}
+                  onChange={() => setContactVia((c) => (on ? c.filter((v) => v !== value) : [...c, value]))} />
+                {label}
+              </label>
+            );
+          })}
+        </div>
+      </fieldset>
 
       {/* Honeypot — hidden from people, irresistible to bots. */}
       <div aria-hidden="true" className="absolute left-[-9999px] h-0 w-0 overflow-hidden">
