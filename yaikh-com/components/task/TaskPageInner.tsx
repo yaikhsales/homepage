@@ -81,13 +81,18 @@ export function TaskPageInner({ viewer, events: initialEvents, teamOptions }: {
     [events]
   );
 
+  // The Task tab is the outside feed (Telegram / Facebook scout) only. Our
+  // own events live in the Yai events tab; showing them here too made them
+  // look like something found elsewhere to triage.
+  const external = useMemo(() => events.filter((e) => e.origin !== "manual"), [events]);
+
   const filteredEvents = useMemo(() => {
-    return events.filter((e) => {
+    return external.filter((e) => {
       if (selectedMonth && e.date.slice(0, 7) !== selectedMonth) return false;
       if (selectedSource && e.sourceSlug !== selectedSource) return false;
       return true;
     });
-  }, [events, selectedMonth, selectedSource]);
+  }, [external, selectedMonth, selectedSource]);
 
   // Pull live events from /api/events once on mount; keeps initialEvents
   // as a safe fallback if the API is down.
@@ -205,7 +210,7 @@ export function TaskPageInner({ viewer, events: initialEvents, teamOptions }: {
               onSelectMonth={setSelectedMonth}
               selectedSource={selectedSource}
               onSelectSource={setSelectedSource}
-              events={events}
+              events={external}
             />
 
             <TeamTaskList
