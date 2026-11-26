@@ -9,6 +9,7 @@
  */
 import Link from "next/link";
 import { getDb } from "@/lib/mongo";
+import { formatDateRange, formatTimeRange } from "@/lib/event-format";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -17,14 +18,6 @@ export const metadata = {
   title: "Events · Yai",
   description: "Workshops, trainings and meetings hosted by Yai.",
 };
-
-function longDate(iso: string): string {
-  const d = new Date(`${iso}T00:00:00`);
-  if (Number.isNaN(d.getTime())) return iso;
-  return d.toLocaleDateString("en-GB", {
-    weekday: "short", day: "numeric", month: "long", year: "numeric",
-  });
-}
 
 export default async function EventsPage() {
   const today = new Date();
@@ -35,7 +28,7 @@ export default async function EventsPage() {
     const db = await getDb();
     events = await db
       .collection("task_events")
-      .find({ origin: "manual", date: { $gte: iso } })
+      .find({ origin: "manual", $or: [{ date: { $gte: iso } }, { endDate: { $gte: iso } }] })
       .sort({ date: 1 })
       .limit(100)
       .toArray();
@@ -62,8 +55,13 @@ export default async function EventsPage() {
           <ul className="mt-10 space-y-4">
             {events.map((e) => {
               const id = String(e._id);
-              const dates: string[] =
-                Array.isArray(e.dates) && e.dates.length ? (e.dates as string[]) : [String(e.date)];
+              const when = {
+                date: String(e.date),
+                endDate: e.endDate ? String(e.endDate) : undefined,
+                startTime: e.startTime ? String(e.startTime) : undefined,
+                endTime: e.endTime ? String(e.endTime) : undefined,
+                time: e.time ? String(e.time) : undefined,
+              };
               return (
                 <li key={id}>
                   <Link href={`/e/${id}`}
@@ -74,8 +72,8 @@ export default async function EventsPage() {
                       </p>
                     ) : null}
                     <h2 className="text-xl font-bold text-white">{String(e.titleEn || e.title)}</h2>
-                    <p className="mt-2 text-white/75">{dates.map(longDate).join("  ·  ")}</p>
-                    {e.time ? <p className="text-white/60">{String(e.time)}</p> : null}
+                    <p className="mt-2 text-white/75">{formatDateRange(when)}</p>
+                    {formatTimeRange(when) ? <p className="text-white/60">{formatTimeRange(when)}</p> : null}
                     {e.venue ? <p className="text-white/60">{String(e.venue)}</p> : null}
                     <span className="mt-4 inline-block text-sm font-bold text-white underline">
                       Register →

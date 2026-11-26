@@ -14,6 +14,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { TaskCalendar, type TaskEvent } from "./TaskCalendar";
 import { AddEventCard } from "./AddEventCard";
+import { formatDateRange, formatTimeRange, runsOn } from "@/lib/event-format";
 
 type Registration = {
   id: string;
@@ -67,7 +68,7 @@ export function YaiEventsPanel({
   // pinned to — an event with two candidate dates belongs on both.
   const dayEvents = useMemo(() => {
     if (!selectedDay) return [];
-    return ours.filter((e) => (e.dates && e.dates.length ? e.dates : [e.date]).includes(selectedDay));
+    return ours.filter((e) => runsOn(e, selectedDay));
   }, [ours, selectedDay]);
 
   const copyLink = async (id: string) => {
@@ -120,11 +121,17 @@ export function YaiEventsPanel({
                   <div className="mb-3">
                     <p className="text-[14px] font-bold text-yai-navy">{e.title}</p>
                     <p className="text-[11px] text-gray-500">
-                      {(e.dates && e.dates.length ? e.dates : [e.date]).map(longDate).join("  ·  ")}
-                      {e.time && ` · ${e.time}`}
+                      {formatDateRange(e)}
+                      {formatTimeRange(e) && ` · ${formatTimeRange(e)}`}
                       {e.venue && ` · ${e.venue}`}
                       {e.source && ` · ${e.source}`}
                     </p>
+                    {e.mapUrl && (
+                      <a href={e.mapUrl} target="_blank" rel="noopener noreferrer"
+                        className="text-[11px] font-semibold text-yai-blue underline">
+                        View on map ↗
+                      </a>
+                    )}
                   </div>
 
                   <div className="flex flex-wrap gap-5">

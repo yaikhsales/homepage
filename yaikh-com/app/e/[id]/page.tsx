@@ -9,17 +9,10 @@ import { notFound } from "next/navigation";
 import { ObjectId } from "mongodb";
 import { getDb } from "@/lib/mongo";
 import { RegisterForm } from "@/components/event/RegisterForm";
+import { formatDateRange, formatTimeRange } from "@/lib/event-format";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-
-function longDate(iso: string): string {
-  const d = new Date(`${iso}T00:00:00`);
-  if (Number.isNaN(d.getTime())) return iso;
-  return d.toLocaleDateString("en-GB", {
-    weekday: "long", day: "numeric", month: "long", year: "numeric",
-  });
-}
 
 export default async function EventPage({ params }: { params: { id: string } }) {
   if (!ObjectId.isValid(params.id)) notFound();
@@ -31,6 +24,16 @@ export default async function EventPage({ params }: { params: { id: string } }) 
   const dates: string[] =
     Array.isArray(event.dates) && event.dates.length ? event.dates : [event.date];
 
+  const when = {
+    date: String(event.date),
+    endDate: event.endDate ? String(event.endDate) : undefined,
+    startTime: event.startTime ? String(event.startTime) : undefined,
+    endTime: event.endTime ? String(event.endTime) : undefined,
+    time: event.time ? String(event.time) : undefined,
+  };
+  const mapUrl =
+    typeof event.mapUrl === "string" && /^https:\/\//i.test(event.mapUrl) ? event.mapUrl : "";
+
   return (
     <main className="min-h-screen bg-yai-blue-deep px-4 py-10 sm:px-6 sm:py-16">
       <div className="mx-auto grid max-w-5xl gap-8 lg:grid-cols-2 lg:gap-12">
@@ -40,9 +43,17 @@ export default async function EventPage({ params }: { params: { id: string } }) 
           </h1>
 
           <div className="mt-4 space-y-1 text-white/80">
-            <p>{dates.map(longDate).join("  ·  ")}</p>
-            {event.time && <p>{String(event.time)}</p>}
+            <p>{formatDateRange(when)}</p>
+            {formatTimeRange(when) && <p>{formatTimeRange(when)}</p>}
             {event.venue && <p>{String(event.venue)}</p>}
+            {mapUrl && (
+              <p>
+                <a href={mapUrl} target="_blank" rel="noopener noreferrer"
+                  className="font-semibold text-white underline hover:text-yai-orange">
+                  View on map ↗
+                </a>
+              </p>
+            )}
           </div>
         </div>
 

@@ -42,6 +42,10 @@ export async function GET() {
         id: String(r._id),
         date: r.date,
         dates: Array.isArray(r.dates) && r.dates.length ? r.dates : [r.date],
+        endDate: r.endDate || r.date,
+        startTime: r.startTime || "",
+        endTime: r.endTime || "",
+        mapUrl: r.mapUrl || "",
         title: r.titleEn || r.title,       // prefer EN; fallback to original
         titleOriginal: r.title,            // keep the KM original around
         kind: r.kind,
@@ -114,14 +118,32 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: "Say who is organising it." }, { status: 400 });
   }
 
-  // An event can offer two or three candidate dates for registrants to
-  // choose between; `date` is the first and is what the calendar pins it to.
-  const extraDates = Array.isArray(body.dateOptions)
-    ? body.dateOptions
-        .map((d) => clean(d, 10))
-        .filter((d) => /^\d{4}-\d{2}-\d{2}$/.test(d) && !Number.isNaN(Date.parse(d)))
-    : [];
-  const dates = Array.from(new Set([date, ...extraDates])).sort().slice(0, 3);
+  // An event runs on one day, or across a from–to range of days. It is one
+  // event either way; registrants sign up for it rather than choosing a day.
+  const endInput = clean(body.endDate, 10) || date;
+  const endDate =
+    /^\d{4}-\d{2}-\d{2}$/.test(endInput) && !Number.isNaN(Date.parse(endInput)) && endInput >= date
+      ? endInput
+      : date;
+  const spanDays = Math.round((Date.parse(endDate) - Date.parse(date)) / 86_400_000) + 1;
+  if (spanDays > 31) {
+    return NextResponse.json({ ok: false, error: "An event can run for at most 31 days." }, { status: 400 });
+  }
+
+  const startTime = /^\d{2}:\d{2}$/.test(clean(body.startTime, 5)) ? clean(body.startTime, 5) : "";
+  const endTime = /^\d{2}:\d{2}$/.test(clean(body.endTime, 5)) ? clean(body.endTime, 5) : "";
+  if (startTime && endTime && endTime <= startTime) {
+    return NextResponse.json({ ok: false, error: "The end time must be after the start time." }, { status: 400 });
+  }
+  // Kept as one display string too, because the Task tab and older rows
+  // read `time`.
+  const time = startTime && endTime ? `${startTime}–${endTime}` : startTime || clean(body.time, 40);
+
+  // Only an https link — it is shown to the public as "View on map".
+  const mapInput = clean(body.mapUrl, 500);
+  if (mapInput && !/^https:\/\//i.test(mapInput)) {
+    return NextResponse.json({ ok: false, error: "The map link must start with https://" }, { status: 400 });
+  }
 
   const kindInput = clean(body.kind, 20);
   const kind = (KINDS as readonly string[]).includes(kindInput) ? kindInput : "other";
@@ -137,7 +159,11 @@ export async function POST(request: Request) {
 
   const doc = {
     date,
-    dates,
+    endDate,
+    dates: [date],
+    startTime,
+    endTime,
+    mapUrl: mapInput,
     title,
     titleEn: title,
     kind,
@@ -147,7 +173,7 @@ export async function POST(request: Request) {
     // proposal the team still has to triage.
     status: "go" as const,
     venue: clean(body.venue, 200),
-    time: clean(body.time, 40),
+    time,
     link,
     origin: "manual" as const,
     createdBy: viewer,
@@ -162,7 +188,11 @@ export async function POST(request: Request) {
       event: {
         id: String(result.insertedId),
         date: doc.date,
+        endDate: doc.endDate,
         dates: doc.dates,
+        startTime: doc.startTime,
+        endTime: doc.endTime,
+        mapUrl: doc.mapUrl,
         title: doc.title,
         titleOriginal: doc.title,
         kind: doc.kind,

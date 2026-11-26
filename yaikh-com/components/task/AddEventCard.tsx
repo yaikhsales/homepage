@@ -1,16 +1,15 @@
 "use client";
 
-/* "Add event" card for /task.
+/* "Add event" card for the Yai events tab.
  *
- * Collapsed it is a single button; open it is a small form. On success the
- * parent folds the new event into its list, which is all the filter bar
- * needs — its organiser chips are derived from the events themselves, so a
- * new organiser appears as a new chip and an existing one just gains a
- * count.
+ * Dates work like a booking form: pick "One day" for a single date, or
+ * "Several days" for a from–to range, then a start and end time. A range
+ * is one event that runs across those days — registrants sign up for the
+ * event, they do not choose between dates.
  *
- * The organiser field is a free-text input backed by a datalist of the
- * organisers already on the board, so picking an existing one is one click
- * and lands the event on that chip instead of beside it.
+ * On success the parent folds the new event into its list; the calendar
+ * and the organiser chips are derived from that list, so nothing else needs
+ * wiring.
  */
 
 import { useMemo, useState } from "react";
@@ -42,17 +41,17 @@ export function AddEventCard({
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [span, setSpan] = useState<"one" | "several">("one");
   const [date, setDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [startTime, setStartTime] = useState("09:00");
+  const [endTime, setEndTime] = useState("17:00");
+  const [venue, setVenue] = useState("");
+  const [mapUrl, setMapUrl] = useState("");
+  const [kind, setKind] = useState("workshop");
   const [title, setTitle] = useState("");
   const [source, setSource] = useState("");
-  const [kind, setKind] = useState("workshop");
-  const [time, setTime] = useState("");
-  const [venue, setVenue] = useState("");
-  // Up to two alternatives beside the main date; registrants pick one.
-  const [altDates, setAltDates] = useState<string[]>([]);
 
-  // Organisers already on the board, so the viewer can reuse one rather
-  // than retyping it slightly differently and splitting the chip.
   const knownSources = useMemo(() => {
     const seen = new Set<string>();
     for (const e of events) if (e.source) seen.add(e.source);
@@ -60,13 +59,21 @@ export function AddEventCard({
   }, [events]);
 
   const reset = () => {
-    setDate(""); setTitle(""); setSource(""); setKind("workshop");
-    setTime(""); setVenue(""); setAltDates([]); setError(null);
+    setSpan("one"); setDate(""); setEndDate(""); setStartTime("09:00"); setEndTime("17:00");
+    setVenue(""); setMapUrl(""); setKind("workshop"); setTitle(""); setSource(""); setError(null);
   };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (saving) return;
+    if (span === "several" && endDate && date && endDate <= date) {
+      setError("The end date must be after the start date.");
+      return;
+    }
+    if (startTime && endTime && endTime <= startTime) {
+      setError("The end time must be after the start time.");
+      return;
+    }
     setSaving(true);
     setError(null);
     try {
@@ -74,11 +81,25 @@ export function AddEventCard({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "same-origin",
-        body: JSON.stringify({ date, title, source, kind, time, venue, dateOptions: altDates.filter(Boolean) }),
+        body: JSON.stringify({
+          date,
+          endDate: span === "several" ? endDate : date,
+          startTime,
+          endTime,
+          venue,
+          mapUrl,
+          kind,
+          title,
+          source,
+        }),
       });
       const data = await res.json();
       if (!res.ok || !data?.ok) {
-        setError(data?.error || "Could not save. Please try again.");
+        setError(
+          res.status === 401
+            ? "You were signed out. Refresh the page, sign in again, and save."
+            : data?.error || "Could not save. Please try again."
+        );
         return;
       }
       onCreated(data.event as TaskEvent);
@@ -121,31 +142,66 @@ export function AddEventCard({
       </div>
 
       <form onSubmit={submit}>
+        {/* One day / several days — booking-form style */}
+        <div className="mb-3 inline-flex rounded-lg bg-[#e4dfd0] p-1">
+          {([
+            ["one", "One day"],
+            ["several", "Several days"],
+          ] as const).map(([value, label]) => (
+            <button
+              key={value}
+              type="button"
+              disabled={saving}
+              onClick={() => setSpan(value)}
+              aria-pressed={span === value}
+              className={`rounded-md px-3.5 py-1 text-[12px] font-bold transition ${
+                span === value ? "bg-white text-yai-navy shadow-sm" : "text-gray-500 hover:text-yai-navy"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-6">
           <div>
-            <label className={LABEL} htmlFor="ev-date">Date</label>
+            <label className={LABEL} htmlFor="ev-date">{span === "one" ? "Date" : "From"}</label>
             <input id="ev-date" type="date" required value={date} disabled={saving}
               onChange={(e) => setDate(e.target.value)} className={FIELD} />
           </div>
 
+          {span === "several" && (
+            <div>
+              <label className={LABEL} htmlFor="ev-end-date">To</label>
+              <input id="ev-end-date" type="date" required min={date || undefined} value={endDate}
+                disabled={saving} onChange={(e) => setEndDate(e.target.value)} className={FIELD} />
+            </div>
+          )}
+
           <div>
-            <label className={LABEL} htmlFor="ev-time">Time <span className="font-normal normal-case">(optional)</span></label>
-            <input id="ev-time" type="text" maxLength={40} placeholder="09:00" value={time}
-              disabled={saving} onChange={(e) => setTime(e.target.value)} className={FIELD} />
+            <label className={LABEL} htmlFor="ev-start">Starts</label>
+            <input id="ev-start" type="time" required value={startTime} disabled={saving}
+              onChange={(e) => setStartTime(e.target.value)} className={FIELD} />
           </div>
 
-          <div className="lg:col-span-2">
-            <label className={LABEL} htmlFor="ev-venue">Venue <span className="font-normal normal-case">(optional)</span></label>
-            <input id="ev-venue" type="text" maxLength={200} placeholder="Where" value={venue}
+          <div>
+            <label className={LABEL} htmlFor="ev-end">Ends</label>
+            <input id="ev-end" type="time" required value={endTime} disabled={saving}
+              onChange={(e) => setEndTime(e.target.value)} className={FIELD} />
+          </div>
+
+          <div className={span === "one" ? "lg:col-span-3" : "lg:col-span-2"}>
+            <label className={LABEL} htmlFor="ev-venue">Venue</label>
+            <input id="ev-venue" type="text" required maxLength={200} placeholder="Where" value={venue}
               disabled={saving} onChange={(e) => setVenue(e.target.value)} className={FIELD} />
           </div>
 
-          <div className="lg:col-span-2">
-            <label className={LABEL} htmlFor="ev-kind">Kind</label>
-            <select id="ev-kind" value={kind} disabled={saving}
-              onChange={(e) => setKind(e.target.value)} className={FIELD}>
-              {KINDS.map((k) => <option key={k.value} value={k.value}>{k.label}</option>)}
-            </select>
+          <div className="lg:col-span-6">
+            <label className={LABEL} htmlFor="ev-map">
+              Google Maps link <span className="font-normal normal-case">(optional — paste from Maps → Share)</span>
+            </label>
+            <input id="ev-map" type="url" maxLength={500} placeholder="https://maps.app.goo.gl/..."
+              value={mapUrl} disabled={saving} onChange={(e) => setMapUrl(e.target.value)} className={FIELD} />
           </div>
 
           <div className="lg:col-span-4">
@@ -155,7 +211,7 @@ export function AddEventCard({
               onChange={(e) => setTitle(e.target.value)} className={FIELD} />
           </div>
 
-          <div className="lg:col-span-2">
+          <div>
             <label className={LABEL} htmlFor="ev-source">Organiser</label>
             <input id="ev-source" type="text" required minLength={2} maxLength={80}
               list="ev-source-options" placeholder="Yai" value={source} disabled={saving}
@@ -164,29 +220,13 @@ export function AddEventCard({
               {knownSources.map((s) => <option key={s} value={s} />)}
             </datalist>
           </div>
-        </div>
 
-        <div className="mt-3">
-          <span className={LABEL}>
-            Other dates offered <span className="font-normal normal-case">(optional — registrants pick one)</span>
-          </span>
-          <div className="flex flex-wrap items-center gap-2">
-            {altDates.map((d, i) => (
-              <span key={i} className="flex items-center gap-1">
-                <input type="date" value={d} disabled={saving}
-                  onChange={(e) => setAltDates((a) => a.map((v, j) => (j === i ? e.target.value : v)))}
-                  className={FIELD + " w-auto"} />
-                <button type="button" disabled={saving} aria-label="Remove this date"
-                  onClick={() => setAltDates((a) => a.filter((_, j) => j !== i))}
-                  className="px-1.5 text-gray-400 hover:text-rose-600">×</button>
-              </span>
-            ))}
-            {altDates.length < 2 && (
-              <button type="button" disabled={saving} onClick={() => setAltDates((a) => [...a, ""])}
-                className="rounded border border-dashed border-gray-400 px-2.5 py-1.5 text-[12px] font-semibold text-gray-600 hover:bg-gray-50">
-                + Add a date
-              </button>
-            )}
+          <div>
+            <label className={LABEL} htmlFor="ev-kind">Kind</label>
+            <select id="ev-kind" value={kind} disabled={saving}
+              onChange={(e) => setKind(e.target.value)} className={FIELD}>
+              {KINDS.map((k) => <option key={k.value} value={k.value}>{k.label}</option>)}
+            </select>
           </div>
         </div>
 
@@ -198,7 +238,7 @@ export function AddEventCard({
             {saving ? "Saving…" : "Save event"}
           </button>
           <span className="text-[11px] text-gray-500">
-            Saved as ours and marked <strong>go</strong>. It joins the organiser chips below.
+            After saving, click its date on the calendar above to get the QR code.
           </span>
         </div>
       </form>

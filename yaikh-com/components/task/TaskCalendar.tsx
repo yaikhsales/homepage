@@ -124,7 +124,11 @@ export type TaskEvent = {
   source?: string;
   sourceSlug?: string;
   logo?: string;              // "/task-logos/<slug>.jpg"
-  dates?: string[];           // candidate dates a registrant chooses between
+  dates?: string[];           // legacy: candidate dates
+  endDate?: string;           // last day of a multi-day event (= date for one day)
+  startTime?: string;         // "HH:MM"
+  endTime?: string;           // "HH:MM"
+  mapUrl?: string;            // Google Maps link shown on the public page
   origin?: string;            // "manual" = ours, "telegram" = scout-found
   kind?: "workshop" | "funding" | "expo" | "meeting" | "training" | "tender" | "other";
   status?: "proposed" | "go" | "skip" | "later";
@@ -301,6 +305,18 @@ export function TaskCalendar({ events, cursorMonth, overrides, onSetStatus, onSe
       const arr = m.get(e.date) || [];
       arr.push({ event: e, isDeadline: false });
       m.set(e.date, arr);
+      // A multi-day event belongs on every day it runs, not just the first.
+      if (e.endDate && e.endDate > e.date) {
+        const d = new Date(`${e.date}T00:00:00`);
+        for (let i = 0; i < 31; i++) {
+          d.setDate(d.getDate() + 1);
+          const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+          if (iso > e.endDate) break;
+          const more = m.get(iso) || [];
+          more.push({ event: e, isDeadline: false });
+          m.set(iso, more);
+        }
+      }
       if (e.deadline && e.deadline !== e.date) {
         const darr = m.get(e.deadline) || [];
         darr.push({ event: e, isDeadline: true });
