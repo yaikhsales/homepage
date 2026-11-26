@@ -11,6 +11,22 @@
  */
 import "server-only";
 import { AwsClient } from "aws4fetch";
+import { promises as fs } from "fs";
+import path from "path";
+
+/* Fallback store: a Railway volume. Railway sets RAILWAY_VOLUME_MOUNT_PATH
+ * as soon as a volume is attached to the service, so uploads work with no
+ * keys at all. R2 wins when its four variables are set. */
+function diskDir(): string | null {
+  return process.env.FILES_DIR || process.env.RAILWAY_VOLUME_MOUNT_PATH || null;
+}
+
+function diskPath(key: string): string {
+  const root = path.resolve(diskDir() as string, "event-files");
+  const full = path.resolve(root, key);
+  if (!full.startsWith(root + path.sep)) throw new Error("Bad file key.");
+  return full;
+}
 
 function cfg() {
   const accountId = process.env.R2_ACCOUNT_ID;
@@ -25,7 +41,7 @@ function cfg() {
 }
 
 export function r2Configured(): boolean {
-  return cfg() !== null;
+  return cfg() !== null || diskDir() !== null;
 }
 
 function urlFor(base: string, key: string) {
@@ -34,7 +50,14 @@ function urlFor(base: string, key: string) {
 
 export async function r2Put(key: string, body: ArrayBuffer, contentType: string): Promise<void> {
   const c = cfg();
-  if (!c) throw new Error("File storage is not configured.");
+  if (!c) {
+    if (!diskDir()) throw new Error("File storage is not configured.");
+    const full = diskPath(key);
+    await fs.mkdir(path.dirname(full), { recursive: true });
+    await fs.writeFile(full, Buffer.from(body));
+    await fs.writeFile(`${full}.type`, contentType);
+    return;
+  }
   const res = await c.client.fetch(urlFor(c.base, key), {
     method: "PUT",
     body,
@@ -45,12 +68,28 @@ export async function r2Put(key: string, body: ArrayBuffer, contentType: string)
 
 export async function r2Get(key: string): Promise<Response> {
   const c = cfg();
-  if (!c) throw new Error("File storage is not configured.");
+  if (!c) {
+    if (!diskDir()) throw new Error("File storage is not configured.");
+    try {
+      const full = diskPath(key);
+      const data = await fs.readFile(full);
+      const type = await fs.readFile(`${full}.type`, "utf8").catch(() => "application/octet-stream");
+      return new Response(new Uint8Array(data), { status: 200, headers: { "Content-Type": type } });
+    } catch {
+      return new Response(null, { status: 404 });
+    }
+  }
   return c.client.fetch(urlFor(c.base, key), { method: "GET" });
 }
 
 export async function r2Delete(key: string): Promise<void> {
   const c = cfg();
-  if (!c) return;
+  if (!c) {
+    if (!diskDir()) return;
+    const full = diskPath(key);
+    await fs.rm(full, { force: true });
+    await fs.rm(`${full}.type`, { force: true });
+    return;
+  }
   await c.client.fetch(urlFor(c.base, key), { method: "DELETE" });
 }

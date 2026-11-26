@@ -18,7 +18,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
   if (!verifySession(cookies().get(COOKIE_NAME)?.value)) return bad("unauthorized", 401);
   if (!ObjectId.isValid(params.id)) return bad("Unknown event.", 404);
   if (!r2Configured()) {
-    return bad("File storage is not set up yet — the R2 keys are missing on Railway.", 503);
+    return bad("File storage is not set up yet.", 503);
   }
 
   let form: FormData;
