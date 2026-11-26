@@ -41,6 +41,11 @@ export function TaskPageInner({ viewer, events: initialEvents, teamOptions }: {
   const [selectedMonth, setSelectedMonth] = useState<MonthKey | null>(null);
   const [selectedSource, setSelectedSource] = useState<string | null>(null);
 
+  // Two halves of this page do different jobs: triaging what the scout
+  // found, and running our own events. They were stacked on one scroll and
+  // got in each other's way, so they are tabs.
+  const [tab, setTab] = useState<"task" | "events">("task");
+
   const shiftCursor = useCallback((delta: number) => {
     setCursorMonth((mk) => {
       const [y, m] = mk.split("-").map(Number);
@@ -71,6 +76,11 @@ export function TaskPageInner({ viewer, events: initialEvents, teamOptions }: {
       [...prev, created].sort((a, b) => a.date.localeCompare(b.date))
     );
   }, []);
+
+  const ourCount = useMemo(
+    () => events.filter((e) => e.origin === "manual").length,
+    [events]
+  );
 
   const filteredEvents = useMemo(() => {
     return events.filter((e) => {
@@ -156,34 +166,63 @@ export function TaskPageInner({ viewer, events: initialEvents, teamOptions }: {
           </button>
         </div>
 
-        <TaskCalendar
-          events={filteredEvents}
-          cursorMonth={cursorMonth}
-          overrides={overrides}
-          onSetStatus={setStatus}
-        />
+        <div className="mb-4 inline-flex rounded-lg bg-[#e4dfd0] p-1">
+          {([
+            ["task", "Task"],
+            ["events", "Yai events"],
+          ] as const).map(([value, label]) => (
+            <button
+              key={value}
+              type="button"
+              onClick={() => setTab(value)}
+              aria-pressed={tab === value}
+              className={`rounded-md px-4 py-1.5 text-[12px] font-bold uppercase tracking-wider transition ${
+                tab === value
+                  ? "bg-white text-yai-navy shadow-sm"
+                  : "text-gray-500 hover:text-yai-navy"
+              }`}
+            >
+              {label}
+              {value === "events" && ourCount > 0 && (
+                <span className="ml-1.5 font-normal text-gray-400">{ourCount}</span>
+              )}
+            </button>
+          ))}
+        </div>
 
-        <AddEventCard events={events} onCreated={addEvent} />
+        {tab === "task" ? (
+          <>
+            <TaskCalendar
+              events={filteredEvents}
+              cursorMonth={cursorMonth}
+              overrides={overrides}
+              onSetStatus={setStatus}
+            />
 
-        <TaskFilterBar
-          cursorMonth={cursorMonth}
-          onShift={shiftCursor}
-          selectedMonth={selectedMonth}
-          onSelectMonth={setSelectedMonth}
-          selectedSource={selectedSource}
-          onSelectSource={setSelectedSource}
-          events={events}
-        />
+            <TaskFilterBar
+              cursorMonth={cursorMonth}
+              onShift={shiftCursor}
+              selectedMonth={selectedMonth}
+              onSelectMonth={setSelectedMonth}
+              selectedSource={selectedSource}
+              onSelectSource={setSelectedSource}
+              events={events}
+            />
 
-        <EventRegistry events={events} />
-
-        <TeamTaskList
-          events={filteredEvents}
-          teamOptions={teamOptions}
-          overrides={overrides}
-          onSetStatus={setStatus}
-          onSetAssignee={setAssignee}
-        />
+            <TeamTaskList
+              events={filteredEvents}
+              teamOptions={teamOptions}
+              overrides={overrides}
+              onSetStatus={setStatus}
+              onSetAssignee={setAssignee}
+            />
+          </>
+        ) : (
+          <>
+            <AddEventCard events={events} onCreated={addEvent} />
+            <EventRegistry events={events} />
+          </>
+        )}
       </div>
     </main>
   );
