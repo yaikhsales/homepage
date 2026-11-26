@@ -59,38 +59,34 @@ export default async function EventPage({ params }: { params: { id: string } }) 
             {event.titleEn || event.title}
           </h1>
 
-          <ul className="mt-5 space-y-2.5 text-[15px] text-white/85">
-            <li className="flex gap-3">
-              <span aria-hidden="true" className="w-6 shrink-0 text-center">📅</span>
-              <span>{formatDateRange(when)}</span>
-            </li>
+          {/* One flowing line: icon + text pairs that only wrap as whole
+              items on a narrow phone, never mid-item. */}
+          <p className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[14px] text-white/85">
+            <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
+              <span aria-hidden="true">📅</span>{formatDateRange(when)}
+            </span>
             {formatTimeRange(when) && (
-              <li className="flex gap-3">
-                <span aria-hidden="true" className="w-6 shrink-0 text-center">🕘</span>
-                <span>{formatTimeRange(when)}</span>
-              </li>
+              <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
+                <span aria-hidden="true">🕘</span>{formatTimeRange(when)}
+              </span>
             )}
             {event.venue && (
-              <li className="flex gap-3">
-                <span aria-hidden="true" className="w-6 shrink-0 text-center">📍</span>
-                <span>
-                  {String(event.venue)}
-                  {mapUrl && (
-                    <a href={mapUrl} target="_blank" rel="noopener noreferrer"
-                      className="ml-3 font-semibold text-white underline hover:text-yai-orange">
-                      View on map ↗
-                    </a>
-                  )}
-                </span>
-              </li>
+              <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
+                <span aria-hidden="true">📍</span>{String(event.venue)}
+                {mapUrl && (
+                  <a href={mapUrl} target="_blank" rel="noopener noreferrer"
+                    className="ml-1 font-semibold text-white underline hover:text-yai-orange">
+                    map ↗
+                  </a>
+                )}
+              </span>
             )}
             {provided.map((c) => (
-              <li key={c.value} className="flex gap-3">
-                <span aria-hidden="true" className="w-6 shrink-0 text-center">{c.icon}</span>
-                <span>{c.label}</span>
-              </li>
+              <span key={c.value} className="inline-flex items-center gap-1.5 whitespace-nowrap">
+                <span aria-hidden="true">{c.icon}</span>{c.label}
+              </span>
             ))}
-          </ul>
+          </p>
         </div>
 
         <RegisterForm eventId={String(event._id)} dates={dates} />
