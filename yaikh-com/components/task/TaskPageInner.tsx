@@ -16,8 +16,7 @@ import { useRouter } from "next/navigation";
 import { TaskCalendar, type TaskEvent } from "./TaskCalendar";
 import { TeamTaskList } from "./TeamTaskList";
 import { TaskFilterBar, keyOf, type MonthKey } from "./TaskFilterBar";
-import { AddEventCard } from "./AddEventCard";
-import { EventRegistry } from "./EventRegistry";
+import { YaiEventsPanel } from "./YaiEventsPanel";
 
 const IDLE_MS = 5 * 60_000; // 5 minutes
 
@@ -218,10 +217,7 @@ export function TaskPageInner({ viewer, events: initialEvents, teamOptions }: {
             />
           </>
         ) : (
-          <>
-            <AddEventCard events={events} onCreated={addEvent} />
-            <EventRegistry events={events} />
-          </>
+          <YaiEventsPanel events={events} onCreated={addEvent} />
         )}
       </div>
     </main>

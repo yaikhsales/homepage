@@ -159,7 +159,7 @@ function isSameDay(a: Date, year: number, month: number, day: number): boolean {
   return a.getFullYear() === year && a.getMonth() === month && a.getDate() === day;
 }
 
-function MonthGrid({ year, month, byDay, today, onIgnore, onKeep, onGo }: {
+function MonthGrid({ year, month, byDay, today, onIgnore, onKeep, onGo, onSelectDay, selectedDay }: {
   year: number;
   month: number;
   byDay: Map<string, DayEntry[]>;
@@ -167,6 +167,10 @@ function MonthGrid({ year, month, byDay, today, onIgnore, onKeep, onGo }: {
   onIgnore: (id: string) => void;
   onKeep: (id: string) => void;
   onGo: (id: string) => void;
+  // When given, a day with events becomes clickable — used by the Yai
+  // events tab to open a day's detail below the calendar.
+  onSelectDay?: (iso: string) => void;
+  selectedDay?: string | null;
 }) {
   const startOffset = startOfMonthWeekday(year, month);
   const totalDays = daysInMonth(year, month);
@@ -195,18 +199,37 @@ function MonthGrid({ year, month, byDay, today, onIgnore, onKeep, onGo }: {
           const entries = byDay.get(iso) || [];
           const isToday = isSameDay(today, year, month, day);
           const holiday = HOLIDAY_BY_ISO.get(iso);
-          const base = isToday
-            ? "border-2 border-yai-blue bg-white"
-            : holiday
-              ? "border border-rose-300 bg-rose-100/70"
-              : "border border-gray-300/70 bg-[#cfcbba]/60";
+          const picked = selectedDay === iso;
+          const base = picked
+            ? "border-2 border-yai-orange bg-orange-50"
+            : isToday
+              ? "border-2 border-yai-blue bg-white"
+              : holiday
+                ? "border border-rose-300 bg-rose-100/70"
+                : "border border-gray-300/70 bg-[#cfcbba]/60";
+          const clickable = Boolean(onSelectDay) && entries.length > 0;
           const dayColor = isToday
             ? "text-yai-blue"
             : holiday ? "text-rose-700" : "text-gray-700";
           return (
             <div
               key={i}
-              className={`h-14 sm:h-16 rounded px-1 py-0.5 overflow-hidden ${base}`}
+              onClick={clickable ? () => onSelectDay!(picked ? "" : iso) : undefined}
+              role={clickable ? "button" : undefined}
+              tabIndex={clickable ? 0 : undefined}
+              onKeyDown={
+                clickable
+                  ? (ev) => {
+                      if (ev.key === "Enter" || ev.key === " ") {
+                        ev.preventDefault();
+                        onSelectDay!(picked ? "" : iso);
+                      }
+                    }
+                  : undefined
+              }
+              className={`h-14 sm:h-16 rounded px-1 py-0.5 overflow-hidden ${base} ${
+                clickable ? "cursor-pointer hover:ring-2 hover:ring-yai-orange/40" : ""
+              }`}
             >
               <div className={`text-[10px] font-bold leading-none ${dayColor}`}>
                 {day}
@@ -246,11 +269,14 @@ function shiftMonth(y: number, m: number, delta: number): { y: number; m: number
   return { y: Math.floor(total / 12), m: ((total % 12) + 12) % 12 };
 }
 
-export function TaskCalendar({ events, cursorMonth, overrides, onSetStatus }: {
+export function TaskCalendar({ events, cursorMonth, overrides, onSetStatus, onSelectDay, selectedDay, emptyNote }: {
   events: TaskEvent[];
   cursorMonth?: string;
   overrides?: Record<string, { status?: "proposed" | "go" | "skip" | "later" }>;
   onSetStatus?: (id: string, status: "proposed" | "go" | "skip" | "later") => void;
+  onSelectDay?: (iso: string) => void;
+  selectedDay?: string | null;
+  emptyNote?: string;
 }) {
   const today = useMemo(() => new Date(), []);
   // Cursor is the MIDDLE month of the three-month strip.
@@ -346,13 +372,15 @@ export function TaskCalendar({ events, cursorMonth, overrides, onSetStatus }: {
             onIgnore={onIgnore}
             onKeep={onKeep}
             onGo={onGo}
+            onSelectDay={onSelectDay}
+            selectedDay={selectedDay}
           />
         ))}
       </div>
 
       {events.length === 0 && (
         <p className="mt-3 text-[11px] text-gray-500 italic">
-          Nothing booked yet. Events feed from the Telegram scout is pending.
+          {emptyNote || "Nothing booked yet. Events feed from the Telegram scout is pending."}
         </p>
       )}
     </section>
