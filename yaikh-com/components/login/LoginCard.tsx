@@ -170,6 +170,24 @@ export function LoginCard({ redirectTo = "/plan", title }: { redirectTo?: string
       >
         Confidential. By accessing this page you agree not to share its contents without permission.
       </motion.p>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.7, duration: 0.5 }}
+        className="mt-6 text-center"
+      >
+        <a
+          href="/"
+          className="inline-flex items-center gap-1.5 text-white/70 hover:text-white text-sm font-medium transition"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <line x1="19" y1="12" x2="5" y2="12" />
+            <polyline points="12 19 5 12 12 5" />
+          </svg>
+          Back to home
+        </a>
+      </motion.div>
     </motion.div>
   );
 }
