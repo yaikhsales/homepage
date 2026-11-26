@@ -49,8 +49,8 @@ export default async function EventPage({ params }: { params: { id: string } }) 
     typeof event.mapUrl === "string" && /^https:\/\//i.test(event.mapUrl) ? event.mapUrl : "";
 
   return (
-    <main className="min-h-screen bg-yai-blue-deep px-4 py-10 sm:px-6 sm:py-16">
-      <div className="mx-auto grid max-w-5xl gap-8 lg:grid-cols-2 lg:gap-12">
+    <main className="relative min-h-screen overflow-hidden mesh-hero grain text-white px-4 py-10 sm:px-6 sm:py-16">
+      <div className="relative mx-auto grid max-w-5xl gap-8 lg:grid-cols-2 lg:gap-12">
         <div>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/images/yai-logo.jpg" alt="Yai" className="mb-5 h-9 w-9 rounded-md object-cover shadow-lg" />

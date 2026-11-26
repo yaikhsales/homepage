@@ -39,8 +39,8 @@ export default async function EventsPage() {
   }
 
   return (
-    <main className="min-h-screen bg-yai-blue-deep px-4 py-12 sm:px-6 sm:py-20">
-      <div className="mx-auto max-w-3xl">
+    <main className="relative min-h-screen overflow-hidden mesh-hero grain text-white px-4 py-12 sm:px-6 sm:py-20">
+      <div className="relative mx-auto max-w-3xl">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/images/yai-logo.jpg" alt="Yai" className="mb-8 h-14 w-auto rounded-lg shadow-xl" />
 
