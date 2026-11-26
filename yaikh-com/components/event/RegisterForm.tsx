@@ -30,9 +30,10 @@ export function RegisterForm({ eventId, days, lang = "en" }: { eventId: string; 
   const [name, setName] = useState("");
   const [via, setVia] = useState<Channel[]>([]);
   const [detail, setDetail] = useState<Record<Channel, string>>({ email: "", phone: "", telegram: "" });
-  // A one-day event needs no choice; a multi-day one asks which day(s).
+  // A one-day event needs no choice; a multi-day one asks which ONE day —
+  // a registration is for a single day's seat.
   const multiDay = days.length > 1;
-  const [attend, setAttend] = useState<string[]>(multiDay ? [] : days);
+  const [attend, setAttend] = useState<string>(multiDay ? "" : days[0] || "");
   const [website, setWebsite] = useState(""); // honeypot
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -44,7 +45,7 @@ export function RegisterForm({ eventId, days, lang = "en" }: { eventId: string; 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (saving) return;
-    if (multiDay && attend.length === 0) {
+    if (multiDay && !attend) {
       setError(t("tickDay"));
       return;
     }
@@ -64,7 +65,7 @@ export function RegisterForm({ eventId, days, lang = "en" }: { eventId: string; 
           phone: via.includes("phone") ? detail.phone : "",
           telegram: via.includes("telegram") ? detail.telegram : "",
           contactVia: via,
-          attendDays: [...attend].sort(),
+          attendDays: attend ? [attend] : [],
           website,
         }),
       });
@@ -110,14 +111,14 @@ export function RegisterForm({ eventId, days, lang = "en" }: { eventId: string; 
           <legend className="mb-2 text-sm font-semibold text-white">{t("attend")}</legend>
           <div className="flex flex-wrap gap-2">
             {days.map((d) => {
-              const on = attend.includes(d);
+              const on = attend === d;
               return (
                 <label key={d}
                   className={`flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 text-sm font-semibold transition ${
                     on ? "border-white bg-white text-yai-blue-deep" : "border-white/30 bg-white/5 text-white hover:bg-white/15"
                   }`}>
-                  <input type="checkbox" className="h-4 w-4 accent-yai-orange" checked={on} disabled={saving}
-                    onChange={() => setAttend((a) => (on ? a.filter((x) => x !== d) : [...a, d]))} />
+                  <input type="radio" name="rg-day" className="h-4 w-4 accent-yai-orange" checked={on} disabled={saving}
+                    onChange={() => setAttend(d)} />
                   {evDayShort(lang, d)}
                 </label>
               );

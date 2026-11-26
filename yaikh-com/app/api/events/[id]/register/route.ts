@@ -105,6 +105,8 @@ export async function POST(request: Request, { params }: { params: { id: string 
       return NextResponse.json({ ok: false, error: "Tick the day you will attend." }, { status: 400 });
     }
     if (attendDays.length === 0) attendDays.push(first);
+    // One registration is one day's seat.
+    attendDays.splice(1);
     const date = attendDays[0];
 
     // One person, one place per event: a second submit with the same contact
