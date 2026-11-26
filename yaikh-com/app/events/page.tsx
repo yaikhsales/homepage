@@ -80,8 +80,11 @@ export default async function EventsPage() {
                       {cateringItems(e.catering).length > 0 ? (
                         <span>{cateringItems(e.catering).map((c) => `${c.icon} ${c.label}`).join("  ")}</span>
                       ) : null}
-                      <span className="ml-auto rounded-full bg-yai-orange px-5 py-2 text-[15px] font-bold text-white shadow-lg">
-                        Register →
+                      <span className="ml-auto flex flex-col items-center rounded-full bg-yai-orange px-5 py-1.5 text-white shadow-lg">
+                        <span className="text-[15px] font-bold leading-tight">Register →</span>
+                        <span className="text-[10px] font-semibold leading-tight text-white/90">
+                          <span lang="km">ចុះឈ្មោះ</span> · <span lang="zh">报名</span>
+                        </span>
                       </span>
                     </p>
                   </Link>
