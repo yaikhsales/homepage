@@ -48,6 +48,8 @@ export function AddEventCard({
   const [kind, setKind] = useState("workshop");
   const [time, setTime] = useState("");
   const [venue, setVenue] = useState("");
+  // Up to two alternatives beside the main date; registrants pick one.
+  const [altDates, setAltDates] = useState<string[]>([]);
 
   // Organisers already on the board, so the viewer can reuse one rather
   // than retyping it slightly differently and splitting the chip.
@@ -59,7 +61,7 @@ export function AddEventCard({
 
   const reset = () => {
     setDate(""); setTitle(""); setSource(""); setKind("workshop");
-    setTime(""); setVenue(""); setError(null);
+    setTime(""); setVenue(""); setAltDates([]); setError(null);
   };
 
   const submit = async (e: React.FormEvent) => {
@@ -72,7 +74,7 @@ export function AddEventCard({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "same-origin",
-        body: JSON.stringify({ date, title, source, kind, time, venue }),
+        body: JSON.stringify({ date, title, source, kind, time, venue, dateOptions: altDates.filter(Boolean) }),
       });
       const data = await res.json();
       if (!res.ok || !data?.ok) {
@@ -161,6 +163,30 @@ export function AddEventCard({
             <datalist id="ev-source-options">
               {knownSources.map((s) => <option key={s} value={s} />)}
             </datalist>
+          </div>
+        </div>
+
+        <div className="mt-3">
+          <span className={LABEL}>
+            Other dates offered <span className="font-normal normal-case">(optional — registrants pick one)</span>
+          </span>
+          <div className="flex flex-wrap items-center gap-2">
+            {altDates.map((d, i) => (
+              <span key={i} className="flex items-center gap-1">
+                <input type="date" value={d} disabled={saving}
+                  onChange={(e) => setAltDates((a) => a.map((v, j) => (j === i ? e.target.value : v)))}
+                  className={FIELD + " w-auto"} />
+                <button type="button" disabled={saving} aria-label="Remove this date"
+                  onClick={() => setAltDates((a) => a.filter((_, j) => j !== i))}
+                  className="px-1.5 text-gray-400 hover:text-rose-600">×</button>
+              </span>
+            ))}
+            {altDates.length < 2 && (
+              <button type="button" disabled={saving} onClick={() => setAltDates((a) => [...a, ""])}
+                className="rounded border border-dashed border-gray-400 px-2.5 py-1.5 text-[12px] font-semibold text-gray-600 hover:bg-gray-50">
+                + Add a date
+              </button>
+            )}
           </div>
         </div>
 

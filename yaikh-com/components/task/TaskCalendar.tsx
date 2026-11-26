@@ -124,6 +124,8 @@ export type TaskEvent = {
   source?: string;
   sourceSlug?: string;
   logo?: string;              // "/task-logos/<slug>.jpg"
+  dates?: string[];           // candidate dates a registrant chooses between
+  origin?: string;            // "manual" = ours, "telegram" = scout-found
   kind?: "workshop" | "funding" | "expo" | "meeting" | "training" | "tender" | "other";
   status?: "proposed" | "go" | "skip" | "later";
   venue?: string;

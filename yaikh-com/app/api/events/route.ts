@@ -41,6 +41,7 @@ export async function GET() {
       return {
         id: String(r._id),
         date: r.date,
+        dates: Array.isArray(r.dates) && r.dates.length ? r.dates : [r.date],
         title: r.titleEn || r.title,       // prefer EN; fallback to original
         titleOriginal: r.title,            // keep the KM original around
         kind: r.kind,
@@ -51,6 +52,7 @@ export async function GET() {
         venue: r.venue || "",
         time: r.time || "",
         link: r.link || "",
+        origin: r.origin || "telegram",
       };
     });
 
@@ -112,6 +114,15 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: "Say who is organising it." }, { status: 400 });
   }
 
+  // An event can offer two or three candidate dates for registrants to
+  // choose between; `date` is the first and is what the calendar pins it to.
+  const extraDates = Array.isArray(body.dateOptions)
+    ? body.dateOptions
+        .map((d) => clean(d, 10))
+        .filter((d) => /^\d{4}-\d{2}-\d{2}$/.test(d) && !Number.isNaN(Date.parse(d)))
+    : [];
+  const dates = Array.from(new Set([date, ...extraDates])).sort().slice(0, 3);
+
   const kindInput = clean(body.kind, 20);
   const kind = (KINDS as readonly string[]).includes(kindInput) ? kindInput : "other";
   const sourceSlug = slugify(source);
@@ -126,6 +137,7 @@ export async function POST(request: Request) {
 
   const doc = {
     date,
+    dates,
     title,
     titleEn: title,
     kind,
@@ -150,6 +162,7 @@ export async function POST(request: Request) {
       event: {
         id: String(result.insertedId),
         date: doc.date,
+        dates: doc.dates,
         title: doc.title,
         titleOriginal: doc.title,
         kind: doc.kind,
@@ -163,6 +176,7 @@ export async function POST(request: Request) {
         venue: doc.venue,
         time: doc.time,
         link: doc.link,
+        origin: doc.origin,
       },
     });
   } catch (err) {

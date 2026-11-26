@@ -17,6 +17,7 @@ import { TaskCalendar, type TaskEvent } from "./TaskCalendar";
 import { TeamTaskList } from "./TeamTaskList";
 import { TaskFilterBar, keyOf, type MonthKey } from "./TaskFilterBar";
 import { AddEventCard } from "./AddEventCard";
+import { EventRegistry } from "./EventRegistry";
 
 const IDLE_MS = 5 * 60_000; // 5 minutes
 
@@ -173,6 +174,8 @@ export function TaskPageInner({ viewer, events: initialEvents, teamOptions }: {
           onSelectSource={setSelectedSource}
           events={events}
         />
+
+        <EventRegistry events={events} />
 
         <TeamTaskList
           events={filteredEvents}
