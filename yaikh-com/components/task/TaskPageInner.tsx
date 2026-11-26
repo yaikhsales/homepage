@@ -82,18 +82,16 @@ export function TaskPageInner({ viewer, events: initialEvents, teamOptions }: {
     [events]
   );
 
-  // The Task tab is the outside feed (Telegram / Facebook scout) only. Our
-  // own events live in the Yai events tab; showing them here too made them
-  // look like something found elsewhere to triage.
-  const external = useMemo(() => events.filter((e) => e.origin !== "manual"), [events]);
-
+  // The Task tab shows everything: the outside feed (Telegram / Facebook
+  // scout) and our own events, since our events are internal work too. The
+  // Yai events tab narrows to ours only.
   const filteredEvents = useMemo(() => {
-    return external.filter((e) => {
+    return events.filter((e) => {
       if (selectedMonth && e.date.slice(0, 7) !== selectedMonth) return false;
       if (selectedSource && e.sourceSlug !== selectedSource) return false;
       return true;
     });
-  }, [external, selectedMonth, selectedSource]);
+  }, [events, selectedMonth, selectedSource]);
 
   // Pull live events from /api/events once on mount; keeps initialEvents
   // as a safe fallback if the API is down.
@@ -212,7 +210,7 @@ export function TaskPageInner({ viewer, events: initialEvents, teamOptions }: {
               onSelectMonth={setSelectedMonth}
               selectedSource={selectedSource}
               onSelectSource={setSelectedSource}
-              events={external}
+              events={events}
             />
 
             <TeamTaskList
