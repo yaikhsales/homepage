@@ -12,7 +12,7 @@ import { NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
 import QRCode from "qrcode";
 import { getDb } from "@/lib/mongo";
-import { eventSlug } from "@/lib/event-number";
+import { eventSlug, backfillEventNumbers } from "@/lib/event-number";
 
 export const runtime = "nodejs";
 
@@ -35,6 +35,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
   let path = `/e/${params.id}`;
   try {
     const db = await getDb();
+    await backfillEventNumbers(db);
     const event = await db
       .collection("task_events")
       .findOne({ _id: new ObjectId(params.id) }, { projection: { eventNo: 1 } });

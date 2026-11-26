@@ -9,6 +9,7 @@
  */
 import Link from "next/link";
 import { getDb } from "@/lib/mongo";
+import { backfillEventNumbers } from "@/lib/event-number";
 import { formatDateRange, formatTimeRange, cateringItems } from "@/lib/event-format";
 
 export const runtime = "nodejs";
@@ -26,6 +27,7 @@ export default async function EventsPage() {
   let events: Array<Record<string, unknown>> = [];
   try {
     const db = await getDb();
+    await backfillEventNumbers(db);
     events = await db
       .collection("task_events")
       .find({ origin: "manual", $or: [{ date: { $gte: iso } }, { endDate: { $gte: iso } }] })

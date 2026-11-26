@@ -8,6 +8,7 @@
 import { notFound } from "next/navigation";
 import { ObjectId } from "mongodb";
 import { getDb } from "@/lib/mongo";
+import { backfillEventNumbers } from "@/lib/event-number";
 import { RegisterForm } from "@/components/event/RegisterForm";
 import { formatDateRange, formatTimeRange, cateringItems } from "@/lib/event-format";
 
@@ -21,9 +22,16 @@ export default async function EventPage({ params }: { params: { id: string } }) 
   if (!byNumber && !ObjectId.isValid(params.id)) notFound();
 
   const db = await getDb();
-  const event = await db
-    .collection("task_events")
-    .findOne(byNumber ? { eventNo: Number(params.id), origin: "manual" } : { _id: new ObjectId(params.id) });
+  const find = () =>
+    db.collection("task_events")
+      .findOne(byNumber ? { eventNo: Number(params.id), origin: "manual" } : { _id: new ObjectId(params.id) });
+  let event = await find();
+  // An event saved before running numbers existed has none until the first
+  // backfill — number them now rather than 404 a printed link.
+  if (!event && byNumber) {
+    await backfillEventNumbers(db);
+    event = await find();
+  }
   if (!event) notFound();
 
   const dates: string[] =

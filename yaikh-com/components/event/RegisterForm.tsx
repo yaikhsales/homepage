@@ -2,9 +2,13 @@
 
 /* Sign-up form on the public event page — what a scanned QR leads to.
  *
- * Deliberately plain: name, email, phone, telegram, and the date choice
- * only when the event offers more than one. No account, no access code —
- * the people filling this in scanned a handout.
+ *   Name           [            ]
+ *   Confirm — we may contact you by   ☐ Email  ☐ Phone  ☐ Telegram
+ *   (a box opens for each one ticked)
+ *   [ Submit ]
+ *
+ * Only the details for ticked channels are sent: we do not keep a phone
+ * number someone typed and then said we may not use.
  */
 
 import { useState } from "react";
@@ -13,35 +17,50 @@ const FIELD =
   "w-full min-w-0 rounded-lg border border-white/30 bg-white px-3 py-2.5 text-[15px] text-yai-blue-deep " +
   "placeholder-yai-blue-deep/40 focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent " +
   "disabled:opacity-60";
-const LABEL = "block text-white text-sm font-semibold mb-1.5";
-// Name [ field ] on one line — the label sits to the left of its box.
 const INLINE_LABEL = "w-20 shrink-0 text-white text-sm font-semibold sm:w-24";
+
+const CHANNELS = [
+  { value: "email", label: "Email", type: "email", placeholder: "you@company.com", max: 200 },
+  { value: "phone", label: "Phone", type: "tel", placeholder: "+855 ...", max: 40 },
+  { value: "telegram", label: "Telegram", type: "text", placeholder: "@username", max: 80 },
+] as const;
+type Channel = (typeof CHANNELS)[number]["value"];
 
 export function RegisterForm({ eventId, dates }: { eventId: string; dates: string[] }) {
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [telegram, setTelegram] = useState("");
+  const [via, setVia] = useState<Channel[]>([]);
+  const [detail, setDetail] = useState<Record<Channel, string>>({ email: "", phone: "", telegram: "" });
   const [chosenDate, setChosenDate] = useState(dates[0] || "");
-  // Which channels the person agrees to be contacted on. Asked explicitly
-  // rather than inferred: leaving a phone number is not the same as saying
-  // "you may call me".
-  const [contactVia, setContactVia] = useState<string[]>([]);
   const [website, setWebsite] = useState(""); // honeypot
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
 
+  const toggle = (c: Channel) =>
+    setVia((v) => (v.includes(c) ? v.filter((x) => x !== c) : [...v, c]));
+
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (saving) return;
+    if (via.length === 0) {
+      setError("Tick at least one way we may contact you.");
+      return;
+    }
     setSaving(true);
     setError(null);
     try {
       const res = await fetch(`/api/events/${eventId}/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, phone, telegram, chosenDate, contactVia, website }),
+        body: JSON.stringify({
+          name,
+          email: via.includes("email") ? detail.email : "",
+          phone: via.includes("phone") ? detail.phone : "",
+          telegram: via.includes("telegram") ? detail.telegram : "",
+          contactVia: via,
+          chosenDate,
+          website,
+        }),
       });
       const data = await res.json();
       if (!res.ok || !data?.ok) {
@@ -69,80 +88,57 @@ export function RegisterForm({ eventId, dates }: { eventId: string; dates: strin
   }
 
   return (
-    <form onSubmit={submit}
-      className="rounded-2xl border border-white/15 bg-white/10 p-6 backdrop-blur-md sm:p-8">
+    <form onSubmit={submit} className="rounded-2xl border border-white/15 bg-white/10 p-6 backdrop-blur-md sm:p-8">
       <h2 className="mb-5 text-lg font-bold text-white">Register</h2>
 
       {dates.length > 1 && (
-        <div className="mb-4">
-          <span className={LABEL}>Which date suits you?</span>
-          <div className="flex flex-wrap gap-2">
-            {dates.map((d) => (
-              <button key={d} type="button" disabled={saving} onClick={() => setChosenDate(d)}
-                className={`rounded-lg border px-3 py-2 text-sm font-semibold transition ${
-                  chosenDate === d
-                    ? "border-white bg-white text-yai-blue-deep"
-                    : "border-white/30 bg-white/5 text-white hover:bg-white/15"
-                }`}>
-                {new Date(`${d}T00:00:00`).toLocaleDateString("en-GB", {
-                  weekday: "short", day: "numeric", month: "short",
-                })}
-              </button>
-            ))}
-          </div>
+        <div className="mb-4 flex flex-wrap gap-2">
+          {dates.map((d) => (
+            <button key={d} type="button" disabled={saving} onClick={() => setChosenDate(d)}
+              className={`rounded-lg border px-3 py-2 text-sm font-semibold transition ${
+                chosenDate === d ? "border-white bg-white text-yai-blue-deep" : "border-white/30 bg-white/5 text-white hover:bg-white/15"
+              }`}>
+              {d}
+            </button>
+          ))}
         </div>
       )}
 
-      <div className="mb-3 flex items-center gap-3">
+      <div className="mb-5 flex items-center gap-3">
         <label className={INLINE_LABEL} htmlFor="rg-name">Name</label>
         <input id="rg-name" required minLength={2} maxLength={120} value={name}
           disabled={saving} onChange={(e) => setName(e.target.value)}
           className={FIELD} placeholder="Full name" />
       </div>
 
-      <div className="mb-3 flex items-center gap-3">
-        <label className={INLINE_LABEL} htmlFor="rg-email">Email</label>
-        <input id="rg-email" type="email" maxLength={200} value={email}
-          disabled={saving} onChange={(e) => setEmail(e.target.value)}
-          className={FIELD} placeholder="you@company.com" />
-      </div>
-
-      <div className="mb-3 flex items-center gap-3">
-        <label className={INLINE_LABEL} htmlFor="rg-phone">Phone</label>
-        <input id="rg-phone" type="tel" maxLength={40} value={phone}
-          disabled={saving} onChange={(e) => setPhone(e.target.value)}
-          className={FIELD} placeholder="+855 ..." />
-      </div>
-
-      <div className="mb-3 flex items-center gap-3">
-        <label className={INLINE_LABEL} htmlFor="rg-tg">Telegram</label>
-        <input id="rg-tg" maxLength={80} value={telegram}
-          disabled={saving} onChange={(e) => setTelegram(e.target.value)}
-          className={FIELD} placeholder="@username" />
-      </div>
-
-      <fieldset className="mb-5">
-        <legend className={LABEL}>You may contact me by</legend>
+      <fieldset className="mb-4">
+        <legend className="mb-2 text-sm font-semibold text-white">Confirm — we may contact you by</legend>
         <div className="flex flex-wrap gap-2">
-          {([
-            ["email", "Email"],
-            ["telegram", "Telegram"],
-            ["phone", "Phone"],
-          ] as const).map(([value, label]) => {
-            const on = contactVia.includes(value);
+          {CHANNELS.map((c) => {
+            const on = via.includes(c.value);
             return (
-              <label key={value}
+              <label key={c.value}
                 className={`flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 text-sm font-semibold transition ${
                   on ? "border-white bg-white text-yai-blue-deep" : "border-white/30 bg-white/5 text-white hover:bg-white/15"
                 }`}>
-                <input type="checkbox" className="h-4 w-4 accent-yai-orange" checked={on} disabled={saving}
-                  onChange={() => setContactVia((c) => (on ? c.filter((v) => v !== value) : [...c, value]))} />
-                {label}
+                <input type="checkbox" className="h-4 w-4 accent-yai-orange" checked={on}
+                  disabled={saving} onChange={() => toggle(c.value)} />
+                {c.label}
               </label>
             );
           })}
         </div>
       </fieldset>
+
+      {CHANNELS.filter((c) => via.includes(c.value)).map((c) => (
+        <div key={c.value} className="mb-3 flex items-center gap-3">
+          <label className={INLINE_LABEL} htmlFor={`rg-${c.value}`}>{c.label}</label>
+          <input id={`rg-${c.value}`} type={c.type} required maxLength={c.max}
+            value={detail[c.value]} disabled={saving} placeholder={c.placeholder}
+            onChange={(e) => setDetail((d) => ({ ...d, [c.value]: e.target.value }))}
+            className={FIELD} />
+        </div>
+      ))}
 
       {/* Honeypot — hidden from people, irresistible to bots. */}
       <div aria-hidden="true" className="absolute left-[-9999px] h-0 w-0 overflow-hidden">
@@ -151,10 +147,10 @@ export function RegisterForm({ eventId, dates }: { eventId: string; dates: strin
           onChange={(e) => setWebsite(e.target.value)} />
       </div>
 
-      {error && <p className="mb-4 text-sm font-semibold text-rose-200">{error}</p>}
+      {error && <p className="mb-4 mt-2 text-sm font-semibold text-rose-200">{error}</p>}
 
       <button type="submit" disabled={saving}
-        className="w-full rounded-lg bg-white py-3 font-bold text-yai-blue transition hover:bg-white/95 disabled:opacity-50">
+        className="mt-3 w-full rounded-lg bg-white py-3 font-bold text-yai-blue transition hover:bg-white/95 disabled:opacity-50">
         {saving ? "Submitting…" : "Submit"}
       </button>
     </form>
