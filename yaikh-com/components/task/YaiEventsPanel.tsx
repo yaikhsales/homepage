@@ -78,6 +78,18 @@ export function YaiEventsPanel({
 
   const ours = useMemo(() => events.filter((e) => e.origin === "manual"), [events]);
 
+  // Open on the next event of ours, so the QR, sign-ups and files show
+  // without hunting for the day first. A click on the calendar takes over.
+  const [picked, setPicked] = useState(false);
+  useEffect(() => {
+    if (picked || selectedDay) return;
+    const today = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Phnom_Penh" });
+    const next = ours
+      .filter((e) => (e.endDate || e.date) >= today)
+      .sort((a, b) => a.date.localeCompare(b.date))[0];
+    if (next) setSelectedDay(next.date >= today ? next.date : today);
+  }, [ours, picked, selectedDay]);
+
   const load = useCallback(() => {
     setState("loading");
     fetch("/api/registrations", { credentials: "same-origin" })
@@ -115,7 +127,7 @@ export function YaiEventsPanel({
     <>
       <TaskCalendar
         events={ours}
-        onSelectDay={(iso) => setSelectedDay(iso || null)}
+        onSelectDay={(iso) => { setPicked(true); setSelectedDay(iso || null); }}
         selectedDay={selectedDay}
         emptyNote="No events of ours yet. Add one below and it appears on this calendar."
       />
