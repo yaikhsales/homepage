@@ -12,7 +12,7 @@
  */
 
 import { useState } from "react";
-import { evT, type EvLang } from "./strings";
+import { evT, evDayShort, type EvLang } from "./strings";
 
 const FIELD =
   "w-full min-w-0 rounded-lg border border-white/30 bg-white px-3 py-2.5 text-[15px] text-yai-blue-deep " +
@@ -25,12 +25,14 @@ const CHANNELS = [
 ] as const;
 type Channel = (typeof CHANNELS)[number]["value"];
 
-export function RegisterForm({ eventId, dates, lang = "en" }: { eventId: string; dates: string[]; lang?: EvLang }) {
+export function RegisterForm({ eventId, days, lang = "en" }: { eventId: string; days: string[]; lang?: EvLang }) {
   const t = (k: Parameters<typeof evT>[1]) => evT(lang, k);
   const [name, setName] = useState("");
   const [via, setVia] = useState<Channel[]>([]);
   const [detail, setDetail] = useState<Record<Channel, string>>({ email: "", phone: "", telegram: "" });
-  const [chosenDate, setChosenDate] = useState(dates[0] || "");
+  // A one-day event needs no choice; a multi-day one asks which day(s).
+  const multiDay = days.length > 1;
+  const [attend, setAttend] = useState<string[]>(multiDay ? [] : days);
   const [website, setWebsite] = useState(""); // honeypot
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -42,6 +44,10 @@ export function RegisterForm({ eventId, dates, lang = "en" }: { eventId: string;
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (saving) return;
+    if (multiDay && attend.length === 0) {
+      setError(t("tickDay"));
+      return;
+    }
     if (via.length === 0) {
       setError(t("tickOne"));
       return;
@@ -58,7 +64,7 @@ export function RegisterForm({ eventId, dates, lang = "en" }: { eventId: string;
           phone: via.includes("phone") ? detail.phone : "",
           telegram: via.includes("telegram") ? detail.telegram : "",
           contactVia: via,
-          chosenDate,
+          attendDays: [...attend].sort(),
           website,
         }),
       });
@@ -92,25 +98,33 @@ export function RegisterForm({ eventId, dates, lang = "en" }: { eventId: string;
     <form onSubmit={submit} className="rounded-2xl border border-white/15 bg-white/10 p-6 backdrop-blur-md sm:p-8">
       <h2 className="mb-4 text-lg font-bold text-white">{t("register")}</h2>
 
-      {dates.length > 1 && (
-        <div className="mb-4 flex flex-wrap gap-2">
-          {dates.map((d) => (
-            <button key={d} type="button" disabled={saving} onClick={() => setChosenDate(d)}
-              className={`rounded-lg border px-3 py-2 text-sm font-semibold transition ${
-                chosenDate === d ? "border-white bg-white text-yai-blue-deep" : "border-white/30 bg-white/5 text-white hover:bg-white/15"
-              }`}>
-              {d}
-            </button>
-          ))}
-        </div>
-      )}
-
       <div className="mb-4">
         <label className="sr-only" htmlFor="rg-name">{t("name")}</label>
         <input id="rg-name" required minLength={2} maxLength={120} value={name}
           disabled={saving} onChange={(e) => setName(e.target.value)}
           className={FIELD} placeholder={t("name")} />
       </div>
+
+      {multiDay && (
+        <fieldset className="mb-4">
+          <legend className="mb-2 text-sm font-semibold text-white">{t("attend")}</legend>
+          <div className="flex flex-wrap gap-2">
+            {days.map((d) => {
+              const on = attend.includes(d);
+              return (
+                <label key={d}
+                  className={`flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 text-sm font-semibold transition ${
+                    on ? "border-white bg-white text-yai-blue-deep" : "border-white/30 bg-white/5 text-white hover:bg-white/15"
+                  }`}>
+                  <input type="checkbox" className="h-4 w-4 accent-yai-orange" checked={on} disabled={saving}
+                    onChange={() => setAttend((a) => (on ? a.filter((x) => x !== d) : [...a, d]))} />
+                  {evDayShort(lang, d)}
+                </label>
+              );
+            })}
+          </div>
+        </fieldset>
+      )}
 
       <fieldset className="mb-4">
         <legend className="mb-2 text-sm font-semibold text-white">{t("consent")}</legend>

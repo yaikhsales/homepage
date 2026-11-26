@@ -27,6 +27,7 @@ type Registration = {
   contactMethod: string;
   contactVia?: string[];
   chosenDate: string;
+  attendDays?: string[];
   note: string;
   createdAt: string;
 };
@@ -227,7 +228,7 @@ export function YaiEventsPanel({
                                 <th className="py-1.5 pr-3 font-bold">Phone</th>
                                 <th className="py-1.5 pr-3 font-bold">Telegram</th>
                                 <th className="py-1.5 pr-3 font-bold">May contact by</th>
-                                <th className="py-1.5 font-bold">Date</th>
+                                <th className="py-1.5 font-bold">Attending</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -242,7 +243,12 @@ export function YaiEventsPanel({
                                       .map((v) => v.charAt(0).toUpperCase() + v.slice(1)).join(", ")}
                                   </td>
                                   <td className="py-1.5 text-gray-700">
-                                    {r.chosenDate ? longDate(r.chosenDate).split(",").slice(0, 2).join(",") : "—"}
+                                    {(r.attendDays && r.attendDays.length ? r.attendDays : r.chosenDate ? [r.chosenDate] : [])
+                                      .map((d) => {
+                                        const x = new Date(`${d}T00:00:00`);
+                                        return x.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
+                                      })
+                                      .join(" + ") || "—"}
                                   </td>
                                 </tr>
                               ))}

@@ -93,10 +93,19 @@ export async function POST(request: Request, { params }: { params: { id: string 
       return NextResponse.json({ ok: false, error: "Unknown event." }, { status: 404 });
     }
 
-    const offered: string[] =
-      Array.isArray(event.dates) && event.dates.length ? event.dates : [event.date];
-    // Only a date this event actually offers; otherwise fall back to its first.
-    const date = offered.includes(chosenDate) ? chosenDate : offered[0];
+    // The days this event runs. A multi-day event must have at least one
+    // ticked; only real days of the event are kept.
+    const first = String(event.date);
+    const last = event.endDate && String(event.endDate) > first ? String(event.endDate) : first;
+    const asked = Array.isArray(body.attendDays) ? body.attendDays : chosenDate ? [chosenDate] : [];
+    const attendDays = Array.from(new Set(asked.map((d: unknown) => clean(d, 10))))
+      .filter((d) => /^\d{4}-\d{2}-\d{2}$/.test(d) && d >= first && d <= last)
+      .sort();
+    if (last > first && attendDays.length === 0) {
+      return NextResponse.json({ ok: false, error: "Tick the day you will attend." }, { status: 400 });
+    }
+    if (attendDays.length === 0) attendDays.push(first);
+    const date = attendDays[0];
 
     // One person, one place per event: a second submit with the same contact
     // detail updates the first rather than filling the registry with repeats.
@@ -115,6 +124,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
           contactMethod,
           contactVia,
           chosenDate: date,
+          attendDays,
           note,
           updatedAt: new Date(),
         },
@@ -123,7 +133,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
       { upsert: true }
     );
 
-    return NextResponse.json({ ok: true, registered: true, chosenDate: date });
+    return NextResponse.json({ ok: true, registered: true, attendDays });
   } catch (err) {
     return NextResponse.json(
       { ok: false, error: err instanceof Error ? err.message : String(err) },

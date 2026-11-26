@@ -40,6 +40,12 @@ const S = {
   doneBody: { en: "We will be in touch.", km: "យើងនឹងទាក់ទងអ្នកឆាប់ៗនេះ។", zh: "我们会尽快与您联系。" },
   home: { en: "Back to home", km: "ត្រឡប់ទៅទំព័រដើម", zh: "返回首页" },
   map: { en: "map ↗", km: "ផែនទី ↗", zh: "地图 ↗" },
+  attend: { en: "I will attend", km: "ខ្ញុំនឹងចូលរួមថ្ងៃ", zh: "我将参加" },
+  tickDay: {
+    en: "Tick the day you will attend.",
+    km: "សូមជ្រើសរើសថ្ងៃដែលអ្នកនឹងចូលរួម។",
+    zh: "请勾选您参加的日期。",
+  },
   handouts: { en: "Handout", km: "ឯកសារចែកជូន", zh: "宣传单" },
   slides: { en: "Slides", km: "ស្លាយ", zh: "演示文稿" },
   slidesSoon: { en: "Slides open on", km: "ស្លាយបើកនៅ", zh: "演示文稿开放日期" },
@@ -89,4 +95,30 @@ export function evDateRange(lang: EvLang, date: string, endDate?: string): strin
   if (a.y !== b.y) return `${one(a)} – ${one(b)}`;
   if (a.m !== b.m) return `${wd[a.w]} ${a.day} ${mon[a.m]} – ${one(b)}`;
   return `${wd[a.w]} ${a.day} – ${one(b)}`;
+}
+
+const MON_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+/** One day, short: "Fri 18 Dec 26" · "សុក្រ 18 ធ្នូ 26" · "12月18日（周五）". */
+export function evDayShort(lang: EvLang, iso: string): string {
+  const p = parts(iso);
+  if (!p) return iso;
+  const yy = String(p.y).slice(2);
+  if (lang === "zh") return `${p.m + 1}月${p.day}日（${WD.zh[p.w]}）`;
+  if (lang === "km") return `${WD.km[p.w]} ${p.day} ${MON.km[p.m]} ${yy}`;
+  return `${WD.en[p.w]} ${p.day} ${MON_SHORT[p.m]} ${yy}`;
+}
+
+/** Every day an event runs, first to last (at most 31). */
+export function eventDays(date: string, endDate?: string): string[] {
+  const out = [date];
+  if (!endDate || endDate <= date) return out;
+  const d = new Date(`${date}T00:00:00Z`);
+  for (let i = 0; i < 31; i++) {
+    d.setUTCDate(d.getUTCDate() + 1);
+    const iso = d.toISOString().slice(0, 10);
+    if (iso > endDate) break;
+    out.push(iso);
+  }
+  return out;
 }

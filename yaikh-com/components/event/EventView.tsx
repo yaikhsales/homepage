@@ -7,7 +7,7 @@
 import { useEffect, useState } from "react";
 import { RegisterForm } from "./RegisterForm";
 import { FlagKH, FlagGB, FlagCN } from "./flags";
-import { evT, evDateRange, EV_LANGS, type EvLang } from "./strings";
+import { evT, evDateRange, eventDays, EV_LANGS, type EvLang } from "./strings";
 
 export type EventViewData = {
   id: string;
@@ -150,7 +150,7 @@ export function EventView({ ev }: { ev: EventViewData }) {
         )}
       </div>
 
-      <RegisterForm eventId={ev.id} dates={ev.dates} lang={lang} />
+      <RegisterForm eventId={ev.id} days={eventDays(ev.date, ev.endDate)} lang={lang} />
     </>
   );
 }

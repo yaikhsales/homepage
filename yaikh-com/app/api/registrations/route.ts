@@ -41,6 +41,7 @@ export async function GET(request: Request) {
       contactMethod: r.contactMethod || "email",
       contactVia: Array.isArray(r.contactVia) && r.contactVia.length ? r.contactVia : [r.contactMethod || "email"],
       chosenDate: r.chosenDate || "",
+      attendDays: Array.isArray(r.attendDays) && r.attendDays.length ? r.attendDays : r.chosenDate ? [r.chosenDate] : [],
       note: r.note || "",
       status: r.status || "new",
       createdAt: r.createdAt ? new Date(r.createdAt).toISOString() : "",
