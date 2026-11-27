@@ -172,8 +172,8 @@ function Nav() {
                   <a href="https://main.yaikh.com/" role="menuitem" onClick={() => setExperienceOpen(false)} className="mt-2 block text-[13px] font-semibold hover:text-yai-orange transition whitespace-nowrap">
                     Media &amp; Publications
                   </a>
-                  <a href="/events" role="menuitem" onClick={() => setExperienceOpen(false)} className="mt-2 block text-[13px] font-semibold hover:text-yai-orange transition whitespace-nowrap">
-                    Events
+                  <a href="/task" role="menuitem" onClick={() => setExperienceOpen(false)} className="mt-2 block text-[13px] font-semibold hover:text-yai-orange transition whitespace-nowrap">
+                    Task
                   </a>
                 </div>
               )}
