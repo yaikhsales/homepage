@@ -94,9 +94,16 @@ export default async function EventsPage() {
           </ul>
         )}
 
-        <Link href="/" className="mt-6 inline-block text-sm font-semibold text-white/60 underline hover:text-white">
-          Back to home
-        </Link>
+        <div className="mt-6 flex items-center justify-between">
+          <Link href="/" className="text-sm font-semibold text-white/60 underline hover:text-white">
+            Back to home
+          </Link>
+          {/* Way in to the staff calendar (Task / Yai events). Kept small: the
+              public menu's Events link stays on this public page. */}
+          <Link href="/task" className="text-xs font-semibold text-white/40 hover:text-white">
+            Staff calendar →
+          </Link>
+        </div>
       </div>
     </main>
   );
